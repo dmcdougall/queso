@@ -24,8 +24,8 @@
 
 #include <queso/GslVector.h>
 #include <queso/Defines.h>
-#include <gsl/gsl_sort_vector.h>
 #include <cmath>
+#include <queso/GslVectorImplementation.h>
 
 namespace QUESO {
 
@@ -42,7 +42,7 @@ GslVector::GslVector()
 GslVector::GslVector(const BaseEnvironment& env, const Map& map)
   :
   Vector(env,map),
-  m_vec        (gsl_vector_calloc(map.NumGlobalElements()))
+  m_vec(new GslVectorImplementation(map))
 {
   //std::cout << "Entering GslVector::constructor(1)" << std::endl;
 
@@ -51,17 +51,17 @@ GslVector::GslVector(const BaseEnvironment& env, const Map& map)
                       "GslVector::constructor(1)",
                       "null vector generated");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(1)",
                       "incompatible local vec size");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) map.NumGlobalElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeGlobal() != (unsigned int) map.NumGlobalElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(1)",
                       "incompatible global vec size");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) m_map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(1)",
                       "incompatible own vec size");
@@ -78,7 +78,7 @@ GslVector::GslVector(const BaseEnvironment& env, const Map& map)
 GslVector::GslVector(const BaseEnvironment& env, const Map& map, double value)
   :
   Vector(env,map),
-  m_vec        (gsl_vector_calloc(map.NumGlobalElements()))
+  m_vec(new GslVectorImplementation(map, value))
 {
   //std::cout << "Entering GslVector::constructor(2)" << std::endl;
 
@@ -87,19 +87,19 @@ GslVector::GslVector(const BaseEnvironment& env, const Map& map, double value)
                       "GslVector::constructor(2)",
                       "null vector generated");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(2)",
                       "incompatible local vec size");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) map.NumGlobalElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeGlobal() != (unsigned int) map.NumGlobalElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(2)",
                       "incompatible global vec size");
 
   this->cwSet(value);
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) m_map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(2)",
                       "incompatible own vec size");
@@ -110,7 +110,7 @@ GslVector::GslVector(const BaseEnvironment& env, const Map& map, double value)
 GslVector::GslVector(const BaseEnvironment& env, double d1, double d2, const Map& map)
   :
   Vector(env,map),
-  m_vec        (gsl_vector_calloc(map.NumGlobalElements()))
+  m_vec(new GslVectorImplementation(d1, d2, map))
 {
   //std::cout << "Entering GslVector::constructor(3)" << std::endl;
 
@@ -119,22 +119,22 @@ GslVector::GslVector(const BaseEnvironment& env, double d1, double d2, const Map
                       "GslVector::constructor(3), linspace",
                       "null vector generated");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(3)",
                       "incompatible local vec size");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) map.NumGlobalElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeGlobal() != (unsigned int) map.NumGlobalElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(3)",
                       "incompatible global vec size");
 
-  for (unsigned int i = 0; i < m_vec->size; ++i) {
-    double alpha = (double) i / ((double) m_vec->size - 1.);
+  for (unsigned int i = 0; i < m_vec->sizeLocal(); ++i) {
+    double alpha = (double) i / ((double) m_vec->sizeLocal() - 1.);
     (*this)[i] = (1.-alpha)*d1 + alpha*d2;
   }
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) m_map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(3)",
                       "incompatible own vec size");
@@ -145,7 +145,7 @@ GslVector::GslVector(const BaseEnvironment& env, double d1, double d2, const Map
 GslVector::GslVector(const GslVector& v, double start, double end)
   :
   Vector(v.env(),v.map()),
-  m_vec        (gsl_vector_calloc(v.sizeLocal()))
+  m_vec(new GslVectorImplementation(*(v.m_vec), start, end))
 {
   //std::cout << "Entering GslVector::constructor(4)" << std::endl;
 
@@ -154,22 +154,22 @@ GslVector::GslVector(const GslVector& v, double start, double end)
                       "GslVector::constructor(4), linspace",
                       "null vector generated");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) v.map().NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) v.map().NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(4)",
                       "incompatible local vec size");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) v.map().NumGlobalElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeGlobal() != (unsigned int) v.map().NumGlobalElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(4)",
                       "incompatible global vec size");
 
-  for (unsigned int i = 0; i < m_vec->size; ++i) {
-    double alpha = (double) i / ((double) m_vec->size - 1.);
+  for (unsigned int i = 0; i < m_vec->sizeLocal(); ++i) {
+    double alpha = (double) i / ((double) m_vec->sizeLocal() - 1.);
     (*this)[i] = (1. - alpha) * start + alpha * end;
   }
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) m_map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(4)",
                       "incompatible own vec size");
@@ -180,7 +180,7 @@ GslVector::GslVector(const GslVector& v, double start, double end)
 GslVector::GslVector(const GslVector& v)  // mox
   :
   Vector(v.env(),v.map()),
-  m_vec        (gsl_vector_calloc(v.sizeLocal()))
+  m_vec(new GslVectorImplementation(*(v.m_vec)))
 {
   //std::cout << "Entering GslVector::constructor(5)" << std::endl;
 
@@ -190,19 +190,19 @@ GslVector::GslVector(const GslVector& v)  // mox
                       "GslVector::constructor(5), copy",
                       "null vector generated");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) v.map().NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) v.map().NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(5)",
                       "incompatible local vec size");
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) v.map().NumGlobalElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeGlobal() != (unsigned int) v.map().NumGlobalElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(5)",
                       "incompatible global vec size");
 
   this->copy(v);
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) m_map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::constructor(5)",
                       "incompatible own vec size");
@@ -212,7 +212,9 @@ GslVector::GslVector(const GslVector& v)  // mox
 
 GslVector::~GslVector()
 {
-  if (m_vec) gsl_vector_free(m_vec);
+  if (m_vec) {
+    delete m_vec;
+  }
 }
 
 GslVector&
@@ -237,12 +239,7 @@ GslVector::operator=(const GslVector& rhs)
 GslVector&
 GslVector::operator*=(double a)
 {
-  int iRC;
-  iRC = gsl_vector_scale(m_vec,a);
-  UQ_FATAL_RC_MACRO(iRC,
-                    m_env.worldRank(),
-                    "GslVector::operator*=()",
-                    "failed");
+  *(this->m_vec) *= a;
   return *this;
 }
 
@@ -291,52 +288,34 @@ GslVector::operator/=(const GslVector& rhs)
 GslVector&
 GslVector::operator+=(const GslVector& rhs)
 {
-  int iRC;
-  iRC = gsl_vector_add(m_vec,rhs.m_vec);
-  UQ_FATAL_RC_MACRO(iRC,
-                    m_env.worldRank(),
-                    "GslVector::operator+=()",
-                    "failed");
+  *(this->m_vec) += *(rhs.m_vec);
   return *this;
 }
 
 GslVector&
 GslVector::operator-=(const GslVector& rhs)
 {
-  int iRC;
-  iRC = gsl_vector_sub(m_vec,rhs.m_vec);
-  UQ_FATAL_RC_MACRO(iRC,
-                    m_env.worldRank(),
-                    "GslVector::operator-=()",
-                    "failed");
-
+  *(this->m_vec) -= *(rhs.m_vec);
   return *this;
 }
 
 double&
 GslVector::operator[](unsigned int i)
 {
-  return *gsl_vector_ptr(m_vec,i);
+  return (*(this->m_vec))[i];
 }
 
 const double&
 GslVector::operator[](unsigned int i) const
 {
-  return *gsl_vector_const_ptr(m_vec,i);
+  return (*(this->m_vec))[i];
 }
 
 void
 GslVector::copy(const GslVector& src)
 {
   this->Vector::copy(src); // prudenci 2010-06-17 mox
-  int iRC;
-  iRC = gsl_vector_memcpy(this->m_vec, src.m_vec);
-  UQ_FATAL_RC_MACRO(iRC,
-                    m_env.worldRank(),
-                    "GslVector::copy()",
-                    "failed");
-
-  return;
+  this->m_vec->copy(*(src.m_vec));
 }
 
 unsigned int
@@ -353,7 +332,7 @@ GslVector::sizeLocal() const
   //std::cout << ", m_vec->size = "           << m_vec->size
   //          << std::endl;
 
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumMyElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeLocal() != (unsigned int) m_map.NumMyElements(),
                       m_env.worldRank(),
                       "GslVector::sizeLocal()",
                       "incompatible vec size");
@@ -365,18 +344,18 @@ GslVector::sizeLocal() const
   //          << ", m_map.NumMyElements() = " << m_map.NumMyElements()
   //          << std::endl;
 
-  return m_vec->size;
+  return m_vec->sizeLocal();
 }
 
 unsigned int
 GslVector::sizeGlobal() const
 {
-  UQ_FATAL_TEST_MACRO(m_vec->size != (unsigned int) m_map.NumGlobalElements(),
+  UQ_FATAL_TEST_MACRO(m_vec->sizeGlobal() != (unsigned int) m_map.NumGlobalElements(),
                       m_env.worldRank(),
                       "GslVector::sizeGlobal()",
                       "incompatible vec size");
 
-  return m_vec->size;
+  return m_vec->sizeGlobal();
 }
 
 double
@@ -788,9 +767,7 @@ GslVector::matlabLinearInterpExtrap(
 void
 GslVector::sort()
 {
-  gsl_sort_vector(m_vec);
-
-  return;
+  m_vec->sort();
 }
 
 void
@@ -1176,7 +1153,7 @@ GslVector::subReadContents(
   return;
 }
 
-gsl_vector*
+GslVectorImplementation *
 GslVector::data() const
 {
   return m_vec;
@@ -1261,25 +1238,25 @@ GslVector::atLeastOneComponentBiggerOrEqualThan(const GslVector& rhs) const
 double
 GslVector::getMaxValue( ) const
 {
-  return gsl_vector_max( m_vec );
+  return m_vec->getMaxValue();
 }
 
 double
 GslVector::getMinValue( ) const
 {
-  return gsl_vector_min( m_vec );
+  return m_vec->getMinValue();
 }
 
 int
 GslVector::getMaxValueIndex( ) const
 {
-  return gsl_vector_max_index( m_vec );
+  return m_vec->getMaxValueIndex();
 }
 
 int
 GslVector::getMinValueIndex( ) const
 {
-  return gsl_vector_min_index( m_vec );
+  return m_vec->getMinValueIndex();
 }
 
 void

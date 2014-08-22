@@ -144,10 +144,11 @@ public:
   //! This function returns absolute value of elements in \c this.
   GslVectorImplementation abs() const;
  //@}
-private:
 
-  //! This function copies the elements of the vector src into \c this.
-  void         copy             (const GslVectorImplementation& src);
+ //! This function copies the elements of the vector src into \c this.
+ void         copy             (const GslVectorImplementation& src);
+
+private:
 
   //! GSL vector.
   gsl_vector* m_vec;

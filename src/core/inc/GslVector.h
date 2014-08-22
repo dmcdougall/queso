@@ -32,7 +32,6 @@
 
 #include <queso/Defines.h>
 #include <queso/Vector.h>
-#include <gsl/gsl_vector.h>
 
 namespace QUESO {
 
@@ -44,6 +43,8 @@ namespace QUESO {
     type as a specialization of Vector using GSL vectors, which are defined 
     by an encapsulated gsl_vector structure.
 */
+
+class GslVectorImplementation;
 
 class GslVector : public Vector
 {
@@ -211,7 +212,7 @@ public:
   //@}
 
   // Necessary for GslMatrix::invertMultiply() and GslMatrix::setRow/Column
-  gsl_vector*  data                          () const; 
+  GslVectorImplementation * data() const;
 
 //! @name Attribute methods.
   //@{ 
@@ -242,7 +243,7 @@ private:
   void         copy             (const GslVector& src);
 
   //! GSL vector.
-  gsl_vector* m_vec;
+  GslVectorImplementation * m_vec;
 };
 
 // Comments in this part of file don't appear in the doxygen docs.
