@@ -38,6 +38,7 @@ BUILT_SOURCES += FunctionBase.h
 BUILT_SOURCES += FunctionOperatorBuilder.h
 BUILT_SOURCES += GslMatrix.h
 BUILT_SOURCES += GslVector.h
+BUILT_SOURCES += GslVectorImplementation.h
 BUILT_SOURCES += InfiniteDimensionalGaussian.h
 BUILT_SOURCES += InfiniteDimensionalLikelihoodBase.h
 BUILT_SOURCES += InfiniteDimensionalMCMCSampler.h
@@ -229,6 +230,8 @@ FunctionOperatorBuilder.h: $(top_srcdir)/src/core/inc/FunctionOperatorBuilder.h
 GslMatrix.h: $(top_srcdir)/src/core/inc/GslMatrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 GslVector.h: $(top_srcdir)/src/core/inc/GslVector.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+GslVectorImplementation.h: $(top_srcdir)/src/core/inc/GslVectorImplementation.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 InfiniteDimensionalGaussian.h: $(top_srcdir)/src/core/inc/InfiniteDimensionalGaussian.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@

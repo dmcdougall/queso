@@ -96,6 +96,7 @@ libqueso_la_SOURCES += core/src/FunctionOperatorBuilder.C
 if UQBT_GSL
 libqueso_la_SOURCES += core/src/GslVector.C
 libqueso_la_SOURCES += core/src/GslMatrix.C
+libqueso_la_SOURCES += core/src/GslVectorImplementation.C
 endif
 
 # Sources from misc/src
@@ -263,6 +264,7 @@ libqueso_include_HEADERS += core/inc/BasicPdfsGsl.h
 libqueso_include_HEADERS += core/inc/BasicPdfsBoost.h
 libqueso_include_HEADERS += core/inc/GslMatrix.h
 libqueso_include_HEADERS += core/inc/GslVector.h
+libqueso_include_HEADERS += core/inc/GslVectorImplementation.h
 libqueso_include_HEADERS += core/inc/TeuchosMatrix.h
 libqueso_include_HEADERS += core/inc/TeuchosVector.h
 libqueso_include_HEADERS += core/inc/Matrix.h
