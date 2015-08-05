@@ -91,6 +91,21 @@ ACX_MPI([CXX="$MPICXX"], [AC_MSG_ERROR([Could not find MPI.])])
 # External Library Checks
 #-------------------------
 
+# enable python interfaces with SWIG
+SWIG_INTERFACES=0
+AC_ARG_ENABLE([python], AC_HELP_STRING([--enable-python],[enable python bindings]),
+[
+ AM_PATH_PYTHON(2.3)
+ dnl AC_PROG_SWIG(1.3.21)
+ AC_PROG_SWIG()
+ dnl SWIG_ENABLE_C
+ SWIG_PYTHON
+ SWIG_INTERFACES=1
+ AC_DEFINE(SWIG_INTERFACES,1,[Define if python bindings enabled])
+ ],[])
+
+AM_CONDITIONAL(SWIG_ENABLED,[test "x$SWIG_INTERFACES" = x1])
+
 # Check for Trilinos (optional)
 #Kemelli: The lowest version used to be 8.0.7, now is 11.0.2, to accomodate the changes in -lteuchos*.
 

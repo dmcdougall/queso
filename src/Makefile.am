@@ -21,8 +21,9 @@ if LIBMESH_ENABLED
   AM_CPPFLAGS += $(LIBMESH_CPPFLAGS)# $(LIBMESH_INCLUDE)
 endif
 
+BUILT_SOURCES =
 if GIT_CLONE
-BUILT_SOURCES = .license.stamp
+BUILT_SOURCES += .license.stamp
 endif
 
 # Dynamic library build: we include external library linkage here to
@@ -35,6 +36,36 @@ libqueso_la_LDFLAGS += $(GSL_LIBS)
 libqueso_la_LDFLAGS += $(BOOST_PROGRAM_OPTIONS_LDFLAGS) $(BOOST_PROGRAM_OPTIONS_LIBS)
 libqueso_la_LDFLAGS += $(ANN_LIBS)
 libqueso_la_LDFLAGS += $(HDF5_LIBS)
+
+##########################################
+# QUESO (SWIG) Python interface (optional)
+##########################################
+if SWIG_ENABLED
+  BUILT_SOURCES += queso_wrap.C queso.py
+	SWIG_SRC = queso.i
+
+	pkgpython_PYTHON = queso.py __init__.py
+	pkgpyexec_LTLIBRARIES = _queso.la
+	_queso_la_SOURCES = queso_wrap.C
+	_queso_la_CXXFLAGS = $(AX_SWIG_PYTHON_CPPFLAGS) -I$(top_builddir)/inc
+	_queso_la_LDFLAGS = -lqueso
+	_queso_la_LIBADD = libqueso.la
+
+# Produce two built sources from a single queso.i source
+	queso_wrap.C: $(SWIG_SRC)
+		$(SWIG) $(AX_SWIG_PYTHON_OPT) queso.i
+	queso.py: queso_wrap.C
+		@if test ! -f $@; then rm -f $+; $(MAKE) $(AM_MAKEFLAGS) $+; fi
+
+	CLEANFILES += queso_wrap.C queso.py queso.pyc
+else
+# Stubs for "make distcheck" to be happy
+	queso_wrap.C:
+		@touch $@
+	queso.py:
+		@touch $@
+endif
+
 
 if GRVY_ENABLED
   libqueso_la_LDFLAGS += $(GRVY_LIBS)

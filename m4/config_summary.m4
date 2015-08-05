@@ -32,7 +32,7 @@ echo GSL_LIBS...................... : $GSL_LIBS
 echo BOOST_DIR..................... : ${BOOST_DIR}
 ###echo Boost program options... ..... : $BOOST_PROGRAM_OPTIONS_LDFLAGS $BOOST_PROGRAM_OPTIONS_LIBS
 echo ' '
-echo Install dir................... : $prefix 
+echo Install dir................... : $prefix
 echo Build user.................... : $USER
 echo Build host.................... : $BUILD_HOST
 echo Configure date................ : $BUILD_DATE
@@ -85,9 +85,15 @@ else
    echo '   'Build internal ANN library. : yes
 fi
 
+if test "$SWIG_INTERFACES" = "1"; then
+   echo '   'Enable python bindings..... : yes
+else
+   echo '   'Enable python bindings..... : no
+fi
+
 # Paths for optional packages which are enabled
 
-echo 
+echo
 echo Optional Feature Paths:
 
 if test "$HAVE_GRVY" = "1"; then
@@ -112,7 +118,7 @@ else
    echo '   'libmesh DIR................ : $LIBMESH_PREFIX
 fi
 
-echo 		   
+echo
 
 echo '-------------------------------------------------------------------------------'
 
