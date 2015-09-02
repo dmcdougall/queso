@@ -140,6 +140,7 @@ MetropolisHastingsSG<P_V,P_M>::MetropolisHastingsSG(
   /*! Initial chain position     */ const P_V&                          initialPosition,
   /*! Proposal cov. matrix       */ const P_M*                          inputProposalCovMatrix)
   :
+  SequenceGenerator<P_V, P_M>(prefix, alternativeOptionsValues, sourceRv, initialPosition, inputProposalCovMatrix),
   m_env                       (sourceRv.env()),
   m_vectorSpace               (sourceRv.imageSet().vectorSpace()),
   m_targetPdf                 (sourceRv.pdf()),
@@ -221,6 +222,7 @@ MetropolisHastingsSG<P_V,P_M>::MetropolisHastingsSG(
   /*! Initial chain likelihood   */ double                              initialLogLikelihood,
   /*! Proposal cov. matrix       */ const P_M*                          inputProposalCovMatrix)
   :
+  SequenceGenerator<P_V, P_M>(prefix, alternativeOptionsValues, sourceRv, initialPosition, inputProposalCovMatrix),
   m_env                       (sourceRv.env()),
   m_vectorSpace               (sourceRv.imageSet().vectorSpace()),
   m_targetPdf                 (sourceRv.pdf()),
@@ -300,6 +302,8 @@ MetropolisHastingsSG<P_V,P_M>::MetropolisHastingsSG(
   const P_V&                           initialPosition, // KEY
   const P_M*                           inputProposalCovMatrix)
   :
+  // FIXME: empty prefix and NULL options
+  SequenceGenerator<P_V, P_M>("", NULL, sourceRv, initialPosition, inputProposalCovMatrix),
   m_env                       (sourceRv.env()),
   m_vectorSpace               (sourceRv.imageSet().vectorSpace()),
   m_targetPdf                 (sourceRv.pdf()),
@@ -366,6 +370,8 @@ MetropolisHastingsSG<P_V,P_M>::MetropolisHastingsSG(
   double                               initialLogLikelihood,
   const P_M*                           inputProposalCovMatrix)
   :
+  // FIXME: empty prefix and NULL options
+  SequenceGenerator<P_V, P_M>("", NULL, sourceRv, initialPosition, inputProposalCovMatrix),
   m_env                       (sourceRv.env()),
   m_vectorSpace               (sourceRv.imageSet().vectorSpace()),
   m_targetPdf                 (sourceRv.pdf()),
