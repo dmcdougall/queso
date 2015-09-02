@@ -25,6 +25,7 @@
 #ifndef UQ_MH_SG_H
 #define UQ_MH_SG_H
 
+#include <queso/SequenceGenerator.h>
 #include <queso/MetropolisHastingsSGOptions.h>
 #include <queso/TKGroup.h>
 #include <queso/VectorRV.h>
@@ -120,7 +121,7 @@ struct MHRawChainInfoStruct
  * The names of the variables are self explanatory. */
 
 template <class P_V = GslVector, class P_M = GslMatrix>
-class MetropolisHastingsSG
+class MetropolisHastingsSG : public SequenceGenerator<P_V, P_M>
 {
 public:
   //! @name Constructor/Destructor methods

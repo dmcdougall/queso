@@ -63,91 +63,12 @@ SequenceGenerator<V,M>::SequenceGenerator(const char * prefix,
   if (inputProposalCovMatrix != NULL) {
     m_initialProposalCovMatrix = *inputProposalCovMatrix;
   }
-  // If NULL, we create one
-  if (m_optionsObj == NULL) {
-    MhOptionsValues * tempOptions = new MhOptionsValues(&m_env, prefix);
-
-    // We did this dance because scanOptionsValues is not a const method, but
-    // m_optionsObj is a pointer to const
-    m_optionsObj = tempOptions;
-
-    // We set this flag so we don't free something the user created
-    m_userDidNotProvideOptions = true;
-  }
-
-  if (m_optionsObj->m_help != "") {
-    if (m_env.subDisplayFile() && !m_optionsObj->m_totallyMute) {
-      *m_env.subDisplayFile() << (*m_optionsObj) << std::endl;
-    }
-  }
-
-  if ((m_env.subDisplayFile()                   ) &&
-      (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "Entering SequenceGenerator<V,M>::constructor(1)"
-                            << ": prefix = " << prefix
-                            << ", alternativeOptionsValues = " << alternativeOptionsValues
-                            << ", m_env.optionsInputFileName() = " << m_env.optionsInputFileName()
-                            << ", m_initialProposalCovMatrix = " << m_initialProposalCovMatrix
-                            << std::endl;
-  }
 
   queso_require_equal_to_msg(sourceRv.imageSet().vectorSpace().dimLocal(), initialPosition.sizeLocal(), "'sourceRv' and 'initialPosition' should have equal dimensions");
 
   if (inputProposalCovMatrix) {
     queso_require_equal_to_msg(sourceRv.imageSet().vectorSpace().dimLocal(), inputProposalCovMatrix->numRowsLocal(), "'sourceRv' and 'inputProposalCovMatrix' should have equal dimensions");
     queso_require_equal_to_msg(inputProposalCovMatrix->numCols(), inputProposalCovMatrix->numRowsGlobal(), "'inputProposalCovMatrix' should be a square matrix");
-  }
-
-  /////////////////////////////////////////////////////////////////
-  // Instantiate the appropriate TK (transition kernel)
-  /////////////////////////////////////////////////////////////////
-  if ((m_env.subDisplayFile()                   ) &&
-      (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "Entering SequenceGenerator<V,M>::commonConstructor()"
-                            << std::endl;
-  }
-
-  if (m_optionsObj->m_initialPositionDataInputFileName != ".") { // palms
-    std::set<unsigned int> tmpSet;
-    tmpSet.insert(m_env.subId());
-    m_initialPosition.subReadContents((m_optionsObj->m_initialPositionDataInputFileName+"_sub"+m_env.subIdString()),
-                                      m_optionsObj->m_initialPositionDataInputFileType,
-                                      tmpSet);
-    if ((m_env.subDisplayFile()                   ) &&
-        (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::commonConstructor()"
-                              << ": just read initial position contents = " << m_initialPosition
-                              << std::endl;
-    }
-  }
-
-  if (m_optionsObj->m_initialProposalCovMatrixDataInputFileName != ".") { // palms
-    std::set<unsigned int> tmpSet;
-    tmpSet.insert(m_env.subId());
-    m_initialProposalCovMatrix.subReadContents((m_optionsObj->m_initialProposalCovMatrixDataInputFileName+"_sub"+m_env.subIdString()),
-                                               m_optionsObj->m_initialProposalCovMatrixDataInputFileType,
-                                               tmpSet);
-    if ((m_env.subDisplayFile()                   ) &&
-        (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::commonConstructor()"
-                              << ": just read initial proposal cov matrix contents = " << m_initialProposalCovMatrix
-                              << std::endl;
-    }
-  }
-  else {
-    queso_require_msg(!(m_nullInputProposalCovMatrix), "proposal cov matrix should have been passed by user, since, according to the input algorithm options, local Hessians will not be used in the proposal");
-  }
-
-  if ((m_env.subDisplayFile()                   ) &&
-      (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "Leaving SequenceGenerator<V,M>::commonConstructor()"
-                            << std::endl;
-  }
-
-  if ((m_env.subDisplayFile()                   ) &&
-      (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "Leaving SequenceGenerator<V,M>::constructor(1)"
-                            << std::endl;
   }
 }
 
