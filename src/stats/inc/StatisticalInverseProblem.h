@@ -170,7 +170,7 @@ public:
   void                             solveWithBayesMLSampling        ();
 
   //! Return the underlying MetropolisHastingSG object
-  const MetropolisHastingsSG<P_V, P_M> & sequenceGenerator() const;
+  const SequenceGenerator<P_V, P_M> & sequenceGenerator() const;
 
   //! Returns the Prior RV; access to private attribute m_priorRv.
   const BaseVectorRV   <P_V,P_M>& priorRv                   () const;
@@ -225,7 +225,7 @@ private:
         BaseVectorCdf       <P_V,P_M>*   m_subSolutionCdf;
         BaseVectorRealizer  <P_V,P_M>*   m_solutionRealizer;
 
-        MetropolisHastingsSG<P_V,P_M>*   m_mhSeqGenerator;
+        SequenceGenerator<P_V,P_M> * m_mhSeqGenerator;
         MLSampling          <P_V,P_M>*   m_mlSampler;
         BaseVectorSequence  <P_V,P_M>*   m_chain;
         ScalarSequence      <double>*    m_logLikelihoodValues;

@@ -445,7 +445,7 @@ StatisticalInverseProblem<P_V,P_M>::solveWithBayesMLSampling()
 }
 
 template <class P_V, class P_M>
-const MetropolisHastingsSG<P_V, P_M> &
+const SequenceGenerator<P_V, P_M> &
 StatisticalInverseProblem<P_V, P_M>::sequenceGenerator() const
 {
   return *m_mhSeqGenerator;
