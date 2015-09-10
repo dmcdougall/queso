@@ -104,9 +104,9 @@ public:
   Newton capabilities.
   </list>
   */
-  void generateSequence(BaseVectorSequence<V, M> & workingChain,
-                        ScalarSequence<double> * workingLogLikelihoodValues,
-                        ScalarSequence<double> * workingLogTargetValues);
+  virtual void generateSequence(BaseVectorSequence<V, M> & workingChain,
+                                ScalarSequence<double> * workingLogLikelihoodValues,
+                                ScalarSequence<double> * workingLogTargetValues) = 0;
 
   //! Returns the underlying transition kernel for this sequence generator
   virtual const BaseTKGroup<V, M> & transitionKernel() const;
