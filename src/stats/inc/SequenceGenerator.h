@@ -84,26 +84,30 @@ public:
 
   //! @name Statistical methods
   //@{
- //! Method to generate the chain.
- /*! Requirement: the vector space 'm_vectorSpace' should have dimension equal to the size of a
-  * vector in 'workingChain'. If the requirement is satisfied, this operation sets the size and
-  * the contents of 'workingChain' using the algorithm options set in the constructor. If not NULL,
-  * 'workingLogLikelihoodValues' and 'workingLogTargetValues' are set accordingly. This operation
-  * currently implements the DRAM algorithm (Heikki Haario, Marko Laine, Antonietta Mira and
-  * Eero Saksman, "DRAM: Efficient Adaptive MCMC", Statistics and Computing (2006), 16:339-354),
-  * as a translation of the core routine at the MCMC toolbox for MATLAB, available at
-  *  \htmlonly helios.fmi.fi/~lainema/mcmc/‎ \endhtmlonly (accessed in July 3rd, 2013). Indeed,
-  * the example available in examples/statisticalInverseProblem is closely related to the
-  * 'normal example' in the toolbox. Over time, though:
-  <list type=number>
-  <item> the whole set of QUESO classes took shape, focusing not only on Markov Chains, but on
-  statistical forward problems and model validation as well;
-  <item> the interfaces to this Metropolis-Hastings class changed;
-  <item> QUESO has parallel capabilities;
-  <item> TK (transition kernel) class has been added in order to have both DRAM with Stochastic
-  Newton capabilities.
-  </list>
-  */
+  //! Method to generate the chain.
+  /*!
+   * Requirement: the vector space 'm_vectorSpace' should have dimension equal to the size of a
+   * vector in 'workingChain'. If the requirement is satisfied, this operation sets the size and
+   * the contents of 'workingChain' using the algorithm options set in the constructor. If not NULL,
+   * 'workingLogLikelihoodValues' and 'workingLogTargetValues' are set accordingly. This operation
+   * currently implements the DRAM algorithm (Heikki Haario, Marko Laine, Antonietta Mira and
+   * Eero Saksman, "DRAM: Efficient Adaptive MCMC", Statistics and Computing (2006), 16:339-354),
+   * as a translation of the core routine at the MCMC toolbox for MATLAB, available at
+   *  \htmlonly helios.fmi.fi/~lainema/mcmc/‎ \endhtmlonly (accessed in July 3rd, 2013). Indeed,
+   * the example available in examples/statisticalInverseProblem is closely related to the
+   * 'normal example' in the toolbox. Over time, though:
+   * <list type=number>
+   * <item> the whole set of QUESO classes took shape, focusing not only on Markov Chains, but on
+   * statistical forward problems and model validation as well;
+   * <item> the interfaces to this Metropolis-Hastings class changed;
+   * <item> QUESO has parallel capabilities;
+   * <item> TK (transition kernel) class has been added in order to have both DRAM with Stochastic
+   * Newton capabilities.
+   * </list>
+   *
+   * This method is responsible for setting the size of the \c workingChain,
+   * \c workingLogTargetValues, and \c workingLogTargetValues
+   */
   virtual void generateSequence(BaseVectorSequence<V, M> & workingChain,
                                 ScalarSequence<double> * workingLogLikelihoodValues,
                                 ScalarSequence<double> * workingLogTargetValues) = 0;
