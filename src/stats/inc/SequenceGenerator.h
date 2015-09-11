@@ -131,19 +131,6 @@ public:
   //@}
 
 protected:
-  //!  This method generates the chain.
-  /*! Given the size of the chain, the values of the first position in the chain. It checks if the position
-   * is out of target pdf support, otherwise it calculates the value of both its likelihood and prior and
-   * adds the position to the chain. For the next positions, once they are generated, some tests are
-   * performed (such as unicity and the value of alpha) and the steps for the first position are repeated,
-   * including the optional Delayed Rejection and the adaptive Metropolis (adaptation of covariance matrix)
-   * steps.*/
-  virtual void generateFullChain(const V & valuesOf1stPosition,
-                                 unsigned int chainSize,
-                                 BaseVectorSequence<V, M> & workingChain,
-                                 ScalarSequence<double> * workingLogLikelihoodValues,
-                                 ScalarSequence<double> * workingLogTargetValues) = 0;
-
   //! This method reads the chain contents.
   void readFullChain(const std::string & inputFileName,
                      const std::string & inputFileType,
@@ -189,26 +176,6 @@ protected:
   double m_initialLogPriorValue;
   double m_initialLogLikelihoodValue;
   bool m_userDidNotProvideOptions;
-
-private:
-  //! Reads the options values from the options input file.
-  /*!  This method \b actually reads the options input file, such as the value for the Delayed Rejection
-   * scales, the presence of Hessian covariance matrices and reads the user-provided initial proposal
-   * covariance matrix (alternative to local Hessians).*/
-  void commonConstructor();
-
-  //! Adaptive Metropolis method that deals with adapting the proposal covariance matrix
-  virtual void adapt(unsigned int positionId,
-                     BaseVectorSequence<V, M> & workingChain) = 0;
-
-  //! This method updates the adapted covariance matrix
-  /*! This function is called is the option to used adaptive Metropolis was chosen by the user
-   * (via options input file). It performs an adaptation of covariance matrix. */
-  virtual void updateAdaptedCovMatrix(const BaseVectorSequence<V, M> & subChain,
-                                      unsigned int idOfFirstPositionInSubChain,
-                                      double & lastChainSize,
-                                      V & lastMean,
-                                      M & lastAdaptedCovMatrix) = 0;
 };
 
 }  // End namespace QUESO
