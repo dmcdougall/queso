@@ -87,29 +87,6 @@ public:
       (*workingLogTargetValues)[i] = 1.0;
     }
   }
-
-protected:
-  virtual void generateFullChain(const V & valuesOf1stPosition,
-                                 unsigned int chainSize,
-                                 QUESO::BaseVectorSequence<V, M> & workingChain,
-                                 QUESO::ScalarSequence<double> * workingLogLikelihoodValues,
-                                 QUESO::ScalarSequence<double> * workingLogTargetValues)
-  {
-  }
-
-private:
-  virtual void adapt(unsigned int positionId,
-                     QUESO::BaseVectorSequence<V, M> & workingChain)
-  {
-  }
-
-  virtual void updateAdaptedCovMatrix(const QUESO::BaseVectorSequence<V, M> & subChain,
-                                      unsigned int idOfFirstPositionInSubChain,
-                                      double & lastChainSize,
-                                      V & lastMean,
-                                      M & lastAdaptedCovMatrix)
-  {
-  }
 };
 
 int main(int argc, char ** argv) {
