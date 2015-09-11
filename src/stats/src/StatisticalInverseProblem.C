@@ -49,7 +49,7 @@ StatisticalInverseProblem<P_V,P_M>::StatisticalInverseProblem(
   m_subSolutionMdf          (NULL),
   m_subSolutionCdf          (NULL),
   m_solutionRealizer        (NULL),
-  m_mhSeqGenerator          (NULL),
+  m_mhSeqGenerator          (),
   m_mlSampler               (NULL),
   m_chain                   (NULL),
   m_logLikelihoodValues     (NULL),
@@ -121,7 +121,7 @@ StatisticalInverseProblem<P_V,P_M>::StatisticalInverseProblem(
   m_subSolutionMdf          (NULL),
   m_subSolutionCdf          (NULL),
   m_solutionRealizer        (NULL),
-  m_mhSeqGenerator          (NULL),
+  m_mhSeqGenerator          (),
   m_mlSampler               (NULL),
   m_chain                   (NULL),
   m_logLikelihoodValues     (NULL),
@@ -185,7 +185,6 @@ StatisticalInverseProblem<P_V,P_M>::~StatisticalInverseProblem()
     delete m_logTargetValues;
   }
   if (m_mlSampler       ) delete m_mlSampler;
-  if (m_mhSeqGenerator  ) delete m_mhSeqGenerator;
   if (m_solutionRealizer) delete m_solutionRealizer;
   if (m_subSolutionCdf  ) delete m_subSolutionCdf;
   if (m_subSolutionMdf  ) delete m_subSolutionMdf;
@@ -232,7 +231,6 @@ StatisticalInverseProblem<P_V,P_M>::solveWithBayesMetropolisHastings(
   }
 
   if (m_mlSampler       ) delete m_mlSampler;
-  if (m_mhSeqGenerator  ) delete m_mhSeqGenerator;
   if (m_solutionRealizer) delete m_solutionRealizer;
   if (m_subSolutionCdf  ) delete m_subSolutionCdf;
   if (m_subSolutionMdf  ) delete m_subSolutionMdf;
@@ -279,15 +277,15 @@ StatisticalInverseProblem<P_V,P_M>::solveWithBayesMetropolisHastings(
     }
 
     // Compute output realizer: Metropolis-Hastings approach
-    m_mhSeqGenerator = new MetropolisHastingsSG<P_V, P_M>(
+    m_mhSeqGenerator.reset(new MetropolisHastingsSG<P_V, P_M>(
         m_optionsObj->m_prefix.c_str(), alternativeOptionsValues,
-        m_postRv, optimizer.minimizer(), initialProposalCovMatrix);
+        m_postRv, optimizer.minimizer(), initialProposalCovMatrix));
   }
   else {
     // Compute output realizer: Metropolis-Hastings approach
-    m_mhSeqGenerator = new MetropolisHastingsSG<P_V, P_M>(
+    m_mhSeqGenerator.reset(new MetropolisHastingsSG<P_V, P_M>(
         m_optionsObj->m_prefix.c_str(), alternativeOptionsValues, m_postRv,
-        initialValues, initialProposalCovMatrix);
+        initialValues, initialProposalCovMatrix));
   }
 
 
@@ -395,7 +393,6 @@ StatisticalInverseProblem<P_V,P_M>::solveWithBayesMLSampling()
   }
 
   if (m_mlSampler       ) delete m_mlSampler;
-  if (m_mhSeqGenerator  ) delete m_mhSeqGenerator;
   if (m_solutionRealizer) delete m_solutionRealizer;
   if (m_subSolutionCdf  ) delete m_subSolutionCdf;
   if (m_subSolutionMdf  ) delete m_subSolutionMdf;
@@ -449,6 +446,14 @@ const SequenceGenerator<P_V, P_M> &
 StatisticalInverseProblem<P_V, P_M>::sequenceGenerator() const
 {
   return *m_mhSeqGenerator;
+}
+
+template <class P_V, class P_M>
+void
+StatisticalInverseProblem<P_V, P_M>::setSequenceGenerator(
+    typename SharedPtr<SequenceGenerator<P_V, P_M> >::Type sequenceGenerator)
+{
+  m_mhSeqGenerator = sequenceGenerator;
 }
 
 //--------------------------------------------------
