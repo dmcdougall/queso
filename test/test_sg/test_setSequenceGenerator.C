@@ -113,7 +113,9 @@ private:
 };
 
 int main(int argc, char ** argv) {
+#ifdef QUESO_HAS_MPI
   MPI_Init(&argc, &argv);
+#endif
 
   QUESO::EnvOptionsValues envOptions;
   envOptions.m_numSubEnvironments = 1;
@@ -123,7 +125,11 @@ int main(int argc, char ** argv) {
   envOptions.m_syncVerbosity = 0;
   envOptions.m_seed = 0;
 
+#ifdef QUESO_HAS_MPI
   QUESO::FullEnvironment env(MPI_COMM_WORLD, "", "", &envOptions);
+#else
+  QUESO::FullEnvironment env("", "", &envOptions);
+#endif
 
   unsigned int dim = 2;
   QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
@@ -198,7 +204,9 @@ int main(int argc, char ** argv) {
   ip.solveWithBayesMetropolisHastings(&mhOptions, paramInitials,
       &proposalCovMatrix);
 
+#ifdef QUESO_HAS_MPI
   MPI_Finalize();
+#endif
 
   return 0;
 }
