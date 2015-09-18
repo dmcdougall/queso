@@ -84,7 +84,10 @@ public:
     workingLogTargetValues->resizeSequence(chainSize);
 
     for (unsigned int i = 0; i < chainSize; i++) {
+      this->m_tk->rv(0).realizer().realization(v);
       workingChain.setPositionValues(i, v);
+      std::cout << "sample " << i << " is:" << std::endl;
+      std::cout << v << std::endl;
     }
 
     for (unsigned int i = 0; i < chainSize; i++) {
