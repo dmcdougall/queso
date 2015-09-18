@@ -1,10 +1,11 @@
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
 #include <queso/TKGroup.h>
 #include <queso/SharedPtr.h>
+#include <queso/ScopedPtr.h>
 
 namespace QUESO
 {
-  class GslVector;
-  class GslMatrix;
   template <class V, class M> class VectorSpace;
   template <class V, class M> class BaseVectorRV;
 }
@@ -32,4 +33,6 @@ private:
 
   //! The underlying random variable object
   typename QUESO::SharedPtr<QUESO::BaseVectorRV<V, M> >::Type m_rv;
+  typename QUESO::ScopedPtr<QUESO::GslVector>::Type m_mean;
+  typename QUESO::ScopedPtr<QUESO::GslMatrix>::Type m_covariance;
 };
