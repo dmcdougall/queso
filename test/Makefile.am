@@ -55,6 +55,7 @@ check_PROGRAMS += test_optimizer_options
 check_PROGRAMS += test_SharedPtr
 check_PROGRAMS += test_serialEnv
 check_PROGRAMS += test_setSequenceGenerator
+check_PROGRAMS += test_customTK
 
 LDADD       = $(top_builddir)/src/libqueso.la
 
@@ -135,6 +136,8 @@ test_optimizer_options_SOURCES = test_optimizer/test_optimizer_options.C
 test_SharedPtr_SOURCES = pointers/test_SharedPtr.C
 test_serialEnv_SOURCES = test_Environment/test_serialEnv.C
 test_setSequenceGenerator_SOURCES = test_sg/test_setSequenceGenerator.C
+test_customTK_SOURCES = test_sg/test_customTK.C test_sg/rwtk.C test_sg/rwtk.h
+test_customTK_CPPFLAGS = $(AM_CPPFLAGS) -I$(top_builddir)/test/test_sg
 
 # Files to freedom stamp
 srcstamp =
@@ -187,6 +190,7 @@ srcstamp += $(test_optimizer_options_SOURCES)
 srcstamp += $(test_SharedPtr_SOURCES)
 srcstamp += $(test_serialEnv_SOURCES)
 srcstamp += $(test_setSequenceGenerator_SOURCES)
+srcstamp += $(test_customTK_SOURCES)
 
 TESTS =
 TESTS += $(top_builddir)/test/test_uqEnvironmentNonFatal
@@ -239,6 +243,7 @@ TESTS += $(top_builddir)/test/test_optimizer_options
 TESTS += $(top_builddir)/test/test_SharedPtr
 TESTS += $(top_builddir)/test/test_serialEnv
 TESTS += $(top_builddir)/test/test_setSequenceGenerator
+TESTS += $(top_builddir)/test/test_customTK
 
 XFAIL_TESTS = $(top_builddir)/test/test_SequenceOfVectorsErase
 if ! MPI_ENABLED
@@ -291,6 +296,7 @@ clean-local:
 	rm -rf $(top_builddir)/test/output_test_optimizer_options
 	rm -rf $(top_builddir)/test/output_test_serialEnv
 	rm -rf $(top_builddir)/test/output_test_setSequenceGenerator
+	rm -rf $(top_builddir)/test/output_test_customTK
 
 if CODE_COVERAGE_ENABLED
   CLEANFILES += *.gcda *.gcno
