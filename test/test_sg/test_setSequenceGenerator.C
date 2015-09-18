@@ -45,10 +45,10 @@ public:
 };
 
 template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
-class PCNSequenceGenerator : public QUESO::SequenceGenerator<V, M>
+class MySequenceGenerator : public QUESO::SequenceGenerator<V, M>
 {
 public:
-  PCNSequenceGenerator(const char * prefix,
+  MySequenceGenerator(const char * prefix,
                        const QUESO::MhOptionsValues * options,
                        const QUESO::BaseVectorRV<V, M> & sourceRv,
                        const V & initialPosition,
@@ -57,7 +57,7 @@ public:
   {
   }
 
-  virtual ~PCNSequenceGenerator()
+  virtual ~MySequenceGenerator()
   {
   }
 
@@ -170,12 +170,12 @@ int main(int argc, char ** argv) {
   mhOptions.m_amEpsilon = 1.e-8;
   mhOptions.m_doLogitTransform = false;
 
-  QUESO::SharedPtr<PCNSequenceGenerator<> >::Type
-    sequenceGenerator(new PCNSequenceGenerator<>("",
-                                                 NULL,
-                                                 ip.postRv(),
-                                                 paramInitials,
-                                                 &proposalCovMatrix));
+  QUESO::SharedPtr<MySequenceGenerator<> >::Type
+    sequenceGenerator(new MySequenceGenerator<>("",
+                                                NULL,
+                                                ip.postRv(),
+                                                paramInitials,
+                                                &proposalCovMatrix));
 
   ip.setSequenceGenerator(sequenceGenerator);
   ip.solveWithBayesMetropolisHastings(&mhOptions, paramInitials,
