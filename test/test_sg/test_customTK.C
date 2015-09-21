@@ -18,6 +18,8 @@
 #include <queso/VectorSequence.h>
 #include <queso/TKGroup.h>
 
+#define CHAIN_SIZE 10
+
 template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
 {
@@ -74,27 +76,23 @@ public:
       QUESO::ScalarSequence<double> * workingLogLikelihoodValues,
       QUESO::ScalarSequence<double> * workingLogTargetValues)
   {
-    unsigned int chainSize = 10;
-
     QUESO::GslVector v(workingChain.vectorSpace().zeroVector());
     v.cwSet(1.0);
 
-    workingChain.resizeSequence(chainSize);
-    workingLogLikelihoodValues->resizeSequence(chainSize);
-    workingLogTargetValues->resizeSequence(chainSize);
+    workingChain.resizeSequence(CHAIN_SIZE);
+    workingLogLikelihoodValues->resizeSequence(CHAIN_SIZE);
+    workingLogTargetValues->resizeSequence(CHAIN_SIZE);
 
-    for (unsigned int i = 0; i < chainSize; i++) {
+    for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
       this->m_tk->rv(0).realizer().realization(v);
       workingChain.setPositionValues(i, v);
-      std::cout << "sample " << i << " is:" << std::endl;
-      std::cout << v << std::endl;
     }
 
-    for (unsigned int i = 0; i < chainSize; i++) {
+    for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
       (*workingLogLikelihoodValues)[i] = 1.0;
     }
 
-    for (unsigned int i = 0; i < chainSize; i++) {
+    for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
       (*workingLogTargetValues)[i] = 1.0;
     }
   }
@@ -191,6 +189,12 @@ int main(int argc, char ** argv) {
   ip.setSequenceGenerator(sequenceGenerator);
   ip.solveWithBayesMetropolisHastings(&mhOptions, paramInitials,
       &proposalCovMatrix);
+
+  QUESO::GslVector postSample(paramSpace.zeroVector());
+  for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
+    ip.postRv().realizer().realization(postSample);
+    std::cout << "Sample " << i + 1 << " is: " << postSample << std::endl;
+  }
 
 #ifdef QUESO_HAS_MPI
   MPI_Finalize();
