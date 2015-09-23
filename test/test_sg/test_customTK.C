@@ -96,6 +96,13 @@ public:
       (*workingLogTargetValues)[i] = 1.0;
     }
   }
+
+  virtual void propose(unsigned int positionId,
+      const QUESO::BaseVectorSequence<V, M> & workingChain,
+      V & proposedState)
+  {
+    proposedState.cwSet(1.0);
+  }
 };
 
 int main(int argc, char ** argv) {
