@@ -904,7 +904,6 @@ SequenceGenerator<V, M>::generateFullChain(
   }
   else {
     for (unsigned int positionId = 1; positionId < workingChain.subSequenceSize(); ++positionId) {
-      unsigned int stageId = 0;
       m_tk->clearPreComputingPositions();
 
       //****************************************************
@@ -914,6 +913,7 @@ SequenceGenerator<V, M>::generateFullChain(
       propose(positionId, workingChain, tmpVecValues);
       queso_require_msg(m_targetPdf.domainSet().contains(tmpVecValues),
           "generated proposal lies outside of the support of the posterior");
+      outOfTargetSupport = false;
 
       logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
 
@@ -935,20 +935,13 @@ SequenceGenerator<V, M>::generateFullChain(
 
       bool accept = false;
       double alphaFirstCandidate = 0.;
-      if (outOfTargetSupport) {
-        if (m_optionsObj->m_rawChainGenerateExtra) {
-          m_alphaQuotients[positionId] = 0.;
-        }
+      if (m_optionsObj->m_rawChainGenerateExtra) {
+        alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,&m_alphaQuotients[positionId]);
       }
       else {
-        if (m_optionsObj->m_rawChainGenerateExtra) {
-          alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,&m_alphaQuotients[positionId]);
-        }
-        else {
-          alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,NULL);
-        }
-        accept = acceptAlpha(alphaFirstCandidate);
+        alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,NULL);
       }
+      accept = acceptAlpha(alphaFirstCandidate);
 
       bool displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
       if ((m_env.subDisplayFile()                   ) &&
