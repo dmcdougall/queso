@@ -936,26 +936,9 @@ SequenceGenerator<V, M>::generateFullChain(
       // Point 2/6 of logic for new position
       // Loop: generate new position
       //****************************************************
-      bool keepGeneratingCandidates = true;
-      while (keepGeneratingCandidates) {
-        propose(positionId, workingChain, tmpVecValues);
-
-        outOfTargetSupport = !m_targetPdf.domainSet().contains(tmpVecValues);
-
-        bool displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
-        if ((m_env.subDisplayFile()                   ) &&
-            (displayDetail                            ) &&
-            (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
-                                  << ": for chain position of id = " << positionId
-                                  << ", candidate = "                << tmpVecValues // FIX ME: might need parallelism
-                                  << ", outOfTargetSupport = "       << outOfTargetSupport
-                                  << std::endl;
-        }
-
-        if (m_optionsObj->m_putOutOfBoundsInChain) keepGeneratingCandidates = false;
-        else                                            keepGeneratingCandidates = outOfTargetSupport;
-      }  // End while(keepGeneratingCandidates)
+      propose(positionId, workingChain, tmpVecValues);
+      queso_require_msg(m_targetPdf.domainSet().contains(tmpVecValues),
+          "generated proposal lies outside of the support of the posterior");
 
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 5            ) &&
@@ -965,7 +948,7 @@ SequenceGenerator<V, M>::generateFullChain(
                                 << ", values = " << tmpVecValues
                                 << std::endl;
       }
-      validPreComputingPosition = m_tk->setPreComputingPosition(tmpVecValues,stageId+1);
+      bool validPreComputingPosition = m_tk->setPreComputingPosition(tmpVecValues,stageId+1);
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 5            ) &&
           (m_optionsObj->m_totallyMute == false)) {
