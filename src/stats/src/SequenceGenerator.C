@@ -200,19 +200,19 @@ SequenceGenerator<V,M>::alpha(const MarkovChainPositionData<V> & x,
   return std::min(1.,alphaQuotient);
 }
 
-// template<class V, class M>
-// bool
-// SequenceGenerator<V, M>::acceptAlpha(double alpha)
-// {
-//   bool result = false;
-//
-//   if      (alpha <= 0.                                ) result = false;
-//   else if (alpha >= 1.                                ) result = true;
-//   else if (alpha >= m_env.rngObject()->uniformSample()) result = true;
-//   else                                                  result = false;
-//
-//   return result;
-// }
+template<class V, class M>
+bool
+SequenceGenerator<V, M>::acceptAlpha(double alpha)
+{
+  bool result = false;
+
+  if      (alpha <= 0.                                ) result = false;
+  else if (alpha >= 1.                                ) result = true;
+  else if (alpha >= m_env.rngObject()->uniformSample()) result = true;
+  else                                                  result = false;
+
+  return result;
+}
 
 template<class V, class M>
 int
@@ -285,12 +285,956 @@ SequenceGenerator<V, M>::transitionKernel() const
 
 template <class V, class M>
 void
+SequenceGenerator<V, M>::generateSequence(
+  BaseVectorSequence<V, M> & workingChain,
+  ScalarSequence<double> * workingLogLikelihoodValues,
+  ScalarSequence<double> * workingLogTargetValues)
+{
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 5            ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Entering MetropolisHastingsSG<V,M>::generateSequence()..."
+                            << std::endl;
+  }
+
+  if (m_vectorSpace.dimLocal() != workingChain.vectorSizeLocal()) {
+    std::cerr << "'m_vectorSpace' and 'workingChain' are related to vector"
+              << "spaces of different dimensions"
+              << std::endl;
+    queso_error();
+  }
+
+  // Set a flag to write out log likelihood or not
+  bool writeLogLikelihood;
+  if ((workingLogLikelihoodValues != NULL) &&
+      (m_optionsObj->m_outputLogLikelihood)) {
+    writeLogLikelihood = true;
+  }
+  else {
+    writeLogLikelihood = false;
+  }
+
+  // Set a flag to write out log target or not
+  bool writeLogTarget;
+  if ((workingLogTargetValues != NULL) &&
+      (m_optionsObj->m_outputLogTarget)) {
+    writeLogTarget = true;
+  }
+  else {
+    writeLogTarget = false;
+  }
+
+  MiscCheckTheParallelEnvironment<V,V>(m_initialPosition,
+                                             m_initialPosition);
+
+  V valuesOf1stPosition(m_initialPosition);
+  int iRC = UQ_OK_RC;
+
+  workingChain.setName(m_optionsObj->m_prefix + "rawChain");
+
+  //****************************************************
+  // Generate chain
+  //****************************************************
+  if (m_optionsObj->m_rawChainDataInputFileName == UQ_MH_SG_FILENAME_FOR_NO_FILE) {
+    generateFullChain(valuesOf1stPosition,
+                      m_optionsObj->m_rawChainSize,
+                      workingChain,
+                      workingLogLikelihoodValues,
+                      workingLogTargetValues);
+  }
+  else {
+    readFullChain(m_optionsObj->m_rawChainDataInputFileName,
+                  m_optionsObj->m_rawChainDataInputFileType,
+                  m_optionsObj->m_rawChainSize,
+                  workingChain);
+  }
+
+  //****************************************************
+  // Open generic output file
+  //****************************************************
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                            << ", prefix = "                                         << m_optionsObj->m_prefix
+                            << ", chain name = "                                     << workingChain.name()
+                            << ": about to try to open generic output file '"        << m_optionsObj->m_dataOutputFileName
+                            << "."                                                   << UQ_FILE_EXTENSION_FOR_MATLAB_FORMAT // Yes, always ".m"
+                            << "', subId = "                                         << m_env.subId()
+                            << ", subenv is allowed to write (1/true or 0/false) = " << (m_optionsObj->m_dataOutputAllowedSet.find(m_env.subId()) != m_optionsObj->m_dataOutputAllowedSet.end())
+                            << "..."
+                            << std::endl;
+  }
+
+  FilePtrSetStruct genericFilePtrSet;
+  m_env.openOutputFile(m_optionsObj->m_dataOutputFileName,
+                       UQ_FILE_EXTENSION_FOR_MATLAB_FORMAT, // Yes, always ".m"
+                       m_optionsObj->m_dataOutputAllowedSet,
+                       false,
+                       genericFilePtrSet);
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                            << ", prefix = "                                   << m_optionsObj->m_prefix
+                            << ", raw chain name = "                           << workingChain.name()
+                            << ": returned from opening generic output file '" << m_optionsObj->m_dataOutputFileName
+                            << "."                                             << UQ_FILE_EXTENSION_FOR_MATLAB_FORMAT // Yes, always ".m"
+                            << "', subId = "                                   << m_env.subId()
+                            << std::endl;
+  }
+
+  //****************************************************************************************
+  // Eventually:
+  // --> write raw chain
+  // --> compute statistics on it
+  //****************************************************************************************
+  if ((m_optionsObj->m_rawChainDataOutputFileName != UQ_MH_SG_FILENAME_FOR_NO_FILE) &&
+      (m_optionsObj->m_totallyMute == false                                       )) {
+
+    // Take "sub" care of raw chain
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                              << ", prefix = "                                         << m_optionsObj->m_prefix
+                              << ", raw chain name = "                                 << workingChain.name()
+                              << ": about to try to write raw sub chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
+                              << "."                                                   << m_optionsObj->m_rawChainDataOutputFileType
+                              << "', subId = "                                         << m_env.subId()
+                              << ", subenv is allowed to write  1/true or 0/false) = " << (m_optionsObj->m_rawChainDataOutputAllowedSet.find(m_env.subId()) != m_optionsObj->m_rawChainDataOutputAllowedSet.end())
+                              << "..."
+                              << std::endl;
+    }
+
+    // Compute raw sub MLE
+    if (workingLogLikelihoodValues) {
+      SequenceOfVectors<V,M> rawSubMLEpositions(m_vectorSpace,0,m_optionsObj->m_prefix+"rawSubMLEseq");
+      double rawSubMLEvalue = workingChain.subPositionsOfMaximum(*workingLogLikelihoodValues,
+                                                                 rawSubMLEpositions);
+      queso_require_not_equal_to_msg(rawSubMLEpositions.subSequenceSize(), 0, "rawSubMLEpositions.subSequenceSize() = 0");
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        V tmpVec(m_vectorSpace.zeroVector());
+        rawSubMLEpositions.getPositionValues(0,tmpVec);
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                                << ": just computed MLE"
+                                << ", rawSubMLEvalue = "                       << rawSubMLEvalue
+                                << ", rawSubMLEpositions.subSequenceSize() = " << rawSubMLEpositions.subSequenceSize()
+                                << ", rawSubMLEpositions[0] = "                << tmpVec
+                                << std::endl;
+      }
+    }
+
+    // Compute raw sub MAP
+    if (workingLogTargetValues) {
+      SequenceOfVectors<V,M> rawSubMAPpositions(m_vectorSpace,0,m_optionsObj->m_prefix+"rawSubMAPseq");
+      double rawSubMAPvalue = workingChain.subPositionsOfMaximum(*workingLogTargetValues,
+                                                                 rawSubMAPpositions);
+      queso_require_not_equal_to_msg(rawSubMAPpositions.subSequenceSize(), 0, "rawSubMAPpositions.subSequenceSize() = 0");
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        V tmpVec(m_vectorSpace.zeroVector());
+        rawSubMAPpositions.getPositionValues(0,tmpVec);
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                                << ": just computed MAP"
+                                << ", rawSubMAPvalue = "                       << rawSubMAPvalue
+                                << ", rawSubMAPpositions.subSequenceSize() = " << rawSubMAPpositions.subSequenceSize()
+                                << ", rawSubMAPpositions[0] = "                << tmpVec
+                                << std::endl;
+      }
+    }
+
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                              << ", prefix = "                                         << m_optionsObj->m_prefix
+                              << ", raw chain name = "                                 << workingChain.name()
+                              << ": returned from writing raw sub chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
+                              << "."                                                   << m_optionsObj->m_rawChainDataOutputFileType
+                              << "', subId = "                                         << m_env.subId()
+                              << std::endl;
+    }
+
+    // Take "unified" care of raw chain
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                              << ", prefix = "                                             << m_optionsObj->m_prefix
+                              << ", raw chain name = "                                     << workingChain.name()
+                              << ": about to try to write raw unified chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
+                              << "."                                                       << m_optionsObj->m_rawChainDataOutputFileType
+                              << "', subId = "                                             << m_env.subId()
+                              << "..."
+                              << std::endl;
+    }
+
+    workingChain.unifiedWriteContents(m_optionsObj->m_rawChainDataOutputFileName,
+                                      m_optionsObj->m_rawChainDataOutputFileType);
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                              << ", prefix = "                                             << m_optionsObj->m_prefix
+                              << ", raw chain name = "                                     << workingChain.name()
+                              << ": returned from writing raw unified chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
+                              << "."                                                       << m_optionsObj->m_rawChainDataOutputFileType
+                              << "', subId = "                                             << m_env.subId()
+                              << std::endl;
+    }
+
+    if (writeLogLikelihood) {
+      workingLogLikelihoodValues->unifiedWriteContents(m_optionsObj->m_rawChainDataOutputFileName + "_loglikelihood",
+                                                       m_optionsObj->m_rawChainDataOutputFileType);
+    }
+
+    if (writeLogTarget) {
+      workingLogTargetValues->unifiedWriteContents(m_optionsObj->m_rawChainDataOutputFileName + "_logtarget",
+                                                   m_optionsObj->m_rawChainDataOutputFileType);
+    }
+
+    // Compute raw unified MLE
+    if (workingLogLikelihoodValues) {
+      SequenceOfVectors<V,M> rawUnifiedMLEpositions(m_vectorSpace,0,m_optionsObj->m_prefix+"rawUnifiedMLEseq");
+
+      double rawUnifiedMLEvalue = workingChain.unifiedPositionsOfMaximum(*workingLogLikelihoodValues,
+                                                                         rawUnifiedMLEpositions);
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        V tmpVec(m_vectorSpace.zeroVector());
+
+        // Make sure the positions vector (which only contains stuff on process
+        // zero) actually contains positions
+        if (rawUnifiedMLEpositions.subSequenceSize() > 0) {
+          rawUnifiedMLEpositions.getPositionValues(0,tmpVec);
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                                  << ": just computed MLE"
+                                  << ", rawUnifiedMLEvalue = "                       << rawUnifiedMLEvalue
+                                  << ", rawUnifiedMLEpositions.subSequenceSize() = " << rawUnifiedMLEpositions.subSequenceSize()
+                                  << ", rawUnifiedMLEpositions[0] = "                << tmpVec
+                                  << std::endl;
+        }
+      }
+    }
+
+    // Compute raw unified MAP
+    if (workingLogTargetValues) {
+      SequenceOfVectors<V,M> rawUnifiedMAPpositions(m_vectorSpace,0,m_optionsObj->m_prefix+"rawUnifiedMAPseq");
+      double rawUnifiedMAPvalue = workingChain.unifiedPositionsOfMaximum(*workingLogTargetValues,
+                                                                         rawUnifiedMAPpositions);
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        V tmpVec(m_vectorSpace.zeroVector());
+
+        // Make sure the positions vector (which only contains stuff on process
+        // zero) actually contains positions
+        if (rawUnifiedMAPpositions.subSequenceSize() > 0) {
+          rawUnifiedMAPpositions.getPositionValues(0,tmpVec);
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                                  << ": just computed MAP"
+                                  << ", rawUnifiedMAPvalue = "                       << rawUnifiedMAPvalue
+                                  << ", rawUnifiedMAPpositions.subSequenceSize() = " << rawUnifiedMAPpositions.subSequenceSize()
+                                  << ", rawUnifiedMAPpositions[0] = "                << tmpVec
+                                  << std::endl;
+        }
+      }
+    }
+  }
+
+  // Take care of other aspects of raw chain
+  if ((genericFilePtrSet.ofsVar                 ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    // Write likelihoodValues and alphaValues, if they were requested by user
+    iRC = writeInfo(workingChain,
+                    *genericFilePtrSet.ofsVar);
+    queso_require_msg(!(iRC), "improper writeInfo() return");
+  }
+
+#ifdef QUESO_USES_SEQUENCE_STATISTICAL_OPTIONS
+  if (m_optionsObj->m_rawChainComputeStats) {
+    workingChain.computeStatistics(*m_optionsObj->m_rawChainStatisticalOptionsObj,
+                                   genericFilePtrSet.ofsVar);
+  }
+#endif
+
+  //****************************************************************************************
+  // Eventually:
+  // --> filter the raw chain
+  // --> write it
+  // --> compute statistics on it
+  //****************************************************************************************
+  if (m_optionsObj->m_filteredChainGenerate) {
+    // Compute filter parameters
+    unsigned int filterInitialPos = (unsigned int) (m_optionsObj->m_filteredChainDiscardedPortion * (double) workingChain.subSequenceSize());
+    unsigned int filterSpacing    = m_optionsObj->m_filteredChainLag;
+    if (filterSpacing == 0) {
+      workingChain.computeFilterParams(genericFilePtrSet.ofsVar,
+                                       filterInitialPos,
+                                       filterSpacing);
+    }
+
+    // Filter positions from the converged portion of the chain
+    workingChain.filter(filterInitialPos,
+                        filterSpacing);
+    workingChain.setName(m_optionsObj->m_prefix + "filtChain");
+
+    if (workingLogLikelihoodValues) workingLogLikelihoodValues->filter(filterInitialPos,
+                                                                       filterSpacing);
+
+    if (workingLogTargetValues) workingLogTargetValues->filter(filterInitialPos,
+                                                               filterSpacing);
+
+    // Write filtered chain
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                              << ", prefix = "                                                      << m_optionsObj->m_prefix
+                              << ": checking necessity of opening output files for filtered chain " << workingChain.name()
+                              << "..."
+                              << std::endl;
+    }
+
+    // Take "sub" care of filtered chain
+    if ((m_optionsObj->m_filteredChainDataOutputFileName != UQ_MH_SG_FILENAME_FOR_NO_FILE) &&
+        (m_optionsObj->m_totallyMute == false                                            )) {
+      workingChain.subWriteContents(0,
+                                    workingChain.subSequenceSize(),
+                                    m_optionsObj->m_filteredChainDataOutputFileName,
+                                    m_optionsObj->m_filteredChainDataOutputFileType,
+                                    m_optionsObj->m_filteredChainDataOutputAllowedSet);
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                                << ", prefix = "                << m_optionsObj->m_prefix
+                                << ": closed sub output file '" << m_optionsObj->m_filteredChainDataOutputFileName
+                                << "' for filtered chain "      << workingChain.name()
+                                << std::endl;
+      }
+
+      if (writeLogLikelihood) {
+        workingLogLikelihoodValues->subWriteContents(0,
+                                                     workingChain.subSequenceSize(),
+                                                     m_optionsObj->m_filteredChainDataOutputFileName + "_loglikelihood",
+                                                     m_optionsObj->m_filteredChainDataOutputFileType,
+                                                     m_optionsObj->m_filteredChainDataOutputAllowedSet);
+      }
+
+      if (writeLogTarget) {
+        workingLogTargetValues->subWriteContents(0,
+                                                 workingChain.subSequenceSize(),
+                                                 m_optionsObj->m_filteredChainDataOutputFileName + "_logtarget",
+                                                 m_optionsObj->m_filteredChainDataOutputFileType,
+                                                 m_optionsObj->m_filteredChainDataOutputAllowedSet);
+      }
+    }
+
+    // Compute sub filtered MLE and sub filtered MAP
+
+    // Take "unified" care of filtered chain
+    if ((m_optionsObj->m_filteredChainDataOutputFileName != UQ_MH_SG_FILENAME_FOR_NO_FILE) &&
+        (m_optionsObj->m_totallyMute == false                                            )) {
+      workingChain.unifiedWriteContents(m_optionsObj->m_filteredChainDataOutputFileName,
+                                        m_optionsObj->m_filteredChainDataOutputFileType);
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                                << ", prefix = "                    << m_optionsObj->m_prefix
+                                << ": closed unified output file '" << m_optionsObj->m_filteredChainDataOutputFileName
+                                << "' for filtered chain "          << workingChain.name()
+                                << std::endl;
+      }
+
+      if (writeLogLikelihood) {
+        workingLogLikelihoodValues->unifiedWriteContents(m_optionsObj->m_filteredChainDataOutputFileName + "_loglikelihood",
+                                                         m_optionsObj->m_filteredChainDataOutputFileType);
+      }
+
+      if (writeLogTarget) {
+        workingLogTargetValues->unifiedWriteContents(m_optionsObj->m_filteredChainDataOutputFileName + "_logtarget",
+                                                     m_optionsObj->m_filteredChainDataOutputFileType);
+      }
+    }
+
+    // Compute unified filtered MLE and unified filtered MAP
+
+    // Compute statistics
+#ifdef QUESO_USES_SEQUENCE_STATISTICAL_OPTIONS
+    if (m_optionsObj->m_filteredChainComputeStats) {
+      workingChain.computeStatistics(*m_optionsObj->m_filteredChainStatisticalOptionsObj,
+                                     genericFilePtrSet.ofsVar);
+    }
+#endif
+  }
+
+  //****************************************************
+  // Close generic output file
+  //****************************************************
+  if (genericFilePtrSet.ofsVar) {
+    //genericFilePtrSet.ofsVar->close();
+    delete genericFilePtrSet.ofsVar;
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+                              << ", prefix = "                    << m_optionsObj->m_prefix
+                              << ": closed generic output file '" << m_optionsObj->m_dataOutputFileName
+                              << "' (chain name is "              << workingChain.name()
+                              << ")"
+                              << std::endl;
+    }
+  }
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << std::endl;
+  }
+
+  //m_env.syncPrintDebugMsg("Leaving MetropolisHastingsSG<V,M>::generateSequence()",2,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 5            ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Leaving MetropolisHastingsSG<V,M>::generateSequence()"
+                            << std::endl;
+  }
+
+  return;
+}
+
+
+template <class V, class M>
+void
 SequenceGenerator<V, M>::readFullChain(const std::string & inputFileName,
                                        const std::string & inputFileType,
                                        unsigned int chainSize,
                                        BaseVectorSequence<V, M> & workingChain)
 {
   workingChain.unifiedReadContents(inputFileName, inputFileType, chainSize);
+}
+
+template <class V, class M>
+void
+SequenceGenerator<V, M>::generateFullChain(
+    const V & valuesOf1stPosition,
+    unsigned int chainSize,
+    BaseVectorSequence<V, M> & workingChain,
+    ScalarSequence<double> * workingLogLikelihoodValues,
+    ScalarSequence<double> * workingLogTargetValues)
+{
+  //m_env.syncPrintDebugMsg("Entering MetropolisHastingsSG<V,M>::generateFullChain()",3,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Starting the generation of Markov chain " << workingChain.name()
+                            << ", with "                                  << chainSize
+                            << " positions..."
+                            << std::endl;
+  }
+
+  int iRC = UQ_OK_RC;
+  struct timeval timevalChain;
+  struct timeval timevalCandidate;
+  struct timeval timevalTarget;
+  struct timeval timevalMhAlpha;
+  struct timeval timevalDrAlpha;
+  struct timeval timevalDR;
+
+  iRC = gettimeofday(&timevalChain, NULL);
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "\nIn MetropolisHastingsSG<V,M>::generateFullChain()"
+                            << ": contents of initial position are:";
+    *m_env.subDisplayFile() << valuesOf1stPosition; // FIX ME: might need parallelism
+    *m_env.subDisplayFile() << "\nIn MetropolisHastingsSG<V,M>::generateFullChain()"
+                            << ": targetPdf.domaintSet() info is:"
+                            << m_targetPdf.domainSet();
+    *m_env.subDisplayFile() << std::endl;
+  }
+
+  // Set a flag to write out log likelihood or not
+  bool writeLogLikelihood;
+  if ((workingLogLikelihoodValues != NULL) &&
+      (m_optionsObj->m_outputLogLikelihood)) {
+    writeLogLikelihood = true;
+  }
+  else {
+    writeLogLikelihood = false;
+  }
+
+  // Set a flag to write out log target or not
+  bool writeLogTarget;
+  if ((workingLogTargetValues != NULL) &&
+      (m_optionsObj->m_outputLogTarget)) {
+    writeLogTarget = true;
+  }
+  else {
+    writeLogTarget = false;
+  }
+
+  bool outOfTargetSupport = !m_targetPdf.domainSet().contains(valuesOf1stPosition);
+  if ((m_env.subDisplayFile()) &&
+      (outOfTargetSupport    )) {
+    *m_env.subDisplayFile() << "ERROR: In MetropolisHastingsSG<V,M>::generateFullChain()"
+                            << ": contents of initial position are:\n";
+    *m_env.subDisplayFile() << valuesOf1stPosition; // FIX ME: might need parallelism
+    *m_env.subDisplayFile() << "\nERROR: In MetropolisHastingsSG<V,M>::generateFullChain()"
+                            << ": targetPdf.domaintSet() info is:\n"
+                            << m_targetPdf.domainSet();
+    *m_env.subDisplayFile() << std::endl;
+  }
+  queso_require_msg(!(outOfTargetSupport), "initial position should not be out of target pdf support");
+
+  double logPrior      = 0.;
+  double logLikelihood = 0.;
+  double logTarget     = 0.;
+  if (m_computeInitialPriorAndLikelihoodValues) {
+    if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalTarget, NULL);
+    logTarget = m_targetPdfSynchronizer->callFunction(&valuesOf1stPosition,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment // KEY
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_env.displayVerbosity() >= 3            ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+            << ": just returned from likelihood() for initial chain position"
+            << ", logPrior = "      << logPrior
+            << ", logLikelihood = " << logLikelihood
+            << ", logTarget = "     << logTarget
+            << std::endl;
+    }
+  }
+  else {
+    logPrior       = m_initialLogPriorValue;
+    logLikelihood  = m_initialLogLikelihoodValue;
+    logTarget      = logPrior + logLikelihood;
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_env.displayVerbosity() >= 3            ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+            << ": used input prior and likelihood for initial chain position"
+            << ", logPrior = "      << logPrior
+            << ", logLikelihood = " << logLikelihood
+            << ", logTarget = "     << logTarget
+            << std::endl;
+    }
+  }
+
+  //*m_env.subDisplayFile() << "AQUI 001" << std::endl;
+  MarkovChainPositionData<V> currentPositionData(m_env,
+                                                          valuesOf1stPosition,
+                                                          outOfTargetSupport,
+                                                          logLikelihood,
+                                                          logTarget);
+
+  V gaussianVector(m_vectorSpace.zeroVector());
+  V tmpVecValues(m_vectorSpace.zeroVector());
+  MarkovChainPositionData<V> currentCandidateData(m_env);
+
+  //****************************************************
+  // Set chain position with positionId = 0
+  //****************************************************
+  workingChain.resizeSequence(chainSize);
+  if (workingLogLikelihoodValues) workingLogLikelihoodValues->resizeSequence(chainSize);
+  if (workingLogTargetValues    ) workingLogTargetValues->resizeSequence    (chainSize);
+  if (true/*m_uniqueChainGenerate*/) m_idsOfUniquePositions.resize(chainSize,0);
+  if (m_optionsObj->m_rawChainGenerateExtra) {
+    m_logTargets.resize    (chainSize,0.);
+    m_alphaQuotients.resize(chainSize,0.);
+  }
+
+  unsigned int uniquePos = 0;
+  workingChain.setPositionValues(0,currentPositionData.vecValues());
+  if ((m_optionsObj->m_rawChainDataOutputPeriod           >  0  ) &&
+      (((0+1) % m_optionsObj->m_rawChainDataOutputPeriod) == 0  ) &&
+      (m_optionsObj->m_rawChainDataOutputFileName         != ".")) {
+    workingChain.subWriteContents(0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod,
+                                  m_optionsObj->m_rawChainDataOutputPeriod,
+                                  m_optionsObj->m_rawChainDataOutputFileName,
+                                  m_optionsObj->m_rawChainDataOutputFileType,
+                                  m_optionsObj->m_rawChainDataOutputAllowedSet);
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                              << ", " << 0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod << " <= pos <= " << 0
+                              << std::endl;
+    }
+
+    if (writeLogLikelihood) {
+      workingLogLikelihoodValues->subWriteContents(0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod,
+                                                   m_optionsObj->m_rawChainDataOutputPeriod,
+                                                   m_optionsObj->m_rawChainDataOutputFileName + "_loglikelihood",
+                                                   m_optionsObj->m_rawChainDataOutputFileType,
+                                                   m_optionsObj->m_rawChainDataOutputAllowedSet);
+    }
+
+    if (writeLogTarget) {
+      workingLogTargetValues->subWriteContents(0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod,
+                                               m_optionsObj->m_rawChainDataOutputPeriod,
+                                               m_optionsObj->m_rawChainDataOutputFileName + "_logtarget",
+                                               m_optionsObj->m_rawChainDataOutputFileType,
+                                               m_optionsObj->m_rawChainDataOutputAllowedSet);
+    }
+  }
+
+  if (workingLogLikelihoodValues) (*workingLogLikelihoodValues)[0] = currentPositionData.logLikelihood();
+  if (workingLogTargetValues    ) (*workingLogTargetValues    )[0] = currentPositionData.logTarget();
+  if (true/*m_uniqueChainGenerate*/) m_idsOfUniquePositions[uniquePos++] = 0;
+  if (m_optionsObj->m_rawChainGenerateExtra) {
+    m_logTargets    [0] = currentPositionData.logTarget();
+    m_alphaQuotients[0] = 1.;
+  }
+  //*m_env.subDisplayFile() << "AQUI 002" << std::endl;
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 10           ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "\n"
+                            << "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+                            << "\n"
+                            << std::endl;
+  }
+
+  //m_env.syncPrintDebugMsg("In MetropolisHastingsSG<V,M>::generateFullChain(), right before main loop",3,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
+
+  //****************************************************
+  // Begin chain loop from positionId = 1
+  //****************************************************
+  if ((m_env.numSubEnvironments() < (unsigned int) m_env.fullComm().NumProc()) &&
+      (m_initialPosition.numOfProcsForStorage() == 1                         ) &&
+      (m_env.subRank()                          != 0                         )) {
+    // subRank != 0 --> Enter the barrier and wait for processor 0 to decide to call the targetPdf
+    double aux = 0.;
+    aux = m_targetPdfSynchronizer->callFunction(NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL);
+    if (aux) {}; // just to remove compiler warning
+    for (unsigned int positionId = 1; positionId < workingChain.subSequenceSize(); ++positionId) {
+      // Multiply by position values by 'positionId' in order to avoid a constant sequence,
+      // which would cause zero variance and eventually OVERFLOW flags raised
+      workingChain.setPositionValues(positionId,((double) positionId) * currentPositionData.vecValues());
+    }
+  }
+  else {
+    for (unsigned int positionId = 1; positionId < workingChain.subSequenceSize(); ++positionId) {
+      //****************************************************
+      // Point 1/6 of logic for new position
+      // Loop: initialize variables and print some information
+      //****************************************************
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 3            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": beginning chain position of id = "  << positionId
+                                << ", m_optionsObj->m_drMaxNumExtraStages = " << m_optionsObj->m_drMaxNumExtraStages
+                                << std::endl;
+      }
+      unsigned int stageId  = 0;
+
+      m_tk->clearPreComputingPositions();
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 5            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": about to set TK pre computing position of local id " << 0
+                                << ", values = " << currentPositionData.vecValues()
+                                << std::endl;
+      }
+      bool validPreComputingPosition = m_tk->setPreComputingPosition(currentPositionData.vecValues(),0);
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 5            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": returned from setting TK pre computing position of local id " << 0
+                                << ", values = " << currentPositionData.vecValues()
+                                << ", valid = "  << validPreComputingPosition
+                                << std::endl;
+      }
+      queso_require_msg(validPreComputingPosition, "initial position should not be an invalid pre computing position");
+
+      //****************************************************
+      // Point 2/6 of logic for new position
+      // Loop: generate new position
+      //****************************************************
+      bool keepGeneratingCandidates = true;
+      while (keepGeneratingCandidates) {
+        if (m_optionsObj->m_rawChainMeasureRunTimes) {
+          iRC = gettimeofday(&timevalCandidate, NULL);
+        }
+
+        propose(positionId, workingChain, tmpVecValues);
+
+        outOfTargetSupport = !m_targetPdf.domainSet().contains(tmpVecValues);
+
+        bool displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
+        if ((m_env.subDisplayFile()                   ) &&
+            (displayDetail                            ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                  << ": for chain position of id = " << positionId
+                                  << ", candidate = "                << tmpVecValues // FIX ME: might need parallelism
+                                  << ", outOfTargetSupport = "       << outOfTargetSupport
+                                  << std::endl;
+        }
+
+        if (m_optionsObj->m_putOutOfBoundsInChain) keepGeneratingCandidates = false;
+        else                                            keepGeneratingCandidates = outOfTargetSupport;
+      }  // End while(keepGeneratingCandidates)
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 5            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": about to set TK pre computing position of local id " << stageId+1
+                                << ", values = " << tmpVecValues
+                                << std::endl;
+      }
+      validPreComputingPosition = m_tk->setPreComputingPosition(tmpVecValues,stageId+1);
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 5            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": returned from setting TK pre computing position of local id " << stageId+1
+                                << ", values = " << tmpVecValues
+                                << ", valid = "  << validPreComputingPosition
+                                << std::endl;
+      }
+
+      if (outOfTargetSupport) {
+        logPrior      = -INFINITY;
+        logLikelihood = -INFINITY;
+        logTarget     = -INFINITY;
+      }
+      else {
+        if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalTarget, NULL);
+        logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity() >= 3            ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                  << ": just returned from likelihood() for chain position of id " << positionId
+                                  << ", logPrior = "      << logPrior
+                                  << ", logLikelihood = " << logLikelihood
+                                  << ", logTarget = "     << logTarget
+                                  << std::endl;
+        }
+      }
+      currentCandidateData.set(tmpVecValues,
+                               outOfTargetSupport,
+                               logLikelihood,
+                               logTarget);
+
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 10           ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "\n"
+                                << "\n-----------------------------------------------------------\n"
+                                << "\n"
+                                << std::endl;
+      }
+      bool accept = false;
+      double alphaFirstCandidate = 0.;
+      if (outOfTargetSupport) {
+        if (m_optionsObj->m_rawChainGenerateExtra) {
+          m_alphaQuotients[positionId] = 0.;
+        }
+      }
+      else {
+        if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalMhAlpha, NULL);
+        if (m_optionsObj->m_rawChainGenerateExtra) {
+          alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,&m_alphaQuotients[positionId]);
+        }
+        else {
+          alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,NULL);
+        }
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity() >= 10           ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                  << ": for chain position of id = " << positionId
+                                  << std::endl;
+        }
+        accept = acceptAlpha(alphaFirstCandidate);
+      }
+
+      bool displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
+      if ((m_env.subDisplayFile()                   ) &&
+          (displayDetail                            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": for chain position of id = " << positionId
+                                << ", outOfTargetSupport = "       << outOfTargetSupport
+                                << ", alpha = "                    << alphaFirstCandidate
+                                << ", accept = "                   << accept
+                                << ", currentCandidateData.vecValues() = ";
+        *m_env.subDisplayFile() << currentCandidateData.vecValues(); // FIX ME: might need parallelism
+        *m_env.subDisplayFile() << "\n"
+                                << "\n curLogTarget  = "           << currentPositionData.logTarget()
+                                << "\n"
+                                << "\n canLogTarget  = "           << currentCandidateData.logTarget()
+                                << "\n"
+                                << std::endl;
+      }
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 10           ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "\n"
+                                << "\n-----------------------------------------------------------\n"
+                                << "\n"
+                                << std::endl;
+      }
+
+      //****************************************************
+      // Point 4/6 of logic for new position
+      // Loop: update chain
+      //****************************************************
+      if (accept) {
+        workingChain.setPositionValues(positionId,currentCandidateData.vecValues());
+        if (true/*m_uniqueChainGenerate*/) m_idsOfUniquePositions[uniquePos++] = positionId;
+        currentPositionData = currentCandidateData;
+      }
+      else {
+        workingChain.setPositionValues(positionId,currentPositionData.vecValues());
+      }
+      if ((m_optionsObj->m_rawChainDataOutputPeriod                    >  0  ) &&
+          (((positionId+1) % m_optionsObj->m_rawChainDataOutputPeriod) == 0  ) &&
+          (m_optionsObj->m_rawChainDataOutputFileName                  != ".")) {
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity()         >= 10   ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                  << ", for chain position of id = " << positionId
+                                  << ", " << positionId + 1 - m_optionsObj->m_rawChainDataOutputPeriod << " <= pos <= " << positionId
+                                  << std::endl;
+        }
+        workingChain.subWriteContents(positionId + 1 - m_optionsObj->m_rawChainDataOutputPeriod,
+                                      m_optionsObj->m_rawChainDataOutputPeriod,
+                                      m_optionsObj->m_rawChainDataOutputFileName,
+                                      m_optionsObj->m_rawChainDataOutputFileType,
+                                      m_optionsObj->m_rawChainDataOutputAllowedSet);
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                  << ", for chain position of id = " << positionId
+                                  << ", " << positionId + 1 - m_optionsObj->m_rawChainDataOutputPeriod << " <= pos <= " << positionId
+                                  << std::endl;
+        }
+
+        if (writeLogLikelihood) {
+          workingLogLikelihoodValues->subWriteContents(0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod,
+                                                       m_optionsObj->m_rawChainDataOutputPeriod,
+                                                       m_optionsObj->m_rawChainDataOutputFileName + "_loglikelihood",
+                                                       m_optionsObj->m_rawChainDataOutputFileType,
+                                                       m_optionsObj->m_rawChainDataOutputAllowedSet);
+        }
+
+        if (writeLogTarget) {
+          workingLogTargetValues->subWriteContents(0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod,
+                                                   m_optionsObj->m_rawChainDataOutputPeriod,
+                                                   m_optionsObj->m_rawChainDataOutputFileName + "_logtarget",
+                                                   m_optionsObj->m_rawChainDataOutputFileType,
+                                                   m_optionsObj->m_rawChainDataOutputAllowedSet);
+        }
+      }
+
+
+      if (workingLogLikelihoodValues) (*workingLogLikelihoodValues)[positionId] = currentPositionData.logLikelihood();
+      if (workingLogTargetValues    ) (*workingLogTargetValues    )[positionId] = currentPositionData.logTarget();
+
+      if (m_optionsObj->m_rawChainGenerateExtra) {
+        m_logTargets[positionId] = currentPositionData.logTarget();
+      }
+
+      if (m_optionsObj->m_enableBrooksGelmanConvMonitor > 0) {
+        if (positionId % m_optionsObj->m_enableBrooksGelmanConvMonitor == 0 &&
+            positionId > m_optionsObj->m_BrooksGelmanLag + 1) {  // +1 to help ensure there are at least 2 samples to use
+
+          double conv_est = workingChain.estimateConvBrooksGelman(
+              m_optionsObj->m_BrooksGelmanLag,
+              positionId - m_optionsObj->m_BrooksGelmanLag);
+
+          if (m_env.subDisplayFile()) {
+            *m_env.subDisplayFile() << "positionId = " << positionId
+                                    << ", conv_est = " << conv_est
+                                    << std::endl;
+            (*m_env.subDisplayFile()).flush();
+          }
+        }
+      }
+
+      //****************************************************
+      // Point 6/6 of logic for new position
+      // Loop: print some information before going to the next chain position
+      //****************************************************
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 3            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+                                << ": finishing chain position of id = " << positionId
+                                << ", accept = "                         << accept
+                                << ", curLogTarget  = "                  << currentPositionData.logTarget()
+                                << ", canLogTarget  = "                  << currentCandidateData.logTarget()
+                                << std::endl;
+      }
+
+      if ((m_optionsObj->m_rawChainDisplayPeriod                     > 0) &&
+          (((positionId+1) % m_optionsObj->m_rawChainDisplayPeriod) == 0)) {
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "Finished generating " << positionId+1
+                                  << " positions"  // root
+                                  << " %"
+                                  << std::endl;
+        }
+      }
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 10           ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "\n"
+                                << "\n++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+                                << "\n"
+                                << std::endl;
+      }
+    }
+  } // end chain loop [for (unsigned int positionId = 1; positionId < workingChain.subSequenceSize(); ++positionId) {]
+
+  if ((m_env.numSubEnvironments() < (unsigned int) m_env.fullComm().NumProc()) &&
+      (m_initialPosition.numOfProcsForStorage() == 1                         ) &&
+      (m_env.subRank()                          == 0                         )) {
+    // subRank == 0 --> Tell all other processors to exit barrier now that the chain has been fully generated
+    double aux = 0.;
+    aux = m_targetPdfSynchronizer->callFunction(NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL,
+                                                NULL);
+    if (aux) {}; // just to remove compiler warning
+  }
+
+  //****************************************************
+  // Print basic information about the chain
+  //****************************************************
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Finished the generation of Markov chain " << workingChain.name()
+                            << ", with sub "                              << workingChain.subSequenceSize()
+                            << " positions";
+    *m_env.subDisplayFile() << std::endl;
+  }
+
+  //****************************************************
+  // Release memory before leaving routine
+  //****************************************************
+  //m_env.syncPrintDebugMsg("Leaving MetropolisHastingsSG<V,M>::generateFullChain()",3,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
+
+  return;
 }
 
 }  // End namespace QUESO

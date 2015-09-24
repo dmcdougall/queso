@@ -110,7 +110,13 @@ public:
    */
   virtual void generateSequence(BaseVectorSequence<V, M> & workingChain,
                                 ScalarSequence<double> * workingLogLikelihoodValues,
-                                ScalarSequence<double> * workingLogTargetValues) = 0;
+                                ScalarSequence<double> * workingLogTargetValues);
+
+  void generateFullChain(const V & valuesOf1stPosition,
+                         unsigned int chainSize,
+                         BaseVectorSequence<V, M> & workingChain,
+                         ScalarSequence<double> * workingLogLikelihoodValues,
+                         ScalarSequence<double> * workingLogTargetValues);
 
   //! Implement this method to compute the proposed state of the chain
   /*!
