@@ -904,60 +904,16 @@ SequenceGenerator<V, M>::generateFullChain(
   }
   else {
     for (unsigned int positionId = 1; positionId < workingChain.subSequenceSize(); ++positionId) {
-      //****************************************************
-      // Point 1/6 of logic for new position
-      // Loop: initialize variables and print some information
-      //****************************************************
       unsigned int stageId = 0;
-
       m_tk->clearPreComputingPositions();
 
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 5            ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
-                                << ": about to set TK pre computing position of local id " << 0
-                                << ", values = " << currentPositionData.vecValues()
-                                << std::endl;
-      }
-      bool validPreComputingPosition = m_tk->setPreComputingPosition(currentPositionData.vecValues(),0);
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 5            ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
-                                << ": returned from setting TK pre computing position of local id " << 0
-                                << ", values = " << currentPositionData.vecValues()
-                                << ", valid = "  << validPreComputingPosition
-                                << std::endl;
-      }
-      queso_require_msg(validPreComputingPosition, "initial position should not be an invalid pre computing position");
-
       //****************************************************
-      // Point 2/6 of logic for new position
+      // Point 1/6 of logic for new position
       // Loop: generate new position
       //****************************************************
       propose(positionId, workingChain, tmpVecValues);
       queso_require_msg(m_targetPdf.domainSet().contains(tmpVecValues),
           "generated proposal lies outside of the support of the posterior");
-
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 5            ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
-                                << ": about to set TK pre computing position of local id " << stageId+1
-                                << ", values = " << tmpVecValues
-                                << std::endl;
-      }
-      bool validPreComputingPosition = m_tk->setPreComputingPosition(tmpVecValues,stageId+1);
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 5            ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
-                                << ": returned from setting TK pre computing position of local id " << stageId+1
-                                << ", values = " << tmpVecValues
-                                << ", valid = "  << validPreComputingPosition
-                                << std::endl;
-      }
 
       if (outOfTargetSupport) {
         logPrior      = -INFINITY;
@@ -1043,7 +999,7 @@ SequenceGenerator<V, M>::generateFullChain(
       }
 
       //****************************************************
-      // Point 3/6 of logic for new position
+      // Point 2/6 of logic for new position
       // Loop: update chain
       //****************************************************
       if (accept) {
@@ -1121,7 +1077,7 @@ SequenceGenerator<V, M>::generateFullChain(
       }
 
       //****************************************************
-      // Point 4/6 of logic for new position
+      // Point 3/6 of logic for new position
       // Loop: print some information before going to the next chain position
       //****************************************************
       if ((m_env.subDisplayFile()                   ) &&
