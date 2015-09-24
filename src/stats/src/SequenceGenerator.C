@@ -293,7 +293,7 @@ SequenceGenerator<V, M>::generateSequence(
   if ((m_env.subDisplayFile()                   ) &&
       (m_env.displayVerbosity() >= 5            ) &&
       (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "Entering MetropolisHastingsSG<V,M>::generateSequence()..."
+    *m_env.subDisplayFile() << "Entering SequenceGenerator<V,M>::generateSequence()..."
                             << std::endl;
   }
 
@@ -354,7 +354,7 @@ SequenceGenerator<V, M>::generateSequence(
   //****************************************************
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+    *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                             << ", prefix = "                                         << m_optionsObj->m_prefix
                             << ", chain name = "                                     << workingChain.name()
                             << ": about to try to open generic output file '"        << m_optionsObj->m_dataOutputFileName
@@ -374,7 +374,7 @@ SequenceGenerator<V, M>::generateSequence(
 
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+    *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                             << ", prefix = "                                   << m_optionsObj->m_prefix
                             << ", raw chain name = "                           << workingChain.name()
                             << ": returned from opening generic output file '" << m_optionsObj->m_dataOutputFileName
@@ -394,7 +394,7 @@ SequenceGenerator<V, M>::generateSequence(
     // Take "sub" care of raw chain
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                               << ", prefix = "                                         << m_optionsObj->m_prefix
                               << ", raw chain name = "                                 << workingChain.name()
                               << ": about to try to write raw sub chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
@@ -416,7 +416,7 @@ SequenceGenerator<V, M>::generateSequence(
           (m_optionsObj->m_totallyMute == false)) {
         V tmpVec(m_vectorSpace.zeroVector());
         rawSubMLEpositions.getPositionValues(0,tmpVec);
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                                 << ": just computed MLE"
                                 << ", rawSubMLEvalue = "                       << rawSubMLEvalue
                                 << ", rawSubMLEpositions.subSequenceSize() = " << rawSubMLEpositions.subSequenceSize()
@@ -436,7 +436,7 @@ SequenceGenerator<V, M>::generateSequence(
           (m_optionsObj->m_totallyMute == false)) {
         V tmpVec(m_vectorSpace.zeroVector());
         rawSubMAPpositions.getPositionValues(0,tmpVec);
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                                 << ": just computed MAP"
                                 << ", rawSubMAPvalue = "                       << rawSubMAPvalue
                                 << ", rawSubMAPpositions.subSequenceSize() = " << rawSubMAPpositions.subSequenceSize()
@@ -447,7 +447,7 @@ SequenceGenerator<V, M>::generateSequence(
 
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                               << ", prefix = "                                         << m_optionsObj->m_prefix
                               << ", raw chain name = "                                 << workingChain.name()
                               << ": returned from writing raw sub chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
@@ -459,7 +459,7 @@ SequenceGenerator<V, M>::generateSequence(
     // Take "unified" care of raw chain
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                               << ", prefix = "                                             << m_optionsObj->m_prefix
                               << ", raw chain name = "                                     << workingChain.name()
                               << ": about to try to write raw unified chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
@@ -473,7 +473,7 @@ SequenceGenerator<V, M>::generateSequence(
                                       m_optionsObj->m_rawChainDataOutputFileType);
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                               << ", prefix = "                                             << m_optionsObj->m_prefix
                               << ", raw chain name = "                                     << workingChain.name()
                               << ": returned from writing raw unified chain output file '" << m_optionsObj->m_rawChainDataOutputFileName
@@ -507,7 +507,7 @@ SequenceGenerator<V, M>::generateSequence(
         // zero) actually contains positions
         if (rawUnifiedMLEpositions.subSequenceSize() > 0) {
           rawUnifiedMLEpositions.getPositionValues(0,tmpVec);
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                                   << ": just computed MLE"
                                   << ", rawUnifiedMLEvalue = "                       << rawUnifiedMLEvalue
                                   << ", rawUnifiedMLEpositions.subSequenceSize() = " << rawUnifiedMLEpositions.subSequenceSize()
@@ -531,7 +531,7 @@ SequenceGenerator<V, M>::generateSequence(
         // zero) actually contains positions
         if (rawUnifiedMAPpositions.subSequenceSize() > 0) {
           rawUnifiedMAPpositions.getPositionValues(0,tmpVec);
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                                   << ": just computed MAP"
                                   << ", rawUnifiedMAPvalue = "                       << rawUnifiedMAPvalue
                                   << ", rawUnifiedMAPpositions.subSequenceSize() = " << rawUnifiedMAPpositions.subSequenceSize()
@@ -588,7 +588,7 @@ SequenceGenerator<V, M>::generateSequence(
     // Write filtered chain
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                               << ", prefix = "                                                      << m_optionsObj->m_prefix
                               << ": checking necessity of opening output files for filtered chain " << workingChain.name()
                               << "..."
@@ -605,7 +605,7 @@ SequenceGenerator<V, M>::generateSequence(
                                     m_optionsObj->m_filteredChainDataOutputAllowedSet);
       if ((m_env.subDisplayFile()                   ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                                 << ", prefix = "                << m_optionsObj->m_prefix
                                 << ": closed sub output file '" << m_optionsObj->m_filteredChainDataOutputFileName
                                 << "' for filtered chain "      << workingChain.name()
@@ -638,7 +638,7 @@ SequenceGenerator<V, M>::generateSequence(
                                         m_optionsObj->m_filteredChainDataOutputFileType);
       if ((m_env.subDisplayFile()                   ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                                 << ", prefix = "                    << m_optionsObj->m_prefix
                                 << ": closed unified output file '" << m_optionsObj->m_filteredChainDataOutputFileName
                                 << "' for filtered chain "          << workingChain.name()
@@ -675,7 +675,7 @@ SequenceGenerator<V, M>::generateSequence(
     delete genericFilePtrSet.ofsVar;
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateSequence()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateSequence()"
                               << ", prefix = "                    << m_optionsObj->m_prefix
                               << ": closed generic output file '" << m_optionsObj->m_dataOutputFileName
                               << "' (chain name is "              << workingChain.name()
@@ -689,12 +689,12 @@ SequenceGenerator<V, M>::generateSequence(
     *m_env.subDisplayFile() << std::endl;
   }
 
-  //m_env.syncPrintDebugMsg("Leaving MetropolisHastingsSG<V,M>::generateSequence()",2,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
+  //m_env.syncPrintDebugMsg("Leaving SequenceGenerator<V,M>::generateSequence()",2,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
 
   if ((m_env.subDisplayFile()                   ) &&
       (m_env.displayVerbosity() >= 5            ) &&
       (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "Leaving MetropolisHastingsSG<V,M>::generateSequence()"
+    *m_env.subDisplayFile() << "Leaving SequenceGenerator<V,M>::generateSequence()"
                             << std::endl;
   }
 
@@ -733,10 +733,10 @@ SequenceGenerator<V, M>::generateFullChain(
 
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
-    *m_env.subDisplayFile() << "\nIn MetropolisHastingsSG<V,M>::generateFullChain()"
+    *m_env.subDisplayFile() << "\nIn SequenceGenerator<V,M>::generateFullChain()"
                             << ": contents of initial position are:";
     *m_env.subDisplayFile() << valuesOf1stPosition; // FIX ME: might need parallelism
-    *m_env.subDisplayFile() << "\nIn MetropolisHastingsSG<V,M>::generateFullChain()"
+    *m_env.subDisplayFile() << "\nIn SequenceGenerator<V,M>::generateFullChain()"
                             << ": targetPdf.domaintSet() info is:"
                             << m_targetPdf.domainSet();
     *m_env.subDisplayFile() << std::endl;
@@ -765,10 +765,10 @@ SequenceGenerator<V, M>::generateFullChain(
   bool outOfTargetSupport = !m_targetPdf.domainSet().contains(valuesOf1stPosition);
   if ((m_env.subDisplayFile()) &&
       (outOfTargetSupport    )) {
-    *m_env.subDisplayFile() << "ERROR: In MetropolisHastingsSG<V,M>::generateFullChain()"
+    *m_env.subDisplayFile() << "ERROR: In SequenceGenerator<V,M>::generateFullChain()"
                             << ": contents of initial position are:\n";
     *m_env.subDisplayFile() << valuesOf1stPosition; // FIX ME: might need parallelism
-    *m_env.subDisplayFile() << "\nERROR: In MetropolisHastingsSG<V,M>::generateFullChain()"
+    *m_env.subDisplayFile() << "\nERROR: In SequenceGenerator<V,M>::generateFullChain()"
                             << ": targetPdf.domaintSet() info is:\n"
                             << m_targetPdf.domainSet();
     *m_env.subDisplayFile() << std::endl;
@@ -783,7 +783,7 @@ SequenceGenerator<V, M>::generateFullChain(
     if ((m_env.subDisplayFile()                   ) &&
         (m_env.displayVerbosity() >= 3            ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
             << ": just returned from likelihood() for initial chain position"
             << ", logPrior = "      << logPrior
             << ", logLikelihood = " << logLikelihood
@@ -798,7 +798,7 @@ SequenceGenerator<V, M>::generateFullChain(
     if ((m_env.subDisplayFile()                   ) &&
         (m_env.displayVerbosity() >= 3            ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
             << ": used input prior and likelihood for initial chain position"
             << ", logPrior = "      << logPrior
             << ", logLikelihood = " << logLikelihood
@@ -842,7 +842,7 @@ SequenceGenerator<V, M>::generateFullChain(
                                   m_optionsObj->m_rawChainDataOutputAllowedSet);
     if ((m_env.subDisplayFile()                   ) &&
         (m_optionsObj->m_totallyMute == false)) {
-      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+      *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                               << ", " << 0 + 1 - m_optionsObj->m_rawChainDataOutputPeriod << " <= pos <= " << 0
                               << std::endl;
     }
@@ -924,7 +924,7 @@ SequenceGenerator<V, M>::generateFullChain(
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 5            ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": about to set TK pre computing position of local id " << 0
                                 << ", values = " << currentPositionData.vecValues()
                                 << std::endl;
@@ -933,7 +933,7 @@ SequenceGenerator<V, M>::generateFullChain(
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 5            ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": returned from setting TK pre computing position of local id " << 0
                                 << ", values = " << currentPositionData.vecValues()
                                 << ", valid = "  << validPreComputingPosition
@@ -969,7 +969,7 @@ SequenceGenerator<V, M>::generateFullChain(
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 5            ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": about to set TK pre computing position of local id " << stageId+1
                                 << ", values = " << tmpVecValues
                                 << std::endl;
@@ -978,7 +978,7 @@ SequenceGenerator<V, M>::generateFullChain(
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 5            ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": returned from setting TK pre computing position of local id " << stageId+1
                                 << ", values = " << tmpVecValues
                                 << ", valid = "  << validPreComputingPosition
@@ -995,7 +995,7 @@ SequenceGenerator<V, M>::generateFullChain(
         if ((m_env.subDisplayFile()                   ) &&
             (m_env.displayVerbosity() >= 3            ) &&
             (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                   << ": just returned from likelihood() for chain position of id " << positionId
                                   << ", logPrior = "      << logPrior
                                   << ", logLikelihood = " << logLikelihood
@@ -1034,7 +1034,7 @@ SequenceGenerator<V, M>::generateFullChain(
         if ((m_env.subDisplayFile()                   ) &&
             (m_env.displayVerbosity() >= 10           ) &&
             (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                   << ": for chain position of id = " << positionId
                                   << std::endl;
         }
@@ -1045,7 +1045,7 @@ SequenceGenerator<V, M>::generateFullChain(
       if ((m_env.subDisplayFile()                   ) &&
           (displayDetail                            ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": for chain position of id = " << positionId
                                 << ", outOfTargetSupport = "       << outOfTargetSupport
                                 << ", alpha = "                    << alphaFirstCandidate
@@ -1086,7 +1086,7 @@ SequenceGenerator<V, M>::generateFullChain(
         if ((m_env.subDisplayFile()                   ) &&
             (m_env.displayVerbosity()         >= 10   ) &&
             (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                   << ", for chain position of id = " << positionId
                                   << ", " << positionId + 1 - m_optionsObj->m_rawChainDataOutputPeriod << " <= pos <= " << positionId
                                   << std::endl;
@@ -1098,7 +1098,7 @@ SequenceGenerator<V, M>::generateFullChain(
                                       m_optionsObj->m_rawChainDataOutputAllowedSet);
         if ((m_env.subDisplayFile()                   ) &&
             (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                   << ", for chain position of id = " << positionId
                                   << ", " << positionId + 1 - m_optionsObj->m_rawChainDataOutputPeriod << " <= pos <= " << positionId
                                   << std::endl;
@@ -1153,7 +1153,7 @@ SequenceGenerator<V, M>::generateFullChain(
       if ((m_env.subDisplayFile()                   ) &&
           (m_env.displayVerbosity() >= 3            ) &&
           (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": finishing chain position of id = " << positionId
                                 << ", accept = "                         << accept
                                 << ", curLogTarget  = "                  << currentPositionData.logTarget()
