@@ -915,38 +915,24 @@ SequenceGenerator<V, M>::generateFullChain(
       queso_require_msg(m_targetPdf.domainSet().contains(tmpVecValues),
           "generated proposal lies outside of the support of the posterior");
 
-      if (outOfTargetSupport) {
-        logPrior      = -INFINITY;
-        logLikelihood = -INFINITY;
-        logTarget     = -INFINITY;
+      logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
+
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_env.displayVerbosity() >= 3            ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
+                                << ": just returned from likelihood() for chain position of id " << positionId
+                                << ", logPrior = "      << logPrior
+                                << ", logLikelihood = " << logLikelihood
+                                << ", logTarget = "     << logTarget
+                                << std::endl;
       }
-      else {
-        logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
-        if ((m_env.subDisplayFile()                   ) &&
-            (m_env.displayVerbosity() >= 3            ) &&
-            (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
-                                  << ": just returned from likelihood() for chain position of id " << positionId
-                                  << ", logPrior = "      << logPrior
-                                  << ", logLikelihood = " << logLikelihood
-                                  << ", logTarget = "     << logTarget
-                                  << std::endl;
-        }
-      }
+
       currentCandidateData.set(tmpVecValues,
                                outOfTargetSupport,
                                logLikelihood,
                                logTarget);
 
-
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 10           ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "\n"
-                                << "\n-----------------------------------------------------------\n"
-                                << "\n"
-                                << std::endl;
-      }
       bool accept = false;
       double alphaFirstCandidate = 0.;
       if (outOfTargetSupport) {
@@ -961,13 +947,6 @@ SequenceGenerator<V, M>::generateFullChain(
         else {
           alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,NULL);
         }
-        if ((m_env.subDisplayFile()                   ) &&
-            (m_env.displayVerbosity() >= 10           ) &&
-            (m_optionsObj->m_totallyMute == false)) {
-          *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
-                                  << ": for chain position of id = " << positionId
-                                  << std::endl;
-        }
         accept = acceptAlpha(alphaFirstCandidate);
       }
 
@@ -977,7 +956,6 @@ SequenceGenerator<V, M>::generateFullChain(
           (m_optionsObj->m_totallyMute == false)) {
         *m_env.subDisplayFile() << "In SequenceGenerator<V,M>::generateFullChain()"
                                 << ": for chain position of id = " << positionId
-                                << ", outOfTargetSupport = "       << outOfTargetSupport
                                 << ", alpha = "                    << alphaFirstCandidate
                                 << ", accept = "                   << accept
                                 << ", currentCandidateData.vecValues() = ";
@@ -986,14 +964,6 @@ SequenceGenerator<V, M>::generateFullChain(
                                 << "\n curLogTarget  = "           << currentPositionData.logTarget()
                                 << "\n"
                                 << "\n canLogTarget  = "           << currentCandidateData.logTarget()
-                                << "\n"
-                                << std::endl;
-      }
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 10           ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "\n"
-                                << "\n-----------------------------------------------------------\n"
                                 << "\n"
                                 << std::endl;
       }
