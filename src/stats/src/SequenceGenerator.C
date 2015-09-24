@@ -807,12 +807,11 @@ SequenceGenerator<V, M>::generateFullChain(
     }
   }
 
-  //*m_env.subDisplayFile() << "AQUI 001" << std::endl;
   MarkovChainPositionData<V> currentPositionData(m_env,
-                                                          valuesOf1stPosition,
-                                                          outOfTargetSupport,
-                                                          logLikelihood,
-                                                          logTarget);
+                                                 valuesOf1stPosition,
+                                                 outOfTargetSupport,
+                                                 logLikelihood,
+                                                 logTarget);
 
   V gaussianVector(m_vectorSpace.zeroVector());
   V tmpVecValues(m_vectorSpace.zeroVector());
@@ -909,15 +908,7 @@ SequenceGenerator<V, M>::generateFullChain(
       // Point 1/6 of logic for new position
       // Loop: initialize variables and print some information
       //****************************************************
-      if ((m_env.subDisplayFile()                   ) &&
-          (m_env.displayVerbosity() >= 3            ) &&
-          (m_optionsObj->m_totallyMute == false)) {
-        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::generateFullChain()"
-                                << ": beginning chain position of id = "  << positionId
-                                << ", m_optionsObj->m_drMaxNumExtraStages = " << m_optionsObj->m_drMaxNumExtraStages
-                                << std::endl;
-      }
-      unsigned int stageId  = 0;
+      unsigned int stageId = 0;
 
       m_tk->clearPreComputingPositions();
 
