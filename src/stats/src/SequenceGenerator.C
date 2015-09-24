@@ -721,8 +721,6 @@ SequenceGenerator<V, M>::generateFullChain(
     ScalarSequence<double> * workingLogLikelihoodValues,
     ScalarSequence<double> * workingLogTargetValues)
 {
-  //m_env.syncPrintDebugMsg("Entering MetropolisHastingsSG<V,M>::generateFullChain()",3,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
-
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
     *m_env.subDisplayFile() << "Starting the generation of Markov chain " << workingChain.name()
@@ -732,14 +730,6 @@ SequenceGenerator<V, M>::generateFullChain(
   }
 
   int iRC = UQ_OK_RC;
-  struct timeval timevalChain;
-  struct timeval timevalCandidate;
-  struct timeval timevalTarget;
-  struct timeval timevalMhAlpha;
-  struct timeval timevalDrAlpha;
-  struct timeval timevalDR;
-
-  iRC = gettimeofday(&timevalChain, NULL);
 
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
@@ -789,7 +779,6 @@ SequenceGenerator<V, M>::generateFullChain(
   double logLikelihood = 0.;
   double logTarget     = 0.;
   if (m_computeInitialPriorAndLikelihoodValues) {
-    if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalTarget, NULL);
     logTarget = m_targetPdfSynchronizer->callFunction(&valuesOf1stPosition,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment // KEY
     if ((m_env.subDisplayFile()                   ) &&
         (m_env.displayVerbosity() >= 3            ) &&
@@ -882,7 +871,6 @@ SequenceGenerator<V, M>::generateFullChain(
     m_logTargets    [0] = currentPositionData.logTarget();
     m_alphaQuotients[0] = 1.;
   }
-  //*m_env.subDisplayFile() << "AQUI 002" << std::endl;
 
   if ((m_env.subDisplayFile()                   ) &&
       (m_env.displayVerbosity() >= 10           ) &&
@@ -892,8 +880,6 @@ SequenceGenerator<V, M>::generateFullChain(
                             << "\n"
                             << std::endl;
   }
-
-  //m_env.syncPrintDebugMsg("In MetropolisHastingsSG<V,M>::generateFullChain(), right before main loop",3,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
 
   //****************************************************
   // Begin chain loop from positionId = 1
@@ -961,10 +947,6 @@ SequenceGenerator<V, M>::generateFullChain(
       //****************************************************
       bool keepGeneratingCandidates = true;
       while (keepGeneratingCandidates) {
-        if (m_optionsObj->m_rawChainMeasureRunTimes) {
-          iRC = gettimeofday(&timevalCandidate, NULL);
-        }
-
         propose(positionId, workingChain, tmpVecValues);
 
         outOfTargetSupport = !m_targetPdf.domainSet().contains(tmpVecValues);
@@ -1009,7 +991,6 @@ SequenceGenerator<V, M>::generateFullChain(
         logTarget     = -INFINITY;
       }
       else {
-        if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalTarget, NULL);
         logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
         if ((m_env.subDisplayFile()                   ) &&
             (m_env.displayVerbosity() >= 3            ) &&
@@ -1044,7 +1025,6 @@ SequenceGenerator<V, M>::generateFullChain(
         }
       }
       else {
-        if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalMhAlpha, NULL);
         if (m_optionsObj->m_rawChainGenerateExtra) {
           alphaFirstCandidate = this->alpha(currentPositionData,currentCandidateData,0,1,&m_alphaQuotients[positionId]);
         }
@@ -1089,7 +1069,7 @@ SequenceGenerator<V, M>::generateFullChain(
       }
 
       //****************************************************
-      // Point 4/6 of logic for new position
+      // Point 3/6 of logic for new position
       // Loop: update chain
       //****************************************************
       if (accept) {
@@ -1167,7 +1147,7 @@ SequenceGenerator<V, M>::generateFullChain(
       }
 
       //****************************************************
-      // Point 6/6 of logic for new position
+      // Point 4/6 of logic for new position
       // Loop: print some information before going to the next chain position
       //****************************************************
       if ((m_env.subDisplayFile()                   ) &&
@@ -1232,7 +1212,6 @@ SequenceGenerator<V, M>::generateFullChain(
   //****************************************************
   // Release memory before leaving routine
   //****************************************************
-  //m_env.syncPrintDebugMsg("Leaving MetropolisHastingsSG<V,M>::generateFullChain()",3,3000000,m_env.fullComm()); // Dangerous to barrier on fullComm ... // KAUST
 
   return;
 }
