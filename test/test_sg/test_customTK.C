@@ -37,8 +37,8 @@ public:
   virtual double lnValue(const V & domainVector, const V * domainDirection,
       V * gradVector, M * hessianMatrix, V * hessianEffect) const
   {
-    double x1 = domainVector[0];
-    double x2 = domainVector[1];
+    double x1 = domainVector[0] - 10;
+    double x2 = domainVector[1] - 10;
 
     return -0.5 * (x1 * x1 + x2 * x2);
   }
@@ -75,7 +75,6 @@ public:
       const QUESO::BaseVectorSequence<V, M> & workingChain,
       V & proposedState)
   {
-
     // Get current state
     workingChain.getPositionValues(positionId, proposedState);
 
@@ -136,8 +135,8 @@ int main(int argc, char ** argv) {
       postRv);
 
   QUESO::GslVector paramInitials(paramSpace.zeroVector());
-  paramInitials[0] = 0.0;
-  paramInitials[1] = 0.0;
+  paramInitials[0] = 10.0;
+  paramInitials[1] = 10.0;
 
   QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
 
@@ -158,7 +157,7 @@ int main(int argc, char ** argv) {
   mhOptions.m_tkUseLocalHessian = 0;
   mhOptions.m_tkUseNewtonComponent = 1;
   mhOptions.m_filteredChainGenerate = 0;
-  mhOptions.m_rawChainSize = 1000;
+  mhOptions.m_rawChainSize = 100000;
   mhOptions.m_putOutOfBoundsInChain = false;
   mhOptions.m_drMaxNumExtraStages = 1;
   mhOptions.m_drScalesForExtraStages.resize(1);
@@ -181,10 +180,18 @@ int main(int argc, char ** argv) {
       &proposalCovMatrix);
 
   QUESO::GslVector postSample(paramSpace.zeroVector());
-  for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
+  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslVector delta(paramSpace.zeroVector());
+  for (unsigned int i = 1; i < mhOptions.m_rawChainSize + 1; i++) {
     ip.postRv().realizer().realization(postSample);
+    for (unsigned int j = 0; j < dim; j++) {
+      delta[j] = postSample[j] - mean[j];
+      mean[j] += (double) delta[j] / i;
+    }
     std::cout << "Sample " << i + 1 << " is: " << postSample << std::endl;
   }
+
+  std::cout << "Mean: " << mean << std::endl;
 
 #ifdef QUESO_HAS_MPI
   MPI_Finalize();
