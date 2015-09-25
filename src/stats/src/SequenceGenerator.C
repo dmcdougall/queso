@@ -910,9 +910,14 @@ SequenceGenerator<V, M>::generateFullChain(
       // Point 1/6 of logic for new position
       // Loop: generate new position
       //****************************************************
-      propose(positionId, workingChain, tmpVecValues);
+
+      // positionId is the index of the proposed state, so we subtract 1 to get
+      // the index of the current state
+      propose(positionId - 1, workingChain, tmpVecValues);
+
       queso_require_msg(m_targetPdf.domainSet().contains(tmpVecValues),
           "generated proposal lies outside of the support of the posterior");
+
       outOfTargetSupport = false;
 
       logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
