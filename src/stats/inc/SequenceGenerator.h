@@ -120,8 +120,9 @@ public:
 
   //! Implement this method to compute the proposed state of the chain
   /*!
-   * \c positionId is the current sampler index, and \c workingChain is the
-   * whole chain.
+   * \c positionId is the index of the current state, and \c
+   * workingChain is the whole chain.  Therefore the index of the proposed
+   * state is \c positionId + 1.
    *
    * The reason the whole working chain is passed is because one may wish to
    * use chain history to compute the proposed state (cf. adaptive Metropolis)
