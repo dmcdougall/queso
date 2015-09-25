@@ -71,37 +71,20 @@ public:
   {
   }
 
-  virtual void generateSequence(
-      QUESO::BaseVectorSequence<V, M> & workingChain,
-      QUESO::ScalarSequence<double> * workingLogLikelihoodValues,
-      QUESO::ScalarSequence<double> * workingLogTargetValues)
-  {
-    QUESO::GslVector v(workingChain.vectorSpace().zeroVector());
-    v.cwSet(1.0);
-
-    workingChain.resizeSequence(CHAIN_SIZE);
-    workingLogLikelihoodValues->resizeSequence(CHAIN_SIZE);
-    workingLogTargetValues->resizeSequence(CHAIN_SIZE);
-
-    for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
-      this->m_tk->rv(0).realizer().realization(v);
-      workingChain.setPositionValues(i, v);
-    }
-
-    for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
-      (*workingLogLikelihoodValues)[i] = 1.0;
-    }
-
-    for (unsigned int i = 0; i < CHAIN_SIZE; i++) {
-      (*workingLogTargetValues)[i] = 1.0;
-    }
-  }
-
   virtual void propose(unsigned int positionId,
       const QUESO::BaseVectorSequence<V, M> & workingChain,
       V & proposedState)
   {
-    proposedState.cwSet(1.0);
+
+    // Get current state
+    workingChain.getPositionValues(positionId, proposedState);
+
+    // Get random jump
+    V jump(this->m_vectorSpace.zeroVector());
+    this->m_tk->rv(0).realizer().realization(jump);
+
+    // Increment current state by jump to get the proposed state
+    proposedState += jump;
   }
 };
 
@@ -130,8 +113,8 @@ int main(int argc, char ** argv) {
   QUESO::GslVector paramMins(paramSpace.zeroVector());
   QUESO::GslVector paramMaxs(paramSpace.zeroVector());
 
-  double min_val = -10.0;
-  double max_val = 10.0;
+  double min_val = -INFINITY;
+  double max_val = INFINITY;
   paramMins.cwSet(min_val);
   paramMaxs.cwSet(max_val);
 
@@ -188,7 +171,7 @@ int main(int argc, char ** argv) {
 
   QUESO::SharedPtr<RWSequenceGenerator<> >::Type
     sequenceGenerator(new RWSequenceGenerator<>("",
-                                                NULL,
+                                                &mhOptions,
                                                 ip.postRv(),
                                                 paramInitials,
                                                 &proposalCovMatrix));
