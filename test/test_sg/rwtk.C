@@ -34,7 +34,7 @@ template <class V, class M>
 bool
 RWTK<V, M>::symmetric() const
 {
-  return false;
+  return true;
 }
 
 template <class V, class M>
