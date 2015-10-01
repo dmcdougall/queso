@@ -18,7 +18,8 @@
 #include <queso/VectorSequence.h>
 #include <queso/TKGroup.h>
 
-#define CHAIN_SIZE 10
+#define MEAN 10.0
+#define STDDEV 0.5
 
 template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
@@ -37,10 +38,10 @@ public:
   virtual double lnValue(const V & domainVector, const V * domainDirection,
       V * gradVector, M * hessianMatrix, V * hessianEffect) const
   {
-    double x1 = domainVector[0] - 10;
-    double x2 = domainVector[1] - 10;
+    double x1 = domainVector[0] - MEAN;
+    double x2 = domainVector[1] - MEAN;
 
-    return -0.5 * (x1 * x1 + x2 * x2);
+    return -0.5 * (x1 * x1 + x2 * x2) / (STDDEV * STDDEV);
   }
 
   virtual double actualValue(const V & domainVector, const V * domainDirection,
@@ -152,12 +153,13 @@ int main(int argc, char ** argv) {
   mhOptions.m_rawChainDisplayPeriod = 50000;
   mhOptions.m_rawChainMeasureRunTimes = 1;
   mhOptions.m_rawChainDataOutputFileName = "output_test_customTK/ip_raw_chain";
+  mhOptions.m_rawChainDataOutputFileType = "txt";
   mhOptions.m_rawChainDataOutputAllowAll = 1;
   mhOptions.m_displayCandidates = 0;
   mhOptions.m_tkUseLocalHessian = 0;
   mhOptions.m_tkUseNewtonComponent = 1;
   mhOptions.m_filteredChainGenerate = 0;
-  mhOptions.m_rawChainSize = 100000;
+  mhOptions.m_rawChainSize = 1000000;
   mhOptions.m_putOutOfBoundsInChain = false;
   mhOptions.m_drMaxNumExtraStages = 1;
   mhOptions.m_drScalesForExtraStages.resize(1);
@@ -188,14 +190,26 @@ int main(int argc, char ** argv) {
       delta[j] = postSample[j] - mean[j];
       mean[j] += (double) delta[j] / i;
     }
-    std::cout << "Sample " << i + 1 << " is: " << postSample << std::endl;
   }
 
-  std::cout << "Mean: " << mean << std::endl;
+  double mean_lowerbound = MEAN - (3.0 * STDDEV / std::sqrt(mhOptions.m_rawChainSize));
+  double mean_upperbound = MEAN + (3.0 * STDDEV / std::sqrt(mhOptions.m_rawChainSize));
+
+  int return_val = 0;
+  for (unsigned int j = 0; j < dim; j++) {
+    if (mean[0] < mean_lowerbound || mean[0] > mean_upperbound) {
+      return_val = 1;
+      break;
+    }
+  }
+
+  std::cout << "Mean lower bound: " << mean_lowerbound << std::endl;
+  std::cout << "Mean: " << mean[0] << std::endl;
+  std::cout << "Mean upper bound: " << mean_upperbound << std::endl;
 
 #ifdef QUESO_HAS_MPI
   MPI_Finalize();
 #endif
 
-  return 0;
+  return return_val;
 }
