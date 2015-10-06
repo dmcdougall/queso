@@ -164,6 +164,7 @@ endif
 
 libqueso_la_SOURCES += stats/src/FiniteDistribution.C
 libqueso_la_SOURCES += stats/src/SequenceGenerator.C
+libqueso_la_SOURCES += stats/src/RandomWalkSG.C
 libqueso_la_SOURCES += stats/src/MetropolisHastingsSG.C
 libqueso_la_SOURCES += stats/src/MetropolisHastingsSGOptions.C
 libqueso_la_SOURCES += stats/src/MLSampling.C
@@ -385,6 +386,7 @@ libqueso_include_HEADERS += stats/inc/UniformJointPdf.h
 libqueso_include_HEADERS += stats/inc/WignerJointPdf.h
 libqueso_include_HEADERS += stats/inc/MarkovChainPositionData.h
 libqueso_include_HEADERS += stats/inc/SequenceGenerator.h
+libqueso_include_HEADERS += stats/inc/RandomWalkSG.h
 libqueso_include_HEADERS += stats/inc/MetropolisHastingsSG.h
 libqueso_include_HEADERS += stats/inc/MetropolisHastingsSGOptions.h
 libqueso_include_HEADERS += stats/inc/MLSampling.h
