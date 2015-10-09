@@ -44,34 +44,36 @@ template <class V, class M> class ScalarFunctionSynchronizer;
 template <class V> class MarkovChainPositionData;
 template <class T> class ScalarSequence;
 
-//--------------------------------------------------
-// MetropolisHastingsSG----------------------
-//--------------------------------------------------
-
-/*!\class MetropolisHastingsSG
- * \brief A templated class that represents a Metropolis-Hastings generator of samples.
+/*!
+ * \class SequenceGenerator
+ * \brief A templated class that represents an abstract base sequence generator
+ * of samples.
  *
- * This class implements a Metropolis-Hastings generator of samples. 'SG' stands for 'Sequence Generator'.
- * Options reading is handled by class 'MetropolisHastingsOptions'. If options request data to be
- * written in the output file (MATLAB .m format only, for now), the user can check which MATLAB variables
- * are defined and set by running 'grep zeros <OUTPUT FILE NAME>' after the solution procedures ends.
- * The names of the variables are self explanatory. */
-
+ * This class provides an interface for sequence generators (samplers).
+ * Options reading is handled by class 'MhOptionsValues'.
+ */
 template <class V = GslVector, class M = GslMatrix>
 class SequenceGenerator
 {
 public:
-  //! @name Constructor/Destructor methods
+  //!@name Constructor/Destructor methods
   //@{
   //! Constructor.
-  /*! This method reads the options from the options input file. It calls commonConstructor().
-   * Requirements: 1) the image set of the vector random variable 'sourceRv' should belong to a
-   * vector space of dimension equal to the size of the vector 'initialPosition' and 2) if
-   * 'inputProposalCovMatrix' is not NULL, is should be square and its size should be equal to the
-   * size of 'initialPosition'. If the requirements are satisfied, the constructor then reads input
-   * options that begin with the string '\<prefix\>_mh_'. For instance, if 'prefix' is
-   * 'pROblem_775_ip_', then the constructor will read all options that begin with 'pROblem_775_ip_mh_'.
-    Options reading is handled by class 'MetropolisHastingsOptions'.*/
+  /*!
+   * This method reads the options from the options input file.  Requirements:
+   * -# the image set of the vector random variable 'sourceRv' should belong to
+   *    a vector space of dimension equal to the size of the vector
+   *    'initialPosition', and;
+   * -# if 'inputProposalCovMatrix' is not NULL, is should be square and its
+   *    size should be equal to the size of 'initialPosition'.
+   * .
+   *
+   * If the requirements are satisfied, the constructor then reads input
+   * options that begin with the string '\<prefix\>_mh_'. For instance, if
+   * 'prefix' is 'pROblem_775_ip_', then the constructor will read all options
+   * that begin with 'pROblem_775_ip_mh_'.  Options reading is handled by class
+   * 'MhOptionsValues'.
+   */
   SequenceGenerator(const char * prefix,
                     const MhOptionsValues * alternativeOptionsValues,
                     const BaseVectorRV<V, M> & sourceRv,
