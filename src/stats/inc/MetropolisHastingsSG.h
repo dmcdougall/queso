@@ -252,7 +252,6 @@ private:
       double & logLikelihood,
       double & logTarget,
       struct timeval & timevalTarget,
-      struct timeval & timevalDrAlpha,
       bool & displayDetail);
 
   //! Adaptive Metropolis method that deals with adapting the proposal covariance matrix
