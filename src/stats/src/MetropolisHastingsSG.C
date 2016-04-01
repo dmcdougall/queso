@@ -1879,8 +1879,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
         accept = delayedRejection(positionId,
                                   currentPositionData,
                                   currentCandidateData,
-                                  validPreComputingPosition,
-                                  tmpVecValues);
+                                  validPreComputingPosition);
       }
 
       // sep2011
@@ -2102,8 +2101,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
     unsigned int & positionId,
     MarkovChainPositionData<P_V> & currentPositionData,
     MarkovChainPositionData<P_V> & currentCandidateData,
-    bool & validPreComputingPosition,
-    P_V & tmpVecValues)
+    bool & validPreComputingPosition)
 {
   if ((m_optionsObj->m_drDuringAmNonAdaptiveInt  == false     ) &&
       (m_optionsObj->m_tkUseLocalHessian         == false     ) &&
@@ -2160,6 +2158,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
 
     bool keepGeneratingCandidates = true;
     bool outOfTargetSupport = false;
+    P_V tmpVecValues(currentCandidateData.vecValues());
     while (keepGeneratingCandidates) {
       if (m_optionsObj->m_rawChainMeasureRunTimes) {
         iRC = gettimeofday(&timevalCandidate, NULL);
