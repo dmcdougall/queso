@@ -1876,13 +1876,12 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
       if ((accept                                   == false) &&
           (outOfTargetSupport                       == false) && // IMPORTANT
           (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
-        delayedRejection(accept,
-            outOfTargetSupport,
-            positionId,
-            currentPositionData,
-            currentCandidateData,
-            validPreComputingPosition,
-            tmpVecValues);
+        accept = delayedRejection(outOfTargetSupport,
+                                  positionId,
+                                  currentPositionData,
+                                  currentCandidateData,
+                                  validPreComputingPosition,
+                                  tmpVecValues);
       }
 
       // sep2011
@@ -2099,9 +2098,8 @@ MetropolisHastingsSG<P_V, P_M>::propose(unsigned int positionId,
 }
 
 template <class P_V, class P_M>
-void
+bool
 MetropolisHastingsSG<P_V, P_M>::delayedRejection(
-    bool & accept,
     bool & outOfTargetSupport,
     unsigned int & positionId,
     MarkovChainPositionData<P_V> & currentPositionData,
@@ -2114,7 +2112,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
       (m_optionsObj->m_amInitialNonAdaptInterval >  0         ) &&
       (m_optionsObj->m_amAdaptInterval           >  0         ) &&
       (positionId <= m_optionsObj->m_amInitialNonAdaptInterval)) {
-    return;
+    return false;
   }
 
   unsigned int stageId = 0;
@@ -2138,6 +2136,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
   tkStageIds[0] = 0;
   tkStageIds[1] = 1;
 
+  bool accept = false;
   while ((validPreComputingPosition == true                 ) &&
          (accept                    == false                ) &&
          (stageId < m_optionsObj->m_drMaxNumExtraStages)) {
@@ -2272,6 +2271,8 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
   for (unsigned int i = 0; i < drPositionsData.size(); ++i) {
     if (drPositionsData[i]) delete drPositionsData[i];
   }
+
+  return accept;
 }
 
 template <class P_V, class P_M>
