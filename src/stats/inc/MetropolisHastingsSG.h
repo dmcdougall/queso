@@ -245,7 +245,6 @@ private:
       MarkovChainPositionData<P_V> & currentCandidateData,
       bool & validPreComputingPosition,
       P_V & tmpVecValues,
-      double & logPrior,
       double & logLikelihood,
       double & logTarget);
 
