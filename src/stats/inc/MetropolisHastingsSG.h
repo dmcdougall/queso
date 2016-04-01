@@ -242,7 +242,6 @@ private:
       bool & outOfTargetSupport,
       unsigned int & positionId,
       int & iRC,
-      struct timeval & timevalDR,
       MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData,
       bool & validPreComputingPosition,
