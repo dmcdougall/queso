@@ -237,8 +237,7 @@ private:
                                    ScalarSequence<double>*      workingLogTargetValues);
 
   //! Do delayed rejection
-  void delayedRejection(unsigned int & stageId,
-      bool & accept,
+  void delayedRejection(bool & accept,
       bool & outOfTargetSupport,
       unsigned int & positionId,
       MarkovChainPositionData<P_V> & currentPositionData,

@@ -1876,8 +1876,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
       if ((accept                                   == false) &&
           (outOfTargetSupport                       == false) && // IMPORTANT
           (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
-        delayedRejection(stageId,
-            accept,
+        delayedRejection(accept,
             outOfTargetSupport,
             positionId,
             currentPositionData,
@@ -2101,7 +2100,7 @@ MetropolisHastingsSG<P_V, P_M>::propose(unsigned int positionId,
 
 template <class P_V, class P_M>
 void
-MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
+MetropolisHastingsSG<P_V, P_M>::delayedRejection(
     bool & accept,
     bool & outOfTargetSupport,
     unsigned int & positionId,
@@ -2118,6 +2117,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
     return;
   }
 
+  unsigned int stageId = 0;
   std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
   std::vector<unsigned int> tkStageIds (stageId+2,0);
 
