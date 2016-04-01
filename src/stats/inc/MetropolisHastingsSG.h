@@ -244,7 +244,6 @@ private:
       MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData,
       bool & validPreComputingPosition,
-      struct timeval & timevalCandidate,
       P_V & tmpVecValues,
       double & logPrior,
       double & logLikelihood,
