@@ -1864,153 +1864,26 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
       // Point 3/6 of logic for new position
       // Loop: delayed rejection
       //****************************************************
+      delayedRejection(stageId,
+          accept,
+          outOfTargetSupport,
+          positionId,
+          iRC,
+          timevalDR,
+          currentPositionData,
+          currentCandidateData,
+          validPreComputingPosition,
+          keepGeneratingCandidates,
+          timevalCandidate,
+          tmpVecValues,
+          logPrior,
+          logLikelihood,
+          logTarget,
+          timevalTarget,
+          timevalDrAlpha,
+          displayDetail);
+
       // sep2011
-      std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
-      std::vector<unsigned int> tkStageIds (stageId+2,0);
-      if ((accept                                   == false) &&
-          (outOfTargetSupport                       == false) && // IMPORTANT
-          (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
-        if ((m_optionsObj->m_drDuringAmNonAdaptiveInt  == false     ) &&
-            (m_optionsObj->m_tkUseLocalHessian         == false     ) &&
-            (m_optionsObj->m_amInitialNonAdaptInterval >  0         ) &&
-            (m_optionsObj->m_amAdaptInterval           >  0         ) &&
-            (positionId <= m_optionsObj->m_amInitialNonAdaptInterval)) {
-          // Avoid DR now
-        }
-        else {
-          if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalDR, NULL);
-
-          drPositionsData[0] = new MarkovChainPositionData<P_V>(currentPositionData );
-          drPositionsData[1] = new MarkovChainPositionData<P_V>(currentCandidateData);
-
-          tkStageIds[0] = 0;
-          tkStageIds[1] = 1;
-
-          while ((validPreComputingPosition == true                 ) &&
-                 (accept                    == false                ) &&
-                 (stageId < m_optionsObj->m_drMaxNumExtraStages)) {
-            if ((m_env.subDisplayFile()                   ) &&
-                (m_env.displayVerbosity() >= 10           ) &&
-                (m_optionsObj->m_totallyMute == false)) {
-              *m_env.subDisplayFile() << "\n"
-                                      << "\n+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
-                                      << "\n"
-                                      << std::endl;
-            }
-            m_rawChainInfo.numDRs++;
-            stageId++;
-            m_stageIdForDebugging = stageId;
-            if ((m_env.subDisplayFile()                   ) &&
-                (m_env.displayVerbosity() >= 10           ) &&
-                (m_optionsObj->m_totallyMute == false)) {
-              *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
-                                      << ": for chain position of id = " << positionId
-                                      << ", beginning stageId = "        << stageId
-                                      << std::endl;
-            }
-
-            keepGeneratingCandidates = true;
-            while (keepGeneratingCandidates) {
-              if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalCandidate, NULL);
-              m_tk->rv(tkStageIds).realizer().realization(tmpVecValues);
-              if (m_numDisabledParameters > 0) { // gpmsa2
-                for (unsigned int paramId = 0; paramId < m_vectorSpace.dimLocal(); ++paramId) {
-                  if (m_parameterEnabledStatus[paramId] == false) {
-                    tmpVecValues[paramId] = m_initialPosition[paramId];
-                  }
-                }
-              }
-              if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.candidateRunTime += MiscGetEllapsedSeconds(&timevalCandidate);
-
-              outOfTargetSupport = !m_targetPdf.domainSet().contains(tmpVecValues);
-
-              if (m_optionsObj->m_putOutOfBoundsInChain) keepGeneratingCandidates = false;
-              else                                            keepGeneratingCandidates = outOfTargetSupport;
-            }
-
-            if ((m_env.subDisplayFile()                   ) &&
-                (m_env.displayVerbosity() >= 5            ) &&
-                (m_optionsObj->m_totallyMute == false)) {
-              *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
-                                      << ": about to set TK pre computing position of local id " << stageId+1
-                                      << ", values = " << tmpVecValues
-                                      << std::endl;
-            }
-            validPreComputingPosition = m_tk->setPreComputingPosition(tmpVecValues,stageId+1);
-            if ((m_env.subDisplayFile()                   ) &&
-                (m_env.displayVerbosity() >= 5            ) &&
-                (m_optionsObj->m_totallyMute == false)) {
-              *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
-                                      << ": returned from setting TK pre computing position of local id " << stageId+1
-                                      << ", values = " << tmpVecValues
-                                      << ", valid = "  << validPreComputingPosition
-                                      << std::endl;
-            }
-
-            if (outOfTargetSupport) {
-              m_rawChainInfo.numOutOfTargetSupportInDR++; // new 2010/May/12
-              logPrior      = -INFINITY;
-              logLikelihood = -INFINITY;
-              logTarget     = -INFINITY;
-            }
-            else {
-              if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalTarget, NULL);
-              logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
-              if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.targetRunTime += MiscGetEllapsedSeconds(&timevalTarget);
-              m_rawChainInfo.numTargetCalls++;
-              if ((m_env.subDisplayFile()                   ) &&
-                  (m_env.displayVerbosity() >= 3            ) &&
-                  (m_optionsObj->m_totallyMute == false)) {
-                *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
-                                        << ": just returned from likelihood() for chain position of id " << positionId
-                                        << ", m_rawChainInfo.numTargetCalls = " << m_rawChainInfo.numTargetCalls
-                                        << ", stageId = "       << stageId
-                                        << ", logPrior = "      << logPrior
-                                        << ", logLikelihood = " << logLikelihood
-                                        << ", logTarget = "     << logTarget
-                                        << std::endl;
-              }
-            }
-            currentCandidateData.set(tmpVecValues,
-                                     outOfTargetSupport,
-                                     logLikelihood,
-                                     logTarget);
-
-            drPositionsData.push_back(new MarkovChainPositionData<P_V>(currentCandidateData));
-            tkStageIds.push_back     (stageId+1);
-
-            double alphaDR = 0.;
-            if (outOfTargetSupport == false) {
-              if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalDrAlpha, NULL);
-              alphaDR = this->alpha(drPositionsData,tkStageIds);
-              if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.drAlphaRunTime += MiscGetEllapsedSeconds(&timevalDrAlpha);
-              accept = acceptAlpha(alphaDR);
-            }
-
-            displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
-            if ((m_env.subDisplayFile()                   ) &&
-                (displayDetail                            ) &&
-                (m_optionsObj->m_totallyMute == false)) {
-              *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
-                                      << ": for chain position of id = " << positionId
-                                      << " and stageId = "               << stageId
-                                      << ", outOfTargetSupport = "       << outOfTargetSupport
-                                      << ", alpha = "                    << alphaDR
-                                      << ", accept = "                   << accept
-                                      << ", currentCandidateData.vecValues() = ";
-              *m_env.subDisplayFile() << currentCandidateData.vecValues(); // FIX ME: might need parallelism
-              *m_env.subDisplayFile() << std::endl;
-            }
-          } // while
-
-          if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.drRunTime += MiscGetEllapsedSeconds(&timevalDR);
-        } // if-else "Avoid DR now"
-      } // end of 'delayed rejection' logic
-
-      for (unsigned int i = 0; i < drPositionsData.size(); ++i) {
-        if (drPositionsData[i]) delete drPositionsData[i];
-      }
-
       //****************************************************
       // Point 4/6 of logic for new position
       // Loop: update chain
@@ -2221,6 +2094,175 @@ MetropolisHastingsSG<P_V, P_M>::propose(unsigned int positionId,
     P_V & proposedState) {
 
     m_tk->rv(0).realizer().realization(proposedState);
+}
+
+template <class P_V, class P_M>
+void
+MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
+    bool & accept,
+    bool & outOfTargetSupport,
+    unsigned int & positionId,
+    int & iRC,
+    struct timeval & timevalDR,
+    MarkovChainPositionData<P_V> & currentPositionData,
+    MarkovChainPositionData<P_V> & currentCandidateData,
+    bool & validPreComputingPosition,
+    bool & keepGeneratingCandidates,
+    struct timeval & timevalCandidate,
+    P_V & tmpVecValues,
+    double & logPrior,
+    double & logLikelihood,
+    double & logTarget,
+    struct timeval & timevalTarget,
+    struct timeval & timevalDrAlpha,
+    bool & displayDetail)
+{
+  std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
+  std::vector<unsigned int> tkStageIds (stageId+2,0);
+  if ((accept                                   == false) &&
+      (outOfTargetSupport                       == false) && // IMPORTANT
+      (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
+    if ((m_optionsObj->m_drDuringAmNonAdaptiveInt  == false     ) &&
+        (m_optionsObj->m_tkUseLocalHessian         == false     ) &&
+        (m_optionsObj->m_amInitialNonAdaptInterval >  0         ) &&
+        (m_optionsObj->m_amAdaptInterval           >  0         ) &&
+        (positionId <= m_optionsObj->m_amInitialNonAdaptInterval)) {
+      // Avoid DR now
+    }
+    else {
+      if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalDR, NULL);
+
+      drPositionsData[0] = new MarkovChainPositionData<P_V>(currentPositionData );
+      drPositionsData[1] = new MarkovChainPositionData<P_V>(currentCandidateData);
+
+      tkStageIds[0] = 0;
+      tkStageIds[1] = 1;
+
+      while ((validPreComputingPosition == true                 ) &&
+             (accept                    == false                ) &&
+             (stageId < m_optionsObj->m_drMaxNumExtraStages)) {
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity() >= 10           ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "\n"
+                                  << "\n+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+                                  << "\n"
+                                  << std::endl;
+        }
+        m_rawChainInfo.numDRs++;
+        stageId++;
+        m_stageIdForDebugging = stageId;
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity() >= 10           ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
+                                  << ": for chain position of id = " << positionId
+                                  << ", beginning stageId = "        << stageId
+                                  << std::endl;
+        }
+
+        keepGeneratingCandidates = true;
+        while (keepGeneratingCandidates) {
+          if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalCandidate, NULL);
+          m_tk->rv(tkStageIds).realizer().realization(tmpVecValues);
+          if (m_numDisabledParameters > 0) { // gpmsa2
+            for (unsigned int paramId = 0; paramId < m_vectorSpace.dimLocal(); ++paramId) {
+              if (m_parameterEnabledStatus[paramId] == false) {
+                tmpVecValues[paramId] = m_initialPosition[paramId];
+              }
+            }
+          }
+          if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.candidateRunTime += MiscGetEllapsedSeconds(&timevalCandidate);
+
+          outOfTargetSupport = !m_targetPdf.domainSet().contains(tmpVecValues);
+
+          if (m_optionsObj->m_putOutOfBoundsInChain) keepGeneratingCandidates = false;
+          else                                            keepGeneratingCandidates = outOfTargetSupport;
+        }
+
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity() >= 5            ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
+                                  << ": about to set TK pre computing position of local id " << stageId+1
+                                  << ", values = " << tmpVecValues
+                                  << std::endl;
+        }
+        validPreComputingPosition = m_tk->setPreComputingPosition(tmpVecValues,stageId+1);
+        if ((m_env.subDisplayFile()                   ) &&
+            (m_env.displayVerbosity() >= 5            ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
+                                  << ": returned from setting TK pre computing position of local id " << stageId+1
+                                  << ", values = " << tmpVecValues
+                                  << ", valid = "  << validPreComputingPosition
+                                  << std::endl;
+        }
+
+        if (outOfTargetSupport) {
+          m_rawChainInfo.numOutOfTargetSupportInDR++; // new 2010/May/12
+          logPrior      = -INFINITY;
+          logLikelihood = -INFINITY;
+          logTarget     = -INFINITY;
+        }
+        else {
+          if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalTarget, NULL);
+          logTarget = m_targetPdfSynchronizer->callFunction(&tmpVecValues,NULL,NULL,NULL,NULL,&logPrior,&logLikelihood); // Might demand parallel environment
+          if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.targetRunTime += MiscGetEllapsedSeconds(&timevalTarget);
+          m_rawChainInfo.numTargetCalls++;
+          if ((m_env.subDisplayFile()                   ) &&
+              (m_env.displayVerbosity() >= 3            ) &&
+              (m_optionsObj->m_totallyMute == false)) {
+            *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
+                                    << ": just returned from likelihood() for chain position of id " << positionId
+                                    << ", m_rawChainInfo.numTargetCalls = " << m_rawChainInfo.numTargetCalls
+                                    << ", stageId = "       << stageId
+                                    << ", logPrior = "      << logPrior
+                                    << ", logLikelihood = " << logLikelihood
+                                    << ", logTarget = "     << logTarget
+                                    << std::endl;
+          }
+        }
+        currentCandidateData.set(tmpVecValues,
+                                 outOfTargetSupport,
+                                 logLikelihood,
+                                 logTarget);
+
+        drPositionsData.push_back(new MarkovChainPositionData<P_V>(currentCandidateData));
+        tkStageIds.push_back     (stageId+1);
+
+        double alphaDR = 0.;
+        if (outOfTargetSupport == false) {
+          if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalDrAlpha, NULL);
+          alphaDR = this->alpha(drPositionsData,tkStageIds);
+          if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.drAlphaRunTime += MiscGetEllapsedSeconds(&timevalDrAlpha);
+          accept = acceptAlpha(alphaDR);
+        }
+
+        displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
+        if ((m_env.subDisplayFile()                   ) &&
+            (displayDetail                            ) &&
+            (m_optionsObj->m_totallyMute == false)) {
+          *m_env.subDisplayFile() << "In MetropolisHastingsSG<P_V,P_M>::generateFullChain()"
+                                  << ": for chain position of id = " << positionId
+                                  << " and stageId = "               << stageId
+                                  << ", outOfTargetSupport = "       << outOfTargetSupport
+                                  << ", alpha = "                    << alphaDR
+                                  << ", accept = "                   << accept
+                                  << ", currentCandidateData.vecValues() = ";
+          *m_env.subDisplayFile() << currentCandidateData.vecValues(); // FIX ME: might need parallelism
+          *m_env.subDisplayFile() << std::endl;
+        }
+      } // while
+
+      if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.drRunTime += MiscGetEllapsedSeconds(&timevalDR);
+    } // if-else "Avoid DR now"
+  } // end of 'delayed rejection' logic
+
+  for (unsigned int i = 0; i < drPositionsData.size(); ++i) {
+    if (drPositionsData[i]) delete drPositionsData[i];
+  }
+
 }
 
 template <class P_V, class P_M>

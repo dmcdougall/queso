@@ -236,6 +236,26 @@ private:
                                    ScalarSequence<double>*      workingLogLikelihoodValues,
                                    ScalarSequence<double>*      workingLogTargetValues);
 
+  //! Do delayed rejection
+  void delayedRejection(unsigned int & stageId,
+      bool & accept,
+      bool & outOfTargetSupport,
+      unsigned int & positionId,
+      int & iRC,
+      struct timeval & timevalDR,
+      MarkovChainPositionData<P_V> & currentPositionData,
+      MarkovChainPositionData<P_V> & currentCandidateData,
+      bool & validPreComputingPosition,
+      bool & keepGeneratingCandidates,
+      struct timeval & timevalCandidate,
+      P_V & tmpVecValues,
+      double & logPrior,
+      double & logLikelihood,
+      double & logTarget,
+      struct timeval & timevalTarget,
+      struct timeval & timevalDrAlpha,
+      bool & displayDetail);
+
   //! Adaptive Metropolis method that deals with adapting the proposal covariance matrix
   void adapt(unsigned int positionId,
       BaseVectorSequence<P_V, P_M> & workingChain);
