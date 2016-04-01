@@ -1883,8 +1883,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
           tmpVecValues,
           logPrior,
           logLikelihood,
-          logTarget,
-          timevalTarget);
+          logTarget);
 
       // sep2011
       //****************************************************
@@ -2111,8 +2110,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
     P_V & tmpVecValues,
     double & logPrior,
     double & logLikelihood,
-    double & logTarget,
-    struct timeval & timevalTarget)
+    double & logTarget)
 {
   std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
   std::vector<unsigned int> tkStageIds (stageId+2,0);
@@ -2131,6 +2129,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
       struct timeval timevalDR;
       struct timeval timevalDrAlpha;
       struct timeval timevalCandidate;
+      struct timeval timevalTarget;
 
       if (m_optionsObj->m_rawChainMeasureRunTimes) {
         iRC = gettimeofday(&timevalDR, NULL);

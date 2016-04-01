@@ -247,8 +247,7 @@ private:
       P_V & tmpVecValues,
       double & logPrior,
       double & logLikelihood,
-      double & logTarget,
-      struct timeval & timevalTarget);
+      double & logTarget);
 
   //! Adaptive Metropolis method that deals with adapting the proposal covariance matrix
   void adapt(unsigned int positionId,
