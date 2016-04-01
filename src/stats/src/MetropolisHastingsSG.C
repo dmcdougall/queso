@@ -1883,8 +1883,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
             currentPositionData,
             currentCandidateData,
             validPreComputingPosition,
-            tmpVecValues,
-            logTarget);
+            tmpVecValues);
       }
 
       // sep2011
@@ -2109,8 +2108,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
     MarkovChainPositionData<P_V> & currentPositionData,
     MarkovChainPositionData<P_V> & currentCandidateData,
     bool & validPreComputingPosition,
-    P_V & tmpVecValues,
-    double & logTarget)
+    P_V & tmpVecValues)
 {
   if ((m_optionsObj->m_drDuringAmNonAdaptiveInt  == false     ) &&
       (m_optionsObj->m_tkUseLocalHessian         == false     ) &&
@@ -2206,6 +2204,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
 
     double logPrior;
     double logLikelihood;
+    double logTarget;
     if (outOfTargetSupport) {
       m_rawChainInfo.numOutOfTargetSupportInDR++; // new 2010/May/12
       logPrior      = -INFINITY;

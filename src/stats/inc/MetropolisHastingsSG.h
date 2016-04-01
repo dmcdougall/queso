@@ -244,8 +244,7 @@ private:
       MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData,
       bool & validPreComputingPosition,
-      P_V & tmpVecValues,
-      double & logTarget);
+      P_V & tmpVecValues);
 
   //! Adaptive Metropolis method that deals with adapting the proposal covariance matrix
   void adapt(unsigned int positionId,
