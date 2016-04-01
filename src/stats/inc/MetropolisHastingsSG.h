@@ -241,7 +241,6 @@ private:
       bool & accept,
       bool & outOfTargetSupport,
       unsigned int & positionId,
-      int & iRC,
       MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData,
       bool & validPreComputingPosition,

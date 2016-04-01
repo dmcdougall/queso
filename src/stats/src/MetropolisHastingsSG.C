@@ -1866,7 +1866,6 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
           accept,
           outOfTargetSupport,
           positionId,
-          iRC,
           currentPositionData,
           currentCandidateData,
           validPreComputingPosition,
@@ -2097,7 +2096,6 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
     bool & accept,
     bool & outOfTargetSupport,
     unsigned int & positionId,
-    int & iRC,
     MarkovChainPositionData<P_V> & currentPositionData,
     MarkovChainPositionData<P_V> & currentCandidateData,
     bool & validPreComputingPosition,
@@ -2122,6 +2120,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
       // Avoid DR now
     }
     else {
+      int iRC = UQ_OK_RC;
       struct timeval timevalDR;
       struct timeval timevalDrAlpha;
 
