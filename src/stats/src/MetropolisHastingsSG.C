@@ -1880,7 +1880,6 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
           currentPositionData,
           currentCandidateData,
           validPreComputingPosition,
-          keepGeneratingCandidates,
           timevalCandidate,
           tmpVecValues,
           logPrior,
@@ -2110,7 +2109,6 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
     MarkovChainPositionData<P_V> & currentPositionData,
     MarkovChainPositionData<P_V> & currentCandidateData,
     bool & validPreComputingPosition,
-    bool & keepGeneratingCandidates,
     struct timeval & timevalCandidate,
     P_V & tmpVecValues,
     double & logPrior,
@@ -2169,7 +2167,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
                                   << std::endl;
         }
 
-        keepGeneratingCandidates = true;
+        bool keepGeneratingCandidates = true;
         while (keepGeneratingCandidates) {
           if (m_optionsObj->m_rawChainMeasureRunTimes) {
             iRC = gettimeofday(&timevalCandidate, NULL);
