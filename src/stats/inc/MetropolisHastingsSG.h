@@ -238,7 +238,6 @@ private:
 
   //! Do delayed rejection
   bool delayedRejection(
-      bool & outOfTargetSupport,
       unsigned int & positionId,
       MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData,

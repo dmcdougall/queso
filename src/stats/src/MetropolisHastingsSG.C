@@ -1876,8 +1876,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
       if ((accept                                   == false) &&
           (outOfTargetSupport                       == false) && // IMPORTANT
           (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
-        accept = delayedRejection(outOfTargetSupport,
-                                  positionId,
+        accept = delayedRejection(positionId,
                                   currentPositionData,
                                   currentCandidateData,
                                   validPreComputingPosition,
@@ -2100,7 +2099,6 @@ MetropolisHastingsSG<P_V, P_M>::propose(unsigned int positionId,
 template <class P_V, class P_M>
 bool
 MetropolisHastingsSG<P_V, P_M>::delayedRejection(
-    bool & outOfTargetSupport,
     unsigned int & positionId,
     MarkovChainPositionData<P_V> & currentPositionData,
     MarkovChainPositionData<P_V> & currentCandidateData,
@@ -2161,6 +2159,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
     }
 
     bool keepGeneratingCandidates = true;
+    bool outOfTargetSupport = false;
     while (keepGeneratingCandidates) {
       if (m_optionsObj->m_rawChainMeasureRunTimes) {
         iRC = gettimeofday(&timevalCandidate, NULL);
