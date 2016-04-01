@@ -1878,8 +1878,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
           (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
         accept = delayedRejection(positionId,
                                   currentPositionData,
-                                  currentCandidateData,
-                                  validPreComputingPosition);
+                                  currentCandidateData);
       }
 
       // sep2011
@@ -2100,8 +2099,7 @@ bool
 MetropolisHastingsSG<P_V, P_M>::delayedRejection(
     unsigned int & positionId,
     MarkovChainPositionData<P_V> & currentPositionData,
-    MarkovChainPositionData<P_V> & currentCandidateData,
-    bool & validPreComputingPosition)
+    MarkovChainPositionData<P_V> & currentCandidateData)
 {
   if ((m_optionsObj->m_drDuringAmNonAdaptiveInt  == false     ) &&
       (m_optionsObj->m_tkUseLocalHessian         == false     ) &&
@@ -2112,6 +2110,17 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
   }
 
   unsigned int stageId = 0;
+
+  bool validPreComputingPosition;
+
+  m_tk->clearPreComputingPositions();
+
+  validPreComputingPosition = m_tk->setPreComputingPosition(
+      currentPositionData.vecValues(), 0);
+
+  validPreComputingPosition = m_tk->setPreComputingPosition(
+      currentCandidateData.vecValues(), stageId + 1);
+
   std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
   std::vector<unsigned int> tkStageIds (stageId+2,0);
 
@@ -2156,9 +2165,9 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(
                               << std::endl;
     }
 
+    P_V tmpVecValues(currentCandidateData.vecValues());
     bool keepGeneratingCandidates = true;
     bool outOfTargetSupport = false;
-    P_V tmpVecValues(currentCandidateData.vecValues());
     while (keepGeneratingCandidates) {
       if (m_optionsObj->m_rawChainMeasureRunTimes) {
         iRC = gettimeofday(&timevalCandidate, NULL);

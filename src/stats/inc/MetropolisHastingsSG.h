@@ -240,8 +240,7 @@ private:
   bool delayedRejection(
       unsigned int & positionId,
       MarkovChainPositionData<P_V> & currentPositionData,
-      MarkovChainPositionData<P_V> & currentCandidateData,
-      bool & validPreComputingPosition);
+      MarkovChainPositionData<P_V> & currentCandidateData);
 
   //! Adaptive Metropolis method that deals with adapting the proposal covariance matrix
   void adapt(unsigned int positionId,
