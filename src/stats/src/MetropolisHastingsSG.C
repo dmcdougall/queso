@@ -1876,8 +1876,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
           logPrior,
           logLikelihood,
           logTarget,
-          timevalTarget,
-          displayDetail);
+          timevalTarget);
 
       // sep2011
       //****************************************************
@@ -2108,8 +2107,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
     double & logPrior,
     double & logLikelihood,
     double & logTarget,
-    struct timeval & timevalTarget,
-    bool & displayDetail)
+    struct timeval & timevalTarget)
 {
   std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
   std::vector<unsigned int> tkStageIds (stageId+2,0);
@@ -2236,7 +2234,7 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
           accept = acceptAlpha(alphaDR);
         }
 
-        displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
+        bool displayDetail = (m_env.displayVerbosity() >= 10/*99*/) || m_optionsObj->m_displayCandidates;
         if ((m_env.subDisplayFile()                   ) &&
             (displayDetail                            ) &&
             (m_optionsObj->m_totallyMute == false)) {
