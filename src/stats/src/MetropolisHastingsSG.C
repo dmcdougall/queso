@@ -1482,6 +1482,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
   m_rawChainInfo.reset();
 
   iRC = gettimeofday(&timevalChain, NULL);
+  queso_require_equal_to_msg(iRC, 0, "gettimeofday call failed");
 
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
@@ -2124,7 +2125,10 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
       struct timeval timevalDR;
       struct timeval timevalDrAlpha;
 
-      if (m_optionsObj->m_rawChainMeasureRunTimes) iRC = gettimeofday(&timevalDR, NULL);
+      if (m_optionsObj->m_rawChainMeasureRunTimes) {
+        iRC = gettimeofday(&timevalDR, NULL);
+        queso_require_equal_to_msg(iRC, 0, "gettimeofday call failed");
+      }
 
       drPositionsData[0] = new MarkovChainPositionData<P_V>(currentPositionData );
       drPositionsData[1] = new MarkovChainPositionData<P_V>(currentCandidateData);
