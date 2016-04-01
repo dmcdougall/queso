@@ -1873,17 +1873,21 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
       // Point 3/6 of logic for new position
       // Loop: delayed rejection
       //****************************************************
-      delayedRejection(stageId,
-          accept,
-          outOfTargetSupport,
-          positionId,
-          currentPositionData,
-          currentCandidateData,
-          validPreComputingPosition,
-          tmpVecValues,
-          logPrior,
-          logLikelihood,
-          logTarget);
+      if ((accept                                   == false) &&
+          (outOfTargetSupport                       == false) && // IMPORTANT
+          (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
+        delayedRejection(stageId,
+            accept,
+            outOfTargetSupport,
+            positionId,
+            currentPositionData,
+            currentCandidateData,
+            validPreComputingPosition,
+            tmpVecValues,
+            logPrior,
+            logLikelihood,
+            logTarget);
+      }
 
       // sep2011
       //****************************************************
@@ -2114,9 +2118,6 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
 {
   std::vector<MarkovChainPositionData<P_V>*> drPositionsData(stageId+2,NULL);
   std::vector<unsigned int> tkStageIds (stageId+2,0);
-  if ((accept                                   == false) &&
-      (outOfTargetSupport                       == false) && // IMPORTANT
-      (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
     if ((m_optionsObj->m_drDuringAmNonAdaptiveInt  == false     ) &&
         (m_optionsObj->m_tkUseLocalHessian         == false     ) &&
         (m_optionsObj->m_amInitialNonAdaptInterval >  0         ) &&
@@ -2270,7 +2271,6 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int & stageId,
 
       if (m_optionsObj->m_rawChainMeasureRunTimes) m_rawChainInfo.drRunTime += MiscGetEllapsedSeconds(&timevalDR);
     } // if-else "Avoid DR now"
-  } // end of 'delayed rejection' logic
 
   for (unsigned int i = 0; i < drPositionsData.size(); ++i) {
     if (drPositionsData[i]) delete drPositionsData[i];
