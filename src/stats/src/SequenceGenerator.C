@@ -24,6 +24,7 @@
 
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/MpiComm.h>
 #include <queso/VectorRV.h>
 #include <queso/TKGroup.h>
 #include <queso/ScalarFunctionSynchronizer.h>
@@ -33,6 +34,100 @@
 #include <queso/SequenceGenerator.h>
 
 namespace QUESO {
+
+// Default constructor -----------------------------
+MHRawChainInfoStruct::MHRawChainInfoStruct()
+{
+  reset();
+}
+// Copy constructor----------------------------------
+MHRawChainInfoStruct::MHRawChainInfoStruct(const MHRawChainInfoStruct& rhs)
+{
+  this->copy(rhs);
+}
+// Destructor ---------------------------------------
+MHRawChainInfoStruct::~MHRawChainInfoStruct()
+{
+}
+// Set methods---------------------------------------
+MHRawChainInfoStruct&
+MHRawChainInfoStruct::operator=(const MHRawChainInfoStruct& rhs)
+{
+  this->copy(rhs);
+  return *this;
+}
+//---------------------------------------------------
+MHRawChainInfoStruct&
+MHRawChainInfoStruct::operator+=(const MHRawChainInfoStruct& rhs)
+{
+  runTime          += rhs.runTime;
+  candidateRunTime += rhs.candidateRunTime;
+  targetRunTime    += rhs.targetRunTime;
+  mhAlphaRunTime   += rhs.mhAlphaRunTime;
+  drAlphaRunTime   += rhs.drAlphaRunTime;
+  drRunTime        += rhs.drRunTime;
+  amRunTime        += rhs.amRunTime;
+
+  numTargetCalls            += rhs.numTargetCalls;
+  numDRs                    += rhs.numDRs;
+  numOutOfTargetSupport     += rhs.numOutOfTargetSupport;
+  numOutOfTargetSupportInDR += rhs.numOutOfTargetSupportInDR;
+  numRejections             += rhs.numRejections;
+
+  return *this;
+}
+// Misc methods--------------------------------------------------
+void
+MHRawChainInfoStruct::reset()
+{
+  runTime          = 0.;
+  candidateRunTime = 0.;
+  targetRunTime    = 0.;
+  mhAlphaRunTime   = 0.;
+  drAlphaRunTime   = 0.;
+  drRunTime        = 0.;
+  amRunTime        = 0.;
+
+  numTargetCalls            = 0;
+  numDRs                    = 0;
+  numOutOfTargetSupport     = 0;
+  numOutOfTargetSupportInDR = 0;
+  numRejections             = 0;
+}
+//---------------------------------------------------
+void
+MHRawChainInfoStruct::copy(const MHRawChainInfoStruct& rhs)
+{
+  runTime          = rhs.runTime;
+  candidateRunTime = rhs.candidateRunTime;
+  targetRunTime    = rhs.targetRunTime;
+  mhAlphaRunTime   = rhs.mhAlphaRunTime;
+  drAlphaRunTime   = rhs.drAlphaRunTime;
+  drRunTime        = rhs.drRunTime;
+  amRunTime        = rhs.amRunTime;
+
+  numTargetCalls            = rhs.numTargetCalls;
+  numDRs                    = rhs.numDRs;
+  numOutOfTargetSupport     = rhs.numOutOfTargetSupport;
+  numOutOfTargetSupportInDR = rhs.numOutOfTargetSupportInDR;
+  numRejections             = rhs.numRejections;
+
+  return;
+}
+//---------------------------------------------------
+void
+MHRawChainInfoStruct::mpiSum(const MpiComm& comm, MHRawChainInfoStruct& sumInfo)
+{
+  comm.Allreduce<double>(&runTime, &sumInfo.runTime, (int) 7, RawValue_MPI_SUM,
+                 "MHRawChainInfoStruct::mpiSum()",
+                 "failed MPI.Allreduce() for sum of doubles");
+
+  comm.Allreduce<unsigned int>(&numTargetCalls, &sumInfo.numTargetCalls, (int) 5, RawValue_MPI_SUM,
+                 "MHRawChainInfoStruct::mpiSum()",
+                 "failed MPI.Allreduce() for sum of unsigned ints");
+
+  return;
+}
 
 template<class V, class M>
 SequenceGenerator<V,M>::SequenceGenerator(const char * prefix,

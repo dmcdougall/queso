@@ -33,6 +33,7 @@ namespace QUESO {
 class GslVector;
 class GslMatrix;
 class BaseEnvironment;
+class MpiComm;
 class MhOptionsValues;
 class MetropolisHastingsSGOptions;
 template <class V, class M> class BaseTKGroup;
@@ -43,6 +44,70 @@ template <class V, class M> class VectorSpace;
 template <class V, class M> class ScalarFunctionSynchronizer;
 template <class V> class MarkovChainPositionData;
 template <class T> class ScalarSequence;
+
+//--------------------------------------------------
+// MHRawChainInfoStruct --------------------------
+//--------------------------------------------------
+ /*! \file MetropolisHastingsSG.h
+ * \brief A templated class that represents a Metropolis-Hastings generator of samples and a struct which stores its info.
+ *
+ * \struct  MHRawChainInfoStruct
+ * \brief A struct that represents a Metropolis-Hastings sample.
+ *
+ * Some of the information about the  Metropolis-Hastings sample generator includes the allowed number
+ * of delayed rejections, number of rejections, number of positions in or out of target support, and
+ * so on. This struct is responsible for the storage of such info. */
+
+struct MHRawChainInfoStruct
+{
+ //! @name Constructor/Destructor methods
+ //@{
+ //! Constructor.
+  MHRawChainInfoStruct();
+
+  //! Copy constructor.
+  MHRawChainInfoStruct(const MHRawChainInfoStruct& rhs);
+
+  //! Destructor
+  ~MHRawChainInfoStruct();
+  //@}
+
+  //! @name Set methods
+  //@{
+  //! Assignment operator.
+  MHRawChainInfoStruct& operator= (const MHRawChainInfoStruct& rhs);
+
+  //! Addition assignment operator.
+  MHRawChainInfoStruct& operator+=(const MHRawChainInfoStruct& rhs);
+  //@}
+
+   //! @name Misc methods
+  //@{
+  //! Copies Metropolis-Hastings chain info from \c src to \c this.
+  void copy  (const MHRawChainInfoStruct& src);
+
+  //! Resets Metropolis-Hastings chain info.
+  void reset ();
+
+  //! Calculates the MPI sum of \c this.
+  void mpiSum(const MpiComm& comm, MHRawChainInfoStruct& sumInfo);
+  //@}
+
+  double       runTime;
+  double       candidateRunTime;
+  double       targetRunTime;
+  double       mhAlphaRunTime;
+  double       drAlphaRunTime;
+  double       drRunTime;
+  double       amRunTime;
+
+  unsigned int numTargetCalls;
+  unsigned int numDRs;
+  unsigned int numOutOfTargetSupport;
+  unsigned int numOutOfTargetSupportInDR;
+  unsigned int numRejections;
+
+};
 
 /*!
  * \class SequenceGenerator
