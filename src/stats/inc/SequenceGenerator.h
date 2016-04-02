@@ -138,6 +138,11 @@ public:
                        const BaseVectorSequence<V, M> & workingChain,
                        V & proposedState) = 0;
 
+  //! Do delayed rejection
+  virtual bool delayedRejection(unsigned int positionId,
+      MarkovChainPositionData<V> & currentPositionData,
+      MarkovChainPositionData<V> & currentCandidateData) = 0;
+
   //! Returns the underlying transition kernel for this sequence generator
   virtual const BaseTKGroup<V, M> & transitionKernel() const;
   //@}

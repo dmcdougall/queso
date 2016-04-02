@@ -1876,9 +1876,9 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
       if ((accept                                   == false) &&
           (outOfTargetSupport                       == false) && // IMPORTANT
           (m_optionsObj->m_drMaxNumExtraStages >  0    )) {
-        accept = delayedRejection(positionId,
-                                  currentPositionData,
-                                  currentCandidateData);
+        accept = this->delayedRejection(positionId,
+                                        currentPositionData,
+                                        currentCandidateData);
       }
 
       // sep2011
@@ -2097,7 +2097,7 @@ MetropolisHastingsSG<P_V, P_M>::propose(unsigned int positionId,
 template <class P_V, class P_M>
 bool
 MetropolisHastingsSG<P_V, P_M>::delayedRejection(
-    unsigned int & positionId,
+    unsigned int positionId,
     MarkovChainPositionData<P_V> & currentPositionData,
     MarkovChainPositionData<P_V> & currentCandidateData)
 {

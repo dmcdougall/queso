@@ -237,8 +237,7 @@ private:
                                    ScalarSequence<double>*      workingLogTargetValues);
 
   //! Do delayed rejection
-  bool delayedRejection(
-      unsigned int & positionId,
+  virtual bool delayedRejection(unsigned int positionId,
       MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData);
 

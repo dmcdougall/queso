@@ -17,6 +17,7 @@
 #include <queso/VectorSpace.h>
 #include <queso/VectorSequence.h>
 #include <queso/TKGroup.h>
+#include <queso/MetropolisHastingsSG.h>
 
 #define MEAN 10.0
 #define STDDEV 0.5
@@ -85,6 +86,13 @@ public:
 
     // Increment current state by jump to get the proposed state
     proposedState += jump;
+  }
+
+  virtual bool delayedRejection(unsigned int positionId,
+      QUESO::MarkovChainPositionData<V> & currentPositionData,
+      QUESO::MarkovChainPositionData<V> & currentCandidateData)
+  {
+    return false;
   }
 };
 

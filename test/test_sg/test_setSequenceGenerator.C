@@ -12,6 +12,7 @@
 #include <queso/VectorSet.h>
 #include <queso/VectorSpace.h>
 #include <queso/VectorSequence.h>
+#include <queso/MetropolisHastingsSG.h>
 
 template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
@@ -95,6 +96,12 @@ public:
     proposedState.cwSet(1.0);
   }
 
+  virtual bool delayedRejection(unsigned int positionId,
+      QUESO::MarkovChainPositionData<V> & currentPositionData,
+      QUESO::MarkovChainPositionData<V> & currentCandidateData)
+  {
+    return false;
+  }
 };
 
 int main(int argc, char ** argv) {
