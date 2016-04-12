@@ -295,6 +295,178 @@ SequenceGenerator<V,M>::alpha(const MarkovChainPositionData<V> & x,
   return std::min(1.,alphaQuotient);
 }
 
+template<class V,class M>
+double
+SequenceGenerator<V,M>::alpha(
+  const std::vector<MarkovChainPositionData<V>*>& inputPositionsData,
+  const std::vector<unsigned int>& inputTKStageIds)
+{
+  unsigned int inputSize = inputPositionsData.size();
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 10           ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Entering MetropolisHastingsSG<V,M>::alpha(vec)"
+                           << ", inputSize = " << inputSize
+                           << std::endl;
+  }
+  queso_require_greater_equal_msg(inputSize, 2, "inputPositionsData has size < 2");
+
+  // If necessary, return 0. right away
+  if (inputPositionsData[0          ]->outOfTargetSupport()) return 0.;
+  if (inputPositionsData[inputSize-1]->outOfTargetSupport()) return 0.;
+
+  if ((inputPositionsData[0]->logTarget() == -INFINITY           ) ||
+      (inputPositionsData[0]->logTarget() ==  INFINITY           ) ||
+      ( (boost::math::isnan)(inputPositionsData[0]->logTarget()) )) {
+    std::cerr << "WARNING In MetropolisHastingsSG<V,M>::alpha(vec)"
+              << ", worldRank "      << m_env.worldRank()
+              << ", fullRank "       << m_env.fullRank()
+              << ", subEnvironment " << m_env.subId()
+              << ", subRank "        << m_env.subRank()
+              << ", inter0Rank "     << m_env.inter0Rank()
+              << ": inputSize = "    << inputSize
+              << ", inputPositionsData[0]->logTarget() = " << inputPositionsData[0]->logTarget()
+              << ", [0]->values() = "                      << inputPositionsData[0]->vecValues()
+              << ", [inputSize - 1]->values() = "          << inputPositionsData[inputSize-1]->vecValues()
+              << std::endl;
+    return 0.;
+  }
+  else if ((inputPositionsData[inputSize - 1]->logTarget() == -INFINITY           ) ||
+           (inputPositionsData[inputSize - 1]->logTarget() ==  INFINITY           ) ||
+           ( (boost::math::isnan)(inputPositionsData[inputSize - 1]->logTarget()) )) {
+    std::cerr << "WARNING In MetropolisHastingsSG<V,M>::alpha(vec)"
+              << ", worldRank "      << m_env.worldRank()
+              << ", fullRank "       << m_env.fullRank()
+              << ", subEnvironment " << m_env.subId()
+              << ", subRank "        << m_env.subRank()
+              << ", inter0Rank "     << m_env.inter0Rank()
+              << ": inputSize = "    << inputSize
+              << ", inputPositionsData[inputSize - 1]->logTarget() = " << inputPositionsData[inputSize-1]->logTarget()
+              << ", [0]->values() = "                                  << inputPositionsData[0]->vecValues()
+              << ", [inputSize - 1]->values() = "                      << inputPositionsData[inputSize-1]->vecValues()
+              << std::endl;
+    return 0.;
+  }
+
+  // If inputSize is 2, recursion is not needed
+  if (inputSize == 2) return this->alpha(*(inputPositionsData[0            ]),
+                                         *(inputPositionsData[inputSize - 1]),
+                                         inputTKStageIds[0],
+                                         inputTKStageIds[inputSize-1]);
+
+  // Prepare two vectors of positions
+  std::vector<MarkovChainPositionData<V>*>         positionsData  (inputSize,NULL);
+  std::vector<MarkovChainPositionData<V>*> backwardPositionsData  (inputSize,NULL);
+
+  std::vector<unsigned int                        >         tkStageIds     (inputSize,0);
+  std::vector<unsigned int                        > backwardTKStageIds     (inputSize,0);
+
+  std::vector<unsigned int                        >         tkStageIdsLess1(inputSize,0);
+  std::vector<unsigned int                        > backwardTKStageIdsLess1(inputSize,0);
+
+  for (unsigned int i = 0; i < inputSize; ++i) {
+            positionsData  [i] = inputPositionsData[i];
+    backwardPositionsData  [i] = inputPositionsData[inputSize-i-1];
+
+            tkStageIds     [i] = inputTKStageIds   [i];
+    backwardTKStageIds     [i] = inputTKStageIds   [inputSize-i-1];
+
+            tkStageIdsLess1[i] = inputTKStageIds   [i];
+    backwardTKStageIdsLess1[i] = inputTKStageIds   [inputSize-i-1];
+  }
+
+          tkStageIdsLess1.pop_back();
+  backwardTKStageIdsLess1.pop_back();
+
+  // Initialize cumulative variables
+  double logNumerator      = 0.;
+  double logDenominator    = 0.;
+  double alphasNumerator   = 1.;
+  double alphasDenominator = 1.;
+
+  // Compute cumulative variables
+  const V& _lastTKPosition         = m_tk->preComputingPosition(        tkStageIds[inputSize-1]);
+  const V& _lastBackwardTKPosition = m_tk->preComputingPosition(backwardTKStageIds[inputSize-1]);
+
+  double numContrib = m_tk->rv(backwardTKStageIdsLess1).pdf().lnValue(_lastBackwardTKPosition,NULL,NULL,NULL,NULL);
+  double denContrib = m_tk->rv(tkStageIdsLess1).pdf().lnValue(_lastTKPosition,NULL,NULL,NULL,NULL);
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 10           ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::alpha(vec)"
+                           << ", inputSize = "  << inputSize
+                           << ", before loop"
+                           << ": numContrib = " << numContrib
+                           << ", denContrib = " << denContrib
+                           << std::endl;
+  }
+  logNumerator   += numContrib;
+  logDenominator += denContrib;
+
+  for (unsigned int i = 0; i < (inputSize-2); ++i) { // That is why size must be >= 2
+            positionsData.pop_back();
+    backwardPositionsData.pop_back();
+
+    const V& lastTKPosition         = m_tk->preComputingPosition(        tkStageIds[inputSize-2-i]);
+    const V& lastBackwardTKPosition = m_tk->preComputingPosition(backwardTKStageIds[inputSize-2-i]);
+
+            tkStageIds.pop_back();
+    backwardTKStageIds.pop_back();
+
+            tkStageIdsLess1.pop_back();
+    backwardTKStageIdsLess1.pop_back();
+
+    numContrib = m_tk->rv(backwardTKStageIdsLess1).pdf().lnValue(lastBackwardTKPosition,NULL,NULL,NULL,NULL);
+    denContrib = m_tk->rv(tkStageIdsLess1).pdf().lnValue(lastTKPosition,NULL,NULL,NULL,NULL);
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_env.displayVerbosity() >= 10           ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::alpha(vec)"
+                             << ", inputSize = "  << inputSize
+                             << ", in loop, i = " << i
+                             << ": numContrib = " << numContrib
+                             << ", denContrib = " << denContrib
+                             << std::endl;
+    }
+    logNumerator   += numContrib;
+    logDenominator += denContrib;
+
+    alphasNumerator   *= (1. - this->alpha(backwardPositionsData,backwardTKStageIds));
+    alphasDenominator *= (1. - this->alpha(        positionsData,        tkStageIds));
+  }
+
+  double numeratorLogTargetToUse = backwardPositionsData[0]->logTarget();
+  numContrib = numeratorLogTargetToUse;
+  denContrib = positionsData[0]->logTarget();
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 10           ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::alpha(vec)"
+                           << ", inputSize = "  << inputSize
+                           << ", after loop"
+                           << ": numContrib = " << numContrib
+                           << ", denContrib = " << denContrib
+                           << std::endl;
+  }
+  logNumerator   += numContrib;
+  logDenominator += denContrib;
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_env.displayVerbosity() >= 10           ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Leaving MetropolisHastingsSG<V,M>::alpha(vec)"
+                           << ", inputSize = "         << inputSize
+                           << ": alphasNumerator = "   << alphasNumerator
+                           << ", alphasDenominator = " << alphasDenominator
+                           << ", logNumerator = "      << logNumerator
+                           << ", logDenominator = "    << logDenominator
+                           << std::endl;
+  }
+
+  // Return result
+  return std::min(1.,(alphasNumerator/alphasDenominator)*std::exp(logNumerator-logDenominator));
+}
+
 template<class V, class M>
 bool
 SequenceGenerator<V, M>::acceptAlpha(double alpha)

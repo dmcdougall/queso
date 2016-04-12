@@ -224,8 +224,8 @@ private:
 
   //! Calculates acceptance ration.
   /*! The acceptance ratio is used to decide whether to accept or reject a candidate. */
-  double alpha                    (const std::vector<MarkovChainPositionData<P_V>*>& inputPositions,
-                                   const std::vector<unsigned int                        >& inputTKStageIds);
+  // virtual double alpha                    (const std::vector<MarkovChainPositionData<P_V>*>& inputPositions,
+  //                                  const std::vector<unsigned int                        >& inputTKStageIds);
 
   //! Decides whether or not to accept alpha.
   /*! If either alpha is negative or greater than one, its value will not be accepted.*/
