@@ -262,6 +262,23 @@ private:
       const MarkovChainPositionData<P_V> & currentPositionData,
       MarkovChainPositionData<P_V> & currentCandidateData);
 
+  //! Implement this method to compute the proposed state of the chain
+  /*!
+   * \c positionId is the current sampler index, and \c workingChain is the
+   * whole chain.
+   *
+   * The reason the whole working chain is passed is because one may wish to
+   * use chain history to compute the proposed state (cf. adaptive Metropolis)
+   * and we do not want to disallow this.
+   *
+   * The implementation may should set \c proposedState so QUESO may then
+   * decide whether or not to accept this sample by the Metropolis-Hastings
+   * algorithm.
+   */
+  virtual void propose(unsigned int positionId,
+                       const BaseVectorSequence<P_V, P_M> & workingChain,
+                       P_V & proposedState);
+
   //! This method reads the chain contents.
   void   readFullChain            (const std::string&                  inputFileName,
                                    const std::string&                  inputFileType,
