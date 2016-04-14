@@ -972,8 +972,6 @@ SequenceGenerator<V, M>::generateFullChain(
                             << std::endl;
   }
 
-  int iRC = UQ_OK_RC;
-
   if ((m_env.subDisplayFile()                   ) &&
       (m_optionsObj->m_totallyMute == false)) {
     *m_env.subDisplayFile() << "\nIn SequenceGenerator<V,M>::generateFullChain()"
