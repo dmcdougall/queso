@@ -25,7 +25,11 @@
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/VectorRV.h>
+#include <queso/BoxSubset.h>
 #include <queso/TKGroup.h>
+#include <queso/HessianCovMatricesTKGroup.h>
+#include <queso/ScaledCovMatrixTKGroup.h>
+#include <queso/TransformedScaledCovMatrixTKGroup.h>
 #include <queso/ScalarFunctionSynchronizer.h>
 #include <queso/MetropolisHastingsSGOptions.h>
 #include <queso/MarkovChainPositionData.h>
@@ -140,14 +144,19 @@ SequenceGenerator<V,M>::SequenceGenerator(const char * prefix,
   m_initialPosition(initialPosition),
   m_initialProposalCovMatrix(m_vectorSpace.zeroVector()),
   m_nullInputProposalCovMatrix(inputProposalCovMatrix == NULL),
+  m_numDisabledParameters     (0), // gpmsa2
+  m_parameterEnabledStatus    (m_vectorSpace.dimLocal(),true), // gpmsa2
   m_targetPdfSynchronizer(new ScalarFunctionSynchronizer<V,M>(m_targetPdf,m_initialPosition)),
   m_tk(NULL),
+  m_positionIdForDebugging    (0),
+  m_stageIdForDebugging       (0),
   m_idsOfUniquePositions(0),
   m_logTargets(0),
   m_alphaQuotients(0),
   m_lastChainSize(0),
   m_lastMean(NULL),
   m_lastAdaptedCovMatrix(NULL),
+  m_numPositionsNotSubWritten (0),
   m_optionsObj(alternativeOptionsValues),
   m_computeInitialPriorAndLikelihoodValues(true),
   m_initialLogPriorValue(0.),
@@ -157,6 +166,33 @@ SequenceGenerator<V,M>::SequenceGenerator(const char * prefix,
   if (inputProposalCovMatrix != NULL) {
     m_initialProposalCovMatrix = *inputProposalCovMatrix;
   }
+  // If NULL, we create one
+  if (m_optionsObj == NULL) {
+    MhOptionsValues * tempOptions = new MhOptionsValues(&m_env, prefix);
+
+    // We did this dance because scanOptionsValues is not a const method, but
+    // m_optionsObj is a pointer to const
+    m_optionsObj = tempOptions;
+
+    // We set this flag so we don't free something the user created
+    m_userDidNotProvideOptions = true;
+  }
+
+  if (m_optionsObj->m_help != "") {
+    if (m_env.subDisplayFile() && !m_optionsObj->m_totallyMute) {
+      *m_env.subDisplayFile() << (*m_optionsObj) << std::endl;
+    }
+  }
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Entering MetropolisHastingsSG<V,M>::constructor(1)"
+                            << ": prefix = " << prefix
+                            << ", alternativeOptionsValues = " << alternativeOptionsValues
+                            << ", m_env.optionsInputFileName() = " << m_env.optionsInputFileName()
+                            << ", m_initialProposalCovMatrix = " << m_initialProposalCovMatrix
+                            << std::endl;
+  }
 
   queso_require_equal_to_msg(sourceRv.imageSet().vectorSpace().dimLocal(), initialPosition.sizeLocal(), "'sourceRv' and 'initialPosition' should have equal dimensions");
 
@@ -164,8 +200,121 @@ SequenceGenerator<V,M>::SequenceGenerator(const char * prefix,
     queso_require_equal_to_msg(sourceRv.imageSet().vectorSpace().dimLocal(), inputProposalCovMatrix->numRowsLocal(), "'sourceRv' and 'inputProposalCovMatrix' should have equal dimensions");
     queso_require_equal_to_msg(inputProposalCovMatrix->numCols(), inputProposalCovMatrix->numRowsGlobal(), "'inputProposalCovMatrix' should be a square matrix");
   }
+
+  commonConstructor();
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Leaving MetropolisHastingsSG<V,M>::constructor(1)"
+                            << std::endl;
+  }
 }
 
+template<class V,class M>
+void
+SequenceGenerator<V,M>::commonConstructor()
+{
+  /////////////////////////////////////////////////////////////////
+  // Instantiate the appropriate TK (transition kernel)
+  /////////////////////////////////////////////////////////////////
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Entering MetropolisHastingsSG<V,M>::commonConstructor()"
+                            << std::endl;
+  }
+
+  if (m_optionsObj->m_initialPositionDataInputFileName != ".") { // palms
+    std::set<unsigned int> tmpSet;
+    tmpSet.insert(m_env.subId());
+    m_initialPosition.subReadContents((m_optionsObj->m_initialPositionDataInputFileName+"_sub"+m_env.subIdString()),
+                                      m_optionsObj->m_initialPositionDataInputFileType,
+                                      tmpSet);
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::commonConstructor()"
+                              << ": just read initial position contents = " << m_initialPosition
+                              << std::endl;
+    }
+  }
+
+  if (m_optionsObj->m_parameterDisabledSet.size() > 0) { // gpmsa2
+    for (std::set<unsigned int>::iterator setIt = m_optionsObj->m_parameterDisabledSet.begin(); setIt != m_optionsObj->m_parameterDisabledSet.end(); ++setIt) {
+      unsigned int paramId = *setIt;
+      if (paramId < m_vectorSpace.dimLocal()) {
+        m_numDisabledParameters++;
+        m_parameterEnabledStatus[paramId] = false;
+      }
+    }
+  }
+
+  std::vector<double> drScalesAll(m_optionsObj->m_drScalesForExtraStages.size()+1,1.);
+  for (unsigned int i = 1; i < (m_optionsObj->m_drScalesForExtraStages.size()+1); ++i) {
+    drScalesAll[i] = m_optionsObj->m_drScalesForExtraStages[i-1];
+  }
+  if (m_optionsObj->m_tkUseLocalHessian) { // sep2011
+    m_tk = new HessianCovMatricesTKGroup<V,M>(m_optionsObj->m_prefix.c_str(),
+                                                         m_vectorSpace,
+                                                         drScalesAll,
+                                                         *m_targetPdfSynchronizer);
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::commonConstructor()"
+                              << ": just instantiated a 'HessianCovMatrices' TK class"
+                              << std::endl;
+    }
+  }
+  else {
+    if (m_optionsObj->m_initialProposalCovMatrixDataInputFileName != ".") { // palms
+      std::set<unsigned int> tmpSet;
+      tmpSet.insert(m_env.subId());
+      m_initialProposalCovMatrix.subReadContents((m_optionsObj->m_initialProposalCovMatrixDataInputFileName+"_sub"+m_env.subIdString()),
+                                                 m_optionsObj->m_initialProposalCovMatrixDataInputFileType,
+                                                 tmpSet);
+      if ((m_env.subDisplayFile()                   ) &&
+          (m_optionsObj->m_totallyMute == false)) {
+        *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::commonConstructor()"
+                                << ": just read initial proposal cov matrix contents = " << m_initialProposalCovMatrix
+                                << std::endl;
+      }
+    }
+    else {
+      queso_require_msg(!(m_nullInputProposalCovMatrix), "proposal cov matrix should have been passed by user, since, according to the input algorithm options, local Hessians will not be used in the proposal");
+    }
+
+    // Decide whether or not to do logit transform
+    if (m_optionsObj->m_doLogitTransform) {
+      // Variable transform initial proposal cov matrix
+      transformInitialCovMatrixToGaussianSpace(
+          dynamic_cast<const BoxSubset<V, M> & >(m_targetPdf.domainSet()));
+
+      // We need this dynamic_cast to BoxSubset so that m_tk can inspect the
+      // domain bounds and do the necessary transform
+      m_tk = new TransformedScaledCovMatrixTKGroup<V, M>(
+          m_optionsObj->m_prefix.c_str(),
+          dynamic_cast<const BoxSubset<V, M> & >(m_targetPdf.domainSet()),
+          drScalesAll, m_initialProposalCovMatrix);
+    }
+    else {
+      m_tk = new ScaledCovMatrixTKGroup<V, M>(
+          m_optionsObj->m_prefix.c_str(), m_vectorSpace, drScalesAll,
+          m_initialProposalCovMatrix);
+    }
+
+    if ((m_env.subDisplayFile()                   ) &&
+        (m_optionsObj->m_totallyMute == false)) {
+      *m_env.subDisplayFile() << "In MetropolisHastingsSG<V,M>::commonConstructor()"
+                              << ": just instantiated a 'ScaledCovMatrix' TK class"
+                              << std::endl;
+    }
+  }
+
+  if ((m_env.subDisplayFile()                   ) &&
+      (m_optionsObj->m_totallyMute == false)) {
+    *m_env.subDisplayFile() << "Leaving MetropolisHastingsSG<V,M>::commonConstructor()"
+                            << std::endl;
+  }
+  return;
+}
 template<class V, class M>
 SequenceGenerator<V, M>::~SequenceGenerator()
 {
@@ -1206,6 +1355,51 @@ SequenceGenerator<V, M>::generateFullChain(
   //****************************************************
 
   return;
+}
+
+template <class V, class M>
+void
+SequenceGenerator<V, M>::transformInitialCovMatrixToGaussianSpace(
+    const BoxSubset<V, M> & boxSubset)
+{
+  V min_domain_bounds(boxSubset.minValues());
+  V max_domain_bounds(boxSubset.maxValues());
+
+  for (unsigned int i = 0; i < min_domain_bounds.sizeLocal(); i++) {
+    double min_val = min_domain_bounds[i];
+    double max_val = max_domain_bounds[i];
+
+    if (boost::math::isfinite(min_val) && boost::math::isfinite(max_val)) {
+      if (m_initialProposalCovMatrix(i, i) >= max_val - min_val) {
+        // User is trying to specify a uniform proposal distribution, which
+        // is unsupported.  Throw an error for now.
+        std::cerr << "Proposal variance element "
+                  << i
+                  << " is "
+                  << m_initialProposalCovMatrix(i, i)
+                  << " but domain is of size "
+                  << max_val - min_val
+                  << std::endl;
+        std::cerr << "QUESO does not support uniform-like proposal "
+                  << "distributions.  Try making the proposal variance smaller"
+                  << std::endl;
+      }
+
+      // The jacobian at the midpoint of the domain
+      double transformJacobian = 4.0 / (max_val - min_val);
+
+      // Just do the multiplication by hand for now.  There's no method in
+      // Gsl(Vector|Matrix) to do this for me.
+      for (unsigned int j = 0; j < min_domain_bounds.sizeLocal(); j++) {
+        // Multiply column j by element j
+        m_initialProposalCovMatrix(j, i) *= transformJacobian;
+      }
+      for (unsigned int j = 0; j < min_domain_bounds.sizeLocal(); j++) {
+        // Multiply row j by element j
+        m_initialProposalCovMatrix(i, j) *= transformJacobian;
+      }
+    }
+  }
 }
 
 }  // End namespace QUESO

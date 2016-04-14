@@ -36,6 +36,7 @@ class GslMatrix;
 class BaseEnvironment;
 class MhOptionsValues;
 class MetropolisHastingsSGOptions;
+template <class V, class M> class BoxSubset;
 template <class V, class M> class BaseTKGroup;
 template <class V, class M> class BaseVectorRV;
 template <class V, class M> class BaseVectorSequence;
@@ -253,20 +254,41 @@ protected:
   V m_initialPosition;
   M m_initialProposalCovMatrix;
   bool m_nullInputProposalCovMatrix;
+  unsigned int m_numDisabledParameters; // gpmsa2
+  std::vector<bool> m_parameterEnabledStatus; // gpmsa2
   const ScalarFunctionSynchronizer<V, M> * m_targetPdfSynchronizer;
+
   BaseTKGroup<V, M> * m_tk;
+  unsigned int m_positionIdForDebugging;
+  unsigned int m_stageIdForDebugging;
   std::vector<unsigned int> m_idsOfUniquePositions;
   std::vector<double> m_logTargets;
   std::vector<double> m_alphaQuotients;
   double m_lastChainSize;
   V * m_lastMean;
   M * m_lastAdaptedCovMatrix;
+  unsigned int m_numPositionsNotSubWritten;
+
+  MHRawChainInfoStruct m_rawChainInfo;
+
   const MhOptionsValues * m_optionsObj;
   MetropolisHastingsSGOptions * m_oldOptions;
+
   bool m_computeInitialPriorAndLikelihoodValues;
   double m_initialLogPriorValue;
   double m_initialLogLikelihoodValue;
+
   bool m_userDidNotProvideOptions;
+
+private:
+  //! Reads the options values from the options input file.
+  /*!  This method \b actually reads the options input file, such as the value for the Delayed Rejection
+   * scales, the presence of Hessian covariance matrices and reads the user-provided initial proposal
+   * covariance matrix (alternative to local Hessians).*/
+  void commonConstructor();
+
+  void transformInitialCovMatrixToGaussianSpace(const BoxSubset<V, M> &
+      boxSubset);
 };
 
 }  // End namespace QUESO
