@@ -36,6 +36,7 @@ BUILT_SOURCES += Defines.h
 BUILT_SOURCES += DistArray.h
 BUILT_SOURCES += Environment.h
 BUILT_SOURCES += EnvironmentOptions.h
+BUILT_SOURCES += Factory.h
 BUILT_SOURCES += FunctionBase.h
 BUILT_SOURCES += FunctionOperatorBuilder.h
 BUILT_SOURCES += GslBlockMatrix.h
@@ -63,6 +64,7 @@ BUILT_SOURCES += ScopedPtr.h
 BUILT_SOURCES += SharedPtr.h
 BUILT_SOURCES += TeuchosMatrix.h
 BUILT_SOURCES += TeuchosVector.h
+BUILT_SOURCES += TransitionKernelFactory.h
 BUILT_SOURCES += Vector.h
 BUILT_SOURCES += asserts.h
 BUILT_SOURCES += exceptions.h
@@ -259,6 +261,8 @@ Environment.h: $(top_srcdir)/src/core/inc/Environment.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 EnvironmentOptions.h: $(top_srcdir)/src/core/inc/EnvironmentOptions.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+Factory.h: $(top_srcdir)/src/core/inc/Factory.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 FunctionBase.h: $(top_srcdir)/src/core/inc/FunctionBase.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 FunctionOperatorBuilder.h: $(top_srcdir)/src/core/inc/FunctionOperatorBuilder.h
@@ -312,6 +316,8 @@ SharedPtr.h: $(top_srcdir)/src/core/inc/SharedPtr.h
 TeuchosMatrix.h: $(top_srcdir)/src/core/inc/TeuchosMatrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 TeuchosVector.h: $(top_srcdir)/src/core/inc/TeuchosVector.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+TransitionKernelFactory.h: $(top_srcdir)/src/core/inc/TransitionKernelFactory.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 Vector.h: $(top_srcdir)/src/core/inc/Vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
