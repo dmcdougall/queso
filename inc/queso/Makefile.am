@@ -160,6 +160,7 @@ BUILT_SOURCES += ModelValidation.h
 BUILT_SOURCES += MonteCarloSG.h
 BUILT_SOURCES += MonteCarloSGOptions.h
 BUILT_SOURCES += PoweredJointPdf.h
+BUILT_SOURCES += PreconditionedCrankNicolsonTK.h
 BUILT_SOURCES += SampledScalarCdf.h
 BUILT_SOURCES += SampledVectorCdf.h
 BUILT_SOURCES += SampledVectorMdf.h
@@ -511,6 +512,8 @@ MonteCarloSG.h: $(top_srcdir)/src/stats/inc/MonteCarloSG.h
 MonteCarloSGOptions.h: $(top_srcdir)/src/stats/inc/MonteCarloSGOptions.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 PoweredJointPdf.h: $(top_srcdir)/src/stats/inc/PoweredJointPdf.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+PreconditionedCrankNicolsonTK.h: $(top_srcdir)/src/stats/inc/PreconditionedCrankNicolsonTK.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 SampledScalarCdf.h: $(top_srcdir)/src/stats/inc/SampledScalarCdf.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
