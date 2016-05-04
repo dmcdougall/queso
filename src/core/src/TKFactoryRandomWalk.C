@@ -24,6 +24,7 @@
 
 #include <queso/TKFactoryRandomWalk.h>
 #include <queso/ScaledCovMatrixTKGroup.h>
+#include <queso/PreconditionedCrankNicolsonTK.h>
 
 namespace QUESO
 {
@@ -44,5 +45,6 @@ TKFactoryRandomWalk<DerivedTK>::build_tk()
 
 // Instantiate all the transition kernel factories
 TKFactoryRandomWalk<ScaledCovMatrixTKGroup<GslVector, GslMatrix> > tk_factory_random_walk("random_walk");
+TKFactoryRandomWalk<PreconditionedCrankNicolsonTK<GslVector, GslMatrix> > tk_factory_pcn("preconditioned_crank_nicolson");
 
 }  // namespace QUESO
