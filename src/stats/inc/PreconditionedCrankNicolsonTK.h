@@ -96,6 +96,8 @@ private:
   using BaseTKGroup<V,M>::m_rvs;
 
   M m_originalCovMatrix;
+
+  double m_step_size;
 };
 
 }  // End namespace QUESO

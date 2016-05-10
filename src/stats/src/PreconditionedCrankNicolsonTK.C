@@ -32,12 +32,13 @@ namespace QUESO {
 template <class V, class M>
 PreconditionedCrankNicolsonTK<V, M>::PreconditionedCrankNicolsonTK(
   const char * prefix,
-  const VectorSpace<V, M> & vectorSpace, // FIX ME: vectorSubset ???
+  const VectorSpace<V, M> & vectorSpace,
   const std::vector<double> & scales,
   const M & covMatrix)
   :
   BaseTKGroup<V, M>(prefix, vectorSpace, scales),
-  m_originalCovMatrix(covMatrix)
+  m_originalCovMatrix(covMatrix),
+  m_step_size(0.001)
 {
   if ((m_env.subDisplayFile()) && (m_env.displayVerbosity() >= 5)) {
     *m_env.subDisplayFile() << "Entering PreconditionedCrankNicolsonTK<V, M>::constructor()"
@@ -147,7 +148,7 @@ PreconditionedCrankNicolsonTK<V, M>::updateLawCovMatrix(const M & covMatrix)
                               << ", covMatrix = \n" << factor*covMatrix // FIX ME: might demand parallelism
                               << std::endl;
     }
-    dynamic_cast<GaussianVectorRV<V, M> * >(m_rvs[i])->updateLawCovMatrix(factor*covMatrix);
+    dynamic_cast<GaussianVectorRV<V, M> * >(m_rvs[i])->updateLawCovMatrix(factor*m_step_size*m_step_size*covMatrix);
   }
 }
 
@@ -162,8 +163,10 @@ PreconditionedCrankNicolsonTK<V, M>::setPreComputingPosition(const V & position,
                            << std::endl;
   }
 
-  BaseTKGroup<V, M>::setPreComputingPosition(position, stageId);
-  //setRVsWithZeroMean();
+  V new_position(position);
+  new_position *= std::sqrt(1.0 - (m_step_size * m_step_size));
+
+  BaseTKGroup<V, M>::setPreComputingPosition(new_position, stageId);
 
   if ((m_env.subDisplayFile()) && (m_env.displayVerbosity() >= 5)) {
     *m_env.subDisplayFile() << "In PreconditionedCrankNicolsonTK<V, M>::setPreComputingPosition()"
@@ -211,7 +214,7 @@ PreconditionedCrankNicolsonTK<V, M>::setRVsWithZeroMean()
     m_rvs[i] = new GaussianVectorRV<V, M>(m_prefix.c_str(),
                                          *m_vectorSpace,
                                          m_vectorSpace->zeroVector(),
-                                         factor*m_originalCovMatrix);
+                                         factor*m_step_size*m_step_size*m_originalCovMatrix);
   }
 }
 
