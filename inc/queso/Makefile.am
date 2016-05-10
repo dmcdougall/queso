@@ -102,6 +102,7 @@ BUILT_SOURCES += OneDGrid.h
 BUILT_SOURCES += StdOneDGrid.h
 BUILT_SOURCES += StreamUtilities.h
 BUILT_SOURCES += UniformOneDGrid.h
+BUILT_SOURCES += AcceptanceProbability.h
 BUILT_SOURCES += BayesianJointPdf.h
 BUILT_SOURCES += BetaJointPdf.h
 BUILT_SOURCES += BetaVectorRV.h
@@ -396,6 +397,8 @@ StdOneDGrid.h: $(top_srcdir)/src/misc/inc/StdOneDGrid.h
 StreamUtilities.h: $(top_srcdir)/src/misc/inc/StreamUtilities.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 UniformOneDGrid.h: $(top_srcdir)/src/misc/inc/UniformOneDGrid.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+AcceptanceProbability.h: $(top_srcdir)/src/stats/inc/AcceptanceProbability.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 BayesianJointPdf.h: $(top_srcdir)/src/stats/inc/BayesianJointPdf.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@

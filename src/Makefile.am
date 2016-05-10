@@ -252,6 +252,7 @@ libqueso_la_SOURCES += stats/src/GaussianLikelihoodFullCovariance.C
 libqueso_la_SOURCES += stats/src/GaussianLikelihoodFullCovarianceRandomCoefficient.C
 libqueso_la_SOURCES += stats/src/GaussianLikelihoodBlockDiagonalCovariance.C
 libqueso_la_SOURCES += stats/src/GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.C
+libqueso_la_SOURCES += stats/src/AcceptanceProbability.C
 
 # Sources from surrogates/src
 libqueso_la_SOURCES += surrogates/src/InterpolationSurrogateData.C
@@ -463,6 +464,7 @@ libqueso_include_HEADERS += stats/inc/GaussianLikelihoodFullCovariance.h
 libqueso_include_HEADERS += stats/inc/GaussianLikelihoodFullCovarianceRandomCoefficient.h
 libqueso_include_HEADERS += stats/inc/GaussianLikelihoodBlockDiagonalCovariance.h
 libqueso_include_HEADERS += stats/inc/GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.h
+libqueso_include_HEADERS += stats/inc/AcceptanceProbability.h
 
 # Headers to install from surrogates/inc
 libqueso_include_HEADERS += surrogates/inc/SurrogateBase.h
