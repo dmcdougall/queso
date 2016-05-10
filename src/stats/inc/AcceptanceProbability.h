@@ -27,10 +27,29 @@
 
 namespace QUESO {
 
+template <class V, class M> class MarkovChainPositionData;
+
+template <class V, class M>
 class AcceptanceProbability {
 public:
+  /*!
+   * Constructor
+   */
   AcceptanceProbability();
+
+  /*!
+   * Destructor
+   */
   ~AcceptanceProbability();
+
+  /*!
+   * Evaluate method
+   */
+  double evaluate(const MarkovChainPositionData<V, M> & x,
+                  const MarkovChainPositionData<V, M> & y,
+                  unsigned int xStageId,
+                  unsigned int yStageId,
+                  double & alphaQuotient);
 };
 
 }  // End namespace QUESO

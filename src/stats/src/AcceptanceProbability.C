@@ -22,16 +22,32 @@
 //
 //-----------------------------------------------------------------------el-
 
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
 #include <queso/AcceptanceProbability.h>
 
 namespace QUESO {
 
-AcceptanceProbability::AcceptanceProbability()
+template <class V, class M>
+AcceptanceProbability<V, M>::AcceptanceProbability()
 {
 }
 
-AcceptanceProbability::~AcceptanceProbability()
+template <class V, class M>
+AcceptanceProbability<V, M>::~AcceptanceProbability()
 {
 }
 
+template <class V, class M>
+double
+AcceptanceProbability<V, M>::evaluate(const MarkovChainPositionData<V, M> & x,
+                                      const MarkovChainPositionData<V, M> & y,
+                                      unsigned int xStageId,
+                                      unsigned int yStageId,
+                                      double & alphaQuotient)
+{
+  return 0.0;
+}
+
+template class AcceptanceProbability<GslVector, GslMatrix>;
 }  // End namespace QUESO
