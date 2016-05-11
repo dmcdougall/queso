@@ -22,14 +22,25 @@
 //
 //-----------------------------------------------------------------------el-
 
+#include <queso/AcceptanceProbability.h>
+
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
-#include <queso/AcceptanceProbability.h>
+#include <queso/TKGroup.h>
+#include <queso/ScalarFunction.h>
+#include <queso/JointPdf.h>
 
 namespace QUESO {
 
 template <class V, class M>
-AcceptanceProbability<V, M>::AcceptanceProbability()
+AcceptanceProbability<V, M>::AcceptanceProbability(
+    const BaseTKGroup<V, M> & transition_kernel,
+    const BaseJointPdf<V, M> & prior_pdf,
+    const BaseScalarFunction<V, M> & likelihood_fn)
+:
+  m_transition_kernel(transition_kernel),
+  m_prior_pdf(prior_pdf),
+  m_likelihood_fn(likelihood_fn)
 {
 }
 
@@ -39,14 +50,24 @@ AcceptanceProbability<V, M>::~AcceptanceProbability()
 }
 
 template <class V, class M>
-double
-AcceptanceProbability<V, M>::evaluate(const MarkovChainPositionData<V, M> & x,
-                                      const MarkovChainPositionData<V, M> & y,
-                                      unsigned int xStageId,
-                                      unsigned int yStageId,
-                                      double & alphaQuotient)
+const BaseTKGroup<V, M> &
+AcceptanceProbability<V, M>::transition_kernel() const
 {
-  return 0.0;
+  return m_transition_kernel;
+}
+
+template <class V, class M>
+const BaseJointPdf<V, M> &
+AcceptanceProbability<V, M>::prior_pdf() const
+{
+  return m_prior_pdf;
+}
+
+template <class V, class M>
+const BaseScalarFunction<V, M> &
+AcceptanceProbability<V, M>::likelihood_function() const
+{
+  return m_likelihood_fn;
 }
 
 template class AcceptanceProbability<GslVector, GslMatrix>;

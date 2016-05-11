@@ -28,6 +28,9 @@
 namespace QUESO {
 
 template <class V, class M> class MarkovChainPositionData;
+template <class V, class M> class BaseTKGroup;
+template <class V, class M> class BaseJointPdf;
+template <class V, class M> class BaseScalarFunction;
 
 template <class V, class M>
 class AcceptanceProbability {
@@ -35,7 +38,9 @@ public:
   /*!
    * Constructor
    */
-  AcceptanceProbability();
+  AcceptanceProbability(const BaseTKGroup<V, M> & transition_kernel,
+                        const BaseJointPdf<V, M> & prior_pdf,
+                        const BaseScalarFunction<V, M> & likelihood_fn);
 
   /*!
    * Destructor
@@ -45,11 +50,21 @@ public:
   /*!
    * Evaluate method
    */
-  double evaluate(const MarkovChainPositionData<V, M> & x,
-                  const MarkovChainPositionData<V, M> & y,
-                  unsigned int xStageId,
-                  unsigned int yStageId,
-                  double & alphaQuotient);
+  virtual double evaluate(const MarkovChainPositionData<V, M> & x,
+                          const MarkovChainPositionData<V, M> & y,
+                          unsigned int xStageId,
+                          unsigned int yStageId,
+                          double & alphaQuotient) const = 0;
+
+  //! Getters
+  const BaseTKGroup<V, M> & transition_kernel() const;
+  const BaseJointPdf<V, M> & prior_pdf() const;
+  const BaseScalarFunction<V, M> & likelihood_function() const;
+
+private:
+  const BaseTKGroup<V, M> & m_transition_kernel;
+  const BaseJointPdf<V, M> & m_prior_pdf;
+  const BaseScalarFunction<V, M> & m_likelihood_fn;
 };
 
 }  // End namespace QUESO
