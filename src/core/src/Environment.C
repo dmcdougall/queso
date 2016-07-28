@@ -1405,6 +1405,7 @@ FullEnvironment::construct (RawType_MPI_Comm inputComm,
     m_basicPdfs = new BasicPdfsGsl(m_worldRank);
   }
   else if (m_optionsObj->m_rngType == "boost") {
+    queso_deprecated();
     m_rngObject = new RngBoost(m_optionsObj->m_seed,m_worldRank);
     m_basicPdfs = new BasicPdfsBoost(m_worldRank);
   }

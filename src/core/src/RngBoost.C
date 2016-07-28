@@ -32,6 +32,7 @@ RngBoost::RngBoost(int seed, int worldRank)
   RngBase(seed,worldRank)
   //m_rng(seed)
 {
+  queso_deprecated();
   resetSeed(seed);
 //TODO Find a suitable test for here; Kemelli todo
 
@@ -43,6 +44,7 @@ RngBoost::RngBoost(int seed, int worldRank)
 // Destructor ---------------------------------------
 RngBoost::~RngBoost()
 {
+  queso_deprecated();
   //this function does nothing
 }
 
@@ -50,6 +52,7 @@ RngBoost::~RngBoost()
 void
 RngBoost::resetSeed(int newSeed)
 {
+  queso_deprecated();
   m_rng.seed(newSeed);
 
   return;
@@ -59,6 +62,7 @@ RngBoost::resetSeed(int newSeed)
 double
 RngBoost::uniformSample() const
 {
+  queso_deprecated();
   static boost::uniform_01<boost::mt19937> zeroone(m_rng);
   return zeroone();
 }
@@ -67,6 +71,7 @@ RngBoost::uniformSample() const
 double
 RngBoost::gaussianSample(double stdDev) const
 {
+  queso_deprecated();
   double mean = 0.; //it will be added conveniently later
   static boost::uniform_01<boost::mt19937> zeroone(m_rng);
   boost::math::normal_distribution<double>  gaussian_dist(mean, stdDev);
@@ -77,6 +82,7 @@ RngBoost::gaussianSample(double stdDev) const
 double
 RngBoost::betaSample(double alpha, double beta) const
 {
+  queso_deprecated();
   static boost::uniform_01<boost::mt19937> zeroone(m_rng);
   boost::math::beta_distribution<double> beta_dist(alpha, beta);
   return quantile(beta_dist, zeroone());
@@ -86,6 +92,7 @@ RngBoost::betaSample(double alpha, double beta) const
 double
 RngBoost::gammaSample(double a, double b) const
 {
+  queso_deprecated();
   static boost::uniform_01<boost::mt19937> zeroone(m_rng);
   boost::math::gamma_distribution<double>  gamma_dist(a,b);
   return quantile(gamma_dist, zeroone());
