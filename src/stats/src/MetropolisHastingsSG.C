@@ -1570,6 +1570,7 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
     m_stageIdForDebugging = stageId;
 
     m_tk->clearPreComputingPositions();
+    m_tk->set_current_iteration(positionId);
 
     if ((m_env.subDisplayFile()                   ) &&
         (m_env.displayVerbosity() >= 5            ) &&
@@ -1602,7 +1603,6 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
         queso_require_equal_to_msg(iRC, 0, "gettimeofday called failed");
       }
 
-      m_tk->set_current_iteration(positionId);
       m_tk->rv(currentPositionData.vecValues()).realizer().realization(tmpVecValues);
 
       if (m_numDisabledParameters > 0) { // gpmsa2
