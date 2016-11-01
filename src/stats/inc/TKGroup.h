@@ -93,6 +93,9 @@ public:
 
   //! Does nothing.  Subclasses may re-implement.  Returns the current stage id.
   virtual unsigned int set_dr_stage(unsigned int stageId);
+
+  //! Allows the user to setup the TK based on the current iteration number
+  virtual void set_current_iteration(unsigned int iteration);
   //@}
 
   //! @name I/O methods
@@ -110,6 +113,7 @@ protected:
         std::vector<const V*>            m_preComputingPositions;
         std::vector<BaseVectorRV<V,M>* > m_rvs; // Gaussian, not Base... And nothing const...
   unsigned int m_stageId;
+  unsigned int m_currentIteration;
 };
 
 }  // End namespace QUESO

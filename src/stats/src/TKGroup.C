@@ -39,7 +39,8 @@ BaseTKGroup<V,M>::BaseTKGroup()
   m_scales               (),
   m_preComputingPositions(),
   m_rvs                  (),
-  m_stageId              (0)
+  m_stageId              (0),
+  m_currentIteration     (0)
 {
 }
 // Constructor with values---------------------------
@@ -56,7 +57,8 @@ BaseTKGroup<V,M>::BaseTKGroup(
   m_scales               (scales.size(),1.),
   m_preComputingPositions(scales.size()+1,NULL), // Yes, +1
   m_rvs                  (scales.size(),NULL), // IMPORTANT: it stays like this for scaledTK, but it will be overwritten to '+1' by hessianTK constructor
-  m_stageId              (0)
+  m_stageId              (0),
+  m_currentIteration     (0)
 {
   for (unsigned int i = 0; i < m_scales.size(); ++i) {
     m_scales[i] = scales[i];
@@ -125,6 +127,13 @@ unsigned int
 BaseTKGroup<V, M>::set_dr_stage(unsigned int stageId)
 {
   return this->m_stageId;
+}
+
+template <class V, class M>
+void
+BaseTKGroup<V, M>::set_current_iteration(unsigned int iteration)
+{
+  this->m_currentIteration = iteration;
 }
 
 // I/O methods---------------------------------------
