@@ -134,6 +134,14 @@ void
 BaseTKGroup<V, M>::set_current_iteration(unsigned int iteration)
 {
   this->m_currentIteration = iteration;
+
+  // The user may override update_tk to implement behaviour that is
+  // iteration-dependent.  The reason we call a virtual update_tk() method from
+  // within set_current_iteration() rather than just making
+  // set_current_iteration() virtual and having the user override it is that
+  // the user may override it and forget to actually set the m_currentIteration
+  // variable.
+  this->update_tk(iteration);
 }
 
 // I/O methods---------------------------------------

@@ -94,8 +94,13 @@ public:
   //! Does nothing.  Subclasses may re-implement.  Returns the current stage id.
   virtual unsigned int set_dr_stage(unsigned int stageId);
 
-  //! Allows the user to setup the TK based on the current iteration number
-  virtual void set_current_iteration(unsigned int iteration);
+  //! Allows QUESO to pass the current iteration to the transition kernel
+  /*!
+   * This method calls the virtual method update_tk, which the users can
+   * override should they wish to implement iteration-dependent behaviour.
+   */
+  void set_current_iteration(unsigned int iteration);
+
   //@}
 
   //! @name I/O methods
@@ -114,6 +119,17 @@ protected:
         std::vector<BaseVectorRV<V,M>* > m_rvs; // Gaussian, not Base... And nothing const...
   unsigned int m_stageId;
   unsigned int m_currentIteration;
+
+private:
+  //! The user can override this method to implement any iteration-dependent
+  //! transition kernel behaviour.
+  /*!
+   * The user does not need to set the m_currentIteration variable inside
+   * update_tk, as it is done in set_current_iteration()
+   *
+   * Default behaviour is a no-op.
+   */
+  virtual void update_tk(unsigned int iteration) { };
 };
 
 }  // End namespace QUESO
