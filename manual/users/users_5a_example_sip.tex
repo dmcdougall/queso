@@ -3,7 +3,7 @@
 According to the Bayesian paradigm, the unobservable parameters
 in a statistical model are treated as random. When no data is available,
 a prior distribution is used to quantify our knowledge about the parameter.
-When data are available, we can update our prior knowledge using the conditional distribution of parameters, given the data. 
+When data are available, we can update our prior knowledge using the conditional distribution of parameters, given the data.
 The transition from the prior to the posterior is possible via the Bayes theorem:
 \begin{equation*}
 \pi_{\text{posterior}}(\boldsymbol{\theta}|\mathbf{d})=\frac{\pi_{\text{prior}}(\boldsymbol{\theta})\pi_{\text{likelihood}}(\mathbf{d}|\boldsymbol{\theta})}{\pi(\mathbf{d})}
@@ -12,7 +12,7 @@ The transition from the prior to the posterior is possible via the Bayes theorem
 
 In this example, suppose a random variable of interest with two parameters $\bv{\theta} \in \mathbb{R}^2$ has a uniform prior distribution, and suppose that a suitable likelihood has normal distribution with mean $\bv{\mu}$ and covariance matrix $\bf{C}$, given by:
 \begin{equation}\label{eq-example-mu}
-\boldsymbol{\mu} = 
+\boldsymbol{\mu} =
 \left(\begin{array}{c}
 -1 \\
 2
@@ -20,14 +20,14 @@ In this example, suppose a random variable of interest with two parameters $\bv{
 \quad
 \text{and}
 \quad
-\mathbf{C} = 
+\mathbf{C} =
 \left[\begin{array}{cc}
 4 & 0 \\
 0 & 1
 \end{array}\right].
 \end{equation}
 
-Therefore, we have: 
+Therefore, we have:
 \begin{equation*}
 \pi_{\text{prior}}(\boldsymbol{\theta}) \varpropto 1
 \end{equation*}
@@ -37,7 +37,7 @@ and
 \end{equation*}
 where
 \begin{equation*}
-\boldsymbol{\theta} = 
+\boldsymbol{\theta} =
 \left(
 \begin{array}{c}
 \theta_1 \\
@@ -53,7 +53,7 @@ Therefore,  posterior PDF is given by:
 \end{equation}
 
 
-In this example, we can replace the values for the mean and covariance matrix given in Equation (\ref{eq-example-mu}) into Equation (\ref{eq-example-post}), 
+In this example, we can replace the values for the mean and covariance matrix given in Equation (\ref{eq-example-mu}) into Equation (\ref{eq-example-post}),
 in order to analytically compute both the posterior PDF:
 \begin{eqnarray*}\label{eq-example-exact-post}
 \pi_{\text{post}}(\boldsymbol{\theta}) & = & \frac{1}{4\pi} \exp\left(-\frac{1}{2}(\boldsymbol{\theta}-\boldsymbol{\mu})^T[\mathbf{C}^{-1}](\boldsymbol{\theta}-\boldsymbol{\mu})\right) \\
@@ -63,13 +63,13 @@ and the marginal results for $\theta_1$ and $\theta_2$:
 \begin{equation}\label{eq-example-exact-marginal}
 \begin{split}
 \pi_{\text{post}}(\theta_1) & =  \frac{1}{2\sqrt{2\pi}} \exp\left(-\frac{1}{8}(\theta_1+1)^2 \right), \\
-\pi_{\text{post}}(\theta_1) & =  \frac{1}{ \sqrt{2\pi}} \exp\left(-\frac{1}{2}(\theta_2-2)^2 \right). 
+\pi_{\text{post}}(\theta_1) & =  \frac{1}{ \sqrt{2\pi}} \exp\left(-\frac{1}{2}(\theta_2-2)^2 \right).
 \end{split}
 \end{equation}
 
 
 
-Recall that the posterior PDF given in 
+Recall that the posterior PDF given in
 Equation (\ref{eq-example-post}) can be sampled through the expression:
 \begin{equation}\label{eq-example-exact-normal}
 \boldsymbol{\mu}+\mathbf{C}^{1/2}\mathcal{N}(0,I),
@@ -77,16 +77,16 @@ Equation (\ref{eq-example-post}) can be sampled through the expression:
 where $\mathcal{N}(0,I)$ designates a Gaussian joint PDF of zero mean and unit covariance matrix, and
 $\mathbf{C}^{1/2}$ is given by:
 \begin{equation*}
-\mathbf{C}^{1/2} = 
+\mathbf{C}^{1/2} =
 \left[\begin{array}{cc}
 2 & 0 \\
 0 & 1
 \end{array}\right].
 \end{equation*}
 
-Thus, in this simple statistical inverse problem, we use QUESO implementation of the Markov chain 
-algorithm to sample the posterior \eqref{eq-example-post} via Expression (\ref{eq-example-exact-normal}) and compare the calculated marginal results for $\theta_1$ and $\theta_2$ 
-against the analytical formulas given in Equation~(\ref{eq-example-exact-marginal}). 
+Thus, in this simple statistical inverse problem, we use QUESO implementation of the Markov chain
+algorithm to sample the posterior \eqref{eq-example-post} via Expression (\ref{eq-example-exact-normal}) and compare the calculated marginal results for $\theta_1$ and $\theta_2$
+against the analytical formulas given in Equation~(\ref{eq-example-exact-marginal}).
 
 
 \paragraph*{Note:} Due to the possibility to compare QUESO sampling algorithms to analytical expressions, this example is also used in the verification procedures and regression tests within QUESO, and it is reproduced in the directory \verb+tests/t02_sip_sfp+.
@@ -95,30 +95,30 @@ against the analytical formulas given in Equation~(\ref{eq-example-exact-margina
 
 
 \subsection{Running the Example}\label{sec:sip-run}
- 
+
 To run the executable provided (available after QUESO installation), enter the following commands:
 \begin{lstlisting}[label={},caption={}]
 $ cd $HOME/LIBRARIES/QUESO-0.56.0/
 $ cd examples/simpleStatisticalInverseProblem
 $ rm outputData/*
-$ ./exSimpleStatisticalInverseProblem_gsl example.inp    
+$ ./exSimpleStatisticalInverseProblem_gsl example.inp
 $ matlab
    $ simple_ip_plots      # inside matlab
    $ exit                 # inside matlab
 $ ls -l outputData/*.png
- simple_ip_autocorrelation_raw_filt.png  simple_ip_hist_filt.png 
+ simple_ip_autocorrelation_raw_filt.png  simple_ip_hist_filt.png
  simple_ip_cdf_filt.png                  simple_ip_hist_raw.png
  simple_ip_cdf_raw.png                   simple_ip_kde_filt.png
  simple_ip_chain_pos_filt.png            simple_ip_kde_raw.png
 \end{lstlisting}
 
-As a result, the user should have created several of PNG figures containing marginal posterior PDF, chain positions, histograms, cumulative density distributions and autocorrelation of both parameters. The name of the figure files have been chosen to be informative, as shown in the Listing above. 
+As a result, the user should have created several of PNG figures containing marginal posterior PDF, chain positions, histograms, cumulative density distributions and autocorrelation of both parameters. The name of the figure files have been chosen to be informative, as shown in the Listing above.
 
 It is worth noting presence of an argument passed to the executable in the
 example, namely `\verb+example.inp+'. The argument is a input file to be provided to QUESO with options for
 the solution of the SIP and/or SFP; and it is always required. Each option in
 the input file is related to one (or more) of the QUESO classes, and is
-presented throughout Chapter~\ref{ch-classes}. 
+presented throughout Chapter~\ref{ch-classes}.
 
 
 \subsection{Example Code}\label{sec:sip-code}
@@ -142,7 +142,7 @@ The source code for the example is composed of 5 files:
 \lstinputlisting[caption=File \texttt{example\_compute.h.}, label={code:sip-compute-h}, linerange={25-1000}]{../../examples/simpleStatisticalInverseProblem/src/example_compute.h}
 
 \lstinputlisting[caption={File \texttt{example\_compute.C}.}, label={code:sip-compute-c}, linerange={25-1000},numbers=left]{../../examples/simpleStatisticalInverseProblem/src/example_compute.C}
- 
+
 
 
 \subsection{Input File}\label{sec:sip-input-file}
@@ -164,14 +164,14 @@ Note that the names of the variables have been designed to be informative:
 
 The options used for solving this simple SIP are displayed in Listing \ref{code:sip-input-file}.
 
-\lstinputlisting[caption={Options for QUESO library used in application code (Listings \ref{code:sip-main-c}-\ref{code:sip-compute-c}})., 
+\lstinputlisting[caption={Options for QUESO library used in application code (Listings \ref{code:sip-main-c}-\ref{code:sip-compute-c}}).,
 label={code:sip-input-file},]{../../examples/simpleStatisticalInverseProblem/tests/test_2013_08_26/example.inp}
 
 
 
 \subsection{Create your own Makefile}\label{sec:sip-makefile}
 
-Makefiles are special format files that together with the make utility will help one to compile and automatically build and manage projects (programs).  
+Makefiles are special format files that together with the make utility will help one to compile and automatically build and manage projects (programs).
 Listing \ref{code:ip_makefile} presents a Makefile, named `\texttt{Makefile\_sip\_example\_margarida}', that may be used to compile the code and create the executable \verb+simple_sip_example+. Naturally, it must be adapted to the user's settings, i.e., it has to have the correct paths for the user's libraries that have actually been used to compile and install QUESO  (see Sections \ref{sec:Pre_Queso}--\ref{sec:install_Queso_make}).
 
 \begin{lstlisting}[caption={Makefile for the application code in Listings
@@ -224,12 +224,12 @@ $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:\
   $HOME/LIBRARIES/gsl-1.15/lib/:\
   $HOME/LIBRARIES/boost-1.53.0/lib/:\
   $HOME/LIBRARIES/hdf5-1.8.10/lib:\
-  $HOME/LIBRARIES/QUESO-0.56.0/lib 
-$ make -f Makefile_example_margarida 
+  $HOME/LIBRARIES/QUESO-0.56.0/lib
+$ make -f Makefile_example_margarida
 $ ./simple_sip_example example.inp
 \end{lstlisting}
 
-The `\verb+export+' instruction above is only necessary if the user has not saved it in his/her \verb+.bashrc+ file. 
+The `\verb+export+' instruction above is only necessary if the user has not saved it in his/her \verb+.bashrc+ file.
 
 
 \subsection{Data Post-Processing and Visualization}\label{sec:sip-results}
@@ -248,7 +248,7 @@ According to the specifications of the input file in Listing~\ref{code:sip-input
 % \end{verbatim}
 
 
-The code bellow shows how to load the data provided by QUESO during the solution process of the SIP described, in the form of 
+The code bellow shows how to load the data provided by QUESO during the solution process of the SIP described, in the form of
 chains of positions.
 
 \begin{lstlisting}[caption={Matlab code for loading the data in both raw and filtered chains of the SIP, by calling the file \texttt{simple\_ip\_plots.m}.}]
@@ -261,7 +261,7 @@ chains of positions.
 \subsubsection{Autocorrelation Plots}
 
 The code presented in Listing \ref{matlab:simple_sip_autocorr} uses Matlab function \verb+autocorr+ to generate Figure \ref{fig:simple_sip_autocorrelation_raw_filt}
-which presents the autocorrelation of the parameters $\theta_1$ and $\theta_2$ in both cases: raw and filtered chain. 
+which presents the autocorrelation of the parameters $\theta_1$ and $\theta_2$ in both cases: raw and filtered chain.
 
 \begin{lstlisting}[label=matlab:simple_sip_autocorr,caption={Matlab code for the autocorrelation plots depicted in Figure \ref{fig:simple_sip_autocorrelation_raw_filt}.}]
 % inside Matlab
@@ -289,7 +289,7 @@ Autocorrelation plots obtained with QUESO for the SIP. }
 
 \subsubsection{KDE Plots}
 
-Matlab function \verb+[f,xi] = ksdensity(x)+ (kernel smoothing density estimate) computes a probability density estimate of the sample in the vector \texttt{x}. \texttt{f} is the vector of density values evaluated at the points in \texttt{xi}. The estimate is based on a normal kernel function, using a window parameter (`width') that is a function of the number of points in \texttt{x}. The density is evaluated at 100 equally spaced points that cover the range of the data in x.  In order to estimate the KDE of the parameters, it is used together with the option `\verb+pdf+'. 
+Matlab function \verb+[f,xi] = ksdensity(x)+ (kernel smoothing density estimate) computes a probability density estimate of the sample in the vector \texttt{x}. \texttt{f} is the vector of density values evaluated at the points in \texttt{xi}. The estimate is based on a normal kernel function, using a window parameter (`width') that is a function of the number of points in \texttt{x}. The density is evaluated at 100 equally spaced points that cover the range of the data in x.  In order to estimate the KDE of the parameters, it is used together with the option `\verb+pdf+'.
 
 \begin{lstlisting}[label=matlab:ip_kde,caption={Matlab code for the KDE plots displayed in the left of Figure \ref{fig:simple_sip_kde}.}]
 % Inside Matlab
@@ -317,7 +317,7 @@ Matlab function \verb+[f,xi] = ksdensity(x)+ (kernel smoothing density estimate)
 % >> ylabel('Posterior marginal PDF','fontname', 'Times', 'fontsize',20);
 % >> xlabel('\theta_1','fontname', 'Times', 'fontsize',20);
 % >> h=legend('Analytical','QUESO','location','northeast');
-% 
+%
 % % theta_2
 % >> fprintf(1,' Plotting KDE - raw  <press any key>\n');
 % >> [f,xi] = ksdensity(ip_mh_rawChain_unified(:,2),'function','pdf');
@@ -332,7 +332,7 @@ Matlab function \verb+[f,xi] = ksdensity(x)+ (kernel smoothing density estimate)
 
 %Figure \ref{fig:sip_gravity_kde_raw} is created by using Matlab commands presented in Listing \ref{matlab:kde} above.
 \begin{figure}[htpb]
-\centering 
+\centering
 % \subfloat[]{\includegraphics[scale=0.35]{figs/simple_ip_kde_theta1.png}}
 % \subfloat[]{\includegraphics[scale=0.35]{figs/simple_ip_kde_theta2.png}}
 \subfloat[Raw chain]{\includegraphics[scale=0.35]{figs/simple_ip_kde_raw.png}}
@@ -345,7 +345,7 @@ Matlab function \verb+[f,xi] = ksdensity(x)+ (kernel smoothing density estimate)
 
 \subsubsection{Covariance and Correlation Matrices}
 
-Matlab function \verb+cov+ calculates the covariance matrix for a data matrix (where each column represents a separate quantity), 
+Matlab function \verb+cov+ calculates the covariance matrix for a data matrix (where each column represents a separate quantity),
 and \verb+corr+ calculates the correlation matrix.
 
 Listing \ref{matlab:cov_matrix} presents the Matlab steps for calculating the covariance and correlation matrices for the parameters $\theta_1$ and $\theta_2$.
@@ -360,12 +360,12 @@ cov_matrix_theta1_theta2 =
 
     3.8729    0.0259
     0.0259    1.0050
-    
+
 >> corr_matrix_theta1_theta2 = corr(ip_mh_rawChain_unified)
 
 corr_matrix_theta1_theta2 =
 
     1.0000    0.0132
-    0.0132    1.0000    
+    0.0132    1.0000
 \end{lstlisting}
 

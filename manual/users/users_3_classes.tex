@@ -31,20 +31,20 @@ The classed that handle environment (and options), vector and matrix classes are
 QUESO core classes are the classes responsible for handling the environment (and options), vector
 and matrix operations. They are described in the following sections.
 
-% 
+%
 % \begin{description}
 % \item[ core:] environment (and options), vector, matrix;
-% 
+%
 % \item[ templated basic:] vector sets (and subsets, vector spaces),  scalar function, vector function, scalar sequence, vector sequence;
-% 
+%
 % The templated basic classes are necessary for the definition and description of other entities, such as RVs, Bayesian solutions of IPs, sampling algorithms and chains.
-% 
+%
 % %\item Vector sets, subsets and spaces (see Figure \ref{fig-vector-space-subset-classes}),
 % %\item Scalar function (see Figure \ref{fig-scalar-function-class}),
 % %\item Vector function (see Figure \ref{fig-vector-function-class}),
 % %\item Scalar sequence (see Figure \ref{fig-scalar-sequence-class}), and
 % %\item Vector sequence (see Figure \ref{fig-vector-sequence-class}).
-% 
+%
 % \item[ templated statistical:] vector realizer, vector RV, statistical IP (and options), MH solver (and options), statistical FP (and options), MC solver (and options), sequence statistical options;
 % %\item Vector RV (concatenation)
 % %\item Statistical IP (and options)
@@ -54,7 +54,7 @@ and matrix operations. They are described in the following sections.
 % %\item Sequence statistical options
 % \item[ miscellaneous:] C and FORTRAN interfaces.
 % \end{description}
-% 
+%
 
 
 \subsection{Environment Class (and Options)}\label{sec:environment_class}
@@ -103,7 +103,7 @@ The QUESO environment class manages five types of communicators, referred to as:
 \item {\it sub}: communicator of size $F/S$ that contains the number of MPI nodes necessary to solve a statistical IP or a statistical FP;
 \item {\it self}: MPI\_SELF\_COMM, of size 1; and
 \item {\it inter0}: communicator of size $S$ formed by all MPI nodes that have subrank 0 in their respective subcommunicators.
- 
+
 \end{enumerate}
 
 
@@ -119,7 +119,7 @@ statistical forward problem; that is, each subenvironment is able to handle a
 ``sub'' Markov chain (a sequence) of vectors and/or a ``sub'' Monte Carlo
 sequence of output vectors.  The ``sub'' sequences can be seen as forming a
 ``unified'' sequence in a distributed way.  Indeed, the virtual class
-\verb+VectorSequence+ provides ``sub'' and ``unified'' statistical operations. 
+\verb+VectorSequence+ provides ``sub'' and ``unified'' statistical operations.
 
 Thus, if the model code requires 16 processors to run and the user decides to run 64 Markov chains in parallel,
 then the environment will consist of a total of $F=1024$ processors and $S=64$ subenvironments, each subenvironment with $F/S=16$ processors.
@@ -137,7 +137,7 @@ A QUESO subenvironment eventually prints messages to its own output file. In ord
 \item  the processor wanting to write a message to the output file must have sub rank 0 (zero).
 \end{enumerate}
 
-If all requirements are satisfied, then QUESO will generate a file with name \linebreak 
+If all requirements are satisfied, then QUESO will generate a file with name \linebreak
 \verb+<m_subDisplayFileName>_sub<sub id>.txt+.   For instance, if \verb+m_subDisplayFileName+ is `\verb+pROblem_775_+' then a node of sub rank 0 in sub environment 17 will write a message to the file `\verb+pROblem_775_sub17.txt+'. The class responsible for reading options one can pass to a QUESO environment through an input file is the \verb+EnvironmentOptions+ class.
 
 Figure \ref{fig-env-class} depicts class diagram for the environment class and Figure \ref{fig-env-coll} display its collaboration graph; and Figure  \ref{fig-env-options-class} displays environment options class. %, pages \pageref{fig-env-class} and \pageref{fig-env-options-class}),
@@ -177,7 +177,7 @@ Figure \ref{fig-env-class} depicts class diagram for the environment class and F
 % \end{figure}
 
 
-% 
+%
 %\subsubsection{Input File Options}
 
 
@@ -210,19 +210,19 @@ Option name                      &  Default  value & Description \\
 % TODO add the following options:
 % (m_option_platformName.c_str(),         po::value<std::string >()->default_value(UQ_ENV_PLATFORM_NAME_ODV),           "platform name")""
 % (m_option_identifyingString.c_str(),    po::value<std::string >()->default_value(UQ_ENV_IDENTIFYING_STRING_ODV),      "identifying string")""
-% (m_option_checkingLevel.c_str(),        po::value<unsigned int>()->default_value(UQ_ENV_CHECKING_LEVEL_ODV),          "set checking level")  0          
+% (m_option_checkingLevel.c_str(),        po::value<unsigned int>()->default_value(UQ_ENV_CHECKING_LEVEL_ODV),          "set checking level")  0
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
-  
+
 
 %\clearpage
 \subsection{Vector}\label{sec:vector_class}
 
 
-The Vector class handles all the vector operations carried out in QUESO, and currently has two derived classes: \verb+GslVector+ and \verb+TeuchosVector+. \verb+GslVector+ is based on the GSL vector structure; whereas \verb+TeuchosVector+ is based on Trilinos Teuchos vector structure~\cite{Trilinos}, and therefore, it is only available if QUESO was compiled with Trilinos.  
+The Vector class handles all the vector operations carried out in QUESO, and currently has two derived classes: \verb+GslVector+ and \verb+TeuchosVector+. \verb+GslVector+ is based on the GSL vector structure; whereas \verb+TeuchosVector+ is based on Trilinos Teuchos vector structure~\cite{Trilinos}, and therefore, it is only available if QUESO was compiled with Trilinos.
 
 A class diagram for \verb+Vector+ class is presented in Figure \ref{fig-vector-class}.%; the reader may notice that the diagram also presents an extra class, \verb+PetscVector+, in order to show QUESO flexibility to the inclusion of other classes -- this class has yet to be implemented.
 
@@ -275,7 +275,7 @@ random variables, Bayesian solutions of inverse problems, sampling algorithms an
 %
 The vector set class is fundamental for the proper handling of many mathematical entities.
 Indeed, the definition of a scalar function such as $\pi:\mathbf{B}\subset\mathbb{R}^n\rightarrow\mathbb{R}$ requires the
-specification of the domain $\mathbf{B}$, which is a {\it subset} of the {\it vector space} $\mathbb{R}^n$, which is itself a {\it set}. Additionally, 
+specification of the domain $\mathbf{B}$, which is a {\it subset} of the {\it vector space} $\mathbb{R}^n$, which is itself a {\it set}. Additionally,
  SIPs need a likelihood routine $\pi_{\text{like}}:\mathbb{R}^n\rightarrow\mathbb{R}_+$,
 and SFPs need a QoI routine $\mathbf{q}:\mathbb{R}^n\rightarrow\mathbb{R}^m$; the \textit{sets} $\mathbb{R}^n$, $\mathbb{R}^m$, etc., are {\it vector spaces}.
 
@@ -297,7 +297,7 @@ since its domain is the intersection of the domain of the prior PDF with the dom
 \label{fig-vector-space-subset-classes}
 \end{figure}
 
-% 
+%
 % \begin{figure}[htpb]
 % % \centering
 % \hspace{-1cm}
@@ -312,11 +312,11 @@ since its domain is the intersection of the domain of the prior PDF with the dom
 %\clearpage
 \subsection{Scalar Function and Vector Function Classes}\label{sec:scalar-vector-function}
 
-Joint PDF, marginal PDF, and CDF are all examples of scalar functions present in statistical problems. 
+Joint PDF, marginal PDF, and CDF are all examples of scalar functions present in statistical problems.
 QUESO currently supports basic PDFs such as uniform and Gaussian and also more complex PDFs, such as the ones coming from a Bayesian analysis. They are implemented in the classes \verb+UniformJointPdf+, \verb+GaussianJointPdf+, and \verb+BayesianJointPdf+, respectively. The posterior PDF may be represented within QUESO by \verb+GenericJointPdf+.
 See Diagram~\ref{fig-scalar-function-class} for the scalar function class.
 
-The handling of vector functions within QUESO is also quite straightforward. Indeed, the definition of a vector function $\mathbf{q}:\mathbf{B}\subset\mathbb{R}^n\rightarrow\mathbb{R}^m$ requires only the extra specification of the image vector space $\mathbb{R}^m$. The classes representing the vector function class \verb+GenericVectorFunction+ and \verb+ConstantVectorFunction+ are derived  from \verb+BaseVectorFunction+ and are presented in Diagram \ref{fig-vector-function-class} 
+The handling of vector functions within QUESO is also quite straightforward. Indeed, the definition of a vector function $\mathbf{q}:\mathbf{B}\subset\mathbb{R}^n\rightarrow\mathbb{R}^m$ requires only the extra specification of the image vector space $\mathbb{R}^m$. The classes representing the vector function class \verb+GenericVectorFunction+ and \verb+ConstantVectorFunction+ are derived  from \verb+BaseVectorFunction+ and are presented in Diagram \ref{fig-vector-function-class}
 \begin{figure}[htpb]
 % \centering
 \includegraphics[scale=0.65,clip=true]{rawfigs/base_scalar_function}
@@ -378,7 +378,7 @@ a QoI routine, and one output entity, the output RV, as shown in Figure \ref{fig
 \subsection{Vector Realizer Class}\label{sec:vector-realizer-class}
 %
 A {\it realizer} is an object that, simply put, contains a \verb+realization()+ operation that returns a sample of a vector RV.
-QUESO currently supports several realizers: 
+QUESO currently supports several realizers:
 \begin{itemize}
  \item uniform, implemented in \verb+UniformVectorRealizer+,                \vspace{-8pt}
 \item Gaussian, implemented in \verb+GaussianVectorRealizer+,               \vspace{-8pt}
@@ -387,10 +387,10 @@ QUESO currently supports several realizers:
 \item Inverse Gamma, implemented in \verb+InverseGammaVectorRealizer+, and  \vspace{-8pt}
 \item Beta, , implemented in \verb+BetaVectorRealizer+,                     \vspace{-8pt}
 \end{itemize}
-which are all derived from the base class \verb+BaseVectorRealizer+. 
- 
+which are all derived from the base class \verb+BaseVectorRealizer+.
+
 QUESO conveniently provides the class \verb+ConcatenatedVectorRealizer+, which allows two distinct realizers to be concatenated.
-It also contains a {\it sequence realizer} class for storing samples of a MH algorithm. 
+It also contains a {\it sequence realizer} class for storing samples of a MH algorithm.
 
 
 
@@ -471,7 +471,7 @@ Figure \ref{fig-sip-options-class} displays the  \verb+StatisticalInverseProblem
 \subsection{Metropolis-Hastings Solver (and Options)}\label{sec:MH}
 
 
-The templated class that represents a Metropolis-Hastings generator of samples in QUESO is \verb+MetropolisHastingsSG<P_V,P_M>+, where SG stands for 'Sequence Generator'. This class implements the DRAM algorithm of Haario, Laine, Mira and Saksman~\cite{HaLaMiSa06} together with an operation named \verb+generateSequence()+ 
+The templated class that represents a Metropolis-Hastings generator of samples in QUESO is \verb+MetropolisHastingsSG<P_V,P_M>+, where SG stands for 'Sequence Generator'. This class implements the DRAM algorithm of Haario, Laine, Mira and Saksman~\cite{HaLaMiSa06} together with an operation named \verb+generateSequence()+
 based on the core routine at the MCMC toolbox for MATLAB~\cite{Mcmctool}. %In fact,, the reader may notice that the example available in the QUESO build tree directory \verb+examples/statisticalInverseProblem+ is closely related to the `normal example' in the toolbox.
 
 
@@ -494,9 +494,9 @@ The Metropolis-Hastings sequence generator class is depicted in Figure \ref{fig-
 \caption{The Metropolis-Hastings sequence generator class and the Metropolis-Hastings sequence generator options class.}
 \end{figure}
 
-% Use the trim option, which takes four space separated values: 
+% Use the trim option, which takes four space separated values:
 %  trim={<left> <lower> <right> <upper>}
-% 
+%
 % \begin{figure}[htpb]
 % \centering
 % \includegraphics[scale=0.65,clip=true]{rawfigs/metropolis_hastings_options}
@@ -581,7 +581,7 @@ The templated class that represents a Multilevel generator of samples in QUESO i
 The Multilevel sequence generator class is assisted by two extra classes, \verb+MLSamplingOptions+ and \verb+MLSamplingLevelOptions+, for handling the options to be used.
 
 The Multilevel class, the Multilevel options and level options classes are depicted in Figure~\ref{fig-Multilevel-options-class}.  A collaboration graph for the Multilevel class is presented in Figure \ref{fig-Multilevel-coll}; whereas its associated options are presented in Table \ref{tab-Multilevel-options}.
-% 
+%
 % \begin{figure}[htpb]
 % \centering
 % \includegraphics[scale=0.8,clip=true]{rawfigs/ml_sampling}
@@ -626,16 +626,16 @@ The Multilevel class, the Multilevel options and level options classes are depic
 \textlangle PREFIX\textrangle
 ml\_restartOutput\_levelPeriod       & 0    \\ %  (UQ_ML_SAMPLING_RESTART_Output\_LEVEL_PERIOD_ODV       ),
 
-\textlangle PREFIX\textrangle 
+\textlangle PREFIX\textrangle
 ml\_restartOutput\_baseNameForFiles  & "."  \\ %  (UQ_ML_SAMPLING_RESTART_Output\_BASE_NAME_FOR_FILES_ODV),
 
-\textlangle PREFIX\textrangle 
+\textlangle PREFIX\textrangle
 ml\_restartOutput\_fileType          & "m"  \\ %  (UQ_ML_SAMPLING_RESTART_Output\_FILE_TYPE_ODV          ),
 
-\textlangle PREFIX\textrangle 
+\textlangle PREFIX\textrangle
 ml\_restartInput\_baseNameForFiles   & "."  \\ %  (UQ_ML_SAMPLING_RESTART_Input\_BASE_NAME_FOR_FILES_ODV ),
 
-\textlangle PREFIX\textrangle 
+\textlangle PREFIX\textrangle
 ml\_restartInput\_fileType           & "m"  \\ %  (UQ_ML_SAMPLING_RESTART_Input\_FILE_TYPE_ODV           ),
 
 % \textlangle PREFIX\textrangle ml\_option\_dataOutputAllowedSet   & ""  \\ %  (\textlangle PREFIX\textrangle ml\_prefix + "dataOutputAllowedSet")
@@ -697,7 +697,7 @@ ml\_restartInput\_fileType           & "m"  \\ %  (UQ_ML_SAMPLING_RESTART_Input\
 
 
 
-% 
+%
 % \begin{table}[!p]
 % \begin{center}
 % \caption{Input file options for a QUESO Multilevel solver (continuation of Table \ref{tab-Multilevel-options}).}
@@ -707,8 +707,8 @@ ml\_restartInput\_fileType           & "m"  \\ %  (UQ_ML_SAMPLING_RESTART_Input\
 % \toprule
 % \rmfamily Option Name                                    & \rmfamily Default Value \\%& \rmfamily Description \\ %
 % \midrule\midrule
-% 
-% 
+%
+%
 % \bottomrule
 % \end{tabular}
 % \end{center}
@@ -719,7 +719,7 @@ ml\_restartInput\_fileType           & "m"  \\ %  (UQ_ML_SAMPLING_RESTART_Input\
 \subsection{Statistical Forward Problem (and Options)}
 \label{sub:SFP}
 
-A SFP in QUESO also has two input entities, the input (parameter) RV and a QoI function, and one output entity, the QoI RV. 
+A SFP in QUESO also has two input entities, the input (parameter) RV and a QoI function, and one output entity, the QoI RV.
 The SIP is represented through the templated class \verb+StatisticalForwardProblem<P_V,P_M,Q_V,Q_M >+, which diagram is presented in Figure \ref{fig-sfp-class}. Again, the types \verb+P_V+ and \verb+Q_V+ of vectors and types \verb+P_M+ and \verb+Q_M+ of matrices, where \verb+P_+ stands for 'parameter' and \verb+Q_+ stands for 'quantities of interest'.
 
 The input RV and the output QoI RV are instances of the \verb+BaseVectorRv<P_V,P_M>+ class, while
@@ -732,11 +732,11 @@ a vector realizer through the operation \verb+'qoiRv().realizer()'+, which retur
 
 
 
-Figure \ref{fig-sfp-options-class} displays the  statistical forward problem options class, i.e. that class that handles a variety of options for solving the SFP. Such options may be provided to QUESO at the user's input file; and they are listed in Table \ref{tab-sfp-options}. In the table, \texttt{p-q} stands for parameter--quantity of interest. 
+Figure \ref{fig-sfp-options-class} displays the  statistical forward problem options class, i.e. that class that handles a variety of options for solving the SFP. Such options may be provided to QUESO at the user's input file; and they are listed in Table \ref{tab-sfp-options}. In the table, \texttt{p-q} stands for parameter--quantity of interest.
 
 
 
- 
+
 %it provides both CDFs of QoI components through the operation \verb+qoiRv().unifiedCdf()+,  which returns an instance of the class \verb+BaseVectorCdf<Q_V,Q_M>+, and
 %a vector realizer through the operation \verb+qoiRv().realizer()+, which returns an instance of the class \verb+BaseVectorRealizer<Q_V,Q_M>+.
 
@@ -814,16 +814,16 @@ This class has the requirement that the image set of the vector random variable 
 \textlangle PREFIX\textrangle mc\_pseq\_dataOutputAllowedSet   &       \\
 \textlangle PREFIX\textrangle mc\_qseq\_dataInputFileName      &  "."  \\
 \textlangle PREFIX\textrangle mc\_qseq\_size                   &  100  \\
-\textlangle PREFIX\textrangle mc\_qseq\_displayPeriod          &  500  \\  
-\textlangle PREFIX\textrangle mc\_qseq\_measureRunTimes        &    0  \\  
-\textlangle PREFIX\textrangle mc\_qseq\_dataOutputFileName     &  "."  \\ 
-\textlangle PREFIX\textrangle mc\_qseq\_dataOutputAllowedSet   &       \\  
+\textlangle PREFIX\textrangle mc\_qseq\_displayPeriod          &  500  \\
+\textlangle PREFIX\textrangle mc\_qseq\_measureRunTimes        &    0  \\
+\textlangle PREFIX\textrangle mc\_qseq\_dataOutputFileName     &  "."  \\
+\textlangle PREFIX\textrangle mc\_qseq\_dataOutputAllowedSet   &       \\
 \bottomrule
 \end{tabular}
 \end{center}
 \end{table}
 
-% 
+%
 % \begin{table}[htpb]
 % % from uqMonteCarloSGOptions.C and uqMonteCarloSGOptions.h
 % \begin{center}
@@ -837,7 +837,7 @@ This class has the requirement that the image set of the vector random variable 
 % \midrule\midrule
 % %\textlangle PREFIX\textrangle mc\_help                        &         &             \\ %_ODV = option default value
 % %\hline
-% \textlangle PREFIX\textrangle mc\_dataOutputFileName           &   "."   &             \\ % m_dataOutputFileName         (UQ_MOC_SG_DATA_OUTPUT_FILE_NAME_ODV 
+% \textlangle PREFIX\textrangle mc\_dataOutputFileName           &   "."   &             \\ % m_dataOutputFileName         (UQ_MOC_SG_DATA_OUTPUT_FILE_NAME_ODV
 % %\hline
 % \textlangle PREFIX\textrangle mc\_dataOutputAllowedSet         &         &             \\ %//m_dataOutputAllowedSet       (),
 % %\hline
@@ -869,7 +869,7 @@ This class has the requirement that the image set of the vector random variable 
 
 % %\clearpage
 % \subsection{Options for Statistical Analysis of Sequences}
-% 
+%
 % \begin{figure}[htpb]
 % \centering
 % \includegraphics[scale=0.40,clip=true]{figs/uqSequenceStatisticalOptions}
@@ -877,7 +877,7 @@ This class has the requirement that the image set of the vector random variable 
 % \caption{{\color{red}{The sequence statistical options class}}.}
 % \label{fig-seq-statistical-options-class}
 % \end{figure}
-% 
+%
 % \begin{table}[htpb]
 % \begin{center}
 % \caption{Input file options for a the statistical analysis of sequences.}
@@ -985,24 +985,24 @@ This class has the requirement that the image set of the vector random variable 
 % \end{center}
 % \label{tab-seq-statistical-options}
 % \end{table}
-% 
+%
 
 %\clearpage
 \section{Miscellaneous Classes and Routines}
- 
+
 As the name suggests, QUESO miscellaneous classes and routines have a variety of routines.
-For instance, the function \verb+MiscReadDoublesFromString+ is used for reading the options input files and assigning the values to the respective variables, in \texttt{uqMonteCarloSGOptions::} \texttt{getMyOptionValues} and in \verb+MetropolisHastingsSGOptions::getMyOptionValues+. 
+For instance, the function \verb+MiscReadDoublesFromString+ is used for reading the options input files and assigning the values to the respective variables, in \texttt{uqMonteCarloSGOptions::} \texttt{getMyOptionValues} and in \verb+MetropolisHastingsSGOptions::getMyOptionValues+.
 
 QUESO class \verb+BaseOneDGrid+ generates grids necessary for calculating the CDF of a RV; it is required by class \verb+ArrayOfOneDGrids+, which, in turn, is used in both classes: \linebreak \verb+StatisticalForwardProblem+ and \verb+StatisticalInverseProblem+.
 
 % %\clearpage
 % \section{Interface Classes}
-% 
+%
 % \todo{Define what `interface' means here. Is is interface to C and Fortran? }
 % /src/interface/basic...
-% 
+%
 % \subsection{Using Other C++ Classes in the Library}
-% 
+%
 % https://svn.ices.utexas.edu/repos/pecos/turbulence/IncompRansCal/calDataLevModUncert/README
 
 

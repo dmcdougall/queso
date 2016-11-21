@@ -2,7 +2,7 @@
 
 This example replicates the problem in ``Section 4.3 A Hysteretic Model Class
 '' of~\cite{CheungPrudencio2012}, and which is also discussed in \cite{Cheung_2009A}.
-In this example we consider the nonlinear seismic response of a four-story building. 
+In this example we consider the nonlinear seismic response of a four-story building.
 This response is modeled with
 an inelastic shear building model with some linear viscous damping and hysteretic bilinear interstory restoring forces~\cite{Cheung_2009A}. More
 specifically, let $t\geq0 $ denote time, let $a_g(t)$ be a given total acceleration at the base (Fig. 13), and for the i-th floor [degree of freedom (dof)], $1 \leq i \leq N_o \equiv 4$, let us denote:
@@ -14,7 +14,7 @@ F_i(t) &= \text{hysteretic restoring force}
 \end{split}
 \end{equation}
 
-The hysteretic restoring force is illustrated in Figure \ref{fig:hyst_rest_force} and the horizontal base (ground) acceleration (input data) used in~\cite{CheungPrudencio2012} is illustrated in \ref{hig:hist_base_acceleration}. 
+The hysteretic restoring force is illustrated in Figure \ref{fig:hyst_rest_force} and the horizontal base (ground) acceleration (input data) used in~\cite{CheungPrudencio2012} is illustrated in \ref{hig:hist_base_acceleration}.
 \begin{figure}[h!]
 \centerline{
 \input{rawfigs/hyst_restoring_force.latex}\\
@@ -33,7 +33,7 @@ The hysteretic restoring force is illustrated in Figure \ref{fig:hyst_rest_force
 
 We also define the mass matrix $\bv{M}$ and the stiffness matrix $\bv{K}$:
 \begin{equation*}
-\bv{M}= 
+\bv{M}=
 \begin{bmatrix}
   m_1 & 0   & 0   & 0 \\
   0   & m_2 & 0   & 0 \\
@@ -43,23 +43,23 @@ We also define the mass matrix $\bv{M}$ and the stiffness matrix $\bv{K}$:
 %
 \quad \text{and} \quad
 %
-\bv{K}= 
+\bv{K}=
 \begin{bmatrix}
   k_1 + k_2 & -k_2    & 0       & 0 \\
   -k_2      & k_2+k_3 & -k_3    & 0 \\
   0         & -k_3    & k_3+k_4 & -k4 \\
-  0         &   0     & -k_4    & k_4 \\ 
+  0         &   0     & -k_4    & k_4 \\
 \end{bmatrix}
 \end{equation*}
 and the Rayleigh damping matrix
 \begin{equation*}
-\bv{C} = \rho \bv{M} + \gamma \bv{K} 
+\bv{C} = \rho \bv{M} + \gamma \bv{K}
 \end{equation*}
 for given positive scalar parameters $\rho$ and $\gamma$. The response $\bv{q}(t) \equiv [q_1(t),q_2(t),q_3(t),q_4(t)]$ is modeled as satisfying the equation of motion:
 \begin{equation}\label{eq:hyst:motion}
-\bv{M} \ddot{\bv{q}}(t) + \bv{C} \dot{\bv{q}}(t) + \bv{F}(t) = -\bv{M}\cdot 
-\begin{bmatrix} 
-1 \\ 
+\bv{M} \ddot{\bv{q}}(t) + \bv{C} \dot{\bv{q}}(t) + \bv{F}(t) = -\bv{M}\cdot
+\begin{bmatrix}
+1 \\
 \vdots \\
 1
 \end{bmatrix}_{4\times1} \cdot a_g(t),
@@ -93,15 +93,15 @@ where for $i=1,2,3,4$, $k_i$ is the initial stiffness, $r_i$ is the post-yield s
 \label{hig:hist_acceleration_4_floors}
 \end{figure}
 
-According to Cheung and Prudencio~\cite{CheungPrudencio2012}, these input values were chosen deliberately so that the excitation $a_g$ did not cause some of the upper floors to enter the nonlinear regime; that is, so that our test inverse problem did not become globally identifiable. 
+According to Cheung and Prudencio~\cite{CheungPrudencio2012}, these input values were chosen deliberately so that the excitation $a_g$ did not cause some of the upper floors to enter the nonlinear regime; that is, so that our test inverse problem did not become globally identifiable.
 
-In this section, 400 time-steps are used, as the data is  available  at instants  
+In this section, 400 time-steps are used, as the data is  available  at instants
 $$t_n = (n - 1) \times \Delta t, \quad 1 \leq n \leq N_T \equiv 401, \quad \Delta t = 0.01$$
-however, Cheung and Prudencio used only 250 time steps~\cite{CheungPrudencio2012}. 
+however, Cheung and Prudencio used only 250 time steps~\cite{CheungPrudencio2012}.
 
 An additive noise is assumed to be present in the measurements; i.e.,
 \begin{equation*}
-y_i(n)=q_i(n)+\varepsilon_i(n), \quad 1 \leq i \leq N_o, \quad  1 \leq n \leq N_T \equiv 401, 
+y_i(n)=q_i(n)+\varepsilon_i(n), \quad 1 \leq i \leq N_o, \quad  1 \leq n \leq N_T \equiv 401,
 \end{equation*}
 where $q_i(n; \theta_2 ,...,\theta_{15})$ denotes the output at time $t_n= n\Delta t \, (\Delta t=0.01s)$ at the $i$-th observed degree of freedom predicted by the proposed structural model, and $y_i(n)$ denotes the corresponding
 measured output.
@@ -120,11 +120,11 @@ To run the executable provided (available after QUESO installation), and generat
 \begin{lstlisting}[label={},caption={}]
 $ cd $HOME/LIBRARIES/QUESO-0.56.0/examples/example
 $ rm outputData/*
-$ ./example_gsl example_1chain.inp    
+$ ./example_gsl example_1chain.inp
 $ matlab
-   $ plot_all.m	                          # inside matlab   
+   $ plot_all.m	                          # inside matlab
 $ ls -l outputData/*.png
-hysteretic_autocorr_thetas.png  hysteretic_kde_theta8.png 
+hysteretic_autocorr_thetas.png  hysteretic_kde_theta8.png
 hysteretic_cdf_thetas.png       hysteretic_kde_theta9.png
 hysteretic_kde_theta1.png       hysteretic_kde_theta10.png
 hysteretic_kde_theta2.png       hysteretic_kde_theta11.png
@@ -138,7 +138,7 @@ hysteretic_kde_theta7.png       hysteretic_scatter_thetas.png
 
 As a result, the user should have created several of PNG figures containing kernel density estimate of the 15 parameters, cumulative density distribution, autocorrelation and scatter plots. The name of the figure files have been chosen to be informative, as shown in the Listing above.
 
-Additional figures may be generated if the user allows the procedure \texttt{debug\_hyst(} be called by the compiler in Line 11 of file \texttt{example\_main.C}; in that case, call the function \texttt{cpp\_gen.m} inside Matlab/Octave. 
+Additional figures may be generated if the user allows the procedure \texttt{debug\_hyst(} be called by the compiler in Line 11 of file \texttt{example\_main.C}; in that case, call the function \texttt{cpp\_gen.m} inside Matlab/Octave.
 
 
 \subsection{Example Code}\label{sec:hysteretic-code}
@@ -149,7 +149,7 @@ The source code for the example is composed of 5 files:
 \texttt{example\_compute.h} and \texttt{example\_compute.C} (Listings \ref{code:hysteretic-compute-h} and \ref{code:hysteretic-compute-c}), and finally \texttt{example\_hyst.h} and \texttt{example\_hyst.C}, which contain the Hysteretic model properly said.
 
 
-Note that in line 11 of Listings \ref{code:hysteretic-main-c} the `\verb+#if 1+' directive tells the compiler that the application will call \texttt{compute()}, which internally uses QUESO and the Multilevel algorithm. 
+Note that in line 11 of Listings \ref{code:hysteretic-main-c} the `\verb+#if 1+' directive tells the compiler that the application will call \texttt{compute()}, which internally uses QUESO and the Multilevel algorithm.
 On the contrary, the user may calculate the hysteretic force without uncertainty by changing the directive to `\verb+#if 0+', which can assist the analysis of the resulting data.
 
 \lstinputlisting[caption=File \texttt{example\_main.C.}, label={code:hysteretic-main-c}, linerange={33-1000},numbers=left]{../../examples/hysteretic/src/example_main.C}
@@ -161,20 +161,20 @@ On the contrary, the user may calculate the hysteretic force without uncertainty
 \lstinputlisting[caption=File \texttt{example\_compute.h.}, label={code:hysteretic-compute-h}, linerange={33-1000}]{../../examples/hysteretic/src/example_compute.h}
 
 \lstinputlisting[caption={File \texttt{example\_compute.C}.}, label={code:hysteretic-compute-c}, linerange={33-1000}]{../../examples/hysteretic/src/example_compute.C}
- 
+
 
 
 \subsection{Input File}\label{sec:hysteretic-input-file}
 
 
-The options used for solving this example are displayed in Listing \ref{code:hysteretic-input-file}. 
+The options used for solving this example are displayed in Listing \ref{code:hysteretic-input-file}.
 
-\lstinputlisting[caption={Options for QUESO library used in application code (Listings \ref{code:hysteretic-main-c}-\ref{code:hysteretic-compute-c}})., 
+\lstinputlisting[caption={Options for QUESO library used in application code (Listings \ref{code:hysteretic-main-c}-\ref{code:hysteretic-compute-c}}).,
 label={code:hysteretic-input-file},]{../../examples/hysteretic/tests/test_2013_12_11/example.inp}
 
 \subsection{Create your own Makefile}\label{sec:hysteretic-makefile}
 
-Similarly to the other examples presented in this user's manual and also available with QUESO distribution, a user-created makefile is available: `\texttt{Makefile\_hysteretic\_violeta}' which may personalized to each user's computer settings and used to compile the code and create the executable \verb+hysteretic_gsl+. 
+Similarly to the other examples presented in this user's manual and also available with QUESO distribution, a user-created makefile is available: `\texttt{Makefile\_hysteretic\_violeta}' which may personalized to each user's computer settings and used to compile the code and create the executable \verb+hysteretic_gsl+.
 
 Thus to compile, build and execute the code,  commands similar to the following should be entered:
 \begin{lstlisting}
@@ -183,12 +183,12 @@ $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:\
   $HOME/LIBRARIES/gsl-1.15/lib/:\
   $HOME/LIBRARIES/boost-1.53.0/lib/:\
   $HOME/LIBRARIES/hdf5-1.8.10/lib:\
-  $HOME/LIBRARIES/QUESO-0.56.0/lib 
-$ make -f Makefile_hysteretic_violeta 
+  $HOME/LIBRARIES/QUESO-0.56.0/lib
+$ make -f Makefile_hysteretic_violeta
 $ ./hysteretic_gsl example.inp
 \end{lstlisting}
 
-Again, the `\verb+export+' instruction above is only necessary if the user has not saved the path for the libraries used during QUESO installation in his/her \verb+.bashrc+ file. 
+Again, the `\verb+export+' instruction above is only necessary if the user has not saved the path for the libraries used during QUESO installation in his/her \verb+.bashrc+ file.
 
 
 
@@ -198,8 +198,8 @@ Again, the `\verb+export+' instruction above is only necessary if the user has n
 
 According to the specifications of the input file in Listing~\ref{code:hysteretic-input-file}, both a folder named \verb+outputData+ and a the following files should be generated:
 \begin{verbatim}
-rawChain_ml.m 
-display_sub0.txt    
+rawChain_ml.m
+display_sub0.txt
 \end{verbatim}
 
 Note that in this hysteretic problem a total of 13 levels are required for the Multilevel method (e.g. see the contents of file \texttt{rawChain\_ml.m}).
@@ -253,7 +253,7 @@ Figure \ref{fig:hysteretic_kde_like} presents the KDE plots of both the likeliho
 
 \subsubsection{Autocorrelation and CDF Plots}
 
-Figure \ref{fig:hysteretic_cdf} combines the CDF of all parameters $\theta_i,\, i=1,\ldots,15$ into a single plot. 
+Figure \ref{fig:hysteretic_cdf} combines the CDF of all parameters $\theta_i,\, i=1,\ldots,15$ into a single plot.
 Figure~\ref{fig:hysteretic_autocorr} presents their autocorrelations.
 
 \begin{figure}[hptb]

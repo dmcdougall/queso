@@ -7,7 +7,7 @@ In this simple statistical forward problem (SFP), suppose that the quantity of i
 
 Suppose also that the parameters in $\theta$ have Gaussian distribution with mean $\bv{\mu}$ and covariance matrix $\bf{C}$ given by:
 \begin{equation}\label{eq-example-mu-sfp}
-\boldsymbol{\mu} = 
+\boldsymbol{\mu} =
 \left(\begin{array}{c}
 -1 \\
 2
@@ -15,7 +15,7 @@ Suppose also that the parameters in $\theta$ have Gaussian distribution with mea
 \quad
 \text{and}
 \quad
-\mathbf{C} = 
+\mathbf{C} =
 \left[\begin{array}{cc}
 4 & 0 \\
 0 & 1
@@ -39,7 +39,7 @@ where $E$ and $V$ indicate expectation and variance, respectively. Thus the anal
 \end{equation}
 
 
-In this example, we use QUESO Monte Carlo algorithm to sample from the QoI given in Equation (\ref{eq-example-q}) and analyze it. 
+In this example, we use QUESO Monte Carlo algorithm to sample from the QoI given in Equation (\ref{eq-example-q}) and analyze it.
 Since the parameters have known independent Gaussian distributions, the results obtained by QUESO via sampling the QoI, in Equation (\ref{eq-example-q}), should match the Gaussian distribution given in Equation (\ref{eq-example-sfp-analytical}).
 
 
@@ -47,18 +47,18 @@ Since the parameters have known independent Gaussian distributions, the results 
 
 
 \subsection{Running the Example}\label{sec:sfp-run}
- 
+
 To run the executable provided (available after QUESO installation), enter the following commands:
 \begin{lstlisting}[label={},caption={}]
 $ cd $HOME/LIBRARIES/QUESO-0.56.0/
 $ cd examples/simpleStatisticalForwardProblem
 $ rm outputData/*
-$ ./exSimpleStatisticalForwardProblem_gsl example.inp    
+$ ./exSimpleStatisticalForwardProblem_gsl example.inp
 $ matlab
    $ simple_fp_plots      # inside matlab
    $ exit                 # inside matlab
 $ ls -l outputData/*.png
- simple_fp_autocorrelation_qoi.png  simple_fp_chain_pos_param.png  
+ simple_fp_autocorrelation_qoi.png  simple_fp_chain_pos_param.png
  simple_fp_hist_qoi.png             simple_fp_cdf_qoi.png
  simple_fp_chain_pos_qoi.png        simple_fp_kde_qoi.png
 \end{lstlisting}
@@ -84,13 +84,13 @@ The source code for the SFP example is composed of 5 files:
 \lstinputlisting[caption=File \texttt{simple\_sfp\_example\_compute.h.}, label={code:sfp-compute-h}, linerange={25-1000}]{../../examples/simpleStatisticalForwardProblem/src/simple_sfp_example_compute.h}
 
 \lstinputlisting[caption={File \texttt{simple\_sfp\_example\_compute.C}.}, label={code:sfp-compute-c}, linerange={25-1000},numbers=left]{../../examples/simpleStatisticalForwardProblem/src/simple_sfp_example_compute.C}
- 
+
 
 
 \subsection{Input File}\label{sec:sfp-input-file}
 
 In the case of a SFP, QUESO expects a list of options for Monte Carlo algorithm,
-together with options for QUESO environment; such as the name of the output files and which sub-environments will write to to them. 
+together with options for QUESO environment; such as the name of the output files and which sub-environments will write to to them.
 Note that the names of the variables have been designed to be informative:
 \begin{description}\vspace{-8pt}
 \item[ \texttt{env}:] refers to QUESO environment; \vspace{-8pt}
@@ -103,14 +103,14 @@ Note that the names of the variables have been designed to be informative:
 The options used for solving this simple SFP are displayed in Listing \ref{code:sfp-input-file}.
 
 
-\lstinputlisting[caption={File name \texttt{simple\_sfp\_example.inp} with options for QUESO library used in application code (Listings \ref{code:sfp-main-c}--\ref{code:sfp-compute-c}})., 
+\lstinputlisting[caption={File name \texttt{simple\_sfp\_example.inp} with options for QUESO library used in application code (Listings \ref{code:sfp-main-c}--\ref{code:sfp-compute-c}}).,
 label={code:sfp-input-file},]{../../examples/simpleStatisticalForwardProblem/tests/test_2013_08_27/simple_sfp_example.inp}
 
 
 
 \subsection{Create your own Makefile}\label{sec:sfp-makefile}
 
- 
+
 Listing \ref{code:makefile} presents a Makefile, named `\texttt{Makefile\_sfp\_example\_margarida}', that may be used to compile the code and create the executable \verb+simple_sfp_example+. Naturally, it must be adapted to the user's settings, i.e., it has to have the correct paths for the user's libraries that have actually been used to compile and install QUESO.
 
 \begin{lstlisting}[caption={Makefile for the application code in Listings
@@ -158,17 +158,17 @@ Listing \ref{code:makefile} presents a Makefile, named `\texttt{Makefile\_sfp\_e
 
 Thus, to compile, build and execute the code, the user just needs to run the following commands in the same directory where the files are:
 \begin{lstlisting}
-$ cd HOME/LIBRARIES/QUESO-0.56.0/examples/simpleStatisticalForwardProblem 
+$ cd HOME/LIBRARIES/QUESO-0.56.0/examples/simpleStatisticalForwardProblem
 $ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:\
   $HOME/LIBRARIES/gsl-1.15/lib/:\
   $HOME/LIBRARIES/boost-1.53.0/lib/:\
   $HOME/LIBRARIES/hdf5-1.8.10/lib:\
-  $HOME/LIBRARIES/QUESO-0.56.0/lib 
-$ make -f Makefile_sfp_example_margarida 
+  $HOME/LIBRARIES/QUESO-0.56.0/lib
+$ make -f Makefile_sfp_example_margarida
 $ ./simple_sfp_example simple_sfp_example.inp
 \end{lstlisting}
 
-The `\verb+export+' instruction above is only necessary if the user has not saved it in his/her \verb+.bashrc+ file. 
+The `\verb+export+' instruction above is only necessary if the user has not saved it in his/her \verb+.bashrc+ file.
 
 
 \subsection{Data Post-Processing and Visualization}\label{sec:sfp-results}
@@ -215,7 +215,7 @@ The Matlab code presented in Listing \ref{matlab:fp_hist_qoi} below shows how to
 \end{lstlisting}
 
 \begin{figure}[p]
-\centering 
+\centering
 \includegraphics[scale=0.35]{figs/simple_fp_hist_qoi.png}
 \vspace{-10pt}
 \caption{QoI histogram.}
@@ -224,7 +224,7 @@ The Matlab code presented in Listing \ref{matlab:fp_hist_qoi} below shows how to
 
 \subsubsection{KDE Plot}
 
-Matlab function \verb+ksdensity+ (Kernel smoothing density estimate) together with the option `\verb+pdf+' may be used to estimate the KDE of the QoI. 
+Matlab function \verb+ksdensity+ (Kernel smoothing density estimate) together with the option `\verb+pdf+' may be used to estimate the KDE of the QoI.
 
 \begin{lstlisting}[label=matlab:fp_kde_qoi,caption={Matlab code for the KDE displayed in Figure \ref{fig:simple_sfp_kde}}]
 % inside Matlab
@@ -243,7 +243,7 @@ Matlab function \verb+ksdensity+ (Kernel smoothing density estimate) together wi
 
 %Figure \ref{fig:sip_gravity_kde_raw} is created by using Matlab commands presented in Listing \ref{matlab:kde} above.
 \begin{figure}[p]
-\centering 
+\centering
 \includegraphics[scale=0.35]{figs/simple_fp_kde_qoi.png}
 \vspace{-10pt}
 \caption{Kernel Density Estimation. QUESO results are plotted against the PDF of a Gaussian distribution $Q(x)=   \frac{1}{ \sqrt{10\pi}} \exp\left(-\frac{1}{10}(x-1)^2 \right)$, where $\mu=1$ and $\sigma^2=5$.}
@@ -263,7 +263,7 @@ Matlab function \verb+ksdensity+ with \verb+'cdf'+ option may also be used for p
 \end{lstlisting}
 
 \begin{figure}[p]
-\centering 
+\centering
 \includegraphics[scale=0.35]{figs/simple_fp_cdf_qoi.png}
 \vspace*{-10pt}
 \caption{Cumulative Distribution Function.}
