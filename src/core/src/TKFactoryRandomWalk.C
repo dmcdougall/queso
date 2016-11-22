@@ -28,21 +28,7 @@
 namespace QUESO
 {
 
-template <class DerivedTK>
-SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type
-TKFactoryRandomWalk<DerivedTK>::build_tk()
-{
-  SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type new_tk;
-
-  new_tk.reset(new DerivedTK(this->m_options->m_prefix.c_str(),
-                             *(this->m_vectorSpace),
-                             *(this->m_dr_scales),
-                             *(this->m_initial_cov_matrix)));
-
-  return new_tk;
-}
-
-// Instantiate all the transition kernel factories
+// Instantiate the transition kernel factory
 TKFactoryRandomWalk<ScaledCovMatrixTKGroup<GslVector, GslMatrix> > tk_factory_random_walk("random_walk");
 
 }  // namespace QUESO
