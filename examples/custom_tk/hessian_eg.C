@@ -117,6 +117,7 @@ MyTransitionKernel<V, M>::rv(const V & position) const
   //queso_require_greater_msg(m_preComputingPositions.size(), this->m_stageId, "m_preComputingPositions.size() <= stageId");
   //queso_require_msg(m_preComputingPositions[this->m_stageId], "m_preComputingPositions[stageId] == NULL");
 
+  // QUESO relies on the user not touching the RV's covariance matrix?
   GaussianVectorRV<V, M> * gaussian_rv = dynamic_cast<GaussianVectorRV<V, M> * >(m_rvs[this->m_stageId]);
 
   gaussian_rv->updateLawExpVector(position);
