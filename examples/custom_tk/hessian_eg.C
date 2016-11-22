@@ -219,6 +219,13 @@ MyTransitionKernel<V,M>::setRVsWithZeroMean()
   }
 }
 
+template <class V, class M>
+void
+MyTransitionKernel<V, M>::update_tk()
+{
+  std::cout << "QUESO called `update_tk'" << std::endl;
+}
+
 template<class V, class M>
 void
 MyTransitionKernel<V,M>::print(std::ostream& os) const

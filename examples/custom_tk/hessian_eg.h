@@ -52,6 +52,7 @@ public:
   bool setPreComputingPosition(const V & position, unsigned int stageId);
   void clearPreComputingPositions();
   virtual unsigned int set_dr_stage(unsigned int stageId);
+  virtual void update_tk();
   void print(std::ostream & os) const;
 private:
   void setRVsWithZeroMean();
