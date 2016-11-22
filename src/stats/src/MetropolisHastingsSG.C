@@ -1570,7 +1570,9 @@ MetropolisHastingsSG<P_V,P_M>::generateFullChain(
     m_stageIdForDebugging = stageId;
 
     m_tk->clearPreComputingPositions();
-    m_tk->set_current_iteration(positionId);
+
+    // Possibly user-overridded to implement strange things, but we allow it.
+    m_tk->update_tk();
 
     if ((m_env.subDisplayFile()                   ) &&
         (m_env.displayVerbosity() >= 5            ) &&

@@ -39,8 +39,7 @@ BaseTKGroup<V,M>::BaseTKGroup()
   m_scales               (),
   m_preComputingPositions(),
   m_rvs                  (),
-  m_stageId              (0),
-  m_currentIteration     (0)
+  m_stageId              (0)
 {
 }
 // Constructor with values---------------------------
@@ -57,8 +56,7 @@ BaseTKGroup<V,M>::BaseTKGroup(
   m_scales               (scales.size(),1.),
   m_preComputingPositions(scales.size()+1,NULL), // Yes, +1
   m_rvs                  (scales.size(),NULL), // IMPORTANT: it stays like this for scaledTK, but it will be overwritten to '+1' by hessianTK constructor
-  m_stageId              (0),
-  m_currentIteration     (0)
+  m_stageId              (0)
 {
   for (unsigned int i = 0; i < m_scales.size(); ++i) {
     m_scales[i] = scales[i];
@@ -127,21 +125,6 @@ unsigned int
 BaseTKGroup<V, M>::set_dr_stage(unsigned int stageId)
 {
   return this->m_stageId;
-}
-
-template <class V, class M>
-void
-BaseTKGroup<V, M>::set_current_iteration(unsigned int iteration)
-{
-  this->m_currentIteration = iteration;
-
-  // The user may override update_tk to implement behaviour that is
-  // iteration-dependent.  The reason we call a virtual update_tk() method from
-  // within set_current_iteration() rather than just making
-  // set_current_iteration() virtual and having the user override it is that
-  // the user may override it and forget to actually set the m_currentIteration
-  // variable.
-  this->update_tk(iteration);
 }
 
 // I/O methods---------------------------------------
