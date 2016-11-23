@@ -224,6 +224,21 @@ void
 MyTransitionKernel<V, M>::update_tk()
 {
   std::cout << "QUESO called `update_tk'" << std::endl;
+
+  GslMatrix new_matrix(m_vectorSpace->zeroVector());
+  new_matrix(0, 0) = 1.0;
+
+  // Modify transition kernel's random variable here
+  for (unsigned int i = 0; i < m_scales.size(); ++i) {
+    delete m_rvs[i];
+    double factor = 1.0 / m_scales[i] / m_scales[i];
+    m_rvs[i] = new GaussianVectorRV<V, M>(m_prefix.c_str(),
+        *m_vectorSpace,
+        m_vectorSpace->zeroVector(),
+        factor*new_matrix);
+    std::cout << "Updating rv for dr stage " << i << " with cov matrix: " << std::endl;
+    std::cout << factor * new_matrix << std::endl;
+  }
 }
 
 template<class V, class M>
