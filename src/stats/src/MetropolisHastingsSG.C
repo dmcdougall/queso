@@ -2310,7 +2310,11 @@ MetropolisHastingsSG<P_V, P_M>::delayedRejection(unsigned int positionId,
         iRC = gettimeofday(&timevalCandidate, NULL);
         queso_require_equal_to_msg(iRC, 0, "gettimeofday call failed");
       }
-      m_tk->rv(tkStageIds).realizer().realization(tmpVecValues);
+
+      // Generate realization from a TK with shrinked proposal cov matrix
+      m_tk->set_dr_stage(stageId);
+      m_tk->rv(currentPositionData.vecValues()).realizer().realization(tmpVecValues);
+
       if (m_numDisabledParameters > 0) { // gpmsa2
         for (unsigned int paramId = 0; paramId < m_vectorSpace.dimLocal(); ++paramId) {
           if (m_parameterEnabledStatus[paramId] == false) {
