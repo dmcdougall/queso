@@ -652,9 +652,12 @@ MetropolisHastingsSG<P_V,P_M>::alpha(
   const P_V& _lastTKPosition         = m_tk->preComputingPosition(        tkStageIds[inputSize-1]);
   const P_V& _lastBackwardTKPosition = m_tk->preComputingPosition(backwardTKStageIds[inputSize-1]);
 
-  double numContrib = m_tk->rv(backwardTKStageIdsLess1).pdf().lnValue(_lastBackwardTKPosition,NULL,NULL,NULL,NULL);
+  m_tk->set_dr_stage(backwardTKStageIdsLess1[backwardTKStageIdsLess1.size()-1]);
+  double numContrib = m_tk->rv(m_tk->preComputingPosition(backwardTKStageIdsLess1[0])).pdf().lnValue(_lastBackwardTKPosition,NULL,NULL,NULL,NULL);
 
-  double denContrib = m_tk->rv(tkStageIdsLess1).pdf().lnValue(_lastTKPosition,NULL,NULL,NULL,NULL);
+  m_tk->set_dr_stage(tkStageIdsLess1[tkStageIdsLess1.size()-1]);
+  double denContrib = m_tk->rv(m_tk->preComputingPosition(tkStageIdsLess1[0])).pdf().lnValue(_lastTKPosition,NULL,NULL,NULL,NULL);
+
   if ((m_env.subDisplayFile()                   ) &&
       (m_env.displayVerbosity() >= 10           ) &&
       (m_optionsObj->m_totallyMute == false)) {
