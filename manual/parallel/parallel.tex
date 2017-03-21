@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage{amssymb,amsfonts,amsmath,amscd,amsthm}
 \usepackage{graphicx}
-\usepackage{rotating}
+\usepackage{parskip}
 \usepackage{color}
 \usepackage{bm}
 \usepackage{booktabs}
@@ -137,11 +137,24 @@ int main(int argc, char ** argv)
 }
 \end{lstlisting}
 
-\subsection{Problems with the current state}
-
 \subsection{Why we need a distributed state}
 
-computation, licencing
+There are some issues with a serial parameter vector, and some benefits to
+moving to a distributed parameter vector.
+\begin{itemize}
+  \item There are problems with large parameter vectors (discretized fields)
+    that necessitate distribution across multiple processes;
+  \item Parallel parameter vector means \Queso\ can leverage existing high
+    performance linear algebra packages for better compute resource usage;
+  \item High performance linear algebra packages provide better performing
+    optimization algorithms we could use before sampling;
+  \item The serial implementation requires GSL, and GSL is licensed under the
+    GPL.  We have customers at the labs that would like to ship \Queso\ as a
+    binary and GPL'd third-party libraries prevent this from happening.
+\end{itemize}
+A rebuttal to the last point might be to use an alternative serial
+implementation with a more liberal license.  This is a reasonable suggestion
+but it doesn't address the first three points.
 
 \section{How the future might look}
 
