@@ -1,51 +1,47 @@
-\documentclass[12pt,letterpaper,oneside,onecolumn,portrait]{article}
+\documentclass{article}
 \usepackage{amssymb,amsfonts,amsmath,amscd,amsthm}
 \usepackage{graphicx}
 \usepackage{rotating}
+\usepackage{color}
 \usepackage{bm}
 \usepackage{booktabs}
 \usepackage{fancyvrb}
 \usepackage{booktabs}  %nice tables
 
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
 \newcommand{\Quesoweb}{\url{https://github.com/libqueso}}
 \newcommand{\Queso}{\texttt{QUESO}}
-\newcommand{\todo}[1]{ {\color{red} To do: #1} }
 \newcommand{\QUESOversion}{0.51.0}
 
-\usepackage{listings}                           % to include codes using \lstinputlisting
+\usepackage{listings}          % to include codes using \lstinputlisting
 \lstset{
-language=sh,                                    % choose the language of the code
-basicstyle=\scriptsize\ttfamily,                % the size of the fonts that are used for the code
+language=c++,                  % choose the language of the code
+basicstyle=\ttfamily,          % the size of the fonts that are used for the code
 %stringstyle=\ttfamily,
-%commentstyle=\scriptsize\sffamily,
-%keywordstyle=\bfseries,                        % so funciona com basicstyle=\footnotesize,\ttfamily se eu adicionar \usepackage{bold-extra}
-keywordstyle=\color{blue},                      % keyword style
-commentstyle=\color{dkgreen}\sffamily,          % comment style
+%keywordstyle=\bfseries,       % so funciona com basicstyle=\footnotesize,\ttfamily se eu adicionar \usepackage{bold-extra}
+keywordstyle=\color{blue},     % keyword style
+commentstyle=\color{dkgreen},  % comment style
 stringstyle=\color{mauve},
 identifierstyle=\bfseries,
 numberbychapter= true,
 numberfirstline=false,
-% numbers=left,                                 % where to put the line-numbers
-numberstyle=\footnotesize,                      % the size of the fonts that are used for the line-numbers
-stepnumber=5,                                   % the step between two line-numbers. If it is 1 each line will be numbered
-numbersep=8pt,                                  % how far the line-numbers are from the code
-%backgroundcolor=\color{white},                 % choose the background color. You must add \usepackage{color}
-showspaces=false,                               % show spaces adding particular underscores
-showstringspaces=false,                         % underline spaces within strings
-showtabs=false,                                 % show tabs within strings adding particular underscores
-%frameround=fttt,                               % roundish frame - Kemelli
-%frame=trBL,                                    % single % adds a frame around the code
-% frameshape={RYRYYY}{yn}{ny}{RYRYYY},
-frameshape={YYYYYY}{yn}{ny}{YYYYYY},
-% frameshape={RYRYYY}{ny}{yn}{RYRYYY},
-%frame=shadowbox, rulesepcolor=\color{black},
-tabsize=2,                                      % sets default tabsize to 2 spaces
-captionpos=b,                                   % sets the caption-position to bottom
-breaklines=true,                                % sets automatic line breaking
-breakatwhitespace=false,                        % sets if automatic breaks should only happen at whitespace
-escapeinside={\%*}{*)},                         % if you want to add a comment within your code
+% numbers=left,                % where to put the line-numbers
+numberstyle=\footnotesize,     % the size of the fonts that are used for the line-numbers
+stepnumber=5,                  % the step between two line-numbers. If it is 1 each line will be numbered
+numbersep=8pt,                 % how far the line-numbers are from the code
+showspaces=false,              % show spaces adding particular underscores
+showstringspaces=false,        % underline spaces within strings
+showtabs=false,                % show tabs within strings adding particular underscores
+tabsize=2,                     % sets default tabsize to 2 spaces
+captionpos=b,                  % sets the caption-position to bottom
+breaklines=true,               % sets automatic line breaking
+breakatwhitespace=false,       % sets if automatic breaks should only happen at whitespace
+escapeinside={\%*}{*)},        % if you want to add a comment within your code
 morekeywords ={rm,ls},
-belowskip = 10pt,                               % \medskipamount%\smallskipamount,
+belowskip = 10pt,              % \medskipamount%\smallskipamount,
 aboveskip =10pt,
 }
 
@@ -57,9 +53,98 @@ aboveskip =10pt,
 \maketitle
 
 \section{Introduction}
+
+This document describes the current, serial, state of the parameter vector in
+\Queso\ and makes a plan to transition to a distributed state.
+
 \subsection{The current state}
+
+The current state of the parameter vector in \Queso\ is serial.  Parallelism in
+\Queso\ presents itself in two ways: 1) independent parallel Markov chains that
+execute concurrently; and 2) a mechanism, an MPI communicator, that \Queso\
+creates as part of the construction of \lstinline|FullEnvironment| the user can
+hand to a forward problem demanding parallelism.  Neither of these parallel
+capabilities distribute the parameter vector across multiple processes.  In
+other words, each chain's process holds exactly the same parameter vector
+value in the likelihood.
+
+Here is some example commented code that executes the current situation:
+\begin{lstlisting}
+#include <queso/Environment.h>
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
+#include <queso/ScalarFunction.h>
+#include <queso/VectorSpace.h>
+#include <queso/BoxSubset.h>
+
+using namespace QUESO;
+
+template <class V = GslVector, class M = GslMatrix>
+class Likelihood : public BaseScalarFunction<V, M>
+{
+public:
+  Likelihood(const char * prefix,
+             const VectorSet<V, M> & domainSet)
+    : BaseScalarFunction<V, M>(prefix, domainSet),
+      m_env(domainSet.env())
+  {
+  }
+
+  virtual double lnValue(const V & param) const
+  {
+    if (m_env.subRank() == 0) {
+      std::cout << "Rank 0 param: " << param << '\n';
+    }
+    else {  // Rank 1
+      std::cout << "Rank 1 param: " << param << '\n';
+    }
+
+    return 1.0;
+  }
+
+  virtual double actualValue(const V&, const V*, V*,
+                             M*, V*) const
+  {
+    return 1.0;
+  }
+
+  const BaseEnvironment & m_env;
+};
+
+int main(int argc, char ** argv)
+{
+  // We'll assume the program was executed with
+  // mpirun -np 2 and there's only one chain.
+
+  MPI_Init(&argc, &argv);
+  FullEnvironment env(MPI_COMM_WORLD,
+                      argv[1],
+                      "",
+                      NULL);
+  VectorSpace<> paramSpace(env, "", 1, NULL);
+  GslVector min(paramSpace.zeroVector());
+  GslVector max(paramSpace.zeroVector());
+  min[0] = 0.0;
+  max[0] = 1.0;
+  BoxSubset<> paramDomain("", paramSpace, min, max);
+  Likelihood<> likelihood("", paramDomain);
+
+  GslVector point(paramSpace.zeroVector());
+  point[0] = 0.5;
+  likelihood.lnValue(point);  // Both ranks should
+                              // print the same
+                              // parameter value
+
+  MPI_Finalize();
+  return 0;
+}
+\end{lstlisting}
+
 \subsection{Problems with the current state}
-\subsection{The future}
+
+\subsection{Why we need a distributed state}
+
+computation, licencing
 
 \section{How the future might look}
 
