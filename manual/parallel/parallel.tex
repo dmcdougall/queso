@@ -117,9 +117,7 @@ int main(int argc, char ** argv)
   // mpirun -np 2 and there's only one chain.
 
   MPI_Init(&argc, &argv);
-  FullEnvironment env(MPI_COMM_WORLD,
-                      argv[1],
-                      "",
+  FullEnvironment env(MPI_COMM_WORLD, argv[1], "",
                       NULL);
   VectorSpace<> paramSpace(env, "", 1, NULL);
   GslVector min(paramSpace.zeroVector());
@@ -131,9 +129,8 @@ int main(int argc, char ** argv)
 
   GslVector point(paramSpace.zeroVector());
   point[0] = 0.5;
-  likelihood.lnValue(point);  // Both ranks should
-                              // print the same
-                              // parameter value
+  likelihood.lnValue(point);  // Both ranks print the
+                              // same parameter value
 
   MPI_Finalize();
   return 0;
