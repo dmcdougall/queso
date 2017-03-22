@@ -177,7 +177,74 @@ this is not a forwards-compatible change; parallel forward codes that worked
 with a serial parameter vector and aren't designed to work with distributed
 parameter vectors will fail or, worse, produce incorrect results.
 
-\subsection{From \Queso's perspective}
 \subsection{From the user's perspective}
+
+There are a few things to look at:
+\begin{enumerate}
+  \item The parameter space
+  \item The parameter domain
+  \item Distributions on the domain (priors)
+  \item Interacting with vectors and matrices
+  \item The likelihood
+\end{enumerate}
+These should change as little as possible.
+
+\subsubsection{The parameter space}
+
+At present, the user calls the following to instantiate a parameter space of
+dimension 2,
+\begin{lstlisting}
+MPI_Init(&argc, &argv);
+FullEnvironment env(MPI_COMM_WORLD, argv[1], "",
+                    NULL);
+VectorSpace<> paramSpace(env, "", 2, NULL);
+\end{lstlisting}
+The parameter space is the same for each chain.  It is only \emph{within} a
+chain that the parameter is paritioned.  There is a clear constraint here; the
+number of processes belonging to the chain must divide the dimension of the
+parameter space.  This might be problematic in the situation where the forward
+model needs 10 processes to run quickly for a likelihood evaluation but the
+user can't ask for more than 2 processes.
+
+Can we avoid this constraint?  Maybe we allow the user to ask for more
+processes per chain and just use a subset of them.  For example, if the user
+asks for 10 processes per chain for the forward model evaluation then \Queso\
+would also ask for how many of those the parameter should be distributed over.
+
+\subsubsection{The parameter domain}
+
+For a \lstinline|BoxSubset|, which is the most common domain, the user calls
+\begin{lstlisting}
+BoxSubset<> paramDomain("", paramSpace, min, max);
+\end{lstlisting}
+The parameter space is already partitioned and \lstinline|min| and
+\lstinline|max| belong to the parameter space.  Everything is already set up
+for the parameter domain and nothing needs to be done here from the user's
+perspective.
+
+What about other domains?  Another common domain is the
+\lstinline|ConcatenatedSubset|.  What about user-defined domains?
+
+\subsubsection{Distributions on partitioned domains}
+
+As an example, a user might construct a Gaussian distribution for the prior.
+The user calls
+\begin{lstlisting}
+GaussianVectorRV<> prior("", paramDomain, mean,
+                         covariance);
+\end{lstlisting}
+From the user's perspective, nothing would need to change.  The mean belongs
+to the already-partitioned parameter vector space, and so does the covariance
+matrix.
+
+Any distributions that rely on vectors or matrices for construction will lie
+in the already-partitioned space and the user will see no changes in their
+statistical application.
+
+\subsubsection{Interacting with vectors and matrices}
+
+
+
+\subsection{From \Queso's perspective}
 
 \end{document}
