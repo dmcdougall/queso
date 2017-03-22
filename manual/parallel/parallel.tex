@@ -119,16 +119,19 @@ int main(int argc, char ** argv)
   MPI_Init(&argc, &argv);
   FullEnvironment env(MPI_COMM_WORLD, argv[1], "",
                       NULL);
-  VectorSpace<> paramSpace(env, "", 1, NULL);
+  VectorSpace<> paramSpace(env, "", 2, NULL);
   GslVector min(paramSpace.zeroVector());
   GslVector max(paramSpace.zeroVector());
   min[0] = 0.0;
+  min[1] = 0.0;
   max[0] = 1.0;
+  max[1] = 1.0;
   BoxSubset<> paramDomain("", paramSpace, min, max);
   Likelihood<> likelihood("", paramDomain);
 
   GslVector point(paramSpace.zeroVector());
   point[0] = 0.5;
+  point[1] = 0.5;
   likelihood.lnValue(point);  // Both ranks print the
                               // same parameter value
 
@@ -150,13 +153,29 @@ moving to a distributed parameter vector.
     optimization algorithms we could use before sampling;
   \item The serial implementation requires GSL, and GSL is licensed under the
     GPL.  We have customers at the labs that would like to ship \Queso\ as a
-    binary and GPL'd third-party libraries prevent this from happening.
+    binary and GPL third-party libraries prevent this from happening.
+    \begin{itemize}
+      \item A rebuttal to this point might be to use an alternative serial
+        implementation with a more liberal license.  This is a reasonable
+        suggestion but it doesn't address the first three points.
+    \end{itemize}
 \end{itemize}
-A rebuttal to the last point might be to use an alternative serial
-implementation with a more liberal license.  This is a reasonable suggestion
-but it doesn't address the first three points.
 
 \section{How the future might look}
+
+If the user requests multiple processes per chain, then an approach we might
+take is to distribute the parameter across those processes.  In the code
+example above, that would mean process 0 sees only the first element of
+\lstinline|point| and process 1 sees only the second element.  Here's a
+depiction of the change: \textcolor{red}{picture of chain sub-communicator
+holding a piece of the parameter vector}.
+
+Inside the likelihood the user is responsible for providing the mechanism
+needed to pass the parameter information over to their forward model.  This
+will not change in the case the parameter vector is distributed.  Therefore,
+this is not a forwards-compatible change; parallel forward codes that worked
+with a serial parameter vector and aren't designed to work with distributed
+parameter vectors will fail or, worse, produce incorrect results.
 
 \subsection{From \Queso's perspective}
 \subsection{From the user's perspective}
