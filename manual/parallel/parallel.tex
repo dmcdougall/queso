@@ -243,7 +243,25 @@ statistical application.
 
 \subsubsection{Interacting with vectors and matrices}
 
+It ought to be clear at this point that iteractions with distributed vectors
+requires some care.  Since vector are distributed over processes belonging to
+the chain, the following code
+\begin{lstlisting}
+GslVector<> v(paramSpace.zeroVector());
+v[0] = 1.0;
+\end{lstlisting}
+will set local index 0 on process 0 and local index 0 on prcoessor 1.  Local
+index 0 on processor 1 should map to global index 1 for \lstinline|v|.
 
+Interacting with matrices has a similar story, but the paritioning for matrices
+will happen over the rows.  The following code
+\begin{lstlisting}
+GslMatrix<> A(paramSpace.zeroVector());
+A(0,0) = 1.0;
+A(0,1) = 1.0;
+\end{lstlisting}
+will set local row index 0 on process 0 and local row index 0 on process 1.
+Local row index 0 on process 1 maps to global row index 1 for \lstinline|A|.
 
 \subsection{From \Queso's perspective}
 
