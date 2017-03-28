@@ -205,6 +205,7 @@ moving to a distributed parameter vector.
 \end{itemize}
 
 \section{How the future might look}
+\subsection{Parameter distribution in parallel}
 
 If the user requests multiple processes per chain, then an approach we might
 take is to distribute the parameter across those processes.  In the code
@@ -271,33 +272,32 @@ needed by a single model evaluation.
 \begin{center}
   \begin{tikzpicture}
     % Specification of nodes (position, etc.)
-    \node[chain, label={Chain 0}, minimum height=3cm] (chain0) at (0, 0)                {};
-    \node[process, label={Proc 0}, right=of chain0.west, yshift=0.5cm]     (process0)   {};
-    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]                 {};
-    \node[process, label={Proc 1}, right=of process0.east]                 (process1)   {};
-    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm]                {};
-    \node[process, label={Proc 2}, right=of process1.east]                 (process2)   {};
-    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]                   {};
-    \node[process, label={Proc 3}, below=of process0.south, yshift=-0.3cm] (process3)   {};
-    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]                 {};
-    \node[process, label={Proc 4}, right=of process3.east]                 (process4)   {};
-    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm]                {};
-    \node[process, label={Proc 5}, right=of process4.east]                 (process5)   {};
-    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]                   {};
-
-    \node[chain, label={Chain 1}, right=of chain0, minimum height=3cm]     (chain1)     {};
-    \node[process, label={Proc 6}, right=of chain1.west, yshift=0.5cm]     (process6)   {};
-    \node[vector, fill=green!40, right=of process6.west, xshift=0.11cm]                 {};
-    \node[process, label={Proc 7}, right=of process6.east]                 (process7)   {};
-    \node[vector, fill=yellow!40, right=of process7.west, xshift=0.53cm]                {};
-    \node[process, label={Proc 8}, right=of process7.east]                 (process8)   {};
-    \node[vector, fill=red!40, right=of process8.west, xshift=0.95cm]                   {};
-    \node[process, label={Proc 9}, below=of process6.south, yshift=-0.3cm] (process9)   {};
-    \node[vector, fill=green!40, right=of process9.west, xshift=0.11cm]                 {};
-    \node[process, label={Proc 10}, right=of process9.east]                (process10)  {};
-    \node[vector, fill=yellow!40, right=of process10.west, xshift=0.53cm]               {};
-    \node[process, label={Proc 11}, right=of process10.east]               (process11)  {};
-    \node[vector, fill=red!40, right=of process11.west, xshift=0.95cm]                  {};
+    \node[chain, label={Chain 0}, minimum height=3cm]                      (chain0)    {};
+    \node[process, label={Proc 0}, right=of chain0.west, yshift=0.5cm]     (process0)  {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]                {};
+    \node[process, label={Proc 1}, right=of process0.east]                 (process1)  {};
+    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm]               {};
+    \node[process, label={Proc 2}, right=of process1.east]                 (process2)  {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]                  {};
+    \node[process, label={Proc 3}, below=of process0.south, yshift=-0.3cm] (process3)  {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]                {};
+    \node[process, label={Proc 4}, right=of process3.east]                 (process4)  {};
+    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm]               {};
+    \node[process, label={Proc 5}, right=of process4.east]                 (process5)  {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]                  {};
+    \node[chain, label={Chain 1}, right=of chain0, minimum height=3cm]     (chain1)    {};
+    \node[process, label={Proc 6}, right=of chain1.west, yshift=0.5cm]     (process6)  {};
+    \node[vector, fill=green!40, right=of process6.west, xshift=0.11cm]                {};
+    \node[process, label={Proc 7}, right=of process6.east]                 (process7)  {};
+    \node[vector, fill=yellow!40, right=of process7.west, xshift=0.53cm]               {};
+    \node[process, label={Proc 8}, right=of process7.east]                 (process8)  {};
+    \node[vector, fill=red!40, right=of process8.west, xshift=0.95cm]                  {};
+    \node[process, label={Proc 9}, below=of process6.south, yshift=-0.3cm] (process9)  {};
+    \node[vector, fill=green!40, right=of process9.west, xshift=0.11cm]                {};
+    \node[process, label={Proc 10}, right=of process9.east]                (process10) {};
+    \node[vector, fill=yellow!40, right=of process10.west, xshift=0.53cm]              {};
+    \node[process, label={Proc 11}, right=of process10.east]               (process11) {};
+    \node[vector, fill=red!40, right=of process11.west, xshift=0.95cm]                 {};
   \end{tikzpicture}
 \end{center}
 %
@@ -311,6 +311,36 @@ calculation, all processes needed for that model evaluation.  In the above
 picture, \Queso\ will create six communicators; two chain communicators (one
 for each chain) and four model communicators (for the two models evaluated
 in each chain).
+
+\subsection{Choice of parameter partitioning}
+
+We noted in the previous subsection that the parameter vector is distributed
+across the processes involved in a model evaluation.  This implies that if
+there are multiplie independent model evaluations in a likelihood calculation
+then we are not using these extra processes to house a piece of the parameter
+vector.
+
+For example, as depicted in the image above, the parameter is distributed
+across three processes and not six.  Three processes are leveraged for a model
+evaluation and two model evaluations per likelihood calculation.  This wasn't
+the only choice we could have made.  We could have instead chosen to partition
+the parameter vector across \emph{all} processes belonging to the chain.  The
+above picture would look slightly different; the parameter vector would be
+distributed across all six processes belonging to the chain communicator.
+
+Once a model evaluation needs to be done, it is reasonable to expect that the
+model communicator needs the entire (possibly distributed) parameter vector.
+If the parameter vector is distributed across the entire chain communicator,
+the user would be burdened with the point-to-point communication required to
+organise the parameter vector for the model communicator.  The exact
+point-to-point communication required depends on \emph{how} the parameter
+vector is distributed and it may be done to minimise the user burden.
+
+It ought to be clear at this point why we chose to distribute the parameter
+vector among the model communicator and not the chain communicator.
+Furthermore, it is reasonable to expect that, if the model already demands a
+parallel environment, distributing the parameter over only the model
+communicator is a reasonable choice.
 
 \subsection{From the user's perspective}
 
