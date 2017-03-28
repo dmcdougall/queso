@@ -8,6 +8,10 @@
 \usepackage{fancyvrb}
 \usepackage{booktabs}  %nice tables
 
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+\usepackage{verbatim}
+
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -169,6 +173,67 @@ example above, that would mean process 0 sees only the first element of
 \lstinline|point| and process 1 sees only the second element.  Here's a
 depiction of the change: \textcolor{red}{picture of chain sub-communicator
 holding a piece of the parameter vector}.
+
+% Drawing part, node distance is 1.5 cm and every node is prefilled with white
+% background
+\tikzset{
+  % Specifications for style of nodes:
+  base/.style = {
+    rectangle,
+    rounded corners,
+    draw=black,
+    text centered
+  },
+  chain/.style = {
+    base,
+    minimum width=5.5cm,
+    minimum height=2cm,
+    node distance=1cm,
+    fill=orange!15
+  },
+  process/.style = {
+    base,
+    minimum width=1.5cm,
+    minimum height=0.75cm,
+    node distance=0.25cm,
+    fill=blue!15
+  },
+  vector/.style = {
+    square,
+    draw=black,
+    minimum width=0.42cm,
+    minimum height=0.42cm,
+    node distance=0.0cm
+  },
+}
+
+\def\parameter#1{
+  \begin{scope}
+    \node[vector, fill=green!40, right=of #1.west, xshift=0.11cm] (piece0) {};
+    \node[vector, fill=yellow!40, right=of piece0.east, node distance=0cm] (piece1) {};
+    \node[vector, fill=red!40, right=of piece1.east, node distance=0cm] (piece2) {};
+  \end{scope}
+}
+
+\begin{center}
+  \begin{tikzpicture}
+    % Specification of nodes (position, etc.)
+    \node[chain, label={Chain 0}] (chain0) at (0, 0)                  {};
+    \node[chain, label={Chain 1}, right=of chain0]         (chain1)   {};
+    \node[process, label={Proc 0}, right=of chain0.west]   (process0) {};
+    \node[process, label={Proc 1}, right=of process0.east] (process1) {};
+    \node[process, label={Proc 2}, right=of process1.east] (process2) {};
+    \node[process, label={Proc 3}, right=of chain1.west]   (process3) {};
+    \node[process, label={Proc 4}, right=of process3.east] (process4) {};
+    \node[process, label={Proc 5}, right=of process4.east] (process5) {};
+    \parameter{process0}
+    \parameter{process1}
+    \parameter{process2}
+    \parameter{process3}
+    \parameter{process4}
+    \parameter{process5}
+  \end{tikzpicture}
+\end{center}
 
 Inside the likelihood the user is responsible for providing the mechanism
 needed to pass the parameter information over to their forward model.  This
