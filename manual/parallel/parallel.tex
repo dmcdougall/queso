@@ -237,20 +237,20 @@ And here's what it looks like after the change:
 \begin{center}
   \begin{tikzpicture}
     % Specification of nodes (position, etc.)
-    \node[chain, label={Chain 0}] (chain0) at (0, 0)                              {};
-    \node[chain, label={Chain 1}, right=of chain0]         (chain1)               {};
-    \node[process, label={Proc 0}, right=of chain0.west]   (process0)             {};
-    \node[process, label={Proc 1}, right=of process0.east] (process1)             {};
-    \node[process, label={Proc 2}, right=of process1.east] (process2)             {};
-    \node[process, label={Proc 3}, right=of chain1.west]   (process3)             {};
-    \node[process, label={Proc 4}, right=of process3.east] (process4)             {};
-    \node[process, label={Proc 5}, right=of process4.east] (process5)             {};
-    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  (piece0) {};
-    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1) {};
-    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    (piece1) {};
-    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  (piece0) {};
-    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1) {};
-    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    (piece1) {};
+    \node[chain, label={Chain 0}] (chain0) at (0, 0)                     {};
+    \node[chain, label={Chain 1}, right=of chain0]         (chain1)      {};
+    \node[process, label={Proc 0}, right=of chain0.west]   (process0)    {};
+    \node[process, label={Proc 1}, right=of process0.east] (process1)    {};
+    \node[process, label={Proc 2}, right=of process1.east] (process2)    {};
+    \node[process, label={Proc 3}, right=of chain1.west]   (process3)    {};
+    \node[process, label={Proc 4}, right=of process3.east] (process4)    {};
+    \node[process, label={Proc 5}, right=of process4.east] (process5)    {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  {};
+    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  {};
+    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    {};
   \end{tikzpicture}
 \end{center}
 %
@@ -272,34 +272,32 @@ needed by a single model evaluation.
   \begin{tikzpicture}
     % Specification of nodes (position, etc.)
     \node[chain, label={Chain 0}, minimum height=3cm] (chain0) at (0, 0)                {};
+    \node[process, label={Proc 0}, right=of chain0.west, yshift=0.5cm]     (process0)   {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]                 {};
+    \node[process, label={Proc 1}, right=of process0.east]                 (process1)   {};
+    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm]                {};
+    \node[process, label={Proc 2}, right=of process1.east]                 (process2)   {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]                   {};
+    \node[process, label={Proc 3}, below=of process0.south, yshift=-0.3cm] (process3)   {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]                 {};
+    \node[process, label={Proc 4}, right=of process3.east]                 (process4)   {};
+    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm]                {};
+    \node[process, label={Proc 5}, right=of process4.east]                 (process5)   {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]                   {};
 
-    \node[process, label={Proc 0}, right=of chain0.west, yshift=0.5cm]   (process0)     {};
-    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  (piece0)       {};
-    \node[process, label={Proc 1}, right=of process0.east] (process1)                   {};
-    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1)       {};
-    \node[process, label={Proc 2}, right=of process1.east] (process2)                   {};
-    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    (piece1)       {};
-    \node[process, label={Proc 3}, below=of process0.south, yshift=-0.3cm]   (process0) {};
-    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  (piece0)       {};
-    \node[process, label={Proc 4}, right=of process0.east] (process1)                   {};
-    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1)       {};
-    \node[process, label={Proc 5}, right=of process1.east] (process2)                   {};
-    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    (piece1)       {};
-
-    \node[chain, label={Chain 1}, right=of chain0, minimum height=3cm]         (chain1) {};
-
-    \node[process, label={Proc 6}, right=of chain1.west, yshift=0.5cm]   (process3)     {};
-    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  (piece0)       {};
-    \node[process, label={Proc 7}, right=of process3.east] (process4)                   {};
-    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1)       {};
-    \node[process, label={Proc 8}, right=of process4.east] (process5)                   {};
-    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    (piece1)       {};
-    \node[process, label={Proc 9}, below=of process3.south, yshift=-0.3cm]   (process3) {};
-    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  (piece0)       {};
-    \node[process, label={Proc 10}, right=of process3.east] (process4)                   {};
-    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1)       {};
-    \node[process, label={Proc 11}, right=of process4.east] (process5)                   {};
-    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    (piece1)       {};
+    \node[chain, label={Chain 1}, right=of chain0, minimum height=3cm]     (chain1)     {};
+    \node[process, label={Proc 6}, right=of chain1.west, yshift=0.5cm]     (process6)   {};
+    \node[vector, fill=green!40, right=of process6.west, xshift=0.11cm]                 {};
+    \node[process, label={Proc 7}, right=of process6.east]                 (process7)   {};
+    \node[vector, fill=yellow!40, right=of process7.west, xshift=0.53cm]                {};
+    \node[process, label={Proc 8}, right=of process7.east]                 (process8)   {};
+    \node[vector, fill=red!40, right=of process8.west, xshift=0.95cm]                   {};
+    \node[process, label={Proc 9}, below=of process6.south, yshift=-0.3cm] (process9)   {};
+    \node[vector, fill=green!40, right=of process9.west, xshift=0.11cm]                 {};
+    \node[process, label={Proc 10}, right=of process9.east]                (process10)  {};
+    \node[vector, fill=yellow!40, right=of process10.west, xshift=0.53cm]               {};
+    \node[process, label={Proc 11}, right=of process10.east]               (process11)  {};
+    \node[vector, fill=red!40, right=of process11.west, xshift=0.95cm]                  {};
   \end{tikzpicture}
 \end{center}
 %
