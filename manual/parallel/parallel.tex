@@ -12,6 +12,45 @@
 \usetikzlibrary{positioning}
 \usepackage{verbatim}
 
+\tikzset{
+  % Specifications for style of nodes:
+  base/.style = {
+    rectangle,
+    rounded corners,
+    draw=black,
+    text centered
+  },
+  chain/.style = {
+    base,
+    minimum width=5.5cm,
+    minimum height=2cm,
+    node distance=1cm,
+    fill=orange!15
+  },
+  process/.style = {
+    base,
+    minimum width=1.5cm,
+    minimum height=0.75cm,
+    node distance=0.25cm,
+    fill=blue!15
+  },
+  vector/.style = {
+    rectangle,
+    draw=black,
+    minimum width=0.42cm,
+    minimum height=0.42cm,
+    node distance=0.0cm
+  },
+}
+
+\def\parameter#1{
+  \begin{scope}
+    \node[vector, fill=green!40, right=of #1.west, xshift=0.11cm] (piece0) {};
+    \node[vector, fill=yellow!40, right=of piece0.east, node distance=0cm] (piece1) {};
+    \node[vector, fill=red!40, right=of piece1.east, node distance=0cm] (piece2) {};
+  \end{scope}
+}
+
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
@@ -172,46 +211,7 @@ take is to distribute the parameter across those processes.  In the code
 example above, that would mean process 0 sees only the first element of
 \lstinline|point| and process 1 sees only the second element.  Here's a
 depiction before the change:
-
-\tikzset{
-  % Specifications for style of nodes:
-  base/.style = {
-    rectangle,
-    rounded corners,
-    draw=black,
-    text centered
-  },
-  chain/.style = {
-    base,
-    minimum width=5.5cm,
-    minimum height=2cm,
-    node distance=1cm,
-    fill=orange!15
-  },
-  process/.style = {
-    base,
-    minimum width=1.5cm,
-    minimum height=0.75cm,
-    node distance=0.25cm,
-    fill=blue!15
-  },
-  vector/.style = {
-    rectangle,
-    draw=black,
-    minimum width=0.42cm,
-    minimum height=0.42cm,
-    node distance=0.0cm
-  },
-}
-
-\def\parameter#1{
-  \begin{scope}
-    \node[vector, fill=green!40, right=of #1.west, xshift=0.11cm] (piece0) {};
-    \node[vector, fill=yellow!40, right=of piece0.east, node distance=0cm] (piece1) {};
-    \node[vector, fill=red!40, right=of piece1.east, node distance=0cm] (piece2) {};
-  \end{scope}
-}
-
+%
 \begin{center}
   \begin{tikzpicture}
     % Specification of nodes (position, etc.)
@@ -231,35 +231,88 @@ depiction before the change:
     \parameter{process5}
   \end{tikzpicture}
 \end{center}
-
+%
 And here's what it looks like after the change:
-
+%
 \begin{center}
   \begin{tikzpicture}
     % Specification of nodes (position, etc.)
-    \node[chain, label={Chain 0}] (chain0) at (0, 0)                  {};
-    \node[chain, label={Chain 1}, right=of chain0]         (chain1)   {};
-    \node[process, label={Proc 0}, right=of chain0.west]   (process0) {};
-    \node[process, label={Proc 1}, right=of process0.east] (process1) {};
-    \node[process, label={Proc 2}, right=of process1.east] (process2) {};
-    \node[process, label={Proc 3}, right=of chain1.west]   (process3) {};
-    \node[process, label={Proc 4}, right=of process3.east] (process4) {};
-    \node[process, label={Proc 5}, right=of process4.east] (process5) {};
-    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm] (piece0) {};
+    \node[chain, label={Chain 0}] (chain0) at (0, 0)                              {};
+    \node[chain, label={Chain 1}, right=of chain0]         (chain1)               {};
+    \node[process, label={Proc 0}, right=of chain0.west]   (process0)             {};
+    \node[process, label={Proc 1}, right=of process0.east] (process1)             {};
+    \node[process, label={Proc 2}, right=of process1.east] (process2)             {};
+    \node[process, label={Proc 3}, right=of chain1.west]   (process3)             {};
+    \node[process, label={Proc 4}, right=of process3.east] (process4)             {};
+    \node[process, label={Proc 5}, right=of process4.east] (process5)             {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  (piece0) {};
     \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1) {};
-    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm] (piece1) {};
-    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm] (piece0) {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    (piece1) {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  (piece0) {};
     \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1) {};
-    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm] (piece1) {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    (piece1) {};
   \end{tikzpicture}
 \end{center}
-
+%
 Inside the likelihood the user is responsible for providing the mechanism
 needed to pass the parameter information over to their forward model.  This
 will not change in the case the parameter vector is distributed.  Therefore,
 this is not a forwards-compatible change; parallel forward codes that worked
 with a serial parameter vector and aren't designed to work with distributed
 parameter vectors will fail or, worse, produce incorrect results.
+
+What about the case where the user needs multiple independent model evaluations
+for a single likelihood calculation?  This case arises when there are multiple
+experimental data points.  It is reasonable to leverage independent concurrency
+for these data points.  The diagram below depcits how the prcoesses may be
+paritioned in this case.  The rows of processes in a chain correspond to those
+needed by a single model evaluation.
+%
+\begin{center}
+  \begin{tikzpicture}
+    % Specification of nodes (position, etc.)
+    \node[chain, label={Chain 0}, minimum height=3cm] (chain0) at (0, 0)                {};
+
+    \node[process, label={Proc 0}, right=of chain0.west, yshift=0.5cm]   (process0)     {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  (piece0)       {};
+    \node[process, label={Proc 1}, right=of process0.east] (process1)                   {};
+    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1)       {};
+    \node[process, label={Proc 2}, right=of process1.east] (process2)                   {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    (piece1)       {};
+    \node[process, label={Proc 3}, below=of process0.south, yshift=-0.3cm]   (process0) {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]  (piece0)       {};
+    \node[process, label={Proc 4}, right=of process0.east] (process1)                   {};
+    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1)       {};
+    \node[process, label={Proc 5}, right=of process1.east] (process2)                   {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]    (piece1)       {};
+
+    \node[chain, label={Chain 1}, right=of chain0, minimum height=3cm]         (chain1) {};
+
+    \node[process, label={Proc 6}, right=of chain1.west, yshift=0.5cm]   (process3)     {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  (piece0)       {};
+    \node[process, label={Proc 7}, right=of process3.east] (process4)                   {};
+    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1)       {};
+    \node[process, label={Proc 8}, right=of process4.east] (process5)                   {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    (piece1)       {};
+    \node[process, label={Proc 9}, below=of process3.south, yshift=-0.3cm]   (process3) {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]  (piece0)       {};
+    \node[process, label={Proc 10}, right=of process3.east] (process4)                   {};
+    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1)       {};
+    \node[process, label={Proc 11}, right=of process4.east] (process5)                   {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]    (piece1)       {};
+  \end{tikzpicture}
+\end{center}
+%
+Here the parameter vector is distributed over three processes; three process
+are needed for a single model evaluation; and two model evaluations are needed
+for a single likelihood evaluation.
+
+The communicators \Queso\ ought to provide are: 1) for each chain all processes
+belonging to that chain; 2) for each model evaluation needed for a likelihood
+calculation, all processes needed for that model evaluation.  In the above
+picture, \Queso\ will create six communicators; two chain communicators (one
+for each chain) and four model communicators (for the two models evaluated
+in each chain).
 
 \subsection{From the user's perspective}
 
