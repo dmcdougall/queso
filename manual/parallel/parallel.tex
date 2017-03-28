@@ -171,11 +171,8 @@ If the user requests multiple processes per chain, then an approach we might
 take is to distribute the parameter across those processes.  In the code
 example above, that would mean process 0 sees only the first element of
 \lstinline|point| and process 1 sees only the second element.  Here's a
-depiction of the change: \textcolor{red}{picture of chain sub-communicator
-holding a piece of the parameter vector}.
+depiction before the change:
 
-% Drawing part, node distance is 1.5 cm and every node is prefilled with white
-% background
 \tikzset{
   % Specifications for style of nodes:
   base/.style = {
@@ -199,7 +196,7 @@ holding a piece of the parameter vector}.
     fill=blue!15
   },
   vector/.style = {
-    square,
+    rectangle,
     draw=black,
     minimum width=0.42cm,
     minimum height=0.42cm,
@@ -232,6 +229,28 @@ holding a piece of the parameter vector}.
     \parameter{process3}
     \parameter{process4}
     \parameter{process5}
+  \end{tikzpicture}
+\end{center}
+
+And here's what it looks like after the change:
+
+\begin{center}
+  \begin{tikzpicture}
+    % Specification of nodes (position, etc.)
+    \node[chain, label={Chain 0}] (chain0) at (0, 0)                  {};
+    \node[chain, label={Chain 1}, right=of chain0]         (chain1)   {};
+    \node[process, label={Proc 0}, right=of chain0.west]   (process0) {};
+    \node[process, label={Proc 1}, right=of process0.east] (process1) {};
+    \node[process, label={Proc 2}, right=of process1.east] (process2) {};
+    \node[process, label={Proc 3}, right=of chain1.west]   (process3) {};
+    \node[process, label={Proc 4}, right=of process3.east] (process4) {};
+    \node[process, label={Proc 5}, right=of process4.east] (process5) {};
+    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm] (piece0) {};
+    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm] (piece1) {};
+    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm] (piece1) {};
+    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm] (piece0) {};
+    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm] (piece1) {};
+    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm] (piece1) {};
   \end{tikzpicture}
 \end{center}
 
