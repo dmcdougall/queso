@@ -255,92 +255,67 @@ And here's what it looks like after the change:
   \end{tikzpicture}
 \end{center}
 %
-Inside the likelihood the user is responsible for providing the mechanism
-needed to pass the parameter information over to their forward model.  This
-will not change in the case the parameter vector is distributed.  Therefore,
-this is not a forwards-compatible change; parallel forward codes that worked
-with a serial parameter vector and aren't designed to work with distributed
-parameter vectors will fail or, worse, produce incorrect results.
+To maintain compatibility with existing parallel forward problems, \Queso\ will
+do all the necessary communication before a likelihood call to organise the
+parameter vector.  Inside the likelihood each process belonging to the chain
+communicator will receive a serial version of the parameter vector.  Every
+process will hold an exact copy of the parameter vector.
+
+The user will not be burdened with providing the mechanism needed to pass a
+distributed parameter vector to their forward model.  Therefore, parallel
+forward codes that worked with a serial parameter vector will still continue to
+work when \Queso\ distributes the parameter vector representation internally.
 
 What about the case where the user needs multiple independent model evaluations
 for a single likelihood calculation?  This case arises when there are multiple
 experimental data points.  It is reasonable to leverage independent concurrency
-for these data points.  The diagram below depcits how the prcoesses may be
-paritioned in this case.  The rows of processes in a chain correspond to those
-needed by a single model evaluation.
-%
-\begin{center}
-  \begin{tikzpicture}
-    % Specification of nodes (position, etc.)
-    \node[chain, label={Chain 0}, minimum height=3cm]                      (chain0)    {};
-    \node[process, label={Proc 0}, right=of chain0.west, yshift=0.5cm]     (process0)  {};
-    \node[vector, fill=green!40, right=of process0.west, xshift=0.11cm]                {};
-    \node[process, label={Proc 1}, right=of process0.east]                 (process1)  {};
-    \node[vector, fill=yellow!40, right=of process1.west, xshift=0.53cm]               {};
-    \node[process, label={Proc 2}, right=of process1.east]                 (process2)  {};
-    \node[vector, fill=red!40, right=of process2.west, xshift=0.95cm]                  {};
-    \node[process, label={Proc 3}, below=of process0.south, yshift=-0.3cm] (process3)  {};
-    \node[vector, fill=green!40, right=of process3.west, xshift=0.11cm]                {};
-    \node[process, label={Proc 4}, right=of process3.east]                 (process4)  {};
-    \node[vector, fill=yellow!40, right=of process4.west, xshift=0.53cm]               {};
-    \node[process, label={Proc 5}, right=of process4.east]                 (process5)  {};
-    \node[vector, fill=red!40, right=of process5.west, xshift=0.95cm]                  {};
-    \node[chain, label={Chain 1}, right=of chain0, minimum height=3cm]     (chain1)    {};
-    \node[process, label={Proc 6}, right=of chain1.west, yshift=0.5cm]     (process6)  {};
-    \node[vector, fill=green!40, right=of process6.west, xshift=0.11cm]                {};
-    \node[process, label={Proc 7}, right=of process6.east]                 (process7)  {};
-    \node[vector, fill=yellow!40, right=of process7.west, xshift=0.53cm]               {};
-    \node[process, label={Proc 8}, right=of process7.east]                 (process8)  {};
-    \node[vector, fill=red!40, right=of process8.west, xshift=0.95cm]                  {};
-    \node[process, label={Proc 9}, below=of process6.south, yshift=-0.3cm] (process9)  {};
-    \node[vector, fill=green!40, right=of process9.west, xshift=0.11cm]                {};
-    \node[process, label={Proc 10}, right=of process9.east]                (process10) {};
-    \node[vector, fill=yellow!40, right=of process10.west, xshift=0.53cm]              {};
-    \node[process, label={Proc 11}, right=of process10.east]               (process11) {};
-    \node[vector, fill=red!40, right=of process11.west, xshift=0.95cm]                 {};
-  \end{tikzpicture}
-\end{center}
-%
-Here the parameter vector is distributed over three processes; three process
-are needed for a single model evaluation; and two model evaluations are needed
-for a single likelihood evaluation.
+for these data points.  Internally, the parameter vector will be distributed
+over all processes belonging to the chain communicator. \Queso\ is not
+concerned with how these processes are leveraged by the application that
+executes the forward model.  For example, if three process are needed for a
+single model evaluation and two model evaluations are needed for a single
+likelihood evaluation then \Queso\ will distribute the parameter vector over
+all six processes.  \Queso\ will do all the necessary MPI communcation before a
+likelihood call to ensure that every process belonging to a chain communicator
+holds the entire parameter vector.
 
-The communicators \Queso\ ought to provide are: 1) for each chain all processes
-belonging to that chain; 2) for each model evaluation needed for a likelihood
-calculation, all processes needed for that model evaluation.  In the above
-picture, \Queso\ will create six communicators; two chain communicators (one
-for each chain) and four model communicators (for the two models evaluated
-in each chain).
-
-\subsection{Choice of parameter partitioning}
+\subsection{Memory and usability considerations}
 
 We noted in the previous subsection that the parameter vector is distributed
-across the processes involved in a model evaluation.  This implies that if
-there are multiplie independent model evaluations in a likelihood calculation
-then we are not using these extra processes to house a piece of the parameter
-vector.
+across the processes involved in a chain communicator.
 
-For example, as depicted in the image above, the parameter is distributed
-across three processes and not six.  Three processes are leveraged for a model
-evaluation and two model evaluations per likelihood calculation.  This wasn't
-the only choice we could have made.  We could have instead chosen to partition
-the parameter vector across \emph{all} processes belonging to the chain.  The
-above picture would look slightly different; the parameter vector would be
-distributed across all six processes belonging to the chain communicator.
+\subsubsection{Usability}
 
 Once a model evaluation needs to be done, it is reasonable to expect that the
-model communicator needs the entire (possibly distributed) parameter vector.
-If the parameter vector is distributed across the entire chain communicator,
-the user would be burdened with the point-to-point communication required to
-organise the parameter vector for the model communicator.  The exact
-point-to-point communication required depends on \emph{how} the parameter
-vector is distributed and it may be done to minimise the user burden.
+model communicator needs the entire parameter vector.  If the parameter vector
+is distributed across the entire chain communicator after a call to the
+likelihood, the user would be burdened with the point-to-point communication
+required to organise the parameter vector for their model, or their model must
+be written in such a way that understands and respects \Queso's choice of how
+to distributed the parameter vector among the processes in the chain communicator.
+This introduces a rather large barrier to entry.
 
-It ought to be clear at this point why we chose to distribute the parameter
-vector among the model communicator and not the chain communicator.
-Furthermore, it is reasonable to expect that, if the model already demands a
-parallel environment, distributing the parameter over only the model
-communicator is a reasonable choice.
+Making each process hold the entire parameter vector (inside the likelihood)
+offers a much more user-friendly experience; the user needn't concern
+themselves with a potentially burdensome and tricky point-to-point
+communication and bookkeeping.  It also offers the possibility of allowing
+older forward codes to work with \Queso\ since no code changes would be needed.
+
+\subsubsection{Memory}
+
+It is clear that more memory is required if each process in the chain
+communicator holds a copy of the entire parameter vector.  It doesn't seem too
+detrimental, however.
+
+In the worst case the user intends to solve an inverse problem in function
+space.  In other words, the parameter vector represents a discretised field and
+this discretisation may be quite fine.  For inverse problems on function space,
+one typically represents the random field by, for example, a truncated KL
+expansion.  Inference is done on the coefficients in this expansion.  It is
+uncommon to execute an inference at every length scale the discretisation can
+represent.  In other words, the inference is done a number of KL coefficients
+that is typically much smaller than the number of degrees of freedom offered
+by the choice of discretisation.
 
 \subsection{From the user's perspective}
 
@@ -408,25 +383,58 @@ statistical application.
 
 \subsubsection{Interacting with vectors and matrices}
 
-It ought to be clear at this point that iteractions with distributed vectors
-requires some care.  Since vector are distributed over processes belonging to
-the chain, the following code
+We mentioned briefly that nothing special needs to be done to set up vector
+spaces and domains.  We saw that these may depends on vectors and matrices the
+user must construct, and we explore that interaction here.
+
+The user may interact with vectors in two different ways: 1) the user interacts
+with a serial vector; or 2) the user interacts with a parallel vector.  The
+dimension of the vector space (integer passed in the \lstinline|VectorSpace<>|
+constructor) is the global dimension.  This is important to note, because
+\Queso\ will use it to determine which of the two interactions are used.
+If the serial vector interaction is used, then the length of each local vector
+is exactly the same as the global dimension.  If the parallel vector
+interaction is used, then the sum of each of the local vector lengths is equal
+to the global dimension.  If the user chooses to interact with a parallel
+vector then they are explicitly defining a partioning of that vector among
+processes in the chain communicator.  \Queso\ will respect this partioning
+when doing, for example, matrix-vector operations.  If the user interacts with
+a serial vector then \Queso\ will parition it automatically before doing
+matrix-vector operations.  This code
 \begin{lstlisting}
+// Serial vector interaction
 GslVector<> v(paramSpace.zeroVector());
 v[0] = 1.0;
+v[1] = 2.0;
 \end{lstlisting}
-will set local index 0 on process 0 and local index 0 on prcoessor 1.  Local
-index 0 on processor 1 should map to global index 1 for \lstinline|v|.
-
-Interacting with matrices has a similar story, but the paritioning for matrices
-will happen over the rows.  The following code
+will set global (and local) index 0 on process 0 and global (and local) index 0
+on prcoessor 1.  Both processes belonging to the chain hold the 2-vector
+$(1, 2)$.  This code
 \begin{lstlisting}
-GslMatrix<> A(paramSpace.zeroVector());
-A(0,0) = 1.0;
-A(0,1) = 1.0;
+// Parallel vector interaction
+Map map(2, 0, env.subComm());
+GslVector<> v(env, map);
+
+if (env.subRank() == 0) {
+  v[0] = 1.0;
+}
+else if (env.subRank() == 1) {
+  v[0] = 2.0;
+}
 \end{lstlisting}
-will set local row index 0 on process 0 and local row index 0 on process 1.
-Local row index 0 on process 1 maps to global row index 1 for \lstinline|A|.
+will set local index 0 on process 0 and local index 0 on process 1.  Local
+index 0 on processor 1 should map to global index 1 for \lstinline|v|.  Process
+0 holds the 1-vector $(1)$ and process 1 holds the 1-vector $(2)$.  Together
+they represent the partitioned 2-vector $(1, 2)$.
+
+parallel cov
+
+Interacting with matrices has a similar story.  The user can interact with a
+serial matrix and \Queso\ will partition it behind the scences, or the user
+can choose a partitioning and \Queso\ will respect the user's choice.
+
+\textcolor{red}{How does this look?  AFAIK, we don't currently have an API for
+this.}
 
 \subsection{From \Queso's perspective}
 
