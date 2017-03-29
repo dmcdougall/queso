@@ -427,14 +427,26 @@ index 0 on processor 1 should map to global index 1 for \lstinline|v|.  Process
 0 holds the 1-vector $(1)$ and process 1 holds the 1-vector $(2)$.  Together
 they represent the partitioned 2-vector $(1, 2)$.
 
-parallel cov
-
 Interacting with matrices has a similar story.  The user can interact with a
 serial matrix and \Queso\ will partition it behind the scences, or the user
-can choose a partitioning and \Queso\ will respect the user's choice.
+can choose a partitioning and \Queso\ will respect the user's choice.  This
+code
+\begin{lstlisting}
+// Parallel matrix interaction
+GslMatrix<> A(env, map, 2);
 
-\textcolor{red}{How does this look?  AFAIK, we don't currently have an API for
-this.}
+if (env.subRank() == 0) {
+  A(0, 0) = 1.0;
+  A(0, 1) = 0.5;
+}
+else if (env.subRank() == 1) {
+  A(0, 0) = 0.5;
+  A(0, 1) = 1.0;
+}
+\end{lstlisting}
+will set local row index 0 on process 0 and local row index 0 on process 1.
+Local row index 0 on process 1 should map to global row index 1 for
+\lstinline|A|.
 
 \subsection{From \Queso's perspective}
 
