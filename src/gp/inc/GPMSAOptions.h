@@ -215,7 +215,7 @@ public:
   //! Calculate a normalized value from a physical value for the
   //  specified output index.
   double normalized_output(unsigned int i,
-                           double physical_param) const;
+                           double output_data) const;
 
   //! Returns the scale, in physical units, corresponding to a single
   //  nondimensionalized unit for the specified output index.
