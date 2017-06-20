@@ -51,7 +51,7 @@ void open_data_file(const std::string& data_filename, std::ifstream& data_stream
       queso_error_msg(std::string("Cannot open data file: ") + data_filename);
   }
   data_stream.exceptions (std::ifstream::badbit | std::ifstream::eofbit |
-			  std::ifstream::failbit);
+              std::ifstream::failbit);
 }
 
 // Read in data files
@@ -80,21 +80,21 @@ void readData
   try {
     for (unsigned int i = 0; i < num_simulations; ++i) {
       for (unsigned int j = 0; j < num_config; ++j)
-	sim_data >> (*(simulationScenarios[i]))[j];
+        sim_data >> (*(simulationScenarios[i]))[j];
       for (unsigned int j = 0; j < num_params; ++j)
-	sim_data >> (*(simulationParameters[i]))[j];
+        sim_data >> (*(simulationParameters[i]))[j];
       for (unsigned int j = 0; j < num_responses; ++j) {
-	double& sim_output = (*(simulationOutputs[i]))[j];
-	sim_data >> sim_output;
-	double delta = sim_output - meansim[j];
-	meansim[j] += delta / (i+1);
-	m2sim[j] += delta * (sim_output - meansim[j]);
+        double& sim_output = (*(simulationOutputs[i]))[j];
+        sim_data >> sim_output;
+        double delta = sim_output - meansim[j];
+        meansim[j] += delta / (i+1);
+        m2sim[j] += delta * (sim_output - meansim[j]);
       }
     }
   }
   catch (const std::ifstream::failure& e) {
     queso_error_msg(std::string("Error reading ") + sim_data_filename + ": " +
-		    e.what());
+                    e.what());
   }
 
   // The user is required to standardise the experimental and simulation data
@@ -117,29 +117,28 @@ void readData
   try {
     for (unsigned int i = 0; i < num_experiments; ++i) {
       for (unsigned int j = 0; j < num_config; ++j)
-	exp_data >> (*(experimentScenarios[i]))[j];
+        exp_data >> (*(experimentScenarios[i]))[j];
       for (unsigned int j = 0; j < num_responses; ++j)
-	exp_data >> (*(experimentOutputs[i]))[j];
+        exp_data >> (*(experimentOutputs[i]))[j];
     }
   }
   catch (const std::ifstream::failure& e) {
     queso_error_msg(std::string("Error reading ") + exp_data_filename + ": " +
-		    e.what());
+                    e.what());
   }
 
   // Also required to standardise experimental data and covariance
   for (unsigned int i = 0; i < num_experiments; ++i) {
-    unsigned int block_offset = i * num_responses;
     for (unsigned int j = 0; j < num_responses; ++j) {
       (*(experimentOutputs[i]))[j] -= meansim[j];
       (*(experimentOutputs[i]))[j] /= stdsim[j];
+      unsigned int block_offset = i * num_responses;
       for (unsigned int k = 0; k < num_responses; ++k)
-	experimentMat(block_offset + j, block_offset + k) /=
-	  (stdsim[j] * stdsim[k]);
+        experimentMat(block_offset + j, block_offset + k) /=
+          (stdsim[j] * stdsim[k]);
     }
   }
 }
-
 
 void run_scalar(const QUESO::FullEnvironment& env)
 {
@@ -274,15 +273,13 @@ void run_scalar(const QUESO::FullEnvironment& env)
 
   // Experiment observation error (also needs to be scaled by
   // simulation variance)
-  // NOTE: In general, this matrix would be size sum(experiment sizes)
   for (unsigned int i = 0; i < numExperiments; i++)
     (*experimentMat)(i, i) = std::pow(0.05, 2.0);
 
   // Read in data and store the standard deviation of the simulation
   // data (ignored for now).
-  //double stdsim =
   readData("sim_scalar.dat", "y_exp_scalar.txt", simulationScenarios, paramVecs,
-	   outputVecs, experimentScenarios, experimentVecs, *experimentMat);
+           outputVecs, experimentScenarios, experimentVecs, *experimentMat);
 
   // Add simulation and experimental data
   gpmsaFactory.addSimulations(simulationScenarios, paramVecs, outputVecs);
@@ -291,74 +288,62 @@ void run_scalar(const QUESO::FullEnvironment& env)
   QUESO::GenericVectorRV<QUESO::GslVector, QUESO::GslMatrix> postRv(
       "post_",
       gpmsaFactory.prior().imageSet().vectorSpace());
-  QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix> ip("",
-      NULL, gpmsaFactory, postRv);
 
-  QUESO::GslVector paramInitials(
+  QUESO::GslVector point(
       gpmsaFactory.prior().imageSet().vectorSpace().zeroVector());
 
-  // Start with the mean of the prior
-  gpmsaFactory.prior().pdf().distributionMean(paramInitials);
+  unsigned int num_lines = 7252;
+  std::vector<double> expected_log_likelihoods(num_lines);
+  std::vector<double> expected_log_priors(num_lines);
+  std::vector<double> expected_log_posteriors(num_lines);
+  std::vector<double> computed_log_likelihoods(num_lines);
+  std::vector<double> computed_log_priors(num_lines);
+  std::vector<double> computed_log_posteriors(num_lines);
 
-  // Initial condition of the chain: may need to tweak to Brian's expectations
-  std::cout << "\nPrior-based initial position:\n" << paramInitials << std::endl;
+  // File containing x, theta, y (vertical concatenation of lhs.txt, y_mod.txt)
+  std::ifstream solution_data;
+  open_data_file("mcmc_verif1.txt", solution_data);
+  for (unsigned int i = 0; i < num_lines; i++) {
+    for (unsigned int j = 0; j < point.sizeLocal(); ++j)
+      solution_data >> point[j];
 
-  // Brian Williams' recommended initial point
-  paramInitials[0]  = 0.175;    // beta0
-  paramInitials[1]  = -0.3;     // beta1
-  paramInitials[2]  = 0.1;      // beta2
-  // [ truncation error precision ] (truncated SVD case only)
-  // BJW: max(100, shape * scale)
-  paramInitials[3]  = 1.0;               // emul precision
-  paramInitials[4]  = std::exp(-0.025);  // emul corr strength (scenario/beta?)
-  paramInitials[5]  = std::exp(-0.025);  // emul corr strength (scenario/beta?)
-  paramInitials[6]  = std::exp(-0.025);  // emul corr strength (scenario/beta?)
-  paramInitials[7]  = std::exp(-0.025);  // emul corr strength (scenario/beta?)
-  paramInitials[8]  = std::exp(-0.025);  // emul corr strength (scenario/beta?)
-  paramInitials[9]  = std::exp(-0.025);  // emul corr strength (scenario/beta?)
-  paramInitials[10] = 20.0;              // discrepancy precision
-  paramInitials[11] = std::exp(-0.025);  // discrepancy corr strength x1
-  paramInitials[12] = std::exp(-0.025);  // discrepancy corr strength x2
-  paramInitials[13] = std::exp(-0.025);  // discrepancy corr strength x3
-  paramInitials[14] = 1000.0;            // emul data precision
-  if (gpmsaFactory.options().m_calibrateObservationalPrecision)
-    // BJW: max(20, shape * scale)
-    paramInitials[15] = 20.0;            // obs precision
+    double log_likelihood;
+    solution_data >> log_likelihood;
+    expected_log_likelihoods[i] = log_likelihood;
 
-  std::cout << "\nAdjusted initial position:\n" << paramInitials << std::endl;
+    double log_prior;
+    solution_data >> log_prior;
+    expected_log_priors[i] = log_prior;
 
-  QUESO::GslVector point(paramInitials);
-  double value = gpmsaFactory.prior().pdf().lnValue(point);
-  std::cout << "\nlog prior evaluated at: " << point << std::endl;
-  std::cout << "\nlog prior is: " << value << std::endl;
+    double log_posterior;
+    solution_data >> log_posterior;
+    expected_log_posteriors[i] = log_posterior;
 
-  QUESO::GslMatrix proposalCovMatrix(
-      gpmsaFactory.prior().imageSet().vectorSpace().zeroVector());
+    double computed_log_prior;
+    computed_log_prior = (gpmsaFactory.prior().pdf().lnValue(point));
+    computed_log_priors[i] = computed_log_prior;
 
-  // Start with the covariance matrix for the whole prior, including
-  // GPMSA hyper-parameters.
-  gpmsaFactory.prior().pdf().distributionVariance(proposalCovMatrix);
+    double computed_log_likelihood;
+    computed_log_likelihood = (gpmsaFactory.getGPMSAEmulator().lnValue(point, NULL, NULL, NULL, NULL));
+    computed_log_likelihoods[i] = computed_log_likelihood;
+  }
+  solution_data.close();
 
-  std::cout << "\nPrior proposal covariance diagonal:\n";
-  for (unsigned int i=0; i<proposalCovMatrix.numCols(); ++i)
-    std::cout << proposalCovMatrix(i,i) << " ";
-  std::cout << std::endl;
+  for (unsigned int i = 0; i < expected_log_priors.size(); i++) {
+    double diff_prior = expected_log_priors[i] - computed_log_priors[i];
+    queso_require_less_equal_msg(std::abs(diff_prior), 1e-13, "computed log prior differs too much from expected");
+  }
 
-  // FIXME: The default doesn't seem to work for this case; fudge it:
-  proposalCovMatrix(10, 10) = 1.0e2;
-  proposalCovMatrix(14, 14) = 1.0e1;
+  std::cout << "done with prior" << std::endl;
 
-  std::cout << "\nFinal proposal covariance diagonal:\n";
-  for (unsigned int i=0; i<proposalCovMatrix.numCols(); ++i)
-    std::cout << proposalCovMatrix(i,i) << " ";
-  std::cout << std::endl;
-
-  std::cout << "\nFinal GPMSA Options:" << gpmsaFactory.options() << std::endl;
-
-  ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
-
+  for (unsigned int i = 0; i < expected_log_likelihoods.size(); i++) {
+    double diff_likelihood = expected_log_likelihoods[i] - computed_log_likelihoods[i];
+    queso_require_less_equal_msg(std::abs(diff_likelihood), 1e-13, "computed log likelihood differs too much from expected");
+    std::cout << "llhd expected: " << expected_log_likelihoods[i] << std::endl;
+    std::cout << "llhd computed: " << computed_log_likelihoods[i] << std::endl;
+    std::cout << "llhd diff: " << diff_likelihood << std::endl;
+  }
 }
-
 
 void run_multivariate(const QUESO::FullEnvironment& env)
 {
@@ -512,15 +497,15 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   covarianceR(0,4) = covarianceR(4,0) = 0.001024;
 
   // Populate the totalExperimentSpace covariance matrix
-  std::vector<const QUESO::GslMatrix* > vec_covmat_ptrs(numExperiments, 
-							&covarianceR);
+  std::vector<const QUESO::GslMatrix* > vec_covmat_ptrs(numExperiments,
+                                                        &covarianceR);
   experimentMat->fillWithBlocksDiagonally(0, 0, vec_covmat_ptrs, true, true);
 
   // Read in data and store the standard deviation of the simulation
   // data (ignored for now).
   //double stdsim =
   readData("sim_mv.dat", "y_exp_mv.txt", simulationScenarios, paramVecs,
-	   outputVecs, experimentScenarios, experimentVecs, *experimentMat);
+           outputVecs, experimentScenarios, experimentVecs, *experimentMat);
 
   // Add simulation and experimental data
   gpmsaFactory.addSimulations(simulationScenarios, paramVecs, outputVecs);
@@ -595,8 +580,7 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
 }
 
-
-int main(int argc, char ** argv) 
+int main(int argc, char ** argv)
 {
   if (argc < 2) {
     std::cerr << "Usage: argv[0] gpmsa_<case>.txt\n";
