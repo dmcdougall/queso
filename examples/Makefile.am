@@ -444,13 +444,6 @@ dist_gpmsa_vector_DATA += gp/scalar/dakota_pstudy.dat
 dist_gpmsa_vector_DATA += gp/vector/gpmsa_input.txt
 dist_gpmsa_vector_DATA += gp/scalar/ctf_dat.txt
 
-gpmsa_linverifdir = $(prefix)/examples/gp/linear_verif
-
-dist_gpmsa_linverif_DATA =
-dist_gpmsa_linverif_DATA += gp/linear_verif/gpmsa_mv.txt
-dist_gpmsa_linverif_DATA += gp/linear_verif/sim_mv.dat
-dist_gpmsa_linverif_DATA += gp/linear_verif/y_exp_mv.txt
-
 #######################################
 # Canned Gaussian likelihood examples #
 #######################################
