@@ -392,6 +392,10 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
     }
   }
 
+  // std::cout << std::setprecision(16);
+  // std::cout << "Sigma_z matrix is: " << std::endl;
+  // std::cout << covMatrix << std::endl;
+
   // If we're in the multivariate case, we've built the full Sigma_z
   // matrix; now add the remaining Sigma_zhat terms
   if (numOutputs > 1)
@@ -897,6 +901,9 @@ GPMSAFactory<V, M>::setUpEmulator()
   KT_K_inv.reset
     (new M((K->transpose() * *K).inverse()));
 
+  // std::cout << "matrix KT_K_inv: " << std::endl;
+  // std::cout << *KT_K_inv << std::endl;
+
   Map serial_output_map(numOutputs, 0, comm);
 
   for (unsigned int i = 0; i != m_numExperiments; ++i)
@@ -1021,6 +1028,9 @@ GPMSAFactory<V, M>::setUpEmulator()
       this->m_opts->m_observationalPrecisionRidge;
 
   BT_Wy_B_inv.reset(new M(BT_Wy_B.inverse()));
+
+  // std::cout << "bt wy b inv" << std::endl;
+  // std::cout << *BT_Wy_B_inv << std::endl;
 
   // Add a ridge to the inverse even, if the user requested one.
   //
