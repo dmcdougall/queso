@@ -1239,7 +1239,7 @@ GPMSAFactory<V, M>::setUpHyperpriors()
 
       for (unsigned int i = 0; i < this->m_numSimulations; i++) {
         for (unsigned int k = 0; k != numOutputs; ++k)
-          eta[i*numOutputs+k] =
+          eta[k*m_numSimulations+i] =
             this->m_opts->normalized_output(k, (*((this->m_simulationOutputs)[i]))[k]) -
             (*simulationOutputMeans)[k];
       }
