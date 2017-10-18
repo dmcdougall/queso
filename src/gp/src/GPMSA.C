@@ -176,8 +176,7 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
                         m_opts.m_calibrateObservationalPrecision +
                         num_svd_terms +
                         dimParameter +
-                        dimParameter +
-                        dimScenario +
+                        num_svd_terms * (dimParameter + dimScenario) +
                         num_discrepancy_groups +
                         (num_discrepancy_groups * dimScenario);  // yum
 
