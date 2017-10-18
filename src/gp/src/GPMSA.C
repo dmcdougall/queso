@@ -317,7 +317,7 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
         typename SharedPtr<V>::Type cross_scenario1 = (this->m_experimentScenarios)[i];
         typename SharedPtr<V>::Type cross_scenario2 = (this->m_experimentScenarios)[j];
         unsigned int discrepancyCorrStrStart =
-          dimParameter + num_svd_terms + dimParameter + dimScenario + num_discrepancy_groups +
+          dimParameter + num_svd_terms + (dimParameter + dimScenario) * num_svd_terms + num_discrepancy_groups +
           (this->num_svd_terms<num_nonzero_eigenvalues);
 
         // Loop over discrepancy groups.  Keep track of which
@@ -348,8 +348,7 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
           unsigned int discrepancyPrecisionStart = dimParameter +
                                                    (num_svd_terms<num_nonzero_eigenvalues) +
                                                    num_svd_terms +
-                                                   dimScenario +
-                                                   dimParameter;
+                                                   (dimScenario + dimParameter) * num_svd_terms;
 
           const double discrepancy_precision =
             domainVector[discrepancyPrecisionStart+disc_grp];
