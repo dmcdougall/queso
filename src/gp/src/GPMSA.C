@@ -245,48 +245,50 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
           (this->m_simulationParameters)[j-this->m_numExperiments];
       }
 
-      // Emulator component       // = first term in (1)
-      prodScenario = 1.0;
       unsigned int emulatorCorrStrStart =
         dimParameter + (this->num_svd_terms < num_nonzero_eigenvalues) + num_svd_terms;
-      for (unsigned int k = 0; k < dimScenario; k++) {
-        const double & emulator_corr_strength =
-          domainVector[emulatorCorrStrStart+k];
-        double scenario_param1 =
-          m_opts.normalized_scenario_parameter(k, (*scenario1)[k]);
-        double scenario_param2 =
-          m_opts.normalized_scenario_parameter(k, (*scenario2)[k]);
-        prodScenario *= std::pow(emulator_corr_strength,
-                                 4.0 * (scenario_param1 - scenario_param2) *
-                                       (scenario_param1 - scenario_param2));
-      }
-
-      queso_assert (!queso_isnan(prodScenario));
-
-      // = second term in (1)
-      prodParameter = 1.0;
-      for (unsigned int k = 0; k < dimParameter; k++) {
-        queso_assert (!queso_isnan(domainVector[emulatorCorrStrStart+dimScenario+k]));
-        queso_assert (!queso_isnan((*parameter1)[k]));
-        queso_assert (!queso_isnan((*parameter2)[k]));
-        const double & emulator_corr_strength =
-          domainVector[emulatorCorrStrStart+dimScenario+k];
-        double uncertain_param1 =
-          m_opts.normalized_uncertain_parameter(k, (*parameter1)[k]);
-        double uncertain_param2 =
-          m_opts.normalized_uncertain_parameter(k, (*parameter2)[k]);
-        prodParameter *= std::pow(
-            emulator_corr_strength,
-            4.0 * (uncertain_param1 - uncertain_param2) *
-                  (uncertain_param1 - uncertain_param2));
-      }
-
-      queso_assert (!queso_isnan(prodParameter));
 
       // Sigma_eta in scalar case,
       // [Sigma_u, Sigma_uw; Sigma_uw^T, Sigma_w] in vector case
       for (unsigned int basis = 0; basis != num_svd_terms; ++basis)
         {
+
+          // Emulator component       // = first term in (1)
+          prodScenario = 1.0;
+          for (unsigned int k = 0; k < dimScenario; k++) {
+            const double & emulator_corr_strength =
+              domainVector[emulatorCorrStrStart+(dimScenario+dimParameter)*basis+k];
+            double scenario_param1 =
+              m_opts.normalized_scenario_parameter(k, (*scenario1)[k]);
+            double scenario_param2 =
+              m_opts.normalized_scenario_parameter(k, (*scenario2)[k]);
+            prodScenario *= std::pow(emulator_corr_strength,
+                                     4.0 * (scenario_param1 - scenario_param2) *
+                                           (scenario_param1 - scenario_param2));
+          }
+
+          queso_assert (!queso_isnan(prodScenario));
+
+          // = second term in (1)
+          prodParameter = 1.0;
+          for (unsigned int k = 0; k < dimParameter; k++) {
+            queso_assert (!queso_isnan(domainVector[emulatorCorrStrStart+(dimScenario+dimParameter)*basis+dimScenario+k]));
+            queso_assert (!queso_isnan((*parameter1)[k]));
+            queso_assert (!queso_isnan((*parameter2)[k]));
+            const double & emulator_corr_strength =
+              domainVector[emulatorCorrStrStart+(dimScenario+dimParameter)*basis+dimScenario+k];
+            double uncertain_param1 =
+              m_opts.normalized_uncertain_parameter(k, (*parameter1)[k]);
+            double uncertain_param2 =
+              m_opts.normalized_uncertain_parameter(k, (*parameter2)[k]);
+            prodParameter *= std::pow(
+                emulator_corr_strength,
+                4.0 * (uncertain_param1 - uncertain_param2) *
+                      (uncertain_param1 - uncertain_param2));
+          }
+
+          queso_assert (!queso_isnan(prodParameter));
+
           // coefficient in (1)
           // The relevant precision for Sigma_eta is lambda_eta; for
           // Sigma_uw etc. it's lambda_wi and we skip lambda_eta
