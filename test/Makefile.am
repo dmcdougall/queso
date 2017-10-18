@@ -349,6 +349,7 @@ TESTS += test_StatisticalInverseProblem/test_parallel_h5.sh
 TESTS += test_gpmsa/scalar_pdf_small.sh
 TESTS += test_gpmsa/scalar_pdf_large.sh
 TESTS += test_gpmsa/mv_pdf_small.sh
+TESTS += test_gpmsa/mv_pdf_large.sh
 
 if ! MPI_ENABLED
 XFAIL_TESTS = test_SequenceOfVectors/test_unifiedPositionsOfMaximum.sh
@@ -434,6 +435,7 @@ EXTRA_DIST += test_gpmsa/y_exp_scalar_large.txt
 EXTRA_DIST += test_gpmsa/regression_solution_pdf_large.txt
 EXTRA_DIST += test_gpmsa/scalar_pdf_large.sh
 EXTRA_DIST += test_gpmsa/mv_pdf_small.sh
+EXTRA_DIST += test_gpmsa/mv_pdf_large.sh
 EXTRA_DIST += test_gpmsa/gpmsa_mv_pdf_small_input.txt
 EXTRA_DIST += test_gpmsa/sim_mv_small.dat
 EXTRA_DIST += test_gpmsa/y_exp_mv_small.txt
