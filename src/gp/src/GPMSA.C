@@ -1557,7 +1557,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
     (new VectorSpace<V, M>
      (this->m_env,
       "",
-      dimScenario + dimParameter,
+      (dimScenario + dimParameter) * num_svd_terms,
       NULL));
 
   this->emulatorCorrelationMin.reset
@@ -1728,8 +1728,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
     (this->num_svd_terms < num_nonzero_eigenvalues) +
     this->m_opts->m_calibrateObservationalPrecision +
     num_svd_terms +
-    dimParameter +
-    dimScenario +
+    (dimParameter + dimScenario) * num_svd_terms +
     num_discrepancy_groups +
     (num_discrepancy_groups*dimScenario);  // yum
 
@@ -1764,8 +1763,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
   // Starting index of the discrepancy precisions in the hyperparameter vector
   unsigned int discrepancyPrecisionIdx = (num_svd_terms<num_nonzero_eigenvalues) +
                                          num_svd_terms +
-                                         dimScenario +
-                                         dimParameter;
+                                         (dimScenario + dimParameter) * num_svd_terms;
 
   for (unsigned int disc_grp = 0; disc_grp < num_discrepancy_groups; disc_grp++) {
     // Min discrepancy precision
