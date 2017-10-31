@@ -180,6 +180,8 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
                         num_discrepancy_groups +
                         (num_discrepancy_groups * dimScenario);  // yum
 
+  queso_assert_equal_to(dimSum, domainVector.sizeLocal());
+
   // Offset for Sigma_eta equivalent in vector case
   const unsigned int offset1 = (numSimulationOutputs == 1) ?
     0 : m_numExperiments * num_discrepancy_bases;
