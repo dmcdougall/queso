@@ -171,7 +171,7 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
   unsigned int dimParameter = (this->m_parameterSpace).dimLocal();
 
   // Length of prior+hyperprior inputs
-  unsigned int dimSum = 1 +
+  unsigned int dimSum = num_svd_terms +
                         (this->num_svd_terms < num_nonzero_eigenvalues) +
                         m_opts.m_calibrateObservationalPrecision +
                         num_svd_terms +
@@ -1686,14 +1686,21 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
       *(this->m_discrepancyCorrelationStrengthBetaVec)));
 
   // Emulator data precision
+  this->emulatorDataPrecisionSpace.reset
+    (new VectorSpace<V, M>
+     (this->m_env,
+      "",
+      num_svd_terms,
+      NULL));
+
   this->emulatorDataPrecisionMin.reset
-    (new V(this->oneDSpace->zeroVector()));
+    (new V(this->emulatorDataPrecisionSpace->zeroVector()));
   this->emulatorDataPrecisionMax.reset
-    (new V(this->oneDSpace->zeroVector()));
+    (new V(this->emulatorDataPrecisionSpace->zeroVector()));
   this->m_emulatorDataPrecisionShapeVec.reset
-    (new V(this->oneDSpace->zeroVector()));
+    (new V(this->emulatorDataPrecisionSpace->zeroVector()));
   this->m_emulatorDataPrecisionScaleVec.reset
-    (new V(this->oneDSpace->zeroVector()));
+    (new V(this->emulatorDataPrecisionSpace->zeroVector()));
   this->emulatorDataPrecisionMin->cwSet(60.0);
   this->emulatorDataPrecisionMax->cwSet(1e5);
   this->m_emulatorDataPrecisionShapeVec->cwSet(emulatorDataPrecisionShape);
@@ -1702,7 +1709,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
   this->emulatorDataPrecisionDomain.reset
     (new BoxSubset<V, M>
      ("",
-      *(this->oneDSpace),
+      *(this->emulatorDataPrecisionSpace),
       *(this->emulatorDataPrecisionMin),
       *(this->emulatorDataPrecisionMax)));
 
@@ -1715,7 +1722,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
 
   // Now form full prior
   const unsigned int dimHyper =
-    1 +
+    num_svd_terms +
     (this->num_svd_terms < num_nonzero_eigenvalues) +
     this->m_opts->m_calibrateObservationalPrecision +
     num_svd_terms +
@@ -1766,9 +1773,12 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
   }
 
   const int emulator_data_precision_index =
-    dimHyper - 1 - this->m_opts->m_calibrateObservationalPrecision;
-  (*(this->hyperparamMins))[emulator_data_precision_index] = 60.0;  // Min emulator data precision
-  (*(this->hyperparamMaxs))[emulator_data_precision_index] = 1e5;   // Max emulator data precision
+    dimHyper - num_svd_terms - this->m_opts->m_calibrateObservationalPrecision;
+  for (unsigned int emulator_basis = 0; emulator_basis < num_svd_terms;
+      emulator_basis++) {
+    (*(this->hyperparamMins))[emulator_data_precision_index+emulator_basis] = 60.0;  // Min emulator data precision
+    (*(this->hyperparamMaxs))[emulator_data_precision_index+emulator_basis] = 1e5;   // Max emulator data precision
+  }
 
   if (this->m_opts->m_calibrateObservationalPrecision) {
     (*(this->hyperparamMins))[dimHyper-1] = 0.3;      // Min observation error precision
