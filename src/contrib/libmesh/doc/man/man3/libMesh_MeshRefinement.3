@@ -1,0 +1,3698 @@
+.TH "libMesh::MeshRefinement" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshRefinement \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_refinement\&.h>\fP
+.PP
+Inherits \fBlibMesh::ParallelObject\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBElementFlagging\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshRefinement\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBset_periodic_boundaries_ptr\fP (\fBPeriodicBoundaries\fP *pb_ptr)"
+.br
+.ti -1c
+.RI "\fB~MeshRefinement\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBflag_elements_by_error_fraction\fP (const \fBErrorVector\fP &error_per_cell, const \fBReal\fP \fBrefine_fraction\fP=0\&.3, const \fBReal\fP \fBcoarsen_fraction\fP=0\&.0, const unsigned int max_level=\fBlibMesh::invalid_uint\fP)"
+.br
+.ti -1c
+.RI "void \fBflag_elements_by_error_tolerance\fP (const \fBErrorVector\fP &error_per_cell)"
+.br
+.ti -1c
+.RI "bool \fBflag_elements_by_nelem_target\fP (const \fBErrorVector\fP &error_per_cell)"
+.br
+.ti -1c
+.RI "void \fBflag_elements_by_elem_fraction\fP (const \fBErrorVector\fP &error_per_cell, const \fBReal\fP \fBrefine_fraction\fP=0\&.3, const \fBReal\fP \fBcoarsen_fraction\fP=0\&.0, const unsigned int max_level=\fBlibMesh::invalid_uint\fP)"
+.br
+.ti -1c
+.RI "void \fBflag_elements_by_mean_stddev\fP (const \fBErrorVector\fP &error_per_cell, const \fBReal\fP \fBrefine_fraction\fP=1\&.0, const \fBReal\fP \fBcoarsen_fraction\fP=0\&.0, const unsigned int max_level=\fBlibMesh::invalid_uint\fP)"
+.br
+.ti -1c
+.RI "void \fBflag_elements_by\fP (\fBElementFlagging\fP &element_flagging)"
+.br
+.ti -1c
+.RI "void \fBswitch_h_to_p_refinement\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_p_to_h_refinement\fP ()"
+.br
+.ti -1c
+.RI "bool \fBrefine_and_coarsen_elements\fP (const bool maintain_level_one=true)"
+.br
+.ti -1c
+.RI "bool \fBcoarsen_elements\fP (const bool maintain_level_one=true)"
+.br
+.ti -1c
+.RI "bool \fBrefine_elements\fP (const bool maintain_level_one=true)"
+.br
+.ti -1c
+.RI "void \fBuniformly_refine\fP (unsigned int n=1)"
+.br
+.ti -1c
+.RI "void \fBuniformly_coarsen\fP (unsigned int n=1)"
+.br
+.ti -1c
+.RI "void \fBuniformly_p_refine\fP (unsigned int n=1)"
+.br
+.ti -1c
+.RI "void \fBuniformly_p_coarsen\fP (unsigned int n=1)"
+.br
+.ti -1c
+.RI "void \fBclean_refinement_flags\fP ()"
+.br
+.ti -1c
+.RI "bool \fBtest_level_one\fP (bool libmesh_assert_yes=false)"
+.br
+.ti -1c
+.RI "bool \fBtest_unflagged\fP (bool libmesh_assert_yes=false)"
+.br
+.ti -1c
+.RI "\fBNode\fP * \fBadd_point\fP (const \fBPoint\fP &p, const \fBprocessor_id_type\fP \fBprocessor_id\fP, const \fBReal\fP tol)"
+.br
+.ti -1c
+.RI "\fBElem\fP * \fBadd_elem\fP (\fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBget_mesh\fP () const "
+.br
+.ti -1c
+.RI "\fBMeshBase\fP & \fBget_mesh\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBcoarsen_by_parents\fP ()"
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBrefine_fraction\fP ()"
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBcoarsen_fraction\fP ()"
+.br
+.ti -1c
+.RI "unsigned int & \fBmax_h_level\fP ()"
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBcoarsen_threshold\fP ()"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP & \fBnelem_target\fP ()"
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBabsolute_global_tolerance\fP ()"
+.br
+.ti -1c
+.RI "unsigned char & \fBface_level_mismatch_limit\fP ()"
+.br
+.ti -1c
+.RI "unsigned char & \fBedge_level_mismatch_limit\fP ()"
+.br
+.ti -1c
+.RI "unsigned char & \fBnode_level_mismatch_limit\fP ()"
+.br
+.ti -1c
+.RI "bool \fBmake_flags_parallel_consistent\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshRefinement\fP (const \fBMeshRefinement\fP &)"
+.br
+.ti -1c
+.RI "\fBMeshRefinement\fP & \fBoperator=\fP (const \fBMeshRefinement\fP &)"
+.br
+.ti -1c
+.RI "bool \fB_coarsen_elements\fP ()"
+.br
+.ti -1c
+.RI "bool \fB_refine_elements\fP ()"
+.br
+.ti -1c
+.RI "bool \fBlimit_level_mismatch_at_node\fP (const unsigned int max_mismatch)"
+.br
+.ti -1c
+.RI "bool \fBlimit_level_mismatch_at_edge\fP (const unsigned int max_mismatch)"
+.br
+.ti -1c
+.RI "bool \fBeliminate_unrefined_patches\fP ()"
+.br
+.ti -1c
+.RI "void \fBcreate_parent_error_vector\fP (const \fBErrorVector\fP &error_per_cell, \fBErrorVector\fP &error_per_parent, \fBReal\fP &parent_error_min, \fBReal\fP &parent_error_max)"
+.br
+.ti -1c
+.RI "void \fBupdate_nodes_map\fP ()"
+.br
+.ti -1c
+.RI "bool \fBmake_coarsening_compatible\fP (const bool)"
+.br
+.ti -1c
+.RI "bool \fBmake_refinement_compatible\fP (const bool)"
+.br
+.ti -1c
+.RI "\fBElem\fP * \fBtopological_neighbor\fP (\fBElem\fP *elem, const \fBPointLocatorBase\fP *point_locator, const unsigned int \fBside\fP)"
+.br
+.ti -1c
+.RI "bool \fBhas_topological_neighbor\fP (\fBElem\fP *elem, const \fBPointLocatorBase\fP *point_locator, \fBElem\fP *neighbor)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBLocationMap\fP< \fBNode\fP > \fB_new_nodes_map\fP"
+.br
+.ti -1c
+.RI "\fBMeshBase\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "bool \fB_use_member_parameters\fP"
+.br
+.ti -1c
+.RI "bool \fB_coarsen_by_parents\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_refine_fraction\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_coarsen_fraction\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_max_h_level\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_coarsen_threshold\fP"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fB_nelem_target\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_absolute_global_tolerance\fP"
+.br
+.ti -1c
+.RI "unsigned char \fB_face_level_mismatch_limit\fP"
+.br
+.ti -1c
+.RI "unsigned char \fB_edge_level_mismatch_limit\fP"
+.br
+.ti -1c
+.RI "unsigned char \fB_node_level_mismatch_limit\fP"
+.br
+.ti -1c
+.RI "\fBPeriodicBoundaries\fP * \fB_periodic_boundaries\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is the \fC\fBMeshRefinement\fP\fP class\&. This class implements adaptive mesh refinement algorithms for a \fC\fBMeshBase\fP\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002-2007\&. 
+.RE
+.PP
+
+.PP
+Definition at line 62 of file mesh_refinement\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshRefinement::MeshRefinement (\fBMeshBase\fP &mesh)\fC [explicit]\fP"
+Constructor\&. 
+.PP
+Definition at line 55 of file mesh_refinement\&.C\&.
+.PP
+.nf
+55                                            :
+56   ParallelObject(m),
+57   _mesh(m),
+58   _use_member_parameters(false),
+59   _coarsen_by_parents(false),
+60   _refine_fraction(0\&.3),
+61   _coarsen_fraction(0\&.0),
+62   _max_h_level(libMesh::invalid_uint),
+63   _coarsen_threshold(10),
+64   _nelem_target(0),
+65   _absolute_global_tolerance(0\&.0),
+66   _face_level_mismatch_limit(1),
+67   _edge_level_mismatch_limit(0),
+68   _node_level_mismatch_limit(0)
+69 #ifdef LIBMESH_ENABLE_PERIODIC
+70   , _periodic_boundaries(NULL)
+71 #endif
+72 {
+73 }
+74 
+75 
+76 
+77 #ifdef LIBMESH_ENABLE_PERIODIC
+78 void MeshRefinement::set_periodic_boundaries_ptr(PeriodicBoundaries * pb_ptr)
+79 {
+80   _periodic_boundaries = pb_ptr;
+81 }
+.fi
+.SS "libMesh::MeshRefinement::MeshRefinement (const \fBMeshRefinement\fP &)\fC [private]\fP"
+
+.SS "libMesh::MeshRefinement::~MeshRefinement ()"
+Destructor\&. Deletes all the elements that are currently stored\&. 
+.PP
+Definition at line 86 of file mesh_refinement\&.C\&.
+.PP
+References clear()\&.
+.PP
+.nf
+87 {
+88   this->clear();
+89 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::MeshRefinement::_coarsen_elements ()\fC [private]\fP"
+Coarsens user-requested elements\&. Both coarsen_elements and refine_elements used to be in the public interface for the \fBMeshRefinement\fP object\&. Unfortunately, without proper preparation (make_refinement_compatible, make_coarsening_compatible) at least \fBcoarsen_elements()\fP did not work alone\&. By making them private, we signal to the user that they are not part of the interface\&.
+.PP
+It is possible that for a given set of refinement flags there is actually no change upon calling this member function\&. Consequently, this function returns \fCtrue\fP if the mesh actually changed (hence data needs to be projected) and \fCfalse\fP otherwise\&. 
+.PP
+Definition at line 1514 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _new_nodes_map, libMesh::Elem::active(), libMesh::MeshBase::boundary_info, clear(), libMesh::Elem::COARSEN, libMesh::Elem::coarsen(), libMesh::Elem::COARSEN_INACTIVE, libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::MeshBase::is_serial(), libMesh::Elem::JUST_COARSENED, libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::Parallel::Communicator::max(), libMesh::Elem::nullify_neighbors(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_level(), libMesh::Elem::set_p_refinement_flag(), libMesh::START_LOG(), libMesh::STOP_LOG(), update_nodes_map(), and libMesh::MeshBase::update_parallel_id_counts()\&.
+.PP
+Referenced by coarsen_elements(), refine_and_coarsen_elements(), and uniformly_coarsen()\&.
+.PP
+.nf
+1515 {
+1516   // This function must be run on all processors at once
+1517   parallel_object_only();
+1518 
+1519   START_LOG ("_coarsen_elements()", "MeshRefinement");
+1520 
+1521   // Flag indicating if this call actually changes the mesh
+1522   bool mesh_changed = false;
+1523 
+1524   // Clear the unused_elements data structure\&.
+1525   // The elements have been packed since it was built,
+1526   // so there are _no_ unused elements\&.  We cannot trust
+1527   // any iterators currently in this data structure\&.
+1528   // _unused_elements\&.clear();
+1529 
+1530   MeshBase::element_iterator       it  = _mesh\&.elements_begin();
+1531   const MeshBase::element_iterator end = _mesh\&.elements_end();
+1532 
+1533   // Loop over the elements\&.
+1534   for ( ; it != end; ++it)
+1535     {
+1536       Elem* elem = *it;
+1537 
+1538       // Not necessary when using elem_iterator
+1539       // libmesh_assert(elem);
+1540 
+1541       // active elements flagged for coarsening will
+1542       // no longer be deleted until MeshRefinement::contract()
+1543       if (elem->refinement_flag() == Elem::COARSEN)
+1544         {
+1545           // Huh?  no level-0 element should be active
+1546           // and flagged for coarsening\&.
+1547           libmesh_assert_not_equal_to (elem->level(), 0);
+1548 
+1549           // Remove this element from any neighbor
+1550           // lists that point to it\&.
+1551           elem->nullify_neighbors();
+1552 
+1553           // Remove any boundary information associated
+1554           // with this element
+1555           _mesh\&.boundary_info->remove (elem);
+1556 
+1557           // Add this iterator to the _unused_elements
+1558           // data structure so we might fill it\&.
+1559           // The _unused_elements optimization is currently off\&.
+1560           // _unused_elements\&.push_back (it);
+1561 
+1562           // Don't delete the element until
+1563           // MeshRefinement::contract()
+1564           // _mesh\&.delete_elem(elem);
+1565 
+1566           // the mesh has certainly changed
+1567           mesh_changed = true;
+1568         }
+1569 
+1570       // inactive elements flagged for coarsening
+1571       // will become active
+1572       else if (elem->refinement_flag() == Elem::COARSEN_INACTIVE)
+1573         {
+1574           elem->coarsen();
+1575           libmesh_assert (elem->active());
+1576 
+1577           // the mesh has certainly changed
+1578           mesh_changed = true;
+1579         }
+1580       if (elem->p_refinement_flag() == Elem::COARSEN)
+1581         {
+1582           if (elem->p_level() > 0)
+1583             {
+1584               elem->set_p_refinement_flag(Elem::JUST_COARSENED);
+1585               elem->set_p_level(elem->p_level() - 1);
+1586               mesh_changed = true;
+1587             }
+1588           else
+1589             {
+1590               elem->set_p_refinement_flag(Elem::DO_NOTHING);
+1591             }
+1592         }
+1593     }
+1594 
+1595   // If the mesh changed on any processor, it changed globally
+1596   this->comm()\&.max(mesh_changed);
+1597   // And we may need to update ParallelMesh values reflecting the changes
+1598   if (mesh_changed)
+1599     _mesh\&.update_parallel_id_counts();
+1600 
+1601   // Node processor ids may need to change if an element of that id
+1602   // was coarsened away
+1603   if (mesh_changed && !_mesh\&.is_serial())
+1604     {
+1605       // Update the _new_nodes_map so that processors can
+1606       // find requested nodes
+1607       this->update_nodes_map ();
+1608 
+1609       MeshCommunication()\&.make_nodes_parallel_consistent
+1610         (_mesh, _new_nodes_map);
+1611 
+1612       // Clear the _new_nodes_map
+1613       this->clear();
+1614 
+1615 #ifdef DEBUG
+1616       MeshTools::libmesh_assert_valid_procids<Node>(_mesh);
+1617 #endif
+1618     }
+1619 
+1620   STOP_LOG ("_coarsen_elements()", "MeshRefinement");
+1621 
+1622   return mesh_changed;
+1623 }
+.fi
+.SS "bool libMesh::MeshRefinement::_refine_elements ()\fC [private]\fP"
+Refines user-requested elements\&.
+.PP
+It is possible that for a given set of refinement flags there is actually no change upon calling this member function\&. Consequently, this function returns \fCtrue\fP if the mesh actually changed (hence data needs to be projected) and \fCfalse\fP otherwise\&. 
+.PP
+Definition at line 1627 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _new_nodes_map, libMesh::Elem::active(), clear(), libMesh::ParallelObject::comm(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::MeshBase::is_serial(), libMesh::Elem::JUST_REFINED, libMesh::MeshBase::libmesh_assert_valid_parallel_ids(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::Parallel::Communicator::max(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_level(), libMesh::Elem::set_p_refinement_flag(), libMesh::START_LOG(), libMesh::STOP_LOG(), update_nodes_map(), and libMesh::MeshBase::update_parallel_id_counts()\&.
+.PP
+Referenced by refine_and_coarsen_elements(), refine_elements(), and uniformly_refine()\&.
+.PP
+.nf
+1628 {
+1629   // This function must be run on all processors at once
+1630   parallel_object_only();
+1631 
+1632   // Update the _new_nodes_map so that elements can
+1633   // find nodes to connect to\&.
+1634   this->update_nodes_map ();
+1635 
+1636   START_LOG ("_refine_elements()", "MeshRefinement");
+1637 
+1638   // Iterate over the elements, counting the elements
+1639   // flagged for h refinement\&.
+1640   dof_id_type n_elems_flagged = 0;
+1641 
+1642   MeshBase::element_iterator       it  = _mesh\&.elements_begin();
+1643   const MeshBase::element_iterator end = _mesh\&.elements_end();
+1644 
+1645   for (; it != end; ++it)
+1646     {
+1647       Elem* elem = *it;
+1648       if (elem->refinement_flag() == Elem::REFINE)
+1649         n_elems_flagged++;
+1650     }
+1651 
+1652   // Construct a local vector of Elem* which have been
+1653   // previously marked for refinement\&.  We reserve enough
+1654   // space to allow for every element to be refined\&.
+1655   std::vector<Elem*> local_copy_of_elements;
+1656   local_copy_of_elements\&.reserve(n_elems_flagged);
+1657 
+1658   // Iterate over the elements, looking for elements
+1659   // flagged for refinement\&.
+1660   for (it = _mesh\&.elements_begin(); it != end; ++it)
+1661     {
+1662       Elem* elem = *it;
+1663       if (elem->refinement_flag() == Elem::REFINE)
+1664         local_copy_of_elements\&.push_back(elem);
+1665       if (elem->p_refinement_flag() == Elem::REFINE &&
+1666           elem->active())
+1667         {
+1668           elem->set_p_level(elem->p_level()+1);
+1669           elem->set_p_refinement_flag(Elem::JUST_REFINED);
+1670         }
+1671     }
+1672 
+1673   // Now iterate over the local copies and refine each one\&.
+1674   // This may resize the mesh's internal container and invalidate
+1675   // any existing iterators\&.
+1676 
+1677   for (std::size_t e = 0; e != local_copy_of_elements\&.size(); ++e)
+1678     local_copy_of_elements[e]->refine(*this);
+1679 
+1680   // The mesh changed if there were elements h refined
+1681   bool mesh_changed = !local_copy_of_elements\&.empty();
+1682 
+1683   // If the mesh changed on any processor, it changed globally
+1684   this->comm()\&.max(mesh_changed);
+1685 
+1686   // And we may need to update ParallelMesh values reflecting the changes
+1687   if (mesh_changed)
+1688     _mesh\&.update_parallel_id_counts();
+1689 
+1690   if (mesh_changed && !_mesh\&.is_serial())
+1691     {
+1692       MeshCommunication()\&.make_elems_parallel_consistent (_mesh);
+1693       MeshCommunication()\&.make_nodes_parallel_consistent
+1694         (_mesh, _new_nodes_map);
+1695 #ifdef DEBUG
+1696       _mesh\&.libmesh_assert_valid_parallel_ids();
+1697 #endif
+1698     }
+1699 
+1700   // Clear the _new_nodes_map and _unused_elements data structures\&.
+1701   this->clear();
+1702 
+1703   STOP_LOG ("_refine_elements()", "MeshRefinement");
+1704 
+1705   return mesh_changed;
+1706 }
+.fi
+.SS "\fBReal\fP & libMesh::MeshRefinement::absolute_global_tolerance ()\fC [inline]\fP"
+If \fCabsolute_global_tolerance\fP is set to a nonzero value, methods like flag_elements_by_global_tolerance() will attempt to reduce the global error of the mesh (defined as the square root of the sum of the squares of the errors on active elements) to below this tolerance\&.
+.PP
+\fCabsolute_global_tolerance\fP is 0 by default\&. 
+.PP
+Definition at line 724 of file mesh_refinement\&.h\&.
+.PP
+References _absolute_global_tolerance, and _use_member_parameters\&.
+.PP
+.nf
+725 {
+726   _use_member_parameters = true;
+727   return _absolute_global_tolerance;
+728 }
+.fi
+.SS "\fBElem\fP * libMesh::MeshRefinement::add_elem (\fBElem\fP *elem)"
+Adds the element \fCelem\fP to the mesh\&. 
+.PP
+Definition at line 130 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::add_elem(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::Elem::refine()\&.
+.PP
+.nf
+131 {
+132   libmesh_assert(elem);
+133 
+134 
+135   //   // If the unused_elements has any iterators from
+136   //   // old elements, take the first one
+137   //   if (!_unused_elements\&.empty())
+138   //     {
+139   //       std::vector<Elem*>::iterator it = _unused_elements\&.front();
+140 
+141   //       *it = elem;
+142 
+143   //       _unused_elements\&.pop_front();
+144   //     }
+145 
+146   //   // Otherwise, use the conventional add method
+147   //   else
+148   //     {
+149   //       _mesh\&.add_elem (elem);
+150   //     }
+151 
+152   // The _unused_elements optimization has been turned off\&.
+153   _mesh\&.add_elem (elem);
+154 
+155   return elem;
+156 }
+.fi
+.SS "void libMesh::MeshRefinement::add_p_to_h_refinement ()"
+Takes a mesh whose elements are flagged for h refinement and coarsening, and adds flags to request p refinement and coarsening of the same elements\&. 
+.PP
+Definition at line 684 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::elements_begin(), and libMesh::MeshBase::elements_end()\&.
+.PP
+.nf
+685 {
+686   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+687   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+688 
+689   for ( ; elem_it != elem_end; ++elem_it)
+690     (*elem_it)->set_p_refinement_flag((*elem_it)->refinement_flag());
+691 }
+.fi
+.SS "\fBNode\fP * libMesh::MeshRefinement::add_point (const \fBPoint\fP &p, const \fBprocessor_id_type\fPprocessor_id, const \fBReal\fPtol)"
+Add point \fCp\fP to the mesh\&. The function returns a pointer to the new node\&. The processor_id is assigned to the new node (only if no existing node is found\&. The tolerance \fCtol\fP tells the method how far away from p to search for existing nodes\&. 
+.PP
+Definition at line 100 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _new_nodes_map, libMesh::MeshBase::add_point(), libMesh::DofObject::invalid_id, libMesh::libmesh_assert(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::Elem::refine()\&.
+.PP
+.nf
+103 {
+104   START_LOG("add_point()", "MeshRefinement");
+105 
+106   // Return the node if it already exists
+107   Node *node = _new_nodes_map\&.find(p, tol);
+108   if (node)
+109     {
+110       STOP_LOG("add_point()", "MeshRefinement");
+111       return node;
+112     }
+113 
+114   // Add the node, with a default id and the requested
+115   // processor_id
+116   node = _mesh\&.add_point (p, DofObject::invalid_id, processor_id);
+117 
+118   libmesh_assert(node);
+119 
+120   // Add the node to the map\&.
+121   _new_nodes_map\&.insert(*node);
+122 
+123   // Return the address of the new node
+124   STOP_LOG("add_point()", "MeshRefinement");
+125   return node;
+126 }
+.fi
+.SS "void libMesh::MeshRefinement::clean_refinement_flags ()"
+Sets the refinement flag to \fC\fBElem::DO_NOTHING\fP\fP for each element in the mesh\&. 
+.PP
+Definition at line 695 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _mesh, libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), and libMesh::Elem::INACTIVE\&.
+.PP
+Referenced by flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_nelem_target(), libMesh::EquationSystems::init(), libMesh::EquationSystems::read(), uniformly_coarsen(), and uniformly_refine()\&.
+.PP
+.nf
+696 {
+697   // Possibly clean up the refinement flags from
+698   // a previous step
+699   //   elem_iterator       elem_it (_mesh\&.elements_begin());
+700   //   const elem_iterator elem_end(_mesh\&.elements_end());
+701 
+702   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+703   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+704 
+705   for ( ; elem_it != elem_end; ++elem_it)
+706     {
+707       if ((*elem_it)->active())
+708         {
+709           (*elem_it)->set_refinement_flag(Elem::DO_NOTHING);
+710           (*elem_it)->set_p_refinement_flag(Elem::DO_NOTHING);
+711         }
+712       else
+713         {
+714           (*elem_it)->set_refinement_flag(Elem::INACTIVE);
+715           (*elem_it)->set_p_refinement_flag(Elem::INACTIVE);
+716         }
+717     }
+718 }
+.fi
+.SS "void libMesh::MeshRefinement::clear ()"
+Deletes all the data that are currently stored\&. 
+.PP
+Definition at line 93 of file mesh_refinement\&.C\&.
+.PP
+References _new_nodes_map\&.
+.PP
+Referenced by _coarsen_elements(), _refine_elements(), and ~MeshRefinement()\&.
+.PP
+.nf
+94 {
+95   _new_nodes_map\&.clear();
+96 }
+.fi
+.SS "bool & libMesh::MeshRefinement::coarsen_by_parents ()\fC [inline]\fP"
+If \fCcoarsen_by_parents\fP is true, complete groups of sibling elements (elements with the same parent) will be flagged for coarsening\&. This should make the coarsening more likely to occur as requested\&.
+.PP
+\fCcoarsen_by_parents\fP is true by default\&. 
+.PP
+Definition at line 688 of file mesh_refinement\&.h\&.
+.PP
+References _coarsen_by_parents, and _use_member_parameters\&.
+.PP
+.nf
+689 {
+690   _use_member_parameters = true;
+691   return _coarsen_by_parents;
+692 }
+.fi
+.SS "bool libMesh::MeshRefinement::coarsen_elements (const boolmaintain_level_one = \fCtrue\fP)"
+Only coarsens the user-requested elements\&. Some elements will not be coarsened to satisfy the level one rule\&. It is possible that for a given set of refinement flags there is actually no change upon calling this member function\&. Consequently, this function returns \fCtrue\fP if the mesh actually changed (hence data needs to be projected) and \fCfalse\fP otherwise\&.
+.PP
+The argument \fCmaintain_level_one\fP is now deprecated; use the option \fBface_level_mismatch_limit()\fP instead\&. 
+.PP
+Definition at line 611 of file mesh_refinement\&.C\&.
+.PP
+References _coarsen_elements(), _edge_level_mismatch_limit, _face_level_mismatch_limit, _mesh, _node_level_mismatch_limit, libMesh::Elem::active(), libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), eliminate_unrefined_patches(), libMesh::Elem::INACTIVE, libMesh::MeshBase::is_serial(), libMesh::Elem::JUST_REFINED, libMesh::libmesh_assert(), limit_level_mismatch_at_edge(), limit_level_mismatch_at_node(), make_coarsening_compatible(), make_flags_parallel_consistent(), libMesh::Parallel::Communicator::max(), libMesh::Parallel::Communicator::min(), libMesh::out, libMesh::MeshBase::prepare_for_use(), libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), and test_level_one()\&.
+.PP
+Referenced by libMesh::EquationSystems::reinit()\&.
+.PP
+.nf
+612 {
+613   // This function must be run on all processors at once
+614   parallel_object_only();
+615 
+616   bool _maintain_level_one = maintain_level_one;
+617 
+618   // If the user used non-default parameters, let's warn that they're
+619   // deprecated
+620   if (!maintain_level_one)
+621     {
+622       libmesh_deprecated();
+623     }
+624   else
+625     _maintain_level_one = _face_level_mismatch_limit;
+626 
+627   // We can't yet turn a non-level-one mesh into a level-one mesh
+628   if (_maintain_level_one)
+629     libmesh_assert(test_level_one(true));
+630 
+631   // Possibly clean up the refinement flags from
+632   // a previous step
+633   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+634   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+635 
+636   for ( ; elem_it != elem_end; ++elem_it)
+637     {
+638       // Pointer to the element
+639       Elem* elem = *elem_it;
+640 
+641       // Set refinement flag to INACTIVE if the
+642       // element isn't active
+643       if ( !elem->active())
+644         {
+645           elem->set_refinement_flag(Elem::INACTIVE);
+646           elem->set_p_refinement_flag(Elem::INACTIVE);
+647         }
+648 
+649       // This might be left over from the last step
+650       if (elem->refinement_flag() == Elem::JUST_REFINED)
+651         elem->set_refinement_flag(Elem::DO_NOTHING);
+652     }
+653 
+654   // Parallel consistency has to come first, or coarsening
+655   // along processor boundaries might occasionally be falsely
+656   // prevented
+657   bool flags_were_consistent = this->make_flags_parallel_consistent();
+658 
+659   // In theory, we should be able to remove the above call, which can
+660   // be expensive and should be unnecessary\&.  In practice, doing
+661   // consistent flagging in parallel is hard, it's impossible to
+662   // verify at the library level if it's being done by user code, and
+663   // we don't want to abort large parallel runs in opt mode\&.\&.\&. but we
+664   // do want to warn that they should be fixed\&.
+665   libmesh_assert(flags_were_consistent);
+666   if (!flags_were_consistent)
+667     {
+668       libMesh::out << "Refinement flags were not consistent between processors!\n"
+669                    << "Correcting and continuing\&.";
+670     }
+671 
+672   // Repeat until flag changes match on every processor
+673   do
+674     {
+675       // Repeat until the flags form a conforming mesh\&.
+676       bool satisfied = false;
+677       do
+678         {
+679           const bool coarsening_satisfied =
+680             this->make_coarsening_compatible(maintain_level_one);
+681 
+682           bool smoothing_satisfied =
+683             !this->eliminate_unrefined_patches();// &&
+684 
+685           if (_edge_level_mismatch_limit)
+686             smoothing_satisfied = smoothing_satisfied &&
+687               !this->limit_level_mismatch_at_edge (_edge_level_mismatch_limit);
+688 
+689           if (_node_level_mismatch_limit)
+690             smoothing_satisfied = smoothing_satisfied &&
+691               !this->limit_level_mismatch_at_node (_node_level_mismatch_limit);
+692 
+693           satisfied = (coarsening_satisfied &&
+694                        smoothing_satisfied);
+695 #ifdef DEBUG
+696           bool max_satisfied = satisfied,
+697             min_satisfied = satisfied;
+698           this->comm()\&.max(max_satisfied);
+699           this->comm()\&.min(min_satisfied);
+700           libmesh_assert_equal_to (satisfied, max_satisfied);
+701           libmesh_assert_equal_to (satisfied, min_satisfied);
+702 #endif
+703         }
+704       while (!satisfied);
+705     }
+706   while (!_mesh\&.is_serial() && !this->make_flags_parallel_consistent());
+707 
+708   // Coarsen the flagged elements\&.
+709   const bool mesh_changed =
+710     this->_coarsen_elements ();
+711 
+712   if (_maintain_level_one)
+713     libmesh_assert(test_level_one(true));
+714   libmesh_assert(this->make_coarsening_compatible(maintain_level_one));
+715   // FIXME: This won't pass unless we add a redundant find_neighbors()
+716   // call or replace find_neighbors() with on-the-fly neighbor updating
+717   // libmesh_assert(!this->eliminate_unrefined_patches());
+718 
+719   // We can't contract the mesh ourselves anymore - a System might
+720   // need to restrict old coefficient vectors first
+721   // _mesh\&.contract();
+722 
+723   // Finally, the new mesh may need to be prepared for use
+724   if (mesh_changed)
+725     _mesh\&.prepare_for_use (/*skip_renumber =*/false);
+726 
+727   return mesh_changed;
+728 }
+.fi
+.SS "\fBReal\fP & libMesh::MeshRefinement::coarsen_fraction ()\fC [inline]\fP"
+The \fCcoarsen_fraction\fP sets either a desired target or a desired maximum number of elements to flag for coarsening, depending on which flag_elements_by method is called\&.
+.PP
+\fCcoarsen_fraction\fP must be in $ [0,1] $, and is 0 by default\&. 
+.PP
+Definition at line 700 of file mesh_refinement\&.h\&.
+.PP
+References _coarsen_fraction, and _use_member_parameters\&.
+.PP
+.nf
+701 {
+702   _use_member_parameters = true;
+703   return _coarsen_fraction;
+704 }
+.fi
+.SS "\fBReal\fP & libMesh::MeshRefinement::coarsen_threshold ()\fC [inline]\fP"
+The \fCcoarsen_threshold\fP provides hysteresis in AMR/C strategies\&. Refinement of elements with error estimate E will be done even at the expense of coarsening elements whose children's accumulated error does not exceed \fCcoarsen_threshold\fP * E\&.
+.PP
+\fCcoarsen_threshold\fP must be in $ [0,1] $, and is 0\&.1 by default\&. 
+.PP
+Definition at line 712 of file mesh_refinement\&.h\&.
+.PP
+References _coarsen_threshold, and _use_member_parameters\&.
+.PP
+.nf
+713 {
+714   _use_member_parameters = true;
+715   return _coarsen_threshold;
+716 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), _coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), _refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), limit_level_mismatch_at_edge(), limit_level_mismatch_at_node(), make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), refine_and_coarsen_elements(), refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), test_level_one(), test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::MeshRefinement::create_parent_error_vector (const \fBErrorVector\fP &error_per_cell, \fBErrorVector\fP &error_per_parent, \fBReal\fP &parent_error_min, \fBReal\fP &parent_error_max)\fC [private]\fP"
+Calculates the error on all coarsenable parents\&. error_per_parent[parent_id] stores this error if parent_id corresponds to a coarsenable parent, and stores -1 otherwise\&. 
+.PP
+Definition at line 161 of file mesh_refinement\&.C\&.
+.PP
+References libMesh::comm, libMesh::DofObject::id(), libMesh::libmesh_assert(), std::max(), std::min(), libMesh::Elem::parent(), and libMesh::Parallel::verify()\&.
+.PP
+Referenced by flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_error_tolerance(), and flag_elements_by_nelem_target()\&.
+.PP
+.nf
+165 {
+166   // This function must be run on all processors at once
+167   parallel_object_only();
+168 
+169   // Make sure the input error vector is valid
+170 #ifdef DEBUG
+171   for (std::size_t i=0; i != error_per_cell\&.size(); ++i)
+172     {
+173       libmesh_assert_greater_equal (error_per_cell[i], 0);
+174       // isnan() isn't standard C++ yet
+175 #ifdef isnan
+176       libmesh_assert(!isnan(error_per_cell[i]));
+177 #endif
+178     }
+179 
+180   // Use a reference to std::vector to avoid confusing
+181   // this->comm()\&.verify
+182   std::vector<ErrorVectorReal> &epc = error_per_parent;
+183   libmesh_assert(this->comm()\&.verify(epc));
+184 #endif // #ifdef DEBUG
+185 
+186   // error values on uncoarsenable elements will be left at -1
+187   error_per_parent\&.clear();
+188   error_per_parent\&.resize(error_per_cell\&.size(), 0\&.0);
+189 
+190   {
+191     // Find which elements are uncoarsenable
+192     MeshBase::element_iterator       elem_it  = _mesh\&.active_local_elements_begin();
+193     const MeshBase::element_iterator elem_end = _mesh\&.active_local_elements_end();
+194     for (; elem_it != elem_end; ++elem_it)
+195       {
+196         Elem* elem   = *elem_it;
+197         Elem* parent = elem->parent();
+198 
+199         // Active elements are uncoarsenable
+200         error_per_parent[elem->id()] = -1\&.0;
+201 
+202         // Grandparents and up are uncoarsenable
+203         while (parent)
+204           {
+205             parent = parent->parent();
+206             if (parent)
+207               {
+208                 const dof_id_type parentid  = parent->id();
+209                 libmesh_assert_less (parentid, error_per_parent\&.size());
+210                 error_per_parent[parentid] = -1\&.0;
+211               }
+212           }
+213       }
+214 
+215     // Sync between processors\&.
+216     // Use a reference to std::vector to avoid confusing
+217     // this->comm()\&.min
+218     std::vector<ErrorVectorReal> &epp = error_per_parent;
+219     this->comm()\&.min(epp);
+220   }
+221 
+222   // The parent's error is defined as the square root of the
+223   // sum of the children's errors squared, so errors that are
+224   // Hilbert norms remain Hilbert norms\&.
+225   //
+226   // Because the children may be on different processors, we
+227   // calculate local contributions to the parents' errors squared
+228   // first, then sum across processors and take the square roots
+229   // second\&.
+230   {
+231     MeshBase::element_iterator       elem_it  = _mesh\&.active_local_elements_begin();
+232     const MeshBase::element_iterator elem_end = _mesh\&.active_local_elements_end();
+233 
+234     for (; elem_it != elem_end; ++elem_it)
+235       {
+236         Elem* elem   = *elem_it;
+237         Elem* parent = elem->parent();
+238 
+239         // Calculate each contribution to parent cells
+240         if (parent)
+241           {
+242             const dof_id_type parentid  = parent->id();
+243             libmesh_assert_less (parentid, error_per_parent\&.size());
+244 
+245             // If the parent has grandchildren we won't be able to
+246             // coarsen it, so forget it\&.  Otherwise, add this child's
+247             // contribution to the sum of the squared child errors
+248             if (error_per_parent[parentid] != -1\&.0)
+249               error_per_parent[parentid] += (error_per_cell[elem->id()] *
+250                                              error_per_cell[elem->id()]);
+251           }
+252       }
+253   }
+254 
+255   // Sum the vector across all processors
+256   this->comm()\&.sum(static_cast<std::vector<ErrorVectorReal>&>(error_per_parent));
+257 
+258   // Calculate the min and max as we loop
+259   parent_error_min = std::numeric_limits<double>::max();
+260   parent_error_max = 0\&.;
+261 
+262   for (std::size_t i = 0; i != error_per_parent\&.size(); ++i)
+263     {
+264       // If this element isn't a coarsenable parent with error, we
+265       // have nothing to do\&.  Just flag it as -1 and move on
+266       // Note that this->comm()\&.sum might have left uncoarsenable
+267       // elements with error_per_parent=-n_proc, so reset it to
+268       // error_per_parent=-1
+269       if (error_per_parent[i] < 0\&.)
+270         {
+271           error_per_parent[i] = -1\&.;
+272           continue;
+273         }
+274 
+275       // The error estimator might have already given us an
+276       // estimate on the coarsenable parent elements; if so then
+277       // we want to retain that estimate
+278       if (error_per_cell[i])
+279         {
+280           error_per_parent[i] = error_per_cell[i];
+281           continue;
+282         }
+283       // if not, then e_parent = sqrt(sum(e_child^2))
+284       else
+285         error_per_parent[i] = std::sqrt(error_per_parent[i]);
+286 
+287       parent_error_min = std::min (parent_error_min,
+288                                    error_per_parent[i]);
+289       parent_error_max = std::max (parent_error_max,
+290                                    error_per_parent[i]);
+291     }
+292 }
+.fi
+.SS "unsigned char & libMesh::MeshRefinement::edge_level_mismatch_limit ()\fC [inline]\fP"
+If \fCedge_level_mismatch_limit\fP is set to a nonzero value, then refinement and coarsening will produce meshes in which the refinement level of two edge neighbors will not differ by more than that limit\&. If \fCedge_level_mismatch_limit\fP is 0, then level differences will be unlimited\&.
+.PP
+\fCedge_level_mismatch_limit\fP is 0 by default\&. 
+.PP
+Definition at line 735 of file mesh_refinement\&.h\&.
+.PP
+References _edge_level_mismatch_limit\&.
+.PP
+.nf
+736 {
+737   return _edge_level_mismatch_limit;
+738 }
+.fi
+.SS "bool libMesh::MeshRefinement::eliminate_unrefined_patches ()\fC [private]\fP"
+This algorithm selects an element for refinement if all of its neighbors are (or will be) refined\&. This algorithm will transform this mesh: 
+.PP
+.nf
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+|   |   |       |   |   |
+|   |   |       |   |   |
+o---o---o       o---o---o
+|   |   |       |   |   |
+|   |   |       |   |   |
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+
+.fi
+.PP
+.PP
+into this: 
+.PP
+.nf
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+|   |   |   :   |   |   |
+|   |   |   :   |   |   |
+o---o---o...o...o---o---o
+|   |   |   :   |   |   |
+|   |   |   :   |   |   |
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+|   |   |   |   |   |   |
+|   |   |   |   |   |   |
+o---o---o---o---o---o---o
+
+.fi
+.PP
+.PP
+by refining the indicated element 
+.PP
+Definition at line 266 of file mesh_refinement_smoothing\&.C\&.
+.PP
+References _mesh, libMesh::Elem::active(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::Elem::ancestor(), libMesh::Elem::child(), libMesh::Elem::COARSEN, libMesh::Elem::COARSEN_INACTIVE, libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::Elem::INACTIVE, libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::libmesh_assert_greater(), libMesh::Parallel::Communicator::max(), libMesh::Elem::min_new_p_level_by_neighbor(), libMesh::Elem::n_children(), libMesh::Elem::n_neighbors(), libMesh::Elem::neighbor(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::Elem::parent(), libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::remote_elem, libMesh::Elem::set_p_refinement_flag(), and libMesh::Elem::set_refinement_flag()\&.
+.PP
+Referenced by coarsen_elements(), refine_and_coarsen_elements(), and refine_elements()\&.
+.PP
+.nf
+267 {
+268   // This function must be run on all processors at once
+269   parallel_object_only();
+270 
+271   bool flags_changed = false;
+272 
+273   MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+274   const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+275 
+276   for (; elem_it != elem_end; ++elem_it)
+277     {
+278       Elem* elem = *elem_it;
+279       // First assume that we'll have to flag this element for both h
+280       // and p refinement, then change our minds if we see any
+281       // neighbors that are as coarse or coarser than us\&.
+282       bool h_flag_me = true,
+283         p_flag_me = true;
+284 
+285 
+286       // Skip the element if it is already fully flagged for refinement
+287       if (elem->p_refinement_flag() == Elem::REFINE)
+288         p_flag_me = false;
+289       if (elem->refinement_flag() == Elem::REFINE)
+290         {
+291           h_flag_me = false;
+292           if (!p_flag_me)
+293             continue;
+294         }
+295       // Test the parent if that is already flagged for coarsening
+296       else if (elem->refinement_flag() == Elem::COARSEN)
+297         {
+298           libmesh_assert(elem->parent());
+299           elem = elem->parent();
+300           // FIXME - this doesn't seem right - RHS
+301           if (elem->refinement_flag() != Elem::COARSEN_INACTIVE)
+302             continue;
+303           p_flag_me = false;
+304         }
+305 
+306       const unsigned int my_level = elem->level();
+307       int my_p_adjustment = 0;
+308       if (elem->p_refinement_flag() == Elem::REFINE)
+309         my_p_adjustment = 1;
+310       else if (elem->p_refinement_flag() == Elem::COARSEN)
+311         {
+312           libmesh_assert_greater (elem->p_level(), 0);
+313           my_p_adjustment = -1;
+314         }
+315       const unsigned int my_new_p_level = elem->p_level() +
+316         my_p_adjustment;
+317 
+318       // Check all the element neighbors
+319       for (unsigned int n=0; n<elem->n_neighbors(); n++)
+320         {
+321           const Elem *neighbor = elem->neighbor(n);
+322           // Quit if the element is on a local boundary
+323           if (neighbor == NULL || neighbor == remote_elem)
+324             {
+325               h_flag_me = false;
+326               p_flag_me = false;
+327               break;
+328             }
+329           // if the neighbor will be equally or less refined than
+330           // we are, then we will not become an unrefined island\&.
+331           // So if we are still considering h refinement:
+332           if (h_flag_me &&
+333               // If our neighbor is already at a lower level,
+334               // it can't end up at a higher level even if it
+335               // is flagged for refinement once
+336               ((neighbor->level() < my_level) ||
+337                // If our neighbor is at the same level but isn't
+338                // flagged for refinement, it won't end up at a
+339                // higher level
+340                ((neighbor->active()) &&
+341                 (neighbor->refinement_flag() != Elem::REFINE)) ||
+342                // If our neighbor is currently more refined but is
+343                // a parent flagged for coarsening, it will end up
+344                // at the same level\&.
+345                (neighbor->refinement_flag() == Elem::COARSEN_INACTIVE)))
+346             {
+347               // We've proven we won't become an unrefined island,
+348               // so don't h refine to avoid that\&.
+349               h_flag_me = false;
+350 
+351               // If we've also proven we don't need to p refine,
+352               // we don't need to check more neighbors
+353               if (!p_flag_me)
+354                 break;
+355             }
+356           if (p_flag_me)
+357             {
+358               // if active neighbors will have a p level
+359               // equal to or lower than ours, then we do not need to p
+360               // refine ourselves\&.
+361               if (neighbor->active())
+362                 {
+363                   int p_adjustment = 0;
+364                   if (neighbor->p_refinement_flag() == Elem::REFINE)
+365                     p_adjustment = 1;
+366                   else if (neighbor->p_refinement_flag() == Elem::COARSEN)
+367                     {
+368                       libmesh_assert_greater (neighbor->p_level(), 0);
+369                       p_adjustment = -1;
+370                     }
+371                   if (my_new_p_level >= neighbor->p_level() + p_adjustment)
+372                     {
+373                       p_flag_me = false;
+374                       if (!h_flag_me)
+375                         break;
+376                     }
+377                 }
+378               // If we have inactive neighbors, we need to
+379               // test all their active descendants which neighbor us
+380               else if (neighbor->ancestor())
+381                 {
+382                   if (neighbor->min_new_p_level_by_neighbor(elem,
+383                                                             my_new_p_level + 2) <= my_new_p_level)
+384                     {
+385                       p_flag_me = false;
+386                       if (!h_flag_me)
+387                         break;
+388                     }
+389                 }
+390             }
+391         }
+392 
+393       if (h_flag_me)
+394         {
+395           // Parents that would create islands should no longer
+396           // coarsen
+397           if (elem->refinement_flag() == Elem::COARSEN_INACTIVE)
+398             {
+399               for (unsigned int c=0; c<elem->n_children(); c++)
+400                 {
+401                   libmesh_assert_equal_to (elem->child(c)->refinement_flag(),
+402                                            Elem::COARSEN);
+403                   elem->child(c)->set_refinement_flag(Elem::DO_NOTHING);
+404                 }
+405               elem->set_refinement_flag(Elem::INACTIVE);
+406             }
+407           else
+408             elem->set_refinement_flag(Elem::REFINE);
+409           flags_changed = true;
+410         }
+411       if (p_flag_me)
+412         {
+413           if (elem->p_refinement_flag() == Elem::COARSEN)
+414             elem->set_p_refinement_flag(Elem::DO_NOTHING);
+415           else
+416             elem->set_p_refinement_flag(Elem::REFINE);
+417           flags_changed = true;
+418         }
+419     }
+420 
+421   // If flags changed on any processor then they changed globally
+422   this->comm()\&.max(flags_changed);
+423 
+424   return flags_changed;
+425 }
+.fi
+.SS "unsigned char & libMesh::MeshRefinement::face_level_mismatch_limit ()\fC [inline]\fP"
+If \fCface_level_mismatch_limit\fP is set to a nonzero value, then refinement and coarsening will produce meshes in which the refinement level of two face neighbors will not differ by more than that limit\&. If \fCface_level_mismatch_limit\fP is 0, then level differences will be unlimited\&.
+.PP
+\fCface_level_mismatch_limit\fP is 1 by default\&. Currently the only supported options are 0 and 1\&. 
+.PP
+Definition at line 730 of file mesh_refinement\&.h\&.
+.PP
+References _face_level_mismatch_limit\&.
+.PP
+Referenced by libMesh::EquationSystems::reinit()\&.
+.PP
+.nf
+731 {
+732   return _face_level_mismatch_limit;
+733 }
+.fi
+.SS "void libMesh::MeshRefinement::flag_elements_by (\fBElementFlagging\fP &element_flagging)"
+Flag elements based on a function object\&. The class \fC\fBElementFlagging\fP\fP defines a mechanism for implementing refinement strategies\&. 
+.PP
+Definition at line 655 of file mesh_refinement_flagging\&.C\&.
+.PP
+References libMesh::MeshRefinement::ElementFlagging::flag_elements()\&.
+.PP
+.nf
+656 {
+657   element_flagging\&.flag_elements();
+658 }
+.fi
+.SS "void libMesh::MeshRefinement::flag_elements_by_elem_fraction (const \fBErrorVector\fP &error_per_cell, const \fBReal\fPrefine_fraction = \fC0\&.3\fP, const \fBReal\fPcoarsen_fraction = \fC0\&.0\fP, const unsigned intmax_level = \fC\fBlibMesh::invalid_uint\fP\fP)"
+Flags elements for coarsening and refinement based on the computed error passed in \fCerror_per_cell\fP\&. This method picks the top \fCrefine_fraction\fP * \fCn_elem\fP elements for refinement and the bottom \fCcoarsen_fraction\fP * \fCn_elem\fP elements for coarsening\&. The two fractions \fCrefine_fraction\fP and \fCcoarsen_fraction\fP must be in $ [0,1] $\&.
+.PP
+All the function arguments except error_per_cell have been deprecated, and will be removed in future \fBlibMesh\fP releases - to control these parameters, set the corresponding member variables\&. 
+.PP
+Definition at line 452 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _coarsen_by_parents, _coarsen_fraction, _max_h_level, _mesh, _refine_fraction, _use_member_parameters, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::Parallel::Communicator::allgather(), clean_refinement_flags(), libMesh::Elem::COARSEN, libMesh::ParallelObject::comm(), create_parent_error_vector(), libMesh::dim, libMesh::ErrorVectorReal, libMesh::DofObject::id(), libMesh::invalid_uint, libMesh::Elem::level(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_elem(), libMesh::Elem::parent(), libMesh::Real, libMesh::Elem::REFINE, and libMesh::Elem::set_refinement_flag()\&.
+.PP
+.nf
+456 {
+457   parallel_object_only();
+458 
+459   // The function arguments are currently just there for
+460   // backwards_compatibility
+461   if (!_use_member_parameters)
+462     {
+463       // If the user used non-default parameters, lets warn
+464       // that they're deprecated
+465       if (refine_frac != 0\&.3 ||
+466           coarsen_frac != 0\&.0 ||
+467           max_l != libMesh::invalid_uint)
+468         libmesh_deprecated();
+469 
+470       _refine_fraction = refine_frac;
+471       _coarsen_fraction = coarsen_frac;
+472       _max_h_level = max_l;
+473     }
+474 
+475   // Check for valid fractions\&.\&.
+476   // The fraction values must be in [0,1]
+477   libmesh_assert_greater_equal (_refine_fraction, 0);
+478   libmesh_assert_less_equal (_refine_fraction, 1);
+479   libmesh_assert_greater_equal (_coarsen_fraction, 0);
+480   libmesh_assert_less_equal (_coarsen_fraction, 1);
+481 
+482   // The number of active elements in the mesh
+483   const dof_id_type n_active_elem  = _mesh\&.n_elem();
+484 
+485   // The number of elements to flag for coarsening
+486   const dof_id_type n_elem_coarsen =
+487     static_cast<dof_id_type>(_coarsen_fraction * n_active_elem);
+488 
+489   // The number of elements to flag for refinement
+490   const dof_id_type n_elem_refine =
+491     static_cast<dof_id_type>(_refine_fraction  * n_active_elem);
+492 
+493 
+494 
+495   // Clean up the refinement flags\&.  These could be left
+496   // over from previous refinement steps\&.
+497   this->clean_refinement_flags();
+498 
+499 
+500   // This vector stores the error and element number for all the
+501   // active elements\&.  It will be sorted and the top & bottom
+502   // elements will then be flagged for coarsening & refinement
+503   std::vector<ErrorVectorReal> sorted_error;
+504 
+505   sorted_error\&.reserve (n_active_elem);
+506 
+507   // Loop over the active elements and create the entry
+508   // in the sorted_error vector
+509   MeshBase::element_iterator       elem_it  = _mesh\&.active_local_elements_begin();
+510   const MeshBase::element_iterator elem_end = _mesh\&.active_local_elements_end();
+511 
+512   for (; elem_it != elem_end; ++elem_it)
+513     sorted_error\&.push_back (error_per_cell[(*elem_it)->id()]);
+514 
+515   this->comm()\&.allgather(sorted_error);
+516 
+517   // Now sort the sorted_error vector
+518   std::sort (sorted_error\&.begin(), sorted_error\&.end());
+519 
+520   // If we're coarsening by parents:
+521   // Create a sorted error vector with coarsenable parent elements
+522   // only, sorted by lowest errors first
+523   ErrorVector error_per_parent, sorted_parent_error;
+524   if (_coarsen_by_parents)
+525     {
+526       Real parent_error_min, parent_error_max;
+527 
+528       create_parent_error_vector(error_per_cell,
+529                                  error_per_parent,
+530                                  parent_error_min,
+531                                  parent_error_max);
+532 
+533       sorted_parent_error = error_per_parent;
+534       std::sort (sorted_parent_error\&.begin(), sorted_parent_error\&.end());
+535 
+536       // All the other error values will be 0\&., so get rid of them\&.
+537       sorted_parent_error\&.erase (std::remove(sorted_parent_error\&.begin(),
+538                                              sorted_parent_error\&.end(), 0\&.),
+539                                  sorted_parent_error\&.end());
+540     }
+541 
+542 
+543   ErrorVectorReal top_error= 0\&., bottom_error = 0\&.;
+544 
+545   // Get the maximum error value corresponding to the
+546   // bottom n_elem_coarsen elements
+547   if (_coarsen_by_parents && n_elem_coarsen)
+548     {
+549       const unsigned int dim = _mesh\&.mesh_dimension();
+550       unsigned int twotodim = 1;
+551       for (unsigned int i=0; i!=dim; ++i)
+552         twotodim *= 2;
+553 
+554       dof_id_type n_parent_coarsen = n_elem_coarsen / (twotodim - 1);
+555 
+556       if (n_parent_coarsen)
+557         bottom_error = sorted_parent_error[n_parent_coarsen - 1];
+558     }
+559   else if (n_elem_coarsen)
+560     {
+561       bottom_error = sorted_error[n_elem_coarsen - 1];
+562     }
+563 
+564   if (n_elem_refine)
+565     top_error = sorted_error[sorted_error\&.size() - n_elem_refine];
+566 
+567   // Finally, let's do the element flagging
+568   elem_it  = _mesh\&.active_elements_begin();
+569   for (; elem_it != elem_end; ++elem_it)
+570     {
+571       Elem* elem = *elem_it;
+572       Elem* parent = elem->parent();
+573 
+574       if (_coarsen_by_parents && parent && n_elem_coarsen &&
+575           error_per_parent[parent->id()] <= bottom_error)
+576         elem->set_refinement_flag(Elem::COARSEN);
+577 
+578       if (!_coarsen_by_parents && n_elem_coarsen &&
+579           error_per_cell[elem->id()] <= bottom_error)
+580         elem->set_refinement_flag(Elem::COARSEN);
+581 
+582       if (n_elem_refine &&
+583           elem->level() < _max_h_level &&
+584           error_per_cell[elem->id()] >= top_error)
+585         elem->set_refinement_flag(Elem::REFINE);
+586     }
+587 }
+.fi
+.SS "void libMesh::MeshRefinement::flag_elements_by_error_fraction (const \fBErrorVector\fP &error_per_cell, const \fBReal\fPrefine_fraction = \fC0\&.3\fP, const \fBReal\fPcoarsen_fraction = \fC0\&.0\fP, const unsigned intmax_level = \fC\fBlibMesh::invalid_uint\fP\fP)"
+Flags elements for coarsening and refinement based on the computed error passed in \fCerror_per_cell\fP\&. The two fractions \fCrefine_fraction\fP and \fCcoarsen_fraction\fP must be in $ [0,1] $\&.
+.PP
+All the function arguments except error_per_cell have been deprecated, and will be removed in future \fBlibMesh\fP releases - to control these parameters, set the corresponding member variables\&. 
+.PP
+Definition at line 45 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _coarsen_by_parents, _coarsen_fraction, _max_h_level, _mesh, _refine_fraction, _use_member_parameters, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), clean_refinement_flags(), libMesh::Elem::COARSEN, libMesh::ParallelObject::comm(), create_parent_error_vector(), libMesh::ErrorVectorReal, libMesh::DofObject::id(), libMesh::invalid_uint, libMesh::Elem::level(), std::max(), libMesh::Parallel::Communicator::max(), std::min(), libMesh::Parallel::Communicator::min(), libMesh::Elem::parent(), libMesh::Real, libMesh::Elem::REFINE, and libMesh::Elem::set_refinement_flag()\&.
+.PP
+.nf
+49 {
+50   parallel_object_only();
+51 
+52   // The function arguments are currently just there for
+53   // backwards_compatibility
+54   if (!_use_member_parameters)
+55     {
+56       // If the user used non-default parameters, lets warn
+57       // that they're deprecated
+58       if (refine_frac != 0\&.3 ||
+59           coarsen_frac != 0\&.0 ||
+60           max_l != libMesh::invalid_uint)
+61         libmesh_deprecated();
+62 
+63       _refine_fraction = refine_frac;
+64       _coarsen_fraction = coarsen_frac;
+65       _max_h_level = max_l;
+66     }
+67 
+68   // Check for valid fractions\&.\&.
+69   // The fraction values must be in [0,1]
+70   libmesh_assert_greater_equal (_refine_fraction, 0);
+71   libmesh_assert_less_equal (_refine_fraction, 1);
+72   libmesh_assert_greater_equal (_coarsen_fraction, 0);
+73   libmesh_assert_less_equal (_coarsen_fraction, 1);
+74 
+75   // Clean up the refinement flags\&.  These could be left
+76   // over from previous refinement steps\&.
+77   this->clean_refinement_flags();
+78 
+79   // We're getting the minimum and maximum error values
+80   // for the ACTIVE elements
+81   Real error_min = 1\&.e30;
+82   Real error_max = 0\&.;
+83 
+84   // And, if necessary, for their parents
+85   Real parent_error_min = 1\&.e30;
+86   Real parent_error_max = 0\&.;
+87 
+88   // Prepare another error vector if we need to sum parent errors
+89   ErrorVector error_per_parent;
+90   if (_coarsen_by_parents)
+91     {
+92       create_parent_error_vector(error_per_cell,
+93                                  error_per_parent,
+94                                  parent_error_min,
+95                                  parent_error_max);
+96     }
+97 
+98   // We need to loop over all active elements to find the minimum
+99   MeshBase::element_iterator       el_it  =
+100     _mesh\&.active_local_elements_begin();
+101   const MeshBase::element_iterator el_end =
+102     _mesh\&.active_local_elements_end();
+103 
+104   for (; el_it != el_end; ++el_it)
+105     {
+106       const dof_id_type id  = (*el_it)->id();
+107       libmesh_assert_less (id, error_per_cell\&.size());
+108 
+109       error_max = std::max (error_max, error_per_cell[id]);
+110       error_min = std::min (error_min, error_per_cell[id]);
+111     }
+112   this->comm()\&.max(error_max);
+113   this->comm()\&.min(error_min);
+114 
+115   // Compute the cutoff values for coarsening and refinement
+116   const Real error_delta = (error_max - error_min);
+117   const Real parent_error_delta = parent_error_max - parent_error_min;
+118 
+119   const Real refine_cutoff  = (1\&.- _refine_fraction)*error_max;
+120   const Real coarsen_cutoff = _coarsen_fraction*error_delta + error_min;
+121   const Real parent_cutoff = _coarsen_fraction*parent_error_delta + error_min;
+122 
+123   //   // Print information about the error
+124   //   libMesh::out << " Error Information:"                     << std::endl
+125   //     << " ------------------"                     << std::endl
+126   //     << "   min:              " << error_min      << std::endl
+127   //     << "   max:              " << error_max      << std::endl
+128   //     << "   delta:            " << error_delta    << std::endl
+129   //     << "     refine_cutoff:  " << refine_cutoff  << std::endl
+130   //     << "     coarsen_cutoff: " << coarsen_cutoff << std::endl;
+131 
+132 
+133 
+134   // Loop over the elements and flag them for coarsening or
+135   // refinement based on the element error
+136 
+137   MeshBase::element_iterator       e_it  =
+138     _mesh\&.active_elements_begin();
+139   const MeshBase::element_iterator e_end =
+140     _mesh\&.active_elements_end();
+141   for (; e_it != e_end; ++e_it)
+142     {
+143       Elem* elem           = *e_it;
+144       const dof_id_type id = elem->id();
+145 
+146       libmesh_assert_less (id, error_per_cell\&.size());
+147 
+148       const ErrorVectorReal elem_error = error_per_cell[id];
+149 
+150       if (_coarsen_by_parents)
+151         {
+152           Elem* parent           = elem->parent();
+153           if (parent)
+154             {
+155               const dof_id_type parentid  = parent->id();
+156               if (error_per_parent[parentid] >= 0\&. &&
+157                   error_per_parent[parentid] <= parent_cutoff)
+158                 elem->set_refinement_flag(Elem::COARSEN);
+159             }
+160         }
+161       // Flag the element for coarsening if its error
+162       // is <= coarsen_fraction*delta + error_min
+163       else if (elem_error <= coarsen_cutoff)
+164         {
+165           elem->set_refinement_flag(Elem::COARSEN);
+166         }
+167 
+168       // Flag the element for refinement if its error
+169       // is >= refinement_cutoff\&.
+170       if (elem_error >= refine_cutoff)
+171         if (elem->level() < _max_h_level)
+172           elem->set_refinement_flag(Elem::REFINE);
+173     }
+174 }
+.fi
+.SS "void libMesh::MeshRefinement::flag_elements_by_error_tolerance (const \fBErrorVector\fP &error_per_cell)"
+Flags elements for coarsening and refinement based on the computed error passed in \fCerror_per_cell\fP\&. This method refines the worst elements with errors greater than \fCabsolute_global_tolerance\fP / n_active_elem, flagging at most \fCrefine_fraction\fP * n_active_elem It coarsens elements with errors less than \fCcoarsen_threshold\fP * \fCglobal_tolerance\fP / n_active_elem, flagging at most \fCcoarsen_fraction\fP * n_active_elem
+.PP
+The three fractions \fCrefine_fraction\fP \fCcoarsen_fraction\fP and \fCcoarsen_threshold\fP should be in $ [0,1] $\&. 
+.PP
+Definition at line 178 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _absolute_global_tolerance, _coarsen_by_parents, _coarsen_fraction, _coarsen_threshold, _max_h_level, _mesh, _refine_fraction, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::Elem::COARSEN, create_parent_error_vector(), libMesh::ErrorVectorReal, libMesh::DofObject::id(), libMesh::Elem::level(), libMesh::libmesh_assert_greater(), libMesh::MeshBase::n_active_elem(), libMesh::Elem::n_children(), libMesh::Elem::parent(), libMesh::Real, libMesh::Elem::REFINE, and libMesh::Elem::set_refinement_flag()\&.
+.PP
+.nf
+179 {
+180   parallel_object_only();
+181 
+182   libmesh_assert_greater (_coarsen_threshold, 0);
+183 
+184   // Check for valid fractions\&.\&.
+185   // The fraction values must be in [0,1]
+186   libmesh_assert_greater_equal (_refine_fraction, 0);
+187   libmesh_assert_less_equal (_refine_fraction, 1);
+188   libmesh_assert_greater_equal (_coarsen_fraction, 0);
+189   libmesh_assert_less_equal (_coarsen_fraction, 1);
+190 
+191   // How much error per cell will we tolerate?
+192   const Real local_refinement_tolerance =
+193     _absolute_global_tolerance / std::sqrt(static_cast<Real>(_mesh\&.n_active_elem()));
+194   const Real local_coarsening_tolerance =
+195     local_refinement_tolerance * _coarsen_threshold;
+196 
+197   // Prepare another error vector if we need to sum parent errors
+198   ErrorVector error_per_parent;
+199   if (_coarsen_by_parents)
+200     {
+201       Real parent_error_min, parent_error_max;
+202 
+203       create_parent_error_vector(error_per_cell_in,
+204                                  error_per_parent,
+205                                  parent_error_min,
+206                                  parent_error_max);
+207     }
+208 
+209   MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+210   const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+211 
+212   for (; elem_it != elem_end; ++elem_it)
+213     {
+214       Elem* elem = *elem_it;
+215       Elem* parent = elem->parent();
+216       const dof_id_type elem_number    = elem->id();
+217       const ErrorVectorReal elem_error = error_per_cell_in[elem_number];
+218 
+219       if (elem_error > local_refinement_tolerance &&
+220           elem->level() < _max_h_level)
+221         elem->set_refinement_flag(Elem::REFINE);
+222 
+223       if (!_coarsen_by_parents && elem_error <
+224           local_coarsening_tolerance)
+225         elem->set_refinement_flag(Elem::COARSEN);
+226 
+227       if (_coarsen_by_parents && parent)
+228         {
+229           ErrorVectorReal parent_error = error_per_parent[parent->id()];
+230           if (parent_error >= 0\&.)
+231             {
+232               const Real parent_coarsening_tolerance =
+233                 std::sqrt(parent->n_children() *
+234                           local_coarsening_tolerance *
+235                           local_coarsening_tolerance);
+236               if (parent_error < parent_coarsening_tolerance)
+237                 elem->set_refinement_flag(Elem::COARSEN);
+238             }
+239         }
+240     }
+241 }
+.fi
+.SS "void libMesh::MeshRefinement::flag_elements_by_mean_stddev (const \fBErrorVector\fP &error_per_cell, const \fBReal\fPrefine_fraction = \fC1\&.0\fP, const \fBReal\fPcoarsen_fraction = \fC0\&.0\fP, const unsigned intmax_level = \fC\fBlibMesh::invalid_uint\fP\fP)"
+Flags elements for coarsening and refinement based on the computed error passed in \fCerror_per_cell\fP\&. This method picks the top \fCrefine_fraction\fP * \fCstddev\fP + \fCmean\fP elements for refinement and the bottom \fCmean\fP - \fCcoarsen_fraction\fP * \fCstddev\fP elements for coarsening\&. The two fractions \fCrefine_fraction\fP and \fCcoarsen_fraction\fP must be in $ [0,1] $\&.
+.PP
+All the function arguments except error_per_cell have been deprecated, and will be removed in future \fBlibMesh\fP releases - to control these parameters, set the corresponding member variables\&. 
+.PP
+Definition at line 591 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _coarsen_fraction, _max_h_level, _mesh, _refine_fraction, _use_member_parameters, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::Elem::COARSEN, libMesh::ErrorVectorReal, libMesh::DofObject::id(), libMesh::invalid_uint, libMesh::Elem::level(), std::max(), libMesh::ErrorVector::mean(), libMesh::Real, libMesh::Elem::REFINE, libMesh::Elem::set_refinement_flag(), and libMesh::ErrorVector::variance()\&.
+.PP
+.nf
+595 {
+596   // The function arguments are currently just there for
+597   // backwards_compatibility
+598   if (!_use_member_parameters)
+599     {
+600       // If the user used non-default parameters, lets warn
+601       // that they're deprecated
+602       if (refine_frac != 0\&.3 ||
+603           coarsen_frac != 0\&.0 ||
+604           max_l != libMesh::invalid_uint)
+605         libmesh_deprecated();
+606 
+607       _refine_fraction = refine_frac;
+608       _coarsen_fraction = coarsen_frac;
+609       _max_h_level = max_l;
+610     }
+611 
+612   // Get the mean value from the error vector
+613   const Real mean = error_per_cell\&.mean();
+614 
+615   // Get the standard deviation\&.  This equals the
+616   // square-root of the variance
+617   const Real stddev = std::sqrt (error_per_cell\&.variance());
+618 
+619   // Check for valid fractions
+620   libmesh_assert_greater_equal (_refine_fraction, 0);
+621   libmesh_assert_less_equal (_refine_fraction, 1);
+622   libmesh_assert_greater_equal (_coarsen_fraction, 0);
+623   libmesh_assert_less_equal (_coarsen_fraction, 1);
+624 
+625   // The refine and coarsen cutoff
+626   const Real refine_cutoff  =  mean + _refine_fraction  * stddev;
+627   const Real coarsen_cutoff =  std::max(mean - _coarsen_fraction * stddev, 0\&.);
+628 
+629   // Loop over the elements and flag them for coarsening or
+630   // refinement based on the element error
+631   MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+632   const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+633 
+634   for (; elem_it != elem_end; ++elem_it)
+635     {
+636       Elem* elem             = *elem_it;
+637       const dof_id_type id  = elem->id();
+638 
+639       libmesh_assert_less (id, error_per_cell\&.size());
+640 
+641       const ErrorVectorReal elem_error = error_per_cell[id];
+642 
+643       // Possibly flag the element for coarsening \&.\&.\&.
+644       if (elem_error <= coarsen_cutoff)
+645         elem->set_refinement_flag(Elem::COARSEN);
+646 
+647       // \&.\&.\&. or refinement
+648       if ((elem_error >= refine_cutoff) && (elem->level() < _max_h_level))
+649         elem->set_refinement_flag(Elem::REFINE);
+650     }
+651 }
+.fi
+.SS "bool libMesh::MeshRefinement::flag_elements_by_nelem_target (const \fBErrorVector\fP &error_per_cell)"
+Flags elements for coarsening and refinement based on the computed error passed in \fCerror_per_cell\fP\&. This method attempts to produce a mesh with slightly more than \fCnelem_target\fP active elements, trading element refinement for element coarsening when their error ratios exceed \fCcoarsen_threshold\fP\&. It flags no more than \fCrefine_fraction\fP * n_elem elements for refinement and flags no more than \fCcoarsen_fraction\fP * n_elem elements for coarsening\&. This method returns true if it has done all the AMR/C it can do in a single step, or false if further adaptive steps may be required to produce a mesh with a narrow error distribution and the right number of elements\&. 
+.PP
+Definition at line 245 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _coarsen_by_parents, _coarsen_fraction, _coarsen_threshold, _max_h_level, _mesh, _nelem_target, _refine_fraction, libMesh::Elem::active(), libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::Parallel::Communicator::allgather(), libMesh::Elem::child(), clean_refinement_flags(), libMesh::Elem::COARSEN, libMesh::ParallelObject::comm(), create_parent_error_vector(), libMesh::dim, libMesh::Elem::has_children(), libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::max_elem_id(), libMesh::MeshBase::mesh_dimension(), std::min(), libMesh::MeshBase::n_active_elem(), libMesh::Elem::n_children(), libMesh::MeshBase::query_elem(), libMesh::Real, libMesh::Elem::REFINE, libMesh::remote_elem, and libMesh::Elem::set_refinement_flag()\&.
+.PP
+.nf
+246 {
+247   parallel_object_only();
+248 
+249   // Check for valid fractions\&.\&.
+250   // The fraction values must be in [0,1]
+251   libmesh_assert_greater_equal (_refine_fraction, 0);
+252   libmesh_assert_less_equal (_refine_fraction, 1);
+253   libmesh_assert_greater_equal (_coarsen_fraction, 0);
+254   libmesh_assert_less_equal (_coarsen_fraction, 1);
+255 
+256   // This function is currently only coded to work when coarsening by
+257   // parents - it's too hard to guess how many coarsenings will be
+258   // performed otherwise\&.
+259   libmesh_assert (_coarsen_by_parents);
+260 
+261   // The number of active elements in the mesh - hopefully less than
+262   // 2 billion on 32 bit machines
+263   const dof_id_type n_active_elem  = _mesh\&.n_active_elem();
+264 
+265   // The maximum number of active elements to flag for coarsening
+266   const dof_id_type max_elem_coarsen =
+267     static_cast<dof_id_type>(_coarsen_fraction * n_active_elem) + 1;
+268 
+269   // The maximum number of elements to flag for refinement
+270   const dof_id_type max_elem_refine  =
+271     static_cast<dof_id_type>(_refine_fraction  * n_active_elem) + 1;
+272 
+273   // Clean up the refinement flags\&.  These could be left
+274   // over from previous refinement steps\&.
+275   this->clean_refinement_flags();
+276 
+277   // The target number of elements to add or remove
+278   const std::ptrdiff_t n_elem_new = _nelem_target - n_active_elem;
+279 
+280   // Create an vector with active element errors and ids,
+281   // sorted by highest errors first
+282   const dof_id_type max_elem_id = _mesh\&.max_elem_id();
+283   std::vector<std::pair<ErrorVectorReal, dof_id_type> > sorted_error;
+284 
+285   sorted_error\&.reserve (n_active_elem);
+286 
+287   // On a ParallelMesh, we need to communicate to know which remote ids
+288   // correspond to active elements\&.
+289   {
+290     std::vector<bool> is_active(max_elem_id, false);
+291 
+292     MeshBase::element_iterator       elem_it  = _mesh\&.active_local_elements_begin();
+293     const MeshBase::element_iterator elem_end = _mesh\&.active_local_elements_end();
+294     for (; elem_it != elem_end; ++elem_it)
+295       {
+296         const dof_id_type eid = (*elem_it)->id();
+297         is_active[eid] = true;
+298         libmesh_assert_less (eid, error_per_cell\&.size());
+299         sorted_error\&.push_back
+300           (std::make_pair(error_per_cell[eid], eid));
+301       }
+302 
+303     this->comm()\&.max(is_active);
+304 
+305     this->comm()\&.allgather(sorted_error);
+306   }
+307 
+308   // Default sort works since pairs are sorted lexicographically
+309   std::sort (sorted_error\&.begin(), sorted_error\&.end());
+310   std::reverse (sorted_error\&.begin(), sorted_error\&.end());
+311 
+312   // Create a sorted error vector with coarsenable parent elements
+313   // only, sorted by lowest errors first
+314   ErrorVector error_per_parent;
+315   std::vector<std::pair<ErrorVectorReal, dof_id_type> > sorted_parent_error;
+316   Real parent_error_min, parent_error_max;
+317 
+318   create_parent_error_vector(error_per_cell,
+319                              error_per_parent,
+320                              parent_error_min,
+321                              parent_error_max);
+322 
+323   // create_parent_error_vector sets values for non-parents and
+324   // non-coarsenable parents to -1\&.  Get rid of them\&.
+325   for (dof_id_type i=0; i != error_per_parent\&.size(); ++i)
+326     if (error_per_parent[i] != -1)
+327       sorted_parent_error\&.push_back(std::make_pair(error_per_parent[i], i));
+328 
+329   std::sort (sorted_parent_error\&.begin(), sorted_parent_error\&.end());
+330 
+331   // Keep track of how many elements we plan to coarsen & refine
+332   dof_id_type coarsen_count = 0;
+333   dof_id_type refine_count = 0;
+334 
+335   const unsigned int dim = _mesh\&.mesh_dimension();
+336   unsigned int twotodim = 1;
+337   for (unsigned int i=0; i!=dim; ++i)
+338     twotodim *= 2;
+339 
+340   // First, let's try to get our element count to target_nelem
+341   if (n_elem_new >= 0)
+342     {
+343       // Every element refinement creates at least
+344       // 2^dim-1 new elements
+345       refine_count =
+346         std::min(libmesh_cast_int<dof_id_type>(n_elem_new / (twotodim-1)),
+347                  max_elem_refine);
+348     }
+349   else
+350     {
+351       // Every successful element coarsening is likely to destroy
+352       // 2^dim-1 net elements\&.
+353       coarsen_count =
+354         std::min(libmesh_cast_int<dof_id_type>(-n_elem_new / (twotodim-1)),
+355                  max_elem_coarsen);
+356     }
+357 
+358   // Next, let's see if we can trade any refinement for coarsening
+359   while (coarsen_count < max_elem_coarsen &&
+360          refine_count < max_elem_refine &&
+361          coarsen_count < sorted_parent_error\&.size() &&
+362          refine_count < sorted_error\&.size() &&
+363          sorted_error[refine_count]\&.first >
+364          sorted_parent_error[coarsen_count]\&.first * _coarsen_threshold)
+365     {
+366       coarsen_count++;
+367       refine_count++;
+368     }
+369 
+370   // On a ParallelMesh, we need to communicate to know which remote ids
+371   // correspond to refinable elements
+372   dof_id_type successful_refine_count = 0;
+373   {
+374     std::vector<bool> is_refinable(max_elem_id, false);
+375 
+376     for (dof_id_type i=0; i != sorted_error\&.size(); ++i)
+377       {
+378         dof_id_type eid = sorted_error[i]\&.second;
+379         Elem *elem = _mesh\&.query_elem(eid);
+380         if (elem && elem->level() < _max_h_level)
+381           is_refinable[eid] = true;
+382       }
+383     this->comm()\&.max(is_refinable);
+384 
+385     if (refine_count > max_elem_refine)
+386       refine_count = max_elem_refine;
+387     for (dof_id_type i=0; i != sorted_error\&.size(); ++i)
+388       {
+389         if (successful_refine_count >= refine_count)
+390           break;
+391 
+392         dof_id_type eid = sorted_error[i]\&.second;
+393         Elem *elem = _mesh\&.query_elem(eid);
+394         if (is_refinable[eid])
+395           {
+396             if (elem)
+397               elem->set_refinement_flag(Elem::REFINE);
+398             successful_refine_count++;
+399           }
+400       }
+401   }
+402 
+403   // If we couldn't refine enough elements, don't coarsen too many
+404   // either
+405   if (coarsen_count < (refine_count - successful_refine_count))
+406     coarsen_count = 0;
+407   else
+408     coarsen_count -= (refine_count - successful_refine_count);
+409 
+410   if (coarsen_count > max_elem_coarsen)
+411     coarsen_count = max_elem_coarsen;
+412 
+413   dof_id_type successful_coarsen_count = 0;
+414   if (coarsen_count)
+415     {
+416       for (dof_id_type i=0; i != sorted_parent_error\&.size(); ++i)
+417         {
+418           if (successful_coarsen_count >= coarsen_count * twotodim)
+419             break;
+420 
+421           dof_id_type parent_id = sorted_parent_error[i]\&.second;
+422           Elem *parent = _mesh\&.query_elem(parent_id);
+423 
+424           // On a ParallelMesh we skip remote elements
+425           if (!parent)
+426             continue;
+427 
+428           libmesh_assert(parent->has_children());
+429           for (unsigned int c=0; c != parent->n_children(); ++c)
+430             {
+431               Elem *elem = parent->child(c);
+432               if (elem && elem != remote_elem)
+433                 {
+434                   libmesh_assert(elem->active());
+435                   elem->set_refinement_flag(Elem::COARSEN);
+436                   successful_coarsen_count++;
+437                 }
+438             }
+439         }
+440     }
+441 
+442   // Return true if we've done all the AMR/C we can
+443   if (!successful_coarsen_count &&
+444       !successful_refine_count)
+445     return true;
+446   // And false if there may still be more to do\&.
+447   return false;
+448 }
+.fi
+.SS "const \fBMeshBase\fP& libMesh::MeshRefinement::get_mesh () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the \fC\fBMeshBase\fP\fP object associated with this object\&. 
+.RE
+.PP
+
+.PP
+Definition at line 320 of file mesh_refinement\&.h\&.
+.PP
+References _mesh\&.
+.PP
+.nf
+320 { return _mesh; }
+.fi
+.SS "\fBMeshBase\fP& libMesh::MeshRefinement::get_mesh ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the \fC\fBMeshBase\fP\fP object associated with this object\&. 
+.RE
+.PP
+
+.PP
+Definition at line 326 of file mesh_refinement\&.h\&.
+.PP
+References _mesh\&.
+.PP
+.nf
+326 { return _mesh; }
+.fi
+.SS "bool libMesh::MeshRefinement::has_topological_neighbor (\fBElem\fP *elem, const \fBPointLocatorBase\fP *point_locator, \fBElem\fP *neighbor)\fC [private]\fP"
+Local dispatch function for checking the correct has_neighbor function from the \fBElem\fP class 
+.PP
+Definition at line 1826 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _periodic_boundaries, libMesh::Elem::has_neighbor(), libMesh::Elem::has_topological_neighbor(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by make_coarsening_compatible(), and make_refinement_compatible()\&.
+.PP
+.nf
+1829 {
+1830 #ifdef LIBMESH_ENABLE_PERIODIC
+1831   if (_periodic_boundaries && !_periodic_boundaries->empty())
+1832     {
+1833       libmesh_assert(point_locator);
+1834       return elem->has_topological_neighbor(neighbor, _mesh, *point_locator, _periodic_boundaries);
+1835     }
+1836 #endif
+1837   return elem->has_neighbor(neighbor);
+1838 }
+.fi
+.SS "bool libMesh::MeshRefinement::limit_level_mismatch_at_edge (const unsigned intmax_mismatch)\fC [private]\fP"
+
+.PP
+Definition at line 131 of file mesh_refinement_smoothing\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::Elem::build_edge(), libMesh::ParallelObject::comm(), libMesh::Elem::level(), std::max(), libMesh::Parallel::Communicator::max(), libMesh::Elem::n_edges(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::Elem::parent(), libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), and libMesh::swap()\&.
+.PP
+Referenced by coarsen_elements(), refine_and_coarsen_elements(), and refine_elements()\&.
+.PP
+.nf
+132 {
+133   // This function must be run on all processors at once
+134   parallel_object_only();
+135 
+136   bool flags_changed = false;
+137 
+138 
+139   // Maps holding the maximum element level that touches an edge
+140   std::map<std::pair<unsigned int, unsigned int>, unsigned char>
+141     max_level_at_edge;
+142   std::map<std::pair<unsigned int, unsigned int>, unsigned char>
+143     max_p_level_at_edge;
+144 
+145   // Loop over all the active elements & fill the maps
+146   {
+147     MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+148     const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+149 
+150     for (; elem_it != elem_end; ++elem_it)
+151       {
+152         const Elem* elem = *elem_it;
+153         const unsigned char elem_level =
+154           elem->level() + ((elem->refinement_flag() == Elem::REFINE) ? 1 : 0);
+155         const unsigned char elem_p_level =
+156           elem->p_level() + ((elem->p_refinement_flag() == Elem::REFINE) ? 1 : 0);
+157 
+158         // Set the max_level at each edge
+159         for (unsigned int n=0; n<elem->n_edges(); n++)
+160           {
+161             AutoPtr<Elem> edge = elem->build_edge(n);
+162             dof_id_type childnode0 = edge->node(0);
+163             dof_id_type childnode1 = edge->node(1);
+164             if (childnode1 < childnode0)
+165               std::swap(childnode0, childnode1);
+166 
+167             for (const Elem *p = elem; p != NULL; p = p->parent())
+168               {
+169                 AutoPtr<Elem> pedge = p->build_edge(n);
+170                 dof_id_type node0 = pedge->node(0);
+171                 dof_id_type node1 = pedge->node(1);
+172 
+173                 if (node1 < node0)
+174                   std::swap(node0, node1);
+175 
+176                 // If elem does not share this edge with its ancestor
+177                 // p, refinement levels of elements sharing p's edge
+178                 // are not restricted by refinement levels of elem\&.
+179                 // Furthermore, elem will not share this edge with any
+180                 // of p's ancestors, so we can safely break out of the
+181                 // for loop early\&.
+182                 if (node0 != childnode0 && node1 != childnode1)
+183                   break;
+184 
+185                 childnode0 = node0;
+186                 childnode1 = node1;
+187 
+188                 std::pair<unsigned int, unsigned int> edge_key =
+189                   std::make_pair(node0, node1);
+190 
+191                 if (max_level_at_edge\&.find(edge_key) ==
+192                     max_level_at_edge\&.end())
+193                   {
+194                     max_level_at_edge[edge_key] = elem_level;
+195                     max_p_level_at_edge[edge_key] = elem_p_level;
+196                   }
+197                 else
+198                   {
+199                     max_level_at_edge[edge_key] =
+200                       std::max (max_level_at_edge[edge_key], elem_level);
+201                     max_p_level_at_edge[edge_key] =
+202                       std::max (max_p_level_at_edge[edge_key], elem_p_level);
+203                   }
+204               }
+205           }
+206       }
+207   }
+208 
+209 
+210   // Now loop over the active elements and flag the elements
+211   // who violate the requested level mismatch
+212   {
+213     MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+214     const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+215 
+216     for (; elem_it != elem_end; ++elem_it)
+217       {
+218         Elem* elem = *elem_it;
+219         const unsigned int elem_level = elem->level();
+220         const unsigned int elem_p_level = elem->p_level();
+221 
+222         // Skip the element if it is already fully flagged
+223         if (elem->refinement_flag() == Elem::REFINE &&
+224             elem->p_refinement_flag() == Elem::REFINE)
+225           continue;
+226 
+227         // Loop over the nodes, check for possible mismatch
+228         for (unsigned int n=0; n<elem->n_edges(); n++)
+229           {
+230             AutoPtr<Elem> edge = elem->build_edge(n);
+231             dof_id_type node0 = edge->node(0);
+232             dof_id_type node1 = edge->node(1);
+233             if (node1 < node0)
+234               std::swap(node0, node1);
+235 
+236             std::pair<dof_id_type, dof_id_type> edge_key =
+237               std::make_pair(node0, node1);
+238 
+239             // Flag the element for refinement if it violates
+240             // the requested level mismatch
+241             if ( (elem_level + max_mismatch) < max_level_at_edge[edge_key]
+242                  && elem->refinement_flag() != Elem::REFINE)
+243               {
+244                 elem->set_refinement_flag (Elem::REFINE);
+245                 flags_changed = true;
+246               }
+247             if ( (elem_p_level + max_mismatch) < max_p_level_at_edge[edge_key]
+248                  && elem->p_refinement_flag() != Elem::REFINE)
+249               {
+250                 elem->set_p_refinement_flag (Elem::REFINE);
+251                 flags_changed = true;
+252               }
+253           }
+254       }
+255   }
+256 
+257   // If flags changed on any processor then they changed globally
+258   this->comm()\&.max(flags_changed);
+259 
+260   return flags_changed;
+261 }
+.fi
+.SS "bool libMesh::MeshRefinement::limit_level_mismatch_at_node (const unsigned intmax_mismatch)\fC [private]\fP"
+This algorithm restricts the maximum level mismatch at any node in the mesh\&. Calling this with \fCmax_mismatch\fP equal to 1 would transform this mesh: 
+.PP
+.nf
+o---o---o---o---o-------o-------o
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o       |       |
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o-------o-------o
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o       |       |
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o-------o-------o
+|       |       |               |
+|       |       |               |
+|       |       |               |
+|       |       |               |
+|       |       |               |
+o-------o-------o               |
+|       |       |               |
+|       |       |               |
+|       |       |               |
+|       |       |               |
+|       |       |               |
+o-------o-------o---------------o
+
+.fi
+.PP
+.PP
+into this:
+.PP
+.PP
+.nf
+o---o---o---o---o-------o-------o
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o       |       |
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o-------o-------o
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o       |       |
+|   |   |   |   |       |       |
+|   |   |   |   |       |       |
+o---o---o---o---o-------o-------o
+|       |       |       :       |
+|       |       |       :       |
+|       |       |       :       |
+|       |       |       :       |
+|       |       |       :       |
+o-------o-------o.......o.......o
+|       |       |       :       |
+|       |       |       :       |
+|       |       |       :       |
+|       |       |       :       |
+|       |       |       :       |
+o-------o-------o-------o-------o
+.fi
+.PP
+ by refining the indicated element 
+.PP
+Definition at line 39 of file mesh_refinement_smoothing\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::ParallelObject::comm(), libMesh::Elem::level(), std::max(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_refinement_flag(), and libMesh::Elem::set_refinement_flag()\&.
+.PP
+Referenced by coarsen_elements(), refine_and_coarsen_elements(), and refine_elements()\&.
+.PP
+.nf
+40 {
+41   // This function must be run on all processors at once
+42   parallel_object_only();
+43 
+44   bool flags_changed = false;
+45 
+46 
+47   // Vector holding the maximum element level that touches a node\&.
+48   std::vector<unsigned char> max_level_at_node (_mesh\&.n_nodes(), 0);
+49   std::vector<unsigned char> max_p_level_at_node (_mesh\&.n_nodes(), 0);
+50 
+51 
+52   // Loop over all the active elements & fill the vector
+53   {
+54     MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+55     const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+56 
+57     for (; elem_it != elem_end; ++elem_it)
+58       {
+59         const Elem* elem = *elem_it;
+60         const unsigned char elem_level =
+61           elem->level() + ((elem->refinement_flag() == Elem::REFINE) ? 1 : 0);
+62         const unsigned char elem_p_level =
+63           elem->p_level() + ((elem->p_refinement_flag() == Elem::REFINE) ? 1 : 0);
+64 
+65         // Set the max_level at each node
+66         for (unsigned int n=0; n<elem->n_nodes(); n++)
+67           {
+68             const dof_id_type node_number = elem->node(n);
+69 
+70             libmesh_assert_less (node_number, max_level_at_node\&.size());
+71 
+72             max_level_at_node[node_number] =
+73               std::max (max_level_at_node[node_number], elem_level);
+74             max_p_level_at_node[node_number] =
+75               std::max (max_p_level_at_node[node_number], elem_p_level);
+76           }
+77       }
+78   }
+79 
+80 
+81   // Now loop over the active elements and flag the elements
+82   // who violate the requested level mismatch
+83   {
+84     MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+85     const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+86 
+87     for (; elem_it != elem_end; ++elem_it)
+88       {
+89         Elem* elem = *elem_it;
+90         const unsigned int elem_level = elem->level();
+91         const unsigned int elem_p_level = elem->p_level();
+92 
+93         // Skip the element if it is already fully flagged
+94         if (elem->refinement_flag() == Elem::REFINE &&
+95             elem->p_refinement_flag() == Elem::REFINE)
+96           continue;
+97 
+98         // Loop over the nodes, check for possible mismatch
+99         for (unsigned int n=0; n<elem->n_nodes(); n++)
+100           {
+101             const dof_id_type node_number = elem->node(n);
+102 
+103             // Flag the element for refinement if it violates
+104             // the requested level mismatch
+105             if ( (elem_level + max_mismatch) < max_level_at_node[node_number]
+106                  && elem->refinement_flag() != Elem::REFINE)
+107               {
+108                 elem->set_refinement_flag (Elem::REFINE);
+109                 flags_changed = true;
+110               }
+111             if ( (elem_p_level + max_mismatch) < max_p_level_at_node[node_number]
+112                  && elem->p_refinement_flag() != Elem::REFINE)
+113               {
+114                 elem->set_p_refinement_flag (Elem::REFINE);
+115                 flags_changed = true;
+116               }
+117           }
+118       }
+119   }
+120 
+121   // If flags changed on any processor then they changed globally
+122   this->comm()\&.max(flags_changed);
+123 
+124   return flags_changed;
+125 }
+.fi
+.SS "bool libMesh::MeshRefinement::make_coarsening_compatible (const boolmaintain_level_one)\fC [private]\fP"
+Take user-specified coarsening flags and augment them so that level-one dependency is satisfied\&. 
+.PP
+Definition at line 956 of file mesh_refinement\&.C\&.
+.PP
+References _face_level_mismatch_limit, _mesh, _periodic_boundaries, libMesh::Elem::active(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::Elem::ancestor(), libMesh::Elem::child(), libMesh::Elem::COARSEN, libMesh::Elem::COARSEN_INACTIVE, libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::AutoPtr< Tp >::get(), libMesh::Elem::has_children(), has_topological_neighbor(), libMesh::Elem::INACTIVE, libMesh::MeshBase::is_serial(), libMesh::Elem::level(), libMesh::MeshBase::level_elements_begin(), libMesh::MeshBase::level_elements_end(), libMesh::libmesh_assert(), std::max(), libMesh::MeshTools::max_level(), libMesh::Parallel::Communicator::min(), libMesh::Elem::n_children(), libMesh::Elem::n_neighbors(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::remote_elem, libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::MeshBase::sub_point_locator(), topological_neighbor(), and libMesh::Parallel::verify()\&.
+.PP
+Referenced by coarsen_elements(), and refine_and_coarsen_elements()\&.
+.PP
+.nf
+957 {
+958   // This function must be run on all processors at once
+959   parallel_object_only();
+960 
+961   // We may need a PointLocator for topological_neighbor() tests
+962   // later, which we need to make sure gets constructed on all
+963   // processors at once\&.
+964   AutoPtr<PointLocatorBase> point_locator;
+965 
+966 #ifdef LIBMESH_ENABLE_PERIODIC
+967   bool has_periodic_boundaries =
+968     _periodic_boundaries && !_periodic_boundaries->empty();
+969   libmesh_assert(this->comm()\&.verify(has_periodic_boundaries));
+970 
+971   if (has_periodic_boundaries)
+972     point_locator = _mesh\&.sub_point_locator();
+973 #endif
+974 
+975   START_LOG ("make_coarsening_compatible()", "MeshRefinement");
+976 
+977   bool _maintain_level_one = maintain_level_one;
+978 
+979   // If the user used non-default parameters, let's warn that they're
+980   // deprecated
+981   if (!maintain_level_one)
+982     {
+983       libmesh_deprecated();
+984     }
+985   else
+986     _maintain_level_one = _face_level_mismatch_limit;
+987 
+988 
+989   // Unless we encounter a specific situation level-one
+990   // will be satisfied after executing this loop just once
+991   bool level_one_satisfied = true;
+992 
+993 
+994   // Unless we encounter a specific situation we will be compatible
+995   // with any selected refinement flags
+996   bool compatible_with_refinement = true;
+997 
+998 
+999   // find the maximum h and p levels in the mesh
+1000   unsigned int max_level = 0;
+1001   unsigned int max_p_level = 0;
+1002 
+1003   {
+1004     // First we look at all the active level-0 elements\&.  Since it doesn't make
+1005     // sense to coarsen them we must un-set their coarsen flags if
+1006     // they are set\&.
+1007     MeshBase::element_iterator       el     = _mesh\&.active_elements_begin();
+1008     const MeshBase::element_iterator end_el = _mesh\&.active_elements_end();
+1009 
+1010     for (; el != end_el; ++el)
+1011       {
+1012         Elem *elem = *el;
+1013         max_level = std::max(max_level, elem->level());
+1014         max_p_level =
+1015           std::max(max_p_level,
+1016                    static_cast<unsigned int>(elem->p_level()));
+1017 
+1018         if ((elem->level() == 0) &&
+1019             (elem->refinement_flag() == Elem::COARSEN))
+1020           elem->set_refinement_flag(Elem::DO_NOTHING);
+1021 
+1022         if ((elem->p_level() == 0) &&
+1023             (elem->p_refinement_flag() == Elem::COARSEN))
+1024           elem->set_p_refinement_flag(Elem::DO_NOTHING);
+1025       }
+1026   }
+1027 
+1028   // if there are no refined elements on this processor then
+1029   // there is no work for us to do
+1030   if (max_level == 0 && max_p_level == 0)
+1031     {
+1032       STOP_LOG ("make_coarsening_compatible()", "MeshRefinement");
+1033 
+1034       // But we still have to check with other processors
+1035       this->comm()\&.min(compatible_with_refinement);
+1036 
+1037       return compatible_with_refinement;
+1038     }
+1039 
+1040 
+1041 
+1042   // Loop over all the active elements\&.  If an element is marked
+1043   // for coarsening we better check its neighbors\&.  If ANY of these neighbors
+1044   // are marked for refinement AND are at the same level then there is a
+1045   // conflict\&.  By convention refinement wins, so we un-mark the element for
+1046   // coarsening\&.  Level-one would be violated in this case so we need to re-run
+1047   // the loop\&.
+1048   if (_maintain_level_one)
+1049     {
+1050 
+1051     repeat:
+1052       level_one_satisfied = true;
+1053 
+1054       do
+1055         {
+1056           level_one_satisfied = true;
+1057 
+1058           MeshBase::element_iterator       el     = _mesh\&.active_elements_begin();
+1059           const MeshBase::element_iterator end_el = _mesh\&.active_elements_end();
+1060 
+1061           for (; el != end_el; ++el)
+1062             {
+1063               Elem* elem = *el;
+1064               bool my_flag_changed = false;
+1065 
+1066               if (elem->refinement_flag() == Elem::COARSEN) // If the element is active and
+1067                 // the coarsen flag is set
+1068                 {
+1069                   const unsigned int my_level = elem->level();
+1070 
+1071                   for (unsigned int n=0; n<elem->n_neighbors(); n++)
+1072                     {
+1073                       const Elem* neighbor =
+1074                         topological_neighbor(elem, point_locator\&.get(), n);
+1075 
+1076                       if (neighbor != NULL &&      // I have a
+1077                           neighbor != remote_elem) // neighbor here
+1078                         {
+1079                           if (neighbor->active()) // and it is active
+1080                             {
+1081                               if ((neighbor->level() == my_level) &&
+1082                                   (neighbor->refinement_flag() == Elem::REFINE)) // the neighbor is at my level
+1083                                 // and wants to be refined
+1084                                 {
+1085                                   elem->set_refinement_flag(Elem::DO_NOTHING);
+1086                                   my_flag_changed = true;
+1087                                   break;
+1088                                 }
+1089                             }
+1090                           else // I have a neighbor and it is not active\&. That means it has children\&.
+1091                             {  // While it _may_ be possible to coarsen us if all the children of
+1092                               // that element want to be coarsened, it is impossible to know at this
+1093                               // stage\&.  Forget about it for the moment\&.\&.\&.  This can be handled in
+1094                               // two steps\&.
+1095                               elem->set_refinement_flag(Elem::DO_NOTHING);
+1096                               my_flag_changed = true;
+1097                               break;
+1098                             }
+1099                         }
+1100                     }
+1101                 }
+1102               if (elem->p_refinement_flag() == Elem::COARSEN) // If
+1103                 // the element is active and the order reduction flag is set
+1104                 {
+1105                   const unsigned int my_p_level = elem->p_level();
+1106 
+1107                   for (unsigned int n=0; n<elem->n_neighbors(); n++)
+1108                     {
+1109                       const Elem* neighbor =
+1110                         topological_neighbor(elem, point_locator\&.get(), n);
+1111 
+1112                       if (neighbor != NULL &&      // I have a
+1113                           neighbor != remote_elem) // neighbor here
+1114                         {
+1115                           if (neighbor->active()) // and it is active
+1116                             {
+1117                               if ((neighbor->p_level() > my_p_level &&
+1118                                    neighbor->p_refinement_flag() != Elem::COARSEN)
+1119                                   || (neighbor->p_level() == my_p_level &&
+1120                                       neighbor->p_refinement_flag() == Elem::REFINE))
+1121                                 {
+1122                                   elem->set_p_refinement_flag(Elem::DO_NOTHING);
+1123                                   my_flag_changed = true;
+1124                                   break;
+1125                                 }
+1126                             }
+1127                           else // I have a neighbor and it is not active\&.
+1128                             {  // We need to find which of its children
+1129                               // have me as a neighbor, and maintain
+1130                               // level one p compatibility with them\&.
+1131                               // Because we currently have level one h
+1132                               // compatibility, we don't need to check
+1133                               // grandchildren
+1134 
+1135                               libmesh_assert(neighbor->has_children());
+1136                               for (unsigned int c=0; c!=neighbor->n_children(); c++)
+1137                                 {
+1138                                   Elem *subneighbor = neighbor->child(c);
+1139                                   if (subneighbor != remote_elem &&
+1140                                       subneighbor->active() &&
+1141                                       has_topological_neighbor(subneighbor, point_locator\&.get(), elem))
+1142                                     if ((subneighbor->p_level() > my_p_level &&
+1143                                          subneighbor->p_refinement_flag() != Elem::COARSEN)
+1144                                         || (subneighbor->p_level() == my_p_level &&
+1145                                             subneighbor->p_refinement_flag() == Elem::REFINE))
+1146                                       {
+1147                                         elem->set_p_refinement_flag(Elem::DO_NOTHING);
+1148                                         my_flag_changed = true;
+1149                                         break;
+1150                                       }
+1151                                 }
+1152                               if (my_flag_changed)
+1153                                 break;
+1154                             }
+1155                         }
+1156                     }
+1157                 }
+1158 
+1159               // If the current element's flag changed, we hadn't
+1160               // satisfied the level one rule\&.
+1161               if (my_flag_changed)
+1162                 level_one_satisfied = false;
+1163 
+1164               // Additionally, if it has non-local neighbors, and
+1165               // we're not in serial, then we'll eventually have to
+1166               // return compatible_with_refinement = false, because
+1167               // our change has to propagate to neighboring
+1168               // processors\&.
+1169               if (my_flag_changed && !_mesh\&.is_serial())
+1170                 for (unsigned int n=0; n != elem->n_neighbors(); ++n)
+1171                   {
+1172                     Elem* neigh =
+1173                       topological_neighbor(elem, point_locator\&.get(), n);
+1174 
+1175                     if (!neigh)
+1176                       continue;
+1177                     if (neigh == remote_elem ||
+1178                         neigh->processor_id() !=
+1179                         this->processor_id())
+1180                       {
+1181                         compatible_with_refinement = false;
+1182                         break;
+1183                       }
+1184                     // FIXME - for non-level one meshes we should
+1185                     // test all descendants
+1186                     if (neigh->has_children())
+1187                       for (unsigned int c=0; c != neigh->n_children(); ++c)
+1188                         if (neigh->child(c) == remote_elem ||
+1189                             neigh->child(c)->processor_id() !=
+1190                             this->processor_id())
+1191                           {
+1192                             compatible_with_refinement = false;
+1193                             break;
+1194                           }
+1195                   }
+1196             }
+1197         }
+1198       while (!level_one_satisfied);
+1199 
+1200     } // end if (_maintain_level_one)
+1201 
+1202 
+1203   // Next we look at all of the ancestor cells\&.
+1204   // If there is a parent cell with all of its children
+1205   // wanting to be unrefined then the element is a candidate
+1206   // for unrefinement\&.  If all the children don't
+1207   // all want to be unrefined then ALL of them need to have their
+1208   // unrefinement flags cleared\&.
+1209   for (int level=(max_level); level >= 0; level--)
+1210     {
+1211       MeshBase::element_iterator       el     = _mesh\&.level_elements_begin(level);
+1212       const MeshBase::element_iterator end_el = _mesh\&.level_elements_end(level);
+1213       for (; el != end_el; ++el)
+1214         {
+1215           Elem *elem = *el;
+1216           if (elem->ancestor())
+1217             {
+1218 
+1219               // right now the element hasn't been disqualified
+1220               // as a candidate for unrefinement
+1221               bool is_a_candidate = true;
+1222               bool found_remote_child = false;
+1223 
+1224               for (unsigned int c=0; c<elem->n_children(); c++)
+1225                 {
+1226                   Elem *child = elem->child(c);
+1227                   if (child == remote_elem)
+1228                     found_remote_child = true;
+1229                   else if ((child->refinement_flag() != Elem::COARSEN) ||
+1230                            !child->active() )
+1231                     is_a_candidate = false;
+1232                 }
+1233 
+1234               if (!is_a_candidate && !found_remote_child)
+1235                 {
+1236                   elem->set_refinement_flag(Elem::INACTIVE);
+1237 
+1238                   for (unsigned int c=0; c<elem->n_children(); c++)
+1239                     {
+1240                       Elem *child = elem->child(c);
+1241                       if (child == remote_elem)
+1242                         continue;
+1243                       if (child->refinement_flag() == Elem::COARSEN)
+1244                         {
+1245                           level_one_satisfied = false;
+1246                           child->set_refinement_flag(Elem::DO_NOTHING);
+1247                         }
+1248                     }
+1249                 }
+1250             }
+1251         }
+1252     }
+1253 
+1254   if (!level_one_satisfied && _maintain_level_one) goto repeat;
+1255 
+1256 
+1257   // If all the children of a parent are set to be coarsened
+1258   // then flag the parent so that they can kill thier kids\&.\&.\&.
+1259   MeshBase::element_iterator       all_el     = _mesh\&.elements_begin();
+1260   const MeshBase::element_iterator all_el_end = _mesh\&.elements_end();
+1261   for (; all_el != all_el_end; ++all_el)
+1262     {
+1263       Elem *elem = *all_el;
+1264       if (elem->ancestor())
+1265         {
+1266 
+1267           // Presume all the children are local and flagged for
+1268           // coarsening and then look for a contradiction
+1269           bool all_children_flagged_for_coarsening = true;
+1270           bool found_remote_child = false;
+1271 
+1272           for (unsigned int c=0; c<elem->n_children(); c++)
+1273             {
+1274               Elem *child = elem->child(c);
+1275               if (child == remote_elem)
+1276                 found_remote_child = true;
+1277               else if (child->refinement_flag() != Elem::COARSEN)
+1278                 all_children_flagged_for_coarsening = false;
+1279             }
+1280 
+1281           if (!found_remote_child &&
+1282               all_children_flagged_for_coarsening)
+1283             elem->set_refinement_flag(Elem::COARSEN_INACTIVE);
+1284           else if (!found_remote_child)
+1285             elem->set_refinement_flag(Elem::INACTIVE);
+1286         }
+1287     }
+1288 
+1289   STOP_LOG ("make_coarsening_compatible()", "MeshRefinement");
+1290 
+1291   // If one processor finds an incompatibility, we're globally
+1292   // incompatible
+1293   this->comm()\&.min(compatible_with_refinement);
+1294 
+1295   return compatible_with_refinement;
+1296 }
+.fi
+.SS "bool libMesh::MeshRefinement::make_flags_parallel_consistent ()"
+Copy refinement flags on ghost elements from their local processors\&. Return true if any flags changed\&. 
+.PP
+Definition at line 926 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, libMesh::ParallelObject::comm(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Parallel::Communicator::min(), libMesh::Elem::p_refinement_flag(), parallel_consistent, libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::sync_dofobject_data_by_id()\&.
+.PP
+Referenced by coarsen_elements(), refine_and_coarsen_elements(), and refine_elements()\&.
+.PP
+.nf
+927 {
+928   // This function must be run on all processors at once
+929   parallel_object_only();
+930 
+931   START_LOG ("make_flags_parallel_consistent()", "MeshRefinement");
+932 
+933   SyncRefinementFlags hsync(_mesh, &Elem::refinement_flag,
+934                             &Elem::set_refinement_flag);
+935   Parallel::sync_dofobject_data_by_id
+936     (this->comm(), _mesh\&.elements_begin(), _mesh\&.elements_end(), hsync);
+937 
+938   SyncRefinementFlags psync(_mesh, &Elem::p_refinement_flag,
+939                             &Elem::set_p_refinement_flag);
+940   Parallel::sync_dofobject_data_by_id
+941     (this->comm(), _mesh\&.elements_begin(), _mesh\&.elements_end(), psync);
+942 
+943   // If we weren't consistent in both h and p on every processor then
+944   // we weren't globally consistent
+945   bool parallel_consistent = hsync\&.parallel_consistent &&
+946     psync\&.parallel_consistent;
+947   this->comm()\&.min(parallel_consistent);
+948 
+949   STOP_LOG ("make_flags_parallel_consistent()", "MeshRefinement");
+950 
+951   return parallel_consistent;
+952 }
+.fi
+.SS "bool libMesh::MeshRefinement::make_refinement_compatible (const boolmaintain_level_one)\fC [private]\fP"
+Take user-specified refinement flags and augment them so that level-one dependency is satisfied\&. 
+.PP
+Definition at line 1305 of file mesh_refinement\&.C\&.
+.PP
+References _face_level_mismatch_limit, _mesh, _periodic_boundaries, libMesh::Elem::active(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::Elem::child(), libMesh::Elem::COARSEN, libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::AutoPtr< Tp >::get(), libMesh::Elem::has_children(), has_topological_neighbor(), libMesh::Elem::INACTIVE, libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::libmesh_assert_greater(), libMesh::Parallel::Communicator::min(), libMesh::Elem::n_children(), libMesh::Elem::n_sides(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::Elem::parent(), libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::remote_elem, libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), side, libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::MeshBase::sub_point_locator(), topological_neighbor(), and libMesh::Parallel::verify()\&.
+.PP
+Referenced by refine_and_coarsen_elements(), and refine_elements()\&.
+.PP
+.nf
+1306 {
+1307   // This function must be run on all processors at once
+1308   parallel_object_only();
+1309 
+1310   // We may need a PointLocator for topological_neighbor() tests
+1311   // later, which we need to make sure gets constructed on all
+1312   // processors at once\&.
+1313   AutoPtr<PointLocatorBase> point_locator;
+1314 
+1315 #ifdef LIBMESH_ENABLE_PERIODIC
+1316   bool has_periodic_boundaries =
+1317     _periodic_boundaries && !_periodic_boundaries->empty();
+1318   libmesh_assert(this->comm()\&.verify(has_periodic_boundaries));
+1319 
+1320   if (has_periodic_boundaries)
+1321     point_locator = _mesh\&.sub_point_locator();
+1322 #endif
+1323 
+1324   START_LOG ("make_refinement_compatible()", "MeshRefinement");
+1325 
+1326   bool _maintain_level_one = maintain_level_one;
+1327 
+1328   // If the user used non-default parameters, let's warn that they're
+1329   // deprecated
+1330   if (!maintain_level_one)
+1331     {
+1332       libmesh_deprecated();
+1333     }
+1334   else
+1335     _maintain_level_one = _face_level_mismatch_limit;
+1336 
+1337   // Unless we encounter a specific situation we will be compatible
+1338   // with any selected coarsening flags
+1339   bool compatible_with_coarsening = true;
+1340 
+1341   // This loop enforces the level-1 rule\&.  We should only
+1342   // execute it if the user indeed wants level-1 satisfied!
+1343   if (_maintain_level_one)
+1344     {
+1345       // Unless we encounter a specific situation level-one
+1346       // will be satisfied after executing this loop just once
+1347       bool level_one_satisfied = true;
+1348 
+1349       do
+1350         {
+1351           level_one_satisfied = true;
+1352 
+1353           MeshBase::element_iterator       el     = _mesh\&.active_elements_begin();
+1354           const MeshBase::element_iterator end_el = _mesh\&.active_elements_end();
+1355 
+1356           for (; el != end_el; ++el)
+1357             {
+1358               Elem *elem = *el;
+1359               if (elem->refinement_flag() == Elem::REFINE)  // If the element is active and the
+1360                 // h refinement flag is set
+1361                 {
+1362                   const unsigned int my_level = elem->level();
+1363 
+1364                   for (unsigned int side=0; side != elem->n_sides(); side++)
+1365                     {
+1366                       Elem* neighbor =
+1367                         topological_neighbor(elem, point_locator\&.get(), side);
+1368 
+1369                       if (neighbor != NULL        && // I have a
+1370                           neighbor != remote_elem && // neighbor here
+1371                           neighbor->active()) // and it is active
+1372                         {
+1373                           // Case 1:  The neighbor is at the same level I am\&.
+1374                           //        1a: The neighbor will be refined       -> NO PROBLEM
+1375                           //        1b: The neighbor won't be refined      -> NO PROBLEM
+1376                           //        1c: The neighbor wants to be coarsened -> PROBLEM
+1377                           if (neighbor->level() == my_level)
+1378                             {
+1379                               if (neighbor->refinement_flag() == Elem::COARSEN)
+1380                                 {
+1381                                   neighbor->set_refinement_flag(Elem::DO_NOTHING);
+1382                                   if (neighbor->parent())
+1383                                     neighbor->parent()->set_refinement_flag(Elem::INACTIVE);
+1384                                   compatible_with_coarsening = false;
+1385                                   level_one_satisfied = false;
+1386                                 }
+1387                             }
+1388 
+1389 
+1390                           // Case 2: The neighbor is one level lower than I am\&.
+1391                           //         The neighbor thus MUST be refined to satisfy
+1392                           //         the level-one rule, regardless of whether it
+1393                           //         was originally flagged for refinement\&. If it
+1394                           //         wasn't flagged already we need to repeat
+1395                           //         this process\&.
+1396                           else if ((neighbor->level()+1) == my_level)
+1397                             {
+1398                               if (neighbor->refinement_flag() != Elem::REFINE)
+1399                                 {
+1400                                   neighbor->set_refinement_flag(Elem::REFINE);
+1401                                   if (neighbor->parent())
+1402                                     neighbor->parent()->set_refinement_flag(Elem::INACTIVE);
+1403                                   compatible_with_coarsening = false;
+1404                                   level_one_satisfied = false;
+1405                                 }
+1406                             }
+1407 #ifdef DEBUG
+1408 
+1409                           // Sanity check\&. We should never get into a
+1410                           // case when our neighbot is more than one
+1411                           // level away\&.
+1412                           /* // We libmesh_error() in the next case anyway
+1413                              else if ((neighbor->level()+1) < my_level)
+1414                              {
+1415                              libmesh_error();
+1416                              }
+1417                           */
+1418 
+1419 
+1420                           // Note that the only other possibility is that the
+1421                           // neighbor is already refined, in which case it isn't
+1422                           // active and we should never get here\&.
+1423                           else
+1424                             {
+1425                               libmesh_error();
+1426                             }
+1427 #endif
+1428                         }
+1429                     }
+1430                 }
+1431               if (elem->p_refinement_flag() == Elem::REFINE)  // If the element is active and the
+1432                 // p refinement flag is set
+1433                 {
+1434                   const unsigned int my_p_level = elem->p_level();
+1435 
+1436                   for (unsigned int side=0; side != elem->n_sides(); side++)
+1437                     {
+1438                       Elem* neighbor =
+1439                         topological_neighbor(elem, point_locator\&.get(), side);
+1440 
+1441                       if (neighbor != NULL &&      // I have a
+1442                           neighbor != remote_elem) // neighbor here
+1443                         {
+1444                           if (neighbor->active()) // and it is active
+1445                             {
+1446                               if (neighbor->p_level() < my_p_level &&
+1447                                   neighbor->p_refinement_flag() != Elem::REFINE)
+1448                                 {
+1449                                   neighbor->set_p_refinement_flag(Elem::REFINE);
+1450                                   level_one_satisfied = false;
+1451                                   compatible_with_coarsening = false;
+1452                                 }
+1453                               if (neighbor->p_level() == my_p_level &&
+1454                                   neighbor->p_refinement_flag() == Elem::COARSEN)
+1455                                 {
+1456                                   neighbor->set_p_refinement_flag(Elem::DO_NOTHING);
+1457                                   level_one_satisfied = false;
+1458                                   compatible_with_coarsening = false;
+1459                                 }
+1460                             }
+1461                           else // I have an inactive neighbor
+1462                             {
+1463                               libmesh_assert(neighbor->has_children());
+1464                               for (unsigned int c=0; c!=neighbor->n_children(); c++)
+1465                                 {
+1466                                   Elem *subneighbor = neighbor->child(c);
+1467                                   if (subneighbor == remote_elem)
+1468                                     continue;
+1469                                   if (subneighbor->active() &&
+1470                                       has_topological_neighbor(subneighbor, point_locator\&.get(), elem))
+1471                                     {
+1472                                       if (subneighbor->p_level() < my_p_level &&
+1473                                           subneighbor->p_refinement_flag() != Elem::REFINE)
+1474                                         {
+1475                                           // We should already be level one
+1476                                           // compatible
+1477                                           libmesh_assert_greater (subneighbor->p_level() + 2u,
+1478                                                                   my_p_level);
+1479                                           subneighbor->set_p_refinement_flag(Elem::REFINE);
+1480                                           level_one_satisfied = false;
+1481                                           compatible_with_coarsening = false;
+1482                                         }
+1483                                       if (subneighbor->p_level() == my_p_level &&
+1484                                           subneighbor->p_refinement_flag() == Elem::COARSEN)
+1485                                         {
+1486                                           subneighbor->set_p_refinement_flag(Elem::DO_NOTHING);
+1487                                           level_one_satisfied = false;
+1488                                           compatible_with_coarsening = false;
+1489                                         }
+1490                                     }
+1491                                 }
+1492                             }
+1493                         }
+1494                     }
+1495                 }
+1496             }
+1497         }
+1498 
+1499       while (!level_one_satisfied);
+1500     } // end if (_maintain_level_one)
+1501 
+1502   // If we're not compatible on one processor, we're globally not
+1503   // compatible
+1504   this->comm()\&.min(compatible_with_coarsening);
+1505 
+1506   STOP_LOG ("make_refinement_compatible()", "MeshRefinement");
+1507 
+1508   return compatible_with_coarsening;
+1509 }
+.fi
+.SS "unsigned int & libMesh::MeshRefinement::max_h_level ()\fC [inline]\fP"
+The \fCmax_h_level\fP is the greatest refinement level an element should reach\&.
+.PP
+\fCmax_h_level\fP is unlimited (\fBlibMesh::invalid_uint\fP) by default 
+.PP
+Definition at line 706 of file mesh_refinement\&.h\&.
+.PP
+References _max_h_level, and _use_member_parameters\&.
+.PP
+.nf
+707 {
+708   _use_member_parameters = true;
+709   return _max_h_level;
+710 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "\fBdof_id_type\fP & libMesh::MeshRefinement::nelem_target ()\fC [inline]\fP"
+If \fCnelem_target\fP is set to a nonzero value, methods like \fBflag_elements_by_nelem_target()\fP will attempt to keep the number of active elements in the mesh close to nelem_target\&.
+.PP
+\fCnelem_target\fP is 0 by default\&. 
+.PP
+Definition at line 718 of file mesh_refinement\&.h\&.
+.PP
+References _nelem_target, and _use_member_parameters\&.
+.PP
+.nf
+719 {
+720   _use_member_parameters = true;
+721   return _nelem_target;
+722 }
+.fi
+.SS "unsigned char & libMesh::MeshRefinement::node_level_mismatch_limit ()\fC [inline]\fP"
+If \fCnode_level_mismatch_limit\fP is set to a nonzero value, then refinement and coarsening will produce meshes in which the refinement level of two nodal neighbors will not differ by more than that limit\&. If \fCnode_level_mismatch_limit\fP is 0, then level differences will be unlimited\&.
+.PP
+\fCnode_level_mismatch_limit\fP is 0 by default\&. 
+.PP
+Definition at line 740 of file mesh_refinement\&.h\&.
+.PP
+References _node_level_mismatch_limit\&.
+.PP
+.nf
+741 {
+742   return _node_level_mismatch_limit;
+743 }
+.fi
+.SS "\fBMeshRefinement\fP& libMesh::MeshRefinement::operator= (const \fBMeshRefinement\fP &)\fC [private]\fP"
+
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "bool libMesh::MeshRefinement::refine_and_coarsen_elements (const boolmaintain_level_one = \fCtrue\fP)"
+Refines and coarsens user-requested elements\&. Will also refine/coarsen additional elements to satisy level-one rule\&. It is possible that for a given set of refinement flags there is actually no change upon calling this member function\&. Consequently, this function returns \fCtrue\fP if the mesh actually changed (hence data needs to be projected) and \fCfalse\fP otherwise\&.
+.PP
+The argument \fCmaintain_level_one\fP is now deprecated; use the option \fBface_level_mismatch_limit()\fP instead\&. 
+.PP
+Definition at line 442 of file mesh_refinement\&.C\&.
+.PP
+References _coarsen_elements(), _edge_level_mismatch_limit, _face_level_mismatch_limit, _mesh, _node_level_mismatch_limit, _refine_elements(), libMesh::Elem::active(), libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), eliminate_unrefined_patches(), libMesh::Elem::INACTIVE, libMesh::MeshBase::is_serial(), libMesh::Elem::JUST_REFINED, libMesh::libmesh_assert(), libMesh::MeshBase::libmesh_assert_valid_parallel_ids(), limit_level_mismatch_at_edge(), limit_level_mismatch_at_node(), make_coarsening_compatible(), make_flags_parallel_consistent(), make_refinement_compatible(), libMesh::Parallel::Communicator::max(), libMesh::Parallel::Communicator::min(), libMesh::out, libMesh::MeshBase::prepare_for_use(), libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), test_level_one(), and test_unflagged()\&.
+.PP
+.nf
+443 {
+444   // This function must be run on all processors at once
+445   parallel_object_only();
+446 
+447   bool _maintain_level_one = maintain_level_one;
+448 
+449   // If the user used non-default parameters, let's warn that they're
+450   // deprecated
+451   if (!maintain_level_one)
+452     {
+453       libmesh_deprecated();
+454     }
+455   else
+456     _maintain_level_one = _face_level_mismatch_limit;
+457 
+458   // We can't yet turn a non-level-one mesh into a level-one mesh
+459   if (_maintain_level_one)
+460     libmesh_assert(test_level_one(true));
+461 
+462   // Possibly clean up the refinement flags from
+463   // a previous step
+464   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+465   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+466 
+467   for ( ; elem_it != elem_end; ++elem_it)
+468     {
+469       // Pointer to the element
+470       Elem *elem = *elem_it;
+471 
+472       // Set refinement flag to INACTIVE if the
+473       // element isn't active
+474       if ( !elem->active())
+475         {
+476           elem->set_refinement_flag(Elem::INACTIVE);
+477           elem->set_p_refinement_flag(Elem::INACTIVE);
+478         }
+479 
+480       // This might be left over from the last step
+481       if (elem->refinement_flag() == Elem::JUST_REFINED)
+482         elem->set_refinement_flag(Elem::DO_NOTHING);
+483     }
+484 
+485   // Parallel consistency has to come first, or coarsening
+486   // along processor boundaries might occasionally be falsely
+487   // prevented
+488   bool flags_were_consistent = this->make_flags_parallel_consistent();
+489 
+490   // In theory, we should be able to remove the above call, which can
+491   // be expensive and should be unnecessary\&.  In practice, doing
+492   // consistent flagging in parallel is hard, it's impossible to
+493   // verify at the library level if it's being done by user code, and
+494   // we don't want to abort large parallel runs in opt mode\&.\&.\&. but we
+495   // do want to warn that they should be fixed\&.
+496   if (!flags_were_consistent)
+497     {
+498       libMesh::out << "Refinement flags were not consistent between processors!\n"
+499                    << "Correcting and continuing\&.";
+500     }
+501 
+502   // Repeat until flag changes match on every processor
+503   do
+504     {
+505       // Repeat until coarsening & refinement flags jive
+506       bool satisfied = false;
+507       do
+508         {
+509           const bool coarsening_satisfied =
+510             this->make_coarsening_compatible(maintain_level_one);
+511 
+512           const bool refinement_satisfied =
+513             this->make_refinement_compatible(maintain_level_one);
+514 
+515           bool smoothing_satisfied =
+516             !this->eliminate_unrefined_patches();
+517 
+518           if (_edge_level_mismatch_limit)
+519             smoothing_satisfied = smoothing_satisfied &&
+520               !this->limit_level_mismatch_at_edge (_edge_level_mismatch_limit);
+521 
+522           if (_node_level_mismatch_limit)
+523             smoothing_satisfied = smoothing_satisfied &&
+524               !this->limit_level_mismatch_at_node (_node_level_mismatch_limit);
+525 
+526           satisfied = (coarsening_satisfied &&
+527                        refinement_satisfied &&
+528                        smoothing_satisfied);
+529 #ifdef DEBUG
+530           bool max_satisfied = satisfied,
+531             min_satisfied = satisfied;
+532           this->comm()\&.max(max_satisfied);
+533           this->comm()\&.min(min_satisfied);
+534           libmesh_assert_equal_to (satisfied, max_satisfied);
+535           libmesh_assert_equal_to (satisfied, min_satisfied);
+536 #endif
+537         }
+538       while (!satisfied);
+539     }
+540   while (!_mesh\&.is_serial() && !this->make_flags_parallel_consistent());
+541 
+542   // First coarsen the flagged elements\&.
+543   const bool coarsening_changed_mesh =
+544     this->_coarsen_elements ();
+545 
+546   // FIXME: test_level_one now tests consistency across periodic
+547   // boundaries, which requires a point_locator, which just got
+548   // invalidated by _coarsen_elements() and hasn't yet been cleared by
+549   // prepare_for_use()\&.
+550 
+551   //  if (_maintain_level_one)
+552   //    libmesh_assert(test_level_one(true));
+553   //  libmesh_assert(this->make_coarsening_compatible(maintain_level_one));
+554   //  libmesh_assert(this->make_refinement_compatible(maintain_level_one));
+555 
+556   // FIXME: This won't pass unless we add a redundant find_neighbors()
+557   // call or replace find_neighbors() with on-the-fly neighbor updating
+558   // libmesh_assert(!this->eliminate_unrefined_patches());
+559 
+560   // We can't contract the mesh ourselves anymore - a System might
+561   // need to restrict old coefficient vectors first
+562   // _mesh\&.contract();
+563 
+564   // Now refine the flagged elements\&.  This will
+565   // take up some space, maybe more than what was freed\&.
+566   const bool refining_changed_mesh =
+567     this->_refine_elements();
+568 
+569   // Finally, the new mesh needs to be prepared for use
+570   if (coarsening_changed_mesh || refining_changed_mesh)
+571     {
+572 #ifdef DEBUG
+573       _mesh\&.libmesh_assert_valid_parallel_ids();
+574 #endif
+575 
+576       _mesh\&.prepare_for_use (/*skip_renumber =*/false);
+577 
+578       if (_maintain_level_one)
+579         libmesh_assert(test_level_one(true));
+580       libmesh_assert(test_unflagged(true));
+581       libmesh_assert(this->make_coarsening_compatible(maintain_level_one));
+582       libmesh_assert(this->make_refinement_compatible(maintain_level_one));
+583       // FIXME: This won't pass unless we add a redundant find_neighbors()
+584       // call or replace find_neighbors() with on-the-fly neighbor updating
+585       // libmesh_assert(!this->eliminate_unrefined_patches());
+586 
+587       return true;
+588     }
+589   else
+590     {
+591       if (_maintain_level_one)
+592         libmesh_assert(test_level_one(true));
+593       libmesh_assert(test_unflagged(true));
+594       libmesh_assert(this->make_coarsening_compatible(maintain_level_one));
+595       libmesh_assert(this->make_refinement_compatible(maintain_level_one));
+596     }
+597 
+598   // Otherwise there was no change in the mesh,
+599   // let the user know\&.  Also, there is no need
+600   // to prepare the mesh for use since it did not change\&.
+601   return false;
+602 
+603 }
+.fi
+.SS "bool libMesh::MeshRefinement::refine_elements (const boolmaintain_level_one = \fCtrue\fP)"
+Only refines the user-requested elements\&. It is possible that for a given set of refinement flags there is actually no change upon calling this member function\&. Consequently, this function returns \fCtrue\fP if the mesh actually changed (hence data needs to be projected) and \fCfalse\fP otherwise\&.
+.PP
+The argument \fCmaintain_level_one\fP is now deprecated; use the option \fBface_level_mismatch_limit()\fP instead\&. 
+.PP
+Definition at line 736 of file mesh_refinement\&.C\&.
+.PP
+References _edge_level_mismatch_limit, _face_level_mismatch_limit, _mesh, _node_level_mismatch_limit, _refine_elements(), libMesh::Elem::active(), libMesh::ParallelObject::comm(), libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), eliminate_unrefined_patches(), libMesh::Elem::INACTIVE, libMesh::MeshBase::is_serial(), libMesh::Elem::JUST_REFINED, libMesh::libmesh_assert(), limit_level_mismatch_at_edge(), limit_level_mismatch_at_node(), make_flags_parallel_consistent(), make_refinement_compatible(), libMesh::Parallel::Communicator::max(), libMesh::Parallel::Communicator::min(), libMesh::out, libMesh::MeshBase::prepare_for_use(), libMesh::Elem::refinement_flag(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), and test_level_one()\&.
+.PP
+Referenced by libMesh::EquationSystems::reinit()\&.
+.PP
+.nf
+737 {
+738   // This function must be run on all processors at once
+739   parallel_object_only();
+740 
+741   bool _maintain_level_one = maintain_level_one;
+742 
+743   // If the user used non-default parameters, let's warn that they're
+744   // deprecated
+745   if (!maintain_level_one)
+746     {
+747       libmesh_deprecated();
+748     }
+749   else
+750     _maintain_level_one = _face_level_mismatch_limit;
+751 
+752   if (_maintain_level_one)
+753     libmesh_assert(test_level_one(true));
+754 
+755   // Possibly clean up the refinement flags from
+756   // a previous step
+757   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+758   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+759 
+760   for ( ; elem_it != elem_end; ++elem_it)
+761     {
+762       // Pointer to the element
+763       Elem *elem = *elem_it;
+764 
+765       // Set refinement flag to INACTIVE if the
+766       // element isn't active
+767       if ( !elem->active())
+768         {
+769           elem->set_refinement_flag(Elem::INACTIVE);
+770           elem->set_p_refinement_flag(Elem::INACTIVE);
+771         }
+772 
+773       // This might be left over from the last step
+774       if (elem->refinement_flag() == Elem::JUST_REFINED)
+775         elem->set_refinement_flag(Elem::DO_NOTHING);
+776     }
+777 
+778 
+779 
+780   // Parallel consistency has to come first, or coarsening
+781   // along processor boundaries might occasionally be falsely
+782   // prevented
+783   bool flags_were_consistent = this->make_flags_parallel_consistent();
+784 
+785   // In theory, we should be able to remove the above call, which can
+786   // be expensive and should be unnecessary\&.  In practice, doing
+787   // consistent flagging in parallel is hard, it's impossible to
+788   // verify at the library level if it's being done by user code, and
+789   // we don't want to abort large parallel runs in opt mode\&.\&.\&. but we
+790   // do want to warn that they should be fixed\&.
+791   libmesh_assert(flags_were_consistent);
+792   if (!flags_were_consistent)
+793     {
+794       libMesh::out << "Refinement flags were not consistent between processors!\n"
+795                    << "Correcting and continuing\&.";
+796     }
+797 
+798   // Repeat until flag changes match on every processor
+799   do
+800     {
+801       // Repeat until coarsening & refinement flags jive
+802       bool satisfied = false;
+803       do
+804         {
+805           const bool refinement_satisfied =
+806             this->make_refinement_compatible(maintain_level_one);
+807 
+808           bool smoothing_satisfied =
+809             !this->eliminate_unrefined_patches();// &&
+810 
+811           if (_edge_level_mismatch_limit)
+812             smoothing_satisfied = smoothing_satisfied &&
+813               !this->limit_level_mismatch_at_edge (_edge_level_mismatch_limit);
+814 
+815           if (_node_level_mismatch_limit)
+816             smoothing_satisfied = smoothing_satisfied &&
+817               !this->limit_level_mismatch_at_node (_node_level_mismatch_limit);
+818 
+819           satisfied = (refinement_satisfied &&
+820                        smoothing_satisfied);
+821 #ifdef DEBUG
+822           bool max_satisfied = satisfied,
+823             min_satisfied = satisfied;
+824           this->comm()\&.max(max_satisfied);
+825           this->comm()\&.min(min_satisfied);
+826           libmesh_assert_equal_to (satisfied, max_satisfied);
+827           libmesh_assert_equal_to (satisfied, min_satisfied);
+828 #endif
+829         }
+830       while (!satisfied);
+831     }
+832   while (!_mesh\&.is_serial() && !this->make_flags_parallel_consistent());
+833 
+834   // Now refine the flagged elements\&.  This will
+835   // take up some space, maybe more than what was freed\&.
+836   const bool mesh_changed =
+837     this->_refine_elements();
+838 
+839   if (_maintain_level_one)
+840     libmesh_assert(test_level_one(true));
+841   libmesh_assert(this->make_refinement_compatible(maintain_level_one));
+842   // FIXME: This won't pass unless we add a redundant find_neighbors()
+843   // call or replace find_neighbors() with on-the-fly neighbor updating
+844   // libmesh_assert(!this->eliminate_unrefined_patches());
+845 
+846   // Finally, the new mesh needs to be prepared for use
+847   if (mesh_changed)
+848     _mesh\&.prepare_for_use (/*skip_renumber =*/false);
+849 
+850   return mesh_changed;
+851 }
+.fi
+.SS "\fBReal\fP & libMesh::MeshRefinement::refine_fraction ()\fC [inline]\fP"
+The \fCrefine_fraction\fP sets either a desired target or a desired maximum number of elements to flag for refinement, depending on which flag_elements_by method is called\&.
+.PP
+\fCrefine_fraction\fP must be in $ [0,1] $, and is 0\&.3 by default\&. 
+.PP
+Definition at line 694 of file mesh_refinement\&.h\&.
+.PP
+References _refine_fraction, and _use_member_parameters\&.
+.PP
+.nf
+695 {
+696   _use_member_parameters = true;
+697   return _refine_fraction;
+698 }
+.fi
+.SS "void libMesh::MeshRefinement::set_periodic_boundaries_ptr (\fBPeriodicBoundaries\fP *pb_ptr)"
+Sets the \fC\fBPeriodicBoundaries\fP\fP pointer\&. 
+.SS "void libMesh::MeshRefinement::switch_h_to_p_refinement ()"
+Takes a mesh whose elements are flagged for h refinement and coarsening, and switches those flags to request p refinement and coarsening instead\&. 
+.PP
+Definition at line 662 of file mesh_refinement_flagging\&.C\&.
+.PP
+References _mesh, libMesh::Elem::DO_NOTHING, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), and libMesh::Elem::INACTIVE\&.
+.PP
+.nf
+663 {
+664   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+665   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+666 
+667   for ( ; elem_it != elem_end; ++elem_it)
+668     {
+669       if ((*elem_it)->active())
+670         {
+671           (*elem_it)->set_p_refinement_flag((*elem_it)->refinement_flag());
+672           (*elem_it)->set_refinement_flag(Elem::DO_NOTHING);
+673         }
+674       else
+675         {
+676           (*elem_it)->set_p_refinement_flag((*elem_it)->refinement_flag());
+677           (*elem_it)->set_refinement_flag(Elem::INACTIVE);
+678         }
+679     }
+680 }
+.fi
+.SS "bool libMesh::MeshRefinement::test_level_one (boollibmesh_assert_yes = \fCfalse\fP)"
+Returns true if and only if the mesh is level one smooth Returns false otherwise Aborts the program if libmesh_assert_yes is true and the mesh is not level one smooth 
+.PP
+Definition at line 303 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _periodic_boundaries, libMesh::Elem::active(), libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::ParallelObject::comm(), libMesh::AutoPtr< Tp >::get(), libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::Parallel::Communicator::max(), libMesh::Elem::n_neighbors(), libMesh::out, libMesh::Elem::p_level(), libMesh::remote_elem, libMesh::MeshBase::sub_point_locator(), topological_neighbor(), and libMesh::Parallel::verify()\&.
+.PP
+Referenced by coarsen_elements(), refine_and_coarsen_elements(), and refine_elements()\&.
+.PP
+.nf
+304 {
+305   // This function must be run on all processors at once
+306   parallel_object_only();
+307 
+308   // We may need a PointLocator for topological_neighbor() tests
+309   // later, which we need to make sure gets constructed on all
+310   // processors at once\&.
+311   AutoPtr<PointLocatorBase> point_locator;
+312 
+313 #ifdef LIBMESH_ENABLE_PERIODIC
+314   bool has_periodic_boundaries =
+315     _periodic_boundaries && !_periodic_boundaries->empty();
+316   libmesh_assert(this->comm()\&.verify(has_periodic_boundaries));
+317 
+318   if (has_periodic_boundaries)
+319     point_locator = _mesh\&.sub_point_locator();
+320 #endif
+321 
+322   MeshBase::element_iterator       elem_it  = _mesh\&.active_local_elements_begin();
+323   const MeshBase::element_iterator elem_end = _mesh\&.active_local_elements_end();
+324 
+325   bool failure = false;
+326 
+327 #ifndef NDEBUG
+328   Elem *failed_elem = NULL;
+329   Elem *failed_neighbor = NULL;
+330 #endif // !NDEBUG
+331 
+332   for ( ; elem_it != elem_end && !failure; ++elem_it)
+333     {
+334       // Pointer to the element
+335       Elem *elem = *elem_it;
+336 
+337       for (unsigned int n=0; n<elem->n_neighbors(); n++)
+338         {
+339           Elem *neighbor =
+340             topological_neighbor(elem, point_locator\&.get(), n);
+341 
+342           if (!neighbor || !neighbor->active() ||
+343               neighbor == remote_elem)
+344             continue;
+345 
+346           if ((neighbor->level() + 1 < elem->level()) ||
+347               (neighbor->p_level() + 1 < elem->p_level()) ||
+348               (neighbor->p_level() > elem->p_level() + 1))
+349             {
+350               failure = true;
+351 #ifndef NDEBUG
+352               failed_elem = elem;
+353               failed_neighbor = neighbor;
+354 #endif // !NDEBUG
+355               break;
+356             }
+357         }
+358     }
+359 
+360   // If any processor failed, we failed globally
+361   this->comm()\&.max(failure);
+362 
+363   if (failure)
+364     {
+365       // We didn't pass the level one test, so libmesh_assert that
+366       // we're allowed not to
+367 #ifndef NDEBUG
+368       if (libmesh_assert_pass)
+369         {
+370           libMesh::out <<
+371             "MeshRefinement Level one failure, element: " <<
+372             *failed_elem << std::endl;
+373           libMesh::out <<
+374             "MeshRefinement Level one failure, neighbor: " <<
+375             *failed_neighbor << std::endl;
+376         }
+377 #endif // !NDEBUG
+378       libmesh_assert(!libmesh_assert_pass);
+379       return false;
+380     }
+381   return true;
+382 }
+.fi
+.SS "bool libMesh::MeshRefinement::test_unflagged (boollibmesh_assert_yes = \fCfalse\fP)"
+Returns true if and only if the mesh has no elements flagged to be coarsened or refined Returns false otherwise Aborts the program if libmesh_assert_yes is true and the mesh has flagged elements 
+.PP
+Definition at line 386 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::Elem::COARSEN, libMesh::ParallelObject::comm(), libMesh::libmesh_assert(), libMesh::Parallel::Communicator::max(), libMesh::out, libMesh::Elem::p_refinement_flag(), libMesh::Elem::REFINE, and libMesh::Elem::refinement_flag()\&.
+.PP
+Referenced by refine_and_coarsen_elements()\&.
+.PP
+.nf
+387 {
+388   // This function must be run on all processors at once
+389   parallel_object_only();
+390 
+391   bool found_flag = false;
+392 
+393   // Search for local flags
+394   MeshBase::element_iterator       elem_it  = _mesh\&.active_local_elements_begin();
+395   const MeshBase::element_iterator elem_end = _mesh\&.active_local_elements_end();
+396 
+397 #ifndef NDEBUG
+398   Elem *failed_elem = NULL;
+399 #endif
+400 
+401   for ( ; elem_it != elem_end; ++elem_it)
+402     {
+403       // Pointer to the element
+404       Elem *elem = *elem_it;
+405 
+406       if (elem->refinement_flag() == Elem::REFINE ||
+407           elem->refinement_flag() == Elem::COARSEN ||
+408           elem->p_refinement_flag() == Elem::REFINE ||
+409           elem->p_refinement_flag() == Elem::COARSEN)
+410         {
+411           found_flag = true;
+412 #ifndef NDEBUG
+413           failed_elem = elem;
+414 #endif
+415           break;
+416         }
+417     }
+418 
+419   // If we found a flag on any processor, it counts
+420   this->comm()\&.max(found_flag);
+421 
+422   if (found_flag)
+423     {
+424 #ifndef NDEBUG
+425       if (libmesh_assert_pass)
+426         {
+427           libMesh::out <<
+428             "MeshRefinement test_unflagged failure, element: " <<
+429             *failed_elem << std::endl;
+430         }
+431 #endif
+432       // We didn't pass the "elements are unflagged" test,
+433       // so libmesh_assert that we're allowed not to
+434       libmesh_assert(!libmesh_assert_pass);
+435       return false;
+436     }
+437   return true;
+438 }
+.fi
+.SS "\fBElem\fP * libMesh::MeshRefinement::topological_neighbor (\fBElem\fP *elem, const \fBPointLocatorBase\fP *point_locator, const unsigned intside)\fC [private]\fP"
+Local dispatch function for getting the correct topological neighbor from the \fBElem\fP class 
+.PP
+Definition at line 1810 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _periodic_boundaries, libMesh::libmesh_assert(), libMesh::Elem::neighbor(), and libMesh::Elem::topological_neighbor()\&.
+.PP
+Referenced by make_coarsening_compatible(), make_refinement_compatible(), and test_level_one()\&.
+.PP
+.nf
+1813 {
+1814 #ifdef LIBMESH_ENABLE_PERIODIC
+1815   if (_periodic_boundaries && !_periodic_boundaries->empty())
+1816     {
+1817       libmesh_assert(point_locator);
+1818       return elem->topological_neighbor(side, _mesh, *point_locator, _periodic_boundaries);
+1819     }
+1820 #endif
+1821   return elem->neighbor(side);
+1822 }
+.fi
+.SS "void libMesh::MeshRefinement::uniformly_coarsen (unsigned intn = \fC1\fP)"
+Attempts to uniformly coarsen the mesh \fCn\fP times\&. 
+.PP
+Definition at line 1779 of file mesh_refinement\&.C\&.
+.PP
+References _coarsen_elements(), _mesh, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), clean_refinement_flags(), libMesh::Elem::COARSEN, libMesh::Elem::COARSEN_INACTIVE, and libMesh::MeshBase::prepare_for_use()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+1780 {
+1781   // Coarsen n times
+1782   for (unsigned int rstep=0; rstep<n; rstep++)
+1783     {
+1784       // Clean up the refinement flags
+1785       this->clean_refinement_flags();
+1786 
+1787       // Flag all the active elements for coarsening
+1788       MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+1789       const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+1790 
+1791       for ( ; elem_it != elem_end; ++elem_it)
+1792         {
+1793           (*elem_it)->set_refinement_flag(Elem::COARSEN);
+1794           if ((*elem_it)->parent())
+1795             (*elem_it)->parent()->set_refinement_flag(Elem::COARSEN_INACTIVE);
+1796         }
+1797 
+1798       // Coarsen all the elements we just flagged\&.
+1799       this->_coarsen_elements();
+1800     }
+1801 
+1802 
+1803   // Finally, the new mesh probably needs to be prepared for use
+1804   if (n > 0)
+1805     _mesh\&.prepare_for_use (/*skip_renumber =*/false);
+1806 }
+.fi
+.SS "void libMesh::MeshRefinement::uniformly_p_coarsen (unsigned intn = \fC1\fP)"
+Attempts to uniformly p coarsen the mesh \fCn\fP times\&. 
+.PP
+Definition at line 1729 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), and libMesh::Elem::JUST_COARSENED\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+1730 {
+1731   // Coarsen p times
+1732   for (unsigned int rstep=0; rstep<n; rstep++)
+1733     {
+1734       // P coarsen all the active elements
+1735       MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+1736       const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+1737 
+1738       for ( ; elem_it != elem_end; ++elem_it)
+1739         {
+1740           if ((*elem_it)->p_level() > 0)
+1741             {
+1742               (*elem_it)->set_p_level((*elem_it)->p_level()-1);
+1743               (*elem_it)->set_p_refinement_flag(Elem::JUST_COARSENED);
+1744             }
+1745         }
+1746     }
+1747 }
+.fi
+.SS "void libMesh::MeshRefinement::uniformly_p_refine (unsigned intn = \fC1\fP)"
+Uniformly p refines the mesh \fCn\fP times\&. 
+.PP
+Definition at line 1710 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), and libMesh::Elem::JUST_REFINED\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+1711 {
+1712   // Refine n times
+1713   for (unsigned int rstep=0; rstep<n; rstep++)
+1714     {
+1715       // P refine all the active elements
+1716       MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+1717       const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+1718 
+1719       for ( ; elem_it != elem_end; ++elem_it)
+1720         {
+1721           (*elem_it)->set_p_level((*elem_it)->p_level()+1);
+1722           (*elem_it)->set_p_refinement_flag(Elem::JUST_REFINED);
+1723         }
+1724     }
+1725 }
+.fi
+.SS "void libMesh::MeshRefinement::uniformly_refine (unsigned intn = \fC1\fP)"
+Uniformly refines the mesh \fCn\fP times\&. 
+.PP
+Definition at line 1751 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, _refine_elements(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), clean_refinement_flags(), libMesh::MeshBase::prepare_for_use(), and libMesh::Elem::REFINE\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+1752 {
+1753   // Refine n times
+1754   // FIXME - this won't work if n>1 and the mesh
+1755   // has already been attached to an equation system
+1756   for (unsigned int rstep=0; rstep<n; rstep++)
+1757     {
+1758       // Clean up the refinement flags
+1759       this->clean_refinement_flags();
+1760 
+1761       // Flag all the active elements for refinement\&.
+1762       MeshBase::element_iterator       elem_it  = _mesh\&.active_elements_begin();
+1763       const MeshBase::element_iterator elem_end = _mesh\&.active_elements_end();
+1764 
+1765       for ( ; elem_it != elem_end; ++elem_it)
+1766         (*elem_it)->set_refinement_flag(Elem::REFINE);
+1767 
+1768       // Refine all the elements we just flagged\&.
+1769       this->_refine_elements();
+1770     }
+1771 
+1772   // Finally, the new mesh probably needs to be prepared for use
+1773   if (n > 0)
+1774     _mesh\&.prepare_for_use (/*skip_renumber =*/false);
+1775 }
+.fi
+.SS "void libMesh::MeshRefinement::update_nodes_map ()\fC [private]\fP"
+Updates the \fC_new_nodes_map\fP 
+.PP
+Definition at line 296 of file mesh_refinement\&.C\&.
+.PP
+References _mesh, and _new_nodes_map\&.
+.PP
+Referenced by _coarsen_elements(), and _refine_elements()\&.
+.PP
+.nf
+297 {
+298   this->_new_nodes_map\&.init(_mesh);
+299 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReal\fP libMesh::MeshRefinement::_absolute_global_tolerance\fC [private]\fP"
+
+.PP
+Definition at line 673 of file mesh_refinement\&.h\&.
+.PP
+Referenced by absolute_global_tolerance(), and flag_elements_by_error_tolerance()\&.
+.SS "bool libMesh::MeshRefinement::_coarsen_by_parents\fC [private]\fP"
+Refinement parameter values 
+.PP
+Definition at line 661 of file mesh_refinement\&.h\&.
+.PP
+Referenced by coarsen_by_parents(), flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_error_tolerance(), and flag_elements_by_nelem_target()\&.
+.SS "\fBReal\fP libMesh::MeshRefinement::_coarsen_fraction\fC [private]\fP"
+
+.PP
+Definition at line 665 of file mesh_refinement\&.h\&.
+.PP
+Referenced by coarsen_fraction(), flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_error_tolerance(), flag_elements_by_mean_stddev(), and flag_elements_by_nelem_target()\&.
+.SS "\fBReal\fP libMesh::MeshRefinement::_coarsen_threshold\fC [private]\fP"
+
+.PP
+Definition at line 669 of file mesh_refinement\&.h\&.
+.PP
+Referenced by coarsen_threshold(), flag_elements_by_error_tolerance(), and flag_elements_by_nelem_target()\&.
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "unsigned char libMesh::MeshRefinement::_edge_level_mismatch_limit\fC [private]\fP"
+
+.PP
+Definition at line 675 of file mesh_refinement\&.h\&.
+.PP
+Referenced by coarsen_elements(), edge_level_mismatch_limit(), refine_and_coarsen_elements(), and refine_elements()\&.
+.SS "unsigned char libMesh::MeshRefinement::_face_level_mismatch_limit\fC [private]\fP"
+
+.PP
+Definition at line 675 of file mesh_refinement\&.h\&.
+.PP
+Referenced by coarsen_elements(), face_level_mismatch_limit(), make_coarsening_compatible(), make_refinement_compatible(), refine_and_coarsen_elements(), and refine_elements()\&.
+.SS "unsigned int libMesh::MeshRefinement::_max_h_level\fC [private]\fP"
+
+.PP
+Definition at line 667 of file mesh_refinement\&.h\&.
+.PP
+Referenced by flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_error_tolerance(), flag_elements_by_mean_stddev(), flag_elements_by_nelem_target(), and max_h_level()\&.
+.SS "\fBMeshBase\fP& libMesh::MeshRefinement::_mesh\fC [private]\fP"
+Reference to the mesh\&. 
+.PP
+Definition at line 648 of file mesh_refinement\&.h\&.
+.PP
+Referenced by _coarsen_elements(), _refine_elements(), add_elem(), add_p_to_h_refinement(), add_point(), clean_refinement_flags(), coarsen_elements(), eliminate_unrefined_patches(), flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_error_tolerance(), flag_elements_by_mean_stddev(), flag_elements_by_nelem_target(), get_mesh(), has_topological_neighbor(), limit_level_mismatch_at_edge(), limit_level_mismatch_at_node(), make_coarsening_compatible(), make_flags_parallel_consistent(), make_refinement_compatible(), refine_and_coarsen_elements(), refine_elements(), switch_h_to_p_refinement(), test_level_one(), test_unflagged(), topological_neighbor(), uniformly_coarsen(), uniformly_p_coarsen(), uniformly_p_refine(), uniformly_refine(), and update_nodes_map()\&.
+.SS "\fBdof_id_type\fP libMesh::MeshRefinement::_nelem_target\fC [private]\fP"
+
+.PP
+Definition at line 671 of file mesh_refinement\&.h\&.
+.PP
+Referenced by flag_elements_by_nelem_target(), and nelem_target()\&.
+.SS "\fBLocationMap\fP<\fBNode\fP> libMesh::MeshRefinement::_new_nodes_map\fC [private]\fP"
+Data structure that holds the new nodes information\&. 
+.PP
+Definition at line 643 of file mesh_refinement\&.h\&.
+.PP
+Referenced by _coarsen_elements(), _refine_elements(), add_point(), clear(), and update_nodes_map()\&.
+.SS "unsigned char libMesh::MeshRefinement::_node_level_mismatch_limit\fC [private]\fP"
+
+.PP
+Definition at line 675 of file mesh_refinement\&.h\&.
+.PP
+Referenced by coarsen_elements(), node_level_mismatch_limit(), refine_and_coarsen_elements(), and refine_elements()\&.
+.SS "\fBPeriodicBoundaries\fP* libMesh::MeshRefinement::_periodic_boundaries\fC [private]\fP"
+
+.PP
+Definition at line 679 of file mesh_refinement\&.h\&.
+.PP
+Referenced by has_topological_neighbor(), make_coarsening_compatible(), make_refinement_compatible(), test_level_one(), and topological_neighbor()\&.
+.SS "\fBReal\fP libMesh::MeshRefinement::_refine_fraction\fC [private]\fP"
+
+.PP
+Definition at line 663 of file mesh_refinement\&.h\&.
+.PP
+Referenced by flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_error_tolerance(), flag_elements_by_mean_stddev(), flag_elements_by_nelem_target(), and refine_fraction()\&.
+.SS "bool libMesh::MeshRefinement::_use_member_parameters\fC [private]\fP"
+For backwards compatibility, we initialize this as false and then set it to true if the user uses any of the refinement parameter accessor functions 
+.PP
+Definition at line 655 of file mesh_refinement\&.h\&.
+.PP
+Referenced by absolute_global_tolerance(), coarsen_by_parents(), coarsen_fraction(), coarsen_threshold(), flag_elements_by_elem_fraction(), flag_elements_by_error_fraction(), flag_elements_by_mean_stddev(), max_h_level(), nelem_target(), and refine_fraction()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

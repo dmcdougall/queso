@@ -1,0 +1,2354 @@
+.TH "libMesh::XdrIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::XdrIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <xdr_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP, \fBlibMesh::MeshOutput< MeshBase >\fP, and \fBlibMesh::ParallelObject\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBlargest_id_type\fP \fBxdr_id_type\fP"
+.br
+.ti -1c
+.RI "typedef uint32_t \fBheader_id_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXdrIO\fP (\fBMeshBase\fP &, const bool=false)"
+.br
+.ti -1c
+.RI "\fBXdrIO\fP (const \fBMeshBase\fP &, const bool=false)"
+.br
+.ti -1c
+.RI "virtual \fB~XdrIO\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "bool \fBbinary\fP () const "
+.br
+.ti -1c
+.RI "bool & \fBbinary\fP ()"
+.br
+.ti -1c
+.RI "bool \fBlegacy\fP () const "
+.br
+.ti -1c
+.RI "bool & \fBlegacy\fP ()"
+.br
+.ti -1c
+.RI "bool \fBwrite_parallel\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_write_parallel\fP (bool do_parallel=true)"
+.br
+.ti -1c
+.RI "void \fBset_auto_parallel\fP ()"
+.br
+.ti -1c
+.RI "const std::string & \fBversion\fP () const "
+.br
+.ti -1c
+.RI "std::string & \fBversion\fP ()"
+.br
+.ti -1c
+.RI "const std::string & \fBboundary_condition_file_name\fP () const "
+.br
+.ti -1c
+.RI "std::string & \fBboundary_condition_file_name\fP ()"
+.br
+.ti -1c
+.RI "const std::string & \fBpartition_map_file_name\fP () const "
+.br
+.ti -1c
+.RI "std::string & \fBpartition_map_file_name\fP ()"
+.br
+.ti -1c
+.RI "const std::string & \fBsubdomain_map_file_name\fP () const "
+.br
+.ti -1c
+.RI "std::string & \fBsubdomain_map_file_name\fP ()"
+.br
+.ti -1c
+.RI "const std::string & \fBpolynomial_level_file_name\fP () const "
+.br
+.ti -1c
+.RI "std::string & \fBpolynomial_level_file_name\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwrite_serialized_subdomain_names\fP (\fBXdr\fP &io) const "
+.br
+.ti -1c
+.RI "void \fBwrite_serialized_connectivity\fP (\fBXdr\fP &io, const \fBdof_id_type\fP n_elem) const "
+.br
+.ti -1c
+.RI "void \fBwrite_serialized_nodes\fP (\fBXdr\fP &io, const \fBdof_id_type\fP \fBn_nodes\fP) const "
+.br
+.ti -1c
+.RI "void \fBwrite_serialized_bcs\fP (\fBXdr\fP &io, const std::size_t n_bcs) const "
+.br
+.ti -1c
+.RI "void \fBwrite_serialized_nodesets\fP (\fBXdr\fP &io, const std::size_t n_nodesets) const "
+.br
+.ti -1c
+.RI "void \fBwrite_serialized_bc_names\fP (\fBXdr\fP &io, const \fBBoundaryInfo\fP &info, bool is_sideset) const "
+.br
+.ti -1c
+.RI "void \fBread_serialized_subdomain_names\fP (\fBXdr\fP &io)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBread_serialized_connectivity\fP (\fBXdr\fP &io, const \fBdof_id_type\fP n_elem, std::vector< \fBheader_id_type\fP > &sizes, T)"
+.br
+.ti -1c
+.RI "void \fBread_serialized_nodes\fP (\fBXdr\fP &io, const \fBdof_id_type\fP \fBn_nodes\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBread_serialized_bcs\fP (\fBXdr\fP &io, T)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBread_serialized_nodesets\fP (\fBXdr\fP &io, T)"
+.br
+.ti -1c
+.RI "void \fBread_serialized_bc_names\fP (\fBXdr\fP &io, \fBBoundaryInfo\fP &info, bool is_sideset)"
+.br
+.ti -1c
+.RI "void \fBpack_element\fP (std::vector< \fBxdr_id_type\fP > &conn, const \fBElem\fP *elem, const \fBdof_id_type\fP parent_id=\fBDofObject::invalid_id\fP, const \fBdof_id_type\fP parent_pid=\fBDofObject::invalid_id\fP) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_binary\fP"
+.br
+.ti -1c
+.RI "bool \fB_legacy\fP"
+.br
+.ti -1c
+.RI "bool \fB_write_serial\fP"
+.br
+.ti -1c
+.RI "bool \fB_write_parallel\fP"
+.br
+.ti -1c
+.RI "bool \fB_write_unique_id\fP"
+.br
+.ti -1c
+.RI "\fBheader_id_type\fP \fB_field_width\fP"
+.br
+.ti -1c
+.RI "std::string \fB_version\fP"
+.br
+.ti -1c
+.RI "std::string \fB_bc_file_name\fP"
+.br
+.ti -1c
+.RI "std::string \fB_partition_map_file\fP"
+.br
+.ti -1c
+.RI "std::string \fB_subdomain_map_file\fP"
+.br
+.ti -1c
+.RI "std::string \fB_p_level_file\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const std::size_t \fBio_blksize\fP = 128000"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin Kirk, John Peterson, 2004\&. 
+.RE
+.PP
+
+.PP
+Definition at line 51 of file xdr_io\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef uint32_t \fBlibMesh::XdrIO::header_id_type\fP"
+
+.PP
+Definition at line 60 of file xdr_io\&.h\&.
+.SS "typedef \fBlargest_id_type\fP \fBlibMesh::XdrIO::xdr_id_type\fP"
+
+.PP
+Definition at line 57 of file xdr_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::XdrIO::XdrIO (\fBMeshBase\fP &mesh, const boolbinary_in = \fCfalse\fP)\fC [explicit]\fP"
+Constructor\&. Takes a writeable reference to a mesh object\&. This is the constructor required to read a mesh\&. The optional parameter \fCbinary\fP can be used to switch between ASCII (\fCfalse\fP, the default) or binary (\fCtrue\fP) files\&. 
+.PP
+Definition at line 118 of file xdr_io\&.C\&.
+.PP
+.nf
+118                                                   :
+119   MeshInput<MeshBase> (mesh,/* is_parallel_format = */ true),
+120   MeshOutput<MeshBase>(mesh,/* is_parallel_format = */ true),
+121   ParallelObject      (mesh),
+122   _binary             (binary_in),
+123   _legacy             (false),
+124   _write_serial       (false),
+125   _write_parallel     (false),
+126 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+127   _write_unique_id    (true),
+128 #else
+129   _write_unique_id    (false),
+130 #endif
+131   _field_width        (4),   // In 0\&.7\&.0, all fields are 4 bytes, in 0\&.9\&.2 they can vary
+132   _version            ("libMesh-0\&.9\&.2+"),
+133   _bc_file_name       ("n/a"),
+134   _partition_map_file ("n/a"),
+135   _subdomain_map_file ("n/a"),
+136   _p_level_file       ("n/a")
+137 {
+138 }
+.fi
+.SS "libMesh::XdrIO::XdrIO (const \fBMeshBase\fP &mesh, const boolbinary_in = \fCfalse\fP)\fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. The optional parameter \fCbinary\fP can be used to switch between ASCII (\fCfalse\fP, the default) or binary (\fCtrue\fP) files\&. 
+.PP
+Definition at line 142 of file xdr_io\&.C\&.
+.PP
+.nf
+142                                                         :
+143   MeshOutput<MeshBase>(mesh,/* is_parallel_format = */ true),
+144   ParallelObject      (mesh),
+145   _binary (binary_in)
+146 {
+147 }
+.fi
+.SS "libMesh::XdrIO::~XdrIO ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 151 of file xdr_io\&.C\&.
+.PP
+.nf
+152 {
+153 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "bool libMesh::XdrIO::binary () const\fC [inline]\fP"
+Get/Set the flag indicating if we should read/write binary\&. 
+.PP
+Definition at line 100 of file xdr_io\&.h\&.
+.PP
+References _binary\&.
+.PP
+Referenced by read(), libMesh::UnstructuredMesh::read(), and write()\&.
+.PP
+.nf
+100 { return _binary; }
+.fi
+.SS "bool& libMesh::XdrIO::binary ()\fC [inline]\fP"
+
+.PP
+Definition at line 101 of file xdr_io\&.h\&.
+.PP
+References _binary\&.
+.PP
+.nf
+101 { return _binary; }
+.fi
+.SS "const std::string& libMesh::XdrIO::boundary_condition_file_name () const\fC [inline]\fP"
+Get/Set the boundary condition file name\&. 
+.PP
+Definition at line 143 of file xdr_io\&.h\&.
+.PP
+References _bc_file_name\&.
+.PP
+Referenced by read(), read_serialized_bcs(), read_serialized_nodesets(), and write()\&.
+.PP
+.nf
+143 { return _bc_file_name; }
+.fi
+.SS "std::string& libMesh::XdrIO::boundary_condition_file_name ()\fC [inline]\fP"
+
+.PP
+Definition at line 144 of file xdr_io\&.h\&.
+.PP
+References _bc_file_name\&.
+.PP
+.nf
+144 { return _bc_file_name; }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), read_serialized_bc_names(), read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), read_serialized_connectivity(), read_serialized_nodes(), read_serialized_nodesets(), read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), write_serialized_connectivity(), write_serialized_nodes(), write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "bool libMesh::XdrIO::legacy () const\fC [inline]\fP"
+Get/Set the flag indicating if we should read/write legacy\&. 
+.PP
+Definition at line 106 of file xdr_io\&.h\&.
+.PP
+References _legacy\&.
+.PP
+Referenced by read(), libMesh::UnstructuredMesh::read(), and write()\&.
+.PP
+.nf
+106 { return _legacy; }
+.fi
+.SS "bool& libMesh::XdrIO::legacy ()\fC [inline]\fP"
+
+.PP
+Definition at line 107 of file xdr_io\&.h\&.
+.PP
+References _legacy\&.
+.PP
+.nf
+107 { return _legacy; }
+.fi
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), read_serialized_bcs(), read_serialized_connectivity(), read_serialized_nodes(), read_serialized_nodesets(), read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), write_parallel(), libMesh::GmshIO::write_post(), write_serialized_bcs(), write_serialized_connectivity(), write_serialized_nodes(), write_serialized_nodesets(), write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), write_serialized_connectivity(), write_serialized_nodes(), and write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "void libMesh::XdrIO::pack_element (std::vector< \fBxdr_id_type\fP > &conn, const \fBElem\fP *elem, const \fBdof_id_type\fPparent_id = \fC\fBDofObject::invalid_id\fP\fP, const \fBdof_id_type\fPparent_pid = \fC\fBDofObject::invalid_id\fP\fP) const\fC [private]\fP"
+Pack an element into a transfer buffer for parallel communication\&. 
+.PP
+Definition at line 1662 of file xdr_io\&.C\&.
+.PP
+References libMesh::DofObject::invalid_id, libMesh::libmesh_assert(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), libMesh::Elem::p_level(), libMesh::DofObject::processor_id(), libMesh::Elem::subdomain_id(), libMesh::Elem::type(), libMesh::Elem::type_to_n_nodes_map, and libMesh::DofObject::unique_id()\&.
+.PP
+Referenced by write_serialized_connectivity()\&.
+.PP
+.nf
+1664 {
+1665   libmesh_assert(elem);
+1666   libmesh_assert_equal_to (elem->n_nodes(), Elem::type_to_n_nodes_map[elem->type()]);
+1667 
+1668   conn\&.push_back(elem->n_nodes());
+1669 
+1670   conn\&.push_back (elem->type());
+1671 
+1672   // In version 0\&.7\&.0+ "id" is stored but it not used\&.  In version 0\&.9\&.2+
+1673   // we will store unique_id instead, therefore there is no need to
+1674   // check for the older version when writing the unique_id\&.
+1675   conn\&.push_back (elem->unique_id());
+1676 
+1677   if (parent_id != DofObject::invalid_id)
+1678     {
+1679       conn\&.push_back (parent_id);
+1680       libmesh_assert_not_equal_to (parent_pid, DofObject::invalid_id);
+1681       conn\&.push_back (parent_pid);
+1682     }
+1683 
+1684   conn\&.push_back (elem->processor_id());
+1685   conn\&.push_back (elem->subdomain_id());
+1686 
+1687 #ifdef LIBMESH_ENABLE_AMR
+1688   conn\&.push_back (elem->p_level());
+1689 #endif
+1690 
+1691   for (unsigned int n=0; n<elem->n_nodes(); n++)
+1692     conn\&.push_back (elem->node(n));
+1693 }
+.fi
+.SS "const std::string& libMesh::XdrIO::partition_map_file_name () const\fC [inline]\fP"
+Get/Set the partitioning file name\&. 
+.PP
+Definition at line 149 of file xdr_io\&.h\&.
+.PP
+References _partition_map_file\&.
+.PP
+Referenced by read(), read_serialized_connectivity(), write(), and write_serialized_connectivity()\&.
+.PP
+.nf
+149 { return _partition_map_file; }
+.fi
+.SS "std::string& libMesh::XdrIO::partition_map_file_name ()\fC [inline]\fP"
+
+.PP
+Definition at line 150 of file xdr_io\&.h\&.
+.PP
+References _partition_map_file\&.
+.PP
+.nf
+150 { return _partition_map_file; }
+.fi
+.SS "const std::string& libMesh::XdrIO::polynomial_level_file_name () const\fC [inline]\fP"
+Get/Set the polynomial degree file name\&. 
+.PP
+Definition at line 161 of file xdr_io\&.h\&.
+.PP
+References _p_level_file\&.
+.PP
+Referenced by read(), read_serialized_connectivity(), write(), and write_serialized_connectivity()\&.
+.PP
+.nf
+161 { return _p_level_file; }
+.fi
+.SS "std::string& libMesh::XdrIO::polynomial_level_file_name ()\fC [inline]\fP"
+
+.PP
+Definition at line 162 of file xdr_io\&.h\&.
+.PP
+References _p_level_file\&.
+.PP
+.nf
+162 { return _p_level_file; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), read_serialized_bc_names(), read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), read_serialized_connectivity(), libMesh::System::read_serialized_data(), read_serialized_nodes(), read_serialized_nodesets(), read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), write_serialized_bc_names(), write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), write_serialized_connectivity(), libMesh::System::write_serialized_data(), write_serialized_nodes(), write_serialized_nodesets(), write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "void libMesh::XdrIO::read (const std::string &name)\fC [virtual]\fP"
+This method implements reading a mesh from a specified file\&. We are future proofing the layout of this file by adding in size information for all stored types\&. TODO: All types are stored as the same size\&. Use the size information to pack things efficiently\&. For now we will assume that 'type size' is how the entire file will be encoded\&.
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 1033 of file xdr_io\&.C\&.
+.PP
+References _field_width, binary(), boundary_condition_file_name(), libMesh::Parallel::Communicator::broadcast(), libMesh::Xdr::close(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::DECODE, legacy(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshTools::n_elem(), n_nodes, partition_map_file_name(), polynomial_level_file_name(), libMesh::ParallelObject::processor_id(), libMesh::READ, libMesh::LegacyXdrIO::read(), read_serialized_bcs(), read_serialized_connectivity(), read_serialized_nodes(), read_serialized_nodesets(), read_serialized_subdomain_names(), libMesh::MeshBase::reserve_elem(), libMesh::MeshBase::reserve_nodes(), libMesh::Partitioner::set_node_processor_ids(), libMesh::START_LOG(), libMesh::STOP_LOG(), subdomain_map_file_name(), and version()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+1034 {
+1035   // Only open the file on processor 0 -- this is especially important because
+1036   // there may be an underlying bzip/bunzip going on, and multiple simultaneous
+1037   // calls will produce a race condition\&.
+1038   Xdr io (this->processor_id() == 0 ? name : "", this->binary() ? DECODE : READ);
+1039 
+1040   // convenient reference to our mesh
+1041   MeshBase &mesh = MeshInput<MeshBase>::mesh();
+1042 
+1043   // get the version string\&.
+1044   if (this->processor_id() == 0)
+1045     io\&.data (this->version());
+1046   this->comm()\&.broadcast (this->version());
+1047 
+1048   // note that for "legacy" files the first entry is an
+1049   // integer -- not a string at all\&.
+1050   this->legacy() = !(this->version()\&.find("libMesh") < this->version()\&.size());
+1051 
+1052   // Check for a legacy version format\&.
+1053   if (this->legacy())
+1054     {
+1055       io\&.close();
+1056       LegacyXdrIO(mesh, this->binary())\&.read(name);
+1057       return;
+1058     }
+1059 
+1060   START_LOG("read()","XdrIO");
+1061 
+1062   std::vector<header_id_type> meta_data(10, sizeof(xdr_id_type));
+1063   // type_size, uid_size, pid_size, sid_size, p_level_size, eid_size, side_size, bid_size;
+1064   header_id_type pos=0;
+1065 
+1066   const bool is_version_0_9_2 = this->version()\&.find("0\&.9\&.2") != std::string::npos ? true : false;
+1067 
+1068   if (this->processor_id() == 0)
+1069     {
+1070       io\&.data (meta_data[pos++]);
+1071       io\&.data (meta_data[pos++]);
+1072       io\&.data (this->boundary_condition_file_name()); // libMesh::out << "bc_file="  << this->boundary_condition_file_name() << std::endl;
+1073       io\&.data (this->subdomain_map_file_name());      // libMesh::out << "sid_file=" << this->subdomain_map_file_name()      << std::endl;
+1074       io\&.data (this->partition_map_file_name());      // libMesh::out << "pid_file=" << this->partition_map_file_name()      << std::endl;
+1075       io\&.data (this->polynomial_level_file_name());   // libMesh::out << "pl_file="  << this->polynomial_level_file_name()   << std::endl;
+1076 
+1077       if (is_version_0_9_2)
+1078         {
+1079           io\&.data (meta_data[pos++], "# type size");
+1080           io\&.data (meta_data[pos++], "# uid size");
+1081           io\&.data (meta_data[pos++], "# pid size");
+1082           io\&.data (meta_data[pos++], "# sid size");
+1083           io\&.data (meta_data[pos++], "# p-level size");
+1084           // Boundary Condition sizes
+1085           io\&.data (meta_data[pos++], "# eid size");   // elem id
+1086           io\&.data (meta_data[pos++], "# side size "); // side number
+1087           io\&.data (meta_data[pos++], "# bid size");   // boundary id
+1088         }
+1089     }
+1090 
+1091   // broadcast the n_elems, n_nodes, and size information
+1092   this->comm()\&.broadcast (meta_data);
+1093 
+1094   this->comm()\&.broadcast (this->boundary_condition_file_name());
+1095   this->comm()\&.broadcast (this->subdomain_map_file_name());
+1096   this->comm()\&.broadcast (this->partition_map_file_name());
+1097   this->comm()\&.broadcast (this->polynomial_level_file_name());
+1098 
+1099   // Tell the mesh how many nodes/elements to expect\&. Depending on the mesh type,
+1100   // this may allow for efficient adding of nodes/elements\&.
+1101   header_id_type n_elem = meta_data[0];
+1102   header_id_type n_nodes = meta_data[1];
+1103 
+1104   mesh\&.reserve_elem(n_elem);
+1105   mesh\&.reserve_nodes(n_nodes);
+1106 
+1112   if (is_version_0_9_2)
+1113     _field_width = meta_data[2];
+1114 
+1115   if (_field_width == 4)
+1116     {
+1117       uint32_t type_size = 0;
+1118 
+1119       // read subdomain names
+1120       this->read_serialized_subdomain_names(io);
+1121 
+1122       // read connectivity
+1123       this->read_serialized_connectivity (io, n_elem, meta_data, type_size);
+1124 
+1125       // read the nodal locations
+1126       this->read_serialized_nodes (io, n_nodes);
+1127 
+1128       // read the boundary conditions
+1129       this->read_serialized_bcs (io, type_size);
+1130 
+1131       if (is_version_0_9_2)
+1132         // read the nodesets
+1133         this->read_serialized_nodesets (io, type_size);
+1134     }
+1135   else if (_field_width == 8)
+1136     {
+1137       uint64_t type_size = 0;
+1138 
+1139       // read subdomain names
+1140       this->read_serialized_subdomain_names(io);
+1141 
+1142       // read connectivity
+1143       this->read_serialized_connectivity (io, n_elem, meta_data, type_size);
+1144 
+1145       // read the nodal locations
+1146       this->read_serialized_nodes (io, n_nodes);
+1147 
+1148       // read the boundary conditions
+1149       this->read_serialized_bcs (io, type_size);
+1150 
+1151       if (is_version_0_9_2)
+1152         // read the nodesets
+1153         this->read_serialized_nodesets (io, type_size);
+1154     }
+1155 
+1156 
+1157   STOP_LOG("read()","XdrIO");
+1158 
+1159   // set the node processor ids
+1160   Partitioner::set_node_processor_ids(mesh);
+1161 }
+.fi
+.SS "void libMesh::XdrIO::read_serialized_bc_names (\fBXdr\fP &io, \fBBoundaryInfo\fP &info, boolis_sideset)\fC [private]\fP"
+Read boundary names information (sideset and nodeset) - NEW in 0\&.9\&.2 format 
+.PP
+Definition at line 1617 of file xdr_io\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::broadcast(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::ParallelObject::processor_id(), libMesh::BoundaryInfo::set_nodeset_name_map(), libMesh::BoundaryInfo::set_sideset_name_map(), and version()\&.
+.PP
+Referenced by read_serialized_bcs(), and read_serialized_nodesets()\&.
+.PP
+.nf
+1618 {
+1619   const bool read_entity_info = this->version()\&.find("0\&.9\&.2") != std::string::npos ? true : false;
+1620   if (read_entity_info)
+1621     {
+1622       header_id_type n_boundary_names = 0;
+1623       std::vector<header_id_type> boundary_ids;
+1624       std::vector<std::string>  boundary_names;
+1625 
+1626       // Read the sideset names
+1627       if (this->processor_id() == 0)
+1628         {
+1629           io\&.data(n_boundary_names);
+1630 
+1631           boundary_ids\&.resize(n_boundary_names);
+1632           boundary_names\&.resize(n_boundary_names);
+1633 
+1634           if (n_boundary_names)
+1635             {
+1636               io\&.data(boundary_ids);
+1637               io\&.data(boundary_names);
+1638             }
+1639         }
+1640 
+1641       // Broadcast the boundary names to all processors
+1642       this->comm()\&.broadcast(n_boundary_names);
+1643       if (n_boundary_names == 0)
+1644         return;
+1645 
+1646       boundary_ids\&.resize(n_boundary_names);
+1647       boundary_names\&.resize(n_boundary_names);
+1648       this->comm()\&.broadcast(boundary_ids);
+1649       this->comm()\&.broadcast(boundary_names);
+1650 
+1651       // Reassemble the named boundary information
+1652       std::map<boundary_id_type, std::string> & boundary_map = is_sideset ?
+1653         info\&.set_sideset_name_map() : info\&.set_nodeset_name_map();
+1654 
+1655       for (unsigned int i=0; i<n_boundary_names; ++i)
+1656         boundary_map\&.insert(std::make_pair(boundary_ids[i], boundary_names[i]));
+1657     }
+1658 }
+.fi
+.SS "template<typename T > void libMesh::XdrIO::read_serialized_bcs (\fBXdr\fP &io, T)\fC [private]\fP"
+Read the boundary conditions for a parallel, distributed mesh 
+.PP
+\fBReturns:\fP
+.RS 4
+the number of bcs read 
+.RE
+.PP
+
+.PP
+Definition at line 1467 of file xdr_io\&.C\&.
+.PP
+References libMesh::BoundaryInfo::add_side(), boundary_condition_file_name(), libMesh::Parallel::Communicator::broadcast(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), end, libMesh::MeshTools::Generation::Private::idx(), io_blksize, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), std::min(), libMesh::ParallelObject::processor_id(), read_serialized_bc_names(), and libMesh::Xdr::reading()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+1468 {
+1469   if (this->boundary_condition_file_name() == "n/a") return;
+1470 
+1471   libmesh_assert (io\&.reading());
+1472 
+1473   // convenient reference to our mesh
+1474   MeshBase &mesh = MeshInput<MeshBase>::mesh();
+1475 
+1476   // and our boundary info object
+1477   BoundaryInfo &boundary_info = *mesh\&.boundary_info;
+1478 
+1479   // Version 0\&.9\&.2+ introduces unique ids
+1480   read_serialized_bc_names(io, boundary_info, true);  // sideset names
+1481 
+1482   std::vector<DofBCData> dof_bc_data;
+1483   std::vector<T> input_buffer;
+1484 
+1485   header_id_type n_bcs=0;
+1486   if (this->processor_id() == 0)
+1487     io\&.data (n_bcs);
+1488   this->comm()\&.broadcast (n_bcs);
+1489 
+1490   for (std::size_t blk=0, first_bc=0, last_bc=0; last_bc<n_bcs; blk++)
+1491     {
+1492       first_bc = blk*io_blksize;
+1493       last_bc  = std::min((blk+1)*io_blksize, std::size_t(n_bcs));
+1494 
+1495       input_buffer\&.resize (3*(last_bc - first_bc));
+1496 
+1497       if (this->processor_id() == 0)
+1498         io\&.data_stream (input_buffer\&.empty() ? NULL : &input_buffer[0], input_buffer\&.size());
+1499 
+1500       this->comm()\&.broadcast (input_buffer);
+1501       dof_bc_data\&.clear();  dof_bc_data\&.reserve (input_buffer\&.size()/3);
+1502 
+1503       // convert the input_buffer to DofBCData to facilitate searching
+1504       for (std::size_t idx=0; idx<input_buffer\&.size(); idx+=3)
+1505         dof_bc_data\&.push_back (DofBCData(input_buffer[idx+0],
+1506                                          input_buffer[idx+1],
+1507                                          input_buffer[idx+2]));
+1508       input_buffer\&.clear();
+1509       // note that while the files *we* write should already be sorted by
+1510       // element id this is not necessarily guaranteed\&.
+1511       std::sort (dof_bc_data\&.begin(), dof_bc_data\&.end());
+1512 
+1513       MeshBase::const_element_iterator
+1514         it  = mesh\&.level_elements_begin(0),
+1515         end = mesh\&.level_elements_end(0);
+1516 
+1517       // Look for BCs in this block for all the level-0 elements we have
+1518       // (not just local ones)\&.  Do this by finding all the entries
+1519       // in dof_bc_data whose elem_id match the ID of the current element\&.
+1520       // We cannot rely on NULL neighbors at this point since the neighbor
+1521       // data structure has not been initialized\&.
+1522       for (std::pair<std::vector<DofBCData>::iterator,
+1523              std::vector<DofBCData>::iterator> pos; it!=end; ++it)
+1524 #if defined(__SUNPRO_CC) || defined(__PGI)
+1525         for (pos = std::equal_range (dof_bc_data\&.begin(), dof_bc_data\&.end(), (*it)->id(), CompareIntDofBCData());
+1526              pos\&.first != pos\&.second; ++pos\&.first)
+1527 #else
+1528           for (pos = std::equal_range (dof_bc_data\&.begin(), dof_bc_data\&.end(), (*it)->id());
+1529                pos\&.first != pos\&.second; ++pos\&.first)
+1530 #endif
+1531             {
+1532               libmesh_assert_equal_to (pos\&.first->dof_id, (*it)->id());
+1533               libmesh_assert_less (pos\&.first->side, (*it)->n_sides());
+1534 
+1535               boundary_info\&.add_side (*it, pos\&.first->side, pos\&.first->bc_id);
+1536             }
+1537     }
+1538 }
+.fi
+.SS "template<typename T > void libMesh::XdrIO::read_serialized_connectivity (\fBXdr\fP &io, const \fBdof_id_type\fPn_elem, std::vector< \fBheader_id_type\fP > &sizes, T)\fC [private]\fP"
+Read the connectivity for a parallel, distributed mesh 
+.PP
+Definition at line 1211 of file xdr_io\&.C\&.
+.PP
+References libMesh::Elem::add_child(), libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::Parallel::Communicator::broadcast(), libMesh::Elem::build(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), libMesh::Elem::dim(), libMesh::MeshBase::elem(), libMesh::MeshInput< MeshBase >::elems_of_dimension, libMesh::err, libMesh::Elem::hack_p_level(), libMesh::Elem::INACTIVE, libMesh::DofObject::invalid_id, io_blksize, libMesh::Elem::JUST_REFINED, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), std::min(), libMesh::MeshTools::n_elem(), libMesh::Elem::n_nodes(), partition_map_file_name(), polynomial_level_file_name(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::Xdr::reading(), libMesh::DofObject::set_id(), libMesh::MeshBase::set_mesh_dimension(), libMesh::Elem::set_node(), libMesh::Elem::set_refinement_flag(), libMesh::DofObject::set_unique_id(), libMesh::Elem::subdomain_id(), subdomain_map_file_name(), libMesh::Elem::type_to_n_nodes_map, and version()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+1212 {
+1213   libmesh_assert (io\&.reading());
+1214 
+1215   if (!n_elem) return;
+1216 
+1217   const bool
+1218     read_p_level      = ("\&." == this->polynomial_level_file_name()),
+1219     read_partitioning = ("\&." == this->partition_map_file_name()),
+1220     read_subdomain_id = ("\&." == this->subdomain_map_file_name());
+1221 
+1222   // convenient reference to our mesh
+1223   MeshBase &mesh = MeshInput<MeshBase>::mesh();
+1224 
+1225   // Keep track of what kinds of elements this file contains
+1226   elems_of_dimension\&.clear();
+1227   elems_of_dimension\&.resize(4, false);
+1228 
+1229   std::vector<T> conn, input_buffer(100 /* oversized ! */);
+1230 
+1231   int level=-1;
+1232 
+1233   // Version 0\&.9\&.2+ introduces unique ids
+1234   const size_t unique_id_size_index = 3;
+1235   const bool read_unique_id = this->version()\&.find("0\&.9\&.2") != std::string::npos &&
+1236     sizes[unique_id_size_index] ? true : false;
+1237 
+1238   T n_elem_at_level=0, n_processed_at_level=0;
+1239   for (std::size_t blk=0, first_elem=0, last_elem=0;
+1240        last_elem<n_elem; blk++)
+1241     {
+1242       first_elem = blk*io_blksize;
+1243       last_elem  = std::min((blk+1)*io_blksize, std::size_t(n_elem));
+1244 
+1245       conn\&.clear();
+1246 
+1247       if (this->processor_id() == 0)
+1248         for (dof_id_type e=first_elem; e<last_elem; e++, n_processed_at_level++)
+1249           {
+1250             if (n_processed_at_level == n_elem_at_level)
+1251               {
+1252                 // get the number of elements to read at this level
+1253                 io\&.data (n_elem_at_level);
+1254                 n_processed_at_level = 0;
+1255                 level++;
+1256               }
+1257 
+1258             unsigned int pos = 0;
+1259             // get the element type,
+1260             io\&.data_stream (&input_buffer[pos++], 1);
+1261 
+1262             if (read_unique_id)
+1263               io\&.data_stream (&input_buffer[pos++], 1);
+1264             // Older versions won't have this field at all (no increment on pos)
+1265 
+1266             // maybe the parent
+1267             if (level)
+1268               io\&.data_stream (&input_buffer[pos++], 1);
+1269             else
+1270               // We can't always fit DofObject::invalid_id in an
+1271               // xdr_id_type
+1272               input_buffer[pos++] = static_cast<T>(-1);
+1273 
+1274             // maybe the processor id
+1275             if (read_partitioning)
+1276               io\&.data_stream (&input_buffer[pos++], 1);
+1277             else
+1278               input_buffer[pos++] = 0;
+1279 
+1280             // maybe the subdomain id
+1281             if (read_subdomain_id)
+1282               io\&.data_stream (&input_buffer[pos++], 1);
+1283             else
+1284               input_buffer[pos++] = 0;
+1285 
+1286             // maybe the p level
+1287             if (read_p_level)
+1288               io\&.data_stream (&input_buffer[pos++], 1);
+1289             else
+1290               input_buffer[pos++] = 0;
+1291 
+1292             // and all the nodes
+1293             libmesh_assert_less (pos+Elem::type_to_n_nodes_map[input_buffer[0]], input_buffer\&.size());
+1294             io\&.data_stream (&input_buffer[pos], Elem::type_to_n_nodes_map[input_buffer[0]]);
+1295             conn\&.insert (conn\&.end(),
+1296                          input_buffer\&.begin(),
+1297                          input_buffer\&.begin() + pos + Elem::type_to_n_nodes_map[input_buffer[0]]);
+1298           }
+1299 
+1300       std::size_t conn_size = conn\&.size();
+1301       this->comm()\&.broadcast(conn_size);
+1302       conn\&.resize (conn_size);
+1303       this->comm()\&.broadcast (conn);
+1304 
+1305       // All processors now have the connectivity for this block\&.
+1306       typename std::vector<T>::const_iterator it = conn\&.begin();
+1307       for (dof_id_type e=first_elem; e<last_elem; e++)
+1308         {
+1309           const ElemType elem_type        = static_cast<ElemType>(*it); ++it;
+1310 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+1311           unique_id_type unique_id = 0;
+1312 #endif
+1313           if (read_unique_id)
+1314             {
+1315 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+1316               unique_id  = libmesh_cast_int<unique_id_type>(*it);
+1317 #endif
+1318               ++it;
+1319             }
+1320           const dof_id_type parent_id =
+1321             (*it == static_cast<T>(-1)) ?
+1322             DofObject::invalid_id :
+1323             libmesh_cast_int<dof_id_type>(*it);
+1324           ++it;
+1325           const processor_id_type processor_id =
+1326             libmesh_cast_int<processor_id_type>(*it);
+1327           ++it;
+1328           const subdomain_id_type subdomain_id =
+1329             libmesh_cast_int<subdomain_id_type>(*it);
+1330           ++it;
+1331 #ifdef LIBMESH_ENABLE_AMR
+1332           const unsigned int p_level =
+1333             libmesh_cast_int<unsigned int>(*it);
+1334 #endif
+1335           ++it;
+1336 
+1337           Elem *parent =
+1338             (parent_id == DofObject::invalid_id) ? NULL : mesh\&.elem(parent_id);
+1339 
+1340           Elem *elem = Elem::build (elem_type, parent)\&.release();
+1341 
+1342           elem->set_id() = e;
+1343 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+1344           elem->set_unique_id() = unique_id;
+1345 #endif
+1346           elem->processor_id() = processor_id;
+1347           elem->subdomain_id() = subdomain_id;
+1348 #ifdef LIBMESH_ENABLE_AMR
+1349           elem->hack_p_level(p_level);
+1350 
+1351           if (parent)
+1352             {
+1353               parent->add_child(elem);
+1354               parent->set_refinement_flag (Elem::INACTIVE);
+1355               elem->set_refinement_flag   (Elem::JUST_REFINED);
+1356             }
+1357 #endif
+1358 
+1359           for (unsigned int n=0; n<elem->n_nodes(); n++, ++it)
+1360             {
+1361               const dof_id_type global_node_number = *it;
+1362 
+1363               elem->set_node(n) =
+1364                 mesh\&.add_point (Point(), global_node_number);
+1365             }
+1366 
+1367           elems_of_dimension[elem->dim()] = true;
+1368           mesh\&.add_elem(elem);
+1369         }
+1370     }
+1371 
+1372   // Set the mesh dimension to the largest encountered for an element
+1373   for (unsigned int i=0; i!=4; ++i)
+1374     if (elems_of_dimension[i])
+1375       mesh\&.set_mesh_dimension(i);
+1376 
+1377 #if LIBMESH_DIM < 3
+1378   if (mesh\&.mesh_dimension() > LIBMESH_DIM)
+1379     {
+1380       libMesh::err << "Cannot open dimension " <<
+1381         mesh\&.mesh_dimension() <<
+1382         " mesh file when configured without " <<
+1383         mesh\&.mesh_dimension() << "D support\&." <<
+1384         std::endl;
+1385       libmesh_error();
+1386     }
+1387 #endif
+1388 }
+.fi
+.SS "void libMesh::XdrIO::read_serialized_nodes (\fBXdr\fP &io, const \fBdof_id_type\fPn_nodes)\fC [private]\fP"
+Read the nodal locations for a parallel, distributed mesh 
+.PP
+Definition at line 1392 of file xdr_io\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::broadcast(), libMesh::ParallelObject::comm(), libMesh::Xdr::data_stream(), end, libMesh::MeshTools::Generation::Private::idx(), io_blksize, libMesh::libmesh_assert(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshInput< MeshBase >::mesh(), std::min(), n_nodes, libMesh::ParallelObject::processor_id(), and libMesh::Xdr::reading()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+1393 {
+1394   libmesh_assert (io\&.reading());
+1395 
+1396   // convenient reference to our mesh
+1397   MeshBase &mesh = MeshInput<MeshBase>::mesh();
+1398 
+1399   if (!mesh\&.n_nodes()) return;
+1400 
+1401   // At this point the elements have been read from file and placeholder nodes
+1402   // have been assigned\&.  These nodes, however, do not have the proper (x,y,z)
+1403   // locations\&.  This method will read all the nodes from disk, and each processor
+1404   // can then grab the individual values it needs\&.
+1405 
+1406   // build up a list of the nodes contained in our local mesh\&.  These are the nodes
+1407   // stored on the local processor whose (x,y,z) values need to be corrected\&.
+1408   std::vector<dof_id_type> needed_nodes; needed_nodes\&.reserve (mesh\&.n_nodes());
+1409   {
+1410     MeshBase::node_iterator
+1411       it  = mesh\&.nodes_begin(),
+1412       end = mesh\&.nodes_end();
+1413 
+1414     for (; it!=end; ++it)
+1415       needed_nodes\&.push_back((*it)->id());
+1416 
+1417     std::sort (needed_nodes\&.begin(), needed_nodes\&.end());
+1418 
+1419     // We should not have any duplicate node->id()s
+1420     libmesh_assert (std::unique(needed_nodes\&.begin(), needed_nodes\&.end()) == needed_nodes\&.end());
+1421   }
+1422 
+1423   // Get the nodes in blocks\&.
+1424   std::vector<Real> coords;
+1425   std::pair<std::vector<dof_id_type>::iterator,
+1426     std::vector<dof_id_type>::iterator> pos;
+1427   pos\&.first = needed_nodes\&.begin();
+1428 
+1429   for (std::size_t blk=0, first_node=0, last_node=0; last_node<n_nodes; blk++)
+1430     {
+1431       first_node = blk*io_blksize;
+1432       last_node  = std::min((blk+1)*io_blksize, std::size_t(n_nodes));
+1433 
+1434       coords\&.resize(3*(last_node - first_node));
+1435 
+1436       if (this->processor_id() == 0)
+1437         io\&.data_stream (coords\&.empty() ? NULL : &coords[0], coords\&.size());
+1438 
+1439       // For large numbers of processors the majority of processors at any given
+1440       // block may not actually need these data\&.  It may be worth profiling this,
+1441       // although it is expected that disk IO will be the bottleneck
+1442       this->comm()\&.broadcast (coords);
+1443 
+1444       for (std::size_t n=first_node, idx=0; n<last_node; n++, idx+=3)
+1445         {
+1446           // first see if we need this node\&.  use pos\&.first as a smart lower
+1447           // bound, this will ensure that the size of the searched range
+1448           // decreases as we match nodes\&.
+1449           pos = std::equal_range (pos\&.first, needed_nodes\&.end(), n);
+1450 
+1451           if (pos\&.first != pos\&.second) // we need this node\&.
+1452             {
+1453               libmesh_assert_equal_to (*pos\&.first, n);
+1454               mesh\&.node(n) =
+1455                 Point (coords[idx+0],
+1456                        coords[idx+1],
+1457                        coords[idx+2]);
+1458 
+1459             }
+1460         }
+1461     }
+1462 }
+.fi
+.SS "template<typename T > void libMesh::XdrIO::read_serialized_nodesets (\fBXdr\fP &io, T)\fC [private]\fP"
+Read the nodeset conditions for a parallel, distributed mesh 
+.PP
+\fBReturns:\fP
+.RS 4
+the number of nodesets read 
+.RE
+.PP
+
+.PP
+Definition at line 1543 of file xdr_io\&.C\&.
+.PP
+References libMesh::BoundaryInfo::add_node(), boundary_condition_file_name(), libMesh::Parallel::Communicator::broadcast(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), end, libMesh::MeshTools::Generation::Private::idx(), io_blksize, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), std::min(), libMesh::ParallelObject::processor_id(), read_serialized_bc_names(), and libMesh::Xdr::reading()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+1544 {
+1545   if (this->boundary_condition_file_name() == "n/a") return;
+1546 
+1547   libmesh_assert (io\&.reading());
+1548 
+1549   // convenient reference to our mesh
+1550   MeshBase &mesh = MeshInput<MeshBase>::mesh();
+1551 
+1552   // and our boundary info object
+1553   BoundaryInfo &boundary_info = *mesh\&.boundary_info;
+1554 
+1555   // Version 0\&.9\&.2+ introduces unique ids
+1556   read_serialized_bc_names(io, boundary_info, false); // nodeset names
+1557 
+1558   // TODO: Make a data object that works with both the element and nodal bcs
+1559   std::vector<DofBCData> node_bc_data;
+1560   std::vector<T> input_buffer;
+1561 
+1562   header_id_type n_nodesets=0;
+1563   if (this->processor_id() == 0)
+1564     io\&.data (n_nodesets);
+1565   this->comm()\&.broadcast (n_nodesets);
+1566 
+1567   for (std::size_t blk=0, first_bc=0, last_bc=0; last_bc<n_nodesets; blk++)
+1568     {
+1569       first_bc = blk*io_blksize;
+1570       last_bc  = std::min((blk+1)*io_blksize, std::size_t(n_nodesets));
+1571 
+1572       input_buffer\&.resize (2*(last_bc - first_bc));
+1573 
+1574       if (this->processor_id() == 0)
+1575         io\&.data_stream (input_buffer\&.empty() ? NULL : &input_buffer[0], input_buffer\&.size());
+1576 
+1577       this->comm()\&.broadcast (input_buffer);
+1578       node_bc_data\&.clear();  node_bc_data\&.reserve (input_buffer\&.size()/2);
+1579 
+1580       // convert the input_buffer to DofBCData to facilitate searching
+1581       for (std::size_t idx=0; idx<input_buffer\&.size(); idx+=2)
+1582         node_bc_data\&.push_back (DofBCData(input_buffer[idx+0],
+1583                                           0,
+1584                                           input_buffer[idx+1]));
+1585       input_buffer\&.clear();
+1586       // note that while the files *we* write should already be sorted by
+1587       // node id this is not necessarily guaranteed\&.
+1588       std::sort (node_bc_data\&.begin(), node_bc_data\&.end());
+1589 
+1590       MeshBase::const_node_iterator
+1591         it  = mesh\&.nodes_begin(),
+1592         end = mesh\&.nodes_end();
+1593 
+1594       // Look for BCs in this block for all nodes we have
+1595       // (not just local ones)\&.  Do this by finding all the entries
+1596       // in node_bc_data whose dof_id(node_id)  match the ID of the current node\&.
+1597       for (std::pair<std::vector<DofBCData>::iterator,
+1598              std::vector<DofBCData>::iterator> pos; it!=end; ++it)
+1599 #if defined(__SUNPRO_CC) || defined(__PGI)
+1600         for (pos = std::equal_range (node_bc_data\&.begin(), node_bc_data\&.end(), (*it)->id(), CompareIntDofBCData());
+1601              pos\&.first != pos\&.second; ++pos\&.first)
+1602 #else
+1603           for (pos = std::equal_range (node_bc_data\&.begin(), node_bc_data\&.end(), (*it)->id());
+1604                pos\&.first != pos\&.second; ++pos\&.first)
+1605 #endif
+1606             {
+1607               // Note: dof_id from ElmeBCData is being used to hold node_id here
+1608               libmesh_assert_equal_to (pos\&.first->dof_id, (*it)->id());
+1609 
+1610               boundary_info\&.add_node (*it, pos\&.first->bc_id);
+1611             }
+1612     }
+1613 }
+.fi
+.SS "void libMesh::XdrIO::read_serialized_subdomain_names (\fBXdr\fP &io)\fC [private]\fP"
+Read subdomain name information - NEW in 0\&.9\&.2 format 
+.PP
+Definition at line 1165 of file xdr_io\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::broadcast(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::ParallelObject::processor_id(), libMesh::MeshBase::set_subdomain_name_map(), and version()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+1166 {
+1167   const bool read_entity_info = this->version()\&.find("0\&.9\&.2") != std::string::npos ? true : false;
+1168   if (read_entity_info)
+1169     {
+1170       MeshBase &mesh = MeshInput<MeshBase>::mesh();
+1171 
+1172       unsigned int n_subdomain_names = 0;
+1173       std::vector<header_id_type> subdomain_ids;
+1174       std::vector<std::string>  subdomain_names;
+1175 
+1176       // Read the sideset names
+1177       if (this->processor_id() == 0)
+1178         {
+1179           io\&.data(n_subdomain_names);
+1180 
+1181           subdomain_ids\&.resize(n_subdomain_names);
+1182           subdomain_names\&.resize(n_subdomain_names);
+1183 
+1184           if (n_subdomain_names)
+1185             {
+1186               io\&.data(subdomain_ids);
+1187               io\&.data(subdomain_names);
+1188             }
+1189         }
+1190 
+1191       // Broadcast the subdomain names to all processors
+1192       this->comm()\&.broadcast(n_subdomain_names);
+1193       if (n_subdomain_names == 0)
+1194         return;
+1195 
+1196       subdomain_ids\&.resize(n_subdomain_names);
+1197       subdomain_names\&.resize(n_subdomain_names);
+1198       this->comm()\&.broadcast(subdomain_ids);
+1199       this->comm()\&.broadcast(subdomain_names);
+1200 
+1201       // Reassemble the named subdomain information
+1202       std::map<subdomain_id_type, std::string> & subdomain_map = mesh\&.set_subdomain_name_map();
+1203 
+1204       for (unsigned int i=0; i<n_subdomain_names; ++i)
+1205         subdomain_map\&.insert(std::make_pair(subdomain_ids[i], subdomain_names[i]));
+1206     }
+1207 }
+.fi
+.SS "void libMesh::XdrIO::set_auto_parallel ()\fC [inline]\fP"
+Insist that we should write parallel files if and only if the mesh is an already distributed \fBParallelMesh\fP\&. 
+.PP
+Definition at line 301 of file xdr_io\&.h\&.
+.PP
+References _write_parallel, and _write_serial\&.
+.PP
+.nf
+302 {
+303   this->_write_serial   = false;
+304   this->_write_parallel = false;
+305 }
+.fi
+.SS "void libMesh::XdrIO::set_write_parallel (booldo_parallel = \fCtrue\fP)\fC [inline]\fP"
+Insist that we should/shouldn't write parallel files\&. 
+.PP
+Definition at line 291 of file xdr_io\&.h\&.
+.PP
+References _write_parallel, and _write_serial\&.
+.PP
+.nf
+292 {
+293   this->_write_parallel = do_parallel;
+294 
+295   this->_write_serial = !do_parallel;
+296 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and libMesh::UCDIO::read_implementation()\&.
+.SS "const std::string& libMesh::XdrIO::subdomain_map_file_name () const\fC [inline]\fP"
+Get/Set the subdomain file name\&. 
+.PP
+Definition at line 155 of file xdr_io\&.h\&.
+.PP
+References _subdomain_map_file\&.
+.PP
+Referenced by read(), read_serialized_connectivity(), write(), and write_serialized_connectivity()\&.
+.PP
+.nf
+155 { return _subdomain_map_file; }
+.fi
+.SS "std::string& libMesh::XdrIO::subdomain_map_file_name ()\fC [inline]\fP"
+
+.PP
+Definition at line 156 of file xdr_io\&.h\&.
+.PP
+References _subdomain_map_file\&.
+.PP
+.nf
+156 { return _subdomain_map_file; }
+.fi
+.SS "const std::string& libMesh::XdrIO::version () const\fC [inline]\fP"
+Get/Set the version string\&. Vailid version strings: 
+.PP
+.nf
+"libMesh-0.7.0+"
+"libMesh-0.7.0+ parallel"
+.fi
+.PP
+ If 'libMesh' is not detected in the version string the \fC\fBLegacyXdrIO\fP\fP class will be used to read older (pre version 0\&.7\&.0) mesh files\&. 
+.PP
+Definition at line 137 of file xdr_io\&.h\&.
+.PP
+References _version\&.
+.PP
+Referenced by read(), read_serialized_bc_names(), read_serialized_connectivity(), read_serialized_subdomain_names(), and write()\&.
+.PP
+.nf
+137 { return _version; }
+.fi
+.SS "std::string& libMesh::XdrIO::version ()\fC [inline]\fP"
+
+.PP
+Definition at line 138 of file xdr_io\&.h\&.
+.PP
+References _version\&.
+.PP
+.nf
+138 { return _version; }
+.fi
+.SS "void libMesh::XdrIO::write (const std::string &name)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 157 of file xdr_io\&.C\&.
+.PP
+References _write_parallel, _write_unique_id, libMesh::Parallel::Communicator::barrier(), binary(), boundary_condition_file_name(), libMesh::MeshBase::boundary_info, libMesh::Xdr::close(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::ENCODE, legacy(), libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::n_elem(), libMesh::MeshTools::n_elem(), n_nodes, libMesh::MeshBase::n_nodes(), libMesh::MeshTools::n_p_levels(), libMesh::MeshBase::n_subdomains(), libMesh::out, partition_map_file_name(), polynomial_level_file_name(), libMesh::ParallelObject::processor_id(), libMesh::START_LOG(), libMesh::STOP_LOG(), subdomain_map_file_name(), version(), libMesh::WRITE, libMesh::LegacyXdrIO::write(), write_parallel(), write_serialized_bcs(), write_serialized_connectivity(), write_serialized_nodes(), write_serialized_nodesets(), and write_serialized_subdomain_names()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+158 {
+159   if (this->legacy())
+160     {
+161       libmesh_deprecated();
+162 
+163       // We don't support writing parallel files in the legacy format
+164       libmesh_assert(!this->_write_parallel);
+165 
+166       LegacyXdrIO(MeshOutput<MeshBase>::mesh(), this->binary())\&.write(name);
+167       return;
+168     }
+169 
+170   Xdr io ((this->processor_id() == 0) ? name : "", this->binary() ? ENCODE : WRITE);
+171 
+172   START_LOG("write()","XdrIO");
+173 
+174   // convenient reference to our mesh
+175   const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+176 
+177   header_id_type
+178     n_elem     = mesh\&.n_elem(),
+179     n_nodes    = mesh\&.n_nodes();
+180 
+181   libmesh_assert(n_elem == mesh\&.n_elem());
+182   libmesh_assert(n_nodes == mesh\&.n_nodes());
+183 
+184   std::size_t
+185     n_bcs      = mesh\&.boundary_info->n_boundary_conds();
+186   std::size_t
+187     n_nodesets = mesh\&.boundary_info->n_nodeset_conds();
+188   unsigned int
+189     n_p_levels = MeshTools::n_p_levels (mesh);
+190 
+191   bool write_parallel_files = this->write_parallel();
+192 
+193   //-------------------------------------------------------------
+194   // For all the optional files -- the default file name is "n/a"\&.
+195   // However, the user may specify an optional external file\&.
+196 
+197   // If there are BCs and the user has not already provided a
+198   // file name then write to "\&."
+199   if ((n_bcs || n_nodesets) &&
+200       this->boundary_condition_file_name() == "n/a")
+201     this->boundary_condition_file_name() = "\&.";
+202 
+203   // If there are more than one subdomains and the user has not specified an
+204   // external file then write the subdomain mapping to the default file "\&."
+205   if ((mesh\&.n_subdomains() > 0) &&
+206       (this->subdomain_map_file_name() == "n/a"))
+207     this->subdomain_map_file_name() = "\&.";
+208 
+209   // In general we don't write the partition information\&.
+210 
+211   // If we have p levels and the user has not already provided
+212   // a file name then write to "\&."
+213   if ((n_p_levels > 1) &&
+214       (this->polynomial_level_file_name() == "n/a"))
+215     this->polynomial_level_file_name() = "\&.";
+216 
+217   // write the header
+218   if (this->processor_id() == 0)
+219     {
+220       std::string full_ver = this->version() + (write_parallel_files ?  " parallel" : "");
+221       io\&.data (full_ver);
+222 
+223       io\&.data (n_elem,  "# number of elements");
+224       io\&.data (n_nodes, "# number of nodes");
+225 
+226       io\&.data (this->boundary_condition_file_name(), "# boundary condition specification file");
+227       io\&.data (this->subdomain_map_file_name(),      "# subdomain id specification file");
+228       io\&.data (this->partition_map_file_name(),      "# processor id specification file");
+229       io\&.data (this->polynomial_level_file_name(),   "# p-level specification file");
+230 
+231       // Version 0\&.9\&.2+ introduces sizes for each type
+232       header_id_type write_size = sizeof(xdr_id_type), zero_size = 0;
+233 
+234       const bool
+235         write_p_level      = ("\&." == this->polynomial_level_file_name()),
+236         write_partitioning = ("\&." == this->partition_map_file_name()),
+237         write_subdomain_id = ("\&." == this->subdomain_map_file_name()),
+238         write_bcs          = ("\&." == this->boundary_condition_file_name());
+239 
+240       io\&.data (write_size, "# type size");
+241       io\&.data (_write_unique_id   ? write_size : zero_size, "# uid size");
+242       io\&.data (write_partitioning ? write_size : zero_size, "# pid size");
+243       io\&.data (write_subdomain_id ? write_size : zero_size, "# sid size");
+244       io\&.data (write_p_level      ? write_size : zero_size, "# p-level size");
+245       // Boundary Condition sizes
+246       io\&.data (write_bcs          ? write_size : zero_size, "# eid size");   // elem id
+247       io\&.data (write_bcs          ? write_size : zero_size, "# side size "); // side number
+248       io\&.data (write_bcs          ? write_size : zero_size, "# bid size");   // boundary id
+249     }
+250 
+251   if (write_parallel_files)
+252     {
+253       // Parallel xdr mesh files aren't implemented yet; until they
+254       // are we'll just warn the user and write a serial file\&.
+255       libMesh::out << "Warning!  Parallel xda/xdr is not yet implemented\&.\n";
+256       libMesh::out << "Writing a serialized file instead\&." << std::endl;
+257 
+258       // write subdomain names
+259       this->write_serialized_subdomain_names(io);
+260 
+261       // write connectivity
+262       this->write_serialized_connectivity (io, n_elem);
+263 
+264       // write the nodal locations
+265       this->write_serialized_nodes (io, n_nodes);
+266 
+267       // write the boundary condition information
+268       this->write_serialized_bcs (io, n_bcs);
+269 
+270       // write the nodeset information
+271       this->write_serialized_nodesets (io, n_nodesets);
+272     }
+273   else
+274     {
+275       // write subdomain names
+276       this->write_serialized_subdomain_names(io);
+277 
+278       // write connectivity
+279       this->write_serialized_connectivity (io, n_elem);
+280 
+281       // write the nodal locations
+282       this->write_serialized_nodes (io, n_nodes);
+283 
+284       // write the boundary condition information
+285       this->write_serialized_bcs (io, n_bcs);
+286 
+287       // write the nodeset information
+288       this->write_serialized_nodesets (io, n_nodesets);
+289     }
+290 
+291   if(mesh\&.boundary_info->n_edge_conds() > 0)
+292     {
+293       libMesh::out << "Warning: Mesh contains edge boundary IDs, but these "
+294                    << "are not supported by the XDR format\&."
+295                    << std::endl;
+296     }
+297 
+298   STOP_LOG("write()","XdrIO");
+299 
+300   // pause all processes until the writing ends -- this will
+301   // protect for the pathological case where a write is
+302   // followed immediately by a read\&.  The write must be
+303   // guaranteed to complete first\&.
+304   io\&.close();
+305   this->comm()\&.barrier();
+306 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SS "bool libMesh::XdrIO::write_parallel () const\fC [inline]\fP"
+Report whether we should write parallel files\&. 
+.PP
+Definition at line 270 of file xdr_io\&.h\&.
+.PP
+References _write_parallel, _write_serial, libMesh::MeshBase::is_serial(), libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), and libMesh::MeshOutput< MT >::mesh()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+271 {
+272   // We can't insist on both serial and parallel
+273   libmesh_assert (!this->_write_serial || !this->_write_parallel);
+274 
+275   // If we insisted on serial, do that
+276   if (this->_write_serial)
+277     return false;
+278 
+279   // If we insisted on parallel, do that
+280   if (this->_write_parallel)
+281     return true;
+282 
+283   // If we're doing things automatically, check the mesh
+284   const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+285   return !mesh\&.is_serial();
+286 }
+.fi
+.SS "void libMesh::XdrIO::write_serialized_bc_names (\fBXdr\fP &io, const \fBBoundaryInfo\fP &info, boolis_sideset) const\fC [private]\fP"
+Write boundary names information (sideset and nodeset) - NEW in 0\&.9\&.2 format 
+.PP
+Definition at line 993 of file xdr_io\&.C\&.
+.PP
+References libMesh::Xdr::data(), libMesh::BoundaryInfo::get_nodeset_name_map(), libMesh::BoundaryInfo::get_sideset_name_map(), and libMesh::ParallelObject::processor_id()\&.
+.PP
+Referenced by write_serialized_bcs(), and write_serialized_nodesets()\&.
+.PP
+.nf
+994 {
+995   if (this->processor_id() == 0)
+996     {
+997       const std::map<boundary_id_type, std::string> & boundary_map = is_sideset ?
+998         info\&.get_sideset_name_map() : info\&.get_nodeset_name_map();
+999 
+1000       std::vector<header_id_type> boundary_ids;   boundary_ids\&.reserve(boundary_map\&.size());
+1001       std::vector<std::string>  boundary_names; boundary_names\&.reserve(boundary_map\&.size());
+1002 
+1003       // We need to loop over the map and make sure that there aren't any invalid entries\&.  Since we
+1004       // return writable references in boundary_info, it's possible for the user to leave some entity names
+1005       // blank\&.  We can't write those to the XDA file\&.
+1006       header_id_type n_boundary_names = 0;
+1007       std::map<boundary_id_type, std::string>::const_iterator it_end = boundary_map\&.end();
+1008       for (std::map<boundary_id_type, std::string>::const_iterator it = boundary_map\&.begin(); it != it_end; ++it)
+1009         {
+1010           if (!it->second\&.empty())
+1011             {
+1012               n_boundary_names++;
+1013               boundary_ids\&.push_back(it->first);
+1014               boundary_names\&.push_back(it->second);
+1015             }
+1016         }
+1017 
+1018       if (is_sideset)
+1019         io\&.data(n_boundary_names, "# sideset id to name map");
+1020       else
+1021         io\&.data(n_boundary_names, "# nodeset id to name map");
+1022       // Write out the ids and names in two vectors
+1023       if (n_boundary_names)
+1024         {
+1025           io\&.data(boundary_ids);
+1026           io\&.data(boundary_names);
+1027         }
+1028     }
+1029 }
+.fi
+.SS "void libMesh::XdrIO::write_serialized_bcs (\fBXdr\fP &io, const std::size_tn_bcs) const\fC [private]\fP"
+Write the boundary conditions for a parallel, distributed mesh 
+.PP
+Definition at line 829 of file xdr_io\&.C\&.
+.PP
+References bc_id, libMesh::BoundaryInfo::boundary_ids(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), end, libMesh::Parallel::Communicator::gather(), libMesh::MeshTools::Generation::Private::idx(), libMesh::BoundaryInfo::invalid_id, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::ParallelObject::n_processors(), libMesh::Elem::n_sides(), libMesh::ParallelObject::processor_id(), libMesh::Parallel::Communicator::receive(), libMesh::Parallel::Communicator::send(), write_serialized_bc_names(), and libMesh::Xdr::writing()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+830 {
+831   libmesh_assert (io\&.writing());
+832 
+833   // convenient reference to our mesh
+834   const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+835 
+836   // and our boundary info object
+837   const BoundaryInfo &boundary_info = *mesh\&.boundary_info;
+838 
+839   // Version 0\&.9\&.2+ introduces entity names
+840   write_serialized_bc_names(io, boundary_info, true);  // sideset names
+841 
+842   header_id_type n_bcs_out = n_bcs;
+843   if (this->processor_id() == 0)
+844     io\&.data (n_bcs_out, "# number of boundary conditions");
+845   n_bcs_out = 0;
+846 
+847   if (!n_bcs) return;
+848 
+849   std::vector<xdr_id_type> xfer_bcs, recv_bcs;
+850   std::vector<std::size_t> bc_sizes(this->n_processors());
+851 
+852   // Boundary conditions are only specified for level-0 elements
+853   MeshBase::const_element_iterator
+854     it  = mesh\&.local_level_elements_begin(0),
+855     end = mesh\&.local_level_elements_end(0);
+856 
+857   dof_id_type n_local_level_0_elem=0;
+858   for (; it!=end; ++it, n_local_level_0_elem++)
+859     {
+860       const Elem *elem = *it;
+861 
+862       for (unsigned int s=0; s<elem->n_sides(); s++)
+863         // We're supporting boundary ids on internal sides now
+864         //if (elem->neighbor(s) == NULL)
+865         {
+866           const std::vector<boundary_id_type>& bc_ids =
+867             boundary_info\&.boundary_ids (elem, s);
+868           for (std::vector<boundary_id_type>::const_iterator id_it=bc_ids\&.begin(); id_it!=bc_ids\&.end(); ++id_it)
+869             {
+870               const boundary_id_type bc_id = *id_it;
+871               if (bc_id != BoundaryInfo::invalid_id)
+872                 {
+873                   xfer_bcs\&.push_back (n_local_level_0_elem);
+874                   xfer_bcs\&.push_back (s) ;
+875                   xfer_bcs\&.push_back (bc_id);
+876                 }
+877             }
+878         }
+879     }
+880 
+881   xfer_bcs\&.push_back(n_local_level_0_elem);
+882   std::size_t my_size = xfer_bcs\&.size();
+883   this->comm()\&.gather (0, my_size, bc_sizes);
+884 
+885   // All processors send their xfer buffers to processor 0
+886   // Processor 0 will receive all buffers and write out the bcs
+887   if (this->processor_id() == 0)
+888     {
+889       dof_id_type elem_offset = 0;
+890       for (unsigned int pid=0; pid<this->n_processors(); pid++)
+891         {
+892           recv_bcs\&.resize(bc_sizes[pid]);
+893           if (pid == 0)
+894             recv_bcs = xfer_bcs;
+895           else
+896             this->comm()\&.receive (pid, recv_bcs);
+897 
+898           const dof_id_type my_n_local_level_0_elem
+899             = recv_bcs\&.back(); recv_bcs\&.pop_back();
+900 
+901           for (std::size_t idx=0; idx<recv_bcs\&.size(); idx += 3, n_bcs_out++)
+902             recv_bcs[idx+0] += elem_offset;
+903 
+904           io\&.data_stream (recv_bcs\&.empty() ? NULL : &recv_bcs[0], recv_bcs\&.size(), 3);
+905           elem_offset += my_n_local_level_0_elem;
+906         }
+907       libmesh_assert_equal_to (n_bcs, n_bcs_out);
+908     }
+909   else
+910     this->comm()\&.send (0, xfer_bcs);
+911 }
+.fi
+.SS "void libMesh::XdrIO::write_serialized_connectivity (\fBXdr\fP &io, const \fBdof_id_type\fPn_elem) const\fC [private]\fP"
+Write the connectivity for a parallel, distributed mesh 
+.PP
+Definition at line 348 of file xdr_io\&.C\&.
+.PP
+References _write_unique_id, libMesh::Elem::child(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), end, libMesh::Parallel::Communicator::gather(), libMesh::DofObject::id(), libMesh::libmesh_assert(), libMesh::MeshBase::local_elements_end(), libMesh::MeshBase::local_level_elements_begin(), libMesh::MeshBase::local_level_elements_end(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshTools::n_active_levels(), libMesh::Elem::n_children(), libMesh::MeshBase::n_elem(), libMesh::MeshTools::n_elem(), n_nodes, libMesh::ParallelObject::n_processors(), pack_element(), partition_map_file_name(), polynomial_level_file_name(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::Parallel::Communicator::receive(), libMesh::Parallel::Communicator::send(), libMesh::Parallel::Communicator::send_receive(), subdomain_map_file_name(), libMesh::Parallel::Communicator::sum(), and libMesh::Xdr::writing()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+349 {
+350   libmesh_assert (io\&.writing());
+351 
+352   const bool
+353     write_p_level      = ("\&." == this->polynomial_level_file_name()),
+354     write_partitioning = ("\&." == this->partition_map_file_name()),
+355     write_subdomain_id = ("\&." == this->subdomain_map_file_name());
+356 
+357   // convenient reference to our mesh
+358   const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+359   libmesh_assert_equal_to (n_elem, mesh\&.n_elem());
+360 
+361   // We will only write active elements and their parents\&.
+362   const unsigned int n_active_levels = MeshTools::n_active_levels (mesh);
+363   std::vector<xdr_id_type>
+364     n_global_elem_at_level(n_active_levels), n_local_elem_at_level(n_active_levels);
+365 
+366   MeshBase::const_element_iterator it  = mesh\&.local_elements_end(), end=it;
+367 
+368   // Find the number of local and global elements at each level
+369 #ifndef NDEBUG
+370   dof_id_type tot_n_elem = 0;
+371 #endif
+372   for (unsigned int level=0; level<n_active_levels; level++)
+373     {
+374       it  = mesh\&.local_level_elements_begin(level);
+375       end = mesh\&.local_level_elements_end(level);
+376 
+377       n_local_elem_at_level[level] = n_global_elem_at_level[level] = MeshTools::n_elem(it, end);
+378 
+379       this->comm()\&.sum(n_global_elem_at_level[level]);
+380 #ifndef NDEBUG
+381       tot_n_elem += n_global_elem_at_level[level];
+382 #endif
+383       libmesh_assert_less_equal (n_global_elem_at_level[level], n_elem);
+384       libmesh_assert_less_equal (tot_n_elem, n_elem);
+385     }
+386 
+387   std::vector<xdr_id_type>
+388     xfer_conn, recv_conn;
+389   std::vector<dof_id_type>
+390     n_elem_on_proc(this->n_processors()), processor_offsets(this->n_processors());
+391   std::vector<xdr_id_type> output_buffer;
+392   std::vector<std::size_t>
+393     xfer_buf_sizes(this->n_processors());
+394 
+395 #ifdef LIBMESH_ENABLE_AMR
+396   typedef std::map<dof_id_type, std::pair<processor_id_type, dof_id_type> > id_map_type;
+397   id_map_type parent_id_map, child_id_map;
+398 #endif
+399 
+400   dof_id_type my_next_elem=0, next_global_elem=0;
+401 
+402   //-------------------------------------------
+403   // First write the level-0 elements directly\&.
+404   it  = mesh\&.local_level_elements_begin(0);
+405   end = mesh\&.local_level_elements_end(0);
+406   for (; it != end; ++it, ++my_next_elem)
+407     {
+408       pack_element (xfer_conn, *it);
+409 #ifdef LIBMESH_ENABLE_AMR
+410       parent_id_map[(*it)->id()] = std::make_pair(this->processor_id(),
+411                                                   my_next_elem);
+412 #endif
+413     }
+414   xfer_conn\&.push_back(my_next_elem); // toss in the number of elements transferred\&.
+415 
+416   std::size_t my_size = xfer_conn\&.size();
+417   this->comm()\&.gather (0, my_next_elem, n_elem_on_proc);
+418   this->comm()\&.gather (0, my_size,      xfer_buf_sizes);
+419 
+420   processor_offsets[0] = 0;
+421   for (unsigned int pid=1; pid<this->n_processors(); pid++)
+422     processor_offsets[pid] = processor_offsets[pid-1] + n_elem_on_proc[pid-1];
+423 
+424   // All processors send their xfer buffers to processor 0\&.
+425   // Processor 0 will receive the data and write out the elements\&.
+426   if (this->processor_id() == 0)
+427     {
+428       // Write the number of elements at this level\&.
+429       {
+430         std::string comment = "# n_elem at level 0", legend  = ", [ type ";
+431         if (_write_unique_id)
+432           legend += "uid ";
+433         if (write_partitioning)
+434           legend += "pid ";
+435         if (write_subdomain_id)
+436           legend += "sid ";
+437         if (write_p_level)
+438           legend += "p_level ";
+439         legend += "(n0 \&.\&.\&. nN-1) ]";
+440         comment += legend;
+441         io\&.data (n_global_elem_at_level[0], comment\&.c_str());
+442       }
+443 
+444       for (unsigned int pid=0; pid<this->n_processors(); pid++)
+445         {
+446           recv_conn\&.resize(xfer_buf_sizes[pid]);
+447           if (pid == 0)
+448             recv_conn = xfer_conn;
+449           else
+450             this->comm()\&.receive (pid, recv_conn);
+451 
+452           // at a minimum, the buffer should contain the number of elements,
+453           // which could be 0\&.
+454           libmesh_assert (!recv_conn\&.empty());
+455 
+456           {
+457             const xdr_id_type n_elem_received = recv_conn\&.back();
+458             std::vector<xdr_id_type>::const_iterator recv_conn_iter = recv_conn\&.begin();
+459 
+460             for (xdr_id_type elem=0; elem<n_elem_received; elem++, next_global_elem++)
+461               {
+462                 output_buffer\&.clear();
+463                 const xdr_id_type n_nodes = *recv_conn_iter; ++recv_conn_iter;
+464                 output_buffer\&.push_back(*recv_conn_iter);     /* type       */ ++recv_conn_iter;
+465 
+466                 if (_write_unique_id)
+467                   output_buffer\&.push_back(*recv_conn_iter);   /* unique_id  */ ++recv_conn_iter;
+468 
+469                 if (write_partitioning)
+470                   output_buffer\&.push_back(*recv_conn_iter); /* processor id */ ++recv_conn_iter;
+471 
+472                 if (write_subdomain_id)
+473                   output_buffer\&.push_back(*recv_conn_iter); /* subdomain id */ ++recv_conn_iter;
+474 
+475 #ifdef LIBMESH_ENABLE_AMR
+476                 if (write_p_level)
+477                   output_buffer\&.push_back(*recv_conn_iter); /* p level      */ ++recv_conn_iter;
+478 #endif
+479                 for (dof_id_type node=0; node<n_nodes; node++, ++recv_conn_iter)
+480                   output_buffer\&.push_back(*recv_conn_iter);
+481 
+482                 io\&.data_stream (&output_buffer[0], output_buffer\&.size(), output_buffer\&.size());
+483               }
+484           }
+485         }
+486     }
+487   else
+488     this->comm()\&.send (0, xfer_conn);
+489 
+490 #ifdef LIBMESH_ENABLE_AMR
+491   //--------------------------------------------------------------------
+492   // Next write the remaining elements indirectly through their parents\&.
+493   // This will insure that the children are written in the proper order
+494   // so they can be reconstructed properly\&.
+495   for (unsigned int level=1; level<n_active_levels; level++)
+496     {
+497       xfer_conn\&.clear();
+498 
+499       it  = mesh\&.local_level_elements_begin(level-1);
+500       end = mesh\&.local_level_elements_end  (level-1);
+501 
+502       dof_id_type my_n_elem_written_at_level = 0;
+503       for (; it != end; ++it)
+504         if (!(*it)->active()) // we only want the parents elements at this level, and
+505           {                   // there is no direct iterator for this obscure use
+506             const Elem *parent = *it;
+507             id_map_type::iterator pos = parent_id_map\&.find(parent->id());
+508             libmesh_assert (pos != parent_id_map\&.end());
+509             const processor_id_type parent_pid = pos->second\&.first;
+510             const dof_id_type parent_id  = pos->second\&.second;
+511             parent_id_map\&.erase(pos);
+512 
+513             for (unsigned int c=0; c<parent->n_children(); c++, my_next_elem++)
+514               {
+515                 const Elem *child = parent->child(c);
+516                 pack_element (xfer_conn, child, parent_id, parent_pid);
+517 
+518                 // this aproach introduces the possibility that we write
+519                 // non-local elements\&.  These elements may well be parents
+520                 // at the next step
+521                 child_id_map[child->id()] = std::make_pair (child->processor_id(),
+522                                                             my_n_elem_written_at_level++);
+523               }
+524           }
+525       xfer_conn\&.push_back(my_n_elem_written_at_level);
+526       my_size = xfer_conn\&.size();
+527       this->comm()\&.gather (0, my_size,   xfer_buf_sizes);
+528 
+529       // Processor 0 will receive the data and write the elements\&.
+530       if (this->processor_id() == 0)
+531         {
+532           // Write the number of elements at this level\&.
+533           {
+534             char buf[80];
+535             std::sprintf(buf, "# n_elem at level %u", level);
+536             std::string comment(buf), legend  = ", [ type ";
+537 
+538             if (_write_unique_id)
+539               legend += "uid ";
+540             legend += "parent ";
+541             if (write_partitioning)
+542               legend += "pid ";
+543             if (write_subdomain_id)
+544               legend += "sid ";
+545             if (write_p_level)
+546               legend += "p_level ";
+547             legend += "(n0 \&.\&.\&. nN-1) ]";
+548             comment += legend;
+549             io\&.data (n_global_elem_at_level[level], comment\&.c_str());
+550           }
+551 
+552           for (unsigned int pid=0; pid<this->n_processors(); pid++)
+553             {
+554               recv_conn\&.resize(xfer_buf_sizes[pid]);
+555               if (pid == 0)
+556                 recv_conn = xfer_conn;
+557               else
+558                 this->comm()\&.receive (pid, recv_conn);
+559 
+560               // at a minimum, the buffer should contain the number of elements,
+561               // which could be 0\&.
+562               libmesh_assert (!recv_conn\&.empty());
+563 
+564               {
+565                 const xdr_id_type n_elem_received = recv_conn\&.back();
+566                 std::vector<xdr_id_type>::const_iterator recv_conn_iter = recv_conn\&.begin();
+567 
+568                 for (xdr_id_type elem=0; elem<n_elem_received; elem++, next_global_elem++)
+569                   {
+570                     output_buffer\&.clear();
+571                     const xdr_id_type n_nodes = *recv_conn_iter; ++recv_conn_iter;
+572                     output_buffer\&.push_back(*recv_conn_iter);                   /* type          */ ++recv_conn_iter;
+573                     if (_write_unique_id)
+574                       output_buffer\&.push_back(*recv_conn_iter);                 /* unique_id     */ ++recv_conn_iter;
+575 
+576                     const xdr_id_type parent_local_id = *recv_conn_iter; ++recv_conn_iter;
+577                     const xdr_id_type parent_pid      = *recv_conn_iter; ++recv_conn_iter;
+578 
+579                     output_buffer\&.push_back (parent_local_id+processor_offsets[parent_pid]);
+580 
+581                     if (write_partitioning)
+582                       output_buffer\&.push_back(*recv_conn_iter); /* processor id */ ++recv_conn_iter;
+583 
+584                     if (write_subdomain_id)
+585                       output_buffer\&.push_back(*recv_conn_iter); /* subdomain id */ ++recv_conn_iter;
+586 
+587                     if (write_p_level)
+588                       output_buffer\&.push_back(*recv_conn_iter); /* p level       */ ++recv_conn_iter;
+589 
+590                     for (xdr_id_type node=0; node<n_nodes; node++, ++recv_conn_iter)
+591                       output_buffer\&.push_back(*recv_conn_iter);
+592 
+593                     io\&.data_stream (&output_buffer[0], output_buffer\&.size(), output_buffer\&.size());
+594                   }
+595               }
+596             }
+597         }
+598       else
+599         this->comm()\&.send  (0, xfer_conn);
+600 
+601       // update the processor_offsets
+602       processor_offsets[0] = processor_offsets\&.back() + n_elem_on_proc\&.back();
+603       this->comm()\&.gather (0, my_n_elem_written_at_level, n_elem_on_proc);
+604       for (unsigned int pid=1; pid<this->n_processors(); pid++)
+605         processor_offsets[pid] = processor_offsets[pid-1] + n_elem_on_proc[pid-1];
+606 
+607       // Now, at the next level we will again iterate over local parents\&.  However,
+608       // those parents may have been written by other processors (at this step),
+609       // so we need to gather them into our *_id_maps\&.
+610       {
+611         std::vector<std::vector<dof_id_type> > requested_ids(this->n_processors());
+612         std::vector<dof_id_type> request_to_fill;
+613 
+614         it  = mesh\&.local_level_elements_begin(level);
+615         end = mesh\&.local_level_elements_end(level);
+616 
+617         for (; it!=end; ++it)
+618           if (!child_id_map\&.count((*it)->id()))
+619             {
+620               libmesh_assert_not_equal_to ((*it)->parent()->processor_id(), this->processor_id());
+621               requested_ids[(*it)->parent()->processor_id()]\&.push_back((*it)->id());
+622             }
+623 
+624         // Next set the child_ids
+625         for (unsigned int p=1; p != this->n_processors(); ++p)
+626           {
+627             // Trade my requests with processor procup and procdown
+628             unsigned int procup = (this->processor_id() + p) %
+629               this->n_processors();
+630             unsigned int procdown = (this->n_processors() +
+631                                      this->processor_id() - p) %
+632               this->n_processors();
+633 
+634             this->comm()\&.send_receive(procup, requested_ids[procup],
+635                                       procdown, request_to_fill);
+636 
+637             // Fill those requests by overwriting the requested ids
+638             for (std::size_t i=0; i<request_to_fill\&.size(); i++)
+639               {
+640                 libmesh_assert (child_id_map\&.count(request_to_fill[i]));
+641                 libmesh_assert_equal_to (child_id_map[request_to_fill[i]]\&.first, procdown);
+642 
+643                 request_to_fill[i] = child_id_map[request_to_fill[i]]\&.second;
+644               }
+645 
+646             // Trade back the results
+647             std::vector<dof_id_type> filled_request;
+648             this->comm()\&.send_receive(procdown, request_to_fill,
+649                                       procup, filled_request);
+650 
+651             libmesh_assert_equal_to (filled_request\&.size(), requested_ids[procup]\&.size());
+652 
+653             for (std::size_t i=0; i<filled_request\&.size(); i++)
+654               child_id_map[requested_ids[procup][i]] =
+655                 std::make_pair (procup,
+656                                 filled_request[i]);
+657           }
+658         // overwrite the parent_id_map with the child_id_map, but
+659         // use std::map::swap() for efficiency\&.
+660         parent_id_map\&.swap(child_id_map);  child_id_map\&.clear();
+661       }
+662     }
+663 #endif // LIBMESH_ENABLE_AMR
+664   if (this->processor_id() == 0)
+665     libmesh_assert_equal_to (next_global_elem, n_elem);
+666 
+667 }
+.fi
+.SS "void libMesh::XdrIO::write_serialized_nodes (\fBXdr\fP &io, const \fBdof_id_type\fPn_nodes) const\fC [private]\fP"
+Write the nodal locations for a parallel, distributed mesh 
+.PP
+Definition at line 671 of file xdr_io\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::Xdr::data_stream(), end, libMesh::Parallel::Communicator::gather(), libMesh::Parallel::Communicator::get_unique_tag(), libMesh::MeshTools::Generation::Private::idx(), io_blksize, libMesh::MeshBase::local_nodes_begin(), libMesh::MeshBase::local_nodes_end(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), std::min(), n_nodes, libMesh::MeshBase::n_nodes(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::processor_id(), libMesh::Parallel::Communicator::receive(), libMesh::Parallel::Communicator::send(), and libMesh::Parallel::wait()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+672 {
+673   // convenient reference to our mesh
+674   const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+675   libmesh_assert_equal_to (n_nodes, mesh\&.n_nodes());
+676 
+677   std::vector<dof_id_type> xfer_ids;
+678   std::vector<Real>         xfer_coords, &coords=xfer_coords;
+679 
+680   std::vector<std::vector<dof_id_type> > recv_ids   (this->n_processors());;
+681   std::vector<std::vector<Real> >         recv_coords(this->n_processors());
+682 
+683   std::size_t n_written=0;
+684 
+685   for (std::size_t blk=0, last_node=0; last_node<n_nodes; blk++)
+686     {
+687       const std::size_t first_node = blk*io_blksize;
+688       last_node = std::min((blk+1)*io_blksize, std::size_t(n_nodes));
+689 
+690       // Build up the xfer buffers on each processor
+691       MeshBase::const_node_iterator
+692         it  = mesh\&.local_nodes_begin(),
+693         end = mesh\&.local_nodes_end();
+694 
+695       xfer_ids\&.clear(); xfer_coords\&.clear();
+696 
+697       for (; it!=end; ++it)
+698         if (((*it)->id() >= first_node) && // node in [first_node, last_node)
+699             ((*it)->id() <  last_node))
+700           {
+701             xfer_ids\&.push_back((*it)->id());
+702             const Point &p = **it;
+703             xfer_coords\&.push_back(p(0));
+704 #if LIBMESH_DIM > 1
+705             xfer_coords\&.push_back(p(1));
+706 #endif
+707 #if LIBMESH_DIM > 2
+708             xfer_coords\&.push_back(p(2));
+709 #endif
+710           }
+711 
+712       //-------------------------------------
+713       // Send the xfer buffers to processor 0
+714       std::vector<std::size_t> ids_size, coords_size;
+715 
+716       const std::size_t my_ids_size = xfer_ids\&.size();
+717 
+718       // explicitly gather ids_size
+719       this->comm()\&.gather (0, my_ids_size, ids_size);
+720 
+721       // infer coords_size on processor 0
+722       if (this->processor_id() == 0)
+723         {
+724           coords_size\&.reserve(this->n_processors());
+725           for (std::size_t p=0; p<ids_size\&.size(); p++)
+726             coords_size\&.push_back(LIBMESH_DIM*ids_size[p]);
+727         }
+728 
+729       // We will have lots of simultaneous receives if we are
+730       // processor 0, so let's use nonblocking receives\&.
+731       std::vector<Parallel::Request>
+732         id_request_handles(this->n_processors()-1),
+733         coord_request_handles(this->n_processors()-1);
+734 
+735       Parallel::MessageTag
+736         id_tag    = mesh\&.comm()\&.get_unique_tag(1234),
+737         coord_tag = mesh\&.comm()\&.get_unique_tag(1235);
+738 
+739       // Post the receives -- do this on processor 0 only\&.
+740       if (this->processor_id() == 0)
+741         {
+742           for (unsigned int pid=0; pid<this->n_processors(); pid++)
+743             {
+744               recv_ids[pid]\&.resize(ids_size[pid]);
+745               recv_coords[pid]\&.resize(coords_size[pid]);
+746 
+747               if (pid == 0)
+748                 {
+749                   recv_ids[0] = xfer_ids;
+750                   recv_coords[0] = xfer_coords;
+751                 }
+752               else
+753                 {
+754                   this->comm()\&.receive (pid, recv_ids[pid],
+755                                         id_request_handles[pid-1],
+756                                         id_tag);
+757                   this->comm()\&.receive (pid, recv_coords[pid],
+758                                         coord_request_handles[pid-1],
+759                                         coord_tag);
+760                 }
+761             }
+762         }
+763       else
+764         {
+765           // Send -- do this on all other processors\&.
+766           this->comm()\&.send(0, xfer_ids,    id_tag);
+767           this->comm()\&.send(0, xfer_coords, coord_tag);
+768         }
+769 
+770       // -------------------------------------------------------
+771       // Receive the messages and write the output on processor 0\&.
+772       if (this->processor_id() == 0)
+773         {
+774           // Wait for all the receives to complete\&. We have no
+775           // need for the statuses since we already know the
+776           // buffer sizes\&.
+777           Parallel::wait (id_request_handles);
+778           Parallel::wait (coord_request_handles);
+779 
+780           // Write the coordinates in this block\&.
+781           std::size_t tot_id_size=0;
+782 #ifndef NDEBUG
+783           std::size_t tot_coord_size=0;
+784 #endif
+785           for (unsigned int pid=0; pid<this->n_processors(); pid++)
+786             {
+787               tot_id_size    += recv_ids[pid]\&.size();
+788 #ifndef NDEBUG
+789               tot_coord_size += recv_coords[pid]\&.size();
+790 #endif
+791             }
+792 
+793           libmesh_assert_less_equal
+794             (tot_id_size, std::min(io_blksize, std::size_t(n_nodes)));
+795           libmesh_assert_equal_to (tot_coord_size, LIBMESH_DIM*tot_id_size);
+796 
+797           coords\&.resize (3*tot_id_size);
+798           for (unsigned int pid=0; pid<this->n_processors(); pid++)
+799             for (std::size_t idx=0; idx<recv_ids[pid]\&.size(); idx++)
+800               {
+801                 const std::size_t local_idx = recv_ids[pid][idx] - first_node;
+802                 libmesh_assert_less ((3*local_idx+2), coords\&.size());
+803                 libmesh_assert_less ((LIBMESH_DIM*idx+LIBMESH_DIM-1), recv_coords[pid]\&.size());
+804 
+805                 coords[3*local_idx+0] = recv_coords[pid][LIBMESH_DIM*idx+0];
+806 #if LIBMESH_DIM > 1
+807                 coords[3*local_idx+1] = recv_coords[pid][LIBMESH_DIM*idx+1];
+808 #else
+809                 coords[3*local_idx+1] = 0\&.;
+810 #endif
+811 #if LIBMESH_DIM > 2
+812                 coords[3*local_idx+2] = recv_coords[pid][LIBMESH_DIM*idx+2];
+813 #else
+814                 coords[3*local_idx+2] = 0\&.;
+815 #endif
+816 
+817                 n_written++;
+818               }
+819 
+820           io\&.data_stream (coords\&.empty() ? NULL : &coords[0], coords\&.size(), 3);
+821         }
+822     }
+823   if (this->processor_id() == 0)
+824     libmesh_assert_equal_to (n_written, n_nodes);
+825 }
+.fi
+.SS "void libMesh::XdrIO::write_serialized_nodesets (\fBXdr\fP &io, const std::size_tn_nodesets) const\fC [private]\fP"
+Write the boundary conditions for a parallel, distributed mesh 
+.PP
+Definition at line 915 of file xdr_io\&.C\&.
+.PP
+References bc_id, libMesh::BoundaryInfo::boundary_ids(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), end, libMesh::Parallel::Communicator::gather(), libMesh::MeshTools::Generation::Private::idx(), libMesh::BoundaryInfo::invalid_id, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::processor_id(), libMesh::Parallel::Communicator::receive(), libMesh::Parallel::Communicator::send(), write_serialized_bc_names(), and libMesh::Xdr::writing()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+916 {
+917   libmesh_assert (io\&.writing());
+918 
+919   // convenient reference to our mesh
+920   const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+921 
+922   // and our boundary info object
+923   const BoundaryInfo &boundary_info = *mesh\&.boundary_info;
+924 
+925   // Version 0\&.9\&.2+ introduces entity names
+926   write_serialized_bc_names(io, boundary_info, false);  // nodeset names
+927 
+928   header_id_type n_nodesets_out = n_nodesets;
+929   if (this->processor_id() == 0)
+930     io\&.data (n_nodesets_out, "# number of nodesets");
+931   n_nodesets_out = 0;
+932 
+933   if (!n_nodesets) return;
+934 
+935   std::vector<xdr_id_type> xfer_bcs, recv_bcs;
+936   std::vector<std::size_t> bc_sizes(this->n_processors());
+937 
+938   MeshBase::const_node_iterator
+939     it  = mesh\&.local_nodes_begin(),
+940     end = mesh\&.local_nodes_end();
+941 
+942   dof_id_type n_node=0;
+943   for (; it!=end; ++it)
+944     {
+945       const Node *node = *it;
+946       const std::vector<boundary_id_type>& nodeset_ids =
+947         boundary_info\&.boundary_ids (node);
+948       for (std::vector<boundary_id_type>::const_iterator id_it=nodeset_ids\&.begin(); id_it!=nodeset_ids\&.end(); ++id_it)
+949         {
+950           const boundary_id_type bc_id = *id_it;
+951           if (bc_id != BoundaryInfo::invalid_id)
+952             {
+953               xfer_bcs\&.push_back ((*it)->id());
+954               xfer_bcs\&.push_back (bc_id);
+955             }
+956         }
+957     }
+958 
+959   xfer_bcs\&.push_back(n_node);
+960   std::size_t my_size = xfer_bcs\&.size();
+961   this->comm()\&.gather (0, my_size, bc_sizes);
+962 
+963   // All processors send their xfer buffers to processor 0
+964   // Processor 0 will receive all buffers and write out the bcs
+965   if (this->processor_id() == 0)
+966     {
+967       dof_id_type node_offset = 0;
+968       for (unsigned int pid=0; pid<this->n_processors(); pid++)
+969         {
+970           recv_bcs\&.resize(bc_sizes[pid]);
+971           if (pid == 0)
+972             recv_bcs = xfer_bcs;
+973           else
+974             this->comm()\&.receive (pid, recv_bcs);
+975 
+976           const dof_id_type my_n_node
+977             = recv_bcs\&.back(); recv_bcs\&.pop_back();
+978 
+979           for (std::size_t idx=0; idx<recv_bcs\&.size(); idx += 2, n_nodesets_out++)
+980             recv_bcs[idx+0] += node_offset;
+981 
+982           io\&.data_stream (recv_bcs\&.empty() ? NULL : &recv_bcs[0], recv_bcs\&.size(), 2);
+983           node_offset += my_n_node;
+984         }
+985       libmesh_assert_equal_to (n_nodesets, n_nodesets_out);
+986     }
+987   else
+988     this->comm()\&.send (0, xfer_bcs);
+989 }
+.fi
+.SS "void libMesh::XdrIO::write_serialized_subdomain_names (\fBXdr\fP &io) const\fC [private]\fP"
+Write subdomain name information - NEW in 0\&.9\&.2 format 
+.PP
+Definition at line 310 of file xdr_io\&.C\&.
+.PP
+References libMesh::Xdr::data(), libMesh::MeshBase::get_subdomain_name_map(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), and libMesh::ParallelObject::processor_id()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+311 {
+312   if (this->processor_id() == 0)
+313     {
+314       const MeshBase &mesh = MeshOutput<MeshBase>::mesh();
+315 
+316       const std::map<subdomain_id_type, std::string> & subdomain_map = mesh\&.get_subdomain_name_map();
+317 
+318       std::vector<header_id_type> subdomain_ids;   subdomain_ids\&.reserve(subdomain_map\&.size());
+319       std::vector<std::string>  subdomain_names; subdomain_names\&.reserve(subdomain_map\&.size());
+320 
+321       // We need to loop over the map and make sure that there aren't any invalid entries\&.  Since we
+322       // return writable references in mesh_base, it's possible for the user to leave some entity names
+323       // blank\&.  We can't write those to the XDA file\&.
+324       header_id_type n_subdomain_names = 0;
+325       std::map<subdomain_id_type, std::string>::const_iterator it_end = subdomain_map\&.end();
+326       for (std::map<subdomain_id_type, std::string>::const_iterator it = subdomain_map\&.begin(); it != it_end; ++it)
+327         {
+328           if (!it->second\&.empty())
+329             {
+330               n_subdomain_names++;
+331               subdomain_ids\&.push_back(it->first);
+332               subdomain_names\&.push_back(it->second);
+333             }
+334         }
+335 
+336       io\&.data(n_subdomain_names, "# subdomain id to name map");
+337       // Write out the ids and names in two vectors
+338       if (n_subdomain_names)
+339         {
+340           io\&.data(subdomain_ids);
+341           io\&.data(subdomain_names);
+342         }
+343     }
+344 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::string libMesh::XdrIO::_bc_file_name\fC [private]\fP"
+
+.PP
+Definition at line 254 of file xdr_io\&.h\&.
+.PP
+Referenced by boundary_condition_file_name()\&.
+.SS "bool libMesh::XdrIO::_binary\fC [private]\fP"
+
+.PP
+Definition at line 247 of file xdr_io\&.h\&.
+.PP
+Referenced by binary()\&.
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBheader_id_type\fP libMesh::XdrIO::_field_width\fC [private]\fP"
+
+.PP
+Definition at line 252 of file xdr_io\&.h\&.
+.PP
+Referenced by read()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "bool libMesh::XdrIO::_legacy\fC [private]\fP"
+
+.PP
+Definition at line 248 of file xdr_io\&.h\&.
+.PP
+Referenced by legacy()\&.
+.SS "std::string libMesh::XdrIO::_p_level_file\fC [private]\fP"
+
+.PP
+Definition at line 257 of file xdr_io\&.h\&.
+.PP
+Referenced by polynomial_level_file_name()\&.
+.SS "std::string libMesh::XdrIO::_partition_map_file\fC [private]\fP"
+
+.PP
+Definition at line 255 of file xdr_io\&.h\&.
+.PP
+Referenced by partition_map_file_name()\&.
+.SS "std::string libMesh::XdrIO::_subdomain_map_file\fC [private]\fP"
+
+.PP
+Definition at line 256 of file xdr_io\&.h\&.
+.PP
+Referenced by subdomain_map_file_name()\&.
+.SS "std::string libMesh::XdrIO::_version\fC [private]\fP"
+
+.PP
+Definition at line 253 of file xdr_io\&.h\&.
+.PP
+Referenced by version()\&.
+.SS "bool libMesh::XdrIO::_write_parallel\fC [private]\fP"
+
+.PP
+Definition at line 250 of file xdr_io\&.h\&.
+.PP
+Referenced by set_auto_parallel(), set_write_parallel(), write(), and write_parallel()\&.
+.SS "bool libMesh::XdrIO::_write_serial\fC [private]\fP"
+
+.PP
+Definition at line 249 of file xdr_io\&.h\&.
+.PP
+Referenced by set_auto_parallel(), set_write_parallel(), and write_parallel()\&.
+.SS "bool libMesh::XdrIO::_write_unique_id\fC [private]\fP"
+
+.PP
+Definition at line 251 of file xdr_io\&.h\&.
+.PP
+Referenced by write(), and write_serialized_connectivity()\&.
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and read_serialized_connectivity()\&.
+.SS "const std::size_t libMesh::XdrIO::io_blksize = 128000\fC [static]\fP, \fC [private]\fP"
+Define the block size to use for chunked IO\&. 
+.PP
+Definition at line 262 of file xdr_io\&.h\&.
+.PP
+Referenced by read_serialized_bcs(), read_serialized_connectivity(), read_serialized_nodes(), read_serialized_nodesets(), and write_serialized_nodes()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

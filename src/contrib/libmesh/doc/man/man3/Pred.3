@@ -1,0 +1,135 @@
+.TH "Pred< IterType, PredType >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+Pred< IterType, PredType > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <variant_filter_iterator\&.h>\fP
+.PP
+Inherits PredBase\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPred\fP (const PredType &v)"
+.br
+.ti -1c
+.RI "virtual \fB~Pred\fP ()"
+.br
+.ti -1c
+.RI "virtual PredBase * \fBclone\fP () const "
+.br
+.ti -1c
+.RI "virtual PredBase::const_PredBase * \fBconst_clone\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBoperator()\fP (const IterBase *in) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "PredType \fBpred_data\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename IterType, typename PredType>struct Pred< IterType, PredType >"
+The actual predicate is held as a template parameter here\&. There are two template arguments here, one for the actual type of the predicate and one for the iterator type\&. 
+.PP
+Definition at line 228 of file variant_filter_iterator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename IterType, typename PredType> \fBPred\fP< IterType, PredType >::\fBPred\fP (const PredType &v)\fC [inline]\fP"
+Constructor 
+.PP
+Definition at line 233 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+233                              :
+234       pred_data (v) {}
+.fi
+.SS "template<typename IterType, typename PredType> virtual \fBPred\fP< IterType, PredType >::~\fBPred\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor 
+.PP
+Definition at line 239 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+239 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename IterType, typename PredType> virtual PredBase* \fBPred\fP< IterType, PredType >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Returns a copy of this object as a pointer to the base class\&. 
+.PP
+Definition at line 244 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+245     {
+246 #ifdef __SUNPRO_CC
+247       variant_filter_iterator::Pred<IterType,PredType> *copy =
+248         new variant_filter_iterator::Pred<IterType,PredType>(pred_data);
+249 #else
+250       Pred<IterType,PredType> *copy =
+251         new Pred<IterType,PredType>(pred_data);
+252 #endif
+253 
+254       return copy;
+255     }
+.fi
+.SS "template<typename IterType, typename PredType> virtual PredBase::const_PredBase* \fBPred\fP< IterType, PredType >::const_clone () const\fC [inline]\fP, \fC [virtual]\fP"
+The redefinition of the const_clone function for the \fBPred\fP class\&. Notice the strange typename syntax required\&. Will it compile everywhere? Important typedef for const_iterators\&. Notice the weird syntax! Does it compile everywhere?
+.PP
+Definition at line 262 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+263     {
+267       //      typedef typename variant_filter_iterator<Predicate, Type, const Type&, const Type*>::template Pred<IterType, PredType> const_Pred;
+268       typedef typename variant_filter_iterator<Predicate, Type const, Type const &,  Type const *>::template Pred<IterType, PredType> const_Pred;
+269 
+270 
+271       typename PredBase::const_PredBase* copy =
+272         new const_Pred(pred_data);
+273 
+274       return copy;
+275     }
+.fi
+.SS "template<typename IterType, typename PredType> virtual bool \fBPred\fP< IterType, PredType >::operator() (const IterBase *in) const\fC [inline]\fP, \fC [virtual]\fP"
+Re-implementation of op() 
+.PP
+Definition at line 283 of file variant_filter_iterator\&.h\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+284     {
+285       libmesh_assert(in);
+286 
+287       // Attempt downcast
+288 #if defined(__SUNPRO_CC) || (defined(__GNUC__) && (__GNUC__ < 3)  && !defined(__INTEL_COMPILER))
+289       const variant_filter_iterator::Iter<IterType>* p =
+290         libMesh::libmesh_cast_ptr<const variant_filter_iterator::Iter<IterType>* >(in);
+291 #else
+292       const Iter<IterType>* p =
+293         libMesh::libmesh_cast_ptr<const Iter<IterType>* >(in);
+294 #endif
+295 
+296       // Return result of op() for the user's predicate\&.
+297       return pred_data(p->iter_data);
+298     }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename IterType, typename PredType> PredType \fBPred\fP< IterType, PredType >::pred_data"
+This is the predicate passed in by the user\&. 
+.PP
+Definition at line 303 of file variant_filter_iterator\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

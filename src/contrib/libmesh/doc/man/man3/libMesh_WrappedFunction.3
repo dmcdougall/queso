@@ -1,0 +1,318 @@
+.TH "libMesh::WrappedFunction< Output >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::WrappedFunction< Output > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <wrapped_function\&.h>\fP
+.PP
+Inherits \fBlibMesh::FunctionBase< Output >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBWrappedFunction\fP (const \fBSystem\fP &\fBsys\fP, Output fptr(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)=NULL, const \fBParameters\fP *parameters=NULL, unsigned int varnum=0)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBFunctionBase\fP
+.br
+< Output > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "virtual Output \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "virtual void \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "virtual Output \fBcomponent\fP (unsigned int i, const \fBPoint\fP &p, \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBSystem\fP & \fB_sys\fP"
+.br
+.ti -1c
+.RI "Output(* \fB_fptr\fP )(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "const \fBParameters\fP * \fB_parameters\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_varnum\fP"
+.br
+.ti -1c
+.RI "const \fBFunctionBase\fP * \fB_master\fP"
+.br
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Output = Number>class libMesh::WrappedFunction< Output >"
+
+.PP
+Definition at line 44 of file wrapped_function\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Output = Number> \fBlibMesh::WrappedFunction\fP< Output >::\fBWrappedFunction\fP (const \fBSystem\fP &sys, Output fptrconst Point &p,const Parameters &parameters,const std::string &sys_name,const std::string &unknown_name = \fCNULL\fP, const \fBParameters\fP *parameters = \fCNULL\fP, unsigned intvarnum = \fC0\fP)\fC [inline]\fP"
+Constructor to wrap scalar-valued function pointers\&. 
+.PP
+Definition at line 51 of file wrapped_function\&.h\&.
+.PP
+References libMesh::FunctionBase< Output >::_initialized, libMesh::WrappedFunction< Output >::_parameters, libMesh::System::get_equation_systems(), and libMesh::EquationSystems::parameters\&.
+.PP
+.nf
+58     : _sys(sys),
+59       _fptr(fptr),
+60       _parameters(parameters),
+61       _varnum(varnum)
+62   {
+63     this->_initialized = true;
+64     if (!parameters)
+65       _parameters = &sys\&.get_equation_systems()\&.parameters;
+66   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Output> virtual void \fBlibMesh::FunctionBase\fP< Output >::clear ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Clears the function\&. 
+.PP
+Reimplemented in \fBlibMesh::ParsedFunction< Output >\fP, \fBlibMesh::MeshFunction\fP, and \fBlibMesh::AnalyticFunction< Output >\fP\&.
+.PP
+Definition at line 90 of file function_base\&.h\&.
+.PP
+.nf
+90 {}
+.fi
+.SS "template<typename Output > \fBAutoPtr\fP< \fBFunctionBase\fP< Output > > \fBlibMesh::WrappedFunction\fP< Output >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Returns a new copy of the function\&. The new copy should be as ``deep'' as necessary to allow independent destruction and simultaneous evaluations of the copies in different threads\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 130 of file wrapped_function\&.h\&.
+.PP
+References _sys\&.
+.PP
+.nf
+131 {
+132   return AutoPtr<FunctionBase<Output> >
+133     (new WrappedFunction<Output>
+134      (_sys, _fptr, _parameters, _varnum));
+135 }
+.fi
+.SS "template<typename Output > Output \fBlibMesh::WrappedFunction\fP< Output >::component (unsigned inti, const \fBPoint\fP &p, \fBReal\fPtime = \fC0\&.\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the vector component \fCi\fP at coordinate \fCp\fP and time \fCtime\fP\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 190 of file wrapped_function\&.h\&.
+.PP
+References _sys, libMesh::err, libMesh::FEType::family, libMesh::libmesh_assert(), libMesh::Variable::n_components(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::System::name(), libMesh::SCALAR, libMesh::Variable::type(), libMesh::System::variable(), libMesh::System::variable_name(), and libMesh::System::variable_scalar_number()\&.
+.PP
+.nf
+193 {
+194   libmesh_assert(_fptr);
+195   libmesh_assert(_parameters);
+196 
+197   // Loop over variables, then over each component in
+198   // vector-valued variables\&.
+199   const unsigned int n_vars = _sys\&.n_vars();
+200   for (unsigned int v = 0; v != n_vars; ++v)
+201     {
+202       const unsigned int n_components =
+203         _sys\&.variable(v)\&.n_components();
+204       if (n_components == 1 &&
+205           i == _sys\&.variable_scalar_number(v,0))
+206         return _fptr(p, *_parameters, _sys\&.name(), _sys\&.variable_name(v));
+207       else if (i >= _sys\&.variable_scalar_number(v,0) &&
+208                i <= _sys\&.variable_scalar_number(v,n_components-1))
+209         {
+210           // Right now our only non-scalar variable type is the
+211           // SCALAR variables\&.  The irony is priceless\&.
+212           libmesh_assert_equal_to (_sys\&.variable(i)\&.type()\&.family, SCALAR);
+213 
+214           // We pass the point (j,0,0) to an old-style fptr function
+215           // pointer to distinguish the different scalars within the
+216           // SCALAR variable\&.
+217           for (unsigned int j=0; j != n_components; ++j)
+218             if (i == _sys\&.variable_scalar_number(v,j))
+219               return _fptr(Point(j,0,0), *_parameters,
+220                            _sys\&.name(), _sys\&.variable_name(v));
+221         }
+222     }
+223   libMesh::err << "Component index " << i <<
+224     " not found in system " << _sys\&.name() << std::endl;
+225   libmesh_error();
+226   return Output();
+227 }
+.fi
+.SS "template<typename Output> virtual void \fBlibMesh::FunctionBase\fP< Output >::init ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+The actual initialization process\&. 
+.PP
+Reimplemented in \fBlibMesh::ParsedFunction< Output >\fP, \fBlibMesh::MeshFunction\fP, and \fBlibMesh::AnalyticFunction< Output >\fP\&.
+.PP
+Definition at line 85 of file function_base\&.h\&.
+.PP
+.nf
+85 {}
+.fi
+.SS "template<typename Output > bool \fBlibMesh::FunctionBase\fP< Output >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 194 of file function_base\&.h\&.
+.PP
+.nf
+195 {
+196   return (this->_initialized);
+197 }
+.fi
+.SS "template<typename Output > Output \fBlibMesh::WrappedFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\&.\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the scalar value of variable varnum at coordinate \fCp\fP and time \fCtime\fP\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 115 of file wrapped_function\&.h\&.
+.PP
+References _sys, libMesh::libmesh_assert(), libMesh::System::name(), and libMesh::System::variable_name()\&.
+.PP
+.nf
+117 {
+118   libmesh_assert(_fptr);
+119   libmesh_assert(_parameters);
+120   return _fptr(p,
+121                *_parameters,
+122                _sys\&.name(),
+123                _sys\&.variable_name(_varnum));
+124 }
+.fi
+.SS "template<typename Output > void \fBlibMesh::WrappedFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [virtual]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of all system variables at the coordinate \fCp\fP and for time \fCtime\fP\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 145 of file wrapped_function\&.h\&.
+.PP
+References _sys, libMesh::FEType::family, libMesh::libmesh_assert(), libMesh::Variable::n_components(), libMesh::System::n_components(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::System::name(), libMesh::SCALAR, libMesh::DenseVector< T >::size(), libMesh::Variable::type(), libMesh::System::variable(), libMesh::System::variable_name(), and libMesh::System::variable_scalar_number()\&.
+.PP
+.nf
+148 {
+149   libmesh_assert(_fptr);
+150   libmesh_assert(_parameters);
+151 
+152   // We fill each entry of output with a single scalar component of
+153   // the data in our System
+154   libmesh_assert_equal_to (output\&.size(), _sys\&.n_components());
+155 
+156   // Loop over variables, then over each component in
+157   // vector-valued variables, evaluating each\&.
+158   const unsigned int n_vars = _sys\&.n_vars();
+159   for (unsigned int v = 0; v != n_vars; ++v)
+160     {
+161       const unsigned int n_components =
+162         _sys\&.variable(v)\&.n_components();
+163       if (n_components == 1)
+164         output(_sys\&.variable_scalar_number(v,0)) =
+165           _fptr(p, *_parameters, _sys\&.name(), _sys\&.variable_name(v));
+166       else
+167         {
+168           // Right now our only non-scalar variable type is the
+169           // SCALAR variables\&.  The irony is priceless\&.
+170           libmesh_assert_equal_to (_sys\&.variable(v)\&.type()\&.family, SCALAR);
+171 
+172           // We pass the point (j,0,0) to an old-style fptr function
+173           // pointer to distinguish the different scalars within the
+174           // SCALAR variable\&.
+175           for (unsigned int j=0; j != n_components; ++j)
+176             output(_sys\&.variable_scalar_number(v,j)) =
+177               _fptr(Point(j,0,0), *_parameters,
+178                     _sys\&.name(), _sys\&.variable_name(v));
+179         }
+180     }
+181 }
+.fi
+.SS "template<typename Output> void \fBlibMesh::FunctionBase\fP< Output >::operator() (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [inherited]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP\&. 
+.PP
+Definition at line 216 of file function_base\&.h\&.
+.PP
+.nf
+218 {
+219   // Call the time-dependent function with t=0\&.
+220   this->operator()(p, 0\&., output);
+221 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Output = Number> Output(* \fBlibMesh::WrappedFunction\fP< Output >::_fptr)(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)\fC [protected]\fP"
+
+.PP
+Definition at line 98 of file wrapped_function\&.h\&.
+.SS "template<typename Output> bool \fBlibMesh::FunctionBase\fP< Output >::_initialized\fC [protected]\fP, \fC [inherited]\fP"
+When \fC\fBinit()\fP\fP was called so that everything is ready for calls to \fCoperator()\fP (\&.\&.\&.), then this \fCbool\fP is true\&. 
+.PP
+Definition at line 166 of file function_base\&.h\&.
+.PP
+Referenced by libMesh::AnalyticFunction< Output >::AnalyticFunction(), libMesh::ConstFunction< Output >::ConstFunction(), libMesh::ParsedFunction< Output >::ParsedFunction(), and libMesh::WrappedFunction< Output >::WrappedFunction()\&.
+.SS "template<typename Output> const \fBFunctionBase\fP* \fBlibMesh::FunctionBase\fP< Output >::_master\fC [protected]\fP, \fC [inherited]\fP"
+Const pointer to our master, initialized to \fCNULL\fP\&. There may be cases where multiple functions are required, but to save memory, one master handles some centralized data\&. 
+.PP
+Definition at line 160 of file function_base\&.h\&.
+.SS "template<typename Output = Number> const \fBParameters\fP* \fBlibMesh::WrappedFunction\fP< Output >::_parameters\fC [protected]\fP"
+
+.PP
+Definition at line 103 of file wrapped_function\&.h\&.
+.PP
+Referenced by libMesh::WrappedFunction< Output >::WrappedFunction()\&.
+.SS "template<typename Output = Number> const \fBSystem\fP& \fBlibMesh::WrappedFunction\fP< Output >::_sys\fC [protected]\fP"
+
+.PP
+Definition at line 96 of file wrapped_function\&.h\&.
+.SS "template<typename Output = Number> unsigned int \fBlibMesh::WrappedFunction\fP< Output >::_varnum\fC [protected]\fP"
+
+.PP
+Definition at line 105 of file wrapped_function\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

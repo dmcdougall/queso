@@ -1,0 +1,1104 @@
+.TH "libMesh::ExactSolution" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ExactSolution \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <exact_solution\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExactSolution\fP (const \fBEquationSystems\fP &es)"
+.br
+.ti -1c
+.RI "\fB~ExactSolution\fP ()"
+.br
+.ti -1c
+.RI "void \fBattach_reference_solution\fP (const \fBEquationSystems\fP *es_fine)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_values\fP (std::vector< \fBFunctionBase\fP< \fBNumber\fP > * > f)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_value\fP (unsigned int sys_num, \fBFunctionBase\fP< \fBNumber\fP > *f)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_value\fP (\fBNumber\fP fptr(const \fBPoint\fP &p, const \fBParameters\fP &\fBParameters\fP, const std::string &sys_name, const std::string &unknown_name))"
+.br
+.ti -1c
+.RI "void \fBattach_exact_derivs\fP (std::vector< \fBFunctionBase\fP< \fBGradient\fP > * > g)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_deriv\fP (unsigned int sys_num, \fBFunctionBase\fP< \fBGradient\fP > *g)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_deriv\fP (\fBGradient\fP gptr(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name))"
+.br
+.ti -1c
+.RI "void \fBattach_exact_hessians\fP (std::vector< \fBFunctionBase\fP< \fBTensor\fP > * > h)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_hessian\fP (unsigned int sys_num, \fBFunctionBase\fP< \fBTensor\fP > *h)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_hessian\fP (\fBTensor\fP hptr(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name))"
+.br
+.ti -1c
+.RI "void \fBextra_quadrature_order\fP (const int extraorder)"
+.br
+.ti -1c
+.RI "void \fBcompute_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl2_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl1_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl_inf_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBh1_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBhcurl_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBhdiv_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBh2_error\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBerror_norm\fP (const std::string &sys_name, const std::string &unknown_name, const \fBFEMNormType\fP &norm)"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::vector< \fBReal\fP > > \fBSystemErrorMap\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename OutputShape > void \fB_compute_error\fP (const std::string &sys_name, const std::string &unknown_name, std::vector< \fBReal\fP > &error_vals)"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > & \fB_check_inputs\fP (const std::string &sys_name, const std::string &unknown_name)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBFunctionBase\fP
+.br
+< \fBNumber\fP > * > \fB_exact_values\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBFunctionBase\fP
+.br
+< \fBGradient\fP > * > \fB_exact_derivs\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBFunctionBase\fP
+.br
+< \fBTensor\fP > * > \fB_exact_hessians\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, 
+.br
+\fBSystemErrorMap\fP > \fB_errors\fP"
+.br
+.ti -1c
+.RI "const \fBEquationSystems\fP & \fB_equation_systems\fP"
+.br
+.ti -1c
+.RI "const \fBEquationSystems\fP * \fB_equation_systems_fine\fP"
+.br
+.ti -1c
+.RI "int \fB_extra_order\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class handles the computation of the L2 and/or H1 error for the Systems in the \fBEquationSystems\fP object which is passed to it\&. Note that for it to be useful, the user must attach at least one, and possibly two functions which can compute the exact solution and its derivative for any component of any system\&. These are the exact_value and exact_deriv functions below\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk w/ modifications for libmesh by John W\&. Peterson 
+.RE
+.PP
+
+.PP
+Definition at line 64 of file exact_solution\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::vector<\fBReal\fP> > \fBlibMesh::ExactSolution::SystemErrorMap\fP\fC [private]\fP"
+Data structure which stores the errors: ||e|| = ||u - u_h|| ||grad(e)|| = ||grad(u) - grad(u_h)|| for each unknown in a single system\&. The name of the unknown is the key for the map\&. 
+.PP
+Definition at line 293 of file exact_solution\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ExactSolution::ExactSolution (const \fBEquationSystems\fP &es)\fC [explicit]\fP"
+Constructor\&. The \fBExactSolution\fP object must be initialized with an \fBEquationSystems\fP object\&. 
+.PP
+Definition at line 41 of file exact_solution\&.C\&.
+.PP
+References _equation_systems, _errors, libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), libMesh::System::n_vars(), libMesh::System::name(), libMesh::sys, and libMesh::System::variable_name()\&.
+.PP
+.nf
+41                                                       :
+42   _equation_systems(es),
+43   _equation_systems_fine(NULL),
+44   _extra_order(0)
+45 {
+46   // Initialize the _errors data structure which holds all
+47   // the eventual values of the error\&.
+48   for (unsigned int sys=0; sys<_equation_systems\&.n_systems(); ++sys)
+49     {
+50       // Reference to the system
+51       const System& system = _equation_systems\&.get_system(sys);
+52 
+53       // The name of the system
+54       const std::string& sys_name = system\&.name();
+55 
+56       // The SystemErrorMap to be inserted
+57       ExactSolution::SystemErrorMap sem;
+58 
+59       for (unsigned int var=0; var<system\&.n_vars(); ++var)
+60         {
+61           // The name of this variable
+62           const std::string& var_name = system\&.variable_name(var);
+63           sem[var_name] = std::vector<Real>(5, 0\&.);
+64         }
+65 
+66       _errors[sys_name] = sem;
+67     }
+68 }
+.fi
+.SS "libMesh::ExactSolution::~ExactSolution ()"
+Destructor\&. 
+.PP
+Definition at line 71 of file exact_solution\&.C\&.
+.PP
+References _exact_derivs, _exact_hessians, and _exact_values\&.
+.PP
+.nf
+72 {
+73   // delete will clean up any cloned functors and no-op on any NULL
+74   // pointers
+75 
+76   for (unsigned int i=0; i != _exact_values\&.size(); ++i)
+77     delete (_exact_values[i]);
+78 
+79   for (unsigned int i=0; i != _exact_derivs\&.size(); ++i)
+80     delete (_exact_derivs[i]);
+81 
+82   for (unsigned int i=0; i != _exact_hessians\&.size(); ++i)
+83     delete (_exact_hessians[i]);
+84 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "std::vector< \fBReal\fP > & libMesh::ExactSolution::_check_inputs (const std::string &sys_name, const std::string &unknown_name)\fC [private]\fP"
+This function is responsible for checking the validity of the sys_name and unknown_name inputs, and returning a reference to the proper vector for storing the values\&. 
+.PP
+Definition at line 261 of file exact_solution\&.C\&.
+.PP
+References _errors, and libMesh::err\&.
+.PP
+Referenced by compute_error(), error_norm(), h1_error(), h2_error(), l1_error(), l2_error(), and l_inf_error()\&.
+.PP
+.nf
+263 {
+264   // If no exact solution function or fine grid solution has been
+265   // attached, we now just compute the solution norm (i\&.e\&. the
+266   // difference from an "exact solution" of zero
+267 
+268   // Make sure the requested sys_name exists\&.
+269   std::map<std::string, SystemErrorMap>::iterator sys_iter =
+270     _errors\&.find(sys_name);
+271 
+272   if (sys_iter == _errors\&.end())
+273     {
+274       libMesh::err << "Sorry, couldn't find the requested system '"
+275                    << sys_name << "'\&."
+276                    << std::endl;
+277       libmesh_error();
+278     }
+279 
+280   // Make sure the requested unknown_name exists\&.
+281   SystemErrorMap::iterator var_iter = (*sys_iter)\&.second\&.find(unknown_name);
+282 
+283   if (var_iter == (*sys_iter)\&.second\&.end())
+284     {
+285       libMesh::err << "Sorry, couldn't find the requested variable '"
+286                    << unknown_name << "'\&."
+287                    << std::endl;
+288       libmesh_error();
+289     }
+290 
+291   // Return a reference to the proper error entry
+292   return (*var_iter)\&.second;
+293 }
+.fi
+.SS "template<typename OutputShape > template void libMesh::ExactSolution::_compute_error< \fBRealGradient\fP > (const std::string &sys_name, const std::string &unknown_name, std::vector< \fBReal\fP > &error_vals)\fC [private]\fP"
+This function computes the error (in the solution and its first derivative) for a single unknown in a single system\&. It is a private function since it is used by the implementation when solving for several unknowns in several systems\&. 
+.PP
+Definition at line 533 of file exact_solution\&.C\&.
+.PP
+References _equation_systems, _equation_systems_fine, _exact_derivs, _exact_hessians, _exact_values, _extra_order, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::NumericVector< T >::build(), libMesh::ParallelObject::comm(), libMesh::communicator, libMesh::TensorTools::curl_from_grad(), libMesh::System::current_solution(), libMesh::FEType::default_quadrature_rule(), libMesh::dim, libMesh::TensorTools::div_from_grad(), libMesh::DofMap::dof_indices(), libMesh::err, libMesh::FEInterface::field_type(), libMesh::AutoPtr< Tp >::get(), libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::EquationSystems::get_system(), libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::mesh_dimension(), libMesh::FEInterface::n_vec_dim(), libMesh::TensorTools::norm_sq(), libMesh::System::number(), libMesh::Real, libMesh::SERIAL, libMesh::TypeVector< T >::size_sq(), libMesh::System::solution, libMesh::MeshBase::spatial_dimension(), libMesh::Parallel::Communicator::sum(), libMesh::TYPE_VECTOR, libMesh::System::update_global_solution(), libMesh::System::variable_number(), libMesh::System::variable_scalar_number(), and libMesh::DofMap::variable_type()\&.
+.PP
+.nf
+536 {
+537   // Make sure we aren't "overconfigured"
+538   libmesh_assert (!(_exact_values\&.size() && _equation_systems_fine));
+539 
+540   // We need a commmunicator\&.
+541   const Parallel::Communicator &communicator(_equation_systems\&.comm());
+542 
+543   // This function must be run on all processors at once
+544   libmesh_parallel_only(communicator);
+545 
+546   // Get a reference to the system whose error is being computed\&.
+547   // If we have a fine grid, however, we'll integrate on that instead
+548   // for more accuracy\&.
+549   const System& computed_system = _equation_systems_fine ?
+550     _equation_systems_fine->get_system(sys_name) :
+551     _equation_systems\&.get_system (sys_name);
+552 
+553   const Real time = _equation_systems\&.get_system(sys_name)\&.time;
+554 
+555   const unsigned int sys_num = computed_system\&.number();
+556   const unsigned int var = computed_system\&.variable_number(unknown_name);
+557   const unsigned int var_component =
+558     computed_system\&.variable_scalar_number(var, 0);
+559 
+560   // Prepare a global solution and a MeshFunction of the coarse system if we need one
+561   AutoPtr<MeshFunction> coarse_values;
+562   AutoPtr<NumericVector<Number> > comparison_soln = NumericVector<Number>::build(_equation_systems\&.comm());
+563   if (_equation_systems_fine)
+564     {
+565       const System& comparison_system
+566         = _equation_systems\&.get_system(sys_name);
+567 
+568       std::vector<Number> global_soln;
+569       comparison_system\&.update_global_solution(global_soln);
+570       comparison_soln->init(comparison_system\&.solution->size(), true, SERIAL);
+571       (*comparison_soln) = global_soln;
+572 
+573       coarse_values = AutoPtr<MeshFunction>
+574         (new MeshFunction(_equation_systems,
+575                           *comparison_soln,
+576                           comparison_system\&.get_dof_map(),
+577                           comparison_system\&.variable_number(unknown_name)));
+578       coarse_values->init();
+579     }
+580 
+581   // Initialize any functors we're going to use
+582   for (unsigned int i=0; i != _exact_values\&.size(); ++i)
+583     if (_exact_values[i])
+584       _exact_values[i]->init();
+585 
+586   for (unsigned int i=0; i != _exact_derivs\&.size(); ++i)
+587     if (_exact_derivs[i])
+588       _exact_derivs[i]->init();
+589 
+590   for (unsigned int i=0; i != _exact_hessians\&.size(); ++i)
+591     if (_exact_hessians[i])
+592       _exact_hessians[i]->init();
+593 
+594   // Get a reference to the dofmap and mesh for that system
+595   const DofMap& computed_dof_map = computed_system\&.get_dof_map();
+596 
+597   const MeshBase& _mesh = computed_system\&.get_mesh();
+598 
+599   const unsigned int dim = _mesh\&.mesh_dimension();
+600 
+601   // Zero the error before summation
+602   // 0 - sum of square of function error (L2)
+603   // 1 - sum of square of gradient error (H1 semi)
+604   // 2 - sum of square of Hessian error (H2 semi)
+605   // 3 - sum of sqrt(square of function error) (L1)
+606   // 4 - max of sqrt(square of function error) (Linfty)
+607   // 5 - sum of square of curl error (HCurl semi)
+608   // 6 - sum of square of div error (HDiv semi)
+609   error_vals = std::vector<Real>(7, 0\&.);
+610 
+611   // Construct Quadrature rule based on default quadrature order
+612   const FEType& fe_type  = computed_dof_map\&.variable_type(var);
+613 
+614   unsigned int n_vec_dim = FEInterface::n_vec_dim( _mesh, fe_type );
+615 
+616   // FIXME: MeshFunction needs to be updated to support vector-valued
+617   //        elements before we can use a reference solution\&.
+618   if( (n_vec_dim > 1) && _equation_systems_fine )
+619     {
+620       libMesh::err << "Error calculation using reference solution not yet\n"
+621                    << "supported for vector-valued elements\&."
+622                    << std::endl;
+623       libmesh_not_implemented();
+624     }
+625 
+626   AutoPtr<QBase> qrule =
+627     fe_type\&.default_quadrature_rule (dim,
+628                                      _extra_order);
+629 
+630   // Construct finite element object
+631 
+632   AutoPtr<FEGenericBase<OutputShape> > fe(FEGenericBase<OutputShape>::build(dim, fe_type));
+633 
+634   // Attach quadrature rule to FE object
+635   fe->attach_quadrature_rule (qrule\&.get());
+636 
+637   // The Jacobian*weight at the quadrature points\&.
+638   const std::vector<Real>& JxW                               = fe->get_JxW();
+639 
+640   // The value of the shape functions at the quadrature points
+641   // i\&.e\&. phi(i) = phi_values[i][qp]
+642   const std::vector<std::vector<OutputShape> >&  phi_values         = fe->get_phi();
+643 
+644   // The value of the shape function gradients at the quadrature points
+645   const std::vector<std::vector<typename FEGenericBase<OutputShape>::OutputGradient> >&
+646     dphi_values = fe->get_dphi();
+647 
+648   // The value of the shape function curls at the quadrature points
+649   // Only computed for vector-valued elements
+650   const std::vector<std::vector<typename FEGenericBase<OutputShape>::OutputShape> >* curl_values = NULL;
+651 
+652   // The value of the shape function divergences at the quadrature points
+653   // Only computed for vector-valued elements
+654   const std::vector<std::vector<typename FEGenericBase<OutputShape>::OutputDivergence> >* div_values = NULL;
+655 
+656   if( FEInterface::field_type(fe_type) == TYPE_VECTOR )
+657     {
+658       curl_values = &fe->get_curl_phi();
+659       div_values = &fe->get_div_phi();
+660     }
+661 
+662 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+663   // The value of the shape function second derivatives at the quadrature points
+664   const std::vector<std::vector<typename FEGenericBase<OutputShape>::OutputTensor> >&
+665     d2phi_values = fe->get_d2phi();
+666 #endif
+667 
+668   // The XYZ locations (in physical space) of the quadrature points
+669   const std::vector<Point>& q_point                          = fe->get_xyz();
+670 
+671   // The global degree of freedom indices associated
+672   // with the local degrees of freedom\&.
+673   std::vector<dof_id_type> dof_indices;
+674 
+675 
+676   //
+677   // Begin the loop over the elements
+678   //
+679   // TODO: this ought to be threaded (and using subordinate
+680   // MeshFunction objects in each thread rather than a single
+681   // master)
+682   MeshBase::const_element_iterator       el     = _mesh\&.active_local_elements_begin();
+683   const MeshBase::const_element_iterator end_el = _mesh\&.active_local_elements_end();
+684 
+685   for ( ; el != end_el; ++el)
+686     {
+687       // Store a pointer to the element we are currently
+688       // working on\&.  This allows for nicer syntax later\&.
+689       const Elem* elem = *el;
+690 
+691       // reinitialize the element-specific data
+692       // for the current element
+693       fe->reinit (elem);
+694 
+695       // Get the local to global degree of freedom maps
+696       computed_dof_map\&.dof_indices    (elem, dof_indices, var);
+697 
+698       // The number of quadrature points
+699       const unsigned int n_qp = qrule->n_points();
+700 
+701       // The number of shape functions
+702       const unsigned int n_sf =
+703         libmesh_cast_int<unsigned int>(dof_indices\&.size());
+704 
+705       //
+706       // Begin the loop over the Quadrature points\&.
+707       //
+708       for (unsigned int qp=0; qp<n_qp; qp++)
+709         {
+710           // Real u_h = 0\&.;
+711           // RealGradient grad_u_h;
+712 
+713           typename FEGenericBase<OutputShape>::OutputNumber u_h = 0\&.;
+714 
+715           typename FEGenericBase<OutputShape>::OutputNumberGradient grad_u_h;
+716 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+717           typename FEGenericBase<OutputShape>::OutputNumberTensor grad2_u_h;
+718 #endif
+719           typename FEGenericBase<OutputShape>::OutputNumber curl_u_h = 0\&.0;
+720           typename FEGenericBase<OutputShape>::OutputNumberDivergence div_u_h = 0\&.0;
+721 
+722           // Compute solution values at the current
+723           // quadrature point\&.  This reqiures a sum
+724           // over all the shape functions evaluated
+725           // at the quadrature point\&.
+726           for (unsigned int i=0; i<n_sf; i++)
+727             {
+728               // Values from current solution\&.
+729               u_h      += phi_values[i][qp]*computed_system\&.current_solution  (dof_indices[i]);
+730               grad_u_h += dphi_values[i][qp]*computed_system\&.current_solution (dof_indices[i]);
+731 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+732               grad2_u_h += d2phi_values[i][qp]*computed_system\&.current_solution (dof_indices[i]);
+733 #endif
+734               if( FEInterface::field_type(fe_type) == TYPE_VECTOR )
+735                 {
+736                   curl_u_h += (*curl_values)[i][qp]*computed_system\&.current_solution (dof_indices[i]);
+737                   div_u_h += (*div_values)[i][qp]*computed_system\&.current_solution (dof_indices[i]);
+738                 }
+739             }
+740 
+741           // Compute the value of the error at this quadrature point
+742           typename FEGenericBase<OutputShape>::OutputNumber exact_val = 0;
+743           RawAccessor<typename FEGenericBase<OutputShape>::OutputNumber> exact_val_accessor( exact_val, dim );
+744           if (_exact_values\&.size() > sys_num && _exact_values[sys_num])
+745             {
+746               for( unsigned int c = 0; c < n_vec_dim; c++)
+747                 exact_val_accessor(c) =
+748                   _exact_values[sys_num]->
+749                   component(var_component+c, q_point[qp], time);
+750             }
+751           else if (_equation_systems_fine)
+752             {
+753               // FIXME: Needs to be updated for vector-valued elements
+754               exact_val = (*coarse_values)(q_point[qp]);
+755             }
+756           const typename FEGenericBase<OutputShape>::OutputNumber val_error = u_h - exact_val;
+757 
+758           // Add the squares of the error to each contribution
+759           Real error_sq = TensorTools::norm_sq(val_error);
+760           error_vals[0] += JxW[qp]*error_sq;
+761 
+762           Real norm = sqrt(error_sq);
+763           error_vals[3] += JxW[qp]*norm;
+764 
+765           if(error_vals[4]<norm) { error_vals[4] = norm; }
+766 
+767           // Compute the value of the error in the gradient at this
+768           // quadrature point
+769           typename FEGenericBase<OutputShape>::OutputNumberGradient exact_grad;
+770           RawAccessor<typename FEGenericBase<OutputShape>::OutputNumberGradient> exact_grad_accessor( exact_grad, _mesh\&.spatial_dimension() );
+771           if (_exact_derivs\&.size() > sys_num && _exact_derivs[sys_num])
+772             {
+773               for( unsigned int c = 0; c < n_vec_dim; c++)
+774                 for( unsigned int d = 0; d < _mesh\&.spatial_dimension(); d++ )
+775                   exact_grad_accessor(d + c*_mesh\&.spatial_dimension() ) =
+776                     _exact_derivs[sys_num]->
+777                     component(var_component+c, q_point[qp], time)(d);
+778             }
+779           else if (_equation_systems_fine)
+780             {
+781               // FIXME: Needs to be updated for vector-valued elements
+782               exact_grad = coarse_values->gradient(q_point[qp]);
+783             }
+784 
+785           const typename FEGenericBase<OutputShape>::OutputNumberGradient grad_error = grad_u_h - exact_grad;
+786 
+787           error_vals[1] += JxW[qp]*grad_error\&.size_sq();
+788 
+789 
+790           if( FEInterface::field_type(fe_type) == TYPE_VECTOR )
+791             {
+792               // Compute the value of the error in the curl at this
+793               // quadrature point
+794               typename FEGenericBase<OutputShape>::OutputNumber exact_curl = 0\&.0;
+795               if (_exact_derivs\&.size() > sys_num && _exact_derivs[sys_num])
+796                 {
+797                   exact_curl = TensorTools::curl_from_grad( exact_grad );
+798                 }
+799               else if (_equation_systems_fine)
+800                 {
+801                   // FIXME: Need to implement curl for MeshFunction and support reference
+802                   //        solution for vector-valued elements
+803                 }
+804 
+805               const typename FEGenericBase<OutputShape>::OutputNumber curl_error = curl_u_h - exact_curl;
+806 
+807               error_vals[5] += JxW[qp]*TensorTools::norm_sq(curl_error);
+808 
+809               // Compute the value of the error in the divergence at this
+810               // quadrature point
+811               typename FEGenericBase<OutputShape>::OutputNumberDivergence exact_div = 0\&.0;
+812               if (_exact_derivs\&.size() > sys_num && _exact_derivs[sys_num])
+813                 {
+814                   exact_div = TensorTools::div_from_grad( exact_grad );
+815                 }
+816               else if (_equation_systems_fine)
+817                 {
+818                   // FIXME: Need to implement div for MeshFunction and support reference
+819                   //        solution for vector-valued elements
+820                 }
+821 
+822               const typename FEGenericBase<OutputShape>::OutputNumberDivergence div_error = div_u_h - exact_div;
+823 
+824               error_vals[6] += JxW[qp]*TensorTools::norm_sq(div_error);
+825             }
+826 
+827 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+828           // Compute the value of the error in the hessian at this
+829           // quadrature point
+830           typename FEGenericBase<OutputShape>::OutputNumberTensor exact_hess;
+831           RawAccessor<typename FEGenericBase<OutputShape>::OutputNumberTensor> exact_hess_accessor( exact_hess, dim );
+832           if (_exact_hessians\&.size() > sys_num && _exact_hessians[sys_num])
+833             {
+834               //FIXME: This needs to be implemented to support rank 3 tensors
+835               //       which can't happen until type_n_tensor is fully implemented
+836               //       and a RawAccessor<TypeNTensor> is fully implemented
+837               if( FEInterface::field_type(fe_type) == TYPE_VECTOR )
+838                 libmesh_not_implemented();
+839 
+840               for( unsigned int c = 0; c < n_vec_dim; c++)
+841                 for( unsigned int d = 0; d < dim; d++ )
+842                   for( unsigned int e =0; e < dim; e++ )
+843                     exact_hess_accessor(d + e*dim + c*dim*dim) =
+844                       _exact_hessians[sys_num]->
+845                       component(var_component+c, q_point[qp], time)(d,e);
+846             }
+847           else if (_equation_systems_fine)
+848             {
+849               // FIXME: Needs to be updated for vector-valued elements
+850               exact_hess = coarse_values->hessian(q_point[qp]);
+851             }
+852 
+853           const typename FEGenericBase<OutputShape>::OutputNumberTensor grad2_error = grad2_u_h - exact_hess;
+854 
+855           // FIXME: PB: Is this what we want for rank 3 tensors?
+856           error_vals[2] += JxW[qp]*grad2_error\&.size_sq();
+857 #endif
+858 
+859         } // end qp loop
+860     } // end element loop
+861 
+862   // Add up the error values on all processors, except for the L-infty
+863   // norm, for which the maximum is computed\&.
+864   Real l_infty_norm = error_vals[4];
+865   communicator\&.max(l_infty_norm);
+866   communicator\&.sum(error_vals);
+867   error_vals[4] = l_infty_norm;
+868 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_deriv (unsigned intsys_num, \fBFunctionBase\fP< \fBGradient\fP > *g)"
+Clone and attach an arbitrary functor which computes the exact gradient of the system \fCsys_num\fP solution at any point\&. 
+.PP
+Definition at line 196 of file exact_solution\&.C\&.
+.PP
+References _exact_derivs, and libMesh::FunctionBase< Output >::clone()\&.
+.PP
+.nf
+198 {
+199   if (_exact_derivs\&.size() <= sys_num)
+200     _exact_derivs\&.resize(sys_num+1, NULL);
+201 
+202   if (g)
+203     _exact_derivs[sys_num] = g->clone()\&.release();
+204 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_deriv (\fBGradient\fP gptrconst Point &p,const Parameters &parameters,const std::string &sys_name,const std::string &unknown_name)"
+Attach an arbitrary function which computes the exact gradient of the solution at any point\&. 
+.PP
+Definition at line 153 of file exact_solution\&.C\&.
+.PP
+References _equation_systems, _equation_systems_fine, _exact_derivs, libMesh::EquationSystems::get_system(), libMesh::libmesh_assert(), libMesh::EquationSystems::n_systems(), libMesh::EquationSystems::parameters, and libMesh::sys\&.
+.PP
+.nf
+157 {
+158   libmesh_assert(gptr);
+159 
+160   // Clear out any previous _exact_derivs entries, then add a new
+161   // entry for each system\&.
+162   _exact_derivs\&.clear();
+163 
+164   for (unsigned int sys=0; sys<_equation_systems\&.n_systems(); ++sys)
+165     {
+166       const System& system = _equation_systems\&.get_system(sys);
+167       _exact_derivs\&.push_back
+168         (new WrappedFunction<Gradient>
+169          (system, gptr, &_equation_systems\&.parameters));
+170     }
+171 
+172   // If we're using exact values, we're not using a fine grid solution
+173   _equation_systems_fine = NULL;
+174 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_derivs (std::vector< \fBFunctionBase\fP< \fBGradient\fP > * >g)"
+Clone and attach arbitrary functors which compute the exact gradients of the \fBEquationSystems\fP' solutions at any point\&. 
+.PP
+Definition at line 177 of file exact_solution\&.C\&.
+.PP
+References _exact_derivs\&.
+.PP
+.nf
+178 {
+179   // Clear out any previous _exact_derivs entries, then add a new
+180   // entry for each system\&.
+181   for (unsigned int i=0; i != _exact_derivs\&.size(); ++i)
+182     delete (_exact_derivs[i]);
+183 
+184   _exact_derivs\&.clear();
+185   _exact_derivs\&.resize(g\&.size(), NULL);
+186 
+187   // We use clone() to get non-sliced copies of FunctionBase
+188   // subclasses, but we can't put the resulting AutoPtrs into an STL
+189   // container\&.
+190   for (unsigned int i=0; i != g\&.size(); ++i)
+191     if (g[i])
+192       _exact_derivs[i] = g[i]->clone()\&.release();
+193 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_hessian (unsigned intsys_num, \fBFunctionBase\fP< \fBTensor\fP > *h)"
+Clone and attach an arbitrary functor which computes the exact second derivatives of the system \fCsys_num\fP solution at any point\&. 
+.PP
+Definition at line 250 of file exact_solution\&.C\&.
+.PP
+References _exact_hessians, and libMesh::FunctionBase< Output >::clone()\&.
+.PP
+.nf
+252 {
+253   if (_exact_hessians\&.size() <= sys_num)
+254     _exact_hessians\&.resize(sys_num+1, NULL);
+255 
+256   if (h)
+257     _exact_hessians[sys_num] = h->clone()\&.release();
+258 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_hessian (\fBTensor\fP hptrconst Point &p,const Parameters &parameters,const std::string &sys_name,const std::string &unknown_name)"
+Attach an arbitrary function which computes the exact second derivatives of the solution at any point\&. 
+.PP
+Definition at line 207 of file exact_solution\&.C\&.
+.PP
+References _equation_systems, _equation_systems_fine, _exact_hessians, libMesh::EquationSystems::get_system(), libMesh::libmesh_assert(), libMesh::EquationSystems::n_systems(), libMesh::EquationSystems::parameters, and libMesh::sys\&.
+.PP
+.nf
+211 {
+212   libmesh_assert(hptr);
+213 
+214   // Clear out any previous _exact_hessians entries, then add a new
+215   // entry for each system\&.
+216   _exact_hessians\&.clear();
+217 
+218   for (unsigned int sys=0; sys<_equation_systems\&.n_systems(); ++sys)
+219     {
+220       const System& system = _equation_systems\&.get_system(sys);
+221       _exact_hessians\&.push_back
+222         (new WrappedFunction<Tensor>
+223          (system, hptr, &_equation_systems\&.parameters));
+224     }
+225 
+226   // If we're using exact values, we're not using a fine grid solution
+227   _equation_systems_fine = NULL;
+228 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_hessians (std::vector< \fBFunctionBase\fP< \fBTensor\fP > * >h)"
+Clone and attach arbitrary functors which compute the exact second derivatives of the \fBEquationSystems\fP' solutions at any point\&. 
+.PP
+Definition at line 231 of file exact_solution\&.C\&.
+.PP
+References _exact_hessians\&.
+.PP
+.nf
+232 {
+233   // Clear out any previous _exact_hessians entries, then add a new
+234   // entry for each system\&.
+235   for (unsigned int i=0; i != _exact_hessians\&.size(); ++i)
+236     delete (_exact_hessians[i]);
+237 
+238   _exact_hessians\&.clear();
+239   _exact_hessians\&.resize(h\&.size(), NULL);
+240 
+241   // We use clone() to get non-sliced copies of FunctionBase
+242   // subclasses, but we can't put the resulting AutoPtrs into an STL
+243   // container\&.
+244   for (unsigned int i=0; i != h\&.size(); ++i)
+245     if (h[i])
+246       _exact_hessians[i] = h[i]->clone()\&.release();
+247 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_value (unsigned intsys_num, \fBFunctionBase\fP< \fBNumber\fP > *f)"
+Clone and attach an arbitrary functor which computes the exact value of the system \fCsys_num\fP solution at any point\&. 
+.PP
+Definition at line 142 of file exact_solution\&.C\&.
+.PP
+References _exact_values, and libMesh::FunctionBase< Output >::clone()\&.
+.PP
+.nf
+144 {
+145   if (_exact_values\&.size() <= sys_num)
+146     _exact_values\&.resize(sys_num+1, NULL);
+147 
+148   if (f)
+149     _exact_values[sys_num] = f->clone()\&.release();
+150 }
+.fi
+.SS "void libMesh::ExactSolution::attach_exact_value (\fBNumber\fP fptrconst Point &p, const Parameters &Parameters, const std::string &sys_name, const std::string &unknown_name)"
+Attach an arbitrary function which computes the exact value of the solution at any point\&. 
+.SS "void libMesh::ExactSolution::attach_exact_values (std::vector< \fBFunctionBase\fP< \fBNumber\fP > * >f)"
+Clone and attach arbitrary functors which compute the exact values of the \fBEquationSystems\fP' solutions at any point\&. 
+.PP
+Definition at line 123 of file exact_solution\&.C\&.
+.PP
+References _exact_values\&.
+.PP
+.nf
+124 {
+125   // Clear out any previous _exact_values entries, then add a new
+126   // entry for each system\&.
+127   for (unsigned int i=0; i != _exact_values\&.size(); ++i)
+128     delete (_exact_values[i]);
+129 
+130   _exact_values\&.clear();
+131   _exact_values\&.resize(f\&.size(), NULL);
+132 
+133   // We use clone() to get non-sliced copies of FunctionBase
+134   // subclasses, but we can't put the resulting AutoPtrs into an STL
+135   // container\&.
+136   for (unsigned int i=0; i != f\&.size(); ++i)
+137     if (f[i])
+138       _exact_values[i] = f[i]->clone()\&.release();
+139 }
+.fi
+.SS "void libMesh::ExactSolution::attach_reference_solution (const \fBEquationSystems\fP *es_fine)"
+Attach function similar to \fBsystem\&.h\fP which allows the user to attach a second \fBEquationSystems\fP object with a reference fine grid solution\&. 
+.PP
+Definition at line 87 of file exact_solution\&.C\&.
+.PP
+References _equation_systems_fine, _exact_derivs, _exact_hessians, _exact_values, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+88 {
+89   libmesh_assert(es_fine);
+90   _equation_systems_fine = es_fine;
+91 
+92   // If we're using a fine grid solution, we're not using exact values
+93   _exact_values\&.clear();
+94   _exact_derivs\&.clear();
+95   _exact_hessians\&.clear();
+96 }
+.fi
+.SS "void libMesh::ExactSolution::compute_error (const std::string &sys_name, const std::string &unknown_name)"
+Computes and stores the error in the solution value e = u-u_h, the gradient grad(e) = grad(u) - grad(u_h), and possibly the hessian grad(grad(e)) = grad(grad(u)) - grad(grad(u_h))\&. Does not return any value\&. For that you need to call the \fBl2_error()\fP, \fBh1_error()\fP or \fBh2_error()\fP functions respectively\&. 
+.PP
+Definition at line 297 of file exact_solution\&.C\&.
+.PP
+References _check_inputs(), _equation_systems, libMesh::FEInterface::field_type(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::has_system(), libMesh::libmesh_assert(), libMesh::sys, libMesh::TYPE_SCALAR, and libMesh::TYPE_VECTOR\&.
+.PP
+.nf
+299 {
+300   // Check the inputs for validity, and get a reference
+301   // to the proper location to store the error
+302   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+303                                                       unknown_name);
+304 
+305   libmesh_assert( _equation_systems\&.has_system(sys_name) );
+306   const System& sys = _equation_systems\&.get_system<System>( sys_name );
+307 
+308   libmesh_assert( sys\&.has_variable( unknown_name ) );
+309   switch( FEInterface::field_type(sys\&.variable_type( unknown_name )) )
+310     {
+311     case TYPE_SCALAR:
+312       {
+313         this->_compute_error<Real>(sys_name,
+314                                    unknown_name,
+315                                    error_vals);
+316         break;
+317       }
+318     case TYPE_VECTOR:
+319       {
+320         this->_compute_error<RealGradient>(sys_name,
+321                                            unknown_name,
+322                                            error_vals);
+323         break;
+324       }
+325     default:
+326       libmesh_error();
+327     }
+328 
+329   return;
+330 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::error_norm (const std::string &sys_name, const std::string &unknown_name, const \fBFEMNormType\fP &norm)"
+This function returns the error in the requested norm for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. Note also that the result is not exact, but an approximation based on the chosen quadrature rule\&. 
+.PP
+Definition at line 336 of file exact_solution\&.C\&.
+.PP
+References _check_inputs(), _equation_systems, libMesh::err, libMesh::FEInterface::field_type(), libMesh::EquationSystems::get_system(), libMesh::H1, libMesh::H1_SEMINORM, libMesh::H2, libMesh::H2_SEMINORM, libMesh::EquationSystems::has_system(), libMesh::HCURL, libMesh::HCURL_SEMINORM, libMesh::HDIV, libMesh::HDIV_SEMINORM, libMesh::L1, libMesh::L2, libMesh::L_INF, libMesh::libmesh_assert(), and libMesh::TYPE_SCALAR\&.
+.PP
+Referenced by hcurl_error(), and hdiv_error()\&.
+.PP
+.nf
+339 {
+340   // Check the inputs for validity, and get a reference
+341   // to the proper location to store the error
+342   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+343                                                       unknown_name);
+344 
+345   libmesh_assert(_equation_systems\&.has_system(sys_name));
+346   libmesh_assert(_equation_systems\&.get_system(sys_name)\&.has_variable( unknown_name ));
+347   const FEType& fe_type = _equation_systems\&.get_system(sys_name)\&.variable_type(unknown_name);
+348 
+349   switch (norm)
+350     {
+351     case L2:
+352       return std::sqrt(error_vals[0]);
+353     case H1:
+354       return std::sqrt(error_vals[0] + error_vals[1]);
+355     case H2:
+356       return std::sqrt(error_vals[0] + error_vals[1] + error_vals[2]);
+357     case HCURL:
+358       {
+359         if(FEInterface::field_type(fe_type) == TYPE_SCALAR)
+360           {
+361             libMesh::err << "Cannot compute HCurl error norm of scalar-valued variables!" << std::endl;
+362             libmesh_error();
+363           }
+364         else
+365           return std::sqrt(error_vals[0] + error_vals[5]);
+366       }
+367     case HDIV:
+368       {
+369         if(FEInterface::field_type(fe_type) == TYPE_SCALAR)
+370           {
+371             libMesh::err << "Cannot compute HDiv error norm of scalar-valued variables!" << std::endl;
+372             libmesh_error();
+373           }
+374         else
+375           return std::sqrt(error_vals[0] + error_vals[6]);
+376       }
+377     case H1_SEMINORM:
+378       return std::sqrt(error_vals[1]);
+379     case H2_SEMINORM:
+380       return std::sqrt(error_vals[2]);
+381     case HCURL_SEMINORM:
+382       {
+383         if(FEInterface::field_type(fe_type) == TYPE_SCALAR)
+384           {
+385             libMesh::err << "Cannot compute HCurl error seminorm of scalar-valued variables!" << std::endl;
+386             libmesh_error();
+387           }
+388         else
+389           return std::sqrt(error_vals[5]);
+390       }
+391     case HDIV_SEMINORM:
+392       {
+393         if(FEInterface::field_type(fe_type) == TYPE_SCALAR)
+394           {
+395             libMesh::err << "Cannot compute HDiv error seminorm of scalar-valued variables!" << std::endl;
+396             libmesh_error();
+397           }
+398         else
+399           return std::sqrt(error_vals[6]);
+400       }
+401     case L1:
+402       return error_vals[3];
+403     case L_INF:
+404       return error_vals[4];
+405 
+406       // Currently only Sobolev norms/seminorms are supported
+407     default:
+408       libmesh_error();
+409     }
+410 }
+.fi
+.SS "void libMesh::ExactSolution::extra_quadrature_order (const intextraorder)\fC [inline]\fP"
+Increases or decreases the order of the quadrature rule used for numerical integration\&. 
+.PP
+Definition at line 159 of file exact_solution\&.h\&.
+.PP
+References _extra_order\&.
+.PP
+.nf
+160   { _extra_order = extraorder; }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::h1_error (const std::string &sys_name, const std::string &unknown_name)"
+This function computes and returns the H1 error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. 
+.PP
+Definition at line 478 of file exact_solution\&.C\&.
+.PP
+References _check_inputs()\&.
+.PP
+.nf
+480 {
+481   // If the user has supplied no exact derivative function, we
+482   // just integrate the H1 norm of the solution; i\&.e\&. its
+483   // difference from an "exact solution" of zero\&.
+484 
+485   // Check the inputs for validity, and get a reference
+486   // to the proper location to store the error
+487   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+488                                                       unknown_name);
+489 
+490   // Return the square root of the sum of the computed errors\&.
+491   return std::sqrt(error_vals[0] + error_vals[1]);
+492 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::h2_error (const std::string &sys_name, const std::string &unknown_name)"
+This function computes and returns the H2 error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. 
+.PP
+Definition at line 510 of file exact_solution\&.C\&.
+.PP
+References _check_inputs()\&.
+.PP
+.nf
+512 {
+513   // If the user has supplied no exact derivative functions, we
+514   // just integrate the H2 norm of the solution; i\&.e\&. its
+515   // difference from an "exact solution" of zero\&.
+516 
+517   // Check the inputs for validity, and get a reference
+518   // to the proper location to store the error
+519   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+520                                                       unknown_name);
+521 
+522   // Return the square root of the sum of the computed errors\&.
+523   return std::sqrt(error_vals[0] + error_vals[1] + error_vals[2]);
+524 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::hcurl_error (const std::string &sys_name, const std::string &unknown_name)"
+This function computes and returns the HCurl error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. This is only valid for vector-valued element\&. An error is thrown if requested for scalar-valued elements\&. 
+.PP
+Definition at line 495 of file exact_solution\&.C\&.
+.PP
+References error_norm(), and libMesh::HCURL\&.
+.PP
+.nf
+497 {
+498   return this->error_norm(sys_name,unknown_name,HCURL);
+499 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::hdiv_error (const std::string &sys_name, const std::string &unknown_name)"
+This function computes and returns the HDiv error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. This is only valid for vector-valued element\&. An error is thrown if requested for scalar-valued elements\&. 
+.PP
+Definition at line 502 of file exact_solution\&.C\&.
+.PP
+References error_norm(), and libMesh::HDIV\&.
+.PP
+.nf
+504 {
+505   return this->error_norm(sys_name,unknown_name,HDIV);
+506 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::l1_error (const std::string &sys_name, const std::string &unknown_name)"
+This function returns the integrated L1 error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. 
+.PP
+Definition at line 438 of file exact_solution\&.C\&.
+.PP
+References _check_inputs()\&.
+.PP
+.nf
+440 {
+441 
+442   // Check the inputs for validity, and get a reference
+443   // to the proper location to store the error
+444   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+445                                                       unknown_name);
+446 
+447   // Return the square root of the first component of the
+448   // computed error\&.
+449   return error_vals[3];
+450 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::l2_error (const std::string &sys_name, const std::string &unknown_name)"
+This function returns the integrated L2 error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. 
+.PP
+Definition at line 418 of file exact_solution\&.C\&.
+.PP
+References _check_inputs()\&.
+.PP
+.nf
+420 {
+421 
+422   // Check the inputs for validity, and get a reference
+423   // to the proper location to store the error
+424   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+425                                                       unknown_name);
+426 
+427   // Return the square root of the first component of the
+428   // computed error\&.
+429   return std::sqrt(error_vals[0]);
+430 }
+.fi
+.SS "\fBReal\fP libMesh::ExactSolution::l_inf_error (const std::string &sys_name, const std::string &unknown_name)"
+This function returns the L_INF error for the system sys_name for the unknown unknown_name\&. Note that no error computations are actually performed, you must call \fBcompute_error()\fP for that\&. Note also that the result (as for the other norms as well) is not exact, but an approximation based on the chosen quadrature rule: to compute it, we take the max of the absolute value of the error over all the quadrature points\&. 
+.PP
+Definition at line 458 of file exact_solution\&.C\&.
+.PP
+References _check_inputs()\&.
+.PP
+.nf
+460 {
+461 
+462   // Check the inputs for validity, and get a reference
+463   // to the proper location to store the error
+464   std::vector<Real>& error_vals = this->_check_inputs(sys_name,
+465                                                       unknown_name);
+466 
+467   // Return the square root of the first component of the
+468   // computed error\&.
+469   return error_vals[4];
+470 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBEquationSystems\fP& libMesh::ExactSolution::_equation_systems\fC [private]\fP"
+Constant reference to the \fC\fBEquationSystems\fP\fP object used for the simulation\&. 
+.PP
+Definition at line 307 of file exact_solution\&.h\&.
+.PP
+Referenced by _compute_error(), attach_exact_deriv(), attach_exact_hessian(), compute_error(), error_norm(), and ExactSolution()\&.
+.SS "const \fBEquationSystems\fP* libMesh::ExactSolution::_equation_systems_fine\fC [private]\fP"
+Constant pointer to the \fC\fBEquationSystems\fP\fP object containing the fine grid solution\&. 
+.PP
+Definition at line 313 of file exact_solution\&.h\&.
+.PP
+Referenced by _compute_error(), attach_exact_deriv(), attach_exact_hessian(), and attach_reference_solution()\&.
+.SS "std::map<std::string, \fBSystemErrorMap\fP> libMesh::ExactSolution::_errors\fC [private]\fP"
+A map of SystemErrorMaps, which contains entries for each system in the \fBEquationSystems\fP object\&. This is required, since it is possible for two systems to have unknowns with the \fIsame name\fP\&. 
+.PP
+Definition at line 301 of file exact_solution\&.h\&.
+.PP
+Referenced by _check_inputs(), and ExactSolution()\&.
+.SS "std::vector<\fBFunctionBase\fP<\fBGradient\fP> *> libMesh::ExactSolution::_exact_derivs\fC [private]\fP"
+User-provided functors which compute the exact derivative of the solution for each system\&. 
+.PP
+Definition at line 277 of file exact_solution\&.h\&.
+.PP
+Referenced by _compute_error(), attach_exact_deriv(), attach_exact_derivs(), attach_reference_solution(), and ~ExactSolution()\&.
+.SS "std::vector<\fBFunctionBase\fP<\fBTensor\fP> *> libMesh::ExactSolution::_exact_hessians\fC [private]\fP"
+User-provided functors which compute the exact hessians of the solution for each system\&. 
+.PP
+Definition at line 283 of file exact_solution\&.h\&.
+.PP
+Referenced by _compute_error(), attach_exact_hessian(), attach_exact_hessians(), attach_reference_solution(), and ~ExactSolution()\&.
+.SS "std::vector<\fBFunctionBase\fP<\fBNumber\fP> *> libMesh::ExactSolution::_exact_values\fC [private]\fP"
+User-provided functors which compute the exact value of the solution for each system\&. 
+.PP
+Definition at line 271 of file exact_solution\&.h\&.
+.PP
+Referenced by _compute_error(), attach_exact_value(), attach_exact_values(), attach_reference_solution(), and ~ExactSolution()\&.
+.SS "int libMesh::ExactSolution::_extra_order\fC [private]\fP"
+Extra order to use for quadrature rule 
+.PP
+Definition at line 318 of file exact_solution\&.h\&.
+.PP
+Referenced by _compute_error(), and extra_quadrature_order()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

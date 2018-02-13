@@ -1,0 +1,696 @@
+.TH "libMesh::InfElemBuilder" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::InfElemBuilder \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inf_elem_builder\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::pair< bool, double > \fBInfElemOriginValue\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBInfElemBuilder\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "const \fBPoint\fP \fBbuild_inf_elem\fP (const bool be_verbose=false)"
+.br
+.ti -1c
+.RI "const \fBPoint\fP \fBbuild_inf_elem\fP (const \fBInfElemOriginValue\fP &origin_x, const \fBInfElemOriginValue\fP &origin_y, const \fBInfElemOriginValue\fP &origin_z, const bool x_sym=false, const bool y_sym=false, const bool z_sym=false, const bool be_verbose=false, std::vector< const \fBNode\fP * > *inner_boundary_nodes=NULL)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBbuild_inf_elem\fP (const \fBPoint\fP &origin, const bool x_sym=false, const bool y_sym=false, const bool z_sym=false, const bool be_verbose=false, std::set< std::pair< \fBdof_id_type\fP, unsigned int > > *inner_faces=NULL)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fB_mesh\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class is used to build infinite elements on top of an existing mesh\&. It only makes sense to use this if LIBMESH_ENABLE_INFINITE_ELEMENTS is true\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+original code by Daniel Dreyer, converted to \fBInfElemBuilder\fP class by John W\&. Peterson, 2004\&. 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file inf_elem_builder\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::pair<bool, double> \fBlibMesh::InfElemBuilder::InfElemOriginValue\fP"
+Useful typedef 
+.PP
+Definition at line 64 of file inf_elem_builder\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::InfElemBuilder::InfElemBuilder (\fBMeshBase\fP &mesh)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. 
+.PP
+Definition at line 59 of file inf_elem_builder\&.h\&.
+.PP
+.nf
+59 : _mesh(mesh) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "const \fBPoint\fP libMesh::InfElemBuilder::build_inf_elem (const boolbe_verbose = \fCfalse\fP)"
+Build infinite elements atop a volume-based mesh, determine origin automatically\&. Also returns the origin as a \fCconst\fP \fC\fBPoint\fP\fP to make it more obvious that the origin should not change after the infinite elements have been built\&. When symmetry planes are present, use the version with optional symmetry switches\&. The flag \fCbe_verbose\fP enables some diagnostic output\&. 
+.PP
+Definition at line 44 of file inf_elem_builder\&.C\&.
+.PP
+References _mesh, libMesh::MeshTools::bounding_box(), libMesh::out, libMesh::MeshBase::prepare_for_use(), libMesh::ParallelObject::processor_id(), and libMesh::TypeVector< T >::write_unformatted()\&.
+.PP
+Referenced by build_inf_elem()\&.
+.PP
+.nf
+45 {
+46   // determine origin automatically,
+47   // works only if the mesh has no symmetry planes\&.
+48   const MeshTools::BoundingBox b_box = MeshTools::bounding_box(_mesh);
+49   Point origin = (b_box\&.first + b_box\&.second) / 2;
+50 
+51   if (be_verbose && _mesh\&.processor_id() == 0)
+52     {
+53 #ifdef DEBUG
+54       libMesh::out << " Determined origin for Infinite Elements:"
+55                    << std::endl
+56                    << "  ";
+57       origin\&.write_unformatted(libMesh::out);
+58       libMesh::out << std::endl;
+59 #endif
+60     }
+61 
+62   // Call the protected implementation function with the
+63   // automatically determined origin\&.
+64   this->build_inf_elem(origin, false, false, false, be_verbose);
+65 
+66   // when finished with building the Ifems,
+67   // it remains to prepare the mesh for use:
+68   // find neighbors (again), partition (if needed)\&.\&.\&.
+69   this->_mesh\&.prepare_for_use (/*skip_renumber =*/ false);
+70 
+71   return origin;
+72 }
+.fi
+.SS "const \fBPoint\fP libMesh::InfElemBuilder::build_inf_elem (const \fBInfElemOriginValue\fP &origin_x, const \fBInfElemOriginValue\fP &origin_y, const \fBInfElemOriginValue\fP &origin_z, const boolx_sym = \fCfalse\fP, const booly_sym = \fCfalse\fP, const boolz_sym = \fCfalse\fP, const boolbe_verbose = \fCfalse\fP, std::vector< const \fBNode\fP * > *inner_boundary_nodes = \fCNULL\fP)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the origin of the infinite elements\&. Builds infinite elements atop a volume-based mesh\&. Finds all faces on the outer boundary and build infinite elements on them\&. Using the \fCInfElemOriginValue\fP the user can prescribe only selected origin coordinates\&. The remaining coordinates are computed from the center of the bounding box of the mesh\&.
+.RE
+.PP
+During the search for faces on which infinite elements are built, \fIinterior\fP faces that are not on symmetry planes are found, too\&. When an (optional) pointer to \fCinner_boundary_nodes\fP is provided, then this vector will be filled with the nodes that lie on the inner boundary\&.
+.PP
+Faces which lie in at least one symmetry plane are skipped\&. The three optional booleans \fCx_sym\fP, \fCy_sym\fP, \fCz_sym\fP indicate symmetry planes (through the origin, obviously) perpendicular to the \fCx\fP, \fCy\fP and \fCz\fP direction, respectively\&. The flag \fCbe_verbose\fP enables some diagnostic output\&. 
+.PP
+Definition at line 85 of file inf_elem_builder\&.C\&.
+.PP
+References _mesh, libMesh::MeshTools::bounding_box(), build_inf_elem(), libMesh::Elem::build_side(), libMesh::MeshBase::elem(), libMesh::MeshBase::node(), libMesh::out, libMesh::MeshBase::prepare_for_use(), libMesh::MeshBase::print_info(), side, libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::TypeVector< T >::write_unformatted()\&.
+.PP
+.nf
+93 {
+94   START_LOG("build_inf_elem()", "InfElemBuilder");
+95 
+96   // first determine the origin of the
+97   // infinite elements\&.  For this, the
+98   // origin defaults to the given values,
+99   // and may be overridden when the user
+100   // provided values
+101   Point origin(origin_x\&.second, origin_y\&.second, origin_z\&.second);
+102 
+103   // when only _one_ of the origin coordinates is _not_
+104   // given, we have to determine it on our own
+105   if ( !origin_x\&.first || !origin_y\&.first || !origin_z\&.first)
+106     {
+107       // determine origin
+108       const MeshTools::BoundingBox b_box = MeshTools::bounding_box(_mesh);
+109       const Point auto_origin = (b_box\&.first+b_box\&.second)/2;
+110 
+111       // override default values, if necessary
+112       if (!origin_x\&.first)
+113         origin(0) = auto_origin(0);
+114       if (!origin_y\&.first)
+115         origin(1) = auto_origin(1);
+116       if (!origin_z\&.first)
+117         origin(2) = auto_origin(2);
+118 
+119       if (be_verbose)
+120         {
+121           libMesh::out << " Origin for Infinite Elements:" << std::endl;
+122 
+123           if (!origin_x\&.first)
+124             libMesh::out << "  determined x-coordinate" << std::endl;
+125           if (!origin_y\&.first)
+126             libMesh::out << "  determined y-coordinate" << std::endl;
+127           if (!origin_z\&.first)
+128             libMesh::out << "  determined z-coordinate" << std::endl;
+129 
+130           libMesh::out << "  coordinates: ";
+131           origin\&.write_unformatted(libMesh::out);
+132           libMesh::out << std::endl;
+133         }
+134     }
+135 
+136   else if (be_verbose)
+137 
+138     {
+139       libMesh::out << " Origin for Infinite Elements:" << std::endl;
+140       libMesh::out << "  coordinates: ";
+141       origin\&.write_unformatted(libMesh::out);
+142       libMesh::out << std::endl;
+143     }
+144 
+145 
+146 
+147   // Now that we have the origin, check if the user provided an \p
+148   // inner_boundary_nodes\&.  If so, we pass a std::set to the actual
+149   // implementation of the build_inf_elem(), so that we can convert
+150   // this to the Node* vector
+151   if (inner_boundary_nodes != NULL)
+152     {
+153       // note that the std::set that we will get
+154       // from build_inf_elem() uses the index of
+155       // the element in this->_elements vector,
+156       // and the second entry is the side index
+157       // for this element\&.  Therefore, we do _not_
+158       // need to renumber nodes and elements
+159       // prior to building the infinite elements\&.
+160       //
+161       // However, note that this method here uses
+162       // node id's\&.\&.\&. Do we need to renumber?
+163 
+164 
+165       // Form the list of faces of elements which finally
+166       // will tell us which nodes should receive boundary
+167       // conditions (to form the std::vector<const Node*>)
+168       std::set< std::pair<dof_id_type,
+169         unsigned int> > inner_faces;
+170 
+171 
+172       // build infinite elements
+173       this->build_inf_elem(origin,
+174                            x_sym, y_sym, z_sym,
+175                            be_verbose,
+176                            &inner_faces);
+177 
+178       if (be_verbose)
+179         {
+180           this->_mesh\&.print_info();
+181           libMesh::out << "Data pre-processing:" << std::endl
+182                        << " convert the <int,int> list to a Node* list\&.\&.\&."
+183                        << std::endl;
+184         }
+185 
+186       // First use a std::vector<dof_id_type> that holds
+187       // the global node numbers\&.  Then sort this vector,
+188       // so that it can be made unique (no multiple occurence
+189       // of a node), and then finally insert the Node* in
+190       // the vector inner_boundary_nodes\&.
+191       //
+192       // Reserve memory for the vector<> with
+193       // 4 times the size of the number of elements in the
+194       // std::set\&. This is a good bet for Quad4 face elements\&.
+195       // For higher-order elements, this probably _has_ to lead
+196       // to additional allocations\&.\&.\&.
+197       // Practice has to show how this affects performance\&.
+198       std::vector<dof_id_type> inner_boundary_node_numbers;
+199       inner_boundary_node_numbers\&.reserve(4*inner_faces\&.size());
+200 
+201       // Now transform the set of pairs to a list of (possibly
+202       // duplicate) global node numbers\&.
+203       std::set< std::pair<dof_id_type,unsigned int> >::iterator face_it = inner_faces\&.begin();
+204       const std::set< std::pair<dof_id_type,unsigned int> >::iterator face_end = inner_faces\&.end();
+205       for(; face_it!=face_end; ++face_it)
+206         {
+207           std::pair<dof_id_type,unsigned int> p = *face_it;
+208 
+209           // build a full-ordered side element to get _all_ the base nodes
+210           AutoPtr<Elem> side( this->_mesh\&.elem(p\&.first)->build_side(p\&.second) );
+211 
+212           // insert all the node numbers in inner_boundary_node_numbers
+213           for (unsigned int n=0; n< side->n_nodes(); n++)
+214             inner_boundary_node_numbers\&.push_back(side->node(n));
+215         }
+216 
+217 
+218       // inner_boundary_node_numbers now still holds multiple entries of
+219       // node numbers\&.  So first sort, then unique the vector\&.
+220       // Note that \p std::unique only puts the new ones in
+221       // front, while to leftovers are @e not deleted\&.  Instead,
+222       // it returns a pointer to the end of the unique range\&.
+223       //TODO:[BSK] int_ibn_size_before is not the same type as unique_size!
+224 #ifndef NDEBUG
+225       const std::size_t ibn_size_before = inner_boundary_node_numbers\&.size();
+226 #endif
+227       std::sort (inner_boundary_node_numbers\&.begin(), inner_boundary_node_numbers\&.end());
+228       std::vector<dof_id_type>::iterator unique_end =
+229         std::unique (inner_boundary_node_numbers\&.begin(), inner_boundary_node_numbers\&.end());
+230 
+231       std::size_t unique_size = std::distance(inner_boundary_node_numbers\&.begin(), unique_end);
+232       libmesh_assert_less_equal (unique_size, ibn_size_before);
+233 
+234       // Finally, create const Node* in the inner_boundary_nodes
+235       // vector\&.  Reserve, not resize (otherwise, the push_back
+236       // would append the interesting nodes, while NULL-nodes
+237       // live in the resize'd area\&.\&.\&.
+238       inner_boundary_nodes->reserve (unique_size);
+239       inner_boundary_nodes->clear();
+240 
+241 
+242       std::vector<dof_id_type>::iterator pos_it = inner_boundary_node_numbers\&.begin();
+243       for (; pos_it != unique_end; ++pos_it)
+244         {
+245           const Node& node = this->_mesh\&.node(*pos_it);
+246           inner_boundary_nodes->push_back(&node);
+247         }
+248 
+249       if (be_verbose)
+250         libMesh::out << "  finished identifying " << unique_size
+251                      << " target nodes\&." << std::endl;
+252     }
+253 
+254   else
+255 
+256     {
+257       // There are no inner boundary nodes, so simply build the infinite elements
+258       this->build_inf_elem(origin, x_sym, y_sym, z_sym, be_verbose);
+259     }
+260 
+261 
+262   STOP_LOG("build_inf_elem()", "InfElemBuilder");
+263 
+264   // when finished with building the Ifems,
+265   // it remains to prepare the mesh for use:
+266   // find neighbors again, partition (if needed)\&.\&.\&.
+267   this->_mesh\&.prepare_for_use (/*skip_renumber =*/ false);
+268 
+269   return origin;
+270 }
+.fi
+.SS "void libMesh::InfElemBuilder::build_inf_elem (const \fBPoint\fP &origin, const boolx_sym = \fCfalse\fP, const booly_sym = \fCfalse\fP, const boolz_sym = \fCfalse\fP, const boolbe_verbose = \fCfalse\fP, std::set< std::pair< \fBdof_id_type\fP, unsigned int > > *inner_faces = \fCNULL\fP)\fC [private]\fP"
+Build infinite elements atop a volume-based mesh\&. Actual implementation\&. 
+.PP
+Definition at line 281 of file inf_elem_builder\&.C\&.
+.PP
+References _mesh, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::Elem::build_side(), libMesh::EDGE2, libMesh::EDGE3, libMesh::MeshBase::elem(), end, libMesh::MeshBase::find_neighbors(), libMesh::DofObject::id(), libMesh::MeshBase::is_serial(), libMesh::MeshBase::libmesh_assert_valid_parallel_ids(), libMesh::MeshBase::max_elem_id(), libMesh::MeshBase::max_node_id(), libMesh::MeshBase::n_elem(), libMesh::Elem::n_neighbors(), libMesh::Elem::n_vertices(), libMesh::Elem::neighbor(), libMesh::MeshBase::node(), libMesh::out, libMesh::MeshBase::point(), libMesh::DofObject::processor_id(), libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::Real, libMesh::DofObject::set_id(), libMesh::Elem::set_node(), side, libMesh::TypeVector< T >::size(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+.nf
+288 {
+289   if (be_verbose)
+290     {
+291 #ifdef DEBUG
+292       libMesh::out << " Building Infinite Elements:" << std::endl;
+293       libMesh::out << "  updating element neighbor tables\&.\&.\&." << std::endl;
+294 #else
+295       libMesh::out << " Verbose mode disabled in non-debug mode\&." << std::endl;
+296 #endif
+297     }
+298 
+299 
+300   // update element neighbors
+301   this->_mesh\&.find_neighbors();
+302 
+303   START_LOG("build_inf_elem()", "InfElemBuilder");
+304 
+305   // A set for storing element number, side number pairs\&.
+306   // pair\&.first == element number, pair\&.second == side number
+307   std::set< std::pair<dof_id_type,unsigned int> > faces;
+308   std::set< std::pair<dof_id_type,unsigned int> > ofaces;
+309 
+310   // A set for storing node numbers on the outer faces\&.
+311   std::set<dof_id_type> onodes;
+312 
+313   // The distance to the farthest point in the mesh from the origin
+314   Real max_r=0\&.;
+315 
+316   // The index of the farthest point in the mesh from the origin
+317   int max_r_node = -1;
+318 
+319 #ifdef DEBUG
+320   if (be_verbose)
+321     {
+322       libMesh::out << "  collecting boundary sides";
+323       if (x_sym || y_sym || z_sym)
+324         libMesh::out << ", skipping sides in symmetry planes\&.\&.\&." << std::endl;
+325       else
+326         libMesh::out << "\&.\&.\&." << std::endl;
+327     }
+328 #endif
+329 
+330   // Iterate through all elements and sides, collect indices of all active
+331   // boundary sides in the faces set\&. Skip sides which lie in symmetry planes\&.
+332   // Later, sides of the inner boundary will be sorted out\&.
+333   {
+334     MeshBase::element_iterator       it  = this->_mesh\&.active_elements_begin();
+335     const MeshBase::element_iterator end = this->_mesh\&.active_elements_end();
+336 
+337     for(; it != end; ++it)
+338       {
+339         Elem* elem = *it;
+340 
+341         for (unsigned int s=0; s<elem->n_neighbors(); s++)
+342           {
+343             // check if elem(e) is on the boundary
+344             if (elem->neighbor(s) == NULL)
+345               {
+346                 // note that it is safe to use the Elem::side() method,
+347                 // which gives a non-full-ordered element
+348                 AutoPtr<Elem> side(elem->build_side(s));
+349 
+350                 // bool flags for symmetry detection
+351                 bool sym_side=false;
+352                 bool on_x_sym=true;
+353                 bool on_y_sym=true;
+354                 bool on_z_sym=true;
+355 
+356 
+357                 // Loop over the nodes to check whether they are on the symmetry planes,
+358                 // and therefore sufficient to use a non-full-ordered side element
+359                 for(unsigned int n=0; n<side->n_nodes(); n++)
+360                   {
+361                     const Point dist_from_origin = this->_mesh\&.point(side->node(n)) - origin;
+362 
+363                     if(x_sym)
+364                       if( std::abs(dist_from_origin(0)) > 1\&.e-3 )
+365                         on_x_sym=false;
+366 
+367                     if(y_sym)
+368                       if( std::abs(dist_from_origin(1)) > 1\&.e-3 )
+369                         on_y_sym=false;
+370 
+371                     if(z_sym)
+372                       if( std::abs(dist_from_origin(2)) > 1\&.e-3 )
+373                         on_z_sym=false;
+374 
+375                     //       if(x_sym)
+376                     // if( std::abs(dist_from_origin(0)) > 1\&.e-6 )
+377                     //   on_x_sym=false;
+378 
+379                     //       if(y_sym)
+380                     // if( std::abs(dist_from_origin(1)) > 1\&.e-6 )
+381                     //   on_y_sym=false;
+382 
+383                     //       if(z_sym)
+384                     // if( std::abs(dist_from_origin(2)) > 1\&.e-6 )
+385                     //   on_z_sym=false;
+386 
+387                     //find the node most distant from origin
+388 
+389                     Real r = dist_from_origin\&.size();
+390                     if (r > max_r)
+391                       {
+392                         max_r = r;
+393                         max_r_node=side->node(n);
+394                       }
+395 
+396                   }
+397 
+398                 sym_side = (x_sym && on_x_sym) || (y_sym && on_y_sym) || (z_sym && on_z_sym);
+399 
+400                 if (!sym_side)
+401                   faces\&.insert( std::make_pair(elem->id(), s) );
+402 
+403               } // neighbor(s) == NULL
+404           } // sides
+405       } // elems
+406   }
+407 
+408 
+409 
+410 
+411 
+412 
+413   //  If a boundary side has one node on the outer boundary,
+414   //  all points of this side are on the outer boundary\&.
+415   //  Start with the node most distant from origin, which has
+416   //  to be on the outer boundary, then recursively find all
+417   //  sides and nodes connected to it\&. Found sides are moved
+418   //  from faces to ofaces, nodes are collected in onodes\&.
+419   //  Here, the search is done iteratively, because, depending on
+420   //  the mesh, a very high level of recursion might be necessary\&.
+421   if (max_r_node > 0)
+422     onodes\&.insert(max_r_node);
+423 
+424 
+425   {
+426     std::set< std::pair<dof_id_type,unsigned int> >::iterator face_it = faces\&.begin();
+427     unsigned int facesfound=0;
+428     while (face_it != faces\&.end()) {
+429 
+430       std::pair<dof_id_type, unsigned int> p;
+431       p = *face_it;
+432 
+433       // This has to be a full-ordered side element,
+434       // since we need the correct n_nodes,
+435       AutoPtr<Elem> side(this->_mesh\&.elem(p\&.first)->build_side(p\&.second));
+436 
+437       bool found=false;
+438       for(unsigned int sn=0; sn<side->n_nodes(); sn++)
+439         if(onodes\&.count(side->node(sn)))
+440           {
+441             found=true;
+442             break;
+443           }
+444 
+445 
+446       // If a new oface is found, include its nodes in onodes
+447       if(found)
+448         {
+449           for(unsigned int sn=0; sn<side->n_nodes(); sn++)
+450             onodes\&.insert(side->node(sn));
+451 
+452           ofaces\&.insert(p);
+453           ++face_it; // iteration is done here
+454           faces\&.erase(p);
+455 
+456           facesfound++;
+457         }
+458 
+459       else
+460         ++face_it; // iteration is done here
+461 
+462       // If at least one new oface was found in this cycle,
+463       // do another search cycle\&.
+464       if(facesfound>0 && face_it == faces\&.end())
+465         {
+466           facesfound = 0;
+467           face_it    = faces\&.begin();
+468         }
+469 
+470     }
+471   }
+472 
+473 
+474 #ifdef DEBUG
+475   if (be_verbose)
+476     libMesh::out << "  found "
+477                  << faces\&.size()
+478                  << " inner and "
+479                  << ofaces\&.size()
+480                  << " outer boundary faces"
+481                  << std::endl;
+482 #endif
+483 
+484   // When the user provided a non-null pointer to
+485   // inner_faces, that implies he wants to have
+486   // this std::set\&.  For now, simply copy the data\&.
+487   if (inner_faces != NULL)
+488     *inner_faces = faces;
+489 
+490   // free memory, clear our local variable, no need
+491   // for it any more\&.
+492   faces\&.clear();
+493 
+494 
+495   // outer_nodes maps onodes to their duplicates
+496   std::map<dof_id_type, Node *> outer_nodes;
+497 
+498   // We may need to pick our own object ids in parallel
+499   dof_id_type old_max_node_id = _mesh\&.max_node_id();
+500   dof_id_type old_max_elem_id = _mesh\&.max_elem_id();
+501 
+502   // for each boundary node, add an outer_node with
+503   // double distance from origin\&.
+504   std::set<dof_id_type>::iterator on_it = onodes\&.begin();
+505   for( ; on_it != onodes\&.end(); ++on_it)
+506     {
+507       Point p = (Point(this->_mesh\&.point(*on_it)) * 2) - origin;
+508       if (_mesh\&.is_serial())
+509         {
+510           // Add with a default id in serial
+511           outer_nodes[*on_it]=this->_mesh\&.add_point(p);
+512         }
+513       else
+514         {
+515           // Pick a unique id in parallel
+516           Node &bnode = _mesh\&.node(*on_it);
+517           dof_id_type new_id = bnode\&.id() + old_max_node_id;
+518           outer_nodes[*on_it] =
+519             this->_mesh\&.add_point(p, new_id,
+520                                   bnode\&.processor_id());
+521         }
+522     }
+523 
+524 
+525 #ifdef DEBUG
+526   // for verbose, remember n_elem
+527   dof_id_type n_conventional_elem = this->_mesh\&.n_elem();
+528 #endif
+529 
+530 
+531   // build Elems based on boundary side type
+532   std::set< std::pair<dof_id_type,unsigned int> >::iterator face_it = ofaces\&.begin();
+533   for( ; face_it != ofaces\&.end(); ++face_it)
+534     {
+535       // Shortcut to the pair being iterated over
+536       std::pair<dof_id_type,unsigned int> p = *face_it;
+537 
+538       // build a full-ordered side element to get the base nodes
+539       AutoPtr<Elem> side(this->_mesh\&.elem(p\&.first)->build_side(p\&.second));
+540 
+541       // create cell depending on side type, assign nodes,
+542       // use braces to force scope\&.
+543       bool is_higher_order_elem = false;
+544 
+545       Elem* el;
+546       switch(side->type())
+547         {
+548           // 3D infinite elements
+549           // TRIs
+550         case TRI3:
+551           el=new InfPrism6;
+552           break;
+553 
+554         case TRI6:
+555           el=new InfPrism12;
+556           is_higher_order_elem = true;
+557           break;
+558 
+559           // QUADs
+560         case QUAD4:
+561           el=new InfHex8;
+562           break;
+563 
+564         case QUAD8:
+565           el=new InfHex16;
+566           is_higher_order_elem = true;
+567           break;
+568 
+569         case QUAD9:
+570           el=new InfHex18;
+571 
+572           // the method of assigning nodes (which follows below)
+573           // omits in the case of QUAD9 the bubble node; therefore
+574           // we assign these first by hand here\&.
+575           el->set_node(16) = side->get_node(8);
+576           el->set_node(17) = outer_nodes[side->node(8)];
+577           is_higher_order_elem=true;
+578           break;
+579 
+580           // 2D infinite elements
+581         case EDGE2:
+582           el=new InfQuad4;
+583           break;
+584 
+585         case EDGE3:
+586           el=new InfQuad6;
+587           el->set_node(4) = side->get_node(2);
+588           break;
+589 
+590           // 1D infinite elements not supported
+591         default:
+592           libMesh::out << "InfElemBuilder::build_inf_elem(Point, bool, bool, bool, bool): "
+593                        << "invalid face element "
+594                        << std::endl;
+595           continue;
+596         }
+597 
+598       // In parallel, assign unique ids to the new element
+599       if (!_mesh\&.is_serial())
+600         {
+601           Elem *belem = _mesh\&.elem(p\&.first);
+602           el->processor_id() = belem->processor_id();
+603           // We'd better not have elements with more than 6 sides
+604           el->set_id (belem->id() * 6 + p\&.second + old_max_elem_id);
+605         }
+606 
+607       // assign vertices to the new infinite element
+608       const unsigned int n_base_vertices = side->n_vertices();
+609       for(unsigned int i=0; i<n_base_vertices; i++)
+610         {
+611           el->set_node(i                ) = side->get_node(i);
+612           el->set_node(i+n_base_vertices) = outer_nodes[side->node(i)];
+613         }
+614 
+615 
+616       // when this is a higher order element,
+617       // assign also the nodes in between
+618       if (is_higher_order_elem)
+619         {
+620           // n_safe_base_nodes is the number of nodes in \p side
+621           // that may be safely assigned using below for loop\&.
+622           // Actually, n_safe_base_nodes is _identical_ with el->n_vertices(),
+623           // since for QUAD9, the 9th node was already assigned above
+624           const unsigned int n_safe_base_nodes   = el->n_vertices();
+625 
+626           for(unsigned int i=n_base_vertices; i<n_safe_base_nodes; i++)
+627             {
+628               el->set_node(i+n_base_vertices)   = side->get_node(i);
+629               el->set_node(i+n_safe_base_nodes) = outer_nodes[side->node(i)];
+630             }
+631         }
+632 
+633 
+634       // add infinite element to mesh
+635       this->_mesh\&.add_elem(el);
+636     } // for
+637 
+638 
+639 #ifdef DEBUG
+640   _mesh\&.libmesh_assert_valid_parallel_ids();
+641 
+642   if (be_verbose)
+643     libMesh::out << "  added "
+644                  << this->_mesh\&.n_elem() - n_conventional_elem
+645                  << " infinite elements and "
+646                  << onodes\&.size()
+647                  << " nodes to the mesh"
+648                  << std::endl
+649                  << std::endl;
+650 #endif
+651 
+652   STOP_LOG("build_inf_elem()", "InfElemBuilder");
+653 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMeshBase\fP& libMesh::InfElemBuilder::_mesh\fC [private]\fP"
+Reference to the mesh we're building infinite elements for\&. 
+.PP
+Definition at line 126 of file inf_elem_builder\&.h\&.
+.PP
+Referenced by build_inf_elem()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

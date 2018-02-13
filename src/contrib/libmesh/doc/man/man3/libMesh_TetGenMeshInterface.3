@@ -1,0 +1,597 @@
+.TH "libMesh::TetGenMeshInterface" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TetGenMeshInterface \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_tetgen_interface\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTetGenMeshInterface\fP (\fBUnstructuredMesh\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fB~TetGenMeshInterface\fP ()"
+.br
+.ti -1c
+.RI "void \fBtriangulate_pointset\fP ()"
+.br
+.ti -1c
+.RI "void \fBpointset_convexhull\fP ()"
+.br
+.ti -1c
+.RI "void \fBtriangulate_conformingDelaunayMesh\fP (double quality_constraint=0\&., double volume_constraint=0\&.)"
+.br
+.ti -1c
+.RI "void \fBtriangulate_conformingDelaunayMesh_carvehole\fP (const std::vector< \fBPoint\fP > &holes, double quality_constraint=0\&., double volume_constraint=0\&.)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBfill_pointlist\fP (\fBTetGenWrapper\fP &wrapper)"
+.br
+.ti -1c
+.RI "void \fBassign_nodes_to_elem\fP (unsigned *node_labels, \fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "unsigned \fBcheck_hull_integrity\fP ()"
+.br
+.ti -1c
+.RI "void \fBprocess_hull_integrity_result\fP (unsigned result)"
+.br
+.ti -1c
+.RI "void \fBdelete_2D_hull_elements\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBUnstructuredMesh\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned > \fB_sequential_to_libmesh_node_map\fP"
+.br
+.ti -1c
+.RI "\fBMeshSerializer\fP \fB_serializer\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class \fC\fBTetGenMeshInterface\fP\fP provides an interface for tetrahedrization of meshes using the TetGen library\&. For information about TetGen cf\&. \fCTetGen home page\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+, Steffen Petersen, 2004 Refactoring, John W\&. Peterson, 2011 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file mesh_tetgen_interface\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TetGenMeshInterface::TetGenMeshInterface (\fBUnstructuredMesh\fP &mesh)\fC [explicit]\fP"
+Constructor\&. Takes a reference to the mesh\&. 
+.PP
+Definition at line 38 of file mesh_tetgen_interface\&.C\&.
+.PP
+.nf
+38                                                                 :
+39   _mesh(mesh),
+40   _serializer(_mesh)
+41 {
+42 }
+.fi
+.SS "libMesh::TetGenMeshInterface::~TetGenMeshInterface ()\fC [inline]\fP"
+Empty destructor\&. 
+.PP
+Definition at line 66 of file mesh_tetgen_interface\&.h\&.
+.PP
+.nf
+66 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::TetGenMeshInterface::assign_nodes_to_elem (unsigned *node_labels, \fBElem\fP *elem)\fC [protected]\fP"
+Assigns the node IDs contained in the 'node_labels' array to 'elem'\&. 
+.PP
+Definition at line 368 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, _sequential_to_libmesh_node_map, libMesh::err, libMesh::Elem::n_nodes(), libMesh::MeshBase::node_ptr(), and libMesh::Elem::set_node()\&.
+.PP
+Referenced by pointset_convexhull(), triangulate_conformingDelaunayMesh_carvehole(), and triangulate_pointset()\&.
+.PP
+.nf
+369 {
+370   for (unsigned int j=0; j<elem->n_nodes(); ++j)
+371     {
+372       // Get the mapped node index to ask the Mesh for
+373       unsigned mapped_node_id = _sequential_to_libmesh_node_map[ node_labels[j] ];
+374 
+375       // Parallel mesh can return NULL pointers, this is bad\&.\&.\&.
+376       Node* current_node = this->_mesh\&.node_ptr( mapped_node_id );
+377 
+378       if (current_node == NULL)
+379         {
+380           libMesh::err << "Error! Mesh returned NULL node pointer!" << std::endl;
+381           libmesh_error();
+382         }
+383 
+384       elem->set_node(j) = current_node;
+385     }
+386 }
+.fi
+.SS "unsigned libMesh::TetGenMeshInterface::check_hull_integrity ()\fC [protected]\fP"
+This function checks the integrity of the current set of elements in the \fBMesh\fP to see if they comprise a convex hull, that is: \&.) If they are all TRI3 elements \&.) They all have non-NULL neighbors
+.PP
+Returns: \&.) 0 if the mesh forms a valid convex hull \&.) 1 if a non-TRI3 element is found \&.) 2 if an element with a NULL-neighbor is found 
+.PP
+Definition at line 392 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::MeshBase::n_elem(), libMesh::Elem::n_neighbors(), libMesh::Elem::neighbor(), libMesh::TRI3, and libMesh::Elem::type()\&.
+.PP
+Referenced by triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+393 {
+394   // Check for easy return: if the Mesh is empty (i\&.e\&. if
+395   // somebody called triangulate_conformingDelaunayMesh on
+396   // a Mesh with no elements, then hull integrity check must
+397   // fail\&.\&.\&.
+398   if (_mesh\&.n_elem() == 0)
+399     return 3;
+400 
+401   MeshBase::element_iterator it        = this->_mesh\&.elements_begin();
+402   const MeshBase::element_iterator end = this->_mesh\&.elements_end();
+403 
+404   for (; it != end ; ++it)
+405     {
+406       Elem* elem = *it;
+407 
+408       // Check for proper element type
+409       if (elem->type() != TRI3)
+410         {
+411           //libMesh::err << "ERROR: Some of the elements in the original mesh were not TRI3!" << std::endl;
+412           //libmesh_error();
+413           return 1;
+414         }
+415 
+416       for (unsigned int i=0; i<elem->n_neighbors(); ++i)
+417         {
+418           if (elem->neighbor(i) == NULL)
+419             {
+420               // libMesh::err << "ERROR: Non-convex hull, cannot be tetrahedralized\&." << std::endl;
+421               // libmesh_error();
+422               return 2;
+423             }
+424         }
+425     }
+426 
+427   // If we made it here, return success!
+428   return 0;
+429 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::delete_2D_hull_elements ()\fC [protected]\fP"
+Delete original convex hull elements from the \fBMesh\fP after performing a Delaunay tetrahedralization\&. 
+.PP
+Definition at line 457 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::delete_elem(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::TRI3, and libMesh::Elem::type()\&.
+.PP
+Referenced by triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+458 {
+459   MeshBase::element_iterator it        = this->_mesh\&.elements_begin();
+460   const MeshBase::element_iterator end = this->_mesh\&.elements_end();
+461 
+462   for (; it != end ; ++it)
+463     {
+464       Elem* elem = *it;
+465 
+466       // Check for proper element type\&. Yes, we legally delete elements while
+467       // iterating over them because no entries from the underlying container
+468       // are actually erased\&.
+469       if (elem->type() == TRI3)
+470         _mesh\&.delete_elem(elem);
+471     }
+472 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::fill_pointlist (\fBTetGenWrapper\fP &wrapper)\fC [protected]\fP"
+This function copies nodes from the _mesh into TetGen's pointlist\&. Takes some pains to ensure that non-sequential node numberings (which can happen with e\&.g\&. \fBParallelMesh\fP) are handled\&. 
+.PP
+Definition at line 341 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, _sequential_to_libmesh_node_map, libMesh::TetGenWrapper::allocate_pointlist(), end, libMesh::MeshBase::n_nodes(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), and libMesh::TetGenWrapper::set_node()\&.
+.PP
+Referenced by pointset_convexhull(), triangulate_conformingDelaunayMesh_carvehole(), and triangulate_pointset()\&.
+.PP
+.nf
+342 {
+343   // fill input structure with point set data:
+344   wrapper\&.allocate_pointlist( this->_mesh\&.n_nodes() );
+345 
+346   // Make enough space to store a mapping between the implied sequential
+347   // node numbering used in tetgen and libmesh's (possibly) non-sequential
+348   // numbering scheme\&.
+349   _sequential_to_libmesh_node_map\&.clear();
+350   _sequential_to_libmesh_node_map\&.resize( this->_mesh\&.n_nodes() );
+351 
+352   {
+353     unsigned index = 0;
+354     MeshBase::node_iterator it  = this->_mesh\&.nodes_begin();
+355     const MeshBase::node_iterator end = this->_mesh\&.nodes_end();
+356     for ( ; it != end; ++it)
+357       {
+358         _sequential_to_libmesh_node_map[index] = (*it)->id();
+359         wrapper\&.set_node(index++, (**it)(0), (**it)(1), (**it)(2));
+360       }
+361   }
+362 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::pointset_convexhull ()"
+Method invokes TetGen library to compute a Delaunay tetrahedrization from the nodes point set\&. Stores only 2D hull surface elements\&. 
+.PP
+Definition at line 100 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::add_elem(), assign_nodes_to_elem(), libMesh::MeshBase::delete_elem(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, fill_pointlist(), libMesh::TetGenWrapper::get_numberoftrifaces(), libMesh::TetGenWrapper::get_triface_node(), libMesh::Elem::n_nodes(), libMesh::TetGenWrapper::run_tetgen(), and libMesh::TetGenWrapper::set_switches()\&.
+.PP
+.nf
+101 {
+102   // class tetgen_wrapper allows library access on a basic level
+103   TetGenWrapper tetgen_wrapper;
+104 
+105   // Copy Mesh's node points into TetGen data structure
+106   this->fill_pointlist(tetgen_wrapper);
+107 
+108   // Run TetGen triangulation method:
+109   // Q = quiet, no terminal output
+110   // Note: if no switch is used, the input must be a list of 3D points
+111   // (\&.node file) and the Delaunay tetrahedralization of this point set
+112   // will be generated\&.  In this particular function, we are throwing
+113   // away the tetrahedra generated by TetGen, and keeping only the
+114   // convex hull\&.\&.\&.
+115   tetgen_wrapper\&.set_switches("Q");
+116   tetgen_wrapper\&.run_tetgen();
+117   unsigned int num_elements   = tetgen_wrapper\&.get_numberoftrifaces();
+118 
+119   // Delete *all* old elements\&.  Yes, we legally delete elements while
+120   // iterating over them because no entries from the underlying container
+121   // are actually erased\&.
+122   {
+123     MeshBase::element_iterator       it  = this->_mesh\&.elements_begin();
+124     const MeshBase::element_iterator end = this->_mesh\&.elements_end();
+125     for ( ; it != end; ++it)
+126       this->_mesh\&.delete_elem (*it);
+127   }
+128 
+129 
+130   // Add the 2D elements which comprise the convex hull back to the mesh\&.
+131   // Vector that temporarily holds the node labels defining element\&.
+132   unsigned int node_labels[3];
+133 
+134   for (unsigned int i=0; i<num_elements; ++i)
+135     {
+136       Elem* elem = new Tri3;
+137 
+138       // Get node labels associated with this element
+139       for (unsigned int j=0; j<elem->n_nodes(); ++j)
+140         node_labels[j] = tetgen_wrapper\&.get_triface_node(i,j);
+141 
+142       this->assign_nodes_to_elem(node_labels, elem);
+143 
+144       // Finally, add this element to the mesh\&.
+145       this->_mesh\&.add_elem(elem);
+146     }
+147 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::process_hull_integrity_result (unsignedresult)\fC [protected]\fP"
+This function prints an informative message and crashes based on the output of the \fBcheck_hull_integrity()\fP function\&. It is a separate function so that you can check hull integrity without crashing if you desire\&. 
+.PP
+Definition at line 435 of file mesh_tetgen_interface\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+Referenced by triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+436 {
+437   if (result != 0)
+438     {
+439       libMesh::err << "Error! Conforming Delaunay mesh tetrahedralization requires a convex hull\&." << std::endl;
+440 
+441       if (result==1)
+442         {
+443           libMesh::err << "Non-TRI3 elements were found in the input Mesh\&.  ";
+444           libMesh::err << "A constrained Delaunay triangulation requires a convex hull of TRI3 elements\&." << std::endl;
+445         }
+446 
+447       libMesh::err << "Consider calling TetGenMeshInterface::pointset_convexhull() followed " << std::endl;
+448       libMesh::err << "by Mesh::find_neighbors() first\&." << std::endl;
+449 
+450       libmesh_error();
+451     }
+452 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh (doublequality_constraint = \fC0\&.\fP, doublevolume_constraint = \fC0\&.\fP)"
+Method invokes TetGen library to compute a Delaunay tetrahedrization from the nodes point set\&. Boundary constraints are taken from elements array\&. 
+.PP
+Definition at line 153 of file mesh_tetgen_interface\&.C\&.
+.PP
+References triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+155 {
+156   // start triangulation method with empty holes list:
+157   std::vector<Point> noholes;
+158   triangulate_conformingDelaunayMesh_carvehole(noholes, quality_constraint, volume_constraint);
+159 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole (const std::vector< \fBPoint\fP > &holes, doublequality_constraint = \fC0\&.\fP, doublevolume_constraint = \fC0\&.\fP)"
+Method invokes TetGen library to compute a Delaunay tetrahedrization from the nodes point set\&. Boundary constraints are taken from elements array\&. Include carve-out functionality\&. 
+.PP
+Definition at line 163 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, _sequential_to_libmesh_node_map, libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::TetGenWrapper::allocate_facet_polygonlist(), libMesh::TetGenWrapper::allocate_facetlist(), libMesh::TetGenWrapper::allocate_polygon_vertexlist(), assign_nodes_to_elem(), libMesh::Utility::binary_find(), check_hull_integrity(), delete_2D_hull_elements(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::err, fill_pointlist(), libMesh::TetGenWrapper::get_element_node(), libMesh::TetGenWrapper::get_numberofpoints(), libMesh::TetGenWrapper::get_numberoftetrahedra(), libMesh::TetGenWrapper::get_output_node(), libMesh::DofObject::id(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), process_hull_integrity_result(), libMesh::TetGenWrapper::run_tetgen(), libMesh::TetGenWrapper::set_hole(), libMesh::TetGenWrapper::set_switches(), libMesh::TetGenWrapper::set_vertex(), and libMesh::x\&.
+.PP
+Referenced by triangulate_conformingDelaunayMesh()\&.
+.PP
+.nf
+166 {
+167   // Before calling this function, the Mesh must contain a convex hull
+168   // of TRI3 elements which define the boundary\&.
+169   unsigned hull_integrity_check = check_hull_integrity();
+170 
+171   // Possibly die if hull integrity check failed
+172   this->process_hull_integrity_result(hull_integrity_check);
+173 
+174   // class tetgen_wrapper allows library access on a basic level
+175   TetGenWrapper tetgen_wrapper;
+176 
+177   // Copy Mesh's node points into TetGen data structure
+178   this->fill_pointlist(tetgen_wrapper);
+179 
+180   // >>> fill input structure "tetgenio" with facet data:
+181   int facet_num = this->_mesh\&.n_elem();
+182 
+183   // allocate memory in "tetgenio" structure:
+184   tetgen_wrapper\&.allocate_facetlist(facet_num, holes\&.size());
+185 
+186 
+187   // Set up tetgen data structures with existing facet information
+188   // from the convex hull\&.
+189   {
+190     int insertnum = 0;
+191     MeshBase::element_iterator it        = this->_mesh\&.elements_begin();
+192     const MeshBase::element_iterator end = this->_mesh\&.elements_end();
+193     for (; it != end ; ++it)
+194       {
+195         tetgen_wrapper\&.allocate_facet_polygonlist(insertnum, 1);
+196         tetgen_wrapper\&.allocate_polygon_vertexlist(insertnum, 0, 3);
+197 
+198         Elem* elem = *it;
+199 
+200         for (unsigned int j=0; j<elem->n_nodes(); ++j)
+201           {
+202             // We need to get the sequential index of elem->get_node(j), but
+203             // it should already be stored in _sequential_to_libmesh_node_map\&.\&.\&.
+204             unsigned libmesh_node_id = elem->node(j);
+205 
+206             // The libmesh node IDs may not be sequential, but can we assume
+207             // they are at least in order???  We will do so here\&.
+208             std::vector<unsigned>::iterator node_iter =
+209               Utility::binary_find(_sequential_to_libmesh_node_map\&.begin(),
+210                                    _sequential_to_libmesh_node_map\&.end(),
+211                                    libmesh_node_id);
+212 
+213             // Check to see if not found: this could also indicate the sequential
+214             // node map is not sorted\&.\&.\&.
+215             if (node_iter == _sequential_to_libmesh_node_map\&.end())
+216               {
+217                 libMesh::err << "Global node " << libmesh_node_id << " not found in sequential node map!"  << std::endl;
+218                 libmesh_error();
+219               }
+220 
+221             std::vector<unsigned>::difference_type
+222               sequential_index = std::distance(_sequential_to_libmesh_node_map\&.begin(), node_iter);
+223 
+224             // Debugging:
+225             //    libMesh::out << "libmesh_node_id=" << libmesh_node_id
+226             //         << ", sequential_index=" << sequential_index
+227             //         << std::endl;
+228 
+229             tetgen_wrapper\&.set_vertex(insertnum, // facet number
+230                                       0,         // polygon (always 0)
+231                                       j,         // local vertex index in tetgen input
+232                                       sequential_index);
+233           }
+234 
+235         // Go to next facet in polygonlist
+236         insertnum++;
+237       }
+238   }
+239 
+240 
+241 
+242   // fill hole list (if there are holes):
+243   if (holes\&.size() > 0)
+244     {
+245       std::vector<Point>::const_iterator ihole;
+246       unsigned hole_index = 0;
+247       for (ihole=holes\&.begin(); ihole!=holes\&.end(); ++ihole)
+248         tetgen_wrapper\&.set_hole(hole_index++, (*ihole)(0), (*ihole)(1), (*ihole)(2));
+249     }
+250 
+251 
+252   // Run TetGen triangulation method:
+253   // p = tetrahedralizes a piecewise linear complex (see definition in user manual)
+254   // Q = quiet, no terminal output
+255   // q = specify a minimum radius/edge ratio
+256   // a = tetrahedron volume constraint
+257 
+258   // assemble switches:
+259   std::ostringstream oss; // string holding switches
+260   oss << "pQ";
+261 
+262   if (quality_constraint != 0)
+263     oss << "q" << std::fixed << quality_constraint;
+264 
+265   if (volume_constraint != 0)
+266     oss << "a" << std::fixed << volume_constraint;
+267 
+268   std::string params = oss\&.str();
+269 
+270   tetgen_wrapper\&.set_switches(params); // TetGen switches: Piecewise linear complex, Quiet mode
+271   tetgen_wrapper\&.run_tetgen();
+272 
+273   // => nodes:
+274   unsigned int old_nodesnum = this->_mesh\&.n_nodes();
+275   REAL x=0\&., y=0\&., z=0\&.;
+276   const unsigned int num_nodes = tetgen_wrapper\&.get_numberofpoints();
+277 
+278   // Debugging:
+279   // libMesh::out << "Original mesh had " << old_nodesnum << " nodes\&." << std::endl;
+280   // libMesh::out << "Reserving space for " << num_nodes << " total nodes\&." << std::endl;
+281 
+282   // Reserve space for additional nodes in the node map
+283   _sequential_to_libmesh_node_map\&.reserve(num_nodes);
+284 
+285   // Add additional nodes to the Mesh\&.
+286   // Original code had i<=num_nodes here (Note: the indexing is:
+287   // foo[3*i], [3*i+1], [3*i+2]) But according to the TetGen docs, "In
+288   // all cases, the first item in any array is stored starting at
+289   // index [0]\&."
+290   for (unsigned int i=old_nodesnum; i<num_nodes; i++)
+291     {
+292       // Fill in x, y, z values
+293       tetgen_wrapper\&.get_output_node(i, x,y,z);
+294 
+295       // Catch the node returned by add_point()\&.\&.\&. this will tell us the ID
+296       // assigned by the Mesh\&.
+297       Node* new_node = this->_mesh\&.add_point ( Point(x,y,z) );
+298 
+299       // Store this new ID in our sequential-to-libmesh node mapping array
+300       _sequential_to_libmesh_node_map\&.push_back( new_node->id() );
+301     }
+302 
+303   // Debugging:
+304   //  std::copy(_sequential_to_libmesh_node_map\&.begin(),
+305   //    _sequential_to_libmesh_node_map\&.end(),
+306   //    std::ostream_iterator<unsigned>(std::cout, " "));
+307   //  std::cout << std::endl;
+308 
+309 
+310   // => tetrahedra:
+311   const unsigned int num_elements = tetgen_wrapper\&.get_numberoftetrahedra();
+312 
+313   // Vector that temporarily holds the node labels defining element connectivity\&.
+314   unsigned int node_labels[4];
+315 
+316   for (unsigned int i=0; i<num_elements; i++)
+317     {
+318       // TetGen only supports Tet4 elements\&.
+319       Elem* elem = new Tet4;
+320 
+321       // Fill up the the node_labels vector
+322       for (unsigned int j=0; j<elem->n_nodes(); j++)
+323         node_labels[j] = tetgen_wrapper\&.get_element_node(i,j);
+324 
+325       // Associate nodes with this element
+326       this->assign_nodes_to_elem(node_labels, elem);
+327 
+328       // Finally, add this element to the mesh
+329       this->_mesh\&.add_elem(elem);
+330     }
+331 
+332   // Delete original convex hull elements\&.  Is there ever a case where
+333   // we should not do this?
+334   this->delete_2D_hull_elements();
+335 }
+.fi
+.SS "void libMesh::TetGenMeshInterface::triangulate_pointset ()"
+Method invokes TetGen library to compute a Delaunay tetrahedrization from the nodes point set\&. 
+.PP
+Definition at line 46 of file mesh_tetgen_interface\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::add_elem(), assign_nodes_to_elem(), fill_pointlist(), libMesh::TetGenWrapper::get_element_node(), libMesh::TetGenWrapper::get_numberoftetrahedra(), libMesh::Elem::n_nodes(), libMesh::TetGenWrapper::run_tetgen(), and libMesh::TetGenWrapper::set_switches()\&.
+.PP
+.nf
+47 {
+48   // class tetgen_wrapper allows library access on a basic level:
+49   TetGenWrapper tetgen_wrapper;
+50 
+51   // fill input structure with point set data:
+52   this->fill_pointlist(tetgen_wrapper);
+53 
+54   // Run TetGen triangulation method:
+55   // Q = quiet, no terminal output
+56   // V = verbose, more terminal output
+57   // Note: if no switch is used, the input must be a list of 3D points
+58   // (\&.node file) and the Delaunay tetrahedralization of this point set
+59   // will be generated\&.
+60 
+61   // Can we apply quality and volume constraints in
+62   // triangulate_pointset()?\&.  On at least one test problem,
+63   // specifying any quality or volume constraints here causes tetgen
+64   // to segfault down in the insphere method: a NULL pointer is passed
+65   // to the routine\&.
+66   std::ostringstream oss;
+67   oss << "Q"; // quiet operation
+68   // oss << "V"; // verbose operation
+69   //oss  << "q" << std::fixed << 2\&.0;  // quality constraint
+70   //oss  << "a" << std::fixed << 100\&.; // volume constraint
+71   tetgen_wrapper\&.set_switches(oss\&.str());
+72 
+73   // Run tetgen
+74   tetgen_wrapper\&.run_tetgen();
+75 
+76   // save elements to mesh structure, nodes will not be changed:
+77   const unsigned int num_elements   = tetgen_wrapper\&.get_numberoftetrahedra();
+78 
+79   // Vector that temporarily holds the node labels defining element\&.
+80   unsigned int node_labels[4];
+81 
+82   for (unsigned int i=0; i<num_elements; ++i)
+83     {
+84       Elem* elem = new Tet4;
+85 
+86       // Get the nodes associated with this element
+87       for (unsigned int j=0; j<elem->n_nodes(); ++j)
+88         node_labels[j] = tetgen_wrapper\&.get_element_node(i,j);
+89 
+90       // Associate the nodes with this element
+91       this->assign_nodes_to_elem(node_labels, elem);
+92 
+93       // Finally, add this element to the mesh\&.
+94       this->_mesh\&.add_elem(elem);
+95     }
+96 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBUnstructuredMesh\fP& libMesh::TetGenMeshInterface::_mesh\fC [protected]\fP"
+Local reference to the mesh we are working with\&. 
+.PP
+Definition at line 145 of file mesh_tetgen_interface\&.h\&.
+.PP
+Referenced by assign_nodes_to_elem(), check_hull_integrity(), delete_2D_hull_elements(), fill_pointlist(), pointset_convexhull(), triangulate_conformingDelaunayMesh_carvehole(), and triangulate_pointset()\&.
+.SS "std::vector<unsigned> libMesh::TetGenMeshInterface::_sequential_to_libmesh_node_map\fC [protected]\fP"
+We should not assume libmesh nodes are numbered sequentially\&.\&.\&. This is not the default behavior of \fBParallelMesh\fP, for example, unless you specify node IDs explicitly\&. So this array allows us to keep a mapping between the sequential numbering in tetgen_data\&.pointlist\&. 
+.PP
+Definition at line 154 of file mesh_tetgen_interface\&.h\&.
+.PP
+Referenced by assign_nodes_to_elem(), fill_pointlist(), and triangulate_conformingDelaunayMesh_carvehole()\&.
+.SS "\fBMeshSerializer\fP libMesh::TetGenMeshInterface::_serializer\fC [protected]\fP"
+Tetgen only operates on serial meshes\&. 
+.PP
+Definition at line 159 of file mesh_tetgen_interface\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

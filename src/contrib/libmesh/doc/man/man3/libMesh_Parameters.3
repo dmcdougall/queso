@@ -1,0 +1,477 @@
+.TH "libMesh::Parameters" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parameters \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parameters\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBParameter\fP"
+.br
+.ti -1c
+.RI "class \fBValue\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+\fBValue\fP * >::\fBiterator\fP \fBiterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+\fBValue\fP * >::\fBconst_iterator\fP \fBconst_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBParameters\fP ()"
+.br
+.ti -1c
+.RI "\fBParameters\fP (const \fBParameters\fP &)"
+.br
+.ti -1c
+.RI "virtual \fB~Parameters\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBParameters\fP & \fBoperator=\fP (const \fBParameters\fP &source)"
+.br
+.ti -1c
+.RI "virtual \fBParameters\fP & \fBoperator+=\fP (const \fBParameters\fP &source)"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBhave_parameter\fP (const std::string &) const "
+.br
+.ti -1c
+.RI "template<typename T > const T & \fBget\fP (const std::string &) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBinsert\fP (const std::string &)"
+.br
+.ti -1c
+.RI "template<typename T > T & \fBset\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBset_attributes\fP (const std::string &, bool)"
+.br
+.ti -1c
+.RI "void \fBremove\fP (const std::string &)"
+.br
+.ti -1c
+.RI "std::size_t \fBn_parameters\fP () const "
+.br
+.ti -1c
+.RI "template<typename T > unsigned int \fBn_parameters\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "\fBiterator\fP \fBbegin\fP ()"
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fBbegin\fP () const "
+.br
+.ti -1c
+.RI "\fBiterator\fP \fBend\fP ()"
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fBend\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< std::string, \fBValue\fP * > \fB_values\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides the ability to map between arbitrary, user-defined strings and several data types\&. This can be used to provide arbitrary user-specified options\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2004 
+.RE
+.PP
+
+.PP
+Definition at line 62 of file parameters\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, \fBValue\fP*>::\fBconst_iterator\fP \fBlibMesh::Parameters::const_iterator\fP"
+Constant parameter map iterator\&. 
+.PP
+Definition at line 250 of file parameters\&.h\&.
+.SS "typedef std::map<std::string, \fBValue\fP*>::\fBiterator\fP \fBlibMesh::Parameters::iterator\fP"
+\fBParameter\fP map iterator\&. 
+.PP
+Definition at line 245 of file parameters\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Parameters::Parameters ()\fC [inline]\fP"
+Default constructor\&. Does nothing\&. 
+.PP
+Definition at line 69 of file parameters\&.h\&.
+.PP
+.nf
+69 {}
+.fi
+.SS "libMesh::Parameters::Parameters (const \fBParameters\fP &p)\fC [inline]\fP"
+Copy constructor\&. 
+.PP
+Definition at line 363 of file parameters\&.h\&.
+.PP
+.nf
+364 {
+365   *this = p;
+366 }
+.fi
+.SS "libMesh::Parameters::~Parameters ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. Clears any allocated memory\&. 
+.PP
+Definition at line 371 of file parameters\&.h\&.
+.PP
+References clear()\&.
+.PP
+.nf
+372 {
+373   this->clear ();
+374 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBParameters::iterator\fP libMesh::Parameters::begin ()\fC [inline]\fP"
+Iterator pointing to the beginning of the set of parameters\&. 
+.PP
+Definition at line 514 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+.nf
+515 {
+516   return _values\&.begin();
+517 }
+.fi
+.SS "\fBParameters::const_iterator\fP libMesh::Parameters::begin () const\fC [inline]\fP"
+Iterator pointing to the beginning of the set of parameters\&. 
+.PP
+Definition at line 520 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+.nf
+521 {
+522   return _values\&.begin();
+523 }
+.fi
+.SS "void libMesh::Parameters::clear ()\fC [inline]\fP, \fC [virtual]\fP"
+Clears internal data structures & frees any allocated memory\&. 
+.PP
+Definition at line 324 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+Referenced by libMesh::EquationSystems::clear(), operator=(), and ~Parameters()\&.
+.PP
+.nf
+325 {                         // before its first use (for some compilers)
+326   while (!_values\&.empty())
+327     {
+328       Parameters::iterator it = _values\&.begin();
+329 
+330       delete it->second;
+331       it->second = NULL;
+332 
+333       _values\&.erase(it);
+334     }
+335 }
+.fi
+.SS "\fBParameters::iterator\fP libMesh::Parameters::end ()\fC [inline]\fP"
+Iterator pointing to the end of the set of parameters 
+.PP
+Definition at line 526 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+.nf
+527 {
+528   return _values\&.end();
+529 }
+.fi
+.SS "\fBParameters::const_iterator\fP libMesh::Parameters::end () const\fC [inline]\fP"
+Iterator pointing to the end of the set of parameters 
+.PP
+Definition at line 532 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+.nf
+533 {
+534   return _values\&.end();
+535 }
+.fi
+.SS "template<typename T > const T & libMesh::Parameters::get (const std::string &name) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the specified parameter value\&. Requires, of course, that the parameter exists\&. 
+.RE
+.PP
+
+.PP
+Definition at line 433 of file parameters\&.h\&.
+.PP
+References _values, libMesh::demangle(), libMesh::err, libMesh::libmesh_assert(), and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::FrequencySystem::clear_all(), libMesh::FEComputeData::init(), libMesh::FrequencySystem::init_data(), libMesh::FrequencySystem::n_frequencies(), libMesh::FrequencySystem::set_current_frequency(), libMesh::NonlinearImplicitSystem::set_solver_parameters(), libMesh::CondensedEigenSystem::solve(), libMesh::EigenSystem::solve(), libMesh::LinearImplicitSystem::solve(), and libMesh::FrequencySystem::solve()\&.
+.PP
+.nf
+434 {
+435   if (!this->have_parameter<T>(name))
+436     {
+437       libMesh::err << "ERROR: no"
+438 #ifdef LIBMESH_HAVE_RTTI
+439                    << ' ' << demangle(typeid(T)\&.name())
+440 #endif // LIBMESH_HAVE_RTTI
+441                    << " parameter named \""
+442                    << name << "\":" << std::endl
+443                    << *this;
+444 
+445       libmesh_error();
+446     }
+447 
+448   Parameters::const_iterator it = _values\&.find(name);
+449 
+450   libmesh_assert(it != _values\&.end());
+451   libmesh_assert(it->second);
+452 
+453   return libmesh_cast_ptr<Parameter<T>*>(it->second)->get();
+454 }
+.fi
+.SS "template<typename T > bool libMesh::Parameters::have_parameter (const std::string &name) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP if a parameter of type \fCT\fP with a specified name exists, \fCfalse\fP otherwise\&.
+.RE
+.PP
+If RTTI has been disabled then we return \fCtrue\fP if a parameter of specified name exists regardless of its type\&. 
+.PP
+Definition at line 414 of file parameters\&.h\&.
+.PP
+References _values, and libMesh::libmesh_cast_ptr()\&.
+.PP
+Referenced by libMesh::FrequencySystem::clear_all(), libMesh::FEComputeData::init(), libMesh::FrequencySystem::init_data(), libMesh::CondensedEigenSystem::solve(), and libMesh::EigenSystem::solve()\&.
+.PP
+.nf
+415 {
+416   Parameters::const_iterator it = _values\&.find(name);
+417 
+418   if (it != _values\&.end())
+419 #ifdef LIBMESH_HAVE_RTTI
+420     if (dynamic_cast<const Parameter<T>*>(it->second) != NULL)
+421 #else // LIBMESH_HAVE_RTTI
+422       if (libmesh_cast_ptr<const Parameter<T>*>(it->second) != NULL)
+423 #endif // LIBMESH_HAVE_RTTI
+424         return true;
+425 
+426   return false;
+427 }
+.fi
+.SS "template<typename T > void libMesh::Parameters::insert (const std::string &name)\fC [inline]\fP"
+Inserts a new \fBParameter\fP into the object but does not return a writable reference\&. The value of the newly inserted parameter may not be valid\&. 
+.PP
+Definition at line 458 of file parameters\&.h\&.
+.PP
+References _values, libMesh::Quality::name(), and set_attributes()\&.
+.PP
+.nf
+459 {
+460   if (!this->have_parameter<T>(name))
+461     _values[name] = new Parameter<T>;
+462 
+463   set_attributes(name, true);
+464 }
+.fi
+.SS "unsigned int libMesh::Parameters::n_parameters () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the total number of parameters\&. 
+.RE
+.PP
+
+.PP
+Definition at line 142 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+.nf
+142 { return _values\&.size(); }
+.fi
+.SS "template<typename T > unsigned int libMesh::Parameters::n_parameters () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of parameters of the requested type\&. 
+.RE
+.PP
+
+.SS "\fBParameters\fP & libMesh::Parameters::operator+= (const \fBParameters\fP &source)\fC [inline]\fP, \fC [virtual]\fP"
+Addition/Assignment operator\&. Inserts copies of all parameters from \fCsource\fP\&. Any parameters of the same name already in \fCthis\fP are replaced\&. 
+.PP
+Definition at line 349 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+.nf
+350 {
+351   for (Parameters::const_iterator it = source\&._values\&.begin();
+352        it != source\&._values\&.end(); ++it)
+353     {
+354       if (_values\&.find(it->first) != _values\&.end())
+355         delete _values[it->first];
+356       _values[it->first] = it->second->clone();
+357     }
+358 
+359   return *this;
+360 }
+.fi
+.SS "\fBParameters\fP & libMesh::Parameters::operator= (const \fBParameters\fP &source)\fC [inline]\fP, \fC [virtual]\fP"
+Assignment operator\&. Removes all parameters in \fCthis\fP and inserts copies of all parameters from \fCsource\fP 
+.PP
+Definition at line 340 of file parameters\&.h\&.
+.PP
+References clear()\&.
+.PP
+.nf
+341 {
+342   this->clear();
+343   *this += source;
+344 
+345   return *this;
+346 }
+.fi
+.SS "void libMesh::Parameters::print (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [inline]\fP"
+Prints the contents, by default to \fBlibMesh::out\fP\&. 
+.PP
+Definition at line 379 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+Referenced by libMesh::operator<<()\&.
+.PP
+.nf
+380 {
+381   Parameters::const_iterator it = _values\&.begin();
+382 
+383   os << "Name\t Type\t Value\n"
+384      << "---------------------\n";
+385   while (it != _values\&.end())
+386     {
+387       os << " "   << it->first
+388 #ifdef LIBMESH_HAVE_RTTI
+389          << "\t " << it->second->type()
+390 #endif // LIBMESH_HAVE_RTTI
+391          << "\t ";   it->second->print(os);
+392       os << '\n';
+393 
+394       ++it;
+395     }
+396 }
+.fi
+.SS "void libMesh::Parameters::remove (const std::string &name)\fC [inline]\fP"
+Removes the specified parameter from the list, if it exists\&. 
+.PP
+Definition at line 480 of file parameters\&.h\&.
+.PP
+References _values\&.
+.PP
+Referenced by libMesh::FrequencySystem::clear_all()\&.
+.PP
+.nf
+481 {
+482   Parameters::iterator it = _values\&.find(name);
+483 
+484   if (it != _values\&.end())
+485     {
+486       delete it->second;
+487       it->second = NULL;
+488 
+489       _values\&.erase(it);
+490     }
+491 }
+.fi
+.SS "template<typename T > T & libMesh::Parameters::set (const std::string &name)\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the specified parameter\&. This method will create the parameter if it does not exist, so it can be used to define parameters which will later be accessed with the \fC\fBget()\fP\fP member\&. 
+.RE
+.PP
+
+.PP
+Definition at line 469 of file parameters\&.h\&.
+.PP
+References _values, libMesh::Quality::name(), and set_attributes()\&.
+.PP
+Referenced by libMesh::NewmarkSystem::clear(), libMesh::EquationSystems::EquationSystems(), libMesh::NewmarkSystem::NewmarkSystem(), libMesh::NonlinearImplicitSystem::NonlinearImplicitSystem(), libMesh::FrequencySystem::set_current_frequency(), libMesh::FrequencySystem::set_frequencies(), libMesh::FrequencySystem::set_frequencies_by_range(), libMesh::FrequencySystem::set_frequencies_by_steps(), and libMesh::NewmarkSystem::set_newmark_parameters()\&.
+.PP
+.nf
+470 {
+471   if (!this->have_parameter<T>(name))
+472     _values[name] = new Parameter<T>;
+473 
+474   set_attributes(name, false);
+475 
+476   return libmesh_cast_ptr<Parameter<T>*>(_values[name])->set();
+477 }
+.fi
+.SS "virtual void libMesh::Parameters::set_attributes (const std::string &, bool)\fC [inline]\fP, \fC [virtual]\fP"
+Overridable function to set any extended attributes for classes inheriting from this class\&. 
+.PP
+Definition at line 132 of file parameters\&.h\&.
+.PP
+Referenced by insert(), and set()\&.
+.PP
+.nf
+132 {}
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::map<std::string, \fBValue\fP*> libMesh::Parameters::_values\fC [protected]\fP"
+Data structure to map names with values\&. 
+.PP
+Definition at line 277 of file parameters\&.h\&.
+.PP
+Referenced by begin(), clear(), end(), get(), have_parameter(), insert(), n_parameters(), operator+=(), print(), remove(), and set()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

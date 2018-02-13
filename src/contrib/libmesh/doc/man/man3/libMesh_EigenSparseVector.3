@@ -1,0 +1,2291 @@
+.TH "libMesh::EigenSparseVector< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::EigenSparseVector< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <eigen_sparse_matrix\&.h>\fP
+.PP
+Inherits \fBlibMesh::NumericVector< T >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBEigenSV\fP \fBDataType\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBParallelType\fP=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBnumeric_index_type\fP n, const \fBParallelType\fP=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBnumeric_index_type\fP n, const \fBnumeric_index_type\fP \fBn_local\fP, const \fBParallelType\fP=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBnumeric_index_type\fP N, const \fBnumeric_index_type\fP \fBn_local\fP, const std::vector< \fBnumeric_index_type\fP > &ghost, const \fBParallelType\fP=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "\fB~EigenSparseVector\fP ()"
+.br
+.ti -1c
+.RI "void \fBclose\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBzero\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBNumericVector\fP
+.br
+< T > > \fBzero_clone\fP () const "
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< T > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBnumeric_index_type\fP N, const \fBnumeric_index_type\fP \fBn_local\fP, const bool fast=false, const \fBParallelType\fP ptype=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBnumeric_index_type\fP N, const bool fast=false, const \fBParallelType\fP ptype=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBnumeric_index_type\fP, const \fBnumeric_index_type\fP, const std::vector< \fBnumeric_index_type\fP > &, const bool=false, const \fBParallelType\fP=\fBAUTOMATIC\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP (const \fBNumericVector\fP< T > &other, const bool fast=false)"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator=\fP (const T s)"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator=\fP (const \fBNumericVector\fP< T > &V)"
+.br
+.ti -1c
+.RI "\fBEigenSparseVector\fP< T > & \fBoperator=\fP (const \fBEigenSparseVector\fP< T > &V)"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator=\fP (const std::vector< T > &v)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmin\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax\fP () const "
+.br
+.ti -1c
+.RI "T \fBsum\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl1_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl2_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBlinfty_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBsize\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBlocal_size\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBfirst_local_index\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBlast_local_index\fP () const "
+.br
+.ti -1c
+.RI "T \fBoperator()\fP (const \fBnumeric_index_type\fP i) const "
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator+=\fP (const \fBNumericVector\fP< T > &V)"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator-=\fP (const \fBNumericVector\fP< T > &V)"
+.br
+.ti -1c
+.RI "virtual \fBNumericVector\fP< T > & \fBoperator/=\fP (\fBNumericVector\fP< T > &v_in)"
+.br
+.ti -1c
+.RI "virtual void \fBreciprocal\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBconjugate\fP ()"
+.br
+.ti -1c
+.RI "void \fBset\fP (const \fBnumeric_index_type\fP i, const T value)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const \fBnumeric_index_type\fP i, const T value)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const T s)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const \fBNumericVector\fP< T > &V)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const T a, const \fBNumericVector\fP< T > &v)"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const std::vector< T > &v, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const \fBNumericVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const \fBNumericVector\fP< T > &, const \fBSparseMatrix\fP< T > &)"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const \fBDenseVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBadd_vector_transpose\fP (const \fBNumericVector\fP< T > &, const \fBSparseMatrix\fP< T > &)"
+.br
+.ti -1c
+.RI "virtual void \fBinsert\fP (const std::vector< T > &v, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "virtual void \fBinsert\fP (const \fBNumericVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "virtual void \fBinsert\fP (const \fBDenseVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "virtual void \fBinsert\fP (const \fBDenseSubVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBscale\fP (const T factor)"
+.br
+.ti -1c
+.RI "virtual void \fBabs\fP ()"
+.br
+.ti -1c
+.RI "virtual T \fBdot\fP (const \fBNumericVector\fP< T > &V) const "
+.br
+.ti -1c
+.RI "void \fBlocalize\fP (std::vector< T > &v_local) const "
+.br
+.ti -1c
+.RI "void \fBlocalize\fP (\fBNumericVector\fP< T > &v_local) const "
+.br
+.ti -1c
+.RI "void \fBlocalize\fP (\fBNumericVector\fP< T > &v_local, const std::vector< \fBnumeric_index_type\fP > &send_list) const "
+.br
+.ti -1c
+.RI "void \fBlocalize\fP (const \fBnumeric_index_type\fP first_local_idx, const \fBnumeric_index_type\fP last_local_idx, const std::vector< \fBnumeric_index_type\fP > &send_list)"
+.br
+.ti -1c
+.RI "void \fBlocalize_to_one\fP (std::vector< T > &v_local, const \fBprocessor_id_type\fP proc_id=0) const "
+.br
+.ti -1c
+.RI "virtual void \fBpointwise_mult\fP (const \fBNumericVector\fP< T > &vec1, const \fBNumericVector\fP< T > &vec2)"
+.br
+.ti -1c
+.RI "virtual void \fBswap\fP (\fBNumericVector\fP< T > &v)"
+.br
+.ti -1c
+.RI "\fBDataType\fP & \fBvec\fP ()"
+.br
+.ti -1c
+.RI "const \fBDataType\fP & \fBvec\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "\fBParallelType\fP \fBtype\fP () const "
+.br
+.ti -1c
+.RI "\fBParallelType\fP & \fBtype\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBclosed\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBsubset_l1_norm\fP (const std::set< \fBnumeric_index_type\fP > &indices) const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBsubset_l2_norm\fP (const std::set< \fBnumeric_index_type\fP > &indices) const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBsubset_linfty_norm\fP (const std::set< \fBnumeric_index_type\fP > &indices) const "
+.br
+.ti -1c
+.RI "virtual T \fBel\fP (const \fBnumeric_index_type\fP i) const "
+.br
+.ti -1c
+.RI "virtual void \fBget\fP (const std::vector< \fBnumeric_index_type\fP > &index, std::vector< T > &values) const "
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator*=\fP (const T a)"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< T > & \fBoperator/=\fP (const T a)"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const \fBNumericVector\fP< T > &v, const \fBShellMatrix\fP< T > &a)"
+.br
+.ti -1c
+.RI "virtual int \fBcompare\fP (const \fBNumericVector\fP< T > &other_vector, const \fBReal\fP threshold=\fBTOLERANCE\fP) const "
+.br
+.ti -1c
+.RI "virtual int \fBlocal_relative_compare\fP (const \fBNumericVector\fP< T > &other_vector, const \fBReal\fP threshold=\fBTOLERANCE\fP) const "
+.br
+.ti -1c
+.RI "virtual int \fBglobal_relative_compare\fP (const \fBNumericVector\fP< T > &other_vector, const \fBReal\fP threshold=\fBTOLERANCE\fP) const "
+.br
+.ti -1c
+.RI "virtual void \fBprint\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "template<> void \fBprint\fP (std::ostream &os) const"
+.br
+.ti -1c
+.RI "virtual void \fBprint_global\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "template<> void \fBprint_global\fP (std::ostream &os) const"
+.br
+.ti -1c
+.RI "virtual void \fBprint_matlab\fP (const std::string &='') const "
+.br
+.ti -1c
+.RI "virtual void \fBcreate_subvector\fP (\fBNumericVector\fP< T > &, const std::vector< \fBnumeric_index_type\fP > &) const "
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBNumericVector\fP
+.br
+< T > > \fBbuild\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBNumericVector\fP
+.br
+< T > > \fBbuild\fP (const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_is_closed\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "\fBParallelType\fP \fB_type\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBDataType\fP \fB_vec\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBEigenSparseMatrix< T >\fP"
+.br
+.ti -1c
+.RI "class \fBEigenSparseLinearSolver< T >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::EigenSparseVector< T >"
+Eigen vector\&. Provides a nice interface to the Eigen C-based data structures for serial vectors\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002 
+.RE
+.PP
+
+.PP
+Definition at line 44 of file eigen_sparse_matrix\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "template<typename T> typedef \fBEigenSV\fP \fBlibMesh::EigenSparseVector\fP< T >::\fBDataType\fP"
+Convenient typedefs 
+.PP
+Definition at line 104 of file eigen_sparse_vector\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::EigenSparseVector\fP< T >::\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &comm, const \fBParallelType\fPptype = \fC\fBAUTOMATIC\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Dummy-Constructor\&. Dimension=0 
+.PP
+Definition at line 492 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::NumericVector< T >::_type\&.
+.PP
+.nf
+494   : NumericVector<T>(comm, ptype)
+495 {
+496   this->_type = ptype;
+497 }
+.fi
+.SS "template<typename T > \fBlibMesh::EigenSparseVector\fP< T >::\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &comm, const \fBnumeric_index_type\fPn, const \fBParallelType\fPptype = \fC\fBAUTOMATIC\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Set dimension to \fCn\fP and initialize all elements with zero\&. 
+.PP
+Definition at line 503 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::EigenSparseVector< T >::init()\&.
+.PP
+.nf
+506   : NumericVector<T>(comm, ptype)
+507 {
+508   this->init(n, n, false, ptype);
+509 }
+.fi
+.SS "template<typename T > \fBlibMesh::EigenSparseVector\fP< T >::\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &comm, const \fBnumeric_index_type\fPn, const \fBnumeric_index_type\fPn_local, const \fBParallelType\fPptype = \fC\fBAUTOMATIC\fP\fP)\fC [inline]\fP"
+Constructor\&. Set local dimension to \fCn_local\fP, the global dimension to \fCn\fP, and initialize all elements with zero\&. 
+.PP
+Definition at line 515 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::EigenSparseVector< T >::init()\&.
+.PP
+.nf
+519   : NumericVector<T>(comm, ptype)
+520 {
+521   this->init(n, n_local, false, ptype);
+522 }
+.fi
+.SS "template<typename T > \fBlibMesh::EigenSparseVector\fP< T >::\fBEigenSparseVector\fP (const \fBParallel::Communicator\fP &comm, const \fBnumeric_index_type\fPN, const \fBnumeric_index_type\fPn_local, const std::vector< \fBnumeric_index_type\fP > &ghost, const \fBParallelType\fPptype = \fC\fBAUTOMATIC\fP\fP)\fC [inline]\fP"
+Constructor\&. Set local dimension to \fCn_local\fP, the global dimension to \fCn\fP, but additionally reserve memory for the indices specified by the \fCghost\fP argument\&. 
+.PP
+Definition at line 528 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::EigenSparseVector< T >::init()\&.
+.PP
+.nf
+533   : NumericVector<T>(comm, ptype)
+534 {
+535   this->init(N, n_local, ghost, false, ptype);
+536 }
+.fi
+.SS "template<typename T > \fBlibMesh::EigenSparseVector\fP< T >::~\fBEigenSparseVector\fP ()\fC [inline]\fP"
+Destructor, deallocates memory\&. Made virtual to allow for derived classes to behave properly\&. 
+.PP
+Definition at line 542 of file eigen_sparse_vector\&.h\&.
+.PP
+.nf
+543 {
+544   this->clear ();
+545 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::abs ()\fC [virtual]\fP"
+v = abs(v)\&.\&.\&. that is, each entry in v is replaced by its absolute value\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 315 of file eigen_sparse_vector\&.C\&.
+.PP
+References std::abs(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+316 {
+317   libmesh_assert (this->initialized());
+318 
+319   const numeric_index_type n = this->size();
+320 
+321   for (numeric_index_type i=0; i!=n; ++i)
+322     this->set(i,std::abs((*this)(i)));
+323 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add (const \fBnumeric_index_type\fPi, const Tvalue)\fC [inline]\fP, \fC [virtual]\fP"
+v(i) += value 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 747 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+748 {
+749   libmesh_assert (this->initialized());
+750   libmesh_assert_less (i, this->size());
+751 
+752   _vec[static_cast<eigen_idx_type>(i)] += value;
+753 
+754 #ifndef NDEBUG
+755   this->_is_closed = false;
+756 #endif
+757 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add (const Ts)\fC [virtual]\fP"
+$U(0-LIBMESH_DIM)+=s$\&. Addition of \fCs\fP to all components\&. Note that \fCs\fP is a scalar and not a vector\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 150 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+151 {
+152   _vec += EigenSV::Constant(this->size(), v);
+153 
+154 #ifndef NDEBUG
+155   this->_is_closed = false;
+156 #endif
+157 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add (const \fBNumericVector\fP< T > &V)\fC [virtual]\fP"
+$ U+=V $\&. Simple vector addition, equal to the \fCoperator\fP +=\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 163 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+164 {
+165   libmesh_assert (this->initialized());
+166 
+167   const EigenSparseVector<T>& v = libmesh_cast_ref<const EigenSparseVector<T>&>(v_in);
+168 
+169   _vec += v\&._vec;
+170 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add (const Ta, const \fBNumericVector\fP< T > &v)\fC [virtual]\fP"
+$ U+=a*V $\&. Simple vector addition, equal to the \fCoperator\fP +=\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 175 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+176 {
+177   libmesh_assert (this->initialized());
+178 
+179   const EigenSparseVector<T>& v = libmesh_cast_ref<const EigenSparseVector<T>&>(v_in);
+180 
+181   _vec += v\&._vec*a;
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add_vector (const std::vector< T > &v, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$ U+=v $ where v is a \fCstd::vector<T>\fP and you want to specify WHERE to add it 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 187 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+189 {
+190   libmesh_assert (!v\&.empty());
+191   libmesh_assert_equal_to (v\&.size(), dof_indices\&.size());
+192 
+193   for (numeric_index_type i=0; i<v\&.size(); i++)
+194     this->add (dof_indices[i], v[i]);
+195 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add_vector (const \fBNumericVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$ U+=V $ where U and V are type NumericVector<T> and you want to specify WHERE to add the NumericVector<T> V 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 200 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::NumericVector< T >::size()\&.
+.PP
+.nf
+202 {
+203   libmesh_assert_equal_to (V\&.size(), dof_indices\&.size());
+204 
+205   for (numeric_index_type i=0; i<V\&.size(); i++)
+206     this->add (dof_indices[i], V(i));
+207 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add_vector (const \fBNumericVector\fP< T > &vec_in, const \fBSparseMatrix\fP< T > &mat_in)\fC [virtual]\fP"
+$U+=A*V$, add the product of a \fC\fBSparseMatrix\fP\fP \fCA\fP and a \fC\fBNumericVector\fP\fP \fCV\fP to \fCthis\fP, where \fCthis=U\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 273 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+275 {
+276   // Make sure the data passed in are really in Eigen types
+277   const EigenSparseVector<T>* vec = libmesh_cast_ptr<const EigenSparseVector<T>*>(&vec_in);
+278   const EigenSparseMatrix<T>* mat = libmesh_cast_ptr<const EigenSparseMatrix<T>*>(&mat_in);
+279 
+280   libmesh_assert(vec);
+281   libmesh_assert(mat);
+282 
+283   _vec += mat->_mat*vec->_vec;
+284 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add_vector (const \fBDenseVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$U+=V $ where U and V are type DenseVector<T> and you want to specify WHERE to add the DenseVector<T> V 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 212 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+214 {
+215   libmesh_assert_equal_to (V\&.size(), dof_indices\&.size());
+216 
+217   for (unsigned int i=0; i<V\&.size(); i++)
+218     this->add (dof_indices[i], V(i));
+219 }
+.fi
+.SS "template<typename T> void \fBlibMesh::NumericVector\fP< T >::add_vector (const \fBNumericVector\fP< T > &v, const \fBShellMatrix\fP< T > &a)\fC [inherited]\fP"
+$U+=A*V$, add the product of a \fC\fBShellMatrix\fP\fP \fCA\fP and a \fC\fBNumericVector\fP\fP \fCV\fP to \fCthis\fP, where \fCthis=U\fP\&. 
+.PP
+Definition at line 380 of file numeric_vector\&.C\&.
+.PP
+References libMesh::ShellMatrix< T >::vector_mult_add()\&.
+.PP
+.nf
+382 {
+383   a\&.vector_mult_add(*this,v);
+384 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::add_vector_transpose (const \fBNumericVector\fP< T > &vec_in, const \fBSparseMatrix\fP< T > &mat_in)\fC [virtual]\fP"
+$U+=A^T*V$, add the product of the transpose of a \fC\fBSparseMatrix\fP\fP \fCA_trans\fP and a \fC\fBNumericVector\fP\fP \fCV\fP to \fCthis\fP, where \fCthis=U\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 289 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+291 {
+292   // Make sure the data passed in are really in Eigen types
+293   const EigenSparseVector<T>* vec = libmesh_cast_ptr<const EigenSparseVector<T>*>(&vec_in);
+294   const EigenSparseMatrix<T>* mat = libmesh_cast_ptr<const EigenSparseMatrix<T>*>(&mat_in);
+295 
+296   libmesh_assert(vec);
+297   libmesh_assert(mat);
+298 
+299   _vec += mat->_mat\&.transpose()*vec->_vec;
+300 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBNumericVector\fP< T > > \fBlibMesh::NumericVector\fP< T >::build (const \fBParallel::Communicator\fP &comm, const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fC\fBNumericVector\fP\fP on the processors in communicator \fCcomm\fP using the linear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 46 of file numeric_vector\&.C\&.
+.PP
+References libMesh::AUTOMATIC, libMesh::EIGEN_SOLVERS, libMesh::LASPACK_SOLVERS, libMesh::PETSC_SOLVERS, and libMesh::TRILINOS_SOLVERS\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::System::add_vector(), libMesh::NumericVector< T >::build(), libMesh::EquationSystems::build_solution_vector(), libMesh::System::calculate_norm(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::EquationSystems::get_solution(), and libMesh::System::project_vector()\&.
+.PP
+.nf
+47 {
+48   // Build the appropriate vector
+49   switch (solver_package)
+50     {
+51 
+52 
+53 #ifdef LIBMESH_HAVE_LASPACK
+54     case LASPACK_SOLVERS:
+55       {
+56         AutoPtr<NumericVector<T> > ap(new LaspackVector<T>(comm, AUTOMATIC));
+57         return ap;
+58       }
+59 #endif
+60 
+61 
+62 #ifdef LIBMESH_HAVE_PETSC
+63     case PETSC_SOLVERS:
+64       {
+65         AutoPtr<NumericVector<T> > ap(new PetscVector<T>(comm, AUTOMATIC));
+66         return ap;
+67       }
+68 #endif
+69 
+70 
+71 #ifdef LIBMESH_HAVE_TRILINOS
+72     case TRILINOS_SOLVERS:
+73       {
+74         AutoPtr<NumericVector<T> > ap(new EpetraVector<T>(comm, AUTOMATIC));
+75         return ap;
+76       }
+77 #endif
+78 
+79 
+80 #ifdef LIBMESH_HAVE_EIGEN
+81     case EIGEN_SOLVERS:
+82       {
+83         AutoPtr<NumericVector<T> > ap(new EigenSparseVector<T>(comm, AUTOMATIC));
+84         return ap;
+85       }
+86 #endif
+87 
+88 
+89     default:
+90       AutoPtr<NumericVector<T> > ap(new DistributedVector<T>(comm, AUTOMATIC));
+91       return ap;
+92 
+93     }
+94 
+95   AutoPtr<NumericVector<T> > ap(NULL);
+96   return ap;
+97 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBNumericVector\fP< T > > \fBlibMesh::NumericVector\fP< T >::build (const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fC\fBNumericVector\fP\fP on the processors in communicator CommWorld using the linear solver package specified by \fCsolver_package\fP\&. Deprecated\&. 
+.PP
+Definition at line 103 of file numeric_vector\&.C\&.
+.PP
+References libMesh::NumericVector< T >::build(), and libMesh::CommWorld\&.
+.PP
+.nf
+104 {
+105   libmesh_deprecated();
+106   return NumericVector<T>::build(CommWorld, solver_package);
+107 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::clear ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBEigenSparseVector\fP\fP to a pristine state\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 632 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized\&.
+.PP
+.nf
+633 {
+634   _vec\&.resize(0);
+635 
+636   this->_is_initialized = false;
+637 #ifndef NDEBUG
+638   this->_is_closed = false;
+639 #endif
+640 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBNumericVector\fP< T > > \fBlibMesh::EigenSparseVector\fP< T >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Creates a copy of this vector and returns it in an \fC\fBAutoPtr\fP\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 671 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::comm\&.
+.PP
+.nf
+672 {
+673   AutoPtr<NumericVector<T> > cloned_vector
+674     (new EigenSparseVector<T>(this->comm()));
+675 
+676   cloned_vector->init(*this, true);
+677 
+678   *cloned_vector = *this;
+679 
+680   return cloned_vector;
+681 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::close ()\fC [inline]\fP, \fC [virtual]\fP"
+Call the assemble functions 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 619 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+620 {
+621   libmesh_assert (this->initialized());
+622 
+623 #ifndef NDEBUG
+624   this->_is_closed = true;
+625 #endif
+626 }
+.fi
+.SS "template<typename T> virtual bool \fBlibMesh::NumericVector\fP< T >::closed () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the vector is closed and ready for computation, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 145 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::DofMap::enforce_adjoint_constraints_exactly(), libMesh::DofMap::enforce_constraints_exactly(), libMesh::DofMap::max_constraint_error(), libMesh::LaspackVector< T >::operator=(), libMesh::EigenSparseVector< T >::operator=(), and libMesh::PetscVector< T >::operator=()\&.
+.PP
+.nf
+145 { return _is_closed; }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "template<typename T> int \fBlibMesh::NumericVector\fP< T >::compare (const \fBNumericVector\fP< T > &other_vector, const \fBReal\fPthreshold = \fC\fBTOLERANCE\fP\fP) const\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fC-1\fP when \fCthis\fP is equivalent to \fCother_vector\fP, up to the given \fCthreshold\fP\&. When differences occur, the return value contains the first index \fCi\fP where the difference \fC\fP(a[i]-b[i]) exceeded the threshold\&. When no threshold is given, the \fC\fBlibMesh\fP\fP \fCTOLERANCE\fP is used\&. 
+.RE
+.PP
+
+.PP
+Definition at line 112 of file numeric_vector\&.C\&.
+.PP
+References std::abs(), libMesh::comm, libMesh::NumericVector< T >::first_local_index(), libMesh::NumericVector< T >::initialized(), libMesh::initialized(), libMesh::NumericVector< T >::last_local_index(), libMesh::libmesh_assert(), and std::max()\&.
+.PP
+.nf
+114 {
+115   libmesh_assert (this->initialized());
+116   libmesh_assert (other_vector\&.initialized());
+117   libmesh_assert_equal_to (this->first_local_index(), other_vector\&.first_local_index());
+118   libmesh_assert_equal_to (this->last_local_index(), other_vector\&.last_local_index());
+119 
+120   int first_different_i = std::numeric_limits<int>::max();
+121   numeric_index_type i = first_local_index();
+122 
+123   do
+124     {
+125       if ( std::abs( (*this)(i) - other_vector(i) ) > threshold )
+126         first_different_i = i;
+127       else
+128         i++;
+129     }
+130   while (first_different_i==std::numeric_limits<int>::max()
+131          && i<last_local_index());
+132 
+133   // Find the correct first differing index in parallel
+134   this->comm()\&.min(first_different_i);
+135 
+136   if (first_different_i == std::numeric_limits<int>::max())
+137     return -1;
+138 
+139   return first_different_i;
+140 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::conjugate ()\fC [virtual]\fP"
+Replace each entry v_i = real(v_i) + imag(v_i) of this vector by its complex conjugate, real(v_i) - imag(v_i) 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 142 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+143 {
+144   _vec = _vec\&.conjugate();
+145 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::NumericVector\fP< T >::create_subvector (\fBNumericVector\fP< T > &, const std::vector< \fBnumeric_index_type\fP > &) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Creates the subvector 'subvector' from the indices in the 'rows' array\&. Similar to the create_submatrix routine for the \fBSparseMatrix\fP class, it is currently only implemented for PetscVectors\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscVector< T >\fP, and \fBlibMesh::EpetraVector< T >\fP\&.
+.PP
+Definition at line 635 of file numeric_vector\&.h\&.
+.PP
+.nf
+637   {
+638     libMesh::err << "ERROR: Not Implemented in base class yet!" << std::endl;
+639     libmesh_error();
+640   }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "template<typename T > T \fBlibMesh::EigenSparseVector\fP< T >::dot (const \fBNumericVector\fP< T > &V) const\fC [virtual]\fP"
+Computes the dot product, p = U\&.V 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 328 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+329 {
+330   libmesh_assert (this->initialized());
+331 
+332   // Make sure the NumericVector passed in is really a EigenSparseVector
+333   const EigenSparseVector<T>* v = libmesh_cast_ptr<const EigenSparseVector<T>*>(&V);
+334   libmesh_assert(v);
+335 
+336   return _vec\&.dot(v->_vec);
+337 }
+.fi
+.SS "template<typename T> virtual T \fBlibMesh::NumericVector\fP< T >::el (const \fBnumeric_index_type\fPi) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the element \fCU(i)\fP 
+.RE
+.PP
+
+.PP
+Definition at line 342 of file numeric_vector\&.h\&.
+.PP
+.nf
+342 { return (*this)(i); }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::EigenSparseVector\fP< T >::first_local_index () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the index of the first vector element actually stored on this processor 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 709 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+710 {
+711   libmesh_assert (this->initialized());
+712 
+713   return 0;
+714 }
+.fi
+.SS "template<typename T> void \fBlibMesh::NumericVector\fP< T >::get (const std::vector< \fBnumeric_index_type\fP > &index, std::vector< T > &values) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Access multiple components at once\&. \fCvalues\fP will be resized, if necessary, and filled\&. The default implementation calls \fCoperator()\fP for each index, but some implementations may supply faster methods here\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscVector< T >\fP\&.
+.PP
+Definition at line 795 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::FEMContext::pre_fe_reinit()\&.
+.PP
+.nf
+796 {
+797   const std::size_t num = index\&.size();
+798   values\&.resize(num);
+799   for(std::size_t i=0; i<num; i++)
+800     {
+801       values[i] = (*this)(index[i]);
+802     }
+803 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T> int \fBlibMesh::NumericVector\fP< T >::global_relative_compare (const \fBNumericVector\fP< T > &other_vector, const \fBReal\fPthreshold = \fC\fBTOLERANCE\fP\fP) const\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fC-1\fP when \fCthis\fP is equivalent to \fCother_vector\fP, up to the given local relative \fCthreshold\fP\&. When differences occur, the return value contains the first index where the difference \fC\fP(a[i]-b[i])/max_j(a[j],b[j]) exceeded the threshold\&. When no threshold is given, the \fC\fBlibMesh\fP\fP \fCTOLERANCE\fP is used\&. 
+.RE
+.PP
+
+.PP
+Definition at line 177 of file numeric_vector\&.C\&.
+.PP
+References std::abs(), libMesh::comm, libMesh::NumericVector< T >::first_local_index(), libMesh::NumericVector< T >::initialized(), libMesh::initialized(), libMesh::NumericVector< T >::last_local_index(), libMesh::libmesh_assert(), libMesh::NumericVector< T >::linfty_norm(), std::max(), and libMesh::Real\&.
+.PP
+.nf
+179 {
+180   libmesh_assert (this->initialized());
+181   libmesh_assert (other_vector\&.initialized());
+182   libmesh_assert_equal_to (this->first_local_index(), other_vector\&.first_local_index());
+183   libmesh_assert_equal_to (this->last_local_index(), other_vector\&.last_local_index());
+184 
+185   int first_different_i = std::numeric_limits<int>::max();
+186   numeric_index_type i = first_local_index();
+187 
+188   const Real my_norm = this->linfty_norm();
+189   const Real other_norm = other_vector\&.linfty_norm();
+190   const Real abs_threshold = std::max(my_norm, other_norm) * threshold;
+191 
+192   do
+193     {
+194       if ( std::abs( (*this)(i) - other_vector(i) ) > abs_threshold )
+195         first_different_i = i;
+196       else
+197         i++;
+198     }
+199   while (first_different_i==std::numeric_limits<int>::max()
+200          && i<last_local_index());
+201 
+202   // Find the correct first differing index in parallel
+203   this->comm()\&.min(first_different_i);
+204 
+205   if (first_different_i == std::numeric_limits<int>::max())
+206     return -1;
+207 
+208   return first_different_i;
+209 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T> void \fBlibMesh::EigenSparseVector\fP< T >::init (const \fBnumeric_index_type\fPN, const \fBnumeric_index_type\fPn_local, const boolfast = \fCfalse\fP, const \fBParallelType\fPptype = \fC\fBAUTOMATIC\fP\fP)\fC [virtual]\fP"
+Change the dimension of the vector to \fCN\fP\&. The reserved memory for this vector remains unchanged if possible, to make things faster, but this may waste some memory, so take this in the back of your head\&. However, if \fCN==0\fP all memory is freed, i\&.e\&. if you want to resize the vector and release the memory not needed, you have to first call \fCinit(0)\fP and then \fCinit(N)\fP\&. This cited behaviour is analogous to that of the STL containers\&.
+.PP
+On \fCfast==false\fP, the vector is filled by zeros\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Referenced by libMesh::EigenSparseVector< T >::EigenSparseVector()\&.
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::init (const \fBnumeric_index_type\fPN, const boolfast = \fCfalse\fP, const \fBParallelType\fPptype = \fC\fBAUTOMATIC\fP\fP)\fC [inline]\fP, \fC [virtual]\fP"
+call init with n_local = N, 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 584 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::TriangleWrapper::init()\&.
+.PP
+.nf
+587 {
+588   this->init(n,n,fast,ptype);
+589 }
+.fi
+.SS "template<typename T> void \fBlibMesh::EigenSparseVector\fP< T >::init (const \fBnumeric_index_type\fP, const \fBnumeric_index_type\fP, const std::vector< \fBnumeric_index_type\fP > &, const bool = \fCfalse\fP, const \fBParallelType\fP = \fC\fBAUTOMATIC\fP\fP)\fC [virtual]\fP"
+Create a vector that holds tha local indices plus those specified in the \fCghost\fP argument\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.SS "template<class T > void \fBlibMesh::EigenSparseVector\fP< T >::init (const \fBNumericVector\fP< T > &other, const boolfast = \fCfalse\fP)\fC [virtual]\fP"
+Creates a vector that has the same dimension and storage type as \fCother\fP, including ghost dofs\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 609 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::TriangleWrapper::init(), libMesh::NumericVector< T >::local_size(), libMesh::NumericVector< T >::size(), and libMesh::NumericVector< T >::type()\&.
+.PP
+.nf
+611 {
+612   this->init(other\&.size(),other\&.local_size(),fast,other\&.type());
+613 }
+.fi
+.SS "template<typename T> virtual bool \fBlibMesh::NumericVector\fP< T >::initialized () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the vector has been initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 129 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::ImplicitSystem::assemble(), libMesh::NumericVector< T >::compare(), libMesh::PetscVector< T >::create_subvector(), libMesh::NumericVector< T >::global_relative_compare(), libMesh::PetscVector< T >::init(), and libMesh::NumericVector< T >::local_relative_compare()\&.
+.PP
+.nf
+129 { return _is_initialized; }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::insert (const std::vector< T > &v, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$ U=v $ where v is a \fCstd::vector<T>\fP and you want to specify WHERE to insert it 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 224 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+226 {
+227   libmesh_assert (!v\&.empty());
+228   libmesh_assert_equal_to (v\&.size(), dof_indices\&.size());
+229 
+230   for (numeric_index_type i=0; i<v\&.size(); i++)
+231     this->set (dof_indices[i], v[i]);
+232 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::insert (const \fBNumericVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$U=V$, where U and V are type NumericVector<T> and you want to specify WHERE to insert the NumericVector<T> V 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 237 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::NumericVector< T >::size()\&.
+.PP
+.nf
+239 {
+240   libmesh_assert_equal_to (V\&.size(), dof_indices\&.size());
+241 
+242   for (numeric_index_type i=0; i<V\&.size(); i++)
+243     this->set (dof_indices[i], V(i));
+244 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::insert (const \fBDenseVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$ U=V $ where V is type DenseVector<T> and you want to specify WHERE to insert it 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 249 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+251 {
+252   libmesh_assert_equal_to (V\&.size(), dof_indices\&.size());
+253 
+254   for (unsigned int i=0; i<V\&.size(); i++)
+255     this->set (dof_indices[i], V(i));
+256 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::insert (const \fBDenseSubVector\fP< T > &V, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+$ U=V $ where V is type DenseSubVector<T> and you want to specify WHERE to insert it 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 261 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::DenseVectorBase< T >::size()\&.
+.PP
+.nf
+263 {
+264   libmesh_assert_equal_to (V\&.size(), dof_indices\&.size());
+265 
+266   for (unsigned int i=0; i<V\&.size(); i++)
+267     this->set (dof_indices[i], V(i));
+268 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::EigenSparseVector\fP< T >::l1_norm () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $l_1$-norm of the vector, i\&.e\&. the sum of the absolute values\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 48 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::closed(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+49 {
+50   libmesh_assert (this->closed());
+51   libmesh_assert (this->initialized());
+52 
+53   return _vec\&.lpNorm<1>();
+54 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::EigenSparseVector\fP< T >::l2_norm () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $l_2$-norm of the vector, i\&.e\&. the square root of the sum of the squares of the elements\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 59 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::closed(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+60 {
+61   libmesh_assert (this->closed());
+62   libmesh_assert (this->initialized());
+63 
+64   return _vec\&.lpNorm<2>();
+65 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::EigenSparseVector\fP< T >::last_local_index () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the index of the last vector element actually stored on this processor 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 720 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+721 {
+722   libmesh_assert (this->initialized());
+723 
+724   return this->size();
+725 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::EigenSparseVector\fP< T >::linfty_norm () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the maximum absolute value of the elements of this vector, which is the $l_\infty$-norm of a vector\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 70 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::closed(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+71 {
+72   libmesh_assert (this->closed());
+73   libmesh_assert (this->initialized());
+74 
+75   return _vec\&.lpNorm<Eigen::Infinity>();
+76 }
+.fi
+.SS "template<typename T> int \fBlibMesh::NumericVector\fP< T >::local_relative_compare (const \fBNumericVector\fP< T > &other_vector, const \fBReal\fPthreshold = \fC\fBTOLERANCE\fP\fP) const\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fC-1\fP when \fCthis\fP is equivalent to \fCother_vector\fP, up to the given local relative \fCthreshold\fP\&. When differences occur, the return value contains the first index where the difference \fC\fP(a[i]-b[i])/max(a[i],b[i]) exceeded the threshold\&. When no threshold is given, the \fC\fBlibMesh\fP\fP \fCTOLERANCE\fP is used\&. 
+.RE
+.PP
+
+.PP
+Definition at line 144 of file numeric_vector\&.C\&.
+.PP
+References std::abs(), libMesh::comm, libMesh::NumericVector< T >::first_local_index(), libMesh::NumericVector< T >::initialized(), libMesh::initialized(), libMesh::NumericVector< T >::last_local_index(), libMesh::libmesh_assert(), and std::max()\&.
+.PP
+.nf
+146 {
+147   libmesh_assert (this->initialized());
+148   libmesh_assert (other_vector\&.initialized());
+149   libmesh_assert_equal_to (this->first_local_index(), other_vector\&.first_local_index());
+150   libmesh_assert_equal_to (this->last_local_index(), other_vector\&.last_local_index());
+151 
+152   int first_different_i = std::numeric_limits<int>::max();
+153   numeric_index_type i = first_local_index();
+154 
+155   do
+156     {
+157       if ( std::abs( (*this)(i) - other_vector(i) ) > threshold *
+158            std::max(std::abs((*this)(i)), std::abs(other_vector(i))))
+159         first_different_i = i;
+160       else
+161         i++;
+162     }
+163   while (first_different_i==std::numeric_limits<int>::max()
+164          && i<last_local_index());
+165 
+166   // Find the correct first differing index in parallel
+167   this->comm()\&.min(first_different_i);
+168 
+169   if (first_different_i == std::numeric_limits<int>::max())
+170     return -1;
+171 
+172   return first_different_i;
+173 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::EigenSparseVector\fP< T >::local_size () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the local size of the vector (index_stop-index_start) 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 698 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+699 {
+700   libmesh_assert (this->initialized());
+701 
+702   return this->size();
+703 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::localize (std::vector< T > &v_local) const\fC [virtual]\fP"
+Creates a copy of the global vector in the local vector \fCv_local\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 458 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+460 {
+461   v_local\&.resize(this->size());
+462 
+463   for (numeric_index_type i=0; i<v_local\&.size(); i++)
+464     v_local[i] = (*this)(i);
+465 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::localize (\fBNumericVector\fP< T > &v_local) const\fC [virtual]\fP"
+Same, but fills a \fCNumericVector<T>\fP instead of a \fCstd::vector\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 411 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+412 {
+413   // Make sure the NumericVector passed in is really a EigenSparseVector
+414   EigenSparseVector<T>* v_local =
+415     libmesh_cast_ptr<EigenSparseVector<T>*>(&v_local_in);
+416 
+417   libmesh_assert(v_local);
+418 
+419   *v_local = *this;
+420 }
+.fi
+.SS "template<typename T> void \fBlibMesh::EigenSparseVector\fP< T >::localize (\fBNumericVector\fP< T > &v_local, const std::vector< \fBnumeric_index_type\fP > &send_list) const\fC [virtual]\fP"
+Creates a local vector \fCv_local\fP containing only information relevant to this processor, as defined by the \fCsend_list\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.SS "template<typename T> void \fBlibMesh::EigenSparseVector\fP< T >::localize (const \fBnumeric_index_type\fPfirst_local_idx, const \fBnumeric_index_type\fPlast_local_idx, const std::vector< \fBnumeric_index_type\fP > &send_list)\fC [virtual]\fP"
+Updates a local vector with selected values from neighboring processors, as defined by \fCsend_list\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.SS "template<typename T> void \fBlibMesh::EigenSparseVector\fP< T >::localize_to_one (std::vector< T > &v_local, const \fBprocessor_id_type\fPproc_id = \fC0\fP) const\fC [virtual]\fP"
+Creates a local copy of the global vector in \fCv_local\fP only on processor \fCproc_id\fP\&. By default the data is sent to processor 0\&. This method is useful for outputting data from one processor\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 470 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+472 {
+473   libmesh_assert_equal_to (pid, 0);
+474 
+475   this->localize (v_local);
+476 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::EigenSparseVector\fP< T >::max () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the maximum element in the vector\&. In case of complex numbers, this returns the maximum Real part\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 490 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::initialized(), libMesh::libmesh_assert(), libMesh::libmesh_real(), std::max(), and libMesh::Real\&.
+.PP
+.nf
+491 {
+492   libmesh_assert (this->initialized());
+493   if (!this->size())
+494     return -std::numeric_limits<Real>::max();
+495 
+496 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+497   Real the_max = libmesh_real((*this)(0));
+498 
+499   const numeric_index_type n = this->size();
+500 
+501   for (numeric_index_type i=1; i<n; i++)
+502     the_max = std::max (the_max, libmesh_real((*this)(i)));
+503 
+504   return the_max;
+505 #else
+506   return libmesh_real(_vec\&.maxCoeff());
+507 #endif
+508 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::EigenSparseVector\fP< T >::min () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the minimum element in the vector\&. In case of complex numbers, this returns the minimum Real part\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 513 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::initialized(), libMesh::libmesh_assert(), libMesh::libmesh_real(), std::max(), std::min(), and libMesh::Real\&.
+.PP
+.nf
+514 {
+515   libmesh_assert (this->initialized());
+516   if (!this->size())
+517     return std::numeric_limits<Real>::max();
+518 
+519 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+520   Real the_min = libmesh_real((*this)(0));
+521 
+522   const numeric_index_type n = this->size();
+523 
+524   for (numeric_index_type i=1; i<n; i++)
+525     the_min = std::min (the_min, libmesh_real((*this)(i)));
+526 
+527   return the_min;
+528 #else
+529   return libmesh_real(_vec\&.minCoeff());
+530 #endif
+531 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T > T \fBlibMesh::EigenSparseVector\fP< T >::operator() (const \fBnumeric_index_type\fPi) const\fC [inline]\fP, \fC [virtual]\fP"
+Access components, returns \fCU(i)\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 763 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+764 {
+765   libmesh_assert (this->initialized());
+766   libmesh_assert ( ((i >= this->first_local_index()) &&
+767                     (i <  this->last_local_index())) );
+768 
+769   return _vec[static_cast<eigen_idx_type>(i)];
+770 }
+.fi
+.SS "template<typename T> \fBNumericVector\fP<T>& \fBlibMesh::NumericVector\fP< T >::operator*= (const Ta)\fC [inline]\fP, \fC [inherited]\fP"
+Multiplication operator\&. Equivalent to \fCU\&.scale(a)\fP 
+.PP
+Definition at line 368 of file numeric_vector\&.h\&.
+.PP
+.nf
+368 { this->scale(a); return *this; }
+.fi
+.SS "template<typename T > \fBNumericVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator+= (const \fBNumericVector\fP< T > &V)\fC [virtual]\fP"
+Addition operator\&. Fast equivalent to \fCU\&.add(1, V)\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 81 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, libMesh::closed(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+82 {
+83   libmesh_assert (this->closed());
+84 
+85   const EigenSparseVector<T>& v = libmesh_cast_ref<const EigenSparseVector<T>&>(v_in);
+86 
+87   _vec += v\&._vec;
+88 
+89   return *this;
+90 }
+.fi
+.SS "template<typename T > \fBNumericVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator-= (const \fBNumericVector\fP< T > &V)\fC [virtual]\fP"
+Subtraction operator\&. Fast equivalent to \fCU\&.add\fP(-1, V)\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 96 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, libMesh::closed(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+97 {
+98   libmesh_assert (this->closed());
+99 
+100   const EigenSparseVector<T>& v = libmesh_cast_ref<const EigenSparseVector<T>&>(v_in);
+101 
+102   _vec -= v\&._vec;
+103 
+104   return *this;
+105 }
+.fi
+.SS "template<typename T > \fBNumericVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator/= (\fBNumericVector\fP< T > &v_in)\fC [virtual]\fP"
+Pointwise Division operator\&. ie divide every entry in this vector by the entry in v 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 110 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::closed(), libMesh::libmesh_assert(), and libMesh::NumericVector< T >::size()\&.
+.PP
+.nf
+111 {
+112   libmesh_assert (this->closed());
+113   libmesh_assert_equal_to(size(), v_in\&.size());
+114 
+115   const EigenSparseVector<T>& v = libmesh_cast_ref<const EigenSparseVector<T>&>(v_in);
+116 
+117   _vec = _vec\&.cwiseQuotient(v\&._vec);
+118 
+119   return *this;
+120 }
+.fi
+.SS "template<typename T> \fBNumericVector\fP<T>& \fBlibMesh::NumericVector\fP< T >::operator/= (const Ta)\fC [inline]\fP, \fC [inherited]\fP"
+Division operator\&. Equivalent to \fCU\&.scale\fP(1\&./a) 
+.PP
+Definition at line 374 of file numeric_vector\&.h\&.
+.PP
+.nf
+374 { this->scale(1\&./a); return *this; }
+.fi
+.SS "template<typename T > \fBNumericVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator= (const Ts)\fC [virtual]\fP"
+$U(0-N) = s$: fill all components\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 343 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::closed(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+344 {
+345   libmesh_assert (this->initialized());
+346   libmesh_assert (this->closed());
+347 
+348   _vec\&.fill(s);
+349 
+350   return *this;
+351 }
+.fi
+.SS "template<typename T > \fBNumericVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator= (const \fBNumericVector\fP< T > &V)\fC [virtual]\fP"
+$U = V$: copy all components\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 357 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+358 {
+359   // Make sure the NumericVector passed in is really a EigenSparseVector
+360   const EigenSparseVector<T>* v =
+361     libmesh_cast_ptr<const EigenSparseVector<T>*>(&v_in);
+362 
+363   libmesh_assert(v);
+364 
+365   *this = *v;
+366 
+367   return *this;
+368 }
+.fi
+.SS "template<typename T > \fBEigenSparseVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator= (const \fBEigenSparseVector\fP< T > &V)"
+$U = V$: copy all components\&. 
+.PP
+Definition at line 374 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec, libMesh::NumericVector< T >::closed(), libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::EigenSparseVector< T >::size()\&.
+.PP
+.nf
+375 {
+376   libmesh_assert (this->initialized());
+377   libmesh_assert (v\&.closed());
+378   libmesh_assert_equal_to (this->size(), v\&.size());
+379 
+380   _vec = v\&._vec;
+381 
+382 #ifndef NDEBUG
+383   this->_is_closed = true;
+384 #endif
+385 
+386   return *this;
+387 }
+.fi
+.SS "template<typename T > \fBNumericVector\fP< T > & \fBlibMesh::EigenSparseVector\fP< T >::operator= (const std::vector< T > &v)\fC [virtual]\fP"
+$U = V$: copy all components\&. Case 1: The vector is the same size of The global vector\&. Only add the local components\&.
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 393 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+394 {
+399   if (this->size() == v\&.size())
+400     for (numeric_index_type i=0; i<v\&.size(); i++)
+401       this->set (i, v[i]);
+402 
+403   else
+404     libmesh_error();
+405 
+406   return *this;
+407 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::pointwise_mult (const \fBNumericVector\fP< T > &vec1, const \fBNumericVector\fP< T > &vec2)\fC [virtual]\fP"
+Computes the pointwise (i\&.e\&. component-wise) product of \fCvec1\fP and \fCvec2\fP and stores the result in \fC*this\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 481 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+483 {
+484   libmesh_not_implemented();
+485 }
+.fi
+.SS "template<typename T > void \fBlibMesh::NumericVector\fP< T >::print (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Prints the local contents of the vector, by default to \fBlibMesh::out\fP 
+.PP
+Definition at line 830 of file numeric_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+831 {
+832   libmesh_assert (this->initialized());
+833   os << "Size\tglobal =  " << this->size()
+834      << "\t\tlocal =  " << this->local_size() << std::endl;
+835 
+836   os << "#\tValue" << std::endl;
+837   for (numeric_index_type i=this->first_local_index(); i<this->last_local_index(); i++)
+838     os << i << "\t" << (*this)(i) << std::endl;
+839 }
+.fi
+.SS "template<> void \fBlibMesh::NumericVector\fP< \fBComplex\fP >::print (std::ostream &os) const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 812 of file numeric_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+813 {
+814   libmesh_assert (this->initialized());
+815   os << "Size\tglobal =  " << this->size()
+816      << "\t\tlocal =  " << this->local_size() << std::endl;
+817 
+818   // std::complex<>::operator<<() is defined, but use this form
+819   os << "#\tReal part\t\tImaginary part" << std::endl;
+820   for (numeric_index_type i=this->first_local_index(); i<this->last_local_index(); i++)
+821     os << i << "\t"
+822        << (*this)(i)\&.real() << "\t\t"
+823        << (*this)(i)\&.imag() << std::endl;
+824 }
+.fi
+.SS "template<typename T > void \fBlibMesh::NumericVector\fP< T >::print_global (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Prints the global contents of the vector, by default to \fBlibMesh::out\fP 
+.PP
+Definition at line 867 of file numeric_vector\&.h\&.
+.PP
+References libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::processor_id()\&.
+.PP
+.nf
+868 {
+869   libmesh_assert (this->initialized());
+870 
+871   std::vector<T> v(this->size());
+872   this->localize(v);
+873 
+874   // Right now we only want one copy of the output
+875   if (this->processor_id())
+876     return;
+877 
+878   os << "Size\tglobal =  " << this->size() << std::endl;
+879   os << "#\tValue" << std::endl;
+880   for (numeric_index_type i=0; i!=v\&.size(); i++)
+881     os << i << "\t" << v[i] << std::endl;
+882 }
+.fi
+.SS "template<> void \fBlibMesh::NumericVector\fP< \fBComplex\fP >::print_global (std::ostream &os) const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 845 of file numeric_vector\&.h\&.
+.PP
+References libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::processor_id()\&.
+.PP
+.nf
+846 {
+847   libmesh_assert (this->initialized());
+848 
+849   std::vector<Complex> v(this->size());
+850   this->localize(v);
+851 
+852   // Right now we only want one copy of the output
+853   if (this->processor_id())
+854     return;
+855 
+856   os << "Size\tglobal =  " << this->size() << std::endl;
+857   os << "#\tReal part\t\tImaginary part" << std::endl;
+858   for (numeric_index_type i=0; i!=v\&.size(); i++)
+859     os << i << "\t"
+860        << v[i]\&.real() << "\t\t"
+861        << v[i]\&.imag() << std::endl;
+862 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::NumericVector\fP< T >::print_matlab (const std::string & = \fC''\fP) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Print the contents of the matrix in Matlab's sparse matrix format\&. Optionally prints the matrix to the file named \fCname\fP\&. If \fCname\fP is not specified it is dumped to the screen\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscVector< T >\fP\&.
+.PP
+Definition at line 624 of file numeric_vector\&.h\&.
+.PP
+.nf
+625   {
+626     libmesh_not_implemented();
+627   }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::reciprocal ()\fC [virtual]\fP"
+Replace each entry v_i of this vector by its reciprocal, 1/v_i\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 126 of file eigen_sparse_vector\&.C\&.
+.PP
+.nf
+127 {
+128 #ifndef NDEBUG
+129   const numeric_index_type n = this->size();
+130 
+131   for (numeric_index_type i=0; i<n; i++)
+132     // Don't divide by zero!
+133     libmesh_assert_not_equal_to ((*this)(i), T(0));
+134 #endif
+135 
+136   _vec = _vec\&.cwiseInverse();
+137 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::scale (const Tfactor)\fC [virtual]\fP"
+Scale each element of the vector by the given factor\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 305 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+306 {
+307   libmesh_assert (this->initialized());
+308 
+309   _vec *= factor;
+310 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::set (const \fBnumeric_index_type\fPi, const Tvalue)\fC [inline]\fP, \fC [virtual]\fP"
+v(i) = value 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 731 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+732 {
+733   libmesh_assert (this->initialized());
+734   libmesh_assert_less (i, this->size());
+735 
+736   _vec[static_cast<eigen_idx_type>(i)] = value;
+737 
+738 #ifndef NDEBUG
+739   this->_is_closed = false;
+740 #endif
+741 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::EigenSparseVector\fP< T >::size () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+dimension of the vector\&. This function was formerly called \fCn()\fP, but was renamed to get the \fC\fBEigenSparseVector\fP\fP class closer to the C++ standard library's \fCstd::vector\fP container\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 687 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::EigenSparseVector< T >::operator=()\&.
+.PP
+.nf
+688 {
+689   libmesh_assert (this->initialized());
+690 
+691   return static_cast<numeric_index_type>(_vec\&.size());
+692 }
+.fi
+.SS "template<class T > \fBReal\fP \fBlibMesh::NumericVector\fP< T >::subset_l1_norm (const std::set< \fBnumeric_index_type\fP > &indices) const\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $l_1$-norm of the vector, i\&.e\&. the sum of the absolute values for the specified entries in the vector\&.
+.RE
+.PP
+Note that the indices must necessary live on this processor\&. 
+.PP
+Definition at line 320 of file numeric_vector\&.C\&.
+.PP
+References std::abs(), libMesh::comm, and libMesh::Real\&.
+.PP
+Referenced by libMesh::System::discrete_var_norm()\&.
+.PP
+.nf
+321 {
+322   const NumericVector<T> & v = *this;
+323 
+324   std::set<numeric_index_type>::const_iterator it = indices\&.begin();
+325   const std::set<numeric_index_type>::const_iterator it_end = indices\&.end();
+326 
+327   Real norm = 0;
+328 
+329   for(; it!=it_end; ++it)
+330     norm += std::abs(v(*it));
+331 
+332   this->comm()\&.sum(norm);
+333 
+334   return norm;
+335 }
+.fi
+.SS "template<class T > \fBReal\fP \fBlibMesh::NumericVector\fP< T >::subset_l2_norm (const std::set< \fBnumeric_index_type\fP > &indices) const\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $l_2$-norm of the vector, i\&.e\&. the square root of the sum of the squares of the elements for the specified entries in the vector\&.
+.RE
+.PP
+Note that the indices must necessary live on this processor\&. 
+.PP
+Definition at line 338 of file numeric_vector\&.C\&.
+.PP
+References libMesh::comm, libMesh::TensorTools::norm_sq(), and libMesh::Real\&.
+.PP
+Referenced by libMesh::System::discrete_var_norm()\&.
+.PP
+.nf
+339 {
+340   const NumericVector<T> & v = *this;
+341 
+342   std::set<numeric_index_type>::const_iterator it = indices\&.begin();
+343   const std::set<numeric_index_type>::const_iterator it_end = indices\&.end();
+344 
+345   Real norm = 0;
+346 
+347   for(; it!=it_end; ++it)
+348     norm += TensorTools::norm_sq(v(*it));
+349 
+350   this->comm()\&.sum(norm);
+351 
+352   return std::sqrt(norm);
+353 }
+.fi
+.SS "template<class T > \fBReal\fP \fBlibMesh::NumericVector\fP< T >::subset_linfty_norm (const std::set< \fBnumeric_index_type\fP > &indices) const\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the maximum absolute value of the specified entries of this vector, which is the $l_\infty$-norm of a vector\&.
+.RE
+.PP
+Note that the indices must necessary live on this processor\&. 
+.PP
+Definition at line 356 of file numeric_vector\&.C\&.
+.PP
+References std::abs(), libMesh::comm, and libMesh::Real\&.
+.PP
+Referenced by libMesh::System::discrete_var_norm()\&.
+.PP
+.nf
+357 {
+358   const NumericVector<T> & v = *this;
+359 
+360   std::set<numeric_index_type>::const_iterator it = indices\&.begin();
+361   const std::set<numeric_index_type>::const_iterator it_end = indices\&.end();
+362 
+363   Real norm = 0;
+364 
+365   for(; it!=it_end; ++it)
+366     {
+367       Real value = std::abs(v(*it));
+368       if(value > norm)
+369         norm = value;
+370     }
+371 
+372   this->comm()\&.max(norm);
+373 
+374   return norm;
+375 }
+.fi
+.SS "template<typename T > T \fBlibMesh::EigenSparseVector\fP< T >::sum () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the sum of values in a vector 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 37 of file eigen_sparse_vector\&.C\&.
+.PP
+References libMesh::closed(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+38 {
+39   libmesh_assert (this->closed());
+40   libmesh_assert (this->initialized());
+41 
+42   return _vec\&.sum();
+43 }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::swap (\fBNumericVector\fP< T > &v)\fC [inline]\fP, \fC [virtual]\fP"
+Swaps the contents\&. 
+.PP
+Reimplemented from \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 776 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::swap(), and libMesh::EigenSparseVector< T >::swap()\&.
+.PP
+Referenced by libMesh::EigenSparseVector< T >::swap()\&.
+.PP
+.nf
+777 {
+778   EigenSparseVector<T>& v = libmesh_cast_ref<EigenSparseVector<T>&>(other);
+779 
+780   _vec\&.swap(v\&._vec);
+781 
+782   std::swap (this->_is_closed,      v\&._is_closed);
+783   std::swap (this->_is_initialized, v\&._is_initialized);
+784   std::swap (this->_type,           v\&._type);
+785 }
+.fi
+.SS "template<typename T> \fBParallelType\fP \fBlibMesh::NumericVector\fP< T >::type () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the type (SERIAL, PARALLEL, GHOSTED) of the vector\&. 
+.RE
+.PP
+
+.PP
+Definition at line 134 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::DofMap::enforce_adjoint_constraints_exactly(), libMesh::DofMap::enforce_constraints_exactly(), libMesh::EpetraVector< T >::EpetraVector(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::DistributedVector< T >::init(), libMesh::LaspackVector< T >::init(), libMesh::EigenSparseVector< T >::init(), libMesh::EpetraVector< T >::init(), libMesh::PetscVector< T >::localize(), libMesh::MeshFunction::operator()(), libMesh::PetscVector< T >::operator=(), libMesh::System::project_vector(), and libMesh::System::read_serialized_vector()\&.
+.PP
+.nf
+134 { return _type; }
+.fi
+.SS "template<typename T> \fBParallelType\fP& \fBlibMesh::NumericVector\fP< T >::type ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the type (SERIAL, PARALLEL, GHOSTED) of the vector\&. 
+.RE
+.PP
+
+.PP
+Definition at line 139 of file numeric_vector\&.h\&.
+.PP
+.nf
+139 { return _type; }
+.fi
+.SS "template<typename T> \fBDataType\fP& \fBlibMesh::EigenSparseVector\fP< T >::vec ()\fC [inline]\fP"
+References to the underlying Eigen data types\&. Note this is generally not required in user-level code\&. 
+.PP
+Definition at line 469 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec\&.
+.PP
+.nf
+469 { return _vec; }
+.fi
+.SS "template<typename T> const \fBDataType\fP& \fBlibMesh::EigenSparseVector\fP< T >::vec () const\fC [inline]\fP"
+
+.PP
+Definition at line 470 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::EigenSparseVector< T >::_vec\&.
+.PP
+.nf
+470 { return _vec; }
+.fi
+.SS "template<typename T > void \fBlibMesh::EigenSparseVector\fP< T >::zero ()\fC [inline]\fP, \fC [virtual]\fP"
+Set all entries to zero\&. Equivalent to \fCv\fP = 0, but more obvious and faster\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 645 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::closed(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+646 {
+647   libmesh_assert (this->initialized());
+648   libmesh_assert (this->closed());
+649 
+650   _vec\&.setZero();
+651 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBNumericVector\fP< T > > \fBlibMesh::EigenSparseVector\fP< T >::zero_clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Creates a vector which has the same type, size and partitioning as this vector, but whose data is all zero\&. Returns it in an \fC\fBAutoPtr\fP\fP\&. 
+.PP
+Implements \fBlibMesh::NumericVector< T >\fP\&.
+.PP
+Definition at line 657 of file eigen_sparse_vector\&.h\&.
+.PP
+References libMesh::comm\&.
+.PP
+.nf
+658 {
+659   AutoPtr<NumericVector<T> > cloned_vector
+660     (new EigenSparseVector<T>(this->comm()));
+661 
+662   cloned_vector->init(*this);
+663 
+664   return cloned_vector;
+665 }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename T> friend class \fBEigenSparseLinearSolver\fP< T >\fC [friend]\fP"
+
+.PP
+Definition at line 483 of file eigen_sparse_vector\&.h\&.
+.SS "template<typename T> friend class \fBEigenSparseMatrix\fP< T >\fC [friend]\fP"
+Make other Eigen datatypes friends 
+.PP
+Definition at line 482 of file eigen_sparse_vector\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T> bool \fBlibMesh::NumericVector\fP< T >::_is_closed\fC [protected]\fP, \fC [inherited]\fP"
+Flag to see if the Numeric assemble routines have been called yet 
+.PP
+Definition at line 655 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::NumericVector< Number >::closed(), libMesh::DistributedVector< T >::localize(), and libMesh::DistributedVector< T >::operator=()\&.
+.SS "template<typename T> bool \fBlibMesh::NumericVector\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag to tell if init has been called yet 
+.PP
+Definition at line 661 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::PetscVector< T >::create_subvector(), libMesh::NumericVector< Number >::initialized(), libMesh::DistributedVector< T >::localize(), and libMesh::DistributedVector< T >::operator=()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T> \fBParallelType\fP \fBlibMesh::NumericVector\fP< T >::_type\fC [protected]\fP, \fC [inherited]\fP"
+Type of vector 
+.PP
+Definition at line 666 of file numeric_vector\&.h\&.
+.PP
+Referenced by libMesh::DistributedVector< T >::DistributedVector(), libMesh::EigenSparseVector< T >::EigenSparseVector(), libMesh::EpetraVector< T >::EpetraVector(), libMesh::PetscVector< T >::init(), libMesh::LaspackVector< T >::LaspackVector(), libMesh::PetscVector< T >::operator=(), libMesh::PetscVector< T >::PetscVector(), and libMesh::NumericVector< Number >::type()\&.
+.SS "template<typename T> \fBDataType\fP \fBlibMesh::EigenSparseVector\fP< T >::_vec\fC [private]\fP"
+Actual Eigen::SparseVector<> we are wrapping\&. 
+.PP
+Definition at line 477 of file eigen_sparse_vector\&.h\&.
+.PP
+Referenced by libMesh::EigenSparseVector< T >::add(), libMesh::EigenSparseVector< T >::add_vector(), libMesh::EigenSparseVector< T >::add_vector_transpose(), libMesh::EigenSparseVector< T >::dot(), libMesh::EigenSparseMatrix< T >::get_diagonal(), libMesh::EigenSparseVector< T >::operator+=(), libMesh::EigenSparseVector< T >::operator-=(), libMesh::EigenSparseVector< T >::operator=(), and libMesh::EigenSparseVector< T >::vec()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

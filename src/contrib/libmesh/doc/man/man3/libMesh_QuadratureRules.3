@@ -1,0 +1,102 @@
+.TH "libMesh::QuadratureRules" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::QuadratureRules \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBname\fP (const \fBQuadratureType\fP t)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const unsigned int \fBnum_rules\fP = 5"
+.br
+.ti -1c
+.RI "const \fBQuadratureType\fP \fBvalid_elem_rules\fP []"
+.br
+.ti -1c
+.RI "const unsigned int \fBnum_valid_elem_rules\fP = 3"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A namespace for utility functions for quadrature rules\&. 
+.SH "Function Documentation"
+.PP 
+.SS "std::string libMesh::QuadratureRules::name (const QuadratureTypet)"
+Returns a standard string representation for the specific quadrature rule\&. 
+.PP
+Definition at line 31 of file quadrature_rules\&.C\&.
+.PP
+References libMesh::err, libMesh::QGAUSS, libMesh::QJACOBI_1_0, libMesh::QJACOBI_2_0, libMesh::QSIMPSON, and libMesh::QTRAP\&.
+.PP
+.nf
+32 {
+33   std::string its_name;
+34 
+35   switch (q)
+36     {
+37 
+38     case QGAUSS:
+39       its_name = "Gauss-Legendre Quadrature";
+40       break;
+41 
+42     case QJACOBI_1_0:
+43       its_name = "Jacobi(1,0)-Gauss Quadrature";
+44       break;
+45 
+46     case QJACOBI_2_0:
+47       its_name = "Jacobi(2,0)-Gauss Quadrature";
+48       break;
+49 
+50     case QSIMPSON:
+51       its_name = "Simpson Rule";
+52       break;
+53 
+54     case QTRAP:
+55       its_name = "Trapezoidal Rule";
+56       break;
+57 
+58 
+59     default:
+60       {
+61         libMesh::err << "ERROR: Bad qt=" << q << std::endl;
+62         libmesh_error();
+63       }
+64     }
+65 
+66   return its_name;
+67 }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "const unsigned int libMesh::QuadratureRules::num_rules = 5"
+The number of quadrature rules that are defined (INVALD_Q_RULE excluded)\&. You might have to update this if you add a new one! 
+.PP
+Definition at line 46 of file quadrature_rules\&.h\&.
+.SS "const unsigned int libMesh::QuadratureRules::num_valid_elem_rules = 3"
+The number of valid quadrature rules for numerical integration over geometric entities\&. 
+.PP
+Definition at line 61 of file quadrature_rules\&.h\&.
+.SS "const \fBQuadratureType\fP libMesh::QuadratureRules::valid_elem_rules[]"
+\fBInitial value:\fP
+.PP
+.nf
+= {QGAUSS,
+                                           QSIMPSON,
+                                           QTRAP}
+.fi
+The types of quadrature rules that may be used for numerical integration over geometric entities\&. 
+.PP
+Definition at line 53 of file quadrature_rules\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

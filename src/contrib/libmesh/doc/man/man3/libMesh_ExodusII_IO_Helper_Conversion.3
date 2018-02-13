@@ -1,0 +1,244 @@
+.TH "libMesh::ExodusII_IO_Helper::Conversion" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ExodusII_IO_Helper::Conversion \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <exodusII_io_helper\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConversion\fP (const int *nm, size_t nm_size, const int *inm, size_t inm_size, const int *sm, size_t sm_size, const int *ism, size_t ism_size, const \fBElemType\fP ct, std::string ex_type)"
+.br
+.ti -1c
+.RI "int \fBget_node_map\fP (int i) const "
+.br
+.ti -1c
+.RI "int \fBget_inverse_node_map\fP (int i) const "
+.br
+.ti -1c
+.RI "int \fBget_side_map\fP (int i) const "
+.br
+.ti -1c
+.RI "int \fBget_inverse_side_map\fP (int i) const "
+.br
+.ti -1c
+.RI "\fBElemType\fP \fBget_canonical_type\fP () const "
+.br
+.ti -1c
+.RI "std::string \fBexodus_elem_type\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const int * \fBnode_map\fP"
+.br
+.ti -1c
+.RI "size_t \fBnode_map_size\fP"
+.br
+.ti -1c
+.RI "const int * \fBinverse_node_map\fP"
+.br
+.ti -1c
+.RI "size_t \fBinverse_node_map_size\fP"
+.br
+.ti -1c
+.RI "const int * \fBside_map\fP"
+.br
+.ti -1c
+.RI "size_t \fBside_map_size\fP"
+.br
+.ti -1c
+.RI "const int * \fBinverse_side_map\fP"
+.br
+.ti -1c
+.RI "size_t \fBinverse_side_map_size\fP"
+.br
+.ti -1c
+.RI "const \fBElemType\fP \fBcanonical_type\fP"
+.br
+.ti -1c
+.RI "const std::string \fBexodus_type\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 593 of file exodusII_io_helper\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ExodusII_IO_Helper::Conversion::Conversion (const int *nm, size_tnm_size, const int *inm, size_tinm_size, const int *sm, size_tsm_size, const int *ism, size_tism_size, const \fBElemType\fPct, std::stringex_type)\fC [inline]\fP"
+Constructor\&. Initializes the const private member variables\&. 
+.PP
+Definition at line 601 of file exodusII_io_helper\&.h\&.
+.PP
+.nf
+611     : node_map(nm),
+612       node_map_size(nm_size),
+613       inverse_node_map(inm),
+614       inverse_node_map_size(inm_size),
+615       side_map(sm),
+616       side_map_size(sm_size),
+617       inverse_side_map(ism),
+618       inverse_side_map_size(ism_size),
+619       canonical_type(ct),
+620       exodus_type(ex_type)
+621   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "std::string libMesh::ExodusII_IO_Helper::Conversion::exodus_elem_type () const\fC [inline]\fP"
+Returns the string corresponding to the Exodus type for this element 
+.PP
+Definition at line 678 of file exodusII_io_helper\&.h\&.
+.PP
+References exodus_type\&.
+.PP
+Referenced by libMesh::ExodusII_IO_Helper::write_elements(), and libMesh::Nemesis_IO_Helper::write_elements()\&.
+.PP
+.nf
+678 { return exodus_type; }
+.fi
+.SS "\fBElemType\fP libMesh::ExodusII_IO_Helper::Conversion::get_canonical_type () const\fC [inline]\fP"
+Returns the canonical element type for this element\&. The canonical element type is the standard element type understood by this library\&. 
+.PP
+Definition at line 673 of file exodusII_io_helper\&.h\&.
+.PP
+References canonical_type\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::Nemesis_IO::read(), and libMesh::ExodusII_IO_Helper::write_elements()\&.
+.PP
+.nf
+673 { return canonical_type; }
+.fi
+.SS "int libMesh::ExodusII_IO_Helper::Conversion::get_inverse_node_map (inti) const\fC [inline]\fP"
+Returns the ith component of the inverse node map for this element\&. The inverse node map maps the libmesh node numbering to Exodus' node numbering\&. Note that all elements except \fBHex27\fP currently have the same node numbering as libmesh elements\&. 
+.PP
+Definition at line 640 of file exodusII_io_helper\&.h\&.
+.PP
+References inverse_node_map, and inverse_node_map_size\&.
+.PP
+Referenced by libMesh::ExodusII_IO_Helper::write_elements()\&.
+.PP
+.nf
+641   {
+642     libmesh_assert_less (static_cast<size_t>(i), inverse_node_map_size);
+643     return inverse_node_map[i];
+644   }
+.fi
+.SS "int libMesh::ExodusII_IO_Helper::Conversion::get_inverse_side_map (inti) const\fC [inline]\fP"
+Returns the ith component of the side map for this element\&. The side map maps the \fBlibMesh\fP side numbering format to this exodus's format\&. 
+.PP
+Definition at line 662 of file exodusII_io_helper\&.h\&.
+.PP
+References inverse_side_map, and inverse_side_map_size\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::ExodusII_IO_Helper::write_sidesets(), and libMesh::Nemesis_IO_Helper::write_sidesets()\&.
+.PP
+.nf
+663   {
+664     libmesh_assert_less (static_cast<size_t>(i), inverse_side_map_size);
+665     return inverse_side_map[i];
+666   }
+.fi
+.SS "int libMesh::ExodusII_IO_Helper::Conversion::get_node_map (inti) const\fC [inline]\fP"
+Returns the ith component of the node map for this element\&. The node map maps the exodusII node numbering format to this library's format\&. 
+.PP
+Definition at line 628 of file exodusII_io_helper\&.h\&.
+.PP
+References node_map, and node_map_size\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), and libMesh::Nemesis_IO::read()\&.
+.PP
+.nf
+629   {
+630     libmesh_assert_less (static_cast<size_t>(i), node_map_size);
+631     return node_map[i];
+632   }
+.fi
+.SS "int libMesh::ExodusII_IO_Helper::Conversion::get_side_map (inti) const\fC [inline]\fP"
+Returns the ith component of the side map for this element\&. The side map maps the exodusII side numbering format to this library's format\&. 
+.PP
+Definition at line 651 of file exodusII_io_helper\&.h\&.
+.PP
+References side_map, and side_map_size\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read(), and libMesh::ExodusII_IO::read()\&.
+.PP
+.nf
+652   {
+653     libmesh_assert_less (static_cast<size_t>(i), side_map_size);
+654     return side_map[i];
+655   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBElemType\fP libMesh::ExodusII_IO_Helper::Conversion::canonical_type\fC [private]\fP"
+The canonical (i\&.e\&. standard for this library) element type\&. 
+.PP
+Definition at line 728 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_canonical_type()\&.
+.SS "const std::string libMesh::ExodusII_IO_Helper::Conversion::exodus_type\fC [private]\fP"
+The string corresponding to the Exodus type for this element 
+.PP
+Definition at line 733 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by exodus_elem_type()\&.
+.SS "const int* libMesh::ExodusII_IO_Helper::Conversion::inverse_node_map\fC [private]\fP"
+Pointer to the inverse node map for this element\&. For all elements except for the \fBHex27\fP, this is the same as the node map\&. 
+.PP
+Definition at line 697 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_inverse_node_map()\&.
+.SS "size_t libMesh::ExodusII_IO_Helper::Conversion::inverse_node_map_size\fC [private]\fP"
+The size of the inverse node map array, this helps with bounds checking\&.\&.\&. 
+.PP
+Definition at line 702 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_inverse_node_map()\&.
+.SS "const int* libMesh::ExodusII_IO_Helper::Conversion::inverse_side_map\fC [private]\fP"
+Pointer to the inverse side map for this element\&. 
+.PP
+Definition at line 717 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_inverse_side_map()\&.
+.SS "size_t libMesh::ExodusII_IO_Helper::Conversion::inverse_side_map_size\fC [private]\fP"
+The size of the inverse side map array, this helps with bounds checking\&.\&.\&. 
+.PP
+Definition at line 722 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_inverse_side_map()\&.
+.SS "const int* libMesh::ExodusII_IO_Helper::Conversion::node_map\fC [private]\fP"
+Pointer to the node map for this element\&. 
+.PP
+Definition at line 685 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_node_map()\&.
+.SS "size_t libMesh::ExodusII_IO_Helper::Conversion::node_map_size\fC [private]\fP"
+The size of the node map array, this helps with bounds checking\&.\&.\&. 
+.PP
+Definition at line 690 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_node_map()\&.
+.SS "const int* libMesh::ExodusII_IO_Helper::Conversion::side_map\fC [private]\fP"
+Pointer to the side map for this element\&. 
+.PP
+Definition at line 707 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_side_map()\&.
+.SS "size_t libMesh::ExodusII_IO_Helper::Conversion::side_map_size\fC [private]\fP"
+The size of the side map array, this helps with bounds checking\&.\&.\&. 
+.PP
+Definition at line 712 of file exodusII_io_helper\&.h\&.
+.PP
+Referenced by get_side_map()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

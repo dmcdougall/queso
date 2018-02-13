@@ -1,0 +1,706 @@
+.TH "libMesh::DenseVector< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DenseVector< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <analytic_function\&.h>\fP
+.PP
+Inherits \fBlibMesh::DenseVectorBase< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDenseVector\fP (const unsigned int n=0)"
+.br
+.ti -1c
+.RI "template<typename T2 > \fBDenseVector\fP (const \fBDenseVector\fP< T2 > &other_vector)"
+.br
+.ti -1c
+.RI "template<typename T2 > \fBDenseVector\fP (const std::vector< T2 > &other_vector)"
+.br
+.ti -1c
+.RI "\fB~DenseVector\fP ()"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBzero\fP ()"
+.br
+.ti -1c
+.RI "T \fBoperator()\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "T & \fBoperator()\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "virtual T \fBel\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual T & \fBel\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "template<typename T2 > \fBDenseVector\fP< T > & \fBoperator=\fP (const \fBDenseVector\fP< T2 > &other_vector)"
+.br
+.ti -1c
+.RI "void \fBswap\fP (\fBDenseVector\fP< T > &other_vector)"
+.br
+.ti -1c
+.RI "void \fBresize\fP (const unsigned int n)"
+.br
+.ti -1c
+.RI "void \fBscale\fP (const T factor)"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< T > & \fBoperator*=\fP (const T factor)"
+.br
+.ti -1c
+.RI "template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP
+.br
+< \fBScalarTraits\fP< T2 >::value, 
+.br
+void >::type \fBadd\fP (const T2 factor, const \fBDenseVector\fP< T3 > &vec)"
+.br
+.ti -1c
+.RI "template<typename T2 > \fBCompareTypes\fP< T, T2 >::supertype \fBdot\fP (const \fBDenseVector\fP< T2 > &vec) const "
+.br
+.ti -1c
+.RI "template<typename T2 > \fBCompareTypes\fP< T, T2 >::supertype \fBindefinite_dot\fP (const \fBDenseVector\fP< T2 > &vec) const "
+.br
+.ti -1c
+.RI "template<typename T2 > bool \fBoperator==\fP (const \fBDenseVector\fP< T2 > &vec) const "
+.br
+.ti -1c
+.RI "template<typename T2 > bool \fBoperator!=\fP (const \fBDenseVector\fP< T2 > &vec) const "
+.br
+.ti -1c
+.RI "template<typename T2 > \fBDenseVector\fP< T > & \fBoperator+=\fP (const \fBDenseVector\fP< T2 > &vec)"
+.br
+.ti -1c
+.RI "template<typename T2 > \fBDenseVector\fP< T > & \fBoperator-=\fP (const \fBDenseVector\fP< T2 > &vec)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmin\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl1_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl2_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBlinfty_norm\fP () const "
+.br
+.ti -1c
+.RI "void \fBget_principal_subvector\fP (unsigned int sub_n, \fBDenseVector\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "std::vector< T > & \fBget_values\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< T > & \fBget_values\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os) const "
+.br
+.ti -1c
+.RI "void \fBprint_scientific\fP (std::ostream &os) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< T > \fB_val\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::DenseVector< T >"
+Defines a dense vector for use in Finite Element-type computations\&. This class is to basically compliment the \fCDenseMatix\fP class\&. It has additional capabilities over the \fCstd::vector\fP that make it useful for finite elements, particulary for systems of equations\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 36 of file analytic_function\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::DenseVector\fP< T >::\fBDenseVector\fP (const unsigned intn = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Creates a dense vector of dimension \fCn\fP\&. 
+.PP
+Definition at line 254 of file dense_vector\&.h\&.
+.PP
+.nf
+254                                                 :
+255   _val (n, T(0\&.))
+256 {
+257 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBlibMesh::DenseVector\fP< T >::\fBDenseVector\fP (const \fBDenseVector\fP< T2 > &other_vector)\fC [inline]\fP"
+Copy-constructor\&. 
+.PP
+Definition at line 264 of file dense_vector\&.h\&.
+.PP
+References libMesh::DenseVector< T >::_val\&.
+.PP
+.nf
+264                                                                 :
+265   DenseVectorBase<T>()
+266 {
+267   const std::vector<T2> &other_vals = other_vector\&.get_values();
+268 
+269   _val\&.clear();
+270   _val\&.reserve(other_vals\&.size());
+271 
+272   for (unsigned int i=0; i<other_vals\&.size(); i++)
+273     _val\&.push_back(other_vals[i]);
+274 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBlibMesh::DenseVector\fP< T >::\fBDenseVector\fP (const std::vector< T2 > &other_vector)\fC [inline]\fP"
+Copy-constructor, from a \fCstd::vector\fP\&. 
+.PP
+Definition at line 281 of file dense_vector\&.h\&.
+.PP
+.nf
+281                                                               :
+282   _val(other_vector)
+283 {
+284 }
+.fi
+.SS "template<typename T> \fBlibMesh::DenseVector\fP< T >::~\fBDenseVector\fP ()\fC [inline]\fP"
+Destructor\&. Does nothing\&. 
+.PP
+Definition at line 76 of file dense_vector\&.h\&.
+.PP
+.nf
+76 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP< \fBScalarTraits\fP< T2 >::value, void >::type \fBlibMesh::DenseVector\fP< T >::add (const T2factor, const \fBDenseVector\fP< T3 > &vec)\fC [inline]\fP"
+Adds \fCfactor\fP times \fCvec\fP to this vector\&. This should only work if T += T2 * T3 is valid C++ and if T2 is scalar\&. Return type is void 
+.PP
+Definition at line 388 of file dense_vector\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::vector_mult_add()\&.
+.PP
+.nf
+390 {
+391   libmesh_assert_equal_to (this->size(), vec\&.size());
+392 
+393   for (unsigned int i=0; i<this->size(); i++)
+394     (*this)(i) += static_cast<T>(factor)*vec(i);
+395 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBCompareTypes\fP< T, T2 >::supertype \fBlibMesh::DenseVector\fP< T >::dot (const \fBDenseVector\fP< T2 > &vec) const\fC [inline]\fP"
+Evaluate dot product with \fCvec\fP\&. In the complex-valued case, use the complex conjugate of vec\&. 
+.PP
+Definition at line 400 of file dense_vector\&.h\&.
+.PP
+References libMesh::libmesh_conj()\&.
+.PP
+.nf
+401 {
+402   libmesh_assert_equal_to (this->size(), vec\&.size());
+403 
+404   typename CompareTypes<T, T2>::supertype val = 0\&.;
+405 
+406   for (unsigned int i=0; i<this->size(); i++)
+407     val += (*this)(i)*libmesh_conj(vec(i));
+408 
+409   return val;
+410 }
+.fi
+.SS "template<typename T> virtual T \fBlibMesh::DenseVector\fP< T >::el (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i) element of the vector\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::DenseVectorBase< T >\fP\&.
+.PP
+Definition at line 103 of file dense_vector\&.h\&.
+.PP
+.nf
+103 { return (*this)(i); }
+.fi
+.SS "template<typename T> virtual T& \fBlibMesh::DenseVector\fP< T >::el (const unsigned inti)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i) element of the vector as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::DenseVectorBase< T >\fP\&.
+.PP
+Definition at line 108 of file dense_vector\&.h\&.
+.PP
+.nf
+108 { return (*this)(i); }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseVector\fP< T >::get_principal_subvector (unsigned intsub_n, \fBDenseVector\fP< T > &dest) const\fC [inline]\fP"
+Puts the principal subvector of size \fCsub_n\fP (i\&.e\&. first sub_n entries) into \fCdest\fP\&. 
+.PP
+Definition at line 569 of file dense_vector\&.h\&.
+.PP
+.nf
+571 {
+572   libmesh_assert_less_equal ( sub_n, this->size() );
+573 
+574   dest\&.resize(sub_n);
+575   for(unsigned int i=0; i<sub_n; i++)
+576     dest(i) = (*this)(i);
+577 }
+.fi
+.SS "template<typename T> std::vector<T>& \fBlibMesh::DenseVector\fP< T >::get_values ()\fC [inline]\fP"
+Access to the values array\&. This should be used with caution but can be used to speed up code compilation significantly\&. 
+.PP
+Definition at line 230 of file dense_vector\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_lu_back_substitute_lapack(), libMesh::DenseMatrix< T >::_matvec_blas(), libMesh::EpetraVector< T >::add_vector(), and libMesh::FEMContext::pre_fe_reinit()\&.
+.PP
+.nf
+230 { return _val; }
+.fi
+.SS "template<typename T> const std::vector<T>& \fBlibMesh::DenseVector\fP< T >::get_values () const\fC [inline]\fP"
+Access to the values array\&. This should be used with caution but can be used to speed up code compilation significantly\&. 
+.PP
+Definition at line 237 of file dense_vector\&.h\&.
+.PP
+.nf
+237 { return _val; }
+.fi
+.SS "template<typename T > template<typename T2 > \fBCompareTypes\fP< T, T2 >::supertype \fBlibMesh::DenseVector\fP< T >::indefinite_dot (const \fBDenseVector\fP< T2 > &vec) const\fC [inline]\fP"
+Evaluate dot product with \fCvec\fP\&. In the complex-valued case, do not use the complex conjugate of vec\&. 
+.PP
+Definition at line 415 of file dense_vector\&.h\&.
+.PP
+.nf
+416 {
+417   libmesh_assert_equal_to (this->size(), vec\&.size());
+418 
+419   typename CompareTypes<T, T2>::supertype val = 0\&.;
+420 
+421   for (unsigned int i=0; i<this->size(); i++)
+422     val += (*this)(i)*(vec(i));
+423 
+424   return val;
+425 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseVector\fP< T >::l1_norm () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $l_1$-norm of the vector, i\&.e\&. the sum of the absolute values\&. 
+.RE
+.PP
+
+.PP
+Definition at line 525 of file dense_vector\&.h\&.
+.PP
+References std::abs(), and libMesh::Real\&.
+.PP
+.nf
+526 {
+527   Real my_norm = 0\&.;
+528   for (unsigned int i=0; i!=this->size(); i++)
+529     {
+530       my_norm += std::abs((*this)(i));
+531     }
+532   return my_norm;
+533 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseVector\fP< T >::l2_norm () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $l_2$-norm of the vector, i\&.e\&. the square root of the sum of the squares of the elements\&. 
+.RE
+.PP
+
+.PP
+Definition at line 539 of file dense_vector\&.h\&.
+.PP
+References libMesh::TensorTools::norm_sq(), and libMesh::Real\&.
+.PP
+.nf
+540 {
+541   Real my_norm = 0\&.;
+542   for (unsigned int i=0; i!=this->size(); i++)
+543     {
+544       my_norm += TensorTools::norm_sq((*this)(i));
+545     }
+546   return sqrt(my_norm);
+547 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseVector\fP< T >::linfty_norm () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the maximum absolute value of the elements of this vector, which is the $l_\infty$-norm of a vector\&. 
+.RE
+.PP
+
+.PP
+Definition at line 553 of file dense_vector\&.h\&.
+.PP
+References libMesh::TensorTools::norm_sq(), and libMesh::Real\&.
+.PP
+.nf
+554 {
+555   if (!this->size())
+556     return 0\&.;
+557   Real my_norm = TensorTools::norm_sq((*this)(0));
+558 
+559   for (unsigned int i=1; i!=this->size(); i++)
+560     {
+561       Real current = TensorTools::norm_sq((*this)(i));
+562       my_norm = (my_norm > current? my_norm : current);
+563     }
+564   return sqrt(my_norm);
+565 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseVector\fP< T >::max () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the maximum element in the vector\&. In case of complex numbers, this returns the maximum Real part\&. 
+.RE
+.PP
+
+.PP
+Definition at line 508 of file dense_vector\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::libmesh_real(), and libMesh::Real\&.
+.PP
+.nf
+509 {
+510   libmesh_assert (this->size());
+511   Real my_max = libmesh_real((*this)(0));
+512 
+513   for (unsigned int i=1; i!=this->size(); i++)
+514     {
+515       Real current = libmesh_real((*this)(i));
+516       my_max = (my_max > current? my_max : current);
+517     }
+518   return my_max;
+519 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseVector\fP< T >::min () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the minimum element in the vector\&. In case of complex numbers, this returns the minimum Real part\&. 
+.RE
+.PP
+
+.PP
+Definition at line 491 of file dense_vector\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::libmesh_real(), and libMesh::Real\&.
+.PP
+.nf
+492 {
+493   libmesh_assert (this->size());
+494   Real my_min = libmesh_real((*this)(0));
+495 
+496   for (unsigned int i=1; i!=this->size(); i++)
+497     {
+498       Real current = libmesh_real((*this)(i));
+499       my_min = (my_min < current? my_min : current);
+500     }
+501   return my_min;
+502 }
+.fi
+.SS "template<typename T > template<typename T2 > bool \fBlibMesh::DenseVector\fP< T >::operator!= (const \fBDenseVector\fP< T2 > &vec) const\fC [inline]\fP"
+Tests if \fCvec\fP is not exactly equal to this vector\&. 
+.PP
+Definition at line 446 of file dense_vector\&.h\&.
+.PP
+.nf
+447 {
+448   libmesh_assert_equal_to (this->size(), vec\&.size());
+449 
+450   for (unsigned int i=0; i<this->size(); i++)
+451     if ((*this)(i) != vec(i))
+452       return true;
+453 
+454   return false;
+455 }
+.fi
+.SS "template<typename T > T \fBlibMesh::DenseVector\fP< T >::operator() (const unsigned inti) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i) element of the vector\&. 
+.RE
+.PP
+
+.PP
+Definition at line 343 of file dense_vector\&.h\&.
+.PP
+.nf
+344 {
+345   libmesh_assert_less (i, _val\&.size());
+346 
+347   return _val[i];
+348 }
+.fi
+.SS "template<typename T > T & \fBlibMesh::DenseVector\fP< T >::operator() (const unsigned inti)\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the vector as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 354 of file dense_vector\&.h\&.
+.PP
+.nf
+355 {
+356   libmesh_assert_less (i, _val\&.size());
+357 
+358   return _val[i];
+359 }
+.fi
+.SS "template<typename T> \fBDenseVector\fP< T > & \fBlibMesh::DenseVector\fP< T >::operator*= (const Tfactor)\fC [inline]\fP"
+Multiplies every element in the vector by \fCfactor\fP\&. 
+.PP
+Definition at line 375 of file dense_vector\&.h\&.
+.PP
+References libMesh::MeshTools::Modification::scale()\&.
+.PP
+.nf
+376 {
+377   this->scale(factor);
+378   return *this;
+379 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBDenseVector\fP< T > & \fBlibMesh::DenseVector\fP< T >::operator+= (const \fBDenseVector\fP< T2 > &vec)\fC [inline]\fP"
+Adds \fCvec\fP to this vector\&. 
+.PP
+Definition at line 462 of file dense_vector\&.h\&.
+.PP
+.nf
+463 {
+464   libmesh_assert_equal_to (this->size(), vec\&.size());
+465 
+466   for (unsigned int i=0; i<this->size(); i++)
+467     (*this)(i) += vec(i);
+468 
+469   return *this;
+470 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBDenseVector\fP< T > & \fBlibMesh::DenseVector\fP< T >::operator-= (const \fBDenseVector\fP< T2 > &vec)\fC [inline]\fP"
+Subtracts \fCvec\fP from this vector\&. 
+.PP
+Definition at line 477 of file dense_vector\&.h\&.
+.PP
+.nf
+478 {
+479   libmesh_assert_equal_to (this->size(), vec\&.size());
+480 
+481   for (unsigned int i=0; i<this->size(); i++)
+482     (*this)(i) -= vec(i);
+483 
+484   return *this;
+485 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBDenseVector\fP< T > & \fBlibMesh::DenseVector\fP< T >::operator= (const \fBDenseVector\fP< T2 > &other_vector)\fC [inline]\fP"
+Assignment operator\&. 
+.PP
+Definition at line 293 of file dense_vector\&.h\&.
+.PP
+.nf
+294 {
+295   //  _val = other_vector\&._val;
+296 
+297   const std::vector<T2> &other_vals = other_vector\&.get_values();
+298 
+299   _val\&.clear();
+300   _val\&.reserve(other_vals\&.size());
+301 
+302   for (unsigned int i=0; i<other_vals\&.size(); i++)
+303     _val\&.push_back(other_vals[i]);
+304 
+305   return *this;
+306 }
+.fi
+.SS "template<typename T > template<typename T2 > bool \fBlibMesh::DenseVector\fP< T >::operator== (const \fBDenseVector\fP< T2 > &vec) const\fC [inline]\fP"
+Tests if \fCvec\fP is exactly equal to this vector\&. 
+.PP
+Definition at line 430 of file dense_vector\&.h\&.
+.PP
+.nf
+431 {
+432   libmesh_assert_equal_to (this->size(), vec\&.size());
+433 
+434   for (unsigned int i=0; i<this->size(); i++)
+435     if ((*this)(i) != vec(i))
+436       return false;
+437 
+438   return true;
+439 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseVectorBase\fP< T >::print (std::ostream &os) const\fC [inherited]\fP"
+Pretty-print the vector to \fCstdout\fP\&. 
+.PP
+Definition at line 62 of file dense_vector_base\&.C\&.
+.PP
+.nf
+63 {
+64   for (unsigned int i=0; i<this->size(); i++)
+65     os << std::setw(8)
+66        << this->el(i)
+67        << std::endl;
+68 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseVectorBase\fP< T >::print_scientific (std::ostream &os) const\fC [inherited]\fP"
+Prints the entries of the vector with additional decimal places in scientific notation\&. 
+.PP
+Definition at line 30 of file dense_vector_base\&.C\&.
+.PP
+.nf
+31 {
+32 #ifndef LIBMESH_BROKEN_IOSTREAM
+33 
+34   // save the initial format flags
+35   std::ios_base::fmtflags os_flags = os\&.flags();
+36 
+37   // Print the vector entries\&.
+38   for (unsigned int i=0; i<this->size(); i++)
+39     os << std::setw(10)
+40        << std::scientific
+41        << std::setprecision(8)
+42        << this->el(i)
+43        << std::endl;
+44 
+45   // reset the original format flags
+46   os\&.flags(os_flags);
+47 
+48 #else
+49 
+50   // Print the matrix entries\&.
+51   for (unsigned int i=0; i<this->size(); i++)
+52     os << std::setprecision(8)
+53        << this->el(i)
+54        << std::endl;
+55 
+56 #endif
+57 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseVector\fP< T >::resize (const unsigned intn)\fC [inline]\fP"
+Resize the vector\&. Sets all elements to 0\&. 
+.PP
+Definition at line 321 of file dense_vector\&.h\&.
+.PP
+References libMesh::zero\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_cholesky_back_substitute(), libMesh::DenseMatrix< T >::_lu_back_substitute(), libMesh::DenseMatrix< T >::_svd_lapack(), libMesh::HPCoarsenTest::add_projection(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::DGFEMContext::neighbor_side_fe_reinit(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), libMesh::FEMContext::pre_fe_reinit(), libMesh::HPCoarsenTest::select_refinement(), libMesh::DenseMatrix< T >::vector_mult(), libMesh::DenseMatrix< T >::vector_mult_add(), and libMesh::DenseMatrix< T >::vector_mult_transpose()\&.
+.PP
+.nf
+322 {
+323   _val\&.resize(n);
+324 
+325   zero();
+326 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseVector\fP< T >::scale (const Tfactor)\fC [inline]\fP"
+Multiplies every element in the vector by \fCfactor\fP\&. 
+.PP
+Definition at line 365 of file dense_vector\&.h\&.
+.PP
+.nf
+366 {
+367   for (unsigned int i=0; i<_val\&.size(); i++)
+368     _val[i] *= factor;
+369 }
+.fi
+.SS "template<typename T> virtual unsigned int \fBlibMesh::DenseVector\fP< T >::size () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the size of the vector\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::DenseVectorBase< T >\fP\&.
+.PP
+Definition at line 81 of file dense_vector\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_lu_back_substitute(), libMesh::DenseMatrix< T >::_matvec_blas(), libMesh::HPCoarsenTest::add_projection(), libMesh::DistributedVector< T >::add_vector(), libMesh::LaspackVector< T >::add_vector(), libMesh::EigenSparseVector< T >::add_vector(), libMesh::EpetraVector< T >::add_vector(), libMesh::PetscVector< T >::add_vector(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DofMap::constrain_element_dyad_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::constrain_element_vector(), libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), libMesh::DofMap::heterogenously_constrain_element_vector(), libMesh::LaspackVector< T >::insert(), libMesh::DistributedVector< T >::insert(), libMesh::EigenSparseVector< T >::insert(), libMesh::EpetraVector< T >::insert(), libMesh::PetscVector< T >::insert(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::ConstFunction< Output >::operator()(), libMesh::ConstFEMFunction< Output >::operator()(), libMesh::WrappedFunction< Output >::operator()(), libMesh::ParsedFunction< Output >::operator()(), libMesh::HPCoarsenTest::select_refinement(), libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), libMesh::DenseMatrix< T >::vector_mult(), libMesh::DenseMatrix< T >::vector_mult_add(), and libMesh::DenseMatrix< T >::vector_mult_transpose()\&.
+.PP
+.nf
+81                                     {
+82     return libmesh_cast_int<unsigned int>(_val\&.size());
+83   }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseVector\fP< T >::swap (\fBDenseVector\fP< T > &other_vector)\fC [inline]\fP"
+STL-like swap method 
+.PP
+Definition at line 312 of file dense_vector\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+313 {
+314   _val\&.swap(other_vector\&._val);
+315 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseVector\fP< T >::zero ()\fC [inline]\fP, \fC [virtual]\fP"
+Set every element in the vector to 0\&. 
+.PP
+Implements \fBlibMesh::DenseVectorBase< T >\fP\&.
+.PP
+Definition at line 332 of file dense_vector\&.h\&.
+.PP
+Referenced by libMesh::HPCoarsenTest::add_projection(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::FEMSystem::numerical_jacobian(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), libMesh::HPCoarsenTest::select_refinement(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+333 {
+334   std::fill (_val\&.begin(),
+335              _val\&.end(),
+336              T(0\&.));
+337 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> std::vector<T> \fBlibMesh::DenseVector\fP< T >::_val\fC [private]\fP"
+The actual data values, stored as a 1D array\&. 
+.PP
+Definition at line 244 of file dense_vector\&.h\&.
+.PP
+Referenced by libMesh::DenseVector< T >::DenseVector(), libMesh::DenseVector< Number >::get_values(), and libMesh::DenseVector< Number >::size()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

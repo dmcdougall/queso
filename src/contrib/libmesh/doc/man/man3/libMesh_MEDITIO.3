@@ -1,0 +1,363 @@
+.TH "libMesh::MEDITIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MEDITIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <medit_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMEDITIO\fP (const \fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "\fBMEDITIO\fP (const \fBMeshBase\fP &, unsigned int c)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "bool & \fBbinary\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBwrite_ascii\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_binary\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBscalar_idx\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes in the mesh format used by the MEdit visualization tool developed in the Gamma Project at INRIA Roquencourt\&. For a full description of the mesh format and to obtain the MEdit software see the \fCMEdit home page\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+F\&. Prill, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 51 of file medit_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MEDITIO::MEDITIO (const \fBMeshBase\fP &mesh_in)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. 
+.PP
+Definition at line 111 of file medit_io\&.h\&.
+.PP
+.nf
+111                                          :
+112   MeshOutput<MeshBase> (mesh_in),
+113   _binary (false)
+114 {
+115 }
+.fi
+.SS "libMesh::MEDITIO::MEDITIO (const \fBMeshBase\fP &mesh_in, unsigned intc)\fC [inline]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. and the desired scalar index for mesh colouring\&. MEdit seems to understand only one scalar value\&. 
+.PP
+Definition at line 118 of file medit_io\&.h\&.
+.PP
+.nf
+118                                                          :
+119   MeshOutput<MeshBase> (mesh_in),
+120   _binary    (false),
+121   scalar_idx (c)
+122 {
+123 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "bool & libMesh::MEDITIO::binary ()\fC [inline]\fP"
+Flag indicating whether or not to write a binary file 
+.PP
+Definition at line 127 of file medit_io\&.h\&.
+.PP
+References _binary\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+128 {
+129   return _binary;
+130 }
+.fi
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::MEDITIO::write (const std::string &fname)\fC [virtual]\fP"
+This method implements writing a mesh to a specified '\&.mesh' file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 37 of file medit_io\&.C\&.
+.PP
+References binary(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::processor_id(), and write_ascii()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+38 {
+39   if (this->mesh()\&.processor_id() == 0)
+40     if (!this->binary())
+41       this->write_ascii  (fname);
+42 }
+.fi
+.SS "void libMesh::MEDITIO::write_ascii (const std::string &fname, const std::vector< \fBNumber\fP > *vec = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)\fC [private]\fP, \fC [virtual]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write an ASCII file\&. 
+.PP
+Definition at line 61 of file medit_io\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), end, libMesh::MeshTools::Generation::Private::idx(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::n_nodes(), libMesh::n_vars, libMesh::MeshBase::point(), libMesh::QUAD4, libMesh::QUAD9, scalar_idx, libMesh::TET4, and libMesh::TRI3\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+64 {
+65   // Current lacks in implementation:
+66   //  (i)   only 3D meshes\&.
+67   //  (ii)  only QUAD4, TRI3, TET4 elements, others are omitted !
+68   //  (iii) no distinction between materials\&.
+69   //  (iv)  no vector output, just first scalar as output
+70 
+71   // libmesh_assert three dimensions (should be extended later)
+72   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.mesh_dimension(), 3);
+73 
+74   // Open the output file stream
+75   std::ofstream out_stream (fname\&.c_str());
+76 
+77   // Make sure it opened correctly
+78   if (!out_stream\&.good())
+79     libmesh_file_error(fname\&.c_str());
+80 
+81   // Get a reference to the mesh
+82   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+83 
+84   // Begin interfacing with the MEdit data file
+85   {
+86     // header:
+87     out_stream << "MeshVersionFormatted  1\n";
+88     out_stream << "Dimension  3\n";
+89     out_stream << "# Mesh generated by libmesh\n\n";
+90 
+91     // write the nodes:
+92     out_stream << "# Set of mesh vertices\n";
+93     out_stream << "Vertices\n";
+94     out_stream << the_mesh\&.n_nodes() << "\n";
+95 
+96     for (unsigned int v=0; v<the_mesh\&.n_nodes(); v++)
+97       out_stream << the_mesh\&.point(v)(0) << " " << the_mesh\&.point(v)(1) << " " << the_mesh\&.point(v)(2) << " 0\n";
+98   }
+99 
+100   {
+101     // write the connectivity:
+102     out_stream << "\n# Set of Polys\n\n";
+103 
+104     // count occurrences of output elements:
+105     int n_tri3  = 0;
+106     int n_quad4 = 0;
+107     int n_tet4  = 0;
+108 
+109     {
+110       MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+111       const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+112 
+113       for ( ; it != end; ++it)
+114         {
+115           if ((*it)->type() == TRI3)  n_tri3++;
+116           if ((*it)->type() == QUAD4) n_quad4++;
+117           if ((*it)->type() == QUAD9) n_quad4+=4; // (QUAD9 is written as 4 QUAD4\&.)
+118           if ((*it)->type() == TET4)  n_tet4++;
+119         } // for
+120     }
+121 
+122     // First: write out TRI3 elements:
+123     out_stream << "Triangles\n";
+124     out_stream << n_tri3 << "\n";
+125 
+126     {
+127       MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+128       const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+129 
+130       for ( ; it != end; ++it)
+131         if ((*it)->type() == TRI3)
+132           out_stream << (*it)->node(0)+1  << " " << (*it)->node(1)+1  << " " << (*it)->node(2)+1  << " 0\n";
+133     }
+134 
+135     // Second: write out QUAD4 elements:
+136     out_stream << "Quadrilaterals\n";
+137     out_stream << n_quad4 << "\n";
+138 
+139     {
+140       MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+141       const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+142 
+143       for ( ; it != end; ++it)
+144         if ((*it)->type() == QUAD4)
+145           {
+146             out_stream << (*it)->node(0)+1  << " "
+147                        << (*it)->node(1)+1  << " "
+148                        << (*it)->node(2)+1  << " "
+149                        << (*it)->node(3)+1  <<" 0\n";
+150           } // if
+151         else if ((*it)->type() == QUAD9)
+152           {
+153             out_stream << (*it)->node(0)+1  << " "
+154                        << (*it)->node(4)+1  << " "
+155                        << (*it)->node(8)+1  << " "
+156                        << (*it)->node(7)+1  <<" 0\n";
+157             out_stream << (*it)->node(7)+1  << " "
+158                        << (*it)->node(8)+1  << " "
+159                        << (*it)->node(6)+1  << " "
+160                        << (*it)->node(3)+1  <<" 0\n";
+161             out_stream << (*it)->node(4)+1  << " "
+162                        << (*it)->node(1)+1  << " "
+163                        << (*it)->node(5)+1  << " "
+164                        << (*it)->node(8)+1  <<" 0\n";
+165             out_stream << (*it)->node(8)+1  << " "
+166                        << (*it)->node(5)+1  << " "
+167                        << (*it)->node(2)+1  << " "
+168                        << (*it)->node(6)+1  <<" 0\n";
+169           } // if
+170     }
+171 
+172 
+173     // Third: write out TET4 elements:
+174     out_stream << "Tetrahedra\n";
+175     out_stream << n_tet4 << "\n";
+176 
+177     {
+178       MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+179       const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+180 
+181       for ( ; it != end; ++it)
+182         if ((*it)->type() == TET4)
+183           {
+184             out_stream << (*it)->node(0)+1  << " "
+185                        << (*it)->node(1)+1  << " "
+186                        << (*it)->node(2)+1  << " "
+187                        << (*it)->node(3)+1  <<" 0\n";
+188           } // if
+189     }
+190 
+191   }
+192   // end of the out file
+193   out_stream << '\n' << "# end of file\n";
+194 
+195   // optionally write the data
+196   if ((solution_names != NULL) &&
+197       (vec != NULL))
+198     {
+199       // Open the "\&.bb" file stream
+200       std::size_t idx = fname\&.find_last_of("\&.");
+201       std::string bbname = fname\&.substr(0,idx) + "\&.bb";
+202 
+203       std::ofstream bbout (bbname\&.c_str());
+204 
+205       // Make sure it opened correctly
+206       if (!bbout\&.good())
+207         libmesh_file_error(bbname\&.c_str());
+208 
+209       // Header: 3: 3D mesh, 1: scalar output, 2: node-indexed
+210       const std::size_t n_vars = solution_names->size();
+211       bbout << "3 1 " << the_mesh\&.n_nodes() << " 2\n";
+212       for (dof_id_type n=0; n<the_mesh\&.n_nodes(); n++)
+213         bbout << std::setprecision(10) << (*vec)[n*n_vars + scalar_idx] << " ";
+214       bbout << "\n";
+215     } // endif
+216 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::MEDITIO::write_nodal_data (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)\fC [virtual]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented from \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 46 of file medit_io\&.C\&.
+.PP
+References binary(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::processor_id(), libMesh::START_LOG(), libMesh::STOP_LOG(), and write_ascii()\&.
+.PP
+.nf
+49 {
+50   START_LOG("write_nodal_data()", "MEDITIO");
+51 
+52   if (this->mesh()\&.processor_id() == 0)
+53     if (!this->binary())
+54       this->write_ascii  (fname, &soln, &names);
+55 
+56   STOP_LOG("write_nodal_data()", "MEDITIO");
+57 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::MEDITIO::_binary\fC [private]\fP"
+Flag to write binary data\&. 
+.PP
+Definition at line 101 of file medit_io\&.h\&.
+.PP
+Referenced by binary()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "unsigned int libMesh::MEDITIO::scalar_idx\fC [private]\fP"
+
+.PP
+Definition at line 103 of file medit_io\&.h\&.
+.PP
+Referenced by write_ascii()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,558 @@
+.TH "libMesh::TetGenIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TetGenIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tetgen_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP, and \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTetGenIO\fP (\fBMeshBase\fP &\fBmesh\fP, \fBMeshData\fP *mesh_data=NULL)"
+.br
+.ti -1c
+.RI "\fBTetGenIO\fP (const \fBMeshBase\fP &\fBmesh\fP, \fBMeshData\fP *mesh_data=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< std::vector< \fBReal\fP > > \fBnode_attributes\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector< \fBReal\fP > > \fBelement_attributes\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBread_nodes_and_elem\fP (std::istream &node_stream, std::istream &ele_stream)"
+.br
+.ti -1c
+.RI "void \fBnode_in\fP (std::istream &node_stream)"
+.br
+.ti -1c
+.RI "void \fBelement_in\fP (std::istream &ele_stream)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< \fBdof_id_type\fP, 
+.br
+\fBdof_id_type\fP > \fB_assign_nodes\fP"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fB_num_nodes\fP"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fB_num_elements\fP"
+.br
+.ti -1c
+.RI "\fBMeshData\fP * \fB_mesh_data\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements reading and writing meshes in the TetGen format\&. Format description: cf\&. \fCTetGen home page\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file tetgen_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TetGenIO::TetGenIO (\fBMeshBase\fP &mesh, \fBMeshData\fP *mesh_data = \fCNULL\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a writeable reference to a mesh object\&. This is the constructor required to read a mesh\&. 
+.PP
+Definition at line 156 of file tetgen_io\&.h\&.
+.PP
+.nf
+156                                                        :
+157   MeshInput<MeshBase> (mesh),
+158   MeshOutput<MeshBase>(mesh),
+159   _mesh_data(mesh_data)
+160 {
+161 }
+.fi
+.SS "libMesh::TetGenIO::TetGenIO (const \fBMeshBase\fP &mesh, \fBMeshData\fP *mesh_data = \fCNULL\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a read-only reference to a mesh object\&. This is the constructor required to write a mesh\&. 
+.PP
+Definition at line 166 of file tetgen_io\&.h\&.
+.PP
+.nf
+166                                                              :
+167   MeshOutput<MeshBase>(mesh),
+168   _mesh_data(mesh_data)
+169 {
+170 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "void libMesh::TetGenIO::element_in (std::istream &ele_stream)\fC [private]\fP"
+Method reads elements and stores them in vector<Elem*> \fCelements\fP in the same order as they come in\&. Within \fC\fBTetGenMeshInterface\fP\fP, element labels are ignored, but \fC\fBMeshData\fP\fP takes care of such things (if active)\&. 
+.PP
+Definition at line 189 of file tetgen_io\&.C\&.
+.PP
+References _assign_nodes, _mesh_data, _num_elements, libMesh::MeshData::add_foreign_elem_id(), element_attributes, libMesh::err, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), n_nodes, and libMesh::resize()\&.
+.PP
+Referenced by read_nodes_and_elem()\&.
+.PP
+.nf
+190 {
+191   // Check input buffer
+192   libmesh_assert (ele_stream\&.good());
+193 
+194   // Get a reference to the mesh
+195   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+196 
+197   // Read the elements from the ele_stream (*\&.ele file)\&.
+198   unsigned int element_lab=0, n_nodes=0, nAttri=0;
+199 
+200   ele_stream >> _num_elements // Read the number of tetrahedrons from the stream\&.
+201              >> n_nodes       // Read the number of nodes per tetrahedron from the stream (defaults to 4)\&.
+202              >> nAttri;       // Read the number of attributes from stream\&.
+203 
+204   // Vector that assigns element nodes to their correct position\&.
+205   // TetGen is normaly 0-based
+206   // (right now this is strictly not necessary since it is the identity map,
+207   //  but in the future TetGen could change their numbering scheme\&.)
+208   static const unsigned int assign_elm_nodes[] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+209 
+210   // If present, make room for element attributes to be stored\&.
+211   this->element_attributes\&.resize(nAttri);
+212   for (unsigned i=0; i<nAttri; ++i)
+213     this->element_attributes[i]\&.resize(_num_elements);
+214 
+215   for (dof_id_type i=0; i<_num_elements; i++)
+216     {
+217       libmesh_assert (ele_stream\&.good());
+218 
+219       // TetGen only supports Tet4 and Tet10 elements\&.
+220       Elem* elem;
+221 
+222       if (n_nodes==4)
+223         elem = new Tet4;
+224 
+225       else if (n_nodes==10)
+226         elem = new Tet10;
+227 
+228       else
+229         {
+230           libMesh::err << "Elements with " << n_nodes
+231                        << " nodes are not supported in the LibMesh tetgen module\n";
+232           libmesh_error();
+233         }
+234       elem->set_id(i);
+235 
+236       mesh\&.add_elem (elem);
+237 
+238       libmesh_assert(elem);
+239       libmesh_assert_equal_to (elem->n_nodes(), n_nodes);
+240 
+241       // Read the element label
+242       ele_stream >> element_lab;
+243 
+244       // Add the element to the mesh &
+245       // tell the MeshData object the foreign element id
+246       if (this->_mesh_data != NULL)
+247         this->_mesh_data->add_foreign_elem_id (elem, element_lab);
+248 
+249       // Read node labels
+250       for (dof_id_type j=0; j<n_nodes; j++)
+251         {
+252           dof_id_type node_label;
+253           ele_stream >> node_label;
+254 
+255           // Assign node to element
+256           elem->set_node(assign_elm_nodes[j]) =
+257             mesh\&.node_ptr(_assign_nodes[node_label]);
+258         }
+259 
+260       // Read and store attributes from the stream\&.
+261       for (unsigned int j=0; j<nAttri; j++)
+262         ele_stream >> this->element_attributes[j][i];
+263     }
+264 }
+.fi
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::TetGenIO::node_in (std::istream &node_stream)\fC [private]\fP"
+Method reads nodes from \fCnode_stream\fP and stores them in vector<Node*> \fCnodes\fP in the order they come in\&. The original node labels are being stored in the map \fC_assign_nodes\fP in order to assign the elements to the right nodes later\&. In addition, provided it is active, the \fC\fBMeshData\fP\fP gets to know the node id from the file, too\&. 
+.PP
+Definition at line 126 of file tetgen_io\&.C\&.
+.PP
+References _assign_nodes, _mesh_data, _num_nodes, libMesh::MeshData::add_foreign_node_id(), libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), node_attributes, libMesh::Real, and libMesh::resize()\&.
+.PP
+Referenced by read_nodes_and_elem()\&.
+.PP
+.nf
+127 {
+128   // Check input buffer
+129   libmesh_assert (node_stream\&.good());
+130 
+131   // Get a reference to the mesh
+132   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+133 
+134   unsigned int dimension=0, nAttributes=0, BoundaryMarkers=0;
+135 
+136   node_stream >> _num_nodes       // Read the number of nodes from the stream
+137               >> dimension        // Read the dimension from the stream
+138               >> nAttributes      // Read the number of attributes from stream
+139               >> BoundaryMarkers; // Read if or not boundary markers are included in *\&.node (0 or 1)
+140 
+141   // Read the nodal coordinates from the node_stream (*\&.node file)\&.
+142   unsigned int node_lab=0;
+143   Point xyz;
+144   Real dummy;
+145 
+146   // If present, make room for node attributes to be stored\&.
+147   this->node_attributes\&.resize(nAttributes);
+148   for (unsigned i=0; i<nAttributes; ++i)
+149     this->node_attributes[i]\&.resize(_num_nodes);
+150 
+151 
+152   for (unsigned int i=0; i<_num_nodes; i++)
+153     {
+154       // Check input buffer
+155       libmesh_assert (node_stream\&.good());
+156 
+157       node_stream >> node_lab  // node number
+158                   >> xyz(0)    // x-coordinate value
+159                   >> xyz(1)    // y-coordinate value
+160                   >> xyz(2);   // z-coordinate value
+161 
+162       // Read and store attributes from the stream\&.
+163       for (unsigned int j=0; j<nAttributes; j++)
+164         node_stream >> node_attributes[j][i];
+165 
+166       // Read (and discard) boundary marker if BoundaryMarker=1\&.
+167       // TODO: should we store this somehow?
+168       if (BoundaryMarkers == 1)
+169         node_stream >> dummy;
+170 
+171       // Store the new position of the node under its label\&.
+172       //_assign_nodes\&.insert (std::make_pair(node_lab,i));
+173       _assign_nodes[node_lab] = i;
+174 
+175       // do this irrespective whether MeshData exists
+176       Node* newnode = mesh\&.add_point(xyz, i);
+177 
+178       // Add node to the nodes vector &
+179       // tell the MeshData object the foreign node id\&.
+180       if (this->_mesh_data != NULL)
+181         this->_mesh_data->add_foreign_node_id (newnode, node_lab);
+182     }
+183 }
+.fi
+.SS "void libMesh::TetGenIO::read (const std::string &name)\fC [virtual]\fP"
+This method implements reading a mesh from a specified file in TetGen format\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 34 of file tetgen_io\&.C\&.
+.PP
+References libMesh::err, libMesh::MeshInput< MT >::mesh(), libMesh::Quality::name(), libMesh::out, libMesh::processor_id(), read_nodes_and_elem(), and libMesh::MeshInput< MeshBase >::skip_comment_lines()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+35 {
+36   // This is a serial-only process for now;
+37   // the Mesh should be read on processor 0 and
+38   // broadcast later
+39   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.processor_id(), 0);
+40 
+41   std::string name_node, name_ele, dummy;
+42 
+43   // tetgen only works in 3D
+44   MeshInput<MeshBase>::mesh()\&.set_mesh_dimension(3);
+45 
+46 #if LIBMESH_DIM < 3
+47   libMesh::err << "Cannot open dimension 3 mesh file when configured without 3D support\&." <<
+48     std::endl;
+49   libmesh_error();
+50 #endif
+51 
+52   // Check name for *\&.node or *\&.ele extension\&.
+53   // Set std::istream for node_stream and ele_stream\&.
+54   //
+55   if (name\&.rfind("\&.node") < name\&.size())
+56     {
+57       name_node            = name;
+58       dummy                = name;
+59       std::size_t position = dummy\&.rfind("\&.node");
+60       name_ele             = dummy\&.replace(position, 5, "\&.ele");
+61     }
+62   else if (name\&.rfind("\&.ele") < name\&.size())
+63     {
+64       name_ele = name;
+65       dummy    = name;
+66       std::size_t position = dummy\&.rfind("\&.ele");
+67       name_node    = dummy\&.replace(position, 4, "\&.node");
+68     }
+69   else
+70     {
+71       libMesh::err << "ERROR: Unrecognized file name: "
+72                    << name << std::endl;
+73       libmesh_error();
+74     }
+75 
+76 
+77 
+78   // Set the streams from which to read in
+79   std::ifstream node_stream (name_node\&.c_str());
+80   std::ifstream ele_stream  (name_ele\&.c_str());
+81 
+82   if ( !node_stream\&.good() || !ele_stream\&.good() )
+83     {
+84       libMesh::err << "ERROR: One or both Input file(s) not good\&." << std::endl
+85                    << "Error checking files "
+86                    << name_node << " and "
+87                    << name_ele  << std::endl;
+88       libmesh_error();
+89     }
+90   libMesh::out<< "TetGenIO found the tetgen files to read " <<std::endl;
+91 
+92   // Skip the comment lines at the beginning
+93   this->skip_comment_lines (node_stream, '#');
+94   this->skip_comment_lines (ele_stream, '#');
+95 
+96   // Read the nodes and elements from the streams
+97   this->read_nodes_and_elem (node_stream, ele_stream);
+98   libMesh::out<< "TetGenIO read in nodes and elements " <<std::endl;
+99 }
+.fi
+.SS "void libMesh::TetGenIO::read_nodes_and_elem (std::istream &node_stream, std::istream &ele_stream)\fC [private]\fP"
+Reads a mesh (nodes & elements) from the file provided through \fCnode_stream\fP and ele_stream\&. 
+.PP
+Definition at line 103 of file tetgen_io\&.C\&.
+.PP
+References _assign_nodes, _mesh_data, _num_elements, _num_nodes, libMesh::MeshData::close_foreign_id_maps(), element_in(), and node_in()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+105 {
+106   _num_nodes    = 0;
+107   _num_elements = 0;
+108 
+109   // Read all the datasets\&.
+110   this->node_in    (node_stream);
+111   this->element_in (ele_stream);
+112 
+113   // Tell the MeshData object that we are finished
+114   // reading data\&.
+115   if (this->_mesh_data != NULL)
+116     this->_mesh_data->close_foreign_id_maps ();
+117 
+118   // some more clean-up
+119   _assign_nodes\&.clear();
+120 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by read(), and libMesh::UCDIO::read_implementation()\&.
+.SS "void libMesh::TetGenIO::write (const std::string &fname)\fC [virtual]\fP"
+This method implements writing a mesh to a specified '\&.poly' file\&. '\&.poly' files defines so called Piecewise \fBLinear\fP Complex (PLC)\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 271 of file tetgen_io\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), end, libMesh::err, libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), and libMesh::MeshBase::point()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+272 {
+273   // libmesh_assert three dimensions (should be extended later)
+274   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.mesh_dimension(), 3);
+275 
+276   if (!(fname\&.rfind("\&.poly") < fname\&.size()))
+277     {
+278       libMesh::err << "ERROR: Unrecognized file name: "
+279                    << fname << std::endl;
+280       libmesh_error();
+281     }
+282 
+283   // Open the output file stream
+284   std::ofstream out_stream (fname\&.c_str());
+285 
+286   // Make sure it opened correctly
+287   if (!out_stream\&.good())
+288     libmesh_file_error(fname\&.c_str());
+289 
+290   // Get a reference to the mesh
+291   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+292 
+293   // Begin interfacing with the \&.poly file
+294   {
+295     // header:
+296     out_stream << "# poly file output generated by libmesh\n"
+297                << mesh\&.n_nodes() << " 3 0 0\n";
+298 
+299     // write the nodes:
+300     for (dof_id_type v=0; v<mesh\&.n_nodes(); v++)
+301       out_stream << v << " "
+302                  << mesh\&.point(v)(0) << " "
+303                  << mesh\&.point(v)(1) << " "
+304                  << mesh\&.point(v)(2) << "\n";
+305   }
+306 
+307   {
+308     // write the connectivity:
+309     out_stream << "# Facets:\n"
+310                << mesh\&.n_elem() << " 0\n";
+311 
+312     //     const_active_elem_iterator       it (mesh\&.elements_begin());
+313     //     const const_active_elem_iterator end(mesh\&.elements_end());
+314 
+315     MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+316     const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+317 
+318     for ( ; it != end; ++it)
+319       out_stream << "1\n3 " // no\&. of facet polygons
+320         //  << (*it)->n_nodes() << " "
+321                  << (*it)->node(0)   << " "
+322                  << (*it)->node(1)   << " "
+323                  << (*it)->node(2)   << "\n";
+324   }
+325 
+326   // end of the file
+327   out_stream << "0\n"; // no holes output!
+328   out_stream << "\n\n# end of file\n";
+329 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::map<\fBdof_id_type\fP,\fBdof_id_type\fP> libMesh::TetGenIO::_assign_nodes\fC [private]\fP"
+stores new positions of nodes\&. Used when reading\&. 
+.PP
+Definition at line 132 of file tetgen_io\&.h\&.
+.PP
+Referenced by element_in(), node_in(), and read_nodes_and_elem()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "\fBMeshData\fP* libMesh::TetGenIO::_mesh_data\fC [private]\fP"
+A pointer to the \fBMeshData\fP object you would like to use\&. with this \fBTetGenIO\fP object\&. Can be NULL\&. 
+.PP
+Definition at line 148 of file tetgen_io\&.h\&.
+.PP
+Referenced by element_in(), node_in(), and read_nodes_and_elem()\&.
+.SS "\fBdof_id_type\fP libMesh::TetGenIO::_num_elements\fC [private]\fP"
+total number of elements\&. Primarily used when reading\&. 
+.PP
+Definition at line 142 of file tetgen_io\&.h\&.
+.PP
+Referenced by element_in(), and read_nodes_and_elem()\&.
+.SS "\fBdof_id_type\fP libMesh::TetGenIO::_num_nodes\fC [private]\fP"
+total number of nodes\&. Primarily used when reading\&. 
+.PP
+Definition at line 137 of file tetgen_io\&.h\&.
+.PP
+Referenced by node_in(), and read_nodes_and_elem()\&.
+.SS "std::vector<std::vector<\fBReal\fP> > libMesh::TetGenIO::element_attributes"
+Data structure to hold element attributes read in from file\&. What you do with these is up to you! 
+.PP
+Definition at line 91 of file tetgen_io\&.h\&.
+.PP
+Referenced by element_in()\&.
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+.SS "std::vector<std::vector<\fBReal\fP> > libMesh::TetGenIO::node_attributes"
+Data structure to hold node attributes read in from file\&. What you do with these is up to you! 
+.PP
+Definition at line 85 of file tetgen_io\&.h\&.
+.PP
+Referenced by node_in()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

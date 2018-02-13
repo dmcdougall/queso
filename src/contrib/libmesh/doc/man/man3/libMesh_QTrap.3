@@ -1,0 +1,1116 @@
+.TH "libMesh::QTrap" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::QTrap \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <quadrature_trap\&.h>\fP
+.PP
+Inherits \fBlibMesh::QBase\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBQTrap\fP (const unsigned int _dim)"
+.br
+.ti -1c
+.RI "\fB~QTrap\fP ()"
+.br
+.ti -1c
+.RI "\fBQuadratureType\fP \fBtype\fP () const "
+.br
+.ti -1c
+.RI "\fBElemType\fP \fBget_elem_type\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBget_p_level\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_points\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBget_dim\fP () const "
+.br
+.ti -1c
+.RI "const std::vector< \fBPoint\fP > & \fBget_points\fP () const "
+.br
+.ti -1c
+.RI "std::vector< \fBPoint\fP > & \fBget_points\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< \fBReal\fP > & \fBget_weights\fP () const "
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > & \fBget_weights\fP ()"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBqp\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBw\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBElemType\fP \fBtype\fP=\fBINVALID_ELEM\fP, unsigned int p_level=0)"
+.br
+.ti -1c
+.RI "\fBOrder\fP \fBget_order\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_info\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "void \fBscale\fP (std::pair< \fBReal\fP, \fBReal\fP > old_range, std::pair< \fBReal\fP, \fBReal\fP > new_range)"
+.br
+.ti -1c
+.RI "virtual bool \fBshapes_need_reinit\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBQBase\fP > \fBbuild\fP (const std::string &name, const unsigned int _dim, const \fBOrder\fP _order=\fBINVALID_ORDER\fP)"
+.br
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBQBase\fP > \fBbuild\fP (const \fBQuadratureType\fP _qt, const unsigned int _dim, const \fBOrder\fP _order=\fBINVALID_ORDER\fP)"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBallow_rules_with_negative_weights\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBinit_0D\fP (const \fBElemType\fP \fBtype\fP=\fBINVALID_ELEM\fP, unsigned int p_level=0)"
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBlibMesh::err\fP<< 'ERROR: Seems 
+.br
+as \fBif\fP this quadrature rule'
+.br
+<< std::endl<< ' is not 
+.br
+implemented \fBfor\fP 2D\&.'<< std::endl;libmesh_error();}#endif virtual void init_3D(const ElemType, unsigned int=0)#ifndef DEBUG{}#else{libMesh::err<< 'ERROR: Seems as if this quadrature rule'<< std::endl<< ' is not implemented for 3D\&.'<< std::endl;libmesh_error();}#endif void tensor_product_quad(const QBase &q1D);void tensor_product_hex(const QBase &q1D);void tensor_product_prism(const QBase &q1D, const QBase &q2D);const unsigned int _dim;const Order _order;ElemType _type;unsigned int _p_level;std::vector< Point > \fB_points\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fB_weights\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinit_1D\fP (const \fBElemType\fP _type=\fBINVALID_ELEM\fP, unsigned int p_level=0)"
+.br
+.ti -1c
+.RI "void \fBinit_2D\fP (const \fBElemType\fP _type=\fBINVALID_ELEM\fP, unsigned int p_level=0)"
+.br
+.ti -1c
+.RI "void \fBinit_3D\fP (const \fBElemType\fP _type=\fBINVALID_ELEM\fP, unsigned int p_level=0)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implemenets trapezoidal quadratue\&. Sometimes also known as Newton-Cotes quadrature with two points\&. These rules sample at the corners and will integrate linears exactly\&. 
+.PP
+Definition at line 41 of file quadrature_trap\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::QTrap::QTrap (const unsigned int_dim)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Declares the dimension of the quadrature rule\&. 
+.PP
+Definition at line 75 of file quadrature_trap\&.h\&.
+.PP
+References libMesh::EDGE2, and libMesh::QBase::init()\&.
+.PP
+.nf
+75                                  : QBase(d,FIRST)
+76 {
+77   // explicitly call the init function in 1D since the
+78   // other tensor-product rules require this one\&.
+79   // note that EDGE will not be used internally, however
+80   // if we called the function with INVALID_ELEM it would try to
+81   // be smart and return, thinking it had already done the work\&.
+82   if (_dim == 1)
+83     init(EDGE2);
+84 }
+.fi
+.SS "libMesh::QTrap::~QTrap ()\fC [inline]\fP"
+Destructor\&. Empty\&. 
+.PP
+Definition at line 54 of file quadrature_trap\&.h\&.
+.PP
+.nf
+54 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBAutoPtr\fP< \fBQBase\fP > libMesh::QBase::build (const std::string &name, const unsigned int_dim, const \fBOrder\fP_order = \fC\fBINVALID_ORDER\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a specific quadrature rule, identified through the \fCname\fP string\&. An \fCAutoPtr<QBase>\fP is returned to prevent a memory leak\&. This way the user need not remember to delete the object\&. Enables run-time decision of the quadrature rule\&. The input parameter \fCname\fP must be mappable through the \fC\fBUtility::string_to_enum<>()\fP\fP function\&. 
+.PP
+Definition at line 40 of file quadrature_build\&.C\&.
+.PP
+Referenced by libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::attach_quadrature_rule()\&.
+.PP
+.nf
+43 {
+44   return QBase::build (Utility::string_to_enum<QuadratureType> (type),
+45                        _dim,
+46                        _order);
+47 }
+.fi
+.SS "\fBAutoPtr\fP< \fBQBase\fP > libMesh::QBase::build (const \fBQuadratureType\fP_qt, const unsigned int_dim, const \fBOrder\fP_order = \fC\fBINVALID_ORDER\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a specific quadrature rule, identified through the \fCQuadratureType\fP\&. An \fCAutoPtr<QBase>\fP is returned to prevent a memory leak\&. This way the user need not remember to delete the object\&. Enables run-time decision of the quadrature rule\&. 
+.PP
+Definition at line 51 of file quadrature_build\&.C\&.
+.PP
+References libMesh::err, libMesh::FIRST, libMesh::FORTYTHIRD, libMesh::out, libMesh::QCLOUGH, libMesh::QGAUSS, libMesh::QGRID, libMesh::QGRUNDMANN_MOLLER, libMesh::QJACOBI_1_0, libMesh::QJACOBI_2_0, libMesh::QMONOMIAL, libMesh::QSIMPSON, libMesh::QTRAP, libMesh::THIRD, and libMesh::TWENTYTHIRD\&.
+.PP
+.nf
+54 {
+55   switch (_qt)
+56     {
+57 
+58     case QCLOUGH:
+59       {
+60 #ifdef DEBUG
+61         if (_order > TWENTYTHIRD)
+62           {
+63             libMesh::out << "WARNING: Clough quadrature implemented" << std::endl
+64                          << " up to TWENTYTHIRD order\&." << std::endl;
+65           }
+66 #endif
+67 
+68         AutoPtr<QBase> ap(new QClough(_dim, _order));
+69         return ap;
+70       }
+71 
+72     case QGAUSS:
+73       {
+74 
+75 #ifdef DEBUG
+76         if (_order > FORTYTHIRD)
+77           {
+78             libMesh::out << "WARNING: Gauss quadrature implemented" << std::endl
+79                          << " up to FORTYTHIRD order\&." << std::endl;
+80           }
+81 #endif
+82 
+83         AutoPtr<QBase> ap(new QGauss(_dim, _order));
+84         return ap;
+85       }
+86 
+87     case QJACOBI_1_0:
+88       {
+89 
+90 #ifdef DEBUG
+91         if (_order > TWENTYTHIRD)
+92           {
+93             libMesh::out << "WARNING: Jacobi(1,0) quadrature implemented" << std::endl
+94                          << " up to TWENTYTHIRD order\&." << std::endl;
+95           }
+96 
+97         if (_dim > 1)
+98           {
+99             libMesh::out << "WARNING: Jacobi(1,0) quadrature implemented" << std::endl
+100                          << " in 1D only\&." << std::endl;
+101           }
+102 #endif
+103 
+104         AutoPtr<QBase> ap(new QJacobi(_dim, _order, 1, 0));
+105         return ap;
+106       }
+107 
+108     case QJACOBI_2_0:
+109       {
+110 
+111 #ifdef DEBUG
+112         if (_order > TWENTYTHIRD)
+113           {
+114             libMesh::out << "WARNING: Jacobi(2,0) quadrature implemented" << std::endl
+115                          << " up to TWENTYTHIRD order\&." << std::endl;
+116           }
+117 
+118         if (_dim > 1)
+119           {
+120             libMesh::out << "WARNING: Jacobi(2,0) quadrature implemented" << std::endl
+121                          << " in 1D only\&." << std::endl;
+122           }
+123 #endif
+124 
+125         AutoPtr<QBase> ap(new QJacobi(_dim, _order, 2, 0));
+126         return ap;
+127       }
+128 
+129     case QSIMPSON:
+130       {
+131 
+132 #ifdef DEBUG
+133         if (_order > THIRD)
+134           {
+135             libMesh::out << "WARNING: Simpson rule provides only" << std::endl
+136                          << " THIRD order!" << std::endl;
+137           }
+138 #endif
+139 
+140         AutoPtr<QBase> ap(new QSimpson(_dim));
+141         return ap;
+142       }
+143 
+144     case QTRAP:
+145       {
+146 
+147 #ifdef DEBUG
+148         if (_order > FIRST)
+149           {
+150             libMesh::out << "WARNING: Trapezoidal rule provides only" << std::endl
+151                          << " FIRST order!" << std::endl;
+152           }
+153 #endif
+154 
+155         AutoPtr<QBase> ap(new QTrap(_dim));
+156         return ap;
+157       }
+158 
+159     case QGRID:
+160       {
+161         AutoPtr<QBase> ap(new QGrid(_dim, _order));
+162         return ap;
+163       }
+164 
+165     case QGRUNDMANN_MOLLER:
+166       {
+167         AutoPtr<QBase> ap(new QGrundmann_Moller(_dim, _order));
+168         return ap;
+169       }
+170 
+171     case QMONOMIAL:
+172       {
+173         AutoPtr<QBase> ap(new QMonomial(_dim, _order));
+174         return ap;
+175       }
+176 
+177     default:
+178       {
+179         libMesh::err << "ERROR: Bad qt=" << _qt << std::endl;
+180         libmesh_error();
+181       }
+182     }
+183 
+184 
+185   libmesh_error();
+186   AutoPtr<QBase> ap(NULL);
+187   return ap;
+188 }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "unsigned int libMesh::QBase::get_dim () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the dimension of the quadrature rule\&. 
+.RE
+.PP
+
+.PP
+Definition at line 123 of file quadrature\&.h\&.
+.PP
+Referenced by libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::attach_quadrature_rule(), libMesh::QConical::conical_product_pyramid(), libMesh::QConical::conical_product_tet(), and libMesh::QConical::conical_product_tri()\&.
+.PP
+.nf
+123 { return _dim;  }
+.fi
+.SS "\fBElemType\fP libMesh::QBase::get_elem_type () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the current element type we're set up for 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file quadrature\&.h\&.
+.PP
+.nf
+105   { return _type; }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "\fBOrder\fP libMesh::QBase::get_order () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the order of the quadrature rule\&. 
+.RE
+.PP
+
+.PP
+Definition at line 169 of file quadrature\&.h\&.
+.PP
+Referenced by libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::attach_quadrature_rule()\&.
+.PP
+.nf
+169 { return static_cast<Order>(_order + _p_level); }
+.fi
+.SS "unsigned int libMesh::QBase::get_p_level () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the current p refinement level we're initialized with 
+.RE
+.PP
+
+.PP
+Definition at line 110 of file quadrature\&.h\&.
+.PP
+.nf
+111   { return _p_level; }
+.fi
+.SS "const std::vector<\fBPoint\fP>& libMesh::QBase::get_points () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a \fCstd::vector\fP containing the quadrature point locations on a reference object\&. 
+.RE
+.PP
+
+.PP
+Definition at line 129 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_points\&.
+.PP
+Referenced by libMesh::QClough::init_1D(), libMesh::QClough::init_2D(), libMesh::QGauss::init_2D(), libMesh::QMonomial::init_2D(), libMesh::QGauss::init_3D(), libMesh::QMonomial::init_3D(), and libMesh::FESubdivision::reinit()\&.
+.PP
+.nf
+129 { return _points;  }
+.fi
+.SS "std::vector<\fBPoint\fP>& libMesh::QBase::get_points ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a \fCstd::vector\fP containing the quadrature point locations on a reference object as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_points\&.
+.PP
+.nf
+135 { return _points;  }
+.fi
+.SS "const std::vector<\fBReal\fP>& libMesh::QBase::get_weights () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a \fCstd::vector\fP containing the quadrature weights\&. 
+.RE
+.PP
+
+.PP
+Definition at line 140 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_weights\&.
+.PP
+Referenced by libMesh::QClough::init_1D(), libMesh::QClough::init_2D(), libMesh::QGauss::init_2D(), libMesh::QMonomial::init_2D(), libMesh::QGauss::init_3D(), libMesh::QMonomial::init_3D(), and libMesh::FESubdivision::reinit()\&.
+.PP
+.nf
+140 { return _weights; }
+.fi
+.SS "std::vector<\fBReal\fP>& libMesh::QBase::get_weights ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a \fCstd::vector\fP containing the quadrature weights\&. 
+.RE
+.PP
+
+.PP
+Definition at line 145 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_weights\&.
+.PP
+.nf
+145 { return _weights; }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::QBase::init (const \fBElemType\fPtype = \fC\fBINVALID_ELEM\fP\fP, unsigned intp_level = \fC0\fP)\fC [inherited]\fP"
+Initializes the data structures to contain a quadrature rule for an object of type \fCtype\fP\&. 
+.PP
+Definition at line 27 of file quadrature\&.C\&.
+.PP
+References libMesh::QBase::init_0D(), libMesh::QBase::init_1D(), and libMesh::QBase::init_2D()\&.
+.PP
+Referenced by libMesh::QClough::init_1D(), init_2D(), libMesh::QClough::init_2D(), libMesh::QGauss::init_2D(), libMesh::QSimpson::init_2D(), libMesh::QGrid::init_2D(), libMesh::QMonomial::init_2D(), init_3D(), libMesh::QGauss::init_3D(), libMesh::QSimpson::init_3D(), libMesh::QGrid::init_3D(), libMesh::QMonomial::init_3D(), libMesh::QGauss::QGauss(), libMesh::QJacobi::QJacobi(), libMesh::QSimpson::QSimpson(), QTrap(), and libMesh::FESubdivision::reinit()\&.
+.PP
+.nf
+29 {
+30   // check to see if we have already
+31   // done the work for this quadrature rule
+32   if (t == _type && p == _p_level)
+33     return;
+34   else
+35     {
+36       _type = t;
+37       _p_level = p;
+38     }
+39 
+40 
+41 
+42   switch(_dim)
+43     {
+44     case 0:
+45       this->init_0D(_type,_p_level);
+46 
+47       return;
+48 
+49     case 1:
+50       this->init_1D(_type,_p_level);
+51 
+52       return;
+53 
+54     case 2:
+55       this->init_2D(_type,_p_level);
+56 
+57       return;
+58 
+59     case 3:
+60       this->init_3D(_type,_p_level);
+61 
+62       return;
+63 
+64     default:
+65       libmesh_error();
+66     }
+67 }
+.fi
+.SS "void libMesh::QBase::init_0D (const \fBElemType\fPtype = \fC\fBINVALID_ELEM\fP\fP, unsigned intp_level = \fC0\fP)\fC [protected]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Initializes the 0D quadrature rule by filling the points and weights vectors with the appropriate values\&. Generally this is just one point with weight 1\&. 
+.PP
+Definition at line 71 of file quadrature\&.C\&.
+.PP
+References libMesh::QBase::_points, and libMesh::QBase::_weights\&.
+.PP
+Referenced by libMesh::QBase::init()\&.
+.PP
+.nf
+73 {
+74   _points\&.resize(1);
+75   _weights\&.resize(1);
+76   _points[0] = Point(0\&.);
+77   _weights[0] = 1\&.0;
+78 }
+.fi
+.SS "void libMesh::QTrap::init_1D (const \fBElemType\fPtype = \fC\fBINVALID_ELEM\fP\fP, unsigned intp_level = \fC0\fP)\fC [private]\fP, \fC [virtual]\fP"
+Initializes the 1D quadrature rule by filling the points and weights vectors with the appropriate values\&. The order of the rule will be defined by the implementing class\&. It is assumed that derived quadrature rules will at least define the init_1D function, therefore it is pure virtual\&. 
+.PP
+Implements \fBlibMesh::QBase\fP\&.
+.PP
+Definition at line 28 of file quadrature_trap_1D\&.C\&.
+.PP
+References libMesh::QBase::_points, and libMesh::QBase::_weights\&.
+.PP
+.nf
+30 {
+31   //----------------------------------------------------------------------
+32   // 1D quadrature rules
+33   _points\&.resize(2);
+34   _weights\&.resize(2);
+35 
+36   _points[0](0) = -1\&.;
+37   _points[1](0) =  1\&.;
+38 
+39   _weights[0] = 1\&.;
+40   _weights[1] = 1\&.;
+41 
+42   return;
+43 }
+.fi
+.SS "void libMesh::QTrap::init_2D (const \fBElemType\fP = \fC\fBINVALID_ELEM\fP\fP, unsigned int = \fC0\fP)\fC [private]\fP, \fC [virtual]\fP"
+Initializes the 2D quadrature rule by filling the points and weights vectors with the appropriate values\&. The order of the rule will be defined by the implementing class\&. Should not be pure virtual since a derived quadrature rule may only be defined in 1D\&. If not redefined, gives an error (when \fCDEBUG\fP defined) when called\&. 
+.PP
+Reimplemented from \fBlibMesh::QBase\fP\&.
+.PP
+Definition at line 28 of file quadrature_trap_2D\&.C\&.
+.PP
+References libMesh::QBase::_points, libMesh::QBase::_weights, libMesh::EDGE2, libMesh::err, libMesh::QBase::init(), libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+.nf
+30 {
+31 #if LIBMESH_DIM > 1
+32 
+33   //-----------------------------------------------------------------------
+34   // 2D quadrature rules
+35   switch (type_in)
+36     {
+37 
+38 
+39       //---------------------------------------------
+40       // Quadrilateral quadrature rules
+41     case QUAD4:
+42     case QUAD8:
+43     case QUAD9:
+44       {
+45 
+46         // We compute the 2D quadrature rule as a tensor
+47         // product of the 1D quadrature rule\&.
+48         QTrap q1D(1);
+49         q1D\&.init(EDGE2);
+50 
+51         tensor_product_quad( q1D );
+52 
+53         return;
+54       }
+55 
+56 
+57       //---------------------------------------------
+58       // Triangle quadrature rules
+59     case TRI3:
+60     case TRI6:
+61       {
+62         _points\&.resize(3);
+63         _weights\&.resize(3);
+64 
+65         _points[0](0) = 0\&.;
+66         _points[0](1) = 0\&.;
+67 
+68         _points[1](0) = 1\&.;
+69         _points[1](1) = 0\&.;
+70 
+71         _points[2](0) = 0\&.;
+72         _points[2](1) = 1\&.;
+73 
+74 
+75         _weights[0] = 1\&./6\&.;
+76         _weights[1] = 1\&./6\&.;
+77         _weights[2] = 1\&./6\&.;
+78 
+79         return;
+80       }
+81 
+82 
+83       //---------------------------------------------
+84       // Unsupported type
+85     default:
+86       {
+87         libMesh::err << "Element type not supported!:" << type_in << std::endl;
+88         libmesh_error();
+89       }
+90     }
+91 
+92   libmesh_error();
+93 
+94   return;
+95 
+96 #endif
+97 }
+.fi
+.SS "void libMesh::QTrap::init_3D (const \fBElemType\fP_type = \fC\fBINVALID_ELEM\fP\fP, unsigned intp_level = \fC0\fP)\fC [private]\fP"
+
+.PP
+Definition at line 30 of file quadrature_trap_3D\&.C\&.
+.PP
+References libMesh::QBase::_points, libMesh::QBase::_weights, libMesh::EDGE2, libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::QBase::init(), libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::TET10, libMesh::TET4, and libMesh::TRI3\&.
+.PP
+.nf
+32 {
+33 #if LIBMESH_DIM == 3
+34 
+35   //-----------------------------------------------------------------------
+36   // 3D quadrature rules
+37   switch (type_in)
+38     {
+39       //---------------------------------------------
+40       // Hex quadrature rules
+41     case HEX8:
+42     case HEX20:
+43     case HEX27:
+44       {
+45         // We compute the 3D quadrature rule as a tensor
+46         // product of the 1D quadrature rule\&.
+47         QTrap q1D(1);
+48         q1D\&.init(EDGE2);
+49 
+50         tensor_product_hex( q1D );
+51 
+52         return;
+53       }
+54 
+55 
+56 
+57       //---------------------------------------------
+58       // Tetrahedral quadrature rules
+59     case TET4:
+60     case TET10:
+61       {
+62         _points\&.resize(4);
+63         _weights\&.resize(4);
+64 
+65         _points[0](0) = 0\&.;
+66         _points[0](1) = 0\&.;
+67         _points[0](2) = 0\&.;
+68 
+69         _points[1](0) = 1\&.;
+70         _points[1](1) = 0\&.;
+71         _points[1](2) = 0\&.;
+72 
+73         _points[2](0) = 0\&.;
+74         _points[2](1) = 1\&.;
+75         _points[2](2) = 0\&.;
+76 
+77         _points[3](0) = 0\&.;
+78         _points[3](1) = 0\&.;
+79         _points[3](2) = 1\&.;
+80 
+81 
+82 
+83         _weights[0] = \&.0416666666666666666666666666666666666666666667;
+84         _weights[1] = _weights[0];
+85         _weights[2] = _weights[0];
+86         _weights[3] = _weights[0];
+87 
+88         return;
+89       }
+90 
+91 
+92 
+93       //---------------------------------------------
+94       // Prism quadrature rules
+95     case PRISM6:
+96     case PRISM15:
+97     case PRISM18:
+98       {
+99         // We compute the 3D quadrature rule as a tensor
+100         // product of the 1D quadrature rule and a 2D
+101         // triangle quadrature rule
+102 
+103         QTrap q1D(1);
+104         QTrap q2D(2);
+105 
+106         // Initialize
+107         q1D\&.init(EDGE2);
+108         q2D\&.init(TRI3);
+109 
+110         tensor_product_prism(q1D, q2D);
+111 
+112         return;
+113       }
+114 
+115 
+116       //---------------------------------------------
+117       // Unsupported type
+118     default:
+119       {
+120         libMesh::err << "ERROR: Unsupported type: " << type_in << std::endl;
+121         libmesh_error();
+122       }
+123     }
+124 
+125   libmesh_error();
+126 
+127   return;
+128 
+129 #endif
+130 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "unsigned int libMesh::QBase::n_points () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of points associated with the quadrature rule\&. 
+.RE
+.PP
+
+.PP
+Definition at line 116 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_points, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::QConical::conical_product_pyramid(), libMesh::QConical::conical_product_tet(), libMesh::QConical::conical_product_tri(), libMesh::ProjectFEMSolution::operator()(), and libMesh::QBase::print_info()\&.
+.PP
+.nf
+117   { libmesh_assert (!_points\&.empty());
+118     return libmesh_cast_int<unsigned int>(_points\&.size()); }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::QBase::print_info (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [inline]\fP, \fC [inherited]\fP"
+Prints information relevant to the quadrature rule, by default to \fBlibMesh::out\fP\&. 
+.PP
+Definition at line 362 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_points, libMesh::QBase::_weights, libMesh::libmesh_assert(), and libMesh::QBase::n_points()\&.
+.PP
+Referenced by libMesh::operator<<()\&.
+.PP
+.nf
+363 {
+364   libmesh_assert(!_points\&.empty());
+365   libmesh_assert(!_weights\&.empty());
+366 
+367   os << "N_Q_Points=" << this->n_points() << std::endl << std::endl;
+368   for (unsigned int qpoint=0; qpoint<this->n_points(); qpoint++)
+369     {
+370       os << " Point " << qpoint << ":\n"
+371          << "  "
+372          << _points[qpoint]
+373          << " Weight:\n "
+374          << "  w=" << _weights[qpoint] << "\n" << std::endl;
+375     }
+376 }
+.fi
+.SS "\fBPoint\fP libMesh::QBase::qp (const unsigned inti) const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $ i^{th} $ quadrature point on the reference object\&. 
+.RE
+.PP
+
+.PP
+Definition at line 150 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_points\&.
+.PP
+Referenced by libMesh::QConical::conical_product_pyramid(), libMesh::QConical::conical_product_tet(), and libMesh::QConical::conical_product_tri()\&.
+.PP
+.nf
+151   { libmesh_assert_less (i, _points\&.size()); return _points[i]; }
+.fi
+.SS "void libMesh::QBase::scale (std::pair< \fBReal\fP, \fBReal\fP >old_range, std::pair< \fBReal\fP, \fBReal\fP >new_range)\fC [inherited]\fP"
+Maps the points of a 1D interval quadrature rule (typically [-1,1]) to any other 1D interval (typically [0,1]) and scales the weights accordingly\&. The quadrature rule will be mapped from the entries of old_range to the entries of new_range\&. 
+.PP
+Definition at line 82 of file quadrature\&.C\&.
+.PP
+References libMesh::QBase::_points, libMesh::QBase::_weights, libMesh::libmesh_assert_greater(), and libMesh::Real\&.
+.PP
+Referenced by libMesh::QConical::conical_product_tet(), and libMesh::QConical::conical_product_tri()\&.
+.PP
+.nf
+84 {
+85   // Make sure we are in 1D
+86   libmesh_assert_equal_to (_dim, 1);
+87 
+88   // Make sure that we have sane ranges
+89   libmesh_assert_greater (new_range\&.second, new_range\&.first);
+90   libmesh_assert_greater (old_range\&.second, old_range\&.first);
+91 
+92   // Make sure there are some points
+93   libmesh_assert_greater (_points\&.size(), 0);
+94 
+95   // We're mapping from old_range -> new_range
+96   for (unsigned int i=0; i<_points\&.size(); i++)
+97     {
+98       _points[i](0) =
+99         (_points[i](0) - old_range\&.first) *
+100         (new_range\&.second - new_range\&.first) /
+101         (old_range\&.second - old_range\&.first) +
+102         new_range\&.first;
+103     }
+104 
+105   // Compute the scale factor and scale the weights
+106   const Real scfact = (new_range\&.second - new_range\&.first) /
+107     (old_range\&.second - old_range\&.first);
+108 
+109   for (unsigned int i=0; i<_points\&.size(); i++)
+110     _weights[i] *= scfact;
+111 }
+.fi
+.SS "virtual bool libMesh::QBase::shapes_need_reinit ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Returns true if the shape functions need to be recalculated\&.
+.PP
+This can happen if the number of points or their positions change\&.
+.PP
+By default this will return false\&. 
+.PP
+Definition at line 198 of file quadrature\&.h\&.
+.PP
+.nf
+198 { return false; }
+.fi
+.SS "\fBQuadratureType\fP libMesh::QTrap::type () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCQTRAP\fP 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::QBase\fP\&.
+.PP
+Definition at line 59 of file quadrature_trap\&.h\&.
+.PP
+References libMesh::QTRAP\&.
+.PP
+.nf
+59 { return QTRAP; }
+.fi
+.SS "\fBReal\fP libMesh::QBase::w (const unsigned inti) const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $ i^{th} $ quadrature weight\&. 
+.RE
+.PP
+
+.PP
+Definition at line 156 of file quadrature\&.h\&.
+.PP
+References libMesh::QBase::_weights\&.
+.PP
+Referenced by libMesh::QConical::conical_product_pyramid(), libMesh::QConical::conical_product_tet(), and libMesh::QConical::conical_product_tri()\&.
+.PP
+.nf
+157   { libmesh_assert_less (i, _weights\&.size()); return _weights[i]; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBlibMesh::err\fP<< 'ERROR: Seems as \fBif\fP this quadrature rule' << std::endl << ' is not implemented \fBfor\fP 2D\&.' << std::endl; libmesh_error(); }#endif virtual void init_3D (const ElemType, unsigned int =0)#ifndef DEBUG {}#else { libMesh::err << 'ERROR: Seems as if this quadrature rule' << std::endl << ' is not implemented for 3D\&.' << std::endl; libmesh_error(); }#endif void tensor_product_quad (const QBase& q1D); void tensor_product_hex (const QBase& q1D); void tensor_product_prism (const QBase& q1D, const QBase& q2D); const unsigned int _dim; const Order _order; ElemType _type; unsigned int _p_level; std::vector<Point> libMesh::QBase::_points\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 332 of file quadrature\&.h\&.
+.PP
+Referenced by libMesh::QConical::conical_product_pyramid(), libMesh::QConical::conical_product_tet(), libMesh::QConical::conical_product_tri(), libMesh::QGauss::dunavant_rule(), libMesh::QGauss::dunavant_rule2(), libMesh::QBase::get_points(), libMesh::QGrundmann_Moller::gm_rule(), libMesh::QBase::init_0D(), init_1D(), libMesh::QClough::init_1D(), libMesh::QGauss::init_1D(), libMesh::QSimpson::init_1D(), libMesh::QGrid::init_1D(), libMesh::QJacobi::init_1D(), init_2D(), libMesh::QClough::init_2D(), libMesh::QGauss::init_2D(), libMesh::QSimpson::init_2D(), libMesh::QGrid::init_2D(), libMesh::QMonomial::init_2D(), init_3D(), libMesh::QGauss::init_3D(), libMesh::QSimpson::init_3D(), libMesh::QGrid::init_3D(), libMesh::QMonomial::init_3D(), libMesh::QGauss::keast_rule(), libMesh::QMonomial::kim_rule(), libMesh::QBase::n_points(), libMesh::QBase::print_info(), libMesh::QBase::qp(), libMesh::QBase::scale(), libMesh::QMonomial::stroud_rule(), and libMesh::QMonomial::wissmann_rule()\&.
+.SS "std::vector<\fBReal\fP> libMesh::QBase::_weights\fC [protected]\fP, \fC [inherited]\fP"
+The value of the quadrature weights\&. 
+.PP
+Definition at line 337 of file quadrature\&.h\&.
+.PP
+Referenced by libMesh::QConical::conical_product_pyramid(), libMesh::QConical::conical_product_tet(), libMesh::QConical::conical_product_tri(), libMesh::QGauss::dunavant_rule(), libMesh::QGauss::dunavant_rule2(), libMesh::QBase::get_weights(), libMesh::QGrundmann_Moller::gm_rule(), libMesh::QBase::init_0D(), init_1D(), libMesh::QClough::init_1D(), libMesh::QGauss::init_1D(), libMesh::QSimpson::init_1D(), libMesh::QGrid::init_1D(), libMesh::QJacobi::init_1D(), init_2D(), libMesh::QClough::init_2D(), libMesh::QGauss::init_2D(), libMesh::QSimpson::init_2D(), libMesh::QGrid::init_2D(), libMesh::QMonomial::init_2D(), init_3D(), libMesh::QGauss::init_3D(), libMesh::QSimpson::init_3D(), libMesh::QGrid::init_3D(), libMesh::QMonomial::init_3D(), libMesh::QGauss::keast_rule(), libMesh::QMonomial::kim_rule(), libMesh::QBase::print_info(), libMesh::QBase::scale(), libMesh::QMonomial::stroud_rule(), libMesh::QBase::w(), and libMesh::QMonomial::wissmann_rule()\&.
+.SS "bool libMesh::QBase::allow_rules_with_negative_weights\fC [inherited]\fP"
+Flag (default true) controlling the use of quadrature rules with negative weights\&. Set this to false to ONLY use (potentially) safer but more expensive rules with all positive weights\&.
+.PP
+Negative weights typically appear in Gaussian quadrature rules over three-dimensional elements\&. Rules with negative weights can be unsuitable for some problems\&. For example, it is possible for a rule with negative weights to obtain a negative result when integrating a positive function\&.
+.PP
+A particular example: if rules with negative weights are not allowed, a request for TET,THIRD (5 points) will return the TET,FIFTH (14 points) rule instead, nearly tripling the computational effort required! 
+.PP
+Definition at line 215 of file quadrature\&.h\&.
+.PP
+Referenced by libMesh::QGauss::init_3D(), libMesh::QMonomial::init_3D(), and libMesh::QGrundmann_Moller::init_3D()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

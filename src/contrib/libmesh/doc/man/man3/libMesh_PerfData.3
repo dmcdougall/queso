@@ -1,0 +1,224 @@
+.TH "libMesh::PerfData" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PerfData \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <perf_log\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPerfData\fP ()"
+.br
+.ti -1c
+.RI "void \fBstart\fP ()"
+.br
+.ti -1c
+.RI "void \fBrestart\fP ()"
+.br
+.ti -1c
+.RI "double \fBpause\fP ()"
+.br
+.ti -1c
+.RI "double \fBstopit\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "double \fBtot_time\fP"
+.br
+.ti -1c
+.RI "double \fBtot_time_incl_sub\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBtstart\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBtstart_incl_sub\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBcount\fP"
+.br
+.ti -1c
+.RI "bool \fBopen\fP"
+.br
+.ti -1c
+.RI "int \fBcalled_recursively\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "double \fBstop_or_pause\fP (const bool do_stop)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBPerfData\fP\fP class simply contains the performance data that is recorded for individual events\&. 
+.PP
+Definition at line 45 of file perf_log\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PerfData::PerfData ()\fC [inline]\fP"
+Constructor\&. Initializes data to be empty\&. 
+.PP
+Definition at line 52 of file perf_log\&.h\&.
+.PP
+.nf
+52               :
+53     tot_time(0\&.),
+54     tot_time_incl_sub(0\&.),
+55     tstart(),
+56     tstart_incl_sub(),
+57     count(0),
+58     open(false),
+59     called_recursively(0)
+60   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "double libMesh::PerfData::pause ()\fC [inline]\fP"
+
+.PP
+Definition at line 314 of file perf_log\&.h\&.
+.PP
+References stop_or_pause()\&.
+.PP
+.nf
+315 {
+316   return this->stop_or_pause(false);
+317 }
+.fi
+.SS "void libMesh::PerfData::restart ()\fC [inline]\fP"
+
+.PP
+Definition at line 306 of file perf_log\&.h\&.
+.PP
+References tstart\&.
+.PP
+.nf
+307 {
+308   gettimeofday (&(this->tstart), NULL);
+309 }
+.fi
+.SS "void libMesh::PerfData::start ()\fC [inline]\fP"
+
+.PP
+Definition at line 295 of file perf_log\&.h\&.
+.PP
+References called_recursively, count, tstart, and tstart_incl_sub\&.
+.PP
+Referenced by libMesh::PerfLog::push()\&.
+.PP
+.nf
+296 {
+297   this->count++;
+298   this->called_recursively++;
+299   gettimeofday (&(this->tstart), NULL);
+300   this->tstart_incl_sub = this->tstart;
+301 }
+.fi
+.SS "double libMesh::PerfData::stop_or_pause (const booldo_stop)\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+Definition at line 321 of file perf_log\&.h\&.
+.PP
+References tot_time, tot_time_incl_sub, tstart, and tstart_incl_sub\&.
+.PP
+Referenced by pause(), and stopit()\&.
+.PP
+.nf
+322 {
+323   // save the start times, reuse the structure we have rather than create
+324   // a new one\&.
+325   const time_t
+326     tstart_tv_sec  = this->tstart\&.tv_sec,
+327     tstart_tv_usec = this->tstart\&.tv_usec;
+328 
+329   gettimeofday (&(this->tstart), NULL);
+330 
+331   const double elapsed_time = (static_cast<double>(this->tstart\&.tv_sec  - tstart_tv_sec) +
+332                                static_cast<double>(this->tstart\&.tv_usec - tstart_tv_usec)*1\&.e-6);
+333 
+334   this->tot_time += elapsed_time;
+335 
+336   if(do_stop)
+337     {
+338       const double elapsed_time_incl_sub = (static_cast<double>(this->tstart\&.tv_sec  - this->tstart_incl_sub\&.tv_sec) +
+339                                             static_cast<double>(this->tstart\&.tv_usec - this->tstart_incl_sub\&.tv_usec)*1\&.e-6);
+340 
+341       this->tot_time_incl_sub += elapsed_time_incl_sub;
+342     }
+343 
+344   return elapsed_time;
+345 }
+.fi
+.SS "double libMesh::PerfData::stopit ()\fC [inline]\fP"
+
+.PP
+Definition at line 350 of file perf_log\&.h\&.
+.PP
+References called_recursively, and stop_or_pause()\&.
+.PP
+.nf
+351 {
+352   // stopit is just similar to pause except that it decrements the
+353   // recursive call counter
+354 
+355   this->called_recursively--;
+356   return this->stop_or_pause(true);
+357 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "int libMesh::PerfData::called_recursively"
+
+.PP
+Definition at line 103 of file perf_log\&.h\&.
+.PP
+Referenced by start(), and stopit()\&.
+.SS "unsigned int libMesh::PerfData::count"
+The number of times this event has been executed 
+.PP
+Definition at line 89 of file perf_log\&.h\&.
+.PP
+Referenced by libMesh::PerfLog::get_perf_info(), and start()\&.
+.SS "bool libMesh::PerfData::open"
+Flag indicating if we are currently monitoring this event\&. Should only be true while the event is executing\&. 
+.PP
+Definition at line 96 of file perf_log\&.h\&.
+.SS "double libMesh::PerfData::tot_time"
+Total time spent in this event\&. 
+.PP
+Definition at line 66 of file perf_log\&.h\&.
+.PP
+Referenced by libMesh::PerfLog::get_perf_info(), and stop_or_pause()\&.
+.SS "double libMesh::PerfData::tot_time_incl_sub"
+Total time spent in this event, including sub-events\&. 
+.PP
+Definition at line 71 of file perf_log\&.h\&.
+.PP
+Referenced by libMesh::PerfLog::get_perf_info(), and stop_or_pause()\&.
+.SS "struct timeval libMesh::PerfData::tstart"
+Structure defining when the event was last started\&. 
+.PP
+Definition at line 77 of file perf_log\&.h\&.
+.PP
+Referenced by restart(), start(), and stop_or_pause()\&.
+.SS "struct timeval libMesh::PerfData::tstart_incl_sub"
+Structure defining when the event was last started, including sub-events\&. 
+.PP
+Definition at line 83 of file perf_log\&.h\&.
+.PP
+Referenced by start(), and stop_or_pause()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

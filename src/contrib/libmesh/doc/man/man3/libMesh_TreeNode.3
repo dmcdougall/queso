@@ -1,0 +1,926 @@
+.TH "libMesh::TreeNode< N >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TreeNode< N > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tree_node\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTreeNode\fP (const \fBMeshBase\fP &m, const unsigned int tbs, const \fBTreeNode\fP< N > *p=NULL)"
+.br
+.ti -1c
+.RI "\fB~TreeNode\fP ()"
+.br
+.ti -1c
+.RI "bool \fBis_root\fP () const "
+.br
+.ti -1c
+.RI "bool \fBactive\fP () const "
+.br
+.ti -1c
+.RI "void \fBinsert\fP (const \fBNode\fP *nd)"
+.br
+.ti -1c
+.RI "void \fBinsert\fP (const \fBElem\fP *nd)"
+.br
+.ti -1c
+.RI "void \fBrefine\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_bounding_box\fP (const std::pair< \fBPoint\fP, \fBPoint\fP > &bbox)"
+.br
+.ti -1c
+.RI "bool \fBbounds_node\fP (const \fBNode\fP *nd) const "
+.br
+.ti -1c
+.RI "bool \fBbounds_point\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "unsigned int \fBlevel\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_nodes\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "void \fBprint_elements\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "void \fBtransform_nodes_to_elements\fP (std::vector< std::vector< const \fBElem\fP * > > &nodes_to_elem)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_active_bins\fP () const "
+.br
+.ti -1c
+.RI "const \fBElem\fP * \fBfind_element\fP (const \fBPoint\fP &p) const "
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBElem\fP * \fBfind_element_in_children\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "std::pair< \fBPoint\fP, \fBPoint\fP > \fBcreate_bounding_box\fP (const unsigned int c) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP"
+.br
+.ti -1c
+.RI "const unsigned int \fBtgt_bin_size\fP"
+.br
+.ti -1c
+.RI "const \fBTreeNode\fP< N > * \fBparent\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBTreeNode\fP< N > * > \fBchildren\fP"
+.br
+.ti -1c
+.RI "std::pair< \fBPoint\fP, \fBPoint\fP > \fBbounding_box\fP"
+.br
+.ti -1c
+.RI "std::vector< const \fBElem\fP * > \fBelements\fP"
+.br
+.ti -1c
+.RI "std::vector< const \fBNode\fP * > \fBnodes\fP"
+.br
+.ti -1c
+.RI "bool \fBcontains_ifems\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<unsigned int N>class libMesh::TreeNode< N >"
+This class defines a node on a tree\&. A tree node contains a pointer to its parent (NULL if the node is the root) and pointers to its children (NULL if the node is active\&. 
+.PP
+Definition at line 46 of file tree_node\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<unsigned int N> \fBlibMesh::TreeNode\fP< N >::\fBTreeNode\fP (const \fBMeshBase\fP &m, const unsigned inttbs, const \fBTreeNode\fP< N > *p = \fCNULL\fP)\fC [inline]\fP"
+Constructor\&. Takes a pointer to this node's parent\&. The pointer should only be NULL for the top-level (root) node\&. 
+.PP
+Definition at line 215 of file tree_node\&.h\&.
+.PP
+References libMesh::TreeNode< N >::active(), libMesh::TreeNode< N >::children, libMesh::TreeNode< N >::elements, libMesh::libmesh_assert(), libMesh::TreeNode< N >::nodes, and libMesh::TreeNode< N >::tgt_bin_size\&.
+.PP
+.nf
+217                                              :
+218   mesh           (m),
+219   tgt_bin_size   (tbs),
+220   parent         (p),
+221   contains_ifems (false)
+222 {
+223   // libmesh_assert our children are empty, thus we are active\&.
+224   libmesh_assert (children\&.empty());
+225   libmesh_assert (this->active());
+226 
+227   // Reserve space for the nodes & elements
+228   nodes\&.reserve    (tgt_bin_size);
+229   elements\&.reserve (tgt_bin_size);
+230 }
+.fi
+.SS "template<unsigned int N> \fBlibMesh::TreeNode\fP< N >::~\fBTreeNode\fP ()\fC [inline]\fP"
+Destructor\&. Deletes all children, if any\&. Thus to delete a tree it is sufficient to explicitly delete the root node\&. 
+.PP
+Definition at line 236 of file tree_node\&.h\&.
+.PP
+.nf
+237 {
+238   // When we are destructed we must delete all of our
+239   // children\&.  They will this delete their children,
+240   // All the way down the line\&.\&.\&.
+241   for (unsigned int c=0; c<children\&.size(); c++)
+242     delete children[c];
+243 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<unsigned int N> bool \fBlibMesh::TreeNode\fP< N >::active () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if this node is active (i\&.e\&. has no children), false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 77 of file tree_node\&.h\&.
+.PP
+References libMesh::TreeNode< N >::children\&.
+.PP
+Referenced by libMesh::TreeNode< N >::TreeNode()\&.
+.PP
+.nf
+77 { return children\&.empty(); }
+.fi
+.SS "template<unsigned int N> bool \fBlibMesh::TreeNode\fP< N >::bounds_node (const \fBNode\fP *nd) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if this \fBTreeNode\fP (or its children) contain node n, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file tree_node\&.h\&.
+.PP
+References libMesh::TreeNode< N >::bounds_point(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+105   { libmesh_assert(nd); return bounds_point(*nd); }
+.fi
+.SS "template<unsigned int N> bool \fBlibMesh::TreeNode\fP< N >::bounds_point (const \fBPoint\fP &p) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if this \fBTreeNode\fP (or its children) contain point p, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 185 of file tree_node\&.C\&.
+.PP
+References libMesh::MeshTools::bounding_box(), std::max(), and std::min()\&.
+.PP
+Referenced by libMesh::TreeNode< N >::bounds_node()\&.
+.PP
+.nf
+186 {
+187   const Point& min = bounding_box\&.first;
+188   const Point& max = bounding_box\&.second;
+189 
+190 
+191   if ((p(0) >= min(0))
+192       && (p(0) <= max(0))
+193 #if LIBMESH_DIM > 1
+194       && (p(1) >= min(1))
+195       && (p(1) <= max(1))
+196 #endif
+197 #if LIBMESH_DIM > 2
+198       && (p(2) >= min(2))
+199       && (p(2) <= max(2))
+200 #endif
+201       )
+202     return true;
+203 
+204   return false;
+205 }
+.fi
+.SS "template<unsigned int N> std::pair< \fBPoint\fP, \fBPoint\fP > \fBlibMesh::TreeNode\fP< N >::create_bounding_box (const unsigned intc) const\fC [private]\fP"
+Constructs the bounding box for child \fCc\fP\&. 
+.PP
+Definition at line 211 of file tree_node\&.C\&.
+.PP
+References libMesh::MeshTools::bounding_box(), libMesh::err, std::max(), std::min(), and libMesh::Real\&.
+.PP
+.nf
+212 {
+213   switch (N)
+214     {
+215 
+216       // How to refine an OctTree Node
+217     case 8:
+218       {
+219         const Real xmin = bounding_box\&.first(0);
+220         const Real ymin = bounding_box\&.first(1);
+221         const Real zmin = bounding_box\&.first(2);
+222 
+223         const Real xmax = bounding_box\&.second(0);
+224         const Real ymax = bounding_box\&.second(1);
+225         const Real zmax = bounding_box\&.second(2);
+226 
+227         const Real xc = xmin + \&.5*(xmax - xmin);
+228         const Real yc = ymin + \&.5*(ymax - ymin);
+229         const Real zc = zmin + \&.5*(zmax - zmin);
+230 
+231 
+232         switch (c)
+233           {
+234 
+235           case 0:
+236             {
+237               const Point min(xmin, ymin, zmin);
+238               const Point max(xc,   yc,   zc);
+239               return std::make_pair (min, max);
+240             }
+241 
+242           case 1:
+243             {
+244               const Point min(xc,   ymin, zmin);
+245               const Point max(xmax, yc,   zc);
+246               return std::make_pair (min, max);
+247             }
+248 
+249           case 2:
+250             {
+251               const Point min(xmin, yc,   zmin);
+252               const Point max(xc,   ymax, zc);
+253               return std::make_pair (min, max);
+254             }
+255 
+256           case 3:
+257             {
+258               const Point min(xc,   yc,   zmin);
+259               const Point max(xmax, ymax, zc);
+260               return std::make_pair (min, max);
+261             }
+262 
+263           case 4:
+264             {
+265               const Point min(xmin, ymin, zc);
+266               const Point max(xc,   yc,   zmax);
+267               return std::make_pair (min, max);
+268             }
+269 
+270           case 5:
+271             {
+272               const Point min(xc,   ymin, zc);
+273               const Point max(xmax, yc,   zmax);
+274               return std::make_pair (min, max);
+275             }
+276 
+277           case 6:
+278             {
+279               const Point min(xmin, yc,   zc);
+280               const Point max(xc,   ymax, zmax);
+281               return std::make_pair (min, max);
+282             }
+283 
+284           case 7:
+285             {
+286               const Point min(xc,   yc,   zc);
+287               const Point max(xmax, ymax, zmax);
+288               return std::make_pair (min, max);
+289             }
+290 
+291           default:
+292             libMesh::err << "c >= N! : " << c
+293                          << std::endl;
+294             libmesh_error();
+295           }
+296 
+297 
+298 
+299         break;
+300       } // case 8
+301 
+302       // How to refine an QuadTree Node
+303     case 4:
+304       {
+305         const Real xmin = bounding_box\&.first(0);
+306         const Real ymin = bounding_box\&.first(1);
+307 
+308         const Real xmax = bounding_box\&.second(0);
+309         const Real ymax = bounding_box\&.second(1);
+310 
+311         const Real xc = xmin + \&.5*(xmax - xmin);
+312         const Real yc = ymin + \&.5*(ymax - ymin);
+313 
+314         switch (c)
+315           {
+316           case 0:
+317             {
+318               const Point min(xmin, ymin);
+319               const Point max(xc,   yc);
+320               return std::make_pair (min, max);
+321             }
+322 
+323           case 1:
+324             {
+325               const Point min(xc,   ymin);
+326               const Point max(xmax, yc);
+327               return std::make_pair (min, max);
+328             }
+329 
+330           case 2:
+331             {
+332               const Point min(xmin, yc);
+333               const Point max(xc,   ymax);
+334               return std::make_pair (min, max);
+335             }
+336 
+337           case 3:
+338             {
+339               const Point min(xc,   yc);
+340               const Point max(xmax, ymax);
+341               return std::make_pair (min, max);
+342             }
+343 
+344           default:
+345             libMesh::err << "c >= N!" << std::endl;
+346             libmesh_error();
+347 
+348           }
+349 
+350         break;
+351       } // case 4
+352 
+353       // How to refine a BinaryTree Node
+354     case 2:
+355       {
+356         const Real xmin = bounding_box\&.first(0);
+357 
+358         const Real xmax = bounding_box\&.second(0);
+359 
+360         const Real xc = xmin + \&.5*(xmax - xmin);
+361 
+362         switch (c)
+363           {
+364           case 0:
+365             {
+366               return std::make_pair (Point(xmin), Point(xc));
+367             }
+368 
+369           case 1:
+370             {
+371               return std::make_pair (Point(xc), Point(xmax));
+372             }
+373 
+374           default:
+375             libMesh::err << "c >= N!" << std::endl;
+376             libmesh_error();
+377           }
+378 
+379         break;
+380       } // case 2
+381 
+382 
+383     default:
+384       libMesh::err << "Only implemented for Octrees, QuadTrees, and Binary Trees!" << std::endl;
+385       libmesh_error();
+386 
+387     }
+388 
+389   // How did we get here?
+390   libmesh_error();
+391 
+392   Point min, max;
+393   return std::make_pair (min, max);
+394 }
+.fi
+.SS "template<unsigned int N> const \fBElem\fP * \fBlibMesh::TreeNode\fP< N >::find_element (const \fBPoint\fP &p) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+an element containing point p\&. 
+.RE
+.PP
+
+.PP
+Definition at line 521 of file tree_node\&.C\&.
+.PP
+.nf
+522 {
+523   if (this->active())
+524     {
+525       // Only check our children if the point is in our bounding box
+526       // or if the node contains infinite elements
+527       if (this->bounds_point(p) || this->contains_ifems)
+528         // Search the active elements in the active TreeNode\&.
+529         for (std::vector<const Elem*>::const_iterator pos=elements\&.begin();
+530              pos != elements\&.end(); ++pos)
+531           if ((*pos)->active())
+532             if ((*pos)->contains_point(p))
+533               return *pos;
+534 
+535       // The point was not found in any element
+536       return NULL;
+537     }
+538   else
+539     return this->find_element_in_children(p);
+540 
+541 
+542 
+543   // Should never get here\&.  See if-else structure
+544   // above with return statements that must get executed\&.
+545   libmesh_error();
+546 
+547   return NULL;
+548 }
+.fi
+.SS "template<unsigned int N> const \fBElem\fP * \fBlibMesh::TreeNode\fP< N >::find_element_in_children (const \fBPoint\fP &p) const\fC [private]\fP"
+Look for point \fCp\fP in our children\&. 
+.PP
+Definition at line 554 of file tree_node\&.C\&.
+.PP
+References libMesh::invalid_uint, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+555 {
+556   libmesh_assert (!this->active());
+557 
+558   unsigned int excluded_child = libMesh::invalid_uint;
+559 
+560   // First only look in the children whose bounding box
+561   // contain the point p\&.  Note that only one child will
+562   // bound the point since the bounding boxes are not
+563   // overlapping
+564   for (unsigned int c=0; c<children\&.size(); c++)
+565     if (children[c]->bounds_point(p))
+566       {
+567         if (children[c]->active())
+568           {
+569             const Elem* e = children[c]->find_element(p);
+570 
+571             if (e != NULL)
+572               return e;
+573           }
+574         else
+575           {
+576             const Elem* e = children[c]->find_element_in_children(p);
+577 
+578             if (e != NULL)
+579               return e;
+580           }
+581 
+582         // If we get here than the child that bounds the
+583         // point does not have any elements that contain
+584         // the point\&.  So, we will search all our children\&.
+585         // However, we have already searched child c so there
+586         // is no use searching her again\&.
+587         excluded_child = c;
+588       }
+589 
+590 
+591   // If we get here then our child whose bounding box
+592   // was searched and did not find any elements containing
+593   // the point p\&.  So, let's look at the other children
+594   // but exclude the one we have already searched\&.
+595   for (unsigned int c=0; c<children\&.size(); c++)
+596     if (c != excluded_child)
+597       {
+598         if (children[c]->active())
+599           {
+600             const Elem* e = children[c]->find_element(p);
+601 
+602             if (e != NULL)
+603               return e;
+604           }
+605         else
+606           {
+607             const Elem* e = children[c]->find_element_in_children(p);
+608 
+609             if (e != NULL)
+610               return e;
+611           }
+612       }
+613 
+614   // If we get here we have searched all our children\&.
+615   // Since this process was started at the root node then
+616   // we have searched all the elements in the tree without
+617   // success\&.  So, we should return NULL since at this point
+618   // _no_ elements in the tree claim to contain point p\&.
+619 
+620   return NULL;
+621 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::insert (const \fBNode\fP *nd)"
+Inserts \fC\fBNode\fP\fP \fCnd\fP into the \fBTreeNode\fP\&. 
+.PP
+Definition at line 35 of file tree_node\&.C\&.
+.PP
+References libMesh::DofObject::id(), libMesh::libmesh_assert(), mesh, and libMesh::MeshBase::n_nodes()\&.
+.PP
+.nf
+36 {
+37   libmesh_assert(nd);
+38   libmesh_assert_less (nd->id(), mesh\&.n_nodes());
+39 
+40   // Return if we don't bound the node
+41   if (!this->bounds_node(nd))
+42     return;
+43 
+44   // Only add the node if we are active
+45   if (this->active())
+46     {
+47       nodes\&.push_back (nd);
+48 
+49       // Refine ourself if we reach the target bin size for a TreeNode\&.
+50       if (nodes\&.size() == tgt_bin_size)
+51         this->refine();
+52     }
+53 
+54   // If we are not active simply pass the node along to
+55   // our children
+56   else
+57     {
+58       libmesh_assert_equal_to (children\&.size(), N);
+59 
+60       for (unsigned int c=0; c<N; c++)
+61         children[c]->insert (nd);
+62     }
+63 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::insert (const \fBElem\fP *nd)"
+Inserts \fC\fBElem\fP\fP \fCel\fP into the \fBTreeNode\fP\&. 
+.PP
+Definition at line 68 of file tree_node\&.C\&.
+.PP
+References libMesh::MeshTools::bounding_box(), libMesh::dim, libMesh::Elem::dim(), libMesh::Elem::infinite(), libMesh::libmesh_assert(), libMesh::Elem::n_nodes(), and libMesh::Elem::point()\&.
+.PP
+.nf
+69 {
+70   libmesh_assert(elem);
+71 
+72   /* We first want to find the corners of the cuboid surrounding the
+73      cell\&.  */
+74   Point minCoord = elem->point(0);
+75   Point maxCoord = minCoord;
+76   unsigned int dim = elem->dim();
+77   for(unsigned int i=elem->n_nodes()-1; i>0; i--)
+78     {
+79       Point p = elem->point(i);
+80       for(unsigned int d=0; d<dim; d++)
+81         {
+82           if(minCoord(d)>p(d)) minCoord(d) = p(d);
+83           if(maxCoord(d)<p(d)) maxCoord(d) = p(d);
+84         }
+85     }
+86 
+87   /* Next, find out whether this cuboid has got non-empty intersection
+88      with the bounding box of the current tree node\&.  */
+89   bool intersects = true;
+90   for(unsigned int d=0; d<dim; d++)
+91     {
+92       if(maxCoord(d)<this->bounding_box\&.first(d) ||
+93          minCoord(d)>this->bounding_box\&.second(d))
+94         {
+95           intersects = false;
+96         }
+97     }
+98 
+99   /* If not, we should not care about this element\&.  */
+100   if(!intersects)
+101     {
+102       return;
+103     }
+104 
+105   // Only add the element if we are active
+106   if (this->active())
+107     {
+108       elements\&.push_back (elem);
+109 
+110 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+111 
+112       // flag indicating this node contains
+113       // infinite elements
+114       if (elem->infinite())
+115         this->contains_ifems = true;
+116 
+117 #endif
+118 
+119       // Refine ourself if we reach the target bin size for a TreeNode\&.
+120       if (elements\&.size() == tgt_bin_size)
+121         this->refine();
+122     }
+123 
+124   // If we are not active simply pass the element along to
+125   // our children
+126   else
+127     {
+128       libmesh_assert_equal_to (children\&.size(), N);
+129 
+130       for (unsigned int c=0; c<N; c++)
+131         children[c]->insert (elem);
+132     }
+133 }
+.fi
+.SS "template<unsigned int N> bool \fBlibMesh::TreeNode\fP< N >::is_root () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if this node is the root node, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 71 of file tree_node\&.h\&.
+.PP
+References libMesh::TreeNode< N >::parent\&.
+.PP
+.nf
+71 { return (parent == NULL); }
+.fi
+.SS "template<unsigned int N> unsigned int \fBlibMesh::TreeNode\fP< N >::level () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the level of the node\&. 
+.RE
+.PP
+
+.PP
+Definition at line 249 of file tree_node\&.h\&.
+.PP
+.nf
+250 {
+251   if (parent != NULL)
+252     return parent->level()+1;
+253 
+254   // if we have no parent, we are a level-0 box
+255   return 0;
+256 }
+.fi
+.SS "template<unsigned int N> unsigned int \fBlibMesh::TreeNode\fP< N >::n_active_bins () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of active bins below (including) this element\&. 
+.RE
+.PP
+
+.PP
+Definition at line 502 of file tree_node\&.C\&.
+.PP
+References libMesh::Parallel::sum()\&.
+.PP
+.nf
+503 {
+504   if (this->active())
+505     return 1;
+506 
+507   else
+508     {
+509       unsigned int sum=0;
+510 
+511       for (unsigned int c=0; c<children\&.size(); c++)
+512         sum += children[c]->n_active_bins();
+513 
+514       return sum;
+515     }
+516 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::print_elements (std::ostream &out = \fC\fBlibMesh::out\fP\fP) const"
+Prints the contents of the elements set if we are active\&. 
+.PP
+Definition at line 421 of file tree_node\&.C\&.
+.PP
+.nf
+422 {
+423   if (this->active())
+424     {
+425       out_stream << "TreeNode Level: " << this->level() << std::endl;
+426 
+427       for (std::vector<const Elem*>::const_iterator pos=elements\&.begin();
+428            pos != elements\&.end(); ++pos)
+429         out_stream << " " << *pos;
+430 
+431       out_stream << std::endl << std::endl;
+432     }
+433   else
+434     {
+435       for (unsigned int child=0; child<children\&.size(); child++)
+436         children[child]->print_elements();
+437     }
+438 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::print_nodes (std::ostream &out = \fC\fBlibMesh::out\fP\fP) const"
+Prints the contents of the node_numbers vector if we are active\&. 
+.PP
+Definition at line 399 of file tree_node\&.C\&.
+.PP
+.nf
+400 {
+401   if (this->active())
+402     {
+403       out_stream << "TreeNode Level: " << this->level() << std::endl;
+404 
+405       for (unsigned int n=0; n<nodes\&.size(); n++)
+406         out_stream << " " << nodes[n]->id();
+407 
+408       out_stream << std::endl << std::endl;
+409 
+410     }
+411   else
+412     {
+413       for (unsigned int child=0; child<children\&.size(); child++)
+414         children[child]->print_nodes();
+415     }
+416 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::refine ()"
+Refine the tree node into N children if it contains more than tol nodes\&. 
+.PP
+Definition at line 138 of file tree_node\&.C\&.
+.PP
+References libMesh::libmesh_assert(), mesh, libMesh::TreeNode< N >::set_bounding_box(), and libMesh::swap()\&.
+.PP
+.nf
+139 {
+140   // Huh?  better be active\&.\&.\&.
+141   libmesh_assert (this->active());
+142   libmesh_assert (children\&.empty());
+143 
+144   // A TreeNode<N> has by definition N children
+145   children\&.resize(N);
+146 
+147   for (unsigned int c=0; c<N; c++)
+148     {
+149       // Create the child and set its bounding box\&.
+150       children[c] = new TreeNode<N> (mesh, tgt_bin_size, this);
+151       children[c]->set_bounding_box(this->create_bounding_box(c));
+152 
+153       // Pass off our nodes to our children
+154       for (unsigned int n=0; n<nodes\&.size(); n++)
+155         children[c]->insert(nodes[n]);
+156 
+157       // Pass off our elements to our children
+158       for (unsigned int e=0; e<elements\&.size(); e++)
+159         children[c]->insert(elements[e]);
+160     }
+161 
+162   // We don't need to store nodes or elements any more,
+163   // they have been added to the children\&.
+164   // Note that we cannot use std::vector<>::clear() here
+165   // since that in general does not reduce capacity!!
+166   // That would be a bad, bad thing\&.
+167   std::vector<const Node*>()\&.swap(nodes);
+168   std::vector<const Elem*>()\&.swap(elements);
+169 
+170   libmesh_assert_equal_to (nodes\&.capacity(), 0);
+171   libmesh_assert_equal_to (elements\&.capacity(), 0);
+172 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::set_bounding_box (const std::pair< \fBPoint\fP, \fBPoint\fP > &bbox)"
+Sets the bounding box; 
+.PP
+Definition at line 177 of file tree_node\&.C\&.
+.PP
+References libMesh::MeshTools::bounding_box()\&.
+.PP
+Referenced by libMesh::TreeNode< N >::refine()\&.
+.PP
+.nf
+178 {
+179   bounding_box = bbox;
+180 }
+.fi
+.SS "template<unsigned int N> void \fBlibMesh::TreeNode\fP< N >::transform_nodes_to_elements (std::vector< std::vector< const \fBElem\fP * > > &nodes_to_elem)"
+Transforms node numbers to element pointers\&. 
+.PP
+Definition at line 443 of file tree_node\&.C\&.
+.PP
+References mesh, libMesh::MeshBase::n_nodes(), and libMesh::swap()\&.
+.PP
+.nf
+444 {
+445   if (this->active())
+446     {
+447       elements\&.clear();
+448 
+449       // Temporarily use a set\&. Since multiple nodes
+450       // will likely map to the same element we use a
+451       // set to eliminate the duplication\&.
+452       std::set<const Elem*> elements_set;
+453 
+454       for (unsigned int n=0; n<nodes\&.size(); n++)
+455         {
+456           // the actual global node number we are replacing
+457           // with the connected elements
+458           const dof_id_type node_number = nodes[n]->id();
+459 
+460           libmesh_assert_less (node_number, mesh\&.n_nodes());
+461           libmesh_assert_less (node_number, nodes_to_elem\&.size());
+462 
+463           for (unsigned int e=0; e<nodes_to_elem[node_number]\&.size(); e++)
+464             elements_set\&.insert(nodes_to_elem[node_number][e]);
+465         }
+466 
+467       // Done with the nodes\&.
+468       std::vector<const Node*>()\&.swap(nodes);
+469 
+470       // Now the set is built\&.  We can copy this to the
+471       // vector\&.  Note that the resulting vector will
+472       // already be sorted, and will require less memory
+473       // than the set\&.
+474       elements\&.reserve(elements_set\&.size());
+475 
+476       for (std::set<const Elem*>::iterator pos=elements_set\&.begin();
+477            pos != elements_set\&.end(); ++pos)
+478         {
+479           elements\&.push_back(*pos);
+480 
+481 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+482 
+483           // flag indicating this node contains
+484           // infinite elements
+485           if ((*pos)->infinite())
+486             this->contains_ifems = true;
+487 
+488 #endif
+489         }
+490     }
+491   else
+492     {
+493       for (unsigned int child=0; child<children\&.size(); child++)
+494         children[child]->transform_nodes_to_elements (nodes_to_elem);
+495     }
+496 
+497 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<unsigned int N> std::pair<\fBPoint\fP, \fBPoint\fP> \fBlibMesh::TreeNode\fP< N >::bounding_box\fC [private]\fP"
+The Cartesian bounding box for the node\&. The minimum point is stored as bounding_box\&.first, the maximum point is stored as bounding_box\&.second\&. 
+.PP
+Definition at line 188 of file tree_node\&.h\&.
+.SS "template<unsigned int N> std::vector<\fBTreeNode\fP<N>* > \fBlibMesh::TreeNode\fP< N >::children\fC [private]\fP"
+Pointers to our children\&. This vector is empty if the node is active\&. 
+.PP
+Definition at line 181 of file tree_node\&.h\&.
+.PP
+Referenced by libMesh::TreeNode< N >::active(), and libMesh::TreeNode< N >::TreeNode()\&.
+.SS "template<unsigned int N> bool \fBlibMesh::TreeNode\fP< N >::contains_ifems\fC [private]\fP"
+Does this node contain any infinite elements\&. 
+.PP
+Definition at line 203 of file tree_node\&.h\&.
+.SS "template<unsigned int N> std::vector<const \fBElem\fP*> \fBlibMesh::TreeNode\fP< N >::elements\fC [private]\fP"
+Pointers to the elements in this tree node\&. 
+.PP
+Definition at line 193 of file tree_node\&.h\&.
+.PP
+Referenced by libMesh::TreeNode< N >::TreeNode()\&.
+.SS "template<unsigned int N> const \fBMeshBase\fP& \fBlibMesh::TreeNode\fP< N >::mesh\fC [private]\fP"
+Reference to the mesh\&. 
+.PP
+Definition at line 164 of file tree_node\&.h\&.
+.SS "template<unsigned int N> std::vector<const \fBNode\fP*> \fBlibMesh::TreeNode\fP< N >::nodes\fC [private]\fP"
+The node numbers contained in this portion of the tree\&. 
+.PP
+Definition at line 198 of file tree_node\&.h\&.
+.PP
+Referenced by libMesh::TreeNode< N >::TreeNode()\&.
+.SS "template<unsigned int N> const \fBTreeNode\fP<N>* \fBlibMesh::TreeNode\fP< N >::parent\fC [private]\fP"
+Pointer to this node's parent\&. 
+.PP
+Definition at line 175 of file tree_node\&.h\&.
+.PP
+Referenced by libMesh::TreeNode< N >::is_root()\&.
+.SS "template<unsigned int N> const unsigned int \fBlibMesh::TreeNode\fP< N >::tgt_bin_size\fC [private]\fP"
+The maximum number of things we should store before refining ourself\&. 
+.PP
+Definition at line 170 of file tree_node\&.h\&.
+.PP
+Referenced by libMesh::TreeNode< N >::TreeNode()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

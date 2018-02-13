@@ -1,0 +1,176 @@
+.TH "libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Base" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Base \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inf_fe\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBElem\fP * \fBbuild_elem\fP (const \fBElem\fP *inf_elem)"
+.br
+.ti -1c
+.RI "static \fBElemType\fP \fBget_elem_type\fP (const \fBElemType\fP type)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_base_mapping_sf\fP (const \fBElemType\fP base_elem_type, const \fBOrder\fP base_mapping_order)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBase\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map>class libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Base"
+This nested class contains most of the static methods related to the base part of an infinite element\&. Only static members are provided, and these should only be accessible from within \fC\fBInfFE\fP\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2003 
+.RE
+.PP
+
+.PP
+Definition at line 188 of file inf_fe\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Base::Base ()\fC [inline]\fP, \fC [private]\fP"
+Never use an object of this type\&. 
+.PP
+Definition at line 195 of file inf_fe\&.h\&.
+.PP
+.nf
+195 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<unsigned int Dim, FEFamily T_radial, InfMapType T_base> \fBElem\fP * \fBlibMesh::InfFE\fP< Dim, T_radial, T_base >::Base::build_elem (const \fBElem\fP *inf_elem)\fC [static]\fP"
+Build the base element of an infinite element\&. Be careful, this method allocates memory! So be sure to delete the new element afterwards\&. 
+.PP
+Definition at line 36 of file inf_fe_base_radial\&.C\&.
+.PP
+References libMesh::Elem::build_side(), and libMesh::AutoPtr< Tp >::release()\&.
+.PP
+.nf
+37 {
+38   AutoPtr<Elem> ape(inf_elem->build_side(0));
+39   return ape\&.release();
+40 }
+.fi
+.SS "template<unsigned int Dim, FEFamily T_radial, InfMapType T_base> \fBElemType\fP \fBlibMesh::InfFE\fP< Dim, T_radial, T_base >::Base::get_elem_type (const \fBElemType\fPtype)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the base element associated to \fCtype\fP\&. This is, for example, \fCTRI3\fP for \fCINFPRISM6\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 46 of file inf_fe_base_radial\&.C\&.
+.PP
+References libMesh::EDGE2, libMesh::EDGE3, libMesh::err, libMesh::INFEDGE2, libMesh::INFHEX16, libMesh::INFHEX18, libMesh::INFHEX8, libMesh::INFPRISM12, libMesh::INFPRISM6, libMesh::INFQUAD4, libMesh::INFQUAD6, libMesh::INVALID_ELEM, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+.nf
+47 {
+48   switch (type)
+49     {
+50       // 3D infinite elements:
+51       // with Dim=3 -> infinite elements on their own
+52     case INFHEX8:
+53       return QUAD4;
+54 
+55     case INFHEX16:
+56       return QUAD8;
+57 
+58     case INFHEX18:
+59       return QUAD9;
+60 
+61     case INFPRISM6:
+62       return TRI3;
+63 
+64     case INFPRISM12:
+65       return TRI6;
+66 
+67       // 2D infinite elements:
+68       // with Dim=3 -> used as boundary condition,
+69       // with Dim=2 -> infinite elements on their own
+70     case INFQUAD4:
+71       return EDGE2;
+72 
+73     case INFQUAD6:
+74       return EDGE3;
+75 
+76       // 1D infinite elements:
+77       // with Dim=2 -> used as boundary condition,
+78       // with Dim=1 -> infinite elements on their own,
+79       //               but no base element!
+80     case INFEDGE2:
+81       return INVALID_ELEM;
+82 
+83     default:
+84       {
+85         libMesh::err << "ERROR: Unsupported element type!: " << type
+86                      << std::endl;
+87         libmesh_error();
+88       }
+89     }
+90 
+91 
+92   libmesh_error();
+93   return INVALID_ELEM;
+94 }
+.fi
+.SS "template<unsigned int Dim, FEFamily T_radial, InfMapType T_base> unsigned int \fBlibMesh::InfFE\fP< Dim, T_radial, T_base >::Base::n_base_mapping_sf (const \fBElemType\fPbase_elem_type, const \fBOrder\fPbase_mapping_order)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of shape functions used in the mapping in the \fIbase\fP element of type \fCbase_elem_type\fP mapped with order \fCbase_mapping_order\fP 
+.RE
+.PP
+
+.PP
+Definition at line 101 of file inf_fe_base_radial\&.C\&.
+.PP
+References libMesh::FE< Dim, T >::n_shape_functions()\&.
+.PP
+.nf
+103 {
+104   if (Dim == 1)
+105     return 1;
+106 
+107   else if (Dim == 2)
+108     return FE<1,LAGRANGE>::n_shape_functions (base_elem_type,
+109                                               base_mapping_order);
+110   else if (Dim == 3)
+111     return FE<2,LAGRANGE>::n_shape_functions (base_elem_type,
+112                                               base_mapping_order);
+113   else
+114     {
+115       // whoa, cool infinite element!
+116       libmesh_error();
+117       return 0;
+118     }
+119 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

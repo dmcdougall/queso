@@ -1,0 +1,642 @@
+.TH "libMesh::TriangleInterface" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TriangleInterface \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_triangle_interface\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBArbitraryHole\fP"
+.br
+.ti -1c
+.RI "class \fBHole\fP"
+.br
+.ti -1c
+.RI "class \fBPolygonHole\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBTriangulationType\fP { \fBGENERATE_CONVEX_HULL\fP = 0, \fBPSLG\fP = 1, \fBINVALID_TRIANGULATION_TYPE\fP }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTriangleInterface\fP (\fBUnstructuredMesh\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fB~TriangleInterface\fP ()"
+.br
+.ti -1c
+.RI "void \fBtriangulate\fP ()"
+.br
+.ti -1c
+.RI "\fBElemType\fP & \fBelem_type\fP ()"
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBdesired_area\fP ()"
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBminimum_angle\fP ()"
+.br
+.ti -1c
+.RI "std::string & \fBextra_flags\fP ()"
+.br
+.ti -1c
+.RI "\fBTriangulationType\fP & \fBtriangulation_type\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBinsert_extra_points\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBsmooth_after_generating\fP ()"
+.br
+.ti -1c
+.RI "void \fBattach_hole_list\fP (const std::vector< \fBHole\fP * > *holes)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< std::pair
+.br
+< unsigned int, unsigned int > > \fBsegments\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBUnstructuredMesh\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "const std::vector< \fBHole\fP * > * \fB_holes\fP"
+.br
+.ti -1c
+.RI "\fBElemType\fP \fB_elem_type\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_desired_area\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_minimum_angle\fP"
+.br
+.ti -1c
+.RI "std::string \fB_extra_flags\fP"
+.br
+.ti -1c
+.RI "\fBTriangulationType\fP \fB_triangulation_type\fP"
+.br
+.ti -1c
+.RI "bool \fB_insert_extra_points\fP"
+.br
+.ti -1c
+.RI "bool \fB_smooth_after_generating\fP"
+.br
+.ti -1c
+.RI "\fBMeshSerializer\fP \fB_serializer\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A C++ interface between LibMesh and the Triangle library written by J\&.R\&. Shewchuk\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file mesh_triangle_interface\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::TriangleInterface::TriangulationType\fP"
+The TriangulationType is used with the general triangulate function defind below\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIGENERATE_CONVEX_HULL \fP\fP
+Uses the triangle library to first generate a convex hull from the set of points passed in, and then triangulate this set of points\&. This is probably the most common type of usage\&. 
+.TP
+\fB\fIPSLG \fP\fP
+Use the triangle library to triangulate a Planar Straight Line Graph which is defined implicitly by the order of the 'points' vector: a straight line is assumed to lie between each successive pair of points, with an additional line joining the final and first points\&. In case your triangulation is a little too 'structured' looking (which can happen when the initial PSLG is really simple) you can try to make the resulting triangulation a little more 'unstructured' looking by setting insert_points to true in the \fBtriangulate()\fP function\&. 
+.TP
+\fB\fIINVALID_TRIANGULATION_TYPE \fP\fP
+Does nothing, used as a default value\&. 
+.PP
+Definition at line 70 of file mesh_triangle_interface\&.h\&.
+.PP
+.nf
+71     {
+77       GENERATE_CONVEX_HULL = 0,
+78 
+89       PSLG = 1,
+90 
+94       INVALID_TRIANGULATION_TYPE
+95     };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TriangleInterface::TriangleInterface (\fBUnstructuredMesh\fP &mesh)\fC [explicit]\fP"
+The constructor\&. A reference to the mesh containing the points which are to be triangulated must be provided\&. Unless otherwise specified, a convex hull will be computed for the set of input points and the convex hull will be meshed\&. 
+.PP
+Definition at line 43 of file mesh_triangle_interface\&.C\&.
+.PP
+.nf
+44   : _mesh(mesh),
+45     _holes(NULL),
+46     _elem_type(TRI3),
+47     _desired_area(0\&.1),
+48     _minimum_angle(20\&.0),
+49     _extra_flags(""),
+50     _triangulation_type(GENERATE_CONVEX_HULL),
+51     _insert_extra_points(false),
+52     _smooth_after_generating(true),
+53     _serializer(_mesh)
+54 {}
+.fi
+.SS "libMesh::TriangleInterface::~TriangleInterface ()\fC [inline]\fP"
+Empty destructor\&. 
+.PP
+Definition at line 64 of file mesh_triangle_interface\&.h\&.
+.PP
+.nf
+64 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::TriangleInterface::attach_hole_list (const std::vector< \fBHole\fP * > *holes)\fC [inline]\fP"
+Attaches a vector of Hole* pointers which will be meshed around\&. 
+.PP
+Definition at line 154 of file mesh_triangle_interface\&.h\&.
+.PP
+References _holes\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_delaunay_square()\&.
+.PP
+.nf
+154 {_holes = holes;}
+.fi
+.SS "\fBReal\fP& libMesh::TriangleInterface::desired_area ()\fC [inline]\fP"
+Sets and/or gets the desired triangle area\&. Set to zero to disable area constraint\&. 
+.PP
+Definition at line 121 of file mesh_triangle_interface\&.h\&.
+.PP
+References _desired_area\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_delaunay_square()\&.
+.PP
+.nf
+121 {return _desired_area;}
+.fi
+.SS "\fBElemType\fP& libMesh::TriangleInterface::elem_type ()\fC [inline]\fP"
+Sets and/or gets the desired element type\&. 
+.PP
+Definition at line 115 of file mesh_triangle_interface\&.h\&.
+.PP
+References _elem_type\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_delaunay_square()\&.
+.PP
+.nf
+115 {return _elem_type;}
+.fi
+.SS "std::string& libMesh::TriangleInterface::extra_flags ()\fC [inline]\fP"
+Sets and/or gets additional flags to be passed to triangle 
+.PP
+Definition at line 132 of file mesh_triangle_interface\&.h\&.
+.PP
+References _extra_flags\&.
+.PP
+.nf
+132 {return _extra_flags;}
+.fi
+.SS "bool& libMesh::TriangleInterface::insert_extra_points ()\fC [inline]\fP"
+Sets and/or gets the flag for inserting add'l points\&. 
+.PP
+Definition at line 142 of file mesh_triangle_interface\&.h\&.
+.PP
+References _insert_extra_points\&.
+.PP
+.nf
+142 {return _insert_extra_points;}
+.fi
+.SS "\fBReal\fP& libMesh::TriangleInterface::minimum_angle ()\fC [inline]\fP"
+Sets and/or gets the minimum angle\&. Set to zero to disable area constraint\&. 
+.PP
+Definition at line 127 of file mesh_triangle_interface\&.h\&.
+.PP
+References _minimum_angle\&.
+.PP
+.nf
+127 {return _minimum_angle;}
+.fi
+.SS "bool& libMesh::TriangleInterface::smooth_after_generating ()\fC [inline]\fP"
+Sets/gets flag which tells whether to do Delaunay mesh smoothing after generating the grid\&. 
+.PP
+Definition at line 148 of file mesh_triangle_interface\&.h\&.
+.PP
+References _smooth_after_generating\&.
+.PP
+.nf
+148 {return _smooth_after_generating;}
+.fi
+.SS "void libMesh::TriangleInterface::triangulate ()"
+This is the main public interface for this function\&. Internally, it calls Triangle's triangulate routine\&. 
+.PP
+Definition at line 59 of file mesh_triangle_interface\&.C\&.
+.PP
+References _desired_area, _elem_type, _extra_flags, _holes, _insert_extra_points, _mesh, _minimum_angle, _smooth_after_generating, _triangulation_type, libMesh::MeshBase::add_point(), libMesh::MeshBase::clear(), libMesh::TriangleWrapper::copy_tri_to_mesh(), libMesh::TriangleWrapper::destroy(), end, libMesh::err, GENERATE_CONVEX_HULL, libMesh::TriangleWrapper::init(), libMesh::TriangleWrapper::INPUT, INVALID_TRIANGULATION_TYPE, libMesh::MeshBase::n_nodes(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::TriangleWrapper::OUTPUT, PSLG, segments, libMesh::MeshBase::set_mesh_dimension(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::TOLERANCE, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_delaunay_square()\&.
+.PP
+.nf
+60 {
+61   // Will the triangulation have holes?
+62   const bool have_holes = ((_holes != NULL) && (!_holes->empty()));
+63 
+64   // If the initial PSLG is really simple, e\&.g\&. an L-shaped domain or
+65   // a square/rectangle, the resulting triangulation may be very
+66   // "structured" looking\&.  Sometimes this is a problem if your
+67   // intention is to work with an "unstructured" looking grid\&.  We can
+68   // attempt to work around this limitation by inserting midpoints
+69   // into the original PSLG\&.  Inserting additional points into a
+70   // set of points meant to be a convex hull usually makes less sense\&.
+71 
+72   // May or may not need to insert new points \&.\&.\&.
+73   if ((_triangulation_type==PSLG) && (_insert_extra_points))
+74     {
+75       // Make a copy of the original points from the Mesh
+76       std::vector<Point> original_points (_mesh\&.n_nodes());
+77 
+78       MeshBase::node_iterator       node_it  = _mesh\&.nodes_begin();
+79       const MeshBase::node_iterator node_end = _mesh\&.nodes_end();
+80 
+81       for (unsigned int ctr=0; node_it != node_end; ++node_it)
+82         original_points[ctr++] = **node_it;
+83 
+84       // Clear out the mesh
+85       _mesh\&.clear();
+86 
+87       // Make sure the new Mesh will be 2D
+88       _mesh\&.set_mesh_dimension(2);
+89 
+90       // Insert a new point on each PSLG at some random location
+91       // np=index into new points vector
+92       // n =index into original points vector
+93       for (unsigned int np=0, n=0; np<2*original_points\&.size(); ++np)
+94         {
+95           // the even entries are the original points
+96           if (np%2==0)
+97             _mesh\&.add_point(original_points[n++]);
+98 
+99           else // the odd entries are the midpoints of the original PSLG segments
+100             _mesh\&.add_point ((original_points[n] + original_points[n-1])/2);
+101         }
+102     }
+103 
+104   // Regardless of whether we added additional points, the set of points to
+105   // triangulate is now sitting in the mesh\&.
+106 
+107   // If the holes vector is non-NULL (and non-empty) we need to determine
+108   // the number of additional points which the holes will add to the
+109   // triangulation\&.
+110   unsigned int n_hole_points = 0;
+111 
+112   if (have_holes)
+113     {
+114       for (unsigned int i=0; i<_holes->size(); ++i)
+115         n_hole_points += (*_holes)[i]->n_points();
+116     }
+117 
+118   // Triangle data structure for the mesh
+119   TriangleWrapper::triangulateio initial;
+120   TriangleWrapper::triangulateio final;
+121 
+122   // Pseudo-Constructor for the triangle io structs
+123   TriangleWrapper::init(initial);
+124   TriangleWrapper::init(final);
+125 
+126   initial\&.numberofpoints = _mesh\&.n_nodes() + n_hole_points;
+127   initial\&.pointlist      = static_cast<REAL*>(std::malloc(initial\&.numberofpoints * 2 * sizeof(REAL)));
+128 
+129   if (_triangulation_type==PSLG)
+130     {
+131       // Implicit segment ordering: One segment per point, including hole points
+132       if (this->segments\&.empty())
+133         initial\&.numberofsegments = initial\&.numberofpoints;
+134 
+135       // User-defined segment ordering: One segment per entry in the segments vector
+136       else
+137         initial\&.numberofsegments = this->segments\&.size();
+138     }
+139 
+140   else if (_triangulation_type==GENERATE_CONVEX_HULL)
+141     initial\&.numberofsegments = n_hole_points; // One segment for each hole point
+142 
+143   // Debugging
+144   // libMesh::out << "Number of segments set to: " << initial\&.numberofsegments << std::endl;
+145 
+146   // Allocate space for the segments (2 int per segment)
+147   if (initial\&.numberofsegments > 0)
+148     {
+149       initial\&.segmentlist = static_cast<int*> (std::malloc(initial\&.numberofsegments * 2 * sizeof(int)));
+150     }
+151 
+152 
+153   // Copy all the holes' points and segments into the triangle struct\&.
+154 
+155   // The hole_offset is a constant offset into the points vector which points
+156   // past the end of the last hole point added\&.
+157   unsigned int hole_offset=0;
+158 
+159   if (have_holes)
+160     for (unsigned int i=0; i<_holes->size(); ++i)
+161       {
+162         for (unsigned int ctr=0, h=0; h<(*_holes)[i]->n_points(); ctr+=2, ++h)
+163           {
+164             Point p = (*_holes)[i]->point(h);
+165 
+166             const unsigned int index0 = 2*hole_offset+ctr;
+167             const unsigned int index1 = 2*hole_offset+ctr+1;
+168 
+169             // Save the x,y locations in the triangle struct\&.
+170             initial\&.pointlist[index0] = p(0);
+171             initial\&.pointlist[index1] = p(1);
+172 
+173             // Set the points which define the segments
+174             initial\&.segmentlist[index0] = hole_offset+h;
+175             initial\&.segmentlist[index1] = (h==(*_holes)[i]->n_points()-1) ? hole_offset : hole_offset+h+1; // wrap around
+176           }
+177 
+178         // Update the hole_offset for the next hole
+179         hole_offset += (*_holes)[i]->n_points();
+180       }
+181 
+182 
+183   // Copy all the non-hole points and segments into the triangle struct\&.
+184   {
+185     MeshBase::node_iterator it = _mesh\&.nodes_begin();
+186     const MeshBase::node_iterator end = _mesh\&.nodes_end();
+187 
+188     for (dof_id_type ctr=0; it != end; ctr+=2, ++it)
+189       {
+190         dof_id_type index = 2*hole_offset + ctr;
+191 
+192         // Get pointer to the current node
+193         Node* node = *it;
+194 
+195         // Set x,y values in pointlist
+196         initial\&.pointlist[index] = (*node)(0);
+197         initial\&.pointlist[index+1] = (*node)(1);
+198 
+199         // If the user requested a PSLG, the non-hole points are also segments
+200         if (_triangulation_type==PSLG)
+201           {
+202             // Use implicit ordering to define segments
+203             if (this->segments\&.empty())
+204               {
+205                 dof_id_type n = ctr/2; // ctr is always even
+206                 initial\&.segmentlist[index] = hole_offset+n;
+207                 initial\&.segmentlist[index+1] = (n==_mesh\&.n_nodes()-1) ? hole_offset : hole_offset+n+1; // wrap around
+208               }
+209           }
+210       }
+211   }
+212 
+213 
+214   // If the user provided it, use his ordering to define the segments
+215   for (unsigned int ctr=0, s=0; s<this->segments\&.size(); ctr+=2, ++s)
+216     {
+217       const unsigned int index0 = 2*hole_offset+ctr;
+218       const unsigned int index1 = 2*hole_offset+ctr+1;
+219 
+220       initial\&.segmentlist[index0] = hole_offset + this->segments[s]\&.first;
+221       initial\&.segmentlist[index1] = hole_offset + this->segments[s]\&.second;
+222     }
+223 
+224 
+225 
+226   // Tell the input struct about the holes
+227   if (have_holes)
+228     {
+229       initial\&.numberofholes = _holes->size();
+230       initial\&.holelist      = static_cast<REAL*>(std::malloc(initial\&.numberofholes * 2 * sizeof(REAL)));
+231       for (unsigned int i=0, ctr=0; i<_holes->size(); ++i, ctr+=2)
+232         {
+233           Point inside_point = (*_holes)[i]->inside();
+234           initial\&.holelist[ctr]   = inside_point(0);
+235           initial\&.holelist[ctr+1] = inside_point(1);
+236         }
+237     }
+238 
+239   // Set the triangulation flags\&.
+240   // c ~ enclose convex hull with segments
+241   // z ~ use zero indexing
+242   // B ~ Suppresses boundary markers in the output
+243   // Q ~ run in "quiet" mode
+244   // p ~ Triangulates a Planar Straight Line Graph
+245   //     If the `p' switch is used, `segmentlist' must point to a list of
+246   //     segments, `numberofsegments' must be properly set, and
+247   //     `segmentmarkerlist' must either be set to NULL (in which case all
+248   //     markers default to zero), or must point to a list of markers\&.
+249   // D ~ Conforming Delaunay: use this switch if you want all triangles
+250   //     in the mesh to be Delaunay, and not just constrained Delaunay
+251   // q ~  Quality mesh generation with no angles smaller than 20 degrees\&.
+252   //      An alternate minimum angle may be specified after the q
+253   // a ~ Imposes a maximum triangle area constraint\&.
+254   // -P  Suppresses the output \&.poly file\&. Saves disk space, but you lose the ability to maintain
+255   //     constraining segments on later refinements of the mesh\&.
+256   // Create the flag strings, depends on element type
+257   std::ostringstream flags;
+258 
+259   // Default flags always used
+260   flags << "zBPQ";
+261 
+262   // Flags which are specific to the type of triangulation
+263   switch (_triangulation_type)
+264     {
+265     case GENERATE_CONVEX_HULL:
+266       {
+267         flags << "c";
+268         break;
+269       }
+270 
+271     case PSLG:
+272       {
+273         flags << "p";
+274         break;
+275       }
+276 
+277     case INVALID_TRIANGULATION_TYPE:
+278       {
+279         libmesh_error();
+280         break;
+281       }
+282 
+283     default:
+284       {
+285         libmesh_error();
+286       }
+287     }
+288 
+289 
+290   // Flags specific to the type of element
+291   switch (_elem_type)
+292     {
+293     case TRI3:
+294       {
+295         // do nothing\&.
+296         break;
+297       }
+298 
+299     case TRI6:
+300       {
+301         flags << "o2";
+302         break;
+303       }
+304 
+305     default:
+306       {
+307         libMesh::err << "ERROR: Unrecognized triangular element type\&." << std::endl;
+308         libmesh_error();
+309       }
+310     }
+311 
+312 
+313   // If we do have holes and the user asked to GENERATE_CONVEX_HULL,
+314   // need to add the p flag so the triangulation respects those segments\&.
+315   if ((_triangulation_type==GENERATE_CONVEX_HULL) && (have_holes))
+316     flags << "p";
+317 
+318   // Finally, add the area constraint
+319   if (_desired_area > TOLERANCE)
+320     flags << "a" << std::fixed << _desired_area;
+321 
+322   // add minimum angle constraint
+323   if (_minimum_angle > TOLERANCE)
+324     flags << "q" << std::fixed << _minimum_angle;
+325 
+326   // add user provided extra flags
+327   if (_extra_flags\&.size() > 0)
+328     flags << _extra_flags;
+329 
+330   // Refine the initial output to conform to the area constraint
+331   TriangleWrapper::triangulate(const_cast<char*>(flags\&.str()\&.c_str()),
+332                                &initial,
+333                                &final,
+334                                NULL); // voronoi ouput -- not used
+335 
+336 
+337   // Send the information computed by Triangle to the Mesh\&.
+338   TriangleWrapper::copy_tri_to_mesh(final,
+339                                     _mesh,
+340                                     _elem_type);
+341 
+342   // To the naked eye, a few smoothing iterations usually looks better,
+343   // so we do this by default unless the user says not to\&.
+344   if (this->_smooth_after_generating)
+345     LaplaceMeshSmoother(_mesh)\&.smooth(2);
+346 
+347 
+348   // Clean up\&.
+349   TriangleWrapper::destroy(initial,      TriangleWrapper::INPUT);
+350   TriangleWrapper::destroy(final,        TriangleWrapper::OUTPUT);
+351 
+352 }
+.fi
+.SS "\fBTriangulationType\fP& libMesh::TriangleInterface::triangulation_type ()\fC [inline]\fP"
+Sets and/or gets the desired triangulation type\&. 
+.PP
+Definition at line 137 of file mesh_triangle_interface\&.h\&.
+.PP
+References _triangulation_type\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_delaunay_square()\&.
+.PP
+.nf
+137 {return _triangulation_type;}
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReal\fP libMesh::TriangleInterface::_desired_area\fC [private]\fP"
+The desired area for the elements in the resulting mesh\&. 
+.PP
+Definition at line 190 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by desired_area(), and triangulate()\&.
+.SS "\fBElemType\fP libMesh::TriangleInterface::_elem_type\fC [private]\fP"
+The type of elements to generate\&. (Defaults to TRI3)\&. 
+.PP
+Definition at line 185 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by elem_type(), and triangulate()\&.
+.SS "std::string libMesh::TriangleInterface::_extra_flags\fC [private]\fP"
+Additional flags to be passed to triangle 
+.PP
+Definition at line 200 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by extra_flags(), and triangulate()\&.
+.SS "const std::vector<\fBHole\fP*>* libMesh::TriangleInterface::_holes\fC [private]\fP"
+A pointer to a vector of Hole*s\&. If this is NULL, there are no holes! 
+.PP
+Definition at line 179 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by attach_hole_list(), and triangulate()\&.
+.SS "bool libMesh::TriangleInterface::_insert_extra_points\fC [private]\fP"
+Flag which tells whether or not to insert additional nodes before triangulation\&. This can sometimes be used to 'de-regularize' the resulting triangulation\&. 
+.PP
+Definition at line 214 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by insert_extra_points(), and triangulate()\&.
+.SS "\fBUnstructuredMesh\fP& libMesh::TriangleInterface::_mesh\fC [private]\fP"
+Reference to the mesh which is to be created by triangle\&. 
+.PP
+Definition at line 173 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by triangulate()\&.
+.SS "\fBReal\fP libMesh::TriangleInterface::_minimum_angle\fC [private]\fP"
+Minimum angle in triangles 
+.PP
+Definition at line 195 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by minimum_angle(), and triangulate()\&.
+.SS "\fBMeshSerializer\fP libMesh::TriangleInterface::_serializer\fC [private]\fP"
+Triangle only operates on serial meshes\&. 
+.PP
+Definition at line 225 of file mesh_triangle_interface\&.h\&.
+.SS "bool libMesh::TriangleInterface::_smooth_after_generating\fC [private]\fP"
+Flag which tells whether we should smooth the mesh after it is generated\&. True by default\&. 
+.PP
+Definition at line 220 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by smooth_after_generating(), and triangulate()\&.
+.SS "\fBTriangulationType\fP libMesh::TriangleInterface::_triangulation_type\fC [private]\fP"
+The type of triangulation to perform: choices are: convex hull PSLG 
+.PP
+Definition at line 207 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by triangulate(), and triangulation_type()\&.
+.SS "std::vector<std::pair<unsigned int, unsigned int> > libMesh::TriangleInterface::segments"
+When constructing a PSLG, it is often not possible to do so implicitly through the ordering of the points\&. You can use the segments vector to specify the segments explicitly, Ex: unit square numbered counter-clockwise starting from origin segments[0] = (0,1) segments[1] = (1,2) segments[2] = (2,3) segments[3] = (3,0) Note: for this case, you could use the implicit ordering! 
+.PP
+Definition at line 167 of file mesh_triangle_interface\&.h\&.
+.PP
+Referenced by triangulate()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,1435 @@
+.TH "libMesh::NewtonSolver" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::NewtonSolver \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <newton_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::DiffSolver\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBDiffSolver\fP \fBParent\fP"
+.br
+.ti -1c
+.RI "enum \fBSolveResult\fP { \fBINVALID_SOLVE_RESULT\fP = 0, \fBCONVERGED_NO_REASON\fP = 1, \fBCONVERGED_ABSOLUTE_RESIDUAL\fP = 2, \fBCONVERGED_RELATIVE_RESIDUAL\fP = 4, \fBCONVERGED_ABSOLUTE_STEP\fP = 8, \fBCONVERGED_RELATIVE_STEP\fP = 16, \fBDIVERGED_NO_REASON\fP = 32, \fBDIVERGED_MAX_NONLINEAR_ITERATIONS\fP = 64, \fBDIVERGED_BACKTRACKING_FAILURE\fP = 128 }"
+.br
+.ti -1c
+.RI "typedef \fBImplicitSystem\fP \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNewtonSolver\fP (\fBsys_type\fP &\fBsystem\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~NewtonSolver\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBreinit\fP ()"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBsolve\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBtotal_outer_iterations\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBtotal_inner_iterations\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBsolve_result\fP ()"
+.br
+.ti -1c
+.RI "const \fBsys_type\fP & \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBDiffSolver\fP > \fBbuild\fP (\fBsys_type\fP &s)"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBrequire_residual_reduction\fP"
+.br
+.ti -1c
+.RI "bool \fBrequire_finite_residual\fP"
+.br
+.ti -1c
+.RI "bool \fBbrent_line_search\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBminsteplength\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBlinear_tolerance_multiplier\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBmax_linear_iterations\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBmax_nonlinear_iterations\fP"
+.br
+.ti -1c
+.RI "bool \fBquiet\fP"
+.br
+.ti -1c
+.RI "bool \fBverbose\fP"
+.br
+.ti -1c
+.RI "bool \fBcontinue_after_max_iterations\fP"
+.br
+.ti -1c
+.RI "bool \fBcontinue_after_backtrack_failure\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBabsolute_residual_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBrelative_residual_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBabsolute_step_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBrelative_step_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBinitial_linear_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBminimum_linear_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBLinearSolutionMonitor\fP > \fBlinear_solution_monitor\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBline_search\fP (\fBReal\fP tol, \fBReal\fP last_residual, \fBReal\fP &current_residual, \fBNumericVector\fP< \fBNumber\fP > &newton_iterate, const \fBNumericVector\fP< \fBNumber\fP > &linear_solution)"
+.br
+.ti -1c
+.RI "void \fBprint_convergence\fP (unsigned int step_num, \fBReal\fP current_residual, \fBReal\fP step_norm, bool linear_solve_finished)"
+.br
+.ti -1c
+.RI "bool \fBtest_convergence\fP (\fBReal\fP current_residual, \fBReal\fP step_norm, bool linear_solve_finished)"
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > \fBlinear_solver\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax_solution_norm\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax_residual_norm\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_outer_iterations\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_inner_iterations\fP"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_solve_result\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a solver which uses the default \fBlibMesh\fP linear solver in a quasiNewton method to handle a \fBDifferentiableSystem\fP
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2006 
+.RE
+.PP
+
+.PP
+Definition at line 48 of file newton_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "typedef \fBDiffSolver\fP \fBlibMesh::NewtonSolver::Parent\fP"
+
+.PP
+Definition at line 63 of file newton_solver\&.h\&.
+.SS "typedef \fBImplicitSystem\fP \fBlibMesh::DiffSolver::sys_type\fP\fC [inherited]\fP"
+The type of system 
+.PP
+Definition at line 77 of file diff_solver\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::DiffSolver::SolveResult\fP\fC [inherited]\fP"
+Enumeration return type for the \fBsolve()\fP function\&. Multiple SolveResults may be combined (OR'd) in the single return\&. To test which ones are present, just AND the return value with any of the SolveResult flags defined below\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIINVALID_SOLVE_RESULT \fP\fP
+A default or invalid solve result\&. This usually means no solve has occurred yet\&. 
+.TP
+\fB\fICONVERGED_NO_REASON \fP\fP
+The solver converged but no particular reason is specified\&. 
+.TP
+\fB\fICONVERGED_ABSOLUTE_RESIDUAL \fP\fP
+The \fBDiffSolver\fP achieved the desired absolute residual tolerance\&. 
+.TP
+\fB\fICONVERGED_RELATIVE_RESIDUAL \fP\fP
+The \fBDiffSolver\fP achieved the desired relative residual tolerance\&. 
+.TP
+\fB\fICONVERGED_ABSOLUTE_STEP \fP\fP
+The \fBDiffSolver\fP achieved the desired absolute step size tolerance\&. 
+.TP
+\fB\fICONVERGED_RELATIVE_STEP \fP\fP
+The \fBDiffSolver\fP achieved the desired relative step size tolerance\&. 
+.TP
+\fB\fIDIVERGED_NO_REASON \fP\fP
+The \fBDiffSolver\fP diverged but no particular reason is specified\&. 
+.TP
+\fB\fIDIVERGED_MAX_NONLINEAR_ITERATIONS \fP\fP
+The \fBDiffSolver\fP reached the maximum allowed number of nonlinear iterations before satisfying any convergence tests\&. 
+.TP
+\fB\fIDIVERGED_BACKTRACKING_FAILURE \fP\fP
+The \fBDiffSolver\fP failed to find a descent direction by backtracking (See \fBnewton_solver\&.C\fP) 
+.PP
+Definition at line 220 of file diff_solver\&.h\&.
+.PP
+.nf
+220                    {
+225     INVALID_SOLVE_RESULT = 0,
+226 
+231     CONVERGED_NO_REASON = 1,
+232 
+237     CONVERGED_ABSOLUTE_RESIDUAL = 2,
+238 
+243     CONVERGED_RELATIVE_RESIDUAL = 4,
+244 
+249     CONVERGED_ABSOLUTE_STEP = 8,
+250 
+255     CONVERGED_RELATIVE_STEP = 16,
+256 
+261     DIVERGED_NO_REASON = 32,
+262 
+268     DIVERGED_MAX_NONLINEAR_ITERATIONS = 64,
+269 
+274     DIVERGED_BACKTRACKING_FAILURE = 128
+275   };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::NewtonSolver::NewtonSolver (\fBsys_type\fP &system)\fC [explicit]\fP"
+Constructor\&. Requires a reference to the system to be solved\&. 
+.PP
+Definition at line 232 of file newton_solver\&.C\&.
+.PP
+.nf
+233   : Parent(s),
+234     require_residual_reduction(true),
+235     require_finite_residual(true),
+236     brent_line_search(true),
+237     minsteplength(1e-5),
+238     linear_tolerance_multiplier(1e-3),
+239     linear_solver(LinearSolver<Number>::build(s\&.comm()))
+240 {
+241 }
+.fi
+.SS "libMesh::NewtonSolver::~NewtonSolver ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 245 of file newton_solver\&.C\&.
+.PP
+.nf
+246 {
+247 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBAutoPtr\fP< \fBDiffSolver\fP > libMesh::DiffSolver::build (\fBsys_type\fP &s)\fC [static]\fP, \fC [inherited]\fP"
+\fBFactory\fP\&. Requires a reference to the system to be solved\&. Returns a \fBNewtonSolver\fP by default 
+.PP
+Definition at line 51 of file diff_solver\&.C\&.
+.PP
+Referenced by libMesh::TimeSolver::init()\&.
+.PP
+.nf
+52 {
+53   return AutoPtr<DiffSolver>(new NewtonSolver(s));
+54 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::NewtonSolver::init ()\fC [virtual]\fP"
+The initialization function\&. This method is used to initialize internal data structures before a simulation begins\&. 
+.PP
+Reimplemented from \fBlibMesh::DiffSolver\fP\&.
+.PP
+Definition at line 251 of file newton_solver\&.C\&.
+.PP
+References libMesh::DiffSolver::_system, libMesh::DiffSolver::init(), linear_solver, libMesh::System::name(), and libMesh::on_command_line()\&.
+.PP
+.nf
+252 {
+253   Parent::init();
+254 
+255   if (libMesh::on_command_line("--solver_system_names"))
+256     linear_solver->init((_system\&.name()+"_")\&.c_str());
+257   else
+258     linear_solver->init();
+259 
+260   linear_solver->init_names(_system);
+261 }
+.fi
+.SS "\fBReal\fP libMesh::NewtonSolver::line_search (\fBReal\fPtol, \fBReal\fPlast_residual, \fBReal\fP &current_residual, \fBNumericVector\fP< \fBNumber\fP > &newton_iterate, const \fBNumericVector\fP< \fBNumber\fP > &linear_solution)\fC [protected]\fP"
+This does a line search in the direction opposite linear_solution to try and minimize the residual of newton_iterate\&. newton_iterate is moved to the end of the quasiNewton step, and the return value is the substep size\&. 
+.PP
+Definition at line 38 of file newton_solver\&.C\&.
+.PP
+References libMesh::DiffSolver::_outer_iterations, libMesh::DiffSolver::_solve_result, libMesh::DiffSolver::_system, std::abs(), libMesh::NumericVector< T >::add(), libMesh::ImplicitSystem::assembly(), brent_line_search, libMesh::NumericVector< T >::close(), libMesh::DiffSolver::continue_after_backtrack_failure, libMesh::DiffSolver::DIVERGED_BACKTRACKING_FAILURE, libMesh::NumericVector< T >::l2_norm(), libMesh::libmesh_isnan(), std::max(), std::min(), minsteplength, libMesh::out, libMesh::DiffSolver::quiet, libMesh::Real, require_finite_residual, require_residual_reduction, libMesh::ExplicitSystem::rhs, libMesh::SIGN(), libMesh::DiffSolver::verbose, and libMesh::x\&.
+.PP
+Referenced by solve()\&.
+.PP
+.nf
+43 {
+44   // Take a full step if we got a residual reduction or if we
+45   // aren't substepping
+46   if ((current_residual < last_residual) ||
+47       (!require_residual_reduction &&
+48        (!require_finite_residual || !libmesh_isnan(current_residual))))
+49     return 1\&.;
+50 
+51   // The residual vector
+52   NumericVector<Number> &rhs = *(_system\&.rhs);
+53 
+54   Real ax = 0\&.;  // First abscissa, don't take negative steps
+55   Real cx = 1\&.;  // Second abscissa, don't extrapolate steps
+56 
+57   // Find bx, a step length that gives lower residual than ax or cx
+58   Real bx = 1\&.;
+59 
+60   while (libmesh_isnan(current_residual) ||
+61          (current_residual > last_residual &&
+62           require_residual_reduction))
+63     {
+64       // Reduce step size to 1/2, 1/4, etc\&.
+65       Real substepdivision;
+66       if (brent_line_search && !libmesh_isnan(current_residual))
+67         {
+68           substepdivision = std::min(0\&.5, last_residual/current_residual);
+69           substepdivision = std::max(substepdivision, tol*2\&.);
+70         }
+71       else
+72         substepdivision = 0\&.5;
+73 
+74       newton_iterate\&.add (bx * (1\&.-substepdivision),
+75                           linear_solution);
+76       newton_iterate\&.close();
+77       bx *= substepdivision;
+78       if (verbose)
+79         libMesh::out << "  Shrinking Newton step to "
+80                   << bx << std::endl;
+81 
+82       // Check residual with fractional Newton step
+83       _system\&.assembly (true, false);
+84 
+85       rhs\&.close();
+86       current_residual = rhs\&.l2_norm();
+87       if (verbose)
+88         libMesh::out << "  Current Residual: "
+89                   << current_residual << std::endl;
+90 
+91       if (bx/2\&. < minsteplength &&
+92           (libmesh_isnan(current_residual) ||
+93            (current_residual > last_residual)))
+94         {
+95           libMesh::out << "Inexact Newton step FAILED at step "
+96                     << _outer_iterations << std::endl;
+97 
+98           if (!continue_after_backtrack_failure)
+99             {
+100               libmesh_convergence_failure();
+101             }
+102           else
+103             {
+104               libMesh::out << "Continuing anyway \&.\&.\&." << std::endl;
+105               _solve_result = DiffSolver::DIVERGED_BACKTRACKING_FAILURE;
+106               return bx;
+107             }
+108         }
+109     } // end while (current_residual > last_residual)
+110 
+111   // Now return that reduced-residual step, or  use Brent's method to
+112   // find a more optimal step\&.
+113 
+114   if (!brent_line_search)
+115     return bx;
+116 
+117   // Brent's method adapted from Numerical Recipes in C, ch\&. 10\&.2
+118   Real e = 0\&.;
+119 
+120   Real x = bx, w = bx, v = bx;
+121 
+122   // Residuals at bx
+123   Real fx = current_residual,
+124        fw = current_residual,
+125        fv = current_residual;
+126 
+127   // Max iterations for Brent's method loop
+128   const unsigned int max_i = 20;
+129 
+130   // for golden ratio steps
+131   const Real golden_ratio = 1\&.-(std::sqrt(5\&.)-1\&.)/2\&.;
+132 
+133   for (unsigned int i=1; i <= max_i; i++)
+134     {
+135       Real xm = (ax+cx)*0\&.5;
+136       Real tol1 = tol * std::abs(x) + tol*tol;
+137       Real tol2 = 2\&.0 * tol1;
+138 
+139       // Test if we're done
+140       if (std::abs(x-xm) <= (tol2 - 0\&.5 * (cx - ax)))
+141         return x;
+142 
+143       Real d;
+144 
+145       // Construct a parabolic fit
+146       if (std::abs(e) > tol1)
+147         {
+148           Real r = (x-w)*(fx-fv);
+149           Real q = (x-v)*(fx-fw);
+150           Real p = (x-v)*q-(x-w)*r;
+151           q = 2\&. * (q-r);
+152           if (q > 0\&.)
+153             p = -p;
+154           else
+155             q = std::abs(q);
+156           if (std::abs(p) >= std::abs(0\&.5*q*e) ||
+157               p <= q * (ax-x) ||
+158               p >= q * (cx-x))
+159             {
+160               // Take a golden section step
+161               e = x >= xm ? ax-x : cx-x;
+162               d = golden_ratio * e;
+163             }
+164           else
+165             {
+166               // Take a parabolic fit step
+167               d = p/q;
+168               if (x+d-ax < tol2 || cx-(x+d) < tol2)
+169                 d = SIGN(tol1, xm - x);
+170             }
+171         }
+172       else
+173         {
+174           // Take a golden section step
+175           e = x >= xm ? ax-x : cx-x;
+176           d = golden_ratio * e;
+177         }
+178 
+179       Real u = std::abs(d) >= tol1 ? x+d : x + SIGN(tol1,d);
+180 
+181       // Assemble the residual at the new steplength u
+182       newton_iterate\&.add (bx - u, linear_solution);
+183       newton_iterate\&.close();
+184       bx = u;
+185       if (verbose)
+186         libMesh::out << "  Shrinking Newton step to "
+187                       << bx << std::endl;
+188 
+189       _system\&.assembly (true, false);
+190 
+191       rhs\&.close();
+192       Real fu = current_residual = rhs\&.l2_norm();
+193       if (verbose)
+194         libMesh::out << "  Current Residual: "
+195                       << fu << std::endl;
+196 
+197       if (fu <= fx)
+198         {
+199           if (u >= x)
+200             ax = x;
+201           else
+202             cx = x;
+203           v = w;   w = x;   x = u;
+204           fv = fw; fw = fx; fx = fu;
+205         }
+206       else
+207         {
+208           if (u < x)
+209             ax = u;
+210           else
+211             cx = u;
+212           if (fu <= fw || w == x)
+213             {
+214               v = w;   w = u;
+215               fv = fw; fw = fu;
+216             }
+217           else if (fu <= fv || v == x || v == w)
+218             {
+219               v = u;
+220               fv = fu;
+221             }
+222         }
+223     }
+224 
+225   if (!quiet)
+226     libMesh::out << "Warning!  Too many iterations used in Brent line search!"
+227                  << std::endl;
+228   return bx;
+229 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "void libMesh::NewtonSolver::print_convergence (unsigned intstep_num, \fBReal\fPcurrent_residual, \fBReal\fPstep_norm, boollinear_solve_finished)\fC [protected]\fP"
+This prints output for the convergence criteria based on by the given residual and step size\&. 
+.PP
+Definition at line 564 of file newton_solver\&.C\&.
+.PP
+References libMesh::DiffSolver::absolute_residual_tolerance, libMesh::DiffSolver::absolute_step_tolerance, libMesh::DiffSolver::max_residual_norm, libMesh::DiffSolver::max_solution_norm, libMesh::out, libMesh::DiffSolver::relative_residual_tolerance, libMesh::DiffSolver::relative_step_tolerance, and libMesh::DiffSolver::verbose\&.
+.PP
+Referenced by solve()\&.
+.PP
+.nf
+568 {
+569   // Is our absolute residual low enough?
+570   if (current_residual < absolute_residual_tolerance)
+571     {
+572       libMesh::out << "  Nonlinear solver converged, step " << step_num
+573                     << ", residual " << current_residual
+574                     << std::endl;
+575     }
+576   else if (absolute_residual_tolerance)
+577     {
+578       if (verbose)
+579         libMesh::out << "  Nonlinear solver current_residual "
+580                      << current_residual << " > "
+581                      << (absolute_residual_tolerance) << std::endl;
+582     }
+583 
+584   // Is our relative residual low enough?
+585   if ((current_residual / max_residual_norm) <
+586       relative_residual_tolerance)
+587     {
+588       libMesh::out << "  Nonlinear solver converged, step " << step_num
+589                     << ", residual reduction "
+590                     << current_residual / max_residual_norm
+591                     << " < " << relative_residual_tolerance
+592                     << std::endl;
+593     }
+594   else if (relative_residual_tolerance)
+595     {
+596       if (verbose)
+597         libMesh::out << "  Nonlinear solver relative residual "
+598                      << (current_residual / max_residual_norm)
+599                      << " > " << relative_residual_tolerance
+600                      << std::endl;
+601     }
+602 
+603   // For incomplete linear solves, it's not safe to test step sizes
+604   if (!linear_solve_finished)
+605     return;
+606 
+607   // Is our absolute Newton step size small enough?
+608   if (step_norm < absolute_step_tolerance)
+609     {
+610       libMesh::out << "  Nonlinear solver converged, step " << step_num
+611                     << ", absolute step size "
+612                     << step_norm
+613                     << " < " << absolute_step_tolerance
+614                     << std::endl;
+615     }
+616   else if (absolute_step_tolerance)
+617     {
+618       if (verbose)
+619         libMesh::out << "  Nonlinear solver absolute step size "
+620                      << step_norm
+621                      << " > " << absolute_step_tolerance
+622                      << std::endl;
+623     }
+624 
+625   // Is our relative Newton step size small enough?
+626   if (step_norm / max_solution_norm <
+627       relative_step_tolerance)
+628     {
+629       libMesh::out << "  Nonlinear solver converged, step " << step_num
+630                     << ", relative step size "
+631                     << (step_norm / max_solution_norm)
+632                     << " < " << relative_step_tolerance
+633                     << std::endl;
+634     }
+635   else if (relative_step_tolerance)
+636     {
+637       if (verbose)
+638         libMesh::out << "  Nonlinear solver relative step size "
+639                      << (step_norm / max_solution_norm)
+640                      << " > " << relative_step_tolerance
+641                      << std::endl;
+642     }
+643 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "void libMesh::NewtonSolver::reinit ()\fC [virtual]\fP"
+The reinitialization function\&. This method is used after changes in the mesh\&. 
+.PP
+Reimplemented from \fBlibMesh::DiffSolver\fP\&.
+.PP
+Definition at line 265 of file newton_solver\&.C\&.
+.PP
+References libMesh::DiffSolver::_system, linear_solver, and libMesh::DiffSolver::reinit()\&.
+.PP
+.nf
+266 {
+267   Parent::reinit();
+268 
+269   linear_solver->clear();
+270 
+271   linear_solver->init_names(_system);
+272 }
+.fi
+.SS "unsigned int libMesh::NewtonSolver::solve ()\fC [virtual]\fP"
+This method performs a solve, using an inexact Newton-Krylov method with line search\&. 
+.PP
+Implements \fBlibMesh::DiffSolver\fP\&.
+.PP
+Definition at line 276 of file newton_solver\&.C\&.
+.PP
+References libMesh::DiffSolver::_inner_iterations, libMesh::DiffSolver::_outer_iterations, libMesh::DiffSolver::_solve_result, libMesh::DiffSolver::_system, libMesh::NumericVector< T >::add(), libMesh::ImplicitSystem::assembly(), libMesh::NumericVector< T >::close(), libMesh::DiffSolver::continue_after_max_iterations, libMesh::DiffSolver::DIVERGED_BACKTRACKING_FAILURE, libMesh::DiffSolver::DIVERGED_MAX_NONLINEAR_ITERATIONS, libMesh::DofMap::enforce_constraints_exactly(), libMesh::System::get_dof_map(), libMesh::DiffSolver::initial_linear_tolerance, libMesh::DiffSolver::INVALID_SOLVE_RESULT, libMesh::NumericVector< T >::l2_norm(), libMesh::libmesh_assert(), libMesh::libmesh_isnan(), line_search(), libMesh::DiffSolver::linear_solution_monitor, linear_solver, linear_tolerance_multiplier, libMesh::ImplicitSystem::matrix, std::max(), libMesh::DiffSolver::max_linear_iterations, libMesh::DiffSolver::max_nonlinear_iterations, libMesh::DiffSolver::max_residual_norm, libMesh::DiffSolver::max_solution_norm, std::min(), libMesh::DiffSolver::minimum_linear_tolerance, libMesh::out, print_convergence(), libMesh::DiffSolver::quiet, libMesh::Real, libMesh::ImplicitSystem::request_matrix(), require_finite_residual, require_residual_reduction, libMesh::ExplicitSystem::rhs, libMesh::System::solution, libMesh::START_LOG(), libMesh::STOP_LOG(), test_convergence(), libMesh::TOLERANCE, libMesh::System::update(), libMesh::DiffSolver::verbose, libMesh::NumericVector< T >::zero(), and libMesh::NumericVector< T >::zero_clone()\&.
+.PP
+.nf
+277 {
+278   START_LOG("solve()", "NewtonSolver");
+279 
+280   // Reset any prior solve result
+281   _solve_result = INVALID_SOLVE_RESULT;
+282 
+283   NumericVector<Number> &newton_iterate = *(_system\&.solution);
+284 
+285   AutoPtr<NumericVector<Number> > linear_solution_ptr = newton_iterate\&.zero_clone();
+286   NumericVector<Number> &linear_solution = *linear_solution_ptr;
+287   NumericVector<Number> &rhs = *(_system\&.rhs);
+288 
+289   newton_iterate\&.close();
+290   linear_solution\&.close();
+291   rhs\&.close();
+292 
+293 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+294   _system\&.get_dof_map()\&.enforce_constraints_exactly(_system);
+295 #endif
+296 
+297   SparseMatrix<Number> &matrix = *(_system\&.matrix);
+298 
+299   // Set starting linear tolerance
+300   Real current_linear_tolerance = initial_linear_tolerance;
+301 
+302   // Start counting our linear solver steps
+303   _inner_iterations = 0;
+304 
+305   // Now we begin the nonlinear loop
+306   for (_outer_iterations=0; _outer_iterations<max_nonlinear_iterations;
+307        ++_outer_iterations)
+308     {
+309       if (verbose)
+310         libMesh::out << "Assembling the System" << std::endl;
+311 
+312       _system\&.assembly(true, true);
+313       rhs\&.close();
+314       Real current_residual = rhs\&.l2_norm();
+315 
+316       // Prepare to take incomplete steps
+317       Real last_residual = current_residual;
+318 
+319       if (libmesh_isnan(current_residual))
+320         {
+321           libMesh::out << "  Nonlinear solver DIVERGED at step "
+322                        << _outer_iterations
+323                        << " with residual Not-a-Number"
+324                        << std::endl;
+325           libmesh_convergence_failure();
+326           continue;
+327         }
+328 
+329       max_residual_norm = std::max (current_residual,
+330                                     max_residual_norm);
+331 
+332       // Compute the l2 norm of the whole solution
+333       Real norm_total = newton_iterate\&.l2_norm();
+334 
+335       max_solution_norm = std::max(max_solution_norm, norm_total);
+336 
+337       if (verbose)
+338         libMesh::out << "Nonlinear Residual: "
+339                       << current_residual << std::endl;
+340 
+341       // Make sure our linear tolerance is low enough
+342       current_linear_tolerance = std::min (current_linear_tolerance,
+343         current_residual * linear_tolerance_multiplier);
+344 
+345       // But don't let it be too small
+346       if (current_linear_tolerance < minimum_linear_tolerance)
+347         {
+348           current_linear_tolerance = minimum_linear_tolerance;
+349         }
+350 
+351       // At this point newton_iterate is the current guess, and
+352       // linear_solution is now about to become the NEGATIVE of the next
+353       // Newton step\&.
+354 
+355       // Our best initial guess for the linear_solution is zero!
+356       linear_solution\&.zero();
+357 
+358       if (verbose)
+359         libMesh::out << "Linear solve starting, tolerance "
+360                       << current_linear_tolerance << std::endl;
+361 
+362       // Solve the linear system\&.
+363       const std::pair<unsigned int, Real> rval =
+364         linear_solver->solve (matrix, _system\&.request_matrix("Preconditioner"),
+365                               linear_solution, rhs, current_linear_tolerance,
+366                               max_linear_iterations);
+367 
+368       // We may need to localize a parallel solution
+369       _system\&.update ();
+370       // The linear solver may not have fit our constraints exactly
+371 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+372       _system\&.get_dof_map()\&.enforce_constraints_exactly
+373         (_system, &linear_solution, /* homogeneous = */ true);
+374 #endif
+375 
+376       const unsigned int linear_steps = rval\&.first;
+377       libmesh_assert_less_equal (linear_steps, max_linear_iterations);
+378       _inner_iterations += linear_steps;
+379 
+380       const bool linear_solve_finished =
+381         !(linear_steps == max_linear_iterations);
+382 
+383       if (verbose)
+384         libMesh::out << "Linear solve finished, step " << linear_steps
+385                       << ", residual " << rval\&.second
+386                       << std::endl;
+387 
+388       // Compute the l2 norm of the nonlinear update
+389       Real norm_delta = linear_solution\&.l2_norm();
+390 
+391       if (verbose)
+392         libMesh::out << "Trying full Newton step" << std::endl;
+393       // Take a full Newton step
+394       newton_iterate\&.add (-1\&., linear_solution);
+395       newton_iterate\&.close();
+396 
+397       if (this->linear_solution_monitor\&.get()) {
+398           // Compute the l2 norm of the whole solution
+399           norm_total = newton_iterate\&.l2_norm();
+400           rhs\&.close();
+401           (*this->linear_solution_monitor)(
+402                   linear_solution, norm_delta,
+403                   newton_iterate, norm_total,
+404                   rhs, rhs\&.l2_norm(), _outer_iterations);
+405       }
+406 
+407       // Check residual with full Newton step, if that's useful for determining
+408       // whether to line search, whether to quit early, or whether to die after
+409       // hitting our max iteration count
+410       if (this->require_residual_reduction ||
+411           this->require_finite_residual ||
+412           _outer_iterations+1 < max_nonlinear_iterations ||
+413           !continue_after_max_iterations)
+414         {
+415           _system\&.assembly(true, false);
+416 
+417           rhs\&.close();
+418           current_residual = rhs\&.l2_norm();
+419           if (verbose)
+420             libMesh::out << "  Current Residual: "
+421                           << current_residual << std::endl;
+422 
+423           // don't fiddle around if we've already converged
+424           if (test_convergence(current_residual, norm_delta,
+425                                linear_solve_finished &&
+426                                current_residual <= last_residual))
+427             {
+428               if (!quiet)
+429                 print_convergence(_outer_iterations, current_residual,
+430                                   norm_delta, linear_solve_finished &&
+431                                   current_residual <= last_residual);
+432               _outer_iterations++;
+433               break; // out of _outer_iterations for loop
+434             }
+435         }
+436 
+437       // since we're not converged, backtrack if necessary
+438       Real steplength =
+439         this->line_search(std::sqrt(TOLERANCE),
+440                           last_residual, current_residual,
+441                           newton_iterate, linear_solution);
+442       norm_delta *= steplength;
+443 
+444       // Check to see if backtracking failed,
+445       // and break out of the nonlinear loop if so\&.\&.\&.
+446       if (_solve_result == DiffSolver::DIVERGED_BACKTRACKING_FAILURE)
+447         {
+448           _outer_iterations++;
+449           break; // out of _outer_iterations for loop
+450         }
+451 
+452       if (_outer_iterations + 1 >= max_nonlinear_iterations)
+453         {
+454           libMesh::out << "  Nonlinear solver reached maximum step "
+455                         << max_nonlinear_iterations << ", latest evaluated residual "
+456                         << current_residual << std::endl;
+457           if (continue_after_max_iterations)
+458             {
+459               _solve_result = DiffSolver::DIVERGED_MAX_NONLINEAR_ITERATIONS;
+460               libMesh::out << "  Continuing\&.\&.\&." << std::endl;
+461             }
+462           else
+463             {
+464               libmesh_convergence_failure();
+465             }
+466           continue;
+467         }
+468 
+469       // Compute the l2 norm of the whole solution
+470       norm_total = newton_iterate\&.l2_norm();
+471 
+472       max_solution_norm = std::max(max_solution_norm, norm_total);
+473 
+474       // Print out information for the
+475       // nonlinear iterations\&.
+476       if (verbose)
+477         libMesh::out << "  Nonlinear step: |du|/|u| = "
+478                       << norm_delta / norm_total
+479                       << ", |du| = " << norm_delta
+480                       << std::endl;
+481 
+482       // Terminate the solution iteration if the difference between
+483       // this iteration and the last is sufficiently small\&.
+484       if (test_convergence(current_residual, norm_delta / steplength,
+485                            linear_solve_finished))
+486         {
+487           if (!quiet)
+488             print_convergence(_outer_iterations, current_residual,
+489                               norm_delta / steplength,
+490                               linear_solve_finished);
+491           _outer_iterations++;
+492           break; // out of _outer_iterations for loop
+493         }
+494     } // end nonlinear loop
+495 
+496   // The linear solver may not have fit our constraints exactly
+497 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+498   _system\&.get_dof_map()\&.enforce_constraints_exactly(_system);
+499 #endif
+500 
+501   // We may need to localize a parallel solution
+502   _system\&.update ();
+503 
+504   STOP_LOG("solve()", "NewtonSolver");
+505 
+506   // Make sure we are returning something sensible as the
+507   // _solve_result, except in the edge case where we weren't really asked to
+508   // solve\&.
+509   libmesh_assert (_solve_result != DiffSolver::INVALID_SOLVE_RESULT ||
+510                   !max_nonlinear_iterations);
+511 
+512   return _solve_result;
+513 }
+.fi
+.SS "unsigned int libMesh::DiffSolver::solve_result ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value of the SolveResult from the last solve\&. 
+.RE
+.PP
+
+.PP
+Definition at line 130 of file diff_solver\&.h\&.
+.PP
+References libMesh::DiffSolver::_solve_result\&.
+.PP
+.nf
+130 { return _solve_result; }
+.fi
+.SS "const \fBsys_type\fP& libMesh::DiffSolver::system () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file diff_solver\&.h\&.
+.PP
+References libMesh::DiffSolver::_system\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_residual()\&.
+.PP
+.nf
+135 { return _system; }
+.fi
+.SS "\fBsys_type\fP& libMesh::DiffSolver::system ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 140 of file diff_solver\&.h\&.
+.PP
+References libMesh::DiffSolver::_system\&.
+.PP
+.nf
+140 { return _system; }
+.fi
+.SS "bool libMesh::NewtonSolver::test_convergence (\fBReal\fPcurrent_residual, \fBReal\fPstep_norm, boollinear_solve_finished)\fC [protected]\fP"
+This returns true if a convergence criterion has been passed by the given residual and step size; false otherwise\&. 
+.PP
+Definition at line 517 of file newton_solver\&.C\&.
+.PP
+References libMesh::DiffSolver::_solve_result, libMesh::DiffSolver::absolute_residual_tolerance, libMesh::DiffSolver::absolute_step_tolerance, libMesh::DiffSolver::CONVERGED_ABSOLUTE_RESIDUAL, libMesh::DiffSolver::CONVERGED_ABSOLUTE_STEP, libMesh::DiffSolver::CONVERGED_RELATIVE_RESIDUAL, libMesh::DiffSolver::CONVERGED_RELATIVE_STEP, libMesh::DiffSolver::max_residual_norm, libMesh::DiffSolver::max_solution_norm, libMesh::DiffSolver::relative_residual_tolerance, and libMesh::DiffSolver::relative_step_tolerance\&.
+.PP
+Referenced by solve()\&.
+.PP
+.nf
+520 {
+521   // We haven't converged unless we pass a convergence test
+522   bool has_converged = false;
+523 
+524   // Is our absolute residual low enough?
+525   if (current_residual < absolute_residual_tolerance)
+526     {
+527       _solve_result |= CONVERGED_ABSOLUTE_RESIDUAL;
+528       has_converged = true;
+529     }
+530 
+531   // Is our relative residual low enough?
+532   if ((current_residual / max_residual_norm) <
+533       relative_residual_tolerance)
+534     {
+535       _solve_result |= CONVERGED_RELATIVE_RESIDUAL;
+536       has_converged = true;
+537     }
+538 
+539   // For incomplete linear solves, it's not safe to test step sizes
+540   if (!linear_solve_finished)
+541     {
+542       return has_converged;
+543     }
+544 
+545   // Is our absolute Newton step size small enough?
+546   if (step_norm < absolute_step_tolerance)
+547     {
+548       _solve_result |= CONVERGED_ABSOLUTE_STEP;
+549       has_converged = true;
+550     }
+551 
+552   // Is our relative Newton step size small enough?
+553   if (step_norm / max_solution_norm <
+554       relative_step_tolerance)
+555     {
+556       _solve_result |= CONVERGED_RELATIVE_STEP;
+557       has_converged = true;
+558     }
+559 
+560   return has_converged;
+561 }
+.fi
+.SS "unsigned int libMesh::DiffSolver::total_inner_iterations ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of 'inner' (e\&.g\&. Krylov) iterations required by the last solve\&. 
+.RE
+.PP
+
+.PP
+Definition at line 125 of file diff_solver\&.h\&.
+.PP
+References libMesh::DiffSolver::_inner_iterations\&.
+.PP
+.nf
+125 { return _inner_iterations; }
+.fi
+.SS "unsigned int libMesh::DiffSolver::total_outer_iterations ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of 'outer' (e\&.g\&. quasi-Newton) iterations required by the last solve\&. 
+.RE
+.PP
+
+.PP
+Definition at line 119 of file diff_solver\&.h\&.
+.PP
+References libMesh::DiffSolver::_outer_iterations\&.
+.PP
+.nf
+119 { return _outer_iterations; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "unsigned int libMesh::DiffSolver::_inner_iterations\fC [protected]\fP, \fC [inherited]\fP"
+The number of inner iterations used by the last solve 
+.PP
+Definition at line 305 of file diff_solver\&.h\&.
+.PP
+Referenced by solve(), and libMesh::DiffSolver::total_inner_iterations()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "unsigned int libMesh::DiffSolver::_outer_iterations\fC [protected]\fP, \fC [inherited]\fP"
+The number of outer iterations used by the last solve 
+.PP
+Definition at line 300 of file diff_solver\&.h\&.
+.PP
+Referenced by line_search(), solve(), and libMesh::DiffSolver::total_outer_iterations()\&.
+.SS "unsigned int libMesh::DiffSolver::_solve_result\fC [protected]\fP, \fC [inherited]\fP"
+Initialized to zero\&. solve_result is typically set internally in the \fBsolve()\fP function before it returns\&. When non-zero, solve_result tells the result of the latest solve\&. See enum definition for description\&. 
+.PP
+Definition at line 318 of file diff_solver\&.h\&.
+.PP
+Referenced by line_search(), solve(), libMesh::DiffSolver::solve_result(), and test_convergence()\&.
+.SS "\fBsys_type\fP& libMesh::DiffSolver::_system\fC [protected]\fP, \fC [inherited]\fP"
+A reference to the system we are solving\&. 
+.PP
+Definition at line 310 of file diff_solver\&.h\&.
+.PP
+Referenced by init(), line_search(), reinit(), solve(), and libMesh::DiffSolver::system()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::absolute_residual_tolerance\fC [inherited]\fP"
+The \fBDiffSolver\fP should exit after the residual is reduced to either less than absolute_residual_tolerance or less than relative_residual_tolerance times the initial residual\&.
+.PP
+Users should increase any of these tolerances that they want to use for a stopping condition\&. 
+.PP
+Definition at line 189 of file diff_solver\&.h\&.
+.PP
+Referenced by print_convergence(), and test_convergence()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::absolute_step_tolerance\fC [inherited]\fP"
+The \fBDiffSolver\fP should exit after the full nonlinear step norm is reduced to either less than absolute_step_tolerance or less than relative_step_tolerance times the largest nonlinear solution which has been seen so far\&.
+.PP
+Users should increase any of these tolerances that they want to use for a stopping condition\&. 
+.PP
+Definition at line 201 of file diff_solver\&.h\&.
+.PP
+Referenced by print_convergence(), and test_convergence()\&.
+.SS "bool libMesh::NewtonSolver::brent_line_search"
+If require_residual_reduction is true, the solver may reduce step lengths when required\&. If so, brent_line_search is an option\&. If brent_line_search is set to false, the solver reduces the length of its steps by 1/2 iteratively until it finds residual reduction\&. If true, step lengths are first reduced by 1/2 or more to find some residual reduction, then Brent's method is used to find as much residual reduction as possible\&.
+.PP
+brent_line_search is currently set to true by default\&. 
+.PP
+Definition at line 112 of file newton_solver\&.h\&.
+.PP
+Referenced by line_search()\&.
+.SS "bool libMesh::DiffSolver::continue_after_backtrack_failure\fC [inherited]\fP"
+Defaults to false, telling the \fBDiffSolver\fP to throw a libmesh_error() when the backtracking scheme fails to find a descent direction\&. 
+.PP
+Definition at line 178 of file diff_solver\&.h\&.
+.PP
+Referenced by line_search()\&.
+.SS "bool libMesh::DiffSolver::continue_after_max_iterations\fC [inherited]\fP"
+Defaults to true, telling the \fBDiffSolver\fP to continue rather than exit when a solve has reached its maximum number of nonlinear iterations\&. 
+.PP
+Definition at line 172 of file diff_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::initial_linear_tolerance\fC [inherited]\fP"
+Any required linear solves will at first be done with this tolerance; the \fBDiffSolver\fP may tighten the tolerance for later solves\&. 
+.PP
+Definition at line 208 of file diff_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBAutoPtr\fP<\fBLinearSolutionMonitor\fP> libMesh::DiffSolver::linear_solution_monitor\fC [inherited]\fP"
+Pointer to functor which is called right after each linear solve 
+.PP
+Definition at line 280 of file diff_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), and solve()\&.
+.SS "\fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> > libMesh::NewtonSolver::linear_solver\fC [protected]\fP"
+The \fC\fBLinearSolver\fP\fP defines the interface used to solve the linear_implicit system\&. This class handles all the details of interfacing with various linear algebra packages like PETSc or LASPACK\&. 
+.PP
+Definition at line 136 of file newton_solver\&.h\&.
+.PP
+Referenced by init(), reinit(), and solve()\&.
+.SS "\fBReal\fP libMesh::NewtonSolver::linear_tolerance_multiplier"
+The tolerance for linear solves is kept below this multiplier (which defaults to 1e-3) times the norm of the current nonlinear residual 
+.PP
+Definition at line 126 of file newton_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "unsigned int libMesh::DiffSolver::max_linear_iterations\fC [inherited]\fP"
+Each linear solver step should exit after \fCmax_linear_iterations\fP is exceeded\&. 
+.PP
+Definition at line 146 of file diff_solver\&.h\&.
+.PP
+Referenced by libMesh::ContinuationSystem::continuation_solve(), solve(), and libMesh::ContinuationSystem::solve_tangent()\&.
+.SS "unsigned int libMesh::DiffSolver::max_nonlinear_iterations\fC [inherited]\fP"
+The \fBDiffSolver\fP should exit in failure if \fCmax_nonlinear_iterations\fP is exceeded and \fCcontinue_after_max_iterations\fP is false, or should end the nonlinear solve if \fCmax_nonlinear_iterations\fP is exceeded and \fCcontinue_after_max_iterations\fP is true\&. 
+.PP
+Definition at line 154 of file diff_solver\&.h\&.
+.PP
+Referenced by libMesh::ContinuationSystem::continuation_solve(), solve(), and libMesh::ContinuationSystem::update_solution()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::max_residual_norm\fC [protected]\fP, \fC [inherited]\fP"
+The largest nonlinear residual which the \fBDiffSolver\fP has yet seen will be stored here, to be used for stopping criteria based on relative_residual_tolerance 
+.PP
+Definition at line 295 of file diff_solver\&.h\&.
+.PP
+Referenced by libMesh::DiffSolver::init(), print_convergence(), libMesh::DiffSolver::reinit(), solve(), and test_convergence()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::max_solution_norm\fC [protected]\fP, \fC [inherited]\fP"
+The largest solution norm which the \fBDiffSolver\fP has yet seen will be stored here, to be used for stopping criteria based on relative_step_tolerance 
+.PP
+Definition at line 288 of file diff_solver\&.h\&.
+.PP
+Referenced by libMesh::DiffSolver::init(), print_convergence(), libMesh::DiffSolver::reinit(), solve(), and test_convergence()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::minimum_linear_tolerance\fC [inherited]\fP"
+The tolerance for linear solves is kept above this minimum 
+.PP
+Definition at line 213 of file diff_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBReal\fP libMesh::NewtonSolver::minsteplength"
+If the quasi-Newton step length must be reduced to below this factor to give a residual reduction, then the Newton solver dies with a libmesh_error() It is currently set to 1e-5 by default\&. 
+.PP
+Definition at line 120 of file newton_solver\&.h\&.
+.PP
+Referenced by line_search()\&.
+.SS "bool libMesh::DiffSolver::quiet\fC [inherited]\fP"
+The \fBDiffSolver\fP should not print anything to \fBlibMesh::out\fP unless quiet is set to false; default is true\&. 
+.PP
+Definition at line 160 of file diff_solver\&.h\&.
+.PP
+Referenced by line_search(), and solve()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::relative_residual_tolerance\fC [inherited]\fP"
+
+.PP
+Definition at line 190 of file diff_solver\&.h\&.
+.PP
+Referenced by print_convergence(), and test_convergence()\&.
+.SS "\fBReal\fP libMesh::DiffSolver::relative_step_tolerance\fC [inherited]\fP"
+
+.PP
+Definition at line 202 of file diff_solver\&.h\&.
+.PP
+Referenced by print_convergence(), and test_convergence()\&.
+.SS "bool libMesh::NewtonSolver::require_finite_residual"
+If this is set to true, the solver is forced to test the residual after each Newton step, and to reduce the length of its steps whenever necessary to avoid an infinite or NaN residual\&. It is currently set to true by default; set it to false to avoid unnecessary residual assembly on well-behaved systems\&. 
+.PP
+Definition at line 99 of file newton_solver\&.h\&.
+.PP
+Referenced by line_search(), and solve()\&.
+.SS "bool libMesh::NewtonSolver::require_residual_reduction"
+If this is set to true, the solver is forced to test the residual after each Newton step, and to reduce the length of its steps whenever necessary to avoid a residual increase\&. It is currently set to true by default; set it to false to avoid unnecessary residual assembly on well-behaved systems\&. 
+.PP
+Definition at line 90 of file newton_solver\&.h\&.
+.PP
+Referenced by line_search(), and solve()\&.
+.SS "bool libMesh::DiffSolver::verbose\fC [inherited]\fP"
+The \fBDiffSolver\fP may print a lot more to \fBlibMesh::out\fP if verbose is set to true; default is false\&. 
+.PP
+Definition at line 166 of file diff_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), line_search(), print_convergence(), and solve()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

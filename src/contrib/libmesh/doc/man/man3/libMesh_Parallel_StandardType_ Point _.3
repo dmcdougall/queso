@@ -1,0 +1,194 @@
+.TH "libMesh::Parallel::StandardType< Point >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::StandardType< Point > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel_algebra\&.h>\fP
+.PP
+Inherits \fBlibMesh::Parallel::DataType\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStandardType\fP (const \fBPoint\fP *example=NULL)"
+.br
+.ti -1c
+.RI "\fBoperator const data_type &\fP () const "
+.br
+.ti -1c
+.RI "\fBoperator data_type &\fP ()"
+.br
+.ti -1c
+.RI "void \fBcommit\fP ()"
+.br
+.ti -1c
+.RI "void \fBfree\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBdata_type\fP \fB_datatype\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<>class libMesh::Parallel::StandardType< Point >"
+
+.PP
+Definition at line 212 of file parallel_algebra\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "\fBlibMesh::Parallel::StandardType\fP< \fBPoint\fP >::\fBStandardType\fP (const \fBPoint\fP *example = \fCNULL\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 216 of file parallel_algebra\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype, libMesh::libMeshPrivateData::_is_initialized, libMesh::AutoPtr< Tp >::get(), and libMesh::AutoPtr< Tp >::reset()\&.
+.PP
+.nf
+216                                           {
+217     // We need an example for MPI_Address to use
+218     Point *ex;
+219     AutoPtr<Point> temp;
+220     if (example)
+221       ex = const_cast<Point *>(example);
+222     else
+223       {
+224         temp\&.reset(new Point());
+225         ex = temp\&.get();
+226       }
+227 
+228     // _static_type never gets freed, but it only gets committed once
+229     // per T, so it's not a *huge* memory leak\&.\&.\&.
+230     static data_type _static_type;
+231     static bool _is_initialized = false;
+232     if (!_is_initialized)
+233       {
+234 #ifdef LIBMESH_HAVE_MPI
+235         StandardType<Real> T_type(&((*ex)(0)));
+236 
+237 #if MPI_VERSION == 1
+238 
+239         int blocklengths[LIBMESH_DIM+2];
+240         MPI_Aint displs[LIBMESH_DIM+2];
+241         MPI_Datatype types[LIBMESH_DIM+2];
+242         MPI_Aint start, later;
+243 
+244         MPI_Address(ex, &start);
+245         blocklengths[0] = 1;
+246         displs[0] = 0;
+247         types[0] = MPI_LB;
+248         for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+249           {
+250             MPI_Address(&((*ex)(i)), &later);
+251             blocklengths[i+1] = 1;
+252             displs[i+1] = later - start;
+253             types[i+1] = T_type;
+254           }
+255         MPI_Address((ex+1), &later);
+256         blocklengths[LIBMESH_DIM+1] = 1;
+257         displs[LIBMESH_DIM+1] = later - start;
+258         types[LIBMESH_DIM+1] = MPI_UB;
+259 
+260         MPI_Type_struct (LIBMESH_DIM+2, blocklengths, displs, types, &_static_type);
+261 
+262 #else // MPI_VERSION >= 2
+263 
+264         int blocklength = LIBMESH_DIM;
+265         MPI_Aint displs, start;
+266         MPI_Datatype tmptype, type = T_type;
+267 
+268         MPI_Get_address (ex,   &start);
+269         MPI_Get_address (&((*ex)(0)), &displs);
+270 
+271         // subtract off offset to first value from the beginning of the structure
+272         displs -= start;
+273 
+274         // create a prototype structure
+275         MPI_Type_create_struct (1, &blocklength, &displs, &type, &tmptype);
+276 
+277         // resize the structure type to account for padding, if any
+278         MPI_Type_create_resized (tmptype, 0, sizeof(Point), &_static_type);
+279 #endif
+280 
+281         MPI_Type_commit (&_static_type);
+282 #endif // #ifdef LIBMESH_HAVE_MPI
+283 
+284         _is_initialized = true;
+285       }
+286     _datatype = _static_type;
+287   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Parallel::DataType::commit ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 277 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+Referenced by libMesh::Parallel::DataType::DataType()\&.
+.PP
+.nf
+278   {
+279 #ifdef LIBMESH_HAVE_MPI
+280     MPI_Type_commit (&_datatype);
+281 #endif
+282   }
+.fi
+.SS "void libMesh::Parallel::DataType::free ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 284 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+Referenced by libMesh::Parallel::StandardType< std::pair< T1, T2 > >::~StandardType(), libMesh::Parallel::StandardType< std::complex< T > >::~StandardType(), libMesh::Parallel::StandardType< TypeTensor< T > >::~StandardType(), and libMesh::Parallel::StandardType< TensorValue< T > >::~StandardType()\&.
+.PP
+.nf
+285   {
+286 #ifdef LIBMESH_HAVE_MPI
+287     MPI_Type_free (&_datatype);
+288 #endif
+289   }
+.fi
+.SS "libMesh::Parallel::DataType::operator const \fBdata_type\fP & () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 265 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+.nf
+266   { return _datatype; }
+.fi
+.SS "libMesh::Parallel::DataType::operator \fBdata_type\fP & ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 268 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+.nf
+269   { return _datatype; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdata_type\fP libMesh::Parallel::DataType::_datatype\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 293 of file parallel\&.h\&.
+.PP
+Referenced by libMesh::Parallel::DataType::commit(), libMesh::Parallel::DataType::DataType(), libMesh::Parallel::DataType::free(), libMesh::Parallel::DataType::operator const data_type &(), libMesh::Parallel::DataType::operator data_type &(), libMesh::Parallel::DataType::operator=(), libMesh::Parallel::StandardType< Hilbert::HilbertIndices >::StandardType(), libMesh::Parallel::StandardType< TypeVector< T > >::StandardType(), libMesh::Parallel::StandardType< std::pair< T1, T2 > >::StandardType(), libMesh::Parallel::StandardType< VectorValue< T > >::StandardType(), and StandardType()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,2789 @@
+.TH "libMesh::Parallel::Communicator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::Communicator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBSendMode\fP { \fBDEFAULT\fP =0, \fBSYNCHRONOUS\fP }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCommunicator\fP ()"
+.br
+.ti -1c
+.RI "\fBCommunicator\fP (const \fBcommunicator\fP &\fBcomm\fP)"
+.br
+.ti -1c
+.RI "\fB~Communicator\fP ()"
+.br
+.ti -1c
+.RI "void \fBsplit\fP (int color, int key, \fBCommunicator\fP &target)"
+.br
+.ti -1c
+.RI "void \fBduplicate\fP (const \fBCommunicator\fP &\fBcomm\fP)"
+.br
+.ti -1c
+.RI "void \fBduplicate\fP (const \fBcommunicator\fP &\fBcomm\fP)"
+.br
+.ti -1c
+.RI "\fBcommunicator\fP & \fBget\fP ()"
+.br
+.ti -1c
+.RI "const \fBcommunicator\fP & \fBget\fP () const "
+.br
+.ti -1c
+.RI "\fBMessageTag\fP \fBget_unique_tag\fP (int tagvalue) const "
+.br
+.ti -1c
+.RI "void \fBreference_unique_tag\fP (int tagvalue) const "
+.br
+.ti -1c
+.RI "void \fBdereference_unique_tag\fP (int tagvalue) const "
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "\fBCommunicator\fP & \fBoperator=\fP (const \fBcommunicator\fP &\fBcomm\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBrank\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBsend_mode\fP (const \fBSendMode\fP sm)"
+.br
+.ti -1c
+.RI "\fBSendMode\fP \fBsend_mode\fP () const "
+.br
+.ti -1c
+.RI "void \fBbarrier\fP () const "
+.br
+.ti -1c
+.RI "template<typename T > bool \fBverify\fP (const T &r) const "
+.br
+.ti -1c
+.RI "template<typename T > bool \fBsemiverify\fP (const T *r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBmin\fP (T &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBminloc\fP (T &r, unsigned int &min_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBminloc\fP (std::vector< T > &r, std::vector< unsigned int > &min_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBmax\fP (T &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBmaxloc\fP (T &r, unsigned int &max_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBmaxloc\fP (std::vector< T > &r, std::vector< unsigned int > &max_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsum\fP (T &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBset_union\fP (T &\fBdata\fP, const unsigned int root_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBset_union\fP (T &\fBdata\fP) const "
+.br
+.ti -1c
+.RI "\fBstatus\fP \fBprobe\fP (const unsigned int src_processor_id, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &buf, const \fBMessageTag\fP &tag=\fBno_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBno_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag=\fBno_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBno_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int dest_processor_id, T &buf, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int dest_processor_id, T &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int dest_processor_id, T &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int dest_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter > void \fBsend_packed_range\fP (const unsigned int dest_processor_id, const Context *context, Iter range_begin, const Iter range_end, const \fBMessageTag\fP &tag=\fBno_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter > void \fBsend_packed_range\fP (const unsigned int dest_processor_id, const Context *context, Iter range_begin, const Iter range_end, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBno_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputIter > void \fBreceive_packed_range\fP (const unsigned int dest_processor_id, Context *context, OutputIter \fBout\fP, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputIter > void \fBreceive_packed_range\fP (const unsigned int dest_processor_id, Context *context, OutputIter \fBout\fP, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, T1 &\fBsend\fP, const unsigned int source_processor_id, T2 &recv, const \fBMessageTag\fP &send_tag=\fBno_tag\fP, const \fBMessageTag\fP &recv_tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename Context1 , typename RangeIter , typename Context2 , typename OutputIter > void \fBsend_receive_packed_range\fP (const unsigned int dest_processor_id, const Context1 *context1, RangeIter send_begin, const RangeIter send_end, const unsigned int source_processor_id, Context2 *context2, OutputIter \fBout\fP, const \fBMessageTag\fP &send_tag=\fBno_tag\fP, const \fBMessageTag\fP &recv_tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, T1 &\fBsend\fP, const \fBDataType\fP &type1, const unsigned int source_processor_id, T2 &recv, const \fBDataType\fP &type2, const \fBMessageTag\fP &send_tag=\fBno_tag\fP, const \fBMessageTag\fP &recv_tag=\fBany_tag\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBgather\fP (const unsigned int root_id, T \fBsend\fP, std::vector< T > &recv) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBgather\fP (const unsigned int root_id, std::vector< T > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBallgather\fP (T \fBsend\fP, std::vector< T > &recv) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBallgather\fP (std::vector< T > &r, const bool identical_buffer_sizes=false) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter , typename OutputIter > void \fBgather_packed_range\fP (const unsigned int root_id, Context *context, Iter range_begin, const Iter range_end, OutputIter \fBout\fP) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter , typename OutputIter > void \fBallgather_packed_range\fP (Context *context, Iter range_begin, const Iter range_end, OutputIter \fBout\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBalltoall\fP (std::vector< T > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBbroadcast\fP (T &\fBdata\fP, const unsigned int root_id=0) const "
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputContext , typename Iter , typename OutputIter > void \fBbroadcast_packed_range\fP (const Context *context1, Iter range_begin, const Iter range_end, OutputContext *context2, OutputIter \fBout\fP, const unsigned int root_id=0) const "
+.br
+.ti -1c
+.RI "template<typename T > bool \fBsemiverify\fP (const std::vector< T > *r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBmin\fP (std::vector< T > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBmax\fP (std::vector< T > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsum\fP (std::vector< T > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsum\fP (std::complex< T > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsum\fP (std::vector< std::complex< T > > &r) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBset_union\fP (std::set< T > &\fBdata\fP, const unsigned int root_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBset_union\fP (std::set< T > &\fBdata\fP) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::basic_string< T > &buf, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::basic_string< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::set< T > &buf, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::set< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::set< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::set< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::vector< T > &buf, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::vector< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, std::basic_string< T > &buf, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, std::basic_string< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, std::set< T > &buf, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, std::set< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, std::set< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, std::set< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, std::vector< T > &buf, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, std::vector< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const "
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, std::vector< T1 > &sendvec, const \fBDataType\fP &type1, const unsigned int source_processor_id, std::vector< T2 > &recv, const \fBDataType\fP &type2, const \fBMessageTag\fP &send_tag, const \fBMessageTag\fP &recv_tag) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend_receive\fP (const unsigned int dest_processor_id, std::vector< T > &sendvec, const unsigned int source_processor_id, std::vector< T > &recv, const \fBMessageTag\fP &send_tag, const \fBMessageTag\fP &recv_tag) const "
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, std::vector< T1 > &sendvec, const unsigned int source_processor_id, std::vector< T2 > &recv, const \fBMessageTag\fP &send_tag, const \fBMessageTag\fP &recv_tag) const "
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, std::vector< std::vector< T1 > > &sendvec, const unsigned int source_processor_id, std::vector< std::vector< T2 > > &recv, const \fBMessageTag\fP &, const \fBMessageTag\fP &) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend_receive\fP (const unsigned int dest_processor_id, std::vector< std::vector< T > > &sendvec, const unsigned int source_processor_id, std::vector< std::vector< T > > &recv, const \fBMessageTag\fP &, const \fBMessageTag\fP &) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBbroadcast\fP (std::basic_string< T > &\fBdata\fP, const unsigned int root_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBbroadcast\fP (std::vector< T > &\fBdata\fP, const unsigned int root_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBbroadcast\fP (std::vector< std::basic_string< T > > &\fBdata\fP, const unsigned int root_id) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBbroadcast\fP (std::set< T > &\fBdata\fP, const unsigned int root_id) const "
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCommunicator\fP (const \fBCommunicator\fP &)"
+.br
+.ti -1c
+.RI "void \fBassign\fP (const \fBcommunicator\fP &\fBcomm\fP)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBcommunicator\fP \fB_communicator\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_rank\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_size\fP"
+.br
+.ti -1c
+.RI "\fBSendMode\fP \fB_send_mode\fP"
+.br
+.ti -1c
+.RI "std::map< int, unsigned int > \fBused_tag_values\fP"
+.br
+.ti -1c
+.RI "bool \fB_I_duped_it\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Encapsulates the MPI_Comm object\&. Allows the size of the group and this process's position in the group to be determined\&.
+.PP
+Methods of this object are the preferred way to perform distributed-memory parallel operations\&. 
+.PP
+Definition at line 540 of file parallel\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::Parallel::Communicator::SendMode\fP"
+Whether to use default or synchronous sends? 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIDEFAULT \fP\fP
+.TP
+\fB\fISYNCHRONOUS \fP\fP
+.PP
+Definition at line 613 of file parallel\&.h\&.
+.PP
+.nf
+613 { DEFAULT=0, SYNCHRONOUS };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Parallel::Communicator::Communicator ()\fC [inline]\fP"
+Default Constructor\&. 
+.PP
+Definition at line 440 of file parallel_implementation\&.h\&.
+.PP
+.nf
+440                                    :
+441 #ifdef LIBMESH_HAVE_MPI
+442   _communicator(MPI_COMM_NULL),
+443 #endif
+444   _rank(0),
+445   _size(1),
+446   _send_mode(DEFAULT),
+447   used_tag_values(),
+448   _I_duped_it(false) {}
+.fi
+.SS "libMesh::Parallel::Communicator::Communicator (const \fBcommunicator\fP &comm)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 450 of file parallel_implementation\&.h\&.
+.PP
+References assign()\&.
+.PP
+.nf
+450                                                            :
+451 #ifdef LIBMESH_HAVE_MPI
+452   _communicator(MPI_COMM_NULL),
+453 #endif
+454   _rank(0),
+455   _size(1),
+456   _send_mode(DEFAULT),
+457   used_tag_values(),
+458   _I_duped_it(false)
+459 {
+460   this->assign(comm);
+461 }
+.fi
+.SS "libMesh::Parallel::Communicator::~Communicator ()\fC [inline]\fP"
+
+.PP
+Definition at line 463 of file parallel_implementation\&.h\&.
+.PP
+References clear()\&.
+.PP
+.nf
+463                                     {
+464   this->clear();
+465 }
+.fi
+.SS "libMesh::Parallel::Communicator::Communicator (const \fBCommunicator\fP &)\fC [inline]\fP, \fC [explicit]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 515 of file parallel_implementation\&.h\&.
+.PP
+.nf
+515                                                        :
+516 #ifdef LIBMESH_HAVE_MPI
+517   _communicator(MPI_COMM_NULL),
+518 #endif
+519   _rank(0),
+520   _size(1),
+521   _send_mode(DEFAULT),
+522   used_tag_values(),
+523   _I_duped_it(false)
+524 {
+525   libmesh_error();
+526 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void libMesh::Parallel::Communicator::allgather (Tsend, std::vector< T > &recv) const\fC [inline]\fP"
+Take a vector of length \fCthis->\fBsize()\fP\fP, and fill in \fCrecv\fP[processor_id] = the value of \fCsend\fP on that processor 
+.PP
+Definition at line 2779 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::Parallel::allgather(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::MeshCommunication::assign_global_indices(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::DofMap::distribute_dofs(), libMesh::MeshCommunication::find_global_indices(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), gather(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO::read(), libMesh::DofMap::set_nonlocal_dof_objects(), and set_union()\&.
+.PP
+.nf
+2781 {
+2782   START_LOG ("allgather()","Parallel");
+2783 
+2784   libmesh_assert(this->size());
+2785   recv\&.resize(this->size());
+2786 
+2787   unsigned int comm_size = this->size();
+2788   if (comm_size > 1)
+2789     {
+2790       StandardType<T> send_type(&sendval);
+2791 
+2792       MPI_Allgather (&sendval,
+2793                      1,
+2794                      send_type,
+2795                      &recv[0],
+2796                      1,
+2797                      send_type,
+2798                      this->get());
+2799     }
+2800   else if (comm_size > 0)
+2801     recv[0] = sendval;
+2802 
+2803   STOP_LOG ("allgather()","Parallel");
+2804 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::allgather (std::vector< T > &r, const boolidentical_buffer_sizes = \fCfalse\fP) const\fC [inline]\fP"
+Take a vector of local variables and expand it to include values from all processors\&. By default, each processor is allowed to have its own unique input buffer length\&. If it is known that all processors have the same input sizes additional communication can be avoided\&.
+.PP
+Specifically, this function transforms this: 
+.PP
+.nf
+Processor 0: [ ... N_0 ]
+Processor 1: [ ....... N_1 ]
+...
+Processor M: [ .. N_M]
+
+.fi
+.PP
+.PP
+into this:
+.PP
+.PP
+.nf
+[ [ ... N_0 ] [ ....... N_1 ] ... [ .. N_M] ]
+.fi
+.PP
+.PP
+on each processor\&. This function is collective and therefore must be called by all processors in the \fBCommunicator\fP\&. 
+.PP
+Definition at line 2810 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::allgather(), libMesh::ierr, libMesh::libmesh_assert(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::verify()\&.
+.PP
+.nf
+2812 {
+2813   if (this->size() < 2)
+2814     return;
+2815 
+2816   START_LOG("allgather()", "Parallel");
+2817 
+2818   if (identical_buffer_sizes)
+2819     {
+2820       if (r\&.empty())
+2821         return;
+2822 
+2823       libmesh_assert(this->verify(r\&.size()));
+2824 
+2825       std::vector<T> r_src(r\&.size()*this->size());
+2826       r_src\&.swap(r);
+2827       StandardType<T> send_type(&r_src[0]);
+2828 
+2829       MPI_Allgather (&r_src[0],
+2830                      libmesh_cast_int<int>(r_src\&.size()),
+2831                      send_type,
+2832                      &r[0],
+2833                      libmesh_cast_int<int>(r_src\&.size()),
+2834                      send_type,
+2835                      this->get());
+2836       libmesh_assert(this->verify(r));
+2837       STOP_LOG("allgather()", "Parallel");
+2838       return;
+2839     }
+2840 
+2841   std::vector<int>
+2842     sendlengths  (this->size(), 0),
+2843     displacements(this->size(), 0);
+2844 
+2845   const int mysize = static_cast<int>(r\&.size());
+2846   this->allgather(mysize, sendlengths);
+2847 
+2848   // Find the total size of the final array and
+2849   // set up the displacement offsets for each processor\&.
+2850   unsigned int globalsize = 0;
+2851   for (unsigned int i=0; i != this->size(); ++i)
+2852     {
+2853       displacements[i] = globalsize;
+2854       globalsize += sendlengths[i];
+2855     }
+2856 
+2857   // Check for quick return
+2858   if (globalsize == 0)
+2859     {
+2860       STOP_LOG("allgather()", "Parallel");
+2861       return;
+2862     }
+2863 
+2864   // copy the input buffer
+2865   std::vector<T> r_src(globalsize);
+2866   r_src\&.swap(r);
+2867 
+2868   StandardType<T> send_type(&r[0]);
+2869 
+2870   // and get the data from the remote processors\&.
+2871   // Pass NULL if our vector is empty\&.
+2872 #ifndef NDEBUG
+2873   // Only catch the return value when asserts are active\&.
+2874   const int ierr =
+2875 #endif
+2876     MPI_Allgatherv (r_src\&.empty() ? NULL : &r_src[0], mysize, send_type,
+2877                     &r[0], &sendlengths[0],
+2878                     &displacements[0], send_type, this->get());
+2879 
+2880   libmesh_assert (ierr == MPI_SUCCESS);
+2881 
+2882   STOP_LOG("allgather()", "Parallel");
+2883 }
+.fi
+.SS "template<typename Context , typename Iter , typename OutputIter > void libMesh::Parallel::Communicator::allgather_packed_range (Context *context, Iterrange_begin, const Iterrange_end, OutputIterout) const\fC [inline]\fP"
+Take a range of local variables, combine it with ranges from all processors, and write the output to the output iterator\&. 
+.PP
+Definition at line 2911 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::allgather(), libMesh::Parallel::pack_range(), and libMesh::Parallel::unpack_range()\&.
+.PP
+Referenced by libMesh::Parallel::allgather_packed_range()\&.
+.PP
+.nf
+2915 {
+2916   typedef typename std::iterator_traits<Iter>::value_type T;
+2917   typedef typename Parallel::BufferType<T>::type buffer_t;
+2918 
+2919   // We will serialize variable size objects from *range_begin to
+2920   // *range_end as a sequence of ints in this buffer
+2921   std::vector<buffer_t> buffer;
+2922 
+2923   Parallel::pack_range(context, range_begin, range_end, buffer);
+2924 
+2925   this->allgather(buffer, false);
+2926 
+2927   Parallel::unpack_range(buffer, context, out);
+2928 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::alltoall (std::vector< T > &r) const\fC [inline]\fP"
+Effectively transposes the input vector across all processors\&. The jth entry on processor i is replaced with the ith entry from processor j\&. 
+.PP
+Definition at line 2932 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::ierr, libMesh::libmesh_assert(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and verify()\&.
+.PP
+Referenced by libMesh::Parallel::alltoall(), and libMesh::Nemesis_IO::read()\&.
+.PP
+.nf
+2933 {
+2934   if (this->size() < 2 || buf\&.empty())
+2935     return;
+2936 
+2937   START_LOG("alltoall()", "Parallel");
+2938 
+2939   // the per-processor size\&.  this is the same for all
+2940   // processors using MPI_Alltoall, could be variable
+2941   // using MPI_Alltoallv
+2942   const int size_per_proc =
+2943     libmesh_cast_int<int>(buf\&.size()/this->size());
+2944 
+2945   libmesh_assert_equal_to (buf\&.size()%this->size(), 0);
+2946 
+2947   libmesh_assert(this->verify(size_per_proc));
+2948 
+2949   std::vector<T> tmp(buf);
+2950 
+2951   StandardType<T> send_type(&tmp[0]);
+2952 
+2953 #ifndef NDEBUG
+2954   // Only catch the return value when asserts are active\&.
+2955   const int ierr =
+2956 #endif
+2957     MPI_Alltoall (&tmp[0],
+2958                   size_per_proc,
+2959                   send_type,
+2960                   &buf[0],
+2961                   size_per_proc,
+2962                   send_type,
+2963                   this->get());
+2964   libmesh_assert (ierr == MPI_SUCCESS);
+2965 
+2966   STOP_LOG("alltoall()", "Parallel");
+2967 }
+.fi
+.SS "void libMesh::Parallel::Communicator::assign (const \fBcommunicator\fP &comm)\fC [inline]\fP, \fC [private]\fP"
+\fBUtility\fP function for setting our member variables from an MPI communicator 
+.PP
+Definition at line 528 of file parallel_implementation\&.h\&.
+.PP
+References _communicator, _rank, _send_mode, _size, libMesh::comm, and DEFAULT\&.
+.PP
+Referenced by Communicator(), duplicate(), and operator=()\&.
+.PP
+.nf
+529 {
+530   _communicator = comm;
+531 #ifdef LIBMESH_HAVE_MPI
+532   if (_communicator != MPI_COMM_NULL)
+533     {
+534       int i;
+535       MPI_Comm_size(_communicator, &i);
+536       libmesh_assert_greater_equal (i, 0);
+537       _size = static_cast<unsigned int>(i);
+538 
+539       MPI_Comm_rank(_communicator, &i);
+540       libmesh_assert_greater_equal (i, 0);
+541       _rank = static_cast<unsigned int>(i);
+542     }
+543   else
+544     {
+545       _rank = 0;
+546       _size = 1;
+547     }
+548 #endif
+549   _send_mode = DEFAULT;
+550 }
+.fi
+.SS "void libMesh::Parallel::Communicator::barrier () const\fC [inline]\fP"
+Pause execution until all processors reach a certain point\&. 
+.PP
+Definition at line 775 of file parallel_implementation\&.h\&.
+.PP
+References size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::Parallel::barrier(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), and libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+776 {
+777   if (this->size() > 1)
+778     {
+779       START_LOG("barrier()", "Parallel");
+780 
+781       MPI_Barrier (this->get());
+782 
+783       STOP_LOG("barrier()", "Parallel");
+784     }
+785 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::broadcast (T &data, const unsigned introot_id = \fC0\fP) const\fC [inline]\fP"
+Take a local value and broadcast it to all processors\&. Optionally takes the \fCroot_id\fP processor, which specifies the processor initiating the broadcast\&. If \fCdata\fP is a vector, the user is responsible for resizing it on all processors, except in the case when \fCdata\fP is a vector of strings\&. 
+.PP
+Definition at line 2972 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::ierr, libMesh::libmesh_assert(), rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::Parallel::broadcast(), broadcast(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::UnstructuredMesh::write(), and libMesh::System::write_serialized_blocked_dof_objects()\&.
+.PP
+.nf
+2973 {
+2974   if (this->size() == 1)
+2975     {
+2976       libmesh_assert (!this->rank());
+2977       libmesh_assert (!root_id);
+2978       return;
+2979     }
+2980 
+2981   libmesh_assert_less (root_id, this->size());
+2982 
+2983   START_LOG("broadcast()", "Parallel");
+2984 
+2985   // Spread data to remote processors\&.
+2986 #ifndef NDEBUG
+2987   // Only catch the return value when asserts are active\&.
+2988   const int ierr =
+2989 #endif
+2990     MPI_Bcast (&data, 1, StandardType<T>(&data), root_id, this->get());
+2991 
+2992   libmesh_assert (ierr == MPI_SUCCESS);
+2993 
+2994   STOP_LOG("broadcast()", "Parallel");
+2995 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::broadcast (std::basic_string< T > &data, const unsigned introot_id) const\fC [inline]\fP"
+
+.PP
+Definition at line 2999 of file parallel_implementation\&.h\&.
+.PP
+References broadcast(), libMesh::libmesh_assert(), rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+3001 {
+3002   if (this->size() == 1)
+3003     {
+3004       libmesh_assert (!this->rank());
+3005       libmesh_assert (!root_id);
+3006       return;
+3007     }
+3008 
+3009   libmesh_assert_less (root_id, this->size());
+3010 
+3011   START_LOG("broadcast()", "Parallel");
+3012 
+3013   std::size_t data_size = data\&.size();
+3014   this->broadcast(data_size, root_id);
+3015 
+3016   std::vector<T> data_c(data_size);
+3017 #ifndef NDEBUG
+3018   std::string orig(data);
+3019 #endif
+3020 
+3021   if (this->rank() == root_id)
+3022     for(std::size_t i=0; i<data\&.size(); i++)
+3023       data_c[i] = data[i];
+3024 
+3025   this->broadcast (data_c, root_id);
+3026 
+3027   data\&.assign(data_c\&.begin(), data_c\&.end());
+3028 
+3029 #ifndef NDEBUG
+3030   if (this->rank() == root_id)
+3031     libmesh_assert_equal_to (data, orig);
+3032 #endif
+3033 
+3034   STOP_LOG("broadcast()", "Parallel");
+3035 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::broadcast (std::vector< T > &data, const unsigned introot_id) const\fC [inline]\fP"
+
+.PP
+Definition at line 3040 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::ierr, libMesh::libmesh_assert(), rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+3042 {
+3043   if (this->size() == 1)
+3044     {
+3045       libmesh_assert (!this->rank());
+3046       libmesh_assert (!root_id);
+3047       return;
+3048     }
+3049 
+3050   libmesh_assert_less (root_id, this->size());
+3051 
+3052   START_LOG("broadcast()", "Parallel");
+3053 
+3054   // and get the data from the remote processors\&.
+3055   // Pass NULL if our vector is empty\&.
+3056   T *data_ptr = data\&.empty() ? NULL : &data[0];
+3057 
+3058 #ifndef NDEBUG
+3059   // Only catch the return value when asserts are active\&.
+3060   const int ierr =
+3061 #endif
+3062     MPI_Bcast (data_ptr, libmesh_cast_int<int>(data\&.size()),
+3063                StandardType<T>(data_ptr), root_id, this->get());
+3064 
+3065   libmesh_assert (ierr == MPI_SUCCESS);
+3066 
+3067   STOP_LOG("broadcast()", "Parallel");
+3068 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::broadcast (std::vector< std::basic_string< T > > &data, const unsigned introot_id) const\fC [inline]\fP"
+The strings will be packed in one long array with the size of each string preceeding the actual characters
+.PP
+Definition at line 3072 of file parallel_implementation\&.h\&.
+.PP
+References broadcast(), libMesh::libmesh_assert(), rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+3074 {
+3075   if (this->size() == 1)
+3076     {
+3077       libmesh_assert (!this->rank());
+3078       libmesh_assert (!root_id);
+3079       return;
+3080     }
+3081 
+3082   libmesh_assert_less (root_id, this->size());
+3083 
+3084   START_LOG("broadcast()", "Parallel");
+3085 
+3086   std::size_t bufsize=0;
+3087   if (root_id == this->rank())
+3088     {
+3089       for (std::size_t i=0; i<data\&.size(); ++i)
+3090         bufsize += data[i]\&.size() + 1;  // Add one for the string length word
+3091     }
+3092   this->broadcast(bufsize, root_id);
+3093 
+3094   // Here we use unsigned int to store up to 32-bit characters
+3095   std::vector<unsigned int> temp; temp\&.reserve(bufsize);
+3096   // Pack the strings
+3097   if (root_id == this->rank())
+3098     {
+3099       for (unsigned int i=0; i<data\&.size(); ++i)
+3100         {
+3101           temp\&.push_back(data[i]\&.size());
+3102           for (std::size_t j=0; j != data[i]\&.size(); ++j)
+3107             temp\&.push_back(data[i][j]);
+3108         }
+3109     }
+3110   else
+3111     temp\&.resize(bufsize);
+3112 
+3113   // broad cast the packed strings
+3114   this->broadcast(temp, root_id);
+3115 
+3116   // Unpack the strings
+3117   if (root_id != this->rank())
+3118     {
+3119       data\&.clear();
+3120       std::vector<unsigned int>::const_iterator iter = temp\&.begin();
+3121       while (iter != temp\&.end())
+3122         {
+3123           std::size_t curr_len = *iter++;
+3124           data\&.push_back(std::string(iter, iter+curr_len));
+3125           iter += curr_len;
+3126         }
+3127     }
+3128 
+3129   STOP_LOG("broadcast()", "Parallel");
+3130 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::broadcast (std::set< T > &data, const unsigned introot_id) const\fC [inline]\fP"
+
+.PP
+Definition at line 3136 of file parallel_implementation\&.h\&.
+.PP
+References broadcast(), libMesh::libmesh_assert(), rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+3138 {
+3139   if (this->size() == 1)
+3140     {
+3141       libmesh_assert (!this->rank());
+3142       libmesh_assert (!root_id);
+3143       return;
+3144     }
+3145 
+3146   libmesh_assert_less (root_id, this->size());
+3147 
+3148   START_LOG("broadcast()", "Parallel");
+3149 
+3150   std::vector<T> vecdata;
+3151   if (this->rank() == root_id)
+3152     vecdata\&.assign(data\&.begin(), data\&.end());
+3153 
+3154   std::size_t vecsize = vecdata\&.size();
+3155   this->broadcast(vecsize, root_id);
+3156   if (this->rank() != root_id)
+3157     vecdata\&.resize(vecsize);
+3158 
+3159   this->broadcast(vecdata, root_id);
+3160   if (this->rank() != root_id)
+3161     {
+3162       data\&.clear();
+3163       data\&.insert(vecdata\&.begin(), vecdata\&.end());
+3164     }
+3165 
+3166   STOP_LOG("broadcast()", "Parallel");
+3167 }
+.fi
+.SS "template<typename Context , typename OutputContext , typename Iter , typename OutputIter > void libMesh::Parallel::Communicator::broadcast_packed_range (const Context *context1, Iterrange_begin, const Iterrange_end, OutputContext *context2, OutputIterout, const unsigned introot_id = \fC0\fP) const\fC [inline]\fP"
+Blocking-broadcast range-of-pointers to one processor\&. This function does not send the raw pointers, but rather constructs new objects at the other end whose contents match the objects pointed to by the sender\&.
+.PP
+void Parallel::pack(const T*, vector<int>& data, const Context*) is used to serialize type T onto the end of a data vector\&.
+.PP
+unsigned int \fBParallel::packable_size(const T*, const Context*)\fP is used to allow data vectors to reserve memory, and for additional error checking
+.PP
+unsigned int \fBParallel::packed_size\fP(const T*, vector<int>::const_iterator) is used to advance to the beginning of the next object's data\&. 
+.PP
+Definition at line 3226 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::broadcast(), libMesh::Parallel::pack_range(), and libMesh::Parallel::unpack_range()\&.
+.PP
+Referenced by libMesh::Parallel::broadcast_packed_range()\&.
+.PP
+.nf
+3232 {
+3233   typedef typename std::iterator_traits<Iter>::value_type T;
+3234   typedef typename Parallel::BufferType<T>::type buffer_t;
+3235 
+3236   // We will serialize variable size objects from *range_begin to
+3237   // *range_end as a sequence of ints in this buffer
+3238   std::vector<buffer_t> buffer;
+3239 
+3240   if (this->rank() == root_id)
+3241     Parallel::pack_range(context1, range_begin, range_end, buffer);
+3242 
+3243   // this->broadcast(vector) requires the receiving vectors to
+3244   // already be the appropriate size
+3245   std::size_t buffer_size = buffer\&.size();
+3246   this->broadcast (buffer_size);
+3247   buffer\&.resize(buffer_size);
+3248 
+3249   // Broadcast the packed data
+3250   this->broadcast (buffer, root_id);
+3251 
+3252   if (this->rank() != root_id)
+3253     Parallel::unpack_range(buffer, context2, out);
+3254 }
+.fi
+.SS "void libMesh::Parallel::Communicator::clear ()\fC [inline]\fP"
+Free and reset this communicator 
+.PP
+Definition at line 496 of file parallel_implementation\&.h\&.
+.PP
+References _communicator, _I_duped_it, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by operator=(), and ~Communicator()\&.
+.PP
+.nf
+496                                 {
+497 #ifdef LIBMESH_HAVE_MPI
+498   if (_I_duped_it)
+499     {
+500       libmesh_assert (_communicator != MPI_COMM_NULL);
+501       MPI_Comm_free(&_communicator);
+502       _communicator = MPI_COMM_NULL;
+503     }
+504   _I_duped_it = false;
+505 #endif
+506 }
+.fi
+.SS "void libMesh::Parallel::Communicator::dereference_unique_tag (inttagvalue) const\fC [inline]\fP"
+Dereference an already-acquired tag, and see if we can re-release it\&. 
+.PP
+Definition at line 1140 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), and used_tag_values\&.
+.PP
+Referenced by libMesh::Parallel::MessageTag::~MessageTag()\&.
+.PP
+.nf
+1141 {
+1142   // This has better be an already-acquired tag\&.
+1143   libmesh_assert(used_tag_values\&.count(tagvalue));
+1144 
+1145   used_tag_values[tagvalue]--;
+1146   // If we don't have any more outstanding references, we
+1147   // don't even need to keep this tag in our "used" set\&.
+1148   if (!used_tag_values[tagvalue])
+1149     used_tag_values\&.erase(tagvalue);
+1150 }
+.fi
+.SS "void libMesh::Parallel::Communicator::duplicate (const \fBCommunicator\fP &comm)\fC [inline]\fP"
+
+.PP
+Definition at line 478 of file parallel_implementation\&.h\&.
+.PP
+References _communicator, and send_mode()\&.
+.PP
+.nf
+478                                                             {
+479   this->duplicate(comm\&._communicator);
+480   this->send_mode(comm\&.send_mode());
+481 }
+.fi
+.SS "void libMesh::Parallel::Communicator::duplicate (const \fBcommunicator\fP &comm)\fC [inline]\fP"
+
+.PP
+Definition at line 484 of file parallel_implementation\&.h\&.
+.PP
+References _communicator, _I_duped_it, and assign()\&.
+.PP
+.nf
+484                                                             {
+485   if (_communicator != MPI_COMM_NULL)
+486     {
+487       MPI_Comm_dup(comm, &_communicator);
+488       _I_duped_it = true;
+489     }
+490   this->assign(_communicator);
+491 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::gather (const unsigned introot_id, Tsend_val, std::vector< T > &recv_val) const\fC [inline]\fP"
+Take a vector of length comm\&.size(), and on processor root_id fill in recv[processor_id] = the value of send on processor processor_id
+.PP
+Gather-to-root on one processor\&. 
+.PP
+Definition at line 2683 of file parallel_implementation\&.h\&.
+.PP
+References rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::Parallel::gather(), set_union(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+2686 {
+2687   libmesh_assert_less (root_id, this->size());
+2688 
+2689   if (this->rank() == root_id)
+2690     recv\&.resize(this->size());
+2691 
+2692   if (this->size() > 1)
+2693     {
+2694       START_LOG("gather()", "Parallel");
+2695 
+2696       StandardType<T> send_type(&sendval);
+2697 
+2698       MPI_Gather(&sendval,
+2699                  1,
+2700                  send_type,
+2701                  recv\&.empty() ? NULL : &recv[0],
+2702                  1,
+2703                  send_type,
+2704                  root_id,
+2705                  this->get());
+2706 
+2707       STOP_LOG("gather()", "Parallel");
+2708     }
+2709   else
+2710     recv[0] = sendval;
+2711 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::gather (const unsigned introot_id, std::vector< T > &r) const\fC [inline]\fP"
+Take a vector of local variables and expand it on processor root_id to include values from all processors
+.PP
+This handles the case where the lengths of the vectors may vary\&. Specifically, this function transforms this: 
+.PP
+.nf
+Processor 0: [ ... N_0 ]
+Processor 1: [ ....... N_1 ]
+...
+Processor M: [ .. N_M]
+
+.fi
+.PP
+.PP
+into this:
+.PP
+.PP
+.nf
+[ [ ... N_0 ] [ ....... N_1 ] ... [ .. N_M] ]
+.fi
+.PP
+.PP
+on processor root_id\&. This function is collective and therefore must be called by all processors in the \fBCommunicator\fP\&. 
+.PP
+Definition at line 2716 of file parallel_implementation\&.h\&.
+.PP
+References allgather(), libMesh::ierr, libMesh::libmesh_assert(), rank(), size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+2718 {
+2719   if (this->size() == 1)
+2720     {
+2721       libmesh_assert (!this->rank());
+2722       libmesh_assert (!root_id);
+2723       return;
+2724     }
+2725 
+2726   libmesh_assert_less (root_id, this->size());
+2727 
+2728   std::vector<int>
+2729     sendlengths  (this->size(), 0),
+2730     displacements(this->size(), 0);
+2731 
+2732   const int mysize = static_cast<int>(r\&.size());
+2733   this->allgather(mysize, sendlengths);
+2734 
+2735   START_LOG("gather()", "Parallel");
+2736 
+2737   // Find the total size of the final array and
+2738   // set up the displacement offsets for each processor\&.
+2739   unsigned int globalsize = 0;
+2740   for (unsigned int i=0; i != this->size(); ++i)
+2741     {
+2742       displacements[i] = globalsize;
+2743       globalsize += sendlengths[i];
+2744     }
+2745 
+2746   // Check for quick return
+2747   if (globalsize == 0)
+2748     {
+2749       STOP_LOG("gather()", "Parallel");
+2750       return;
+2751     }
+2752 
+2753   // copy the input buffer
+2754   std::vector<T> r_src(r);
+2755 
+2756   // now resize it to hold the global data
+2757   // on the receiving processor
+2758   if (root_id == this->rank())
+2759     r\&.resize(globalsize);
+2760 
+2761   // and get the data from the remote processors
+2762 #ifndef NDEBUG
+2763   // Only catch the return value when asserts are active\&.
+2764   const int ierr =
+2765 #endif
+2766     MPI_Gatherv (r_src\&.empty() ? NULL : &r_src[0], mysize, StandardType<T>(),
+2767                  r\&.empty() ? NULL : &r[0], &sendlengths[0],
+2768                  &displacements[0], StandardType<T>(),
+2769                  root_id,
+2770                  this->get());
+2771 
+2772   libmesh_assert (ierr == MPI_SUCCESS);
+2773 
+2774   STOP_LOG("gather()", "Parallel");
+2775 }
+.fi
+.SS "template<typename Context , typename Iter , typename OutputIter > void libMesh::Parallel::Communicator::gather_packed_range (const unsigned introot_id, Context *context, Iterrange_begin, const Iterrange_end, OutputIterout) const\fC [inline]\fP"
+Take a range of local variables, combine it with ranges from all processors, and write the output to the output iterator on rank root\&. 
+.PP
+Definition at line 2888 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::gather(), libMesh::Parallel::pack_range(), and libMesh::Parallel::unpack_range()\&.
+.PP
+Referenced by libMesh::Parallel::gather_packed_range()\&.
+.PP
+.nf
+2893 {
+2894   typedef typename std::iterator_traits<Iter>::value_type T;
+2895   typedef typename Parallel::BufferType<T>::type buffer_t;
+2896 
+2897   // We will serialize variable size objects from *range_begin to
+2898   // *range_end as a sequence of ints in this buffer
+2899   std::vector<buffer_t> buffer;
+2900 
+2901   Parallel::pack_range(context, range_begin, range_end, buffer);
+2902 
+2903   this->gather(root_id, buffer);
+2904 
+2905   Parallel::unpack_range(buffer, context, out);
+2906 }
+.fi
+.SS "\fBcommunicator\fP& libMesh::Parallel::Communicator::get ()\fC [inline]\fP"
+
+.PP
+Definition at line 575 of file parallel\&.h\&.
+.PP
+References _communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_snes_residual(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), EXTERN_C_FOR_PETSC_END::indices_to_fieldsplit(), and split()\&.
+.PP
+.nf
+575 { return _communicator; }
+.fi
+.SS "const \fBcommunicator\fP& libMesh::Parallel::Communicator::get () const\fC [inline]\fP"
+
+.PP
+Definition at line 577 of file parallel\&.h\&.
+.PP
+References _communicator\&.
+.PP
+.nf
+577 { return _communicator; }
+.fi
+.SS "\fBMessageTag\fP libMesh::Parallel::Communicator::get_unique_tag (inttagvalue) const\fC [inline]\fP"
+Get a tag that is unique to this \fBCommunicator\fP\&. Note that if people are also using magic numbers or copying communicators around then we can't guarantee the tag is unique to this MPI_Comm\&. 
+.PP
+Definition at line 1106 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), and used_tag_values\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::write_serialized_blocked_dof_objects(), and libMesh::XdrIO::write_serialized_nodes()\&.
+.PP
+.nf
+1107 {
+1108   if (used_tag_values\&.count(tagvalue))
+1109     {
+1110       // Get the largest value in the used values, and pick one
+1111       // larger
+1112       tagvalue = used_tag_values\&.rbegin()->first+1;
+1113       libmesh_assert(!used_tag_values\&.count(tagvalue));
+1114     }
+1115   used_tag_values[tagvalue] = 1;
+1116 
+1117   // #ifndef NDEBUG
+1118   //   // Make sure everyone called get_unique_tag and make sure
+1119   //   // everyone got the same value
+1120   //   int maxval = tagvalue;
+1121   //   this->max(maxval);
+1122   //   libmesh_assert_equal_to (tagvalue, maxval);
+1123   // #endif
+1124 
+1125   return MessageTag(tagvalue, this);
+1126 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::max (T &r) const\fC [inline]\fP"
+Take a local variable and replace it with the maximum of it's values on all processors\&. Containers are replaced element-wise\&. 
+.PP
+Definition at line 1519 of file parallel_implementation\&.h\&.
+.PP
+References size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::LocationMap< T >::init(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::Parallel::max(), libMesh::MeshTools::n_active_levels(), libMesh::MeshTools::n_levels(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::MeshBase::prepare_for_use(), libMesh::Nemesis_IO::read(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), semiverify(), libMesh::Parallel::sync_dofobject_data_by_xyz(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), and verify()\&.
+.PP
+.nf
+1520 {
+1521   if (this->size() > 1)
+1522     {
+1523       START_LOG("max(scalar)", "Parallel");
+1524 
+1525       T temp;
+1526       MPI_Allreduce (&r,
+1527                      &temp,
+1528                      1,
+1529                      StandardType<T>(&r),
+1530                      MPI_MAX,
+1531                      this->get());
+1532       r = temp;
+1533 
+1534       STOP_LOG("max(scalar)", "Parallel");
+1535     }
+1536 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::max (std::vector< T > &r) const\fC [inline]\fP"
+
+.PP
+Definition at line 1561 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and verify()\&.
+.PP
+.nf
+1562 {
+1563   if (this->size() > 1 && !r\&.empty())
+1564     {
+1565       START_LOG("max(vector)", "Parallel");
+1566 
+1567       libmesh_assert(this->verify(r\&.size()));
+1568 
+1569       std::vector<T> temp(r);
+1570       MPI_Allreduce (&temp[0],
+1571                      &r[0],
+1572                      libmesh_cast_int<int>(r\&.size()),
+1573                      StandardType<T>(&temp[0]),
+1574                      MPI_MAX,
+1575                      this->get());
+1576 
+1577       STOP_LOG("max(vector)", "Parallel");
+1578     }
+1579 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::maxloc (T &r, unsigned int &max_id) const\fC [inline]\fP"
+Take a local variable and replace it with the maximum of it's values on all processors, returning the minimum rank of a processor which originally held the maximum value\&. 
+.PP
+Definition at line 1607 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::out, libMesh::Parallel::DataPlusInt< T >::rank, rank(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::DataPlusInt< T >::val\&.
+.PP
+Referenced by libMesh::Parallel::maxloc()\&.
+.PP
+.nf
+1609 {
+1610   if (this->size() > 1)
+1611     {
+1612       START_LOG("maxloc(scalar)", "Parallel");
+1613 
+1614       DataPlusInt<T> in;
+1615       in\&.val = r;
+1616       in\&.rank = this->rank();
+1617       DataPlusInt<T> out;
+1618       MPI_Allreduce (&in,
+1619                      &out,
+1620                      1,
+1621                      dataplusint_type<T>(),
+1622                      MPI_MAXLOC,
+1623                      this->get());
+1624       r = out\&.val;
+1625       max_id = out\&.rank;
+1626 
+1627       STOP_LOG("maxloc(scalar)", "Parallel");
+1628     }
+1629   else
+1630     max_id = this->rank();
+1631 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::maxloc (std::vector< T > &r, std::vector< unsigned int > &max_id) const\fC [inline]\fP"
+Take a vector of local variables and replace each entry with the maximum of it's values on all processors\&. Set each \fCmin_id\fP entry to the minimum rank where a corresponding maximum was found\&. 
+.PP
+Definition at line 1662 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::out, libMesh::Parallel::DataPlusInt< T >::rank, rank(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::Parallel::DataPlusInt< T >::val, and verify()\&.
+.PP
+.nf
+1664 {
+1665   if (this->size() > 1 && !r\&.empty())
+1666     {
+1667       START_LOG("maxloc(vector)", "Parallel");
+1668 
+1669       libmesh_assert(this->verify(r\&.size()));
+1670 
+1671       std::vector<DataPlusInt<T> > in(r\&.size());
+1672       for (std::size_t i=0; i != r\&.size(); ++i)
+1673         {
+1674           in[i]\&.val  = r[i];
+1675           in[i]\&.rank = this->rank();
+1676         }
+1677       std::vector<DataPlusInt<T> > out(r\&.size());
+1678       MPI_Allreduce (&in[0],
+1679                      &out[0],
+1680                      libmesh_cast_int<int>(r\&.size()),
+1681                      dataplusint_type<T>(),
+1682                      MPI_MAXLOC,
+1683                      this->get());
+1684       for (std::size_t i=0; i != r\&.size(); ++i)
+1685         {
+1686           r[i]      = out[i]\&.val;
+1687           max_id[i] = out[i]\&.rank;
+1688         }
+1689 
+1690       STOP_LOG("maxloc(vector)", "Parallel");
+1691     }
+1692   else if (!r\&.empty())
+1693     {
+1694       for (std::size_t i=0; i != r\&.size(); ++i)
+1695         max_id[i] = this->rank();
+1696     }
+1697 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::min (T &r) const\fC [inline]\fP"
+Take a local variable and replace it with the minimum of it's values on all processors\&. Containers are replaced element-wise\&. 
+.PP
+Definition at line 1300 of file parallel_implementation\&.h\&.
+.PP
+References size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MeshTools::bounding_box(), libMesh::MeshRefinement::coarsen_elements(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::LocationMap< T >::init(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::Parallel::min(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), semiverify(), and verify()\&.
+.PP
+.nf
+1301 {
+1302   if (this->size() > 1)
+1303     {
+1304       START_LOG("min(scalar)", "Parallel");
+1305 
+1306       T temp = r;
+1307       MPI_Allreduce (&temp,
+1308                      &r,
+1309                      1,
+1310                      StandardType<T>(&temp),
+1311                      MPI_MIN,
+1312                      this->get());
+1313 
+1314       STOP_LOG("min(scalar)", "Parallel");
+1315     }
+1316 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::min (std::vector< T > &r) const\fC [inline]\fP"
+
+.PP
+Definition at line 1341 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and verify()\&.
+.PP
+.nf
+1342 {
+1343   if (this->size() > 1 && !r\&.empty())
+1344     {
+1345       START_LOG("min(vector)", "Parallel");
+1346 
+1347       libmesh_assert(this->verify(r\&.size()));
+1348 
+1349       std::vector<T> temp(r);
+1350       MPI_Allreduce (&temp[0],
+1351                      &r[0],
+1352                      libmesh_cast_int<int>(r\&.size()),
+1353                      StandardType<T>(&temp[0]),
+1354                      MPI_MIN,
+1355                      this->get());
+1356 
+1357       STOP_LOG("min(vector)", "Parallel");
+1358     }
+1359 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::minloc (T &r, unsigned int &min_id) const\fC [inline]\fP"
+Take a local variable and replace it with the minimum of it's values on all processors, returning the minimum rank of a processor which originally held the minimum value\&. 
+.PP
+Definition at line 1387 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::out, libMesh::Parallel::DataPlusInt< T >::rank, rank(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::DataPlusInt< T >::val\&.
+.PP
+Referenced by libMesh::Parallel::minloc()\&.
+.PP
+.nf
+1389 {
+1390   if (this->size() > 1)
+1391     {
+1392       START_LOG("minloc(scalar)", "Parallel");
+1393 
+1394       DataPlusInt<T> in;
+1395       in\&.val = r;
+1396       in\&.rank = this->rank();
+1397       DataPlusInt<T> out;
+1398       MPI_Allreduce (&in,
+1399                      &out,
+1400                      1,
+1401                      dataplusint_type<T>(),
+1402                      MPI_MINLOC,
+1403                      this->get());
+1404       r = out\&.val;
+1405       min_id = out\&.rank;
+1406 
+1407       STOP_LOG("minloc(scalar)", "Parallel");
+1408     }
+1409   else
+1410     min_id = this->rank();
+1411 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::minloc (std::vector< T > &r, std::vector< unsigned int > &min_id) const\fC [inline]\fP"
+Take a vector of local variables and replace each entry with the minimum of it's values on all processors\&. Set each \fCmin_id\fP entry to the minimum rank where a corresponding minimum was found\&. 
+.PP
+Definition at line 1442 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::out, libMesh::Parallel::DataPlusInt< T >::rank, rank(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::Parallel::DataPlusInt< T >::val, and verify()\&.
+.PP
+.nf
+1444 {
+1445   if (this->size() > 1 && !r\&.empty())
+1446     {
+1447       START_LOG("minloc(vector)", "Parallel");
+1448 
+1449       libmesh_assert(this->verify(r\&.size()));
+1450 
+1451       std::vector<DataPlusInt<T> > in(r\&.size());
+1452       for (std::size_t i=0; i != r\&.size(); ++i)
+1453         {
+1454           in[i]\&.val  = r[i];
+1455           in[i]\&.rank = this->rank();
+1456         }
+1457       std::vector<DataPlusInt<T> > out(r\&.size());
+1458       MPI_Allreduce (&in[0],
+1459                      &out[0],
+1460                      libmesh_cast_int<int>(r\&.size()),
+1461                      dataplusint_type<T>(),
+1462                      MPI_MINLOC,
+1463                      this->get());
+1464       for (std::size_t i=0; i != r\&.size(); ++i)
+1465         {
+1466           r[i]      = out[i]\&.val;
+1467           min_id[i] = out[i]\&.rank;
+1468         }
+1469 
+1470       STOP_LOG("minloc(vector)", "Parallel");
+1471     }
+1472   else if (!r\&.empty())
+1473     {
+1474       for (std::size_t i=0; i != r\&.size(); ++i)
+1475         min_id[i] = this->rank();
+1476     }
+1477 }
+.fi
+.SS "\fBCommunicator\fP & libMesh::Parallel::Communicator::operator= (const \fBcommunicator\fP &comm)\fC [inline]\fP"
+
+.PP
+Definition at line 508 of file parallel_implementation\&.h\&.
+.PP
+References assign(), and clear()\&.
+.PP
+.nf
+508                                                                       {
+509   this->clear();
+510   this->assign(comm);
+511   return *this;
+512 }
+.fi
+.SS "\fBstatus\fP libMesh::Parallel::Communicator::probe (const unsigned intsrc_processor_id, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Blocking message probe\&. Allows information about a message to be examined before the message is actually received\&.
+.PP
+We do not currently support probes on one processor without MPI\&. 
+.PP
+Definition at line 1868 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::MessageTag::value()\&.
+.PP
+Referenced by libMesh::Parallel::probe(), and receive()\&.
+.PP
+.nf
+1870 {
+1871   START_LOG("probe()", "Parallel");
+1872 
+1873   status stat;
+1874 
+1875   MPI_Probe (src_processor_id,
+1876              tag\&.value(),
+1877              this->get(),
+1878              &stat);
+1879 
+1880   STOP_LOG("probe()", "Parallel");
+1881 
+1882   return stat;
+1883 }
+.fi
+.SS "unsigned int libMesh::Parallel::Communicator::rank () const\fC [inline]\fP"
+
+.PP
+Definition at line 606 of file parallel\&.h\&.
+.PP
+References _rank\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), broadcast(), libMesh::MeshCommunication::find_global_indices(), gather(), maxloc(), minloc(), libMesh::ParallelObject::processor_id(), send_receive(), set_union(), libMesh::Parallel::sync_dofobject_data_by_id(), and libMesh::Parallel::sync_dofobject_data_by_xyz()\&.
+.PP
+.nf
+606 { return _rank; }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intdest_processor_id, T &buf, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Blocking-receive from one processor with data-defined type\&.
+.PP
+We do not currently support receives on one processor without MPI\&. 
+.PP
+Definition at line 2236 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Status::get(), libMesh::ierr, libMesh::libmesh_assert(), probe(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::MessageTag::value()\&.
+.PP
+Referenced by libMesh::SystemSubsetBySubdomain::init(), libMesh::Parallel::nonblocking_receive(), libMesh::Nemesis_IO::read(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::Parallel::receive(), receive(), receive_packed_range(), send_receive(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+2239 {
+2240   START_LOG("receive()", "Parallel");
+2241 
+2242   // Get the status of the message, explicitly provide the
+2243   // datatype so we can later query the size
+2244   Status stat(this->probe(src_processor_id, tag), StandardType<T>(&buf));
+2245 
+2246 #ifndef NDEBUG
+2247   // Only catch the return value when asserts are active\&.
+2248   const int ierr =
+2249 #endif
+2250     MPI_Recv (&buf,
+2251               1,
+2252               StandardType<T>(&buf),
+2253               src_processor_id,
+2254               tag\&.value(),
+2255               this->get(),
+2256               stat\&.get());
+2257   libmesh_assert (ierr == MPI_SUCCESS);
+2258 
+2259   STOP_LOG("receive()", "Parallel");
+2260 
+2261   return stat;
+2262 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intdest_processor_id, T &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Nonblocking-receive from one processor with data-defined type\&. 
+.PP
+Definition at line 2267 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::get(), libMesh::ierr, libMesh::libmesh_assert(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+2271 {
+2272   START_LOG("receive()", "Parallel");
+2273 
+2274 #ifndef NDEBUG
+2275   // Only catch the return value when asserts are active\&.
+2276   const int ierr =
+2277 #endif
+2278     MPI_Irecv (&buf,
+2279                1,
+2280                StandardType<T>(&buf),
+2281                src_processor_id,
+2282                tag\&.value(),
+2283                this->get(),
+2284                req\&.get());
+2285   libmesh_assert (ierr == MPI_SUCCESS);
+2286 
+2287   STOP_LOG("receive()", "Parallel");
+2288 }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intdest_processor_id, T &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Blocking-receive from one processor with user-defined type\&. 
+.PP
+Definition at line 3351 of file parallel_implementation\&.h\&.
+.PP
+.nf
+3352 { libmesh_error(); return Status(); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intdest_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Nonblocking-receive from one processor with user-defined type\&. 
+.PP
+Definition at line 3356 of file parallel_implementation\&.h\&.
+.PP
+.nf
+3357 { libmesh_error(); }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::basic_string< T > &buf, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2192 of file parallel_implementation\&.h\&.
+.PP
+References receive()\&.
+.PP
+.nf
+2195 {
+2196   std::vector<T> tempbuf;  // Officially C++ won't let us get a
+2197                            // modifiable array from a string
+2198 
+2199   Status stat = this->receive(src_processor_id, tempbuf, tag);
+2200   buf\&.assign(tempbuf\&.begin(), tempbuf\&.end());
+2201   return stat;
+2202 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::basic_string< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2207 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::add_post_wait_work(), and receive()\&.
+.PP
+.nf
+2211 {
+2212   // Officially C++ won't let us get a modifiable array from a
+2213   // string, and we can't even put one on the stack for the
+2214   // non-blocking case\&.
+2215   std::vector<T> *tempbuf = new std::vector<T>();
+2216 
+2217   // We can clear the string, but the Request::wait() will need to
+2218   // handle copying our temporary buffer to it
+2219   buf\&.clear();
+2220 
+2221   req\&.add_post_wait_work
+2222     (new Parallel::PostWaitCopyBuffer<std::vector<T>,
+2223      std::back_insert_iterator<std::basic_string<T> > >
+2224      (tempbuf, std::back_inserter(buf)));
+2225 
+2226   // Make the Request::wait() then handle deleting the buffer
+2227   req\&.add_post_wait_work
+2228     (new Parallel::PostWaitDeleteBuffer<std::vector<T> >(tempbuf));
+2229 
+2230   this->receive(src_processor_id, tempbuf, req, tag);
+2231 }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::set< T > &buf, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2293 of file parallel_implementation\&.h\&.
+.PP
+References receive()\&.
+.PP
+.nf
+2296 {
+2297   return this->receive
+2298     (src_processor_id, buf,
+2299      StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), tag);
+2300 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::set< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2305 of file parallel_implementation\&.h\&.
+.PP
+References receive()\&.
+.PP
+.nf
+2309 {
+2310   this->receive (src_processor_id, buf,
+2311                  StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), req, tag);
+2312 }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::set< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2317 of file parallel_implementation\&.h\&.
+.PP
+References receive(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+2321 {
+2322   START_LOG("receive()", "Parallel");
+2323 
+2324   std::vector<T> vecbuf;
+2325   Status stat = this->receive(src_processor_id, vecbuf, type, tag);
+2326   buf\&.clear();
+2327   buf\&.insert(vecbuf\&.begin(), vecbuf\&.end());
+2328 
+2329   STOP_LOG("receive()", "Parallel");
+2330 
+2331   return stat;
+2332 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::set< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2337 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::add_post_wait_work(), receive(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+2342 {
+2343   START_LOG("receive()", "Parallel");
+2344 
+2345   // Allocate temporary buffer on the heap so it lives until after
+2346   // the non-blocking send completes
+2347   std::vector<T> *vecbuf = new std::vector<T>();
+2348 
+2349   // We can clear the set, but the Request::wait() will need to
+2350   // handle copying our temporary buffer to it
+2351   buf\&.clear();
+2352 
+2353   req\&.add_post_wait_work
+2354     (new Parallel::PostWaitCopyBuffer<std::vector<T>,
+2355      std::back_insert_iterator<std::set<T> > >
+2356      (vecbuf, std::back_inserter(buf)));
+2357 
+2358   // Make the Request::wait() then handle deleting the buffer
+2359   req\&.add_post_wait_work
+2360     (new Parallel::PostWaitDeleteBuffer<std::vector<T> >(vecbuf));
+2361 
+2362   this->receive(src_processor_id, *vecbuf, type, req, tag);
+2363 
+2364   STOP_LOG("receive()", "Parallel");
+2365 }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::vector< T > &buf, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2370 of file parallel_implementation\&.h\&.
+.PP
+References receive()\&.
+.PP
+.nf
+2373 {
+2374   return this->receive
+2375     (src_processor_id, buf,
+2376      StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), tag);
+2377 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::vector< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2382 of file parallel_implementation\&.h\&.
+.PP
+References receive()\&.
+.PP
+.nf
+2386 {
+2387   this->receive (src_processor_id, buf,
+2388                  StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), req, tag);
+2389 }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2394 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Status::get(), libMesh::ierr, libMesh::libmesh_assert(), probe(), libMesh::Parallel::Status::size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+2398 {
+2399   START_LOG("receive()", "Parallel");
+2400 
+2401   // Get the status of the message, explicitly provide the
+2402   // datatype so we can later query the size
+2403   Status stat(this->probe(src_processor_id, tag), type);
+2404 
+2405   buf\&.resize(stat\&.size());
+2406 
+2407 #ifndef NDEBUG
+2408   // Only catch the return value when asserts are active\&.
+2409   const int ierr =
+2410 #endif
+2411     MPI_Recv (buf\&.empty() ? NULL : &buf[0],
+2412               libmesh_cast_int<int>(buf\&.size()),
+2413               type,
+2414               src_processor_id,
+2415               tag\&.value(),
+2416               this->get(),
+2417               stat\&.get());
+2418   libmesh_assert (ierr == MPI_SUCCESS);
+2419 
+2420   STOP_LOG("receive()", "Parallel");
+2421 
+2422   return stat;
+2423 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::receive (const unsigned intsrc_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2428 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::get(), libMesh::ierr, libMesh::libmesh_assert(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+2433 {
+2434   START_LOG("receive()", "Parallel");
+2435 
+2436 #ifndef NDEBUG
+2437   // Only catch the return value when asserts are active\&.
+2438   const int ierr =
+2439 #endif
+2440     MPI_Irecv (buf\&.empty() ? NULL : &buf[0],
+2441                libmesh_cast_int<int>(buf\&.size()),
+2442                type,
+2443                src_processor_id,
+2444                tag\&.value(),
+2445                this->get(),
+2446                req\&.get());
+2447   libmesh_assert (ierr == MPI_SUCCESS);
+2448 
+2449   STOP_LOG("receive()", "Parallel");
+2450 }
+.fi
+.SS "template<typename Context , typename OutputIter > void libMesh::Parallel::Communicator::receive_packed_range (const unsigned intdest_processor_id, Context *context, OutputIterout, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Blocking-receive range-of-pointers from one processor\&. This function does not receive raw pointers, but rather constructs new objects whose contents match the objects pointed to by the sender\&.
+.PP
+The objects will be of type T = iterator_traits<OutputIter>::value_type\&.
+.PP
+Using std::back_inserter as the output iterator allows receive to fill any container type\&. Using \fBlibMesh::null_output_iterator\fP allows the receive to be dealt with solely by \fBParallel::unpack()\fP, for objects whose \fBunpack()\fP is written so as to not leak memory when used in this fashion\&.
+.PP
+A future version of this method should be created to preallocate memory when receiving vectors\&.\&.\&.
+.PP
+void Parallel::unpack(vector<int>::iterator in, T** out, Context*) is used to unserialize type T, typically into a new heap-allocated object whose pointer is returned as *out\&.
+.PP
+unsigned int \fBParallel::packed_size\fP(const T*, vector<int>::const_iterator) is used to advance to the beginning of the next object's data\&. 
+.PP
+Definition at line 2454 of file parallel_implementation\&.h\&.
+.PP
+References receive(), and libMesh::Parallel::unpack_range()\&.
+.PP
+Referenced by libMesh::Parallel::receive_packed_range()\&.
+.PP
+.nf
+2458 {
+2459   typedef typename std::iterator_traits<OutputIter>::value_type T;
+2460   typedef typename Parallel::BufferType<T>::type buffer_t;
+2461 
+2462   // Receive serialized variable size objects as a sequence of ints
+2463   std::vector<buffer_t> buffer;
+2464   this->receive(src_processor_id, buffer, tag);
+2465   Parallel::unpack_range(buffer, context, out);
+2466 }
+.fi
+.SS "template<typename Context , typename OutputIter > void libMesh::Parallel::Communicator::receive_packed_range (const unsigned intdest_processor_id, Context *context, OutputIterout, \fBRequest\fP &req, const \fBMessageTag\fP &tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Nonblocking-receive range-of-pointers from one processor\&. This function does not receive raw pointers, but rather constructs new objects whose contents match the objects pointed to by the sender\&.
+.PP
+The objects will be of type T = iterator_traits<OutputIter>::value_type\&.
+.PP
+Using std::back_inserter as the output iterator allows receive to fill any container type\&. Using \fBlibMesh::null_output_iterator\fP allows the receive to be dealt with solely by \fBParallel::unpack()\fP, for objects whose \fBunpack()\fP is written so as to not leak memory when used in this fashion\&.
+.PP
+A future version of this method should be created to preallocate memory when receiving vectors\&.\&.\&.
+.PP
+void Parallel::unpack(vector<int>::iterator in, T** out, Context*) is used to unserialize type T, typically into a new heap-allocated object whose pointer is returned as *out\&.
+.PP
+unsigned int \fBParallel::packed_size\fP(const T*, vector<int>::const_iterator) is used to advance to the beginning of the next object's data\&. 
+.PP
+Definition at line 2471 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::add_post_wait_work(), and receive()\&.
+.PP
+.nf
+2476 {
+2477   typedef typename std::iterator_traits<OutputIter>::value_type T;
+2478   typedef typename Parallel::BufferType<T>::type buffer_t;
+2479 
+2480   // Receive serialized variable size objects as a sequence of
+2481   // buffer_t\&.
+2482   // Allocate a buffer on the heap so we don't have to free it until
+2483   // after the Request::wait()
+2484   std::vector<buffer_t> *buffer = new std::vector<buffer_t>();
+2485   this->receive(src_processor_id, *buffer, req, tag);
+2486 
+2487   // Make the Request::wait() handle unpacking the buffer
+2488   req\&.add_post_wait_work
+2489     (new Parallel::PostWaitUnpackBuffer<std::vector<buffer_t>, Context, OutputIter>
+2490      (buffer, context, out));
+2491 
+2492   // Make the Request::wait() then handle deleting the buffer
+2493   req\&.add_post_wait_work
+2494     (new Parallel::PostWaitDeleteBuffer<std::vector<buffer_t> >(buffer));
+2495 }
+.fi
+.SS "void libMesh::Parallel::Communicator::reference_unique_tag (inttagvalue) const\fC [inline]\fP"
+Reference an already-acquired tag, so that we know it will be dereferenced multiple times before we can re-release it\&. 
+.PP
+Definition at line 1130 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), and used_tag_values\&.
+.PP
+Referenced by libMesh::Parallel::MessageTag::MessageTag()\&.
+.PP
+.nf
+1131 {
+1132   // This has better be an already-acquired tag\&.
+1133   libmesh_assert(used_tag_values\&.count(tagvalue));
+1134 
+1135   used_tag_values[tagvalue]++;
+1136 }
+.fi
+.SS "template<typename T > bool libMesh::Parallel::Communicator::semiverify (const T *r) const\fC [inline]\fP"
+Verify that a local pointer points to the same value on all processors where it is not NULL\&. Containers must have the same value in every entry\&. 
+.PP
+Definition at line 1191 of file parallel_implementation\&.h\&.
+.PP
+References max(), min(), libMesh::Parallel::Attributes< T >::set_highest(), libMesh::Parallel::Attributes< T >::set_lowest(), and size()\&.
+.PP
+Referenced by semiverify()\&.
+.PP
+.nf
+1192 {
+1193   if (this->size() > 1 && Attributes<T>::has_min_max == true)
+1194     {
+1195       T tempmin, tempmax;
+1196       if (r)
+1197         tempmin = tempmax = *r;
+1198       else
+1199         {
+1200           Attributes<T>::set_highest(tempmin);
+1201           Attributes<T>::set_lowest(tempmax);
+1202         }
+1203       this->min(tempmin);
+1204       this->max(tempmax);
+1205       bool invalid = r && ((*r != tempmin) &&
+1206                            (*r != tempmax));
+1207       this->max(invalid);
+1208       return !invalid;
+1209     }
+1210   return true;
+1211 }
+.fi
+.SS "template<typename T > bool libMesh::Parallel::Communicator::semiverify (const std::vector< T > *r) const\fC [inline]\fP"
+
+.PP
+Definition at line 1216 of file parallel_implementation\&.h\&.
+.PP
+References max(), min(), semiverify(), and size()\&.
+.PP
+.nf
+1217 {
+1218   if (this->size() > 1 && Attributes<T>::has_min_max == true)
+1219     {
+1220       std::size_t rsize = r ? r->size() : 0;
+1221       std::size_t *psize = r ? &rsize : NULL;
+1222 
+1223       if (!this->semiverify(psize))
+1224         return false;
+1225 
+1226       this->max(rsize);
+1227 
+1228       std::vector<T> tempmin, tempmax;
+1229       if (r)
+1230         {
+1231           tempmin = tempmax = *r;
+1232         }
+1233       else
+1234         {
+1235           tempmin\&.resize(rsize);
+1236           tempmax\&.resize(rsize);
+1237           Attributes<std::vector<T> >::set_highest(tempmin);
+1238           Attributes<std::vector<T> >::set_lowest(tempmax);
+1239         }
+1240       this->min(tempmin);
+1241       this->max(tempmax);
+1242       bool invalid = r && ((*r != tempmin) &&
+1243                            (*r != tempmax));
+1244       this->max(invalid);
+1245       return !invalid;
+1246     }
+1247   return true;
+1248 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, T &buf, const \fBMessageTag\fP &tag = \fC\fBno_tag\fP\fP) const\fC [inline]\fP"
+Blocking-send to one processor with data-defined type\&.
+.PP
+We do not currently support sends on one processor without MPI\&. 
+.PP
+Definition at line 1946 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::ierr, libMesh::libmesh_assert(), send_mode(), libMesh::START_LOG(), libMesh::STOP_LOG(), SYNCHRONOUS, and libMesh::Parallel::MessageTag::value()\&.
+.PP
+Referenced by libMesh::SystemSubsetBySubdomain::init(), libMesh::Parallel::nonblocking_send(), libMesh::Nemesis_IO::read(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::Parallel::send(), send(), send_packed_range(), send_receive(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+1949 {
+1950   START_LOG("send()", "Parallel");
+1951 
+1952   T* dataptr = &buf;
+1953 
+1954 #ifndef NDEBUG
+1955   // Only catch the return value when asserts are active\&.
+1956   const int ierr =
+1957 #endif
+1958     ((this->send_mode() == SYNCHRONOUS) ?
+1959      MPI_Ssend : MPI_Send) (dataptr,
+1960                             1,
+1961                             StandardType<T>(dataptr),
+1962                             dest_processor_id,
+1963                             tag\&.value(),
+1964                             this->get());
+1965 
+1966   libmesh_assert (ierr == MPI_SUCCESS);
+1967 
+1968   STOP_LOG("send()", "Parallel");
+1969 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, T &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag = \fC\fBno_tag\fP\fP) const\fC [inline]\fP"
+Nonblocking-send to one processor with data-defined type\&. 
+.PP
+Definition at line 1974 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::get(), libMesh::ierr, libMesh::libmesh_assert(), send_mode(), libMesh::START_LOG(), libMesh::STOP_LOG(), SYNCHRONOUS, and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+1978 {
+1979   START_LOG("send()", "Parallel");
+1980 
+1981   T* dataptr = &buf;
+1982 
+1983 #ifndef NDEBUG
+1984   // Only catch the return value when asserts are active\&.
+1985   const int ierr =
+1986 #endif
+1987     ((this->send_mode() == SYNCHRONOUS) ?
+1988      MPI_Issend : MPI_Isend) (dataptr,
+1989                               1,
+1990                               StandardType<T>(dataptr),
+1991                               dest_processor_id,
+1992                               tag\&.value(),
+1993                               this->get(),
+1994                               req\&.get());
+1995 
+1996   libmesh_assert (ierr == MPI_SUCCESS);
+1997 
+1998   STOP_LOG("send()", "Parallel");
+1999 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, T &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag = \fC\fBno_tag\fP\fP) const\fC [inline]\fP"
+Blocking-send to one processor with user-defined type\&. 
+.PP
+Definition at line 3317 of file parallel_implementation\&.h\&.
+.PP
+.nf
+3319 { libmesh_error(); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag = \fC\fBno_tag\fP\fP) const\fC [inline]\fP"
+Nonblocking-send to one processor with user-defined type\&. 
+.PP
+Definition at line 3322 of file parallel_implementation\&.h\&.
+.PP
+.nf
+3324 { libmesh_error(); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::basic_string< T > &buf, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 1888 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::ierr, libMesh::libmesh_assert(), send_mode(), libMesh::START_LOG(), libMesh::STOP_LOG(), SYNCHRONOUS, and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+1891 {
+1892   START_LOG("send()", "Parallel");
+1893 
+1894   T* dataptr = buf\&.empty() ? NULL : const_cast<T*>(buf\&.data());
+1895 
+1896 #ifndef NDEBUG
+1897   // Only catch the return value when asserts are active\&.
+1898   const int ierr =
+1899 #endif
+1900     ((this->send_mode() == SYNCHRONOUS) ?
+1901      MPI_Ssend : MPI_Send) (dataptr,
+1902                             libmesh_cast_int<int>(buf\&.size()),
+1903                             StandardType<T>(dataptr),
+1904                             dest_processor_id,
+1905                             tag\&.value(),
+1906                             this->get());
+1907 
+1908   libmesh_assert (ierr == MPI_SUCCESS);
+1909 
+1910   STOP_LOG("send()", "Parallel");
+1911 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::basic_string< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 1916 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::get(), libMesh::ierr, libMesh::libmesh_assert(), send_mode(), libMesh::START_LOG(), libMesh::STOP_LOG(), SYNCHRONOUS, and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+1920 {
+1921   START_LOG("send()", "Parallel");
+1922 
+1923   T* dataptr = buf\&.empty() ? NULL : const_cast<T*>(buf\&.data());
+1924 
+1925 #ifndef NDEBUG
+1926   // Only catch the return value when asserts are active\&.
+1927   const int ierr =
+1928 #endif
+1929     ((this->send_mode() == SYNCHRONOUS) ?
+1930      MPI_Issend : MPI_Isend) (dataptr,
+1931                               libmesh_cast_int<int>(buf\&.size()),
+1932                               StandardType<T>(dataptr),
+1933                               dest_processor_id,
+1934                               tag\&.value(),
+1935                               this->get(),
+1936                               req\&.get());
+1937 
+1938   libmesh_assert (ierr == MPI_SUCCESS);
+1939 
+1940   STOP_LOG("send()", "Parallel");
+1941 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::set< T > &buf, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2004 of file parallel_implementation\&.h\&.
+.PP
+References send()\&.
+.PP
+.nf
+2007 {
+2008   this->send(dest_processor_id,
+2009              StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), tag);
+2010 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::set< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2015 of file parallel_implementation\&.h\&.
+.PP
+References send()\&.
+.PP
+.nf
+2019 {
+2020   this->send(dest_processor_id,
+2021              StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), req, tag);
+2022 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::set< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2027 of file parallel_implementation\&.h\&.
+.PP
+References send(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+2031 {
+2032   START_LOG("send()", "Parallel");
+2033 
+2034   std::vector<T> vecbuf(buf\&.begin(), buf\&.end());
+2035   this->send(dest_processor_id, vecbuf, type, tag);
+2036 
+2037   STOP_LOG("send()", "Parallel");
+2038 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::set< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2043 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::add_post_wait_work(), send(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+2048 {
+2049   START_LOG("send()", "Parallel");
+2050 
+2051   // Allocate temporary buffer on the heap so it lives until after
+2052   // the non-blocking send completes
+2053   std::vector<T> *vecbuf =
+2054     new std::vector<T>(buf\&.begin(), buf\&.end());
+2055 
+2056   // Make the Request::wait() handle deleting the buffer
+2057   req\&.add_post_wait_work
+2058     (new Parallel::PostWaitDeleteBuffer<std::vector<T> >(vecbuf));
+2059 
+2060   this->send(dest_processor_id, *vecbuf, type, req, tag);
+2061 
+2062   STOP_LOG("send()", "Parallel");
+2063 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::vector< T > &buf, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2068 of file parallel_implementation\&.h\&.
+.PP
+References send()\&.
+.PP
+.nf
+2071 {
+2072   this->send(dest_processor_id, buf,
+2073              StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), tag);
+2074 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::vector< T > &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2079 of file parallel_implementation\&.h\&.
+.PP
+References send()\&.
+.PP
+.nf
+2083 {
+2084   this->send(dest_processor_id, buf,
+2085              StandardType<T>(buf\&.empty() ? NULL : &buf\&.front()), req, tag);
+2086 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2091 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::ierr, libMesh::libmesh_assert(), send_mode(), libMesh::START_LOG(), libMesh::STOP_LOG(), SYNCHRONOUS, and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+2095 {
+2096   START_LOG("send()", "Parallel");
+2097 
+2098 #ifndef NDEBUG
+2099   // Only catch the return value when asserts are active\&.
+2100   const int ierr =
+2101 #endif
+2102     ((this->send_mode() == SYNCHRONOUS) ?
+2103      MPI_Ssend : MPI_Send) (buf\&.empty() ? NULL : &buf[0],
+2104                             libmesh_cast_int<int>(buf\&.size()),
+2105                             type,
+2106                             dest_processor_id,
+2107                             tag\&.value(),
+2108                             this->get());
+2109 
+2110   libmesh_assert (ierr == MPI_SUCCESS);
+2111 
+2112   STOP_LOG("send()", "Parallel");
+2113 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send (const unsigned intdest_processor_id, std::vector< T > &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2118 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::get(), libMesh::ierr, libMesh::libmesh_assert(), send_mode(), libMesh::START_LOG(), libMesh::STOP_LOG(), SYNCHRONOUS, and libMesh::Parallel::MessageTag::value()\&.
+.PP
+.nf
+2123 {
+2124   START_LOG("send()", "Parallel");
+2125 
+2126 #ifndef NDEBUG
+2127   // Only catch the return value when asserts are active\&.
+2128   const int ierr =
+2129 #endif
+2130     ((this->send_mode() == SYNCHRONOUS) ?
+2131      MPI_Issend : MPI_Isend) (buf\&.empty() ? NULL : &buf[0],
+2132                               libmesh_cast_int<int>(buf\&.size()),
+2133                               type,
+2134                               dest_processor_id,
+2135                               tag\&.value(),
+2136                               this->get(),
+2137                               req\&.get());
+2138 
+2139   libmesh_assert (ierr == MPI_SUCCESS);
+2140 
+2141   STOP_LOG("send()", "Parallel");
+2142 }
+.fi
+.SS "void libMesh::Parallel::Communicator::send_mode (const \fBSendMode\fPsm)\fC [inline]\fP"
+Explicitly sets the \fCSendMode\fP type used for send operations\&. 
+.PP
+Definition at line 643 of file parallel\&.h\&.
+.PP
+References _send_mode\&.
+.PP
+Referenced by duplicate(), and split()\&.
+.PP
+.nf
+643 { _send_mode = sm; }
+.fi
+.SS "\fBSendMode\fP libMesh::Parallel::Communicator::send_mode () const\fC [inline]\fP"
+Gets the user-requested SendMode\&. 
+.PP
+Definition at line 648 of file parallel\&.h\&.
+.PP
+References _send_mode\&.
+.PP
+Referenced by duplicate(), send(), and split()\&.
+.PP
+.nf
+648 { return _send_mode; }
+.fi
+.SS "template<typename Context , typename Iter > void libMesh::Parallel::Communicator::send_packed_range (const unsigned intdest_processor_id, const Context *context, Iterrange_begin, const Iterrange_end, const \fBMessageTag\fP &tag = \fC\fBno_tag\fP\fP) const\fC [inline]\fP"
+Blocking-send range-of-pointers to one processor\&. This function does not send the raw pointers, but rather constructs new objects at the other end whose contents match the objects pointed to by the sender\&.
+.PP
+void Parallel::pack(const T*, vector<int>& data, const Context*) is used to serialize type T onto the end of a data vector\&.
+.PP
+unsigned int \fBParallel::packable_size(const T*, const Context*)\fP is used to allow data vectors to reserve memory, and for additional error checking 
+.PP
+Definition at line 2146 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::pack_range(), and send()\&.
+.PP
+Referenced by libMesh::Parallel::send_packed_range()\&.
+.PP
+.nf
+2151 {
+2152   // We will serialize variable size objects from *range_begin to
+2153   // *range_end as a sequence of plain data (e\&.g\&. ints) in this buffer
+2154   typedef typename std::iterator_traits<Iter>::value_type T;
+2155   std::vector<typename Parallel::BufferType<T>::type> buffer;
+2156 
+2157   Parallel::pack_range(context, range_begin, range_end, buffer);
+2158 
+2159   // Blocking send of the buffer
+2160   this->send(dest_processor_id, buffer, tag);
+2161 }
+.fi
+.SS "template<typename Context , typename Iter > void libMesh::Parallel::Communicator::send_packed_range (const unsigned intdest_processor_id, const Context *context, Iterrange_begin, const Iterrange_end, \fBRequest\fP &req, const \fBMessageTag\fP &tag = \fC\fBno_tag\fP\fP) const\fC [inline]\fP"
+Nonblocking-send range-of-pointers to one processor\&. This function does not send the raw pointers, but rather constructs new objects at the other end whose contents match the objects pointed to by the sender\&.
+.PP
+void Parallel::pack(const T*, vector<int>& data, const Context*) is used to serialize type T onto the end of a data vector\&.
+.PP
+unsigned int \fBParallel::packable_size(const T*, const Context*)\fP is used to allow data vectors to reserve memory, and for additional error checking 
+.PP
+Definition at line 2165 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Request::add_post_wait_work(), libMesh::Parallel::pack_range(), and send()\&.
+.PP
+.nf
+2171 {
+2172   // Allocate a buffer on the heap so we don't have to free it until
+2173   // after the Request::wait()
+2174   typedef typename std::iterator_traits<Iter>::value_type T;
+2175   typedef typename Parallel::BufferType<T>::type buffer_t;
+2176   std::vector<buffer_t> *buffer = new std::vector<buffer_t>();
+2177 
+2178   Parallel::pack_range(context, range_begin, range_end, *buffer);
+2179 
+2180   // Make the Request::wait() handle deleting the buffer
+2181   req\&.add_post_wait_work
+2182     (new Parallel::PostWaitDeleteBuffer<std::vector<buffer_t> >
+2183      (buffer));
+2184 
+2185   // Non-blocking send of the buffer
+2186   this->send(dest_processor_id, *buffer, req, tag);
+2187 }
+.fi
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::Communicator::send_receive (const unsigned intsend_tgt, T1 &send_val, const unsigned intrecv_source, T2 &recv_val, const \fBMessageTag\fP &send_tag = \fC\fBno_tag\fP\fP, const \fBMessageTag\fP &recv_tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Send data \fCsend\fP to one processor while simultaneously receiving other data \fCrecv\fP from a (potentially different) processor\&.
+.PP
+Send-receive data from one processor\&. 
+.PP
+Definition at line 2533 of file parallel_implementation\&.h\&.
+.PP
+References rank(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::MessageTag::value()\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::MeshCommunication::find_global_indices(), libMesh::Parallel::send_receive(), send_receive(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::Parallel::sync_dofobject_data_by_id(), libMesh::Parallel::sync_dofobject_data_by_xyz(), and libMesh::XdrIO::write_serialized_connectivity()\&.
+.PP
+.nf
+2539 {
+2540   START_LOG("send_receive()", "Parallel");
+2541 
+2542   if (dest_processor_id   == this->rank() &&
+2543       source_processor_id == this->rank())
+2544     {
+2545       recv = sendvec;
+2546       STOP_LOG("send_receive()", "Parallel");
+2547       return;
+2548     }
+2549 
+2550   MPI_Sendrecv(&sendvec, 1, StandardType<T1>(&sendvec),
+2551                dest_processor_id, send_tag\&.value(),
+2552                &recv, 1, StandardType<T2>(&recv),
+2553                source_processor_id, recv_tag\&.value(),
+2554                this->get(),
+2555                MPI_STATUS_IGNORE);
+2556 
+2557   STOP_LOG("send_receive()", "Parallel");
+2558 }
+.fi
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::Communicator::send_receive (const unsigned intdest_processor_id, T1 &send, const \fBDataType\fP &type1, const unsigned intsource_processor_id, T2 &recv, const \fBDataType\fP &type2, const \fBMessageTag\fP &send_tag = \fC\fBno_tag\fP\fP, const \fBMessageTag\fP &recv_tag = \fC\fBany_tag\fP\fP) const"
+Send data \fCsend\fP to one processor while simultaneously receiving other data \fCrecv\fP from a (potentially different) processor, using a user-specified MPI Dataype\&. 
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::Communicator::send_receive (const unsigned intdest_processor_id, std::vector< T1 > &sendvec, const \fBDataType\fP &type1, const unsigned intsource_processor_id, std::vector< T2 > &recv, const \fBDataType\fP &type2, const \fBMessageTag\fP &send_tag, const \fBMessageTag\fP &recv_tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2500 of file parallel_implementation\&.h\&.
+.PP
+References rank(), receive(), send(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::Request::wait()\&.
+.PP
+.nf
+2508 {
+2509   START_LOG("send_receive()", "Parallel");
+2510 
+2511   if (dest_processor_id   == this->rank() &&
+2512       source_processor_id == this->rank())
+2513     {
+2514       recv = sendvec;
+2515       STOP_LOG("send_receive()", "Parallel");
+2516       return;
+2517     }
+2518 
+2519   Parallel::Request req;
+2520 
+2521   this->send (dest_processor_id, sendvec, type1, req, send_tag);
+2522 
+2523   this->receive (source_processor_id, recv, type2, recv_tag);
+2524 
+2525   req\&.wait();
+2526 
+2527   STOP_LOG("send_receive()", "Parallel");
+2528 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send_receive (const unsigned intdest_processor_id, std::vector< T > &sendvec, const unsigned intsource_processor_id, std::vector< T > &recv, const \fBMessageTag\fP &send_tag, const \fBMessageTag\fP &recv_tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2570 of file parallel_implementation\&.h\&.
+.PP
+References rank(), send_receive(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+2576 {
+2577   if (dest_processor_id   == this->rank() &&
+2578       source_processor_id == this->rank())
+2579     {
+2580       START_LOG("send_receive()", "Parallel");
+2581       recv = sendvec;
+2582       STOP_LOG("send_receive()", "Parallel");
+2583       return;
+2584     }
+2585 
+2586   // Call the user-defined type version with automatic
+2587   // type conversion based on template argument:
+2588   this->send_receive (dest_processor_id, sendvec,
+2589                       StandardType<T>(sendvec\&.empty() ? NULL : &sendvec[0]),
+2590                       source_processor_id, recv,
+2591                       StandardType<T>(recv\&.empty() ? NULL : &recv[0]),
+2592                       send_tag, recv_tag);
+2593 }
+.fi
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::Communicator::send_receive (const unsigned intdest_processor_id, std::vector< T1 > &sendvec, const unsigned intsource_processor_id, std::vector< T2 > &recv, const \fBMessageTag\fP &send_tag, const \fBMessageTag\fP &recv_tag) const\fC [inline]\fP"
+
+.PP
+Definition at line 2599 of file parallel_implementation\&.h\&.
+.PP
+References send_receive()\&.
+.PP
+.nf
+2605 {
+2606   // Call the user-defined type version with automatic
+2607   // type conversion based on template argument:
+2608   this->send_receive (dest_processor_id, sendvec,
+2609                       StandardType<T1>(sendvec\&.empty() ? NULL : &sendvec[0]),
+2610                       source_processor_id, recv,
+2611                       StandardType<T2>(recv\&.empty() ? NULL : &recv[0]),
+2612                       send_tag, recv_tag);
+2613 }
+.fi
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::Communicator::send_receive (const unsigned intdest_processor_id, std::vector< std::vector< T1 > > &sendvec, const unsigned intsource_processor_id, std::vector< std::vector< T2 > > &recv, const \fBMessageTag\fP &, const \fBMessageTag\fP &) const\fC [inline]\fP"
+
+.PP
+Definition at line 2619 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::any_tag, and libMesh::Parallel::no_tag\&.
+.PP
+.nf
+2625 {
+2626   // FIXME - why aren't we honoring send_tag and recv_tag here?
+2627   send_receive_vec_of_vec
+2628     (dest_processor_id, sendvec, source_processor_id, recv,
+2629      no_tag, any_tag, *this);
+2630 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::send_receive (const unsigned intdest_processor_id, std::vector< std::vector< T > > &sendvec, const unsigned intsource_processor_id, std::vector< std::vector< T > > &recv, const \fBMessageTag\fP &, const \fBMessageTag\fP &) const\fC [inline]\fP"
+
+.PP
+Definition at line 2637 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::any_tag, and libMesh::Parallel::no_tag\&.
+.PP
+.nf
+2643 {
+2644   // FIXME - why aren't we honoring send_tag and recv_tag here?
+2645   send_receive_vec_of_vec
+2646     (dest_processor_id, sendvec, source_processor_id, recv,
+2647      no_tag, any_tag, *this);
+2648 }
+.fi
+.SS "template<typename Context1 , typename RangeIter , typename Context2 , typename OutputIter > void libMesh::Parallel::Communicator::send_receive_packed_range (const unsigned intdest_processor_id, const Context1 *context1, RangeItersend_begin, const RangeItersend_end, const unsigned intsource_processor_id, Context2 *context2, OutputIterout, const \fBMessageTag\fP &send_tag = \fC\fBno_tag\fP\fP, const \fBMessageTag\fP &recv_tag = \fC\fBany_tag\fP\fP) const\fC [inline]\fP"
+Send a range-of-pointers to one processor while simultaneously receiving another range from a (potentially different) processor\&. This function does not send or receive raw pointers, but rather constructs new objects at each receiver whose contents match the objects pointed to by the sender\&.
+.PP
+The objects being sent will be of type T1 = iterator_traits<RangeIter>::value_type, and the objects being received will be of type T2 = iterator_traits<OutputIter>::value_type
+.PP
+void Parallel::pack(const T1*, vector<int>& data, const Context1*) is used to serialize type T1 onto the end of a data vector\&.
+.PP
+Using std::back_inserter as the output iterator allows send_receive to fill any container type\&. Using \fBlibMesh::null_output_iterator\fP allows the receive to be dealt with solely by \fBParallel::unpack()\fP, for objects whose \fBunpack()\fP is written so as to not leak memory when used in this fashion\&.
+.PP
+A future version of this method should be created to preallocate memory when receiving vectors\&.\&.\&.
+.PP
+void Parallel::unpack(vector<int>::iterator in, T2** out, Context*) is used to unserialize type T2, typically into a new heap-allocated object whose pointer is returned as *out\&.
+.PP
+unsigned int Parallel::packable_size(const T1*, const Context1*) is used to allow data vectors to reserve memory, and for additional error checking\&.
+.PP
+unsigned int \fBParallel::packed_size\fP(const T2*, vector<int>::const_iterator) is used to advance to the beginning of the next object's data\&.
+.PP
+Send-receive range-of-pointers from one processor\&.
+.PP
+We do not currently support this operation on one processor without MPI\&. 
+.PP
+Definition at line 2655 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::receive_packed_range(), libMesh::Parallel::send_packed_range(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::Request::wait()\&.
+.PP
+Referenced by libMesh::Parallel::send_receive_packed_range()\&.
+.PP
+.nf
+2664 {
+2665   START_LOG("send_receive()", "Parallel");
+2666 
+2667   Parallel::Request req;
+2668 
+2669   this->send_packed_range (dest_processor_id, context1, send_begin, send_end,
+2670                            req, send_tag);
+2671 
+2672   this->receive_packed_range (source_processor_id, context2, out, recv_tag);
+2673 
+2674   req\&.wait();
+2675 
+2676   STOP_LOG("send_receive()", "Parallel");
+2677 
+2678 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::set_union (T &data, const unsigned introot_id) const\fC [inline]\fP"
+Take a container of local variables on each processor, and collect their union over all processors, replacing the set on processor 0\&. 
+.PP
+Definition at line 3294 of file parallel_implementation\&.h\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Parallel::set_union(), libMesh::MeshBase::subdomain_ids(), and libMesh::BoundaryInfo::sync()\&.
+.PP
+.nf
+3295 { libmesh_assert_equal_to(root_id, 0); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::set_union (T &data) const\fC [inline]\fP"
+Take a container of local variables on each processor, and replace it with their union over all processors\&. 
+.PP
+Definition at line 3291 of file parallel_implementation\&.h\&.
+.PP
+.nf
+3291 {}
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::set_union (std::set< T > &data, const unsigned introot_id) const\fC [inline]\fP"
+
+.PP
+Definition at line 1825 of file parallel_implementation\&.h\&.
+.PP
+References gather(), and rank()\&.
+.PP
+.nf
+1827 {
+1828   std::vector<T> vecdata(data\&.begin(), data\&.end());
+1829   this->gather(root_id, vecdata);
+1830   if (this->rank() == root_id)
+1831     data\&.insert(vecdata\&.begin(), vecdata\&.end());
+1832 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::set_union (std::set< T > &data) const\fC [inline]\fP"
+
+.PP
+Definition at line 1837 of file parallel_implementation\&.h\&.
+.PP
+References allgather()\&.
+.PP
+.nf
+1838 {
+1839   std::vector<T> vecdata(data\&.begin(), data\&.end());
+1840   this->allgather(vecdata, false);
+1841   data\&.insert(vecdata\&.begin(), vecdata\&.end());
+1842 }
+.fi
+.SS "unsigned int libMesh::Parallel::Communicator::size () const\fC [inline]\fP"
+
+.PP
+Definition at line 608 of file parallel\&.h\&.
+.PP
+References _size\&.
+.PP
+Referenced by allgather(), alltoall(), libMesh::MeshCommunication::assign_global_indices(), barrier(), broadcast(), libMesh::MeshCommunication::find_global_indices(), gather(), max(), maxloc(), min(), minloc(), libMesh::ParallelObject::n_processors(), semiverify(), libMesh::PetscPreconditioner< T >::set_petsc_preconditioner_type(), sum(), libMesh::Parallel::sync_dofobject_data_by_id(), libMesh::Parallel::sync_dofobject_data_by_xyz(), and verify()\&.
+.PP
+.nf
+608 { return _size; }
+.fi
+.SS "void libMesh::Parallel::Communicator::split (intcolor, intkey, \fBCommunicator\fP &target)\fC [inline]\fP"
+
+.PP
+Definition at line 468 of file parallel_implementation\&.h\&.
+.PP
+References get(), and send_mode()\&.
+.PP
+.nf
+468                                                                         {
+469   MPI_Comm_split(this->get(), color, key, &target\&.get());
+470   target\&.send_mode(this->send_mode());
+471 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::sum (T &r) const\fC [inline]\fP"
+Take a local variable and replace it with the sum of it's values on all processors\&. Containers are replaced element-wise\&. 
+.PP
+Definition at line 1739 of file parallel_implementation\&.h\&.
+.PP
+References size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::System::calculate_norm(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ParallelMesh::n_active_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::ErrorEstimator::reduce_error(), libMesh::Parallel::sum(), libMesh::MeshTools::total_weight(), and libMesh::XdrIO::write_serialized_connectivity()\&.
+.PP
+.nf
+1740 {
+1741   if (this->size() > 1)
+1742     {
+1743       START_LOG("sum()", "Parallel");
+1744 
+1745       T temp = r;
+1746       MPI_Allreduce (&temp,
+1747                      &r,
+1748                      1,
+1749                      StandardType<T>(&temp),
+1750                      MPI_SUM,
+1751                      this->get());
+1752 
+1753       STOP_LOG("sum()", "Parallel");
+1754     }
+1755 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::sum (std::vector< T > &r) const\fC [inline]\fP"
+
+.PP
+Definition at line 1759 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and verify()\&.
+.PP
+.nf
+1760 {
+1761   if (this->size() > 1 && !r\&.empty())
+1762     {
+1763       START_LOG("sum()", "Parallel");
+1764 
+1765       libmesh_assert(this->verify(r\&.size()));
+1766 
+1767       std::vector<T> temp(r);
+1768       MPI_Allreduce (&temp[0],
+1769                      &r[0],
+1770                      libmesh_cast_int<int>(r\&.size()),
+1771                      StandardType<T>(&temp[0]),
+1772                      MPI_SUM,
+1773                      this->get());
+1774 
+1775       STOP_LOG("sum()", "Parallel");
+1776     }
+1777 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::sum (std::complex< T > &r) const\fC [inline]\fP"
+
+.PP
+Definition at line 1783 of file parallel_implementation\&.h\&.
+.PP
+References size(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+1784 {
+1785   if (this->size() > 1)
+1786     {
+1787       START_LOG("sum()", "Parallel");
+1788 
+1789       std::complex<T> temp(r);
+1790       MPI_Allreduce (&temp,
+1791                      &r,
+1792                      2,
+1793                      StandardType<T>(),
+1794                      MPI_SUM,
+1795                      this->get());
+1796 
+1797       STOP_LOG("sum()", "Parallel");
+1798     }
+1799 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::Communicator::sum (std::vector< std::complex< T > > &r) const\fC [inline]\fP"
+
+.PP
+Definition at line 1803 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), size(), libMesh::START_LOG(), libMesh::STOP_LOG(), and verify()\&.
+.PP
+.nf
+1804 {
+1805   if (this->size() > 1 && !r\&.empty())
+1806     {
+1807       START_LOG("sum()", "Parallel");
+1808 
+1809       libmesh_assert(this->verify(r\&.size()));
+1810 
+1811       std::vector<std::complex<T> > temp(r);
+1812       MPI_Allreduce (&temp[0],
+1813                      &r[0],
+1814                      libmesh_cast_int<int>(r\&.size() * 2),
+1815                      StandardType<T>(NULL),
+1816                      MPI_SUM,
+1817                      this->get());
+1818 
+1819       STOP_LOG("sum()", "Parallel");
+1820     }
+1821 }
+.fi
+.SS "template<typename T > bool libMesh::Parallel::Communicator::verify (const T &r) const\fC [inline]\fP"
+Verify that a local variable has the same value on all processors\&. Containers must have the same value in every entry\&. 
+.PP
+Definition at line 1173 of file parallel_implementation\&.h\&.
+.PP
+References max(), min(), and size()\&.
+.PP
+Referenced by alltoall(), libMesh::MeshCommunication::delete_remote_elements(), max(), maxloc(), min(), minloc(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), sum(), and libMesh::Parallel::verify()\&.
+.PP
+.nf
+1174 {
+1175   if (this->size() > 1 && Attributes<T>::has_min_max == true)
+1176     {
+1177       T tempmin = r, tempmax = r;
+1178       this->min(tempmin);
+1179       this->max(tempmax);
+1180       bool verified = (r == tempmin) &&
+1181         (r == tempmax);
+1182       this->min(verified);
+1183       return verified;
+1184     }
+1185   return true;
+1186 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBcommunicator\fP libMesh::Parallel::Communicator::_communicator\fC [private]\fP"
+
+.PP
+Definition at line 628 of file parallel\&.h\&.
+.PP
+Referenced by assign(), clear(), duplicate(), and get()\&.
+.SS "bool libMesh::Parallel::Communicator::_I_duped_it\fC [private]\fP"
+
+.PP
+Definition at line 635 of file parallel\&.h\&.
+.PP
+Referenced by clear(), and duplicate()\&.
+.SS "unsigned int libMesh::Parallel::Communicator::_rank\fC [private]\fP"
+
+.PP
+Definition at line 629 of file parallel\&.h\&.
+.PP
+Referenced by assign(), and rank()\&.
+.SS "\fBSendMode\fP libMesh::Parallel::Communicator::_send_mode\fC [private]\fP"
+
+.PP
+Definition at line 630 of file parallel\&.h\&.
+.PP
+Referenced by assign(), and send_mode()\&.
+.SS "unsigned int libMesh::Parallel::Communicator::_size\fC [private]\fP"
+
+.PP
+Definition at line 629 of file parallel\&.h\&.
+.PP
+Referenced by assign(), and size()\&.
+.SS "std::map<int, unsigned int> libMesh::Parallel::Communicator::used_tag_values\fC [mutable]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 634 of file parallel\&.h\&.
+.PP
+Referenced by dereference_unique_tag(), get_unique_tag(), and reference_unique_tag()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

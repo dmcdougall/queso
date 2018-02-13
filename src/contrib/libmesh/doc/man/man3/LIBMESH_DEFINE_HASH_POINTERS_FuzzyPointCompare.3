@@ -1,0 +1,136 @@
+.TH "LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFuzzyPointCompare\fP (Real tol)"
+.br
+.ti -1c
+.RI "bool \fBoperator()\fP (const Point &lhs, const Point &rhs)"
+.br
+.ti -1c
+.RI "bool \fBoperator()\fP (const std::pair< Point, dof_id_type > &lhs, const std::pair< Point, dof_id_type > &rhs)"
+.br
+.ti -1c
+.RI "bool \fBoperator()\fP (const Point &lhs, std::pair< Point, dof_id_type > &rhs)"
+.br
+.ti -1c
+.RI "bool \fBoperator()\fP (std::pair< Point, dof_id_type > &lhs, const Point &rhs)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "Real \fB_tol\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 37 of file serial_mesh\&.C\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare::FuzzyPointCompare (Realtol)\fC [inline]\fP"
+
+.PP
+Definition at line 44 of file serial_mesh\&.C\&.
+.PP
+.nf
+44 : _tol(tol) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare::operator() (const Point &lhs, const Point &rhs)\fC [inline]\fP"
+
+.PP
+Definition at line 47 of file serial_mesh\&.C\&.
+.PP
+References std::abs(), std::max(), and libMesh::Real\&.
+.PP
+.nf
+48   {
+49     for (unsigned i=0; i<LIBMESH_DIM; ++i)
+50       {
+51         // If the current components are within some tolerance
+52         // of one another, then don't attempt the less-than comparison\&.
+53         // Note that this may cause something strange to happen, as Roy
+54         // believes he can prove it is not a total ordering\&.\&.\&.
+55         Real rel_size = std::max(std::abs(lhs(i)), std::abs(rhs(i)));
+56 
+57         // Don't use relative tolerance if both numbers are already small\&.
+58         // How small?  Some possible options are:
+59         // * std::numeric_limits<Real>::epsilon()
+60         // * TOLERANCE
+61         // * 1\&.0
+62         // If we use std::numeric_limits<Real>::epsilon(), we'll
+63         // do more relative comparisons for small numbers, but
+64         // increase the chance for false positives?  If we pick 1\&.0,
+65         // we'll never "increase" the difference between small numbers
+66         // in the test below\&.
+67         if (rel_size < 1\&.)
+68           rel_size = 1\&.;
+69 
+70         // Don't attempt the comparison if lhs(i) and rhs(i) are too close
+71         // together\&.
+72         if ( std::abs(lhs(i) - rhs(i)) / rel_size < _tol)
+73           continue;
+74 
+75         if (lhs(i) < rhs(i))
+76           return true;
+77         if (lhs(i) > rhs(i))
+78           return false;
+79       }
+80 
+81     // We compared all the components without returning yet, so
+82     // each component was neither greater than nor less than they other\&.
+83     // They might be equal, so return false\&.
+84     return false;
+85   }
+.fi
+.SS "bool LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare::operator() (const std::pair< Point, dof_id_type > &lhs, const std::pair< Point, dof_id_type > &rhs)\fC [inline]\fP"
+
+.PP
+Definition at line 88 of file serial_mesh\&.C\&.
+.PP
+.nf
+90   {
+91     return (*this)(lhs\&.first, rhs\&.first);
+92   }
+.fi
+.SS "bool LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare::operator() (const Point &lhs, std::pair< Point, dof_id_type > &rhs)\fC [inline]\fP"
+
+.PP
+Definition at line 97 of file serial_mesh\&.C\&.
+.PP
+.nf
+98   {
+99     return (*this)(lhs, rhs\&.first);
+100   }
+.fi
+.SS "bool LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare::operator() (std::pair< Point, dof_id_type > &lhs, const Point &rhs)\fC [inline]\fP"
+
+.PP
+Definition at line 103 of file serial_mesh\&.C\&.
+.PP
+.nf
+104   {
+105     return (*this)(lhs\&.first, rhs);
+106   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "Real LIBMESH_DEFINE_HASH_POINTERS::FuzzyPointCompare::_tol\fC [private]\fP"
+
+.PP
+Definition at line 40 of file serial_mesh\&.C\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

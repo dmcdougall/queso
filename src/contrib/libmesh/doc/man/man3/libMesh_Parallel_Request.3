@@ -1,0 +1,335 @@
+.TH "libMesh::Parallel::Request" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::Request \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRequest\fP ()"
+.br
+.ti -1c
+.RI "\fBRequest\fP (const \fBrequest\fP &r)"
+.br
+.ti -1c
+.RI "\fBRequest\fP (const \fBRequest\fP &other)"
+.br
+.ti -1c
+.RI "void \fBcleanup\fP ()"
+.br
+.ti -1c
+.RI "\fBRequest\fP & \fBoperator=\fP (const \fBRequest\fP &other)"
+.br
+.ti -1c
+.RI "\fBRequest\fP & \fBoperator=\fP (const \fBrequest\fP &r)"
+.br
+.ti -1c
+.RI "\fB~Request\fP ()"
+.br
+.ti -1c
+.RI "\fBrequest\fP * \fBget\fP ()"
+.br
+.ti -1c
+.RI "const \fBrequest\fP * \fBget\fP () const "
+.br
+.ti -1c
+.RI "\fBStatus\fP \fBwait\fP ()"
+.br
+.ti -1c
+.RI "bool \fBtest\fP ()"
+.br
+.ti -1c
+.RI "bool \fBtest\fP (\fBstatus\fP &\fBstatus\fP)"
+.br
+.ti -1c
+.RI "void \fBadd_post_wait_work\fP (\fBPostWaitWork\fP *work)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBrequest\fP \fB_request\fP"
+.br
+.ti -1c
+.RI "std::pair< std::vector
+.br
+< \fBPostWaitWork\fP * >, unsigned 
+.br
+int > * \fBpost_wait_work\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Encapsulates the MPI_Request 
+.PP
+Definition at line 395 of file parallel\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Parallel::Request::Request ()\fC [inline]\fP"
+
+.PP
+Definition at line 626 of file parallel_implementation\&.h\&.
+.PP
+.nf
+626                          :
+627 #ifdef LIBMESH_HAVE_MPI
+628   _request(MPI_REQUEST_NULL),
+629 #else
+630   _request(),
+631 #endif
+632   post_wait_work(NULL)
+633 {}
+.fi
+.SS "libMesh::Parallel::Request::Request (const \fBrequest\fP &r)\fC [inline]\fP"
+
+.PP
+Definition at line 635 of file parallel_implementation\&.h\&.
+.PP
+.nf
+635                                          :
+636   _request(r),
+637   post_wait_work(NULL)
+638 {}
+.fi
+.SS "libMesh::Parallel::Request::Request (const \fBRequest\fP &other)\fC [inline]\fP"
+
+.PP
+Definition at line 640 of file parallel_implementation\&.h\&.
+.PP
+References post_wait_work\&.
+.PP
+.nf
+640                                              :
+641   _request(other\&._request),
+642   post_wait_work(other\&.post_wait_work)
+643 {
+644   // operator= should behave like a shared pointer
+645   if (post_wait_work)
+646     post_wait_work->second++;
+647 }
+.fi
+.SS "libMesh::Parallel::Request::~Request ()\fC [inline]\fP"
+
+.PP
+Definition at line 693 of file parallel_implementation\&.h\&.
+.PP
+References cleanup()\&.
+.PP
+.nf
+693                           {
+694   this->cleanup();
+695 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Parallel::Request::add_post_wait_work (\fBPostWaitWork\fP *work)\fC [inline]\fP"
+
+.PP
+Definition at line 760 of file parallel_implementation\&.h\&.
+.PP
+References post_wait_work\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::receive(), libMesh::Parallel::Communicator::receive_packed_range(), libMesh::Parallel::Communicator::send(), and libMesh::Parallel::Communicator::send_packed_range()\&.
+.PP
+.nf
+761 {
+762   if (!post_wait_work)
+763     post_wait_work = new
+764       std::pair<std::vector <PostWaitWork* >, unsigned int>
+765       (std::vector <PostWaitWork* >(), 1);
+766   post_wait_work->first\&.push_back(work);
+767 }
+.fi
+.SS "void libMesh::Parallel::Request::cleanup ()\fC [inline]\fP"
+
+.PP
+Definition at line 649 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), and post_wait_work\&.
+.PP
+Referenced by operator=(), and ~Request()\&.
+.PP
+.nf
+650 {
+651   if (post_wait_work)
+652     {
+653       // Decrement the use count
+654       post_wait_work->second--;
+655 
+656       if (!post_wait_work->second)
+657         {
+658 #ifdef DEBUG
+659           // If we're done using this request, then we'd better have
+660           // done the work we waited for
+661           for (std::vector<PostWaitWork*>::iterator i =
+662                  post_wait_work->first\&.begin();
+663                i != post_wait_work->first\&.end(); ++i)
+664             libmesh_assert(!(*i));
+665 #endif
+666           delete post_wait_work;
+667           post_wait_work = NULL;
+668         }
+669     }
+670 }
+.fi
+.SS "\fBrequest\fP* libMesh::Parallel::Request::get ()\fC [inline]\fP"
+
+.PP
+Definition at line 412 of file parallel\&.h\&.
+.PP
+References _request\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::receive(), and libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+412 { return &_request; }
+.fi
+.SS "const \fBrequest\fP* libMesh::Parallel::Request::get () const\fC [inline]\fP"
+
+.PP
+Definition at line 414 of file parallel\&.h\&.
+.PP
+References _request\&.
+.PP
+.nf
+414 { return &_request; }
+.fi
+.SS "\fBRequest\fP & libMesh::Parallel::Request::operator= (const \fBRequest\fP &other)\fC [inline]\fP"
+
+.PP
+Definition at line 672 of file parallel_implementation\&.h\&.
+.PP
+References _request, cleanup(), and post_wait_work\&.
+.PP
+.nf
+673 {
+674   this->cleanup();
+675   _request = other\&._request;
+676   post_wait_work = other\&.post_wait_work;
+677 
+678   // operator= should behave like a shared pointer
+679   if (post_wait_work)
+680     post_wait_work->second++;
+681 
+682   return *this;
+683 }
+.fi
+.SS "\fBRequest\fP & libMesh::Parallel::Request::operator= (const \fBrequest\fP &r)\fC [inline]\fP"
+
+.PP
+Definition at line 685 of file parallel_implementation\&.h\&.
+.PP
+References _request, cleanup(), and post_wait_work\&.
+.PP
+.nf
+686 {
+687   this->cleanup();
+688   _request = r;
+689   post_wait_work = NULL;
+690   return *this;
+691 }
+.fi
+.SS "bool libMesh::Parallel::Request::test ()\fC [inline]\fP"
+
+.PP
+Definition at line 722 of file parallel_implementation\&.h\&.
+.PP
+References _request, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+723 {
+724 #ifdef LIBMESH_HAVE_MPI
+725   int val=0;
+726 
+727   MPI_Test (&_request,
+728             &val,
+729             MPI_STATUS_IGNORE);
+730   if (val)
+731     {
+732       libmesh_assert          (_request == MPI_REQUEST_NULL);
+733       libmesh_assert_equal_to (val, 1);
+734     }
+735 
+736   return val;
+737 #else
+738   return true;
+739 #endif
+740 }
+.fi
+.SS "bool libMesh::Parallel::Request::test (\fBstatus\fP &status)\fC [inline]\fP"
+
+.PP
+Definition at line 743 of file parallel_implementation\&.h\&.
+.PP
+References _request\&.
+.PP
+.nf
+744 {
+745   int val=0;
+746 
+747   MPI_Test (&_request,
+748             &val,
+749             &stat);
+750 
+751   return val;
+752 }
+.fi
+.SS "\fBStatus\fP libMesh::Parallel::Request::wait ()\fC [inline]\fP"
+
+.PP
+Definition at line 697 of file parallel_implementation\&.h\&.
+.PP
+References _request, libMesh::Parallel::Status::get(), libMesh::libmesh_assert(), post_wait_work, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::send_receive(), libMesh::Parallel::Communicator::send_receive_packed_range(), and libMesh::Parallel::wait()\&.
+.PP
+.nf
+698 {
+699   START_LOG("wait()", "Parallel::Request");
+700 
+701   Status stat;
+702 #ifdef LIBMESH_HAVE_MPI
+703   MPI_Wait (&_request, stat\&.get());
+704 #endif
+705   if (post_wait_work)
+706     for (std::vector<PostWaitWork*>::iterator i =
+707            post_wait_work->first\&.begin();
+708          i != post_wait_work->first\&.end(); ++i)
+709       {
+710         // The user should never try to give us NULL work or try
+711         // to wait() twice\&.
+712         libmesh_assert (*i);
+713         (*i)->run();
+714         delete (*i);
+715         *i = NULL;
+716       }
+717 
+718   STOP_LOG("wait()", "Parallel::Request");
+719   return stat;
+720 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBrequest\fP libMesh::Parallel::Request::_request\fC [private]\fP"
+
+.PP
+Definition at line 425 of file parallel\&.h\&.
+.PP
+Referenced by get(), operator=(), test(), and wait()\&.
+.SS "std::pair<std::vector <\fBPostWaitWork\fP* >, unsigned int>* libMesh::Parallel::Request::post_wait_work\fC [private]\fP"
+
+.PP
+Definition at line 431 of file parallel\&.h\&.
+.PP
+Referenced by add_post_wait_work(), cleanup(), operator=(), Request(), and wait()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

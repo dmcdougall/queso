@@ -1,0 +1,92 @@
+.TH "libMesh::BoundaryInfo::Fill" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::BoundaryInfo::Fill \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFill\fP (std::map< \fBboundary_id_type\fP, \fBdof_id_type\fP > &im)"
+.br
+.ti -1c
+.RI "\fB~Fill\fP ()"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBboundary_id_type\fP &pos)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< \fBboundary_id_type\fP, 
+.br
+\fBdof_id_type\fP > & \fBid_map\fP"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBcnt\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Functor class for printing a single node's info To be used with 'for_each'\&. Functor class for printing a single side's info\&. To be used with 'for_each'\&. Functor class for initializing a map\&. The entries being added to the map increase by exactly one each time\&. The desctructor also inserts the invalid_id entry\&. 
+.PP
+Definition at line 593 of file boundary_info\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::BoundaryInfo::Fill::Fill (std::map< \fBboundary_id_type\fP, \fBdof_id_type\fP > &im)\fC [inline]\fP"
+
+.PP
+Definition at line 596 of file boundary_info\&.h\&.
+.PP
+.nf
+596 : id_map(im), cnt(0) {}
+.fi
+.SS "libMesh::BoundaryInfo::Fill::~Fill ()\fC [inline]\fP"
+
+.PP
+Definition at line 598 of file boundary_info\&.h\&.
+.PP
+References cnt, id_map, and libMesh::BoundaryInfo::invalid_id\&.
+.PP
+.nf
+599     {
+600       id_map[invalid_id] = cnt;
+601     }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::BoundaryInfo::Fill::operator() (const \fBboundary_id_type\fP &pos)\fC [inline]\fP"
+
+.PP
+Definition at line 604 of file boundary_info\&.h\&.
+.PP
+References cnt, and id_map\&.
+.PP
+.nf
+605     {
+606       id_map[pos] = cnt++;
+607     }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdof_id_type\fP libMesh::BoundaryInfo::Fill::cnt\fC [private]\fP"
+
+.PP
+Definition at line 611 of file boundary_info\&.h\&.
+.PP
+Referenced by operator()(), and ~Fill()\&.
+.SS "std::map<\fBboundary_id_type\fP, \fBdof_id_type\fP>& libMesh::BoundaryInfo::Fill::id_map\fC [private]\fP"
+
+.PP
+Definition at line 610 of file boundary_info\&.h\&.
+.PP
+Referenced by operator()(), and ~Fill()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

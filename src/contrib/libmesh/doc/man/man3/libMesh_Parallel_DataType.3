@@ -1,0 +1,201 @@
+.TH "libMesh::Parallel::DataType" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::DataType \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel\&.h>\fP
+.PP
+Inherited by \fBlibMesh::Parallel::StandardType< T >\fP, \fBlibMesh::Parallel::StandardType< Hilbert::HilbertIndices >\fP, \fBlibMesh::Parallel::StandardType< Point >\fP, \fBlibMesh::Parallel::StandardType< std::complex< T > >\fP, \fBlibMesh::Parallel::StandardType< std::pair< T1, T2 > >\fP, \fBlibMesh::Parallel::StandardType< TensorValue< T > >\fP, \fBlibMesh::Parallel::StandardType< TypeTensor< T > >\fP, \fBlibMesh::Parallel::StandardType< TypeVector< T > >\fP, and \fBlibMesh::Parallel::StandardType< VectorValue< T > >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDataType\fP ()"
+.br
+.ti -1c
+.RI "\fBDataType\fP (const \fBDataType\fP &other)"
+.br
+.ti -1c
+.RI "\fBDataType\fP (const \fBdata_type\fP &type)"
+.br
+.ti -1c
+.RI "\fBDataType\fP (const \fBDataType\fP &other, unsigned int count)"
+.br
+.ti -1c
+.RI "\fBDataType\fP (const \fBDataType\fP &, unsigned int)"
+.br
+.ti -1c
+.RI "\fBDataType\fP & \fBoperator=\fP (const \fBDataType\fP &other)"
+.br
+.ti -1c
+.RI "\fBDataType\fP & \fBoperator=\fP (const \fBdata_type\fP &type)"
+.br
+.ti -1c
+.RI "\fBoperator const data_type &\fP () const "
+.br
+.ti -1c
+.RI "\fBoperator data_type &\fP ()"
+.br
+.ti -1c
+.RI "void \fBcommit\fP ()"
+.br
+.ti -1c
+.RI "void \fBfree\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBdata_type\fP \fB_datatype\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Encapsulates the MPI_Datatype\&. 
+.PP
+Definition at line 234 of file parallel\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Parallel::DataType::DataType ()\fC [inline]\fP"
+
+.PP
+Definition at line 237 of file parallel\&.h\&.
+.PP
+Referenced by libMesh::Parallel::StandardType< Hilbert::HilbertIndices >::StandardType()\&.
+.PP
+.nf
+237 : _datatype() {}
+.fi
+.SS "libMesh::Parallel::DataType::DataType (const \fBDataType\fP &other)\fC [inline]\fP"
+
+.PP
+Definition at line 239 of file parallel\&.h\&.
+.PP
+.nf
+239                                    :
+240     _datatype(other\&._datatype)
+241   {}
+.fi
+.SS "libMesh::Parallel::DataType::DataType (const \fBdata_type\fP &type)\fC [inline]\fP"
+
+.PP
+Definition at line 243 of file parallel\&.h\&.
+.PP
+.nf
+243                                    :
+244     _datatype(type)
+245   {}
+.fi
+.SS "libMesh::Parallel::DataType::DataType (const \fBDataType\fP &other, unsigned intcount)\fC [inline]\fP"
+
+.PP
+Definition at line 248 of file parallel\&.h\&.
+.PP
+References _datatype, and commit()\&.
+.PP
+.nf
+249   {
+250     MPI_Type_contiguous(count, other\&._datatype, &_datatype);
+251     this->commit();
+252   }
+.fi
+.SS "libMesh::Parallel::DataType::DataType (const \fBDataType\fP &, unsignedint)\fC [inline]\fP"
+
+.PP
+Definition at line 254 of file parallel\&.h\&.
+.PP
+.nf
+255   {
+256   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Parallel::DataType::commit ()\fC [inline]\fP"
+
+.PP
+Definition at line 277 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+Referenced by DataType()\&.
+.PP
+.nf
+278   {
+279 #ifdef LIBMESH_HAVE_MPI
+280     MPI_Type_commit (&_datatype);
+281 #endif
+282   }
+.fi
+.SS "void libMesh::Parallel::DataType::free ()\fC [inline]\fP"
+
+.PP
+Definition at line 284 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+Referenced by libMesh::Parallel::StandardType< std::pair< T1, T2 > >::~StandardType(), libMesh::Parallel::StandardType< std::complex< T > >::~StandardType(), libMesh::Parallel::StandardType< TypeTensor< T > >::~StandardType(), and libMesh::Parallel::StandardType< TensorValue< T > >::~StandardType()\&.
+.PP
+.nf
+285   {
+286 #ifdef LIBMESH_HAVE_MPI
+287     MPI_Type_free (&_datatype);
+288 #endif
+289   }
+.fi
+.SS "libMesh::Parallel::DataType::operator const \fBdata_type\fP & () const\fC [inline]\fP"
+
+.PP
+Definition at line 265 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+.nf
+266   { return _datatype; }
+.fi
+.SS "libMesh::Parallel::DataType::operator \fBdata_type\fP & ()\fC [inline]\fP"
+
+.PP
+Definition at line 268 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+.nf
+269   { return _datatype; }
+.fi
+.SS "\fBDataType\fP& libMesh::Parallel::DataType::operator= (const \fBDataType\fP &other)\fC [inline]\fP"
+
+.PP
+Definition at line 259 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+.nf
+260   { _datatype = other\&._datatype; return *this; }
+.fi
+.SS "\fBDataType\fP& libMesh::Parallel::DataType::operator= (const \fBdata_type\fP &type)\fC [inline]\fP"
+
+.PP
+Definition at line 262 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+.nf
+263   { _datatype = type; return *this; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdata_type\fP libMesh::Parallel::DataType::_datatype\fC [protected]\fP"
+
+.PP
+Definition at line 293 of file parallel\&.h\&.
+.PP
+Referenced by commit(), DataType(), free(), operator const data_type &(), operator data_type &(), operator=(), libMesh::Parallel::StandardType< Hilbert::HilbertIndices >::StandardType(), libMesh::Parallel::StandardType< TypeVector< T > >::StandardType(), libMesh::Parallel::StandardType< std::pair< T1, T2 > >::StandardType(), libMesh::Parallel::StandardType< VectorValue< T > >::StandardType(), and libMesh::Parallel::StandardType< Point >::StandardType()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

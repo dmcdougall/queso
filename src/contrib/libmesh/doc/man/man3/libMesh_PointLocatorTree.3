@@ -1,0 +1,696 @@
+.TH "libMesh::PointLocatorTree" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PointLocatorTree \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <point_locator_tree\&.h>\fP
+.PP
+Inherits \fBlibMesh::PointLocatorBase\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPointLocatorTree\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBPointLocatorBase\fP *master=NULL)"
+.br
+.ti -1c
+.RI "\fBPointLocatorTree\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBTrees::BuildType\fP build_type, const \fBPointLocatorBase\fP *master=NULL)"
+.br
+.ti -1c
+.RI "\fB~PointLocatorTree\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBTrees::BuildType\fP build_type)"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual const \fBElem\fP * \fBoperator()\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "virtual void \fBenable_out_of_mesh_mode\fP (void)"
+.br
+.ti -1c
+.RI "virtual void \fBdisable_out_of_mesh_mode\fP (void)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBPointLocatorBase\fP > \fBbuild\fP (const \fBPointLocatorType\fP t, const \fBMeshBase\fP &\fBmesh\fP, const \fBPointLocatorBase\fP *master=NULL)"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBTreeBase\fP * \fB_tree\fP"
+.br
+.ti -1c
+.RI "const \fBElem\fP * \fB_element\fP"
+.br
+.ti -1c
+.RI "bool \fB_out_of_mesh_mode\fP"
+.br
+.ti -1c
+.RI "const \fBPointLocatorBase\fP * \fB_master\fP"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a point locator\&. It locates points in space using a tree: given a mesh they return the element and local coordinates for a given point in global coordinates\&. Use \fC\fBPointLocatorBase::build()\fP\fP to create objects of this type at run time\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file point_locator_tree\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PointLocatorTree::PointLocatorTree (const \fBMeshBase\fP &mesh, const \fBPointLocatorBase\fP *master = \fCNULL\fP)"
+Constructor\&. Needs the \fCmesh\fP in which the points should be located\&. Optionally takes a master interpolator\&. This master helps in saving memory by reducing the number of trees in use\&. Only the master locator holds a tree, the others simply use the master's tree\&. 
+.PP
+Definition at line 37 of file point_locator_tree\&.C\&.
+.PP
+References init(), and libMesh::Trees::NODES\&.
+.PP
+.nf
+38                                                                     :
+39   PointLocatorBase (mesh,master),
+40   _tree            (NULL),
+41   _element         (NULL),
+42   _out_of_mesh_mode(false)
+43 {
+44   this->init(Trees::NODES);
+45 }
+.fi
+.SS "libMesh::PointLocatorTree::PointLocatorTree (const \fBMeshBase\fP &mesh, const \fBTrees::BuildType\fPbuild_type, const \fBPointLocatorBase\fP *master = \fCNULL\fP)"
+Constructor\&. Needs the \fCmesh\fP in which the points should be located\&. Allows the user to specify the method to use when building the tree\&. Optionally takes a master interpolator\&. This master helps in saving memory by reducing the number of trees in use\&. Only the master locator holds a tree, the others simply use the master's tree\&. Allows the user to specify the build type\&. 
+.PP
+Definition at line 50 of file point_locator_tree\&.C\&.
+.PP
+References init()\&.
+.PP
+.nf
+52                                                                     :
+53   PointLocatorBase (mesh,master),
+54   _tree            (NULL),
+55   _element         (NULL),
+56   _out_of_mesh_mode(false)
+57 {
+58   this->init(build_type);
+59 }
+.fi
+.SS "libMesh::PointLocatorTree::~PointLocatorTree ()"
+Destructor\&. 
+.PP
+Definition at line 64 of file point_locator_tree\&.C\&.
+.PP
+References clear()\&.
+.PP
+.nf
+65 {
+66   this->clear ();
+67 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBAutoPtr\fP< \fBPointLocatorBase\fP > libMesh::PointLocatorBase::build (const \fBPointLocatorType\fPt, const \fBMeshBase\fP &mesh, const \fBPointLocatorBase\fP *master = \fCNULL\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds an PointLocator for the mesh \fCmesh\fP\&. Optionally takes a master PointLocator to save memory\&. An \fCAutoPtr<PointLocatorBase>\fP is returned to prevent memory leak\&. This way the user need not remember to delete the object\&. 
+.PP
+Definition at line 56 of file point_locator_base\&.C\&.
+.PP
+References libMesh::err, libMesh::LIST, and libMesh::TREE\&.
+.PP
+Referenced by libMesh::MeshBase::point_locator(), and libMesh::MeshBase::sub_point_locator()\&.
+.PP
+.nf
+59 {
+60   switch (t)
+61     {
+62     case TREE:
+63       {
+64         AutoPtr<PointLocatorBase> ap(new PointLocatorTree(mesh,
+65                                                           master));
+66         return ap;
+67       }
+68 
+69     case LIST:
+70       {
+71         AutoPtr<PointLocatorBase> ap(new PointLocatorList(mesh,
+72                                                           master));
+73         return ap;
+74       }
+75 
+76     default:
+77       {
+78         libMesh::err << "ERROR: Bad PointLocatorType = " << t << std::endl;
+79         libmesh_error();
+80       }
+81     }
+82 
+83   libmesh_error();
+84   AutoPtr<PointLocatorBase> ap(NULL);
+85   return ap;
+86 }
+.fi
+.SS "void libMesh::PointLocatorTree::clear ()\fC [virtual]\fP"
+Clears the locator\&. This function frees dynamic memory with 'delete'\&. 
+.PP
+Implements \fBlibMesh::PointLocatorBase\fP\&.
+.PP
+Definition at line 72 of file point_locator_tree\&.C\&.
+.PP
+References libMesh::PointLocatorBase::_master, and _tree\&.
+.PP
+Referenced by ~PointLocatorTree()\&.
+.PP
+.nf
+73 {
+74   // only delete the tree when we are the master
+75   if (this->_tree != NULL)
+76     {
+77       if (this->_master == NULL)
+78         // we own the tree
+79         delete this->_tree;
+80       else
+81         // someone else owns and therefore deletes the tree
+82         this->_tree = NULL;
+83     }
+84 }
+.fi
+.SS "void libMesh::PointLocatorTree::disable_out_of_mesh_mode (void)\fC [virtual]\fP"
+Disables out-of-mesh mode (default)\&. If asked to find a point that is contained in no mesh at all, the point locator will now crash\&. 
+.PP
+Implements \fBlibMesh::PointLocatorBase\fP\&.
+.PP
+Definition at line 270 of file point_locator_tree\&.C\&.
+.PP
+.nf
+271 {
+272   _out_of_mesh_mode = false;
+273 }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::PointLocatorTree::enable_out_of_mesh_mode (void)\fC [virtual]\fP"
+Enables out-of-mesh mode\&. In this mode, if asked to find a point that is contained in no mesh at all, the point locator will return a NULL pointer instead of crashing\&. Per default, this mode is off\&. 
+.PP
+Implements \fBlibMesh::PointLocatorBase\fP\&.
+.PP
+Definition at line 245 of file point_locator_tree\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+246 {
+247   /* Out-of-mesh mode is currently only supported if all of the
+248      elements have affine mappings\&.  The reason is that for quadratic
+249      mappings, it is not easy to construct a relyable bounding box of
+250      the element, and thus, the fallback linear search in \p
+251      operator() is required\&.  Hence, out-of-mesh mode would be
+252      extremely slow\&.  */
+253   if(!_out_of_mesh_mode)
+254     {
+255 #ifdef DEBUG
+256       MeshBase::const_element_iterator       pos     = this->_mesh\&.active_elements_begin();
+257       const MeshBase::const_element_iterator end_pos = this->_mesh\&.active_elements_end();
+258       for ( ; pos != end_pos; ++pos)
+259         if (!(*pos)->has_affine_map())
+260           {
+261             libMesh::err << "ERROR: Out-of-mesh mode is currently only supported if all elements have affine mappings\&." << std::endl;
+262             libmesh_error();
+263           }
+264 #endif
+265 
+266       _out_of_mesh_mode = true;
+267     }
+268 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::PointLocatorTree::init (const \fBTrees::BuildType\fPbuild_type)"
+Initializes the locator, so that the \fCoperator()\fP methods can be used\&. This function allocates dynamic memory with 'new'\&. 
+.PP
+Definition at line 90 of file point_locator_tree\&.C\&.
+.PP
+References _element, libMesh::PointLocatorBase::_initialized, libMesh::PointLocatorBase::_master, libMesh::PointLocatorBase::_mesh, _tree, std::abs(), libMesh::MeshTools::bounding_box(), libMesh::err, libMesh::PointLocatorBase::initialized(), libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+91 {
+92   libmesh_assert (!this->_tree);
+93 
+94   if (this->_initialized)
+95     {
+96       libMesh::err << "ERROR: Already initialized!  Will ignore this call\&.\&.\&."
+97                    << std::endl;
+98     }
+99 
+100   else
+101 
+102     {
+103 
+104       if (this->_master == NULL)
+105         {
+106           START_LOG("init(no master)", "PointLocatorTree");
+107 
+108           if (this->_mesh\&.mesh_dimension() == 3)
+109             _tree = new Trees::OctTree (this->_mesh, 200, build_type);
+110           else
+111             {
+112               // A 1D/2D mesh in 3D space needs special consideration\&.
+113               // If the mesh is planar XY, we want to build a QuadTree
+114               // to search efficiently\&.  If the mesh is truly a manifold,
+115               // then we need an octree
+116 #if LIBMESH_DIM > 2
+117               bool is_planar_xy = false;
+118 
+119               // Build the bounding box for the mesh\&.  If the delta-z bound is
+120               // negligibly small then we can use a quadtree\&.
+121               {
+122                 MeshTools::BoundingBox bbox = MeshTools::bounding_box(this->_mesh);
+123 
+124                 const Real
+125                   Dx = bbox\&.second(0) - bbox\&.first(0),
+126                   Dz = bbox\&.second(2) - bbox\&.first(2);
+127 
+128                 if (std::abs(Dz/(Dx + 1\&.e-20)) < 1e-10)
+129                   is_planar_xy = true;
+130               }
+131 
+132               if (!is_planar_xy)
+133                 _tree = new Trees::OctTree (this->_mesh, 200, build_type);
+134               else
+135 #endif
+136 #if LIBMESH_DIM > 1
+137                 _tree = new Trees::QuadTree (this->_mesh, 200, build_type);
+138 #else
+139               _tree = new Trees::BinaryTree (this->_mesh, 200, build_type);
+140 #endif
+141             }
+142 
+143           STOP_LOG("init(no master)", "PointLocatorTree");
+144         }
+145 
+146       else
+147 
+148         {
+149           // We are _not_ the master\&.  Let our Tree point to
+150           // the master's tree\&.  But for this we first transform
+151           // the master in a state for which we are friends\&.
+152           // And make sure the master @e has a tree!
+153           const PointLocatorTree* my_master =
+154             libmesh_cast_ptr<const PointLocatorTree*>(this->_master);
+155 
+156           if (my_master->initialized())
+157             this->_tree = my_master->_tree;
+158           else
+159             {
+160               libMesh::err << "ERROR: Initialize master first, then servants!"
+161                            << std::endl;
+162               libmesh_error();
+163             }
+164         }
+165 
+166 
+167       // Not all PointLocators may own a tree, but all of them
+168       // use their own element pointer\&.  Let the element pointer
+169       // be unique for every interpolator\&.
+170       // Suppose the interpolators are used concurrently
+171       // at different locations in the mesh, then it makes quite
+172       // sense to have unique start elements\&.
+173       this->_element = NULL;
+174     }
+175 
+176 
+177   // ready for take-off
+178   this->_initialized = true;
+179 }
+.fi
+.SS "virtual void libMesh::PointLocatorTree::init ()\fC [inline]\fP, \fC [virtual]\fP"
+Initializes the locator, so that the \fCoperator()\fP methods can be used\&. This function allocates dynamic memory with 'new'\&. 
+.PP
+Implements \fBlibMesh::PointLocatorBase\fP\&.
+.PP
+Definition at line 108 of file point_locator_tree\&.h\&.
+.PP
+References init(), and libMesh::Trees::NODES\&.
+.PP
+Referenced by init(), and PointLocatorTree()\&.
+.PP
+.nf
+108 { this->init(Trees::NODES); }
+.fi
+.SS "bool libMesh::PointLocatorBase::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 150 of file point_locator_base\&.h\&.
+.PP
+References libMesh::PointLocatorBase::_initialized\&.
+.PP
+Referenced by init(), and libMesh::PointLocatorList::init()\&.
+.PP
+.nf
+151 {
+152   return (this->_initialized);
+153 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "const \fBElem\fP * libMesh::PointLocatorTree::operator() (const \fBPoint\fP &p) const\fC [virtual]\fP"
+Locates the element in which the point with global coordinates \fCp\fP is located\&. The mutable _element member is used to cache the result and allow it to be used during the next call to operator()\&. 
+.PP
+Implements \fBlibMesh::PointLocatorBase\fP\&.
+.PP
+Definition at line 185 of file point_locator_tree\&.C\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+186 {
+187   libmesh_assert (this->_initialized);
+188 
+189   START_LOG("operator()", "PointLocatorTree");
+190 
+191   // First check the element from last time before asking the tree
+192   if (this->_element==NULL || !(this->_element->contains_point(p)))
+193     {
+194       // ask the tree
+195       this->_element = this->_tree->find_element (p);
+196 
+197       if (this->_element == NULL)
+198         {
+199           /* No element seems to contain this point\&.  If out-of-mesh
+200              mode is enabled, just return NULL\&.  If not, however, we
+201              have to perform a linear search before we call \p
+202              libmesh_error() since in the case of curved elements, the
+203              bounding box computed in \p TreeNode::insert(const
+204              Elem*) might be slightly inaccurate\&.  */
+205           if(!_out_of_mesh_mode)
+206             {
+207               START_LOG("linear search", "PointLocatorTree");
+208               MeshBase::const_element_iterator       pos     = this->_mesh\&.active_elements_begin();
+209               const MeshBase::const_element_iterator end_pos = this->_mesh\&.active_elements_end();
+210 
+211               for ( ; pos != end_pos; ++pos)
+212                 if ((*pos)->contains_point(p))
+213                   {
+214                     STOP_LOG("linear search", "PointLocatorTree");
+215                     STOP_LOG("operator()", "PointLocatorTree");
+216                     return this->_element = (*pos);
+217                   }
+218 
+219               /*
+220                 if (this->_element == NULL)
+221                 {
+222                 libMesh::err << std::endl
+223                 << " ******** Serious Problem\&.  Could not find an Element "
+224                 << "in the Mesh"
+225                 << std:: endl
+226                 << " ******** that contains the Point "
+227                 << p;
+228                 libmesh_error();
+229                 }
+230               */
+231               STOP_LOG("linear search", "PointLocatorTree");
+232             }
+233         }
+234     }
+235 
+236   // If we found an element, it should be active
+237   libmesh_assert (!this->_element || this->_element->active());
+238 
+239   STOP_LOG("operator()", "PointLocatorTree");
+240 
+241   // return the element
+242   return this->_element;
+243 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "const \fBElem\fP* libMesh::PointLocatorTree::_element\fC [mutable]\fP, \fC [protected]\fP"
+Pointer to the last element that was found by the tree\&. Chances are that this may be close to the next call to \fCoperator()\fP\&.\&.\&. 
+.PP
+Definition at line 147 of file point_locator_tree\&.h\&.
+.PP
+Referenced by init()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "bool libMesh::PointLocatorBase::_initialized\fC [protected]\fP, \fC [inherited]\fP"
+\fCtrue\fP when properly initialized, \fCfalse\fP otherwise\&. 
+.PP
+Definition at line 142 of file point_locator_base\&.h\&.
+.PP
+Referenced by init(), libMesh::PointLocatorList::init(), and libMesh::PointLocatorBase::initialized()\&.
+.SS "const \fBPointLocatorBase\fP* libMesh::PointLocatorBase::_master\fC [protected]\fP, \fC [inherited]\fP"
+Const pointer to our master, initialized to \fCNULL\fP if none given\&. When using multiple PointLocators, one can be assigned master and be in charge of something that all can have access to\&. 
+.PP
+Definition at line 132 of file point_locator_base\&.h\&.
+.PP
+Referenced by libMesh::PointLocatorList::clear(), clear(), init(), and libMesh::PointLocatorList::init()\&.
+.SS "const \fBMeshBase\fP& libMesh::PointLocatorBase::_mesh\fC [protected]\fP, \fC [inherited]\fP"
+constant reference to the mesh in which the point is looked for\&. 
+.PP
+Definition at line 137 of file point_locator_base\&.h\&.
+.PP
+Referenced by init(), and libMesh::PointLocatorList::init()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "bool libMesh::PointLocatorTree::_out_of_mesh_mode\fC [protected]\fP"
+\fCtrue\fP if out-of-mesh mode is enabled\&. See \fC\fBenable_out_of_mesh_mode()\fP\fP for details\&. 
+.PP
+Definition at line 153 of file point_locator_tree\&.h\&.
+.SS "\fBTreeBase\fP* libMesh::PointLocatorTree::_tree\fC [protected]\fP"
+Pointer to our tree\&. The tree is built at run-time through \fC\fBinit()\fP\fP\&. For servant PointLocators (not master), this simply points to the tree of the master\&. 
+.PP
+Definition at line 140 of file point_locator_tree\&.h\&.
+.PP
+Referenced by clear(), and init()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

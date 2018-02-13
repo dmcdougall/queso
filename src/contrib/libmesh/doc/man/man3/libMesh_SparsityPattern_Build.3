@@ -1,0 +1,886 @@
+.TH "libMesh::SparsityPattern::Build" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SparsityPattern::Build \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <sparsity_pattern\&.h>\fP
+.PP
+Inherits \fBlibMesh::ParallelObject\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBuild\fP (const \fBMeshBase\fP &mesh_in, const \fBDofMap\fP &dof_map_in, const \fBCouplingMatrix\fP *dof_coupling_in, const bool implicit_neighbor_dofs_in, const bool need_full_sparsity_pattern_in)"
+.br
+.ti -1c
+.RI "\fBBuild\fP (\fBBuild\fP &other, \fBThreads::split\fP)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBConstElemRange\fP &range)"
+.br
+.ti -1c
+.RI "void \fBjoin\fP (const \fBBuild\fP &other)"
+.br
+.ti -1c
+.RI "void \fBparallel_sync\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSparsityPattern::Graph\fP \fBsparsity_pattern\fP"
+.br
+.ti -1c
+.RI "\fBSparsityPattern::NonlocalGraph\fP \fBnonlocal_pattern\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > \fBn_nz\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > \fBn_oz\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP"
+.br
+.ti -1c
+.RI "const \fBDofMap\fP & \fBdof_map\fP"
+.br
+.ti -1c
+.RI "const \fBCouplingMatrix\fP * \fBdof_coupling\fP"
+.br
+.ti -1c
+.RI "const bool \fBimplicit_neighbor_dofs\fP"
+.br
+.ti -1c
+.RI "const bool \fBneed_full_sparsity_pattern\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This helper class can be called on multiple threads to compute the sparsity pattern (or graph) of the sparse matrix resulting from the discretization\&. This pattern may be used directly by a particular sparse matrix format (e\&.g\&. \fC\fBLaspackMatrix\fP\fP) or indirectly (e\&.g\&. \fC\fBPetscMatrix\fP\fP)\&. In the latter case the number of nonzeros per row of the matrix is needed for efficient preallocation\&. In this case it suffices to provide estimate (but bounding) values, and in this case the threaded method can take some short-cuts for efficiency\&. 
+.PP
+Definition at line 79 of file sparsity_pattern\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::SparsityPattern::Build::Build (const \fBMeshBase\fP &mesh_in, const \fBDofMap\fP &dof_map_in, const \fBCouplingMatrix\fP *dof_coupling_in, const boolimplicit_neighbor_dofs_in, const boolneed_full_sparsity_pattern_in)"
+
+.PP
+Definition at line 35 of file sparsity_pattern\&.C\&.
+.PP
+.nf
+39                                                         :
+40   ParallelObject(dof_map_in),
+41   mesh(mesh_in),
+42   dof_map(dof_map_in),
+43   dof_coupling(dof_coupling_in),
+44   implicit_neighbor_dofs(implicit_neighbor_dofs_in),
+45   need_full_sparsity_pattern(need_full_sparsity_pattern_in),
+46   sparsity_pattern(),
+47   nonlocal_pattern(),
+48   n_nz(),
+49   n_oz()
+50 {}
+.fi
+.SS "libMesh::SparsityPattern::Build::Build (\fBBuild\fP &other, \fBThreads::split\fP)"
+
+.PP
+Definition at line 54 of file sparsity_pattern\&.C\&.
+.PP
+.nf
+54                                         :
+55   ParallelObject(other),
+56   mesh(other\&.mesh),
+57   dof_map(other\&.dof_map),
+58   dof_coupling(other\&.dof_coupling),
+59   implicit_neighbor_dofs(other\&.implicit_neighbor_dofs),
+60   need_full_sparsity_pattern(other\&.need_full_sparsity_pattern),
+61   sparsity_pattern(),
+62   nonlocal_pattern(),
+63   n_nz(),
+64   n_oz()
+65 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::SparsityPattern::Build::join (const \fBBuild\fP &other)"
+
+.PP
+Definition at line 2813 of file dof_map\&.C\&.
+.PP
+References dof_id, libMesh::dof_map, libMesh::DofMap::end_dof(), libMesh::DofMap::first_dof(), libMesh::libmesh_assert(), std::min(), libMesh::DofMap::n_dofs(), libMesh::DofMap::n_dofs_on_processor(), n_nz, n_oz, nonlocal_pattern, libMesh::processor_id(), libMesh::ParallelObject::processor_id(), and sparsity_pattern\&.
+.PP
+.nf
+2814 {
+2815   const processor_id_type proc_id           = mesh\&.processor_id();
+2816   const dof_id_type       n_global_dofs     = dof_map\&.n_dofs();
+2817   const dof_id_type       n_dofs_on_proc    = dof_map\&.n_dofs_on_processor(proc_id);
+2818   const dof_id_type       first_dof_on_proc = dof_map\&.first_dof(proc_id);
+2819   const dof_id_type       end_dof_on_proc   = dof_map\&.end_dof(proc_id);
+2820 
+2821   libmesh_assert_equal_to (sparsity_pattern\&.size(), other\&.sparsity_pattern\&.size());
+2822   libmesh_assert_equal_to (n_nz\&.size(), sparsity_pattern\&.size());
+2823   libmesh_assert_equal_to (n_oz\&.size(), sparsity_pattern\&.size());
+2824 
+2825   for (dof_id_type r=0; r<n_dofs_on_proc; r++)
+2826     {
+2827       // increment the number of on and off-processor nonzeros in this row
+2828       // (note this will be an upper bound unless we need the full sparsity pattern)
+2829       if (need_full_sparsity_pattern)
+2830         {
+2831           SparsityPattern::Row       &my_row    = sparsity_pattern[r];
+2832           const SparsityPattern::Row &their_row = other\&.sparsity_pattern[r];
+2833 
+2834           // simple copy if I have no dofs
+2835           if (my_row\&.empty())
+2836             my_row = their_row;
+2837 
+2838           // otherwise add their DOFs to mine, resort, and re-unique the row
+2839           else if (!their_row\&.empty()) // do nothing for the trivial case where
+2840             {                          // their row is empty
+2841               my_row\&.insert (my_row\&.end(),
+2842                              their_row\&.begin(),
+2843                              their_row\&.end());
+2844 
+2845               // We cannot use SparsityPattern::sort_row() here because it expects
+2846               // the [begin,middle) [middle,end) to be non-overlapping\&.  This is not
+2847               // necessarily the case here, so use std::sort()
+2848               std::sort (my_row\&.begin(), my_row\&.end());
+2849 
+2850               my_row\&.erase(std::unique (my_row\&.begin(), my_row\&.end()), my_row\&.end());
+2851             }
+2852 
+2853           // fix the number of on and off-processor nonzeros in this row
+2854           n_nz[r] = n_oz[r] = 0;
+2855 
+2856           for (std::size_t j=0; j<my_row\&.size(); j++)
+2857             if ((my_row[j] < first_dof_on_proc) || (my_row[j] >= end_dof_on_proc))
+2858               n_oz[r]++;
+2859             else
+2860               n_nz[r]++;
+2861         }
+2862       else
+2863         {
+2864           n_nz[r] += other\&.n_nz[r];
+2865           n_nz[r] = std::min(n_nz[r], n_dofs_on_proc);
+2866           n_oz[r] += other\&.n_oz[r];
+2867           n_oz[r] =std::min(n_oz[r], static_cast<dof_id_type>(n_global_dofs-n_nz[r]));
+2868         }
+2869     }
+2870 
+2871   // Move nonlocal row information to ourselves; the other thread
+2872   // won't need it in the map after that\&.
+2873   NonlocalGraph::const_iterator it = other\&.nonlocal_pattern\&.begin();
+2874   for (; it != other\&.nonlocal_pattern\&.end(); ++it)
+2875     {
+2876       const dof_id_type dof_id = it->first;
+2877 
+2878 #ifndef NDEBUG
+2879       processor_id_type dbg_proc_id = 0;
+2880       while (dof_id >= dof_map\&.end_dof(dbg_proc_id))
+2881         dbg_proc_id++;
+2882       libmesh_assert (dbg_proc_id != this->processor_id());
+2883 #endif
+2884 
+2885       const SparsityPattern::Row &their_row = it->second;
+2886 
+2887       // We should have no empty values in a map
+2888       libmesh_assert (!their_row\&.empty());
+2889 
+2890       NonlocalGraph::iterator my_it = nonlocal_pattern\&.find(it->first);
+2891       if (my_it == nonlocal_pattern\&.end())
+2892         {
+2893           //          nonlocal_pattern[it->first]\&.swap(their_row);
+2894           nonlocal_pattern[it->first] = their_row;
+2895         }
+2896       else
+2897         {
+2898           SparsityPattern::Row &my_row = my_it->second;
+2899 
+2900           my_row\&.insert (my_row\&.end(),
+2901                          their_row\&.begin(),
+2902                          their_row\&.end());
+2903 
+2904           // We cannot use SparsityPattern::sort_row() here because it expects
+2905           // the [begin,middle) [middle,end) to be non-overlapping\&.  This is not
+2906           // necessarily the case here, so use std::sort()
+2907           std::sort (my_row\&.begin(), my_row\&.end());
+2908 
+2909           my_row\&.erase(std::unique (my_row\&.begin(), my_row\&.end()), my_row\&.end());
+2910         }
+2911     }
+2912 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "void libMesh::SparsityPattern::Build::operator() (const \fBConstElemRange\fP &range)"
+
+.PP
+Definition at line 2425 of file dof_map\&.C\&.
+.PP
+References libMesh::Elem::active_family_tree_by_neighbor(), libMesh::StoredRange< iterator_type, object_type >::begin(), dof_coupling, libMesh::DofMap::dof_indices(), dof_map, libMesh::CouplingMatrix::empty(), libMesh::StoredRange< iterator_type, object_type >::end(), libMesh::DofMap::end_dof(), libMesh::DofMap::find_connected_dofs(), libMesh::DofMap::first_dof(), implicit_neighbor_dofs, libMesh::libmesh_assert(), libMesh::DofMap::n_dofs_on_processor(), n_nz, n_oz, libMesh::Elem::n_sides(), libMesh::DofMap::n_variables(), need_full_sparsity_pattern, libMesh::Elem::neighbor(), nonlocal_pattern, libMesh::ParallelObject::processor_id(), libMesh::CouplingMatrix::size(), libMesh::SparsityPattern::sort_row(), and sparsity_pattern\&.
+.PP
+.nf
+2426 {
+2427   // Compute the sparsity structure of the global matrix\&.  This can be
+2428   // fed into a PetscMatrix to allocate exacly the number of nonzeros
+2429   // necessary to store the matrix\&.  This algorithm should be linear
+2430   // in the (# of elements)*(# nodes per element)
+2431   const processor_id_type proc_id           = mesh\&.processor_id();
+2432   const dof_id_type n_dofs_on_proc    = dof_map\&.n_dofs_on_processor(proc_id);
+2433   const dof_id_type first_dof_on_proc = dof_map\&.first_dof(proc_id);
+2434   const dof_id_type end_dof_on_proc   = dof_map\&.end_dof(proc_id);
+2435 
+2436   sparsity_pattern\&.resize(n_dofs_on_proc);
+2437 
+2438   // If the user did not explicitly specify the DOF coupling
+2439   // then all the DOFS are coupled to each other\&.  Furthermore,
+2440   // we can take a shortcut and do this more quickly here\&.  So
+2441   // we use an if-test\&.
+2442   if ((dof_coupling == NULL) || (dof_coupling->empty()))
+2443     {
+2444       std::vector<dof_id_type>
+2445         element_dofs,
+2446         neighbor_dofs,
+2447         dofs_to_add;
+2448 
+2449       std::vector<const Elem*> active_neighbors;
+2450 
+2451       for (ConstElemRange::const_iterator elem_it = range\&.begin() ; elem_it != range\&.end(); ++elem_it)
+2452         {
+2453           const Elem* const elem = *elem_it;
+2454 
+2455           // Get the global indices of the DOFs with support on this element
+2456           dof_map\&.dof_indices (elem, element_dofs);
+2457 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+2458           dof_map\&.find_connected_dofs (element_dofs);
+2459 #endif
+2460 
+2461           // We can be more efficient if we sort the element DOFs
+2462           // into increasing order
+2463           std::sort(element_dofs\&.begin(), element_dofs\&.end());
+2464 
+2465           const unsigned int n_dofs_on_element =
+2466             libmesh_cast_int<unsigned int>(element_dofs\&.size());
+2467 
+2468           for (unsigned int i=0; i<n_dofs_on_element; i++)
+2469             {
+2470               const dof_id_type ig = element_dofs[i];
+2471 
+2472               SparsityPattern::Row *row;
+2473 
+2474               // We save non-local row components for now so we can
+2475               // communicate them to other processors later\&.
+2476 
+2477               if ((ig >= first_dof_on_proc) &&
+2478                   (ig <  end_dof_on_proc))
+2479                 {
+2480                   // This is what I mean
+2481                   // libmesh_assert_greater_equal ((ig - first_dof_on_proc), 0);
+2482                   // but do the test like this because ig and
+2483                   // first_dof_on_proc are unsigned ints
+2484                   libmesh_assert_greater_equal (ig, first_dof_on_proc);
+2485                   libmesh_assert_less ((ig - first_dof_on_proc), sparsity_pattern\&.size());
+2486 
+2487                   row = &sparsity_pattern[ig - first_dof_on_proc];
+2488                 }
+2489               else
+2490                 {
+2491                   row = &nonlocal_pattern[ig];
+2492                 }
+2493 
+2494               // If the row is empty we will add *all* the element DOFs,
+2495               // so just do that\&.
+2496               if (row->empty())
+2497                 {
+2498                   row->insert(row->end(),
+2499                               element_dofs\&.begin(),
+2500                               element_dofs\&.end());
+2501                 }
+2502               else
+2503                 {
+2504                   // Build a list of the DOF indices not found in the
+2505                   // sparsity pattern
+2506                   dofs_to_add\&.clear();
+2507 
+2508                   // Cache iterators\&.  Low will move forward, subsequent
+2509                   // searches will be on smaller ranges
+2510                   SparsityPattern::Row::iterator
+2511                     low  = std::lower_bound (row->begin(), row->end(), element_dofs\&.front()),
+2512                     high = std::upper_bound (low,          row->end(), element_dofs\&.back());
+2513 
+2514                   for (unsigned int j=0; j<n_dofs_on_element; j++)
+2515                     {
+2516                       const dof_id_type jg = element_dofs[j];
+2517 
+2518                       // See if jg is in the sorted range
+2519                       std::pair<SparsityPattern::Row::iterator,
+2520                         SparsityPattern::Row::iterator>
+2521                         pos = std::equal_range (low, high, jg);
+2522 
+2523                       // Must add jg if it wasn't found
+2524                       if (pos\&.first == pos\&.second)
+2525                         dofs_to_add\&.push_back(jg);
+2526 
+2527                       // pos\&.first is now a valid lower bound for any
+2528                       // remaining element DOFs\&. (That's why we sorted them\&.)
+2529                       // Use it for the next search
+2530                       low = pos\&.first;
+2531                     }
+2532 
+2533                   // Add to the sparsity pattern
+2534                   if (!dofs_to_add\&.empty())
+2535                     {
+2536                       const std::size_t old_size = row->size();
+2537 
+2538                       row->insert (row->end(),
+2539                                    dofs_to_add\&.begin(),
+2540                                    dofs_to_add\&.end());
+2541 
+2542                       SparsityPattern::sort_row
+2543                         (row->begin(), row->begin()+old_size, row->end());
+2544                     }
+2545                 }
+2546 
+2547               // Now (possibly) add dofs from neighboring elements
+2548               // TODO:[BSK] optimize this like above!
+2549               if (implicit_neighbor_dofs)
+2550                 for (unsigned int s=0; s<elem->n_sides(); s++)
+2551                   if (elem->neighbor(s) != NULL)
+2552                     {
+2553                       const Elem* const neighbor_0 = elem->neighbor(s);
+2554 #ifdef LIBMESH_ENABLE_AMR
+2555                       neighbor_0->active_family_tree_by_neighbor(active_neighbors,elem);
+2556 #else
+2557                       active_neighbors\&.clear();
+2558                       active_neighbors\&.push_back(neighbor_0);
+2559 #endif
+2560 
+2561                       for (std::size_t a=0; a != active_neighbors\&.size(); ++a)
+2562                         {
+2563                           const Elem *neighbor = active_neighbors[a];
+2564 
+2565                           dof_map\&.dof_indices (neighbor, neighbor_dofs);
+2566 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+2567                           dof_map\&.find_connected_dofs (neighbor_dofs);
+2568 #endif
+2569                           const std::size_t n_dofs_on_neighbor = neighbor_dofs\&.size();
+2570 
+2571                           for (std::size_t j=0; j<n_dofs_on_neighbor; j++)
+2572                             {
+2573                               const dof_id_type jg = neighbor_dofs[j];
+2574 
+2575                               // See if jg is in the sorted range
+2576                               std::pair<SparsityPattern::Row::iterator,
+2577                                 SparsityPattern::Row::iterator>
+2578                                 pos = std::equal_range (row->begin(), row->end(), jg);
+2579 
+2580                               // Insert jg if it wasn't found
+2581                               if (pos\&.first == pos\&.second)
+2582                                 row->insert (pos\&.first, jg);
+2583                             }
+2584                         }
+2585                     }
+2586             }
+2587         }
+2588     }
+2589 
+2590   // This is what we do in the case that the user has specified
+2591   // explicit DOF coupling\&.
+2592   else
+2593     {
+2594       libmesh_assert(dof_coupling);
+2595       libmesh_assert_equal_to (dof_coupling->size(),
+2596                                dof_map\&.n_variables());
+2597 
+2598       const unsigned int n_var = dof_map\&.n_variables();
+2599 
+2600       std::vector<dof_id_type>
+2601         element_dofs_i,
+2602         element_dofs_j,
+2603         neighbor_dofs,
+2604         dofs_to_add;
+2605 
+2606 
+2607       std::vector<const Elem*> active_neighbors;
+2608       for (ConstElemRange::const_iterator elem_it = range\&.begin() ; elem_it != range\&.end(); ++elem_it)
+2609         for (unsigned int vi=0; vi<n_var; vi++)
+2610           {
+2611             const Elem* const elem = *elem_it;
+2612 
+2613             // Find element dofs for variable vi
+2614             dof_map\&.dof_indices (elem, element_dofs_i, vi);
+2615 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+2616             dof_map\&.find_connected_dofs (element_dofs_i);
+2617 #endif
+2618 
+2619             // We can be more efficient if we sort the element DOFs
+2620             // into increasing order
+2621             std::sort(element_dofs_i\&.begin(), element_dofs_i\&.end());
+2622             const unsigned int n_dofs_on_element_i =
+2623               libmesh_cast_int<unsigned int>(element_dofs_i\&.size());
+2624 
+2625             for (unsigned int vj=0; vj<n_var; vj++)
+2626               if ((*dof_coupling)(vi,vj)) // If vi couples to vj
+2627                 {
+2628                   // Find element dofs for variable vj, note that
+2629                   // if vi==vj we already have the dofs\&.
+2630                   if (vi != vj)
+2631                     {
+2632                       dof_map\&.dof_indices (elem, element_dofs_j, vj);
+2633 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+2634                       dof_map\&.find_connected_dofs (element_dofs_j);
+2635 #endif
+2636 
+2637                       // We can be more efficient if we sort the element DOFs
+2638                       // into increasing order
+2639                       std::sort (element_dofs_j\&.begin(), element_dofs_j\&.end());
+2640                     }
+2641                   else
+2642                     element_dofs_j = element_dofs_i;
+2643 
+2644                   const unsigned int n_dofs_on_element_j =
+2645                     libmesh_cast_int<unsigned int>(element_dofs_j\&.size());
+2646 
+2647                   // there might be 0 dofs for the other variable on the same element (when subdomain variables do not overlap) and that's when we do not do anything
+2648                   if (n_dofs_on_element_j > 0)
+2649                     {
+2650                       for (unsigned int i=0; i<n_dofs_on_element_i; i++)
+2651                         {
+2652                           const dof_id_type ig = element_dofs_i[i];
+2653 
+2654                           SparsityPattern::Row *row;
+2655 
+2656                           // We save non-local row components for now so we can
+2657                           // communicate them to other processors later\&.
+2658 
+2659                           if ((ig >= first_dof_on_proc) &&
+2660                               (ig <  end_dof_on_proc))
+2661                             {
+2662                               // This is what I mean
+2663                               // libmesh_assert_greater_equal ((ig - first_dof_on_proc), 0);
+2664                               // but do the test like this because ig and
+2665                               // first_dof_on_proc are unsigned ints
+2666                               libmesh_assert_greater_equal (ig, first_dof_on_proc);
+2667                               libmesh_assert_less (ig, (sparsity_pattern\&.size() +
+2668                                                         first_dof_on_proc));
+2669 
+2670                               row = &sparsity_pattern[ig - first_dof_on_proc];
+2671                             }
+2672                           else
+2673                             {
+2674                               row = &nonlocal_pattern[ig];
+2675                             }
+2676 
+2677                           // If the row is empty we will add *all* the element j DOFs,
+2678                           // so just do that\&.
+2679                           if (row->empty())
+2680                             {
+2681                               row->insert(row->end(),
+2682                                           element_dofs_j\&.begin(),
+2683                                           element_dofs_j\&.end());
+2684                             }
+2685                           else
+2686                             {
+2687                               // Build a list of the DOF indices not found in the
+2688                               // sparsity pattern
+2689                               dofs_to_add\&.clear();
+2690 
+2691                               // Cache iterators\&.  Low will move forward, subsequent
+2692                               // searches will be on smaller ranges
+2693                               SparsityPattern::Row::iterator
+2694                                 low  = std::lower_bound
+2695                                 (row->begin(), row->end(), element_dofs_j\&.front()),
+2696                                 high = std::upper_bound
+2697                                 (low,          row->end(), element_dofs_j\&.back());
+2698 
+2699                               for (unsigned int j=0; j<n_dofs_on_element_j; j++)
+2700                                 {
+2701                                   const dof_id_type jg = element_dofs_j[j];
+2702 
+2703                                   // See if jg is in the sorted range
+2704                                   std::pair<SparsityPattern::Row::iterator,
+2705                                     SparsityPattern::Row::iterator>
+2706                                     pos = std::equal_range (low, high, jg);
+2707 
+2708                                   // Must add jg if it wasn't found
+2709                                   if (pos\&.first == pos\&.second)
+2710                                     dofs_to_add\&.push_back(jg);
+2711 
+2712                                   // pos\&.first is now a valid lower bound for any
+2713                                   // remaining element j DOFs\&. (That's why we sorted them\&.)
+2714                                   // Use it for the next search
+2715                                   low = pos\&.first;
+2716                                 }
+2717 
+2718                               // Add to the sparsity pattern
+2719                               if (!dofs_to_add\&.empty())
+2720                                 {
+2721                                   const std::size_t old_size = row->size();
+2722 
+2723                                   row->insert (row->end(),
+2724                                                dofs_to_add\&.begin(),
+2725                                                dofs_to_add\&.end());
+2726 
+2727                                   SparsityPattern::sort_row
+2728                                     (row->begin(), row->begin()+old_size,
+2729                                      row->end());
+2730                                 }
+2731                             }
+2732                           // Now (possibly) add dofs from neighboring elements
+2733                           // TODO:[BSK] optimize this like above!
+2734                           if (implicit_neighbor_dofs)
+2735                             for (unsigned int s=0; s<elem->n_sides(); s++)
+2736                               if (elem->neighbor(s) != NULL)
+2737                                 {
+2738                                   const Elem* const neighbor_0 = elem->neighbor(s);
+2739 #ifdef LIBMESH_ENABLE_AMR
+2740                                   neighbor_0->active_family_tree_by_neighbor(active_neighbors,elem);
+2741 #else
+2742                                   active_neighbors\&.clear();
+2743                                   active_neighbors\&.push_back(neighbor_0);
+2744 #endif
+2745 
+2746                                   for (std::size_t a=0; a != active_neighbors\&.size(); ++a)
+2747                                     {
+2748                                       const Elem *neighbor = active_neighbors[a];
+2749 
+2750                                       dof_map\&.dof_indices (neighbor, neighbor_dofs);
+2751 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+2752                                       dof_map\&.find_connected_dofs (neighbor_dofs);
+2753 #endif
+2754                                       const unsigned int n_dofs_on_neighbor =
+2755                                         libmesh_cast_int<unsigned int>(neighbor_dofs\&.size());
+2756 
+2757                                       for (unsigned int j=0; j<n_dofs_on_neighbor; j++)
+2758                                         {
+2759                                           const dof_id_type jg = neighbor_dofs[j];
+2760 
+2761                                           // See if jg is in the sorted range
+2762                                           std::pair<SparsityPattern::Row::iterator,
+2763                                             SparsityPattern::Row::iterator>
+2764                                             pos = std::equal_range (row->begin(), row->end(), jg);
+2765 
+2766                                           // Insert jg if it wasn't found
+2767                                           if (pos\&.first == pos\&.second)
+2768                                             row->insert (pos\&.first, jg);
+2769                                         }
+2770                                     }
+2771                                 }
+2772                         }
+2773                     }
+2774                 }
+2775           }
+2776     }
+2777 
+2778   // Now a new chunk of sparsity structure is built for all of the
+2779   // DOFs connected to our rows of the matrix\&.
+2780 
+2781   // If we're building a full sparsity pattern, then we've got
+2782   // complete rows to work with, so we can just count them from
+2783   // scratch\&.
+2784   if (need_full_sparsity_pattern)
+2785     {
+2786       n_nz\&.clear();
+2787       n_oz\&.clear();
+2788     }
+2789 
+2790   n_nz\&.resize (n_dofs_on_proc, 0);
+2791   n_oz\&.resize (n_dofs_on_proc, 0);
+2792 
+2793   for (dof_id_type i=0; i<n_dofs_on_proc; i++)
+2794     {
+2795       // Get the row of the sparsity pattern
+2796       SparsityPattern::Row &row = sparsity_pattern[i];
+2797 
+2798       for (dof_id_type j=0; j<row\&.size(); j++)
+2799         if ((row[j] < first_dof_on_proc) || (row[j] >= end_dof_on_proc))
+2800           n_oz[i]++;
+2801         else
+2802           n_nz[i]++;
+2803 
+2804       // If we're not building a full sparsity pattern, then we want
+2805       // to avoid overcounting these entries as much as possible\&.
+2806       if (!need_full_sparsity_pattern)
+2807         row\&.clear();
+2808     }
+2809 }
+.fi
+.SS "void libMesh::SparsityPattern::Build::parallel_sync ()"
+
+.PP
+Definition at line 2916 of file dof_map\&.C\&.
+.PP
+References libMesh::comm, dof_id, libMesh::dof_map, libMesh::DofMap::end_dof(), libMesh::DofMap::first_dof(), libMesh::libmesh_assert(), std::min(), libMesh::DofMap::n_dofs(), libMesh::DofMap::n_dofs_on_processor(), libMesh::n_processors(), and libMesh::processor_id()\&.
+.PP
+Referenced by libMesh::DofMap::build_sparsity()\&.
+.PP
+.nf
+2917 {
+2918   parallel_object_only();
+2919   this->comm()\&.verify(need_full_sparsity_pattern);
+2920 
+2921   const dof_id_type n_global_dofs   = dof_map\&.n_dofs();
+2922   const dof_id_type n_dofs_on_proc  = dof_map\&.n_dofs_on_processor(this->processor_id());
+2923   const dof_id_type local_first_dof = dof_map\&.first_dof();
+2924   const dof_id_type local_end_dof   = dof_map\&.end_dof();
+2925 
+2926   // Trade sparsity rows with other processors
+2927   for (processor_id_type p=1; p != this->n_processors(); ++p)
+2928     {
+2929       // Push to processor procup while receiving from procdown
+2930       processor_id_type procup = (this->processor_id() + p) %
+2931         this->n_processors();
+2932       processor_id_type procdown = (this->n_processors() +
+2933                                     this->processor_id() - p) %
+2934         this->n_processors();
+2935 
+2936       // Pack the sparsity pattern rows to push to procup
+2937       std::vector<dof_id_type> pushed_row_ids,
+2938         pushed_row_ids_to_me;
+2939       std::vector<std::vector<dof_id_type> > pushed_rows,
+2940         pushed_rows_to_me;
+2941 
+2942       // Move nonlocal row information to a structure to send it from;
+2943       // we don't need it in the map after that\&.
+2944       NonlocalGraph::iterator it = nonlocal_pattern\&.begin();
+2945       while (it != nonlocal_pattern\&.end())
+2946         {
+2947           const dof_id_type dof_id = it->first;
+2948           processor_id_type proc_id = 0;
+2949           while (dof_id >= dof_map\&.end_dof(proc_id))
+2950             proc_id++;
+2951 
+2952           libmesh_assert (proc_id != this->processor_id());
+2953 
+2954           if (proc_id == procup)
+2955             {
+2956               pushed_row_ids\&.push_back(dof_id);
+2957 
+2958               // We can't just do the swap trick here, thanks to the
+2959               // differing vector allocators?
+2960               pushed_rows\&.push_back(std::vector<dof_id_type>());
+2961               pushed_rows\&.back()\&.assign
+2962                 (it->second\&.begin(), it->second\&.end());
+2963 
+2964               nonlocal_pattern\&.erase(it++);
+2965             }
+2966           else
+2967             ++it;
+2968         }
+2969 
+2970       this->comm()\&.send_receive(procup, pushed_row_ids,
+2971                                 procdown, pushed_row_ids_to_me);
+2972       this->comm()\&.send_receive(procup, pushed_rows,
+2973                                 procdown, pushed_rows_to_me);
+2974       pushed_row_ids\&.clear();
+2975       pushed_rows\&.clear();
+2976 
+2977       const std::size_t n_rows = pushed_row_ids_to_me\&.size();
+2978       for (std::size_t i=0; i != n_rows; ++i)
+2979         {
+2980           const dof_id_type r = pushed_row_ids_to_me[i];
+2981           const dof_id_type my_r = r - local_first_dof;
+2982 
+2983           std::vector<dof_id_type> &their_row = pushed_rows_to_me[i];
+2984 
+2985           if (need_full_sparsity_pattern)
+2986             {
+2987               SparsityPattern::Row &my_row =
+2988                 sparsity_pattern[my_r];
+2989 
+2990               // They wouldn't have sent an empty row
+2991               libmesh_assert(!their_row\&.empty());
+2992 
+2993               // We can end up with an empty row on a dof that touches our
+2994               // inactive elements but not our active ones
+2995               if (my_row\&.empty())
+2996                 {
+2997                   my_row\&.assign (their_row\&.begin(),
+2998                                  their_row\&.end());
+2999                 }
+3000               else
+3001                 {
+3002                   my_row\&.insert (my_row\&.end(),
+3003                                  their_row\&.begin(),
+3004                                  their_row\&.end());
+3005 
+3006                   // We cannot use SparsityPattern::sort_row() here because it expects
+3007                   // the [begin,middle) [middle,end) to be non-overlapping\&.  This is not
+3008                   // necessarily the case here, so use std::sort()
+3009                   std::sort (my_row\&.begin(), my_row\&.end());
+3010 
+3011                   my_row\&.erase(std::unique (my_row\&.begin(), my_row\&.end()), my_row\&.end());
+3012                 }
+3013 
+3014               // fix the number of on and off-processor nonzeros in this row
+3015               n_nz[my_r] = n_oz[my_r] = 0;
+3016 
+3017               for (std::size_t j=0; j<my_row\&.size(); j++)
+3018                 if ((my_row[j] < local_first_dof) || (my_row[j] >= local_end_dof))
+3019                   n_oz[my_r]++;
+3020                 else
+3021                   n_nz[my_r]++;
+3022             }
+3023           else
+3024             {
+3025               for (std::size_t j=0; j<their_row\&.size(); j++)
+3026                 if ((their_row[j] < local_first_dof) || (their_row[j] >= local_end_dof))
+3027                   n_oz[my_r]++;
+3028                 else
+3029                   n_nz[my_r]++;
+3030 
+3031               n_nz[my_r] = std::min(n_nz[my_r], n_dofs_on_proc);
+3032               n_oz[my_r] = std::min(n_oz[my_r],
+3033                                     static_cast<dof_id_type>(n_global_dofs-n_nz[my_r]));
+3034             }
+3035         }
+3036     }
+3037 
+3038   // We should have sent everything at this point\&.
+3039   libmesh_assert (nonlocal_pattern\&.empty());
+3040 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "const \fBCouplingMatrix\fP* libMesh::SparsityPattern::Build::dof_coupling\fC [private]\fP"
+
+.PP
+Definition at line 84 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by operator()()\&.
+.SS "const \fBDofMap\fP& libMesh::SparsityPattern::Build::dof_map\fC [private]\fP"
+
+.PP
+Definition at line 83 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by operator()()\&.
+.SS "const bool libMesh::SparsityPattern::Build::implicit_neighbor_dofs\fC [private]\fP"
+
+.PP
+Definition at line 85 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by operator()()\&.
+.SS "const \fBMeshBase\fP& libMesh::SparsityPattern::Build::mesh\fC [private]\fP"
+
+.PP
+Definition at line 82 of file sparsity_pattern\&.h\&.
+.SS "std::vector<\fBdof_id_type\fP> libMesh::SparsityPattern::Build::n_nz"
+
+.PP
+Definition at line 93 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by libMesh::DofMap::build_sparsity(), libMesh::DofMap::clear_sparsity(), libMesh::DofMap::compute_sparsity(), join(), and operator()()\&.
+.SS "std::vector<\fBdof_id_type\fP> libMesh::SparsityPattern::Build::n_oz"
+
+.PP
+Definition at line 94 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by libMesh::DofMap::build_sparsity(), libMesh::DofMap::clear_sparsity(), libMesh::DofMap::compute_sparsity(), join(), and operator()()\&.
+.SS "const bool libMesh::SparsityPattern::Build::need_full_sparsity_pattern\fC [private]\fP"
+
+.PP
+Definition at line 86 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by operator()()\&.
+.SS "\fBSparsityPattern::NonlocalGraph\fP libMesh::SparsityPattern::Build::nonlocal_pattern"
+
+.PP
+Definition at line 91 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by join(), and operator()()\&.
+.SS "\fBSparsityPattern::Graph\fP libMesh::SparsityPattern::Build::sparsity_pattern"
+
+.PP
+Definition at line 90 of file sparsity_pattern\&.h\&.
+.PP
+Referenced by libMesh::DofMap::attach_matrix(), libMesh::DofMap::build_sparsity(), libMesh::DofMap::compute_sparsity(), join(), and operator()()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

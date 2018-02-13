@@ -1,0 +1,841 @@
+.TH "libMesh::LinearPartitioner" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LinearPartitioner \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <linear_partitioner\&.h>\fP
+.PP
+Inherits \fBlibMesh::Partitioner\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLinearPartitioner\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBPartitioner\fP > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "void \fBpartition\fP (\fBMeshBase\fP &\fBmesh\fP, const unsigned int n)"
+.br
+.ti -1c
+.RI "void \fBpartition\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBrepartition\fP (\fBMeshBase\fP &\fBmesh\fP, const unsigned int n)"
+.br
+.ti -1c
+.RI "void \fBrepartition\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBattach_weights\fP (\fBErrorVector\fP *)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBpartition_unpartitioned_elements\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "static void \fBpartition_unpartitioned_elements\fP (\fBMeshBase\fP &\fBmesh\fP, const unsigned int n)"
+.br
+.ti -1c
+.RI "static void \fBset_parent_processor_ids\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "static void \fBset_node_processor_ids\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fB_do_partition\fP (\fBMeshBase\fP &\fBmesh\fP, const unsigned int n)"
+.br
+.ti -1c
+.RI "void \fBsingle_partition\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "virtual void \fB_do_repartition\fP (\fBMeshBase\fP &\fBmesh\fP, const unsigned int n)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBErrorVector\fP * \fB_weights\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const \fBdof_id_type\fP \fBcommunication_blocksize\fP = 1000000"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBLinearPartitioner\fP\fP is the simplest of all possible partitioners\&. It takes the element list and splits it into equal-sized chunks assigned to each processor\&. Health Warning: THIS PARTITIONER COULD BE ARBITRARILY BAD!! 
+.PP
+Definition at line 42 of file linear_partitioner\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::LinearPartitioner::LinearPartitioner ()\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 49 of file linear_partitioner\&.h\&.
+.PP
+Referenced by clone()\&.
+.PP
+.nf
+49 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::LinearPartitioner::_do_partition (\fBMeshBase\fP &mesh, const unsigned intn)\fC [protected]\fP, \fC [virtual]\fP"
+Partition the \fC\fBMeshBase\fP\fP into \fCn\fP subdomains\&. 
+.PP
+Implements \fBlibMesh::Partitioner\fP\&.
+.PP
+Definition at line 34 of file linear_partitioner\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::libmesh_assert_greater(), libMesh::MeshBase::n_active_elem(), libMesh::Elem::parent(), libMesh::DofObject::processor_id(), libMesh::Partitioner::single_partition(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+36 {
+37   libmesh_assert_greater (n, 0);
+38 
+39   // Check for an easy return
+40   if (n == 1)
+41     {
+42       this->single_partition (mesh);
+43       return;
+44     }
+45 
+46   // Create a simple linear partitioning
+47   {
+48     START_LOG ("partition()", "LinearPartitioner");
+49 
+50     const dof_id_type n_active_elem = mesh\&.n_active_elem();
+51     const dof_id_type blksize       = n_active_elem/n;
+52 
+53     dof_id_type e = 0;
+54 
+55     MeshBase::element_iterator       elem_it  = mesh\&.active_elements_begin();
+56     const MeshBase::element_iterator elem_end = mesh\&.active_elements_end();
+57 
+58     for ( ; elem_it != elem_end; ++elem_it)
+59       {
+60         if ((e/blksize) < n)
+61           {
+62             Elem *elem = *elem_it;
+63             elem->processor_id() =
+64               libmesh_cast_int<processor_id_type>(e/blksize);
+65           }
+66         else
+67           {
+68             Elem *elem = *elem_it;
+69             elem->processor_id() = 0;
+70             elem = elem->parent();
+71           }
+72 
+73         e++;
+74       }
+75 
+76     STOP_LOG ("partition()", "LinearPartitioner");
+77   }
+78 }
+.fi
+.SS "virtual void libMesh::Partitioner::_do_repartition (\fBMeshBase\fP &mesh, const unsigned intn)\fC [inline]\fP, \fC [protected]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This is the actual re-partitioning method which can be overloaded in derived classes\&. Note that the default behavior is to simply call the partition function\&. 
+.PP
+Reimplemented in \fBlibMesh::ParmetisPartitioner\fP\&.
+.PP
+Definition at line 156 of file partitioner\&.h\&.
+.PP
+References libMesh::Partitioner::_do_partition()\&.
+.PP
+Referenced by libMesh::Partitioner::repartition()\&.
+.PP
+.nf
+157                                                       { this->_do_partition (mesh, n); }
+.fi
+.SS "virtual void libMesh::Partitioner::attach_weights (\fBErrorVector\fP *)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Attach weights that can be used for partitioning\&. This \fBErrorVector\fP should be \fIexactly\fP the same on every processor and should have mesh->max_elem_id() entries\&. 
+.PP
+Reimplemented in \fBlibMesh::MetisPartitioner\fP\&.
+.PP
+Definition at line 131 of file partitioner\&.h\&.
+.PP
+.nf
+131 { libmesh_not_implemented(); }
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBPartitioner\fP> libMesh::LinearPartitioner::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Creates a new partitioner of this type and returns it in an \fC\fBAutoPtr\fP\fP\&. 
+.PP
+Implements \fBlibMesh::Partitioner\fP\&.
+.PP
+Definition at line 55 of file linear_partitioner\&.h\&.
+.PP
+References LinearPartitioner()\&.
+.PP
+.nf
+55                                               {
+56     AutoPtr<Partitioner> cloned_partitioner
+57       (new LinearPartitioner());
+58     return cloned_partitioner;
+59   }
+.fi
+.SS "void libMesh::Partitioner::partition (\fBMeshBase\fP &mesh, const unsigned intn)\fC [inherited]\fP"
+Partition the \fC\fBMeshBase\fP\fP into \fCn\fP parts\&. The partitioner currently does not modify the subdomain_id of each element\&. This number is reserved for things like material properties, etc\&. 
+.PP
+Definition at line 55 of file partitioner\&.C\&.
+.PP
+References libMesh::Partitioner::_do_partition(), libMesh::ParallelObject::comm(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_remote_elems(), libMesh::libmesh_parallel_only(), mesh, std::min(), libMesh::MeshBase::n_active_elem(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::MeshBase::redistribute(), libMesh::MeshBase::set_n_partitions(), libMesh::Partitioner::set_node_processor_ids(), libMesh::Partitioner::set_parent_processor_ids(), libMesh::Partitioner::single_partition(), and libMesh::MeshBase::update_post_partitioning()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::SFCPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), and libMesh::Partitioner::partition()\&.
+.PP
+.nf
+57 {
+58   libmesh_parallel_only(mesh\&.comm());
+59 
+60   // BSK - temporary fix while redistribution is integrated 6/26/2008
+61   // Uncomment this to not repartition in parallel
+62   //   if (!mesh\&.is_serial())
+63   //     return;
+64 
+65   // we cannot partition into more pieces than we have
+66   // active elements!
+67   const unsigned int n_parts =
+68     static_cast<unsigned int>
+69     (std::min(mesh\&.n_active_elem(), static_cast<dof_id_type>(n)));
+70 
+71   // Set the number of partitions in the mesh
+72   mesh\&.set_n_partitions()=n_parts;
+73 
+74   if (n_parts == 1)
+75     {
+76       this->single_partition (mesh);
+77       return;
+78     }
+79 
+80   // First assign a temporary partitioning to any unpartitioned elements
+81   Partitioner::partition_unpartitioned_elements(mesh, n_parts);
+82 
+83   // Call the partitioning function
+84   this->_do_partition(mesh,n_parts);
+85 
+86   // Set the parent's processor ids
+87   Partitioner::set_parent_processor_ids(mesh);
+88 
+89   // Redistribute elements if necessary, before setting node processor
+90   // ids, to make sure those will be set consistently
+91   mesh\&.redistribute();
+92 
+93 #ifdef DEBUG
+94   MeshTools::libmesh_assert_valid_remote_elems(mesh);
+95 
+96   // Messed up elem processor_id()s can leave us without the child
+97   // elements we need to restrict vectors on a distributed mesh
+98   MeshTools::libmesh_assert_valid_procids<Elem>(mesh);
+99 #endif
+100 
+101   // Set the node's processor ids
+102   Partitioner::set_node_processor_ids(mesh);
+103 
+104 #ifdef DEBUG
+105   MeshTools::libmesh_assert_valid_procids<Elem>(mesh);
+106 #endif
+107 
+108   // Give derived Mesh classes a chance to update any cached data to
+109   // reflect the new partitioning
+110   mesh\&.update_post_partitioning();
+111 }
+.fi
+.SS "void libMesh::Partitioner::partition (\fBMeshBase\fP &mesh)\fC [inherited]\fP"
+Partition the \fC\fBMeshBase\fP\fP into \fC\fBmesh\&.n_processors()\fP\fP parts\&. The partitioner currently does not modify the subdomain_id of each element\&. This number is reserved for things like material properties, etc\&. 
+.PP
+Definition at line 48 of file partitioner\&.C\&.
+.PP
+References libMesh::ParallelObject::n_processors(), and libMesh::Partitioner::partition()\&.
+.PP
+.nf
+49 {
+50   this->partition(mesh,mesh\&.n_processors());
+51 }
+.fi
+.SS "void libMesh::Partitioner::partition_unpartitioned_elements (\fBMeshBase\fP &mesh)\fC [static]\fP, \fC [inherited]\fP"
+This function 
+.PP
+Definition at line 180 of file partitioner\&.C\&.
+.PP
+References libMesh::ParallelObject::n_processors()\&.
+.PP
+Referenced by libMesh::Partitioner::partition(), and libMesh::Partitioner::repartition()\&.
+.PP
+.nf
+181 {
+182   Partitioner::partition_unpartitioned_elements(mesh, mesh\&.n_processors());
+183 }
+.fi
+.SS "void libMesh::Partitioner::partition_unpartitioned_elements (\fBMeshBase\fP &mesh, const unsigned intn)\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 187 of file partitioner\&.C\&.
+.PP
+References libMesh::MeshTools::bounding_box(), libMesh::ParallelObject::comm(), end, libMesh::MeshCommunication::find_global_indices(), libMesh::MeshTools::n_elem(), libMesh::ParallelObject::n_processors(), libMesh::DofObject::processor_id(), libMesh::MeshBase::unpartitioned_elements_begin(), and libMesh::MeshBase::unpartitioned_elements_end()\&.
+.PP
+.nf
+189 {
+190   MeshBase::element_iterator       it  = mesh\&.unpartitioned_elements_begin();
+191   const MeshBase::element_iterator end = mesh\&.unpartitioned_elements_end();
+192 
+193   const dof_id_type n_unpartitioned_elements = MeshTools::n_elem (it, end);
+194 
+195   // the unpartitioned elements must exist on all processors\&. If the range is empty on one
+196   // it is empty on all, and we can quit right here\&.
+197   if (!n_unpartitioned_elements) return;
+198 
+199   // find the target subdomain sizes
+200   std::vector<dof_id_type> subdomain_bounds(mesh\&.n_processors());
+201 
+202   for (processor_id_type pid=0; pid<mesh\&.n_processors(); pid++)
+203     {
+204       dof_id_type tgt_subdomain_size = 0;
+205 
+206       // watch out for the case that n_subdomains < n_processors
+207       if (pid < n_subdomains)
+208         {
+209           tgt_subdomain_size = n_unpartitioned_elements/n_subdomains;
+210 
+211           if (pid < n_unpartitioned_elements%n_subdomains)
+212             tgt_subdomain_size++;
+213 
+214         }
+215 
+216       //libMesh::out << "pid, #= " << pid << ", " << tgt_subdomain_size << std::endl;
+217       if (pid == 0)
+218         subdomain_bounds[0] = tgt_subdomain_size;
+219       else
+220         subdomain_bounds[pid] = subdomain_bounds[pid-1] + tgt_subdomain_size;
+221     }
+222 
+223   libmesh_assert_equal_to (subdomain_bounds\&.back(), n_unpartitioned_elements);
+224 
+225   // create the unique mapping for all unpartitioned elements independent of partitioning
+226   // determine the global indexing for all the unpartitoned elements
+227   std::vector<dof_id_type> global_indices;
+228 
+229   // Calling this on all processors a unique range in [0,n_unpartitioned_elements) is constructed\&.
+230   // Only the indices for the elements we pass in are returned in the array\&.
+231   MeshCommunication()\&.find_global_indices (mesh\&.comm(),
+232                                            MeshTools::bounding_box(mesh), it, end,
+233                                            global_indices);
+234 
+235   for (dof_id_type cnt=0; it != end; ++it)
+236     {
+237       Elem *elem = *it;
+238 
+239       libmesh_assert_less (cnt, global_indices\&.size());
+240       const dof_id_type global_index =
+241         global_indices[cnt++];
+242 
+243       libmesh_assert_less (global_index, subdomain_bounds\&.back());
+244       libmesh_assert_less (global_index, n_unpartitioned_elements);
+245 
+246       const processor_id_type subdomain_id =
+247         libmesh_cast_int<processor_id_type>
+248         (std::distance(subdomain_bounds\&.begin(),
+249                        std::upper_bound(subdomain_bounds\&.begin(),
+250                                         subdomain_bounds\&.end(),
+251                                         global_index)));
+252       libmesh_assert_less (subdomain_id, n_subdomains);
+253 
+254       elem->processor_id() = subdomain_id;
+255       //libMesh::out << "assigning " << global_index << " to " << subdomain_id << std::endl;
+256     }
+257 }
+.fi
+.SS "void libMesh::Partitioner::repartition (\fBMeshBase\fP &mesh, const unsigned intn)\fC [inherited]\fP"
+Repartitions the \fC\fBMeshBase\fP\fP into \fCn\fP parts\&. This is required since some partitoning algorithms can repartition more efficiently than computing a new partitioning from scratch\&. The default behavior is to simply call this->partition(mesh,n) 
+.PP
+Definition at line 122 of file partitioner\&.C\&.
+.PP
+References libMesh::Partitioner::_do_repartition(), std::min(), libMesh::MeshBase::n_active_elem(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::MeshBase::set_n_partitions(), libMesh::Partitioner::set_node_processor_ids(), libMesh::Partitioner::set_parent_processor_ids(), and libMesh::Partitioner::single_partition()\&.
+.PP
+Referenced by libMesh::Partitioner::repartition()\&.
+.PP
+.nf
+124 {
+125   // we cannot partition into more pieces than we have
+126   // active elements!
+127   const unsigned int n_parts =
+128     static_cast<unsigned int>
+129     (std::min(mesh\&.n_active_elem(), static_cast<dof_id_type>(n)));
+130 
+131   // Set the number of partitions in the mesh
+132   mesh\&.set_n_partitions()=n_parts;
+133 
+134   if (n_parts == 1)
+135     {
+136       this->single_partition (mesh);
+137       return;
+138     }
+139 
+140   // First assign a temporary partitioning to any unpartitioned elements
+141   Partitioner::partition_unpartitioned_elements(mesh, n_parts);
+142 
+143   // Call the partitioning function
+144   this->_do_repartition(mesh,n_parts);
+145 
+146   // Set the parent's processor ids
+147   Partitioner::set_parent_processor_ids(mesh);
+148 
+149   // Set the node's processor ids
+150   Partitioner::set_node_processor_ids(mesh);
+151 }
+.fi
+.SS "void libMesh::Partitioner::repartition (\fBMeshBase\fP &mesh)\fC [inherited]\fP"
+Repartitions the \fC\fBMeshBase\fP\fP into \fC\fBmesh\&.n_processors()\fP\fP parts\&. This is required since some partitoning algorithms can repartition more efficiently than computing a new partitioning from scratch\&. 
+.PP
+Definition at line 115 of file partitioner\&.C\&.
+.PP
+References libMesh::ParallelObject::n_processors(), and libMesh::Partitioner::repartition()\&.
+.PP
+.nf
+116 {
+117   this->repartition(mesh,mesh\&.n_processors());
+118 }
+.fi
+.SS "void libMesh::Partitioner::set_node_processor_ids (\fBMeshBase\fP &mesh)\fC [static]\fP, \fC [inherited]\fP"
+This function is called after partitioning to set the processor IDs for the nodes\&. By definition, a \fBNode\fP's processor ID is the minimum processor ID for all of the elements which share the node\&. 
+.PP
+Definition at line 439 of file partitioner\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::ParallelObject::comm(), libMesh::Elem::get_node(), libMesh::DofObject::id(), libMesh::DofObject::invalid_processor_id, libMesh::DofObject::invalidate_processor_id(), libMesh::libmesh_assert(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::libmesh_parallel_only(), mesh, std::min(), libMesh::MeshTools::n_elem(), libMesh::Elem::n_nodes(), libMesh::MeshBase::n_partitions(), libMesh::ParallelObject::n_processors(), libMesh::MeshBase::node_ptr(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::MeshBase::not_active_elements_begin(), libMesh::MeshBase::not_active_elements_end(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::Parallel::Communicator::send_receive(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::MeshBase::subactive_elements_begin(), libMesh::MeshBase::subactive_elements_end(), libMesh::MeshBase::unpartitioned_elements_begin(), and libMesh::MeshBase::unpartitioned_elements_end()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_first_order(), libMesh::Partitioner::partition(), libMesh::XdrIO::read(), libMesh::Partitioner::repartition(), and libMesh::BoundaryInfo::sync()\&.
+.PP
+.nf
+440 {
+441   START_LOG("set_node_processor_ids()","Partitioner");
+442 
+443   // This function must be run on all processors at once
+444   libmesh_parallel_only(mesh\&.comm());
+445 
+446   // If we have any unpartitioned elements at this
+447   // stage there is a problem
+448   libmesh_assert (MeshTools::n_elem(mesh\&.unpartitioned_elements_begin(),
+449                                     mesh\&.unpartitioned_elements_end()) == 0);
+450 
+451 
+452   //   const dof_id_type orig_n_local_nodes = mesh\&.n_local_nodes();
+453 
+454   //   libMesh::err << "[" << mesh\&.processor_id() << "]: orig_n_local_nodes="
+455   //     << orig_n_local_nodes << std::endl;
+456 
+457   // Build up request sets\&.  Each node is currently owned by a processor because
+458   // it is connected to an element owned by that processor\&.  However, during the
+459   // repartitioning phase that element may have been assigned a new processor id, but
+460   // it is still resident on the original processor\&.  We need to know where to look
+461   // for new ids before assigning new ids, otherwise we may be asking the wrong processors
+462   // for the wrong information\&.
+463   //
+464   // The only remaining issue is what to do with unpartitioned nodes\&.  Since they are required
+465   // to live on all processors we can simply rely on ourselves to number them properly\&.
+466   std::vector<std::vector<dof_id_type> >
+467     requested_node_ids(mesh\&.n_processors());
+468 
+469   // Loop over all the nodes, count the ones on each processor\&.  We can skip ourself
+470   std::vector<dof_id_type> ghost_nodes_from_proc(mesh\&.n_processors(), 0);
+471 
+472   MeshBase::node_iterator       node_it  = mesh\&.nodes_begin();
+473   const MeshBase::node_iterator node_end = mesh\&.nodes_end();
+474 
+475   for (; node_it != node_end; ++node_it)
+476     {
+477       Node *node = *node_it;
+478       libmesh_assert(node);
+479       const processor_id_type current_pid = node->processor_id();
+480       if (current_pid != mesh\&.processor_id() &&
+481           current_pid != DofObject::invalid_processor_id)
+482         {
+483           libmesh_assert_less (current_pid, ghost_nodes_from_proc\&.size());
+484           ghost_nodes_from_proc[current_pid]++;
+485         }
+486     }
+487 
+488   // We know how many objects live on each processor, so reserve()
+489   // space for each\&.
+490   for (processor_id_type pid=0; pid != mesh\&.n_processors(); ++pid)
+491     requested_node_ids[pid]\&.reserve(ghost_nodes_from_proc[pid]);
+492 
+493   // We need to get the new pid for each node from the processor
+494   // which *currently* owns the node\&.  We can safely skip ourself
+495   for (node_it = mesh\&.nodes_begin(); node_it != node_end; ++node_it)
+496     {
+497       Node *node = *node_it;
+498       libmesh_assert(node);
+499       const processor_id_type current_pid = node->processor_id();
+500       if (current_pid != mesh\&.processor_id() &&
+501           current_pid != DofObject::invalid_processor_id)
+502         {
+503           libmesh_assert_less (current_pid, requested_node_ids\&.size());
+504           libmesh_assert_less (requested_node_ids[current_pid]\&.size(),
+505                                ghost_nodes_from_proc[current_pid]);
+506           requested_node_ids[current_pid]\&.push_back(node->id());
+507         }
+508 
+509       // Unset any previously-set node processor ids
+510       node->invalidate_processor_id();
+511     }
+512 
+513   // Loop over all the active elements
+514   MeshBase::element_iterator       elem_it  = mesh\&.active_elements_begin();
+515   const MeshBase::element_iterator elem_end = mesh\&.active_elements_end();
+516 
+517   for ( ; elem_it != elem_end; ++elem_it)
+518     {
+519       Elem* elem = *elem_it;
+520       libmesh_assert(elem);
+521 
+522       libmesh_assert_not_equal_to (elem->processor_id(), DofObject::invalid_processor_id);
+523 
+524       // For each node, set the processor ID to the min of
+525       // its current value and this Element's processor id\&.
+526       //
+527       // TODO: we would probably get better parallel partitioning if
+528       // we did something like "min for even numbered nodes, max for
+529       // odd numbered"\&.  We'd need to be careful about how that would
+530       // affect solution ordering for I/O, though\&.
+531       for (unsigned int n=0; n<elem->n_nodes(); ++n)
+532         elem->get_node(n)->processor_id() = std::min(elem->get_node(n)->processor_id(),
+533                                                      elem->processor_id());
+534     }
+535 
+536   // And loop over the subactive elements, but don't reassign
+537   // nodes that are already active on another processor\&.
+538   MeshBase::element_iterator       sub_it  = mesh\&.subactive_elements_begin();
+539   const MeshBase::element_iterator sub_end = mesh\&.subactive_elements_end();
+540 
+541   for ( ; sub_it != sub_end; ++sub_it)
+542     {
+543       Elem* elem = *sub_it;
+544       libmesh_assert(elem);
+545 
+546       libmesh_assert_not_equal_to (elem->processor_id(), DofObject::invalid_processor_id);
+547 
+548       for (unsigned int n=0; n<elem->n_nodes(); ++n)
+549         if (elem->get_node(n)->processor_id() == DofObject::invalid_processor_id)
+550           elem->get_node(n)->processor_id() = elem->processor_id();
+551     }
+552 
+553   // Same for the inactive elements -- we will have already gotten most of these
+554   // nodes, *except* for the case of a parent with a subset of children which are
+555   // ghost elements\&.  In that case some of the parent nodes will not have been
+556   // properly handled yet
+557   MeshBase::element_iterator       not_it  = mesh\&.not_active_elements_begin();
+558   const MeshBase::element_iterator not_end = mesh\&.not_active_elements_end();
+559 
+560   for ( ; not_it != not_end; ++not_it)
+561     {
+562       Elem* elem = *not_it;
+563       libmesh_assert(elem);
+564 
+565       libmesh_assert_not_equal_to (elem->processor_id(), DofObject::invalid_processor_id);
+566 
+567       for (unsigned int n=0; n<elem->n_nodes(); ++n)
+568         if (elem->get_node(n)->processor_id() == DofObject::invalid_processor_id)
+569           elem->get_node(n)->processor_id() = elem->processor_id();
+570     }
+571 
+572   // We can't assert that all nodes are connected to elements, because
+573   // a ParallelMesh with NodeConstraints might have pulled in some
+574   // remote nodes solely for evaluating those constraints\&.
+575   // MeshTools::libmesh_assert_connected_nodes(mesh);
+576 
+577   // For such nodes, we'll do a sanity check later when making sure
+578   // that we successfully reset their processor ids to something
+579   // valid\&.
+580 
+581   // Next set node ids from other processors, excluding self
+582   for (processor_id_type p=1; p != mesh\&.n_processors(); ++p)
+583     {
+584       // Trade my requests with processor procup and procdown
+585       processor_id_type procup = (mesh\&.processor_id() + p) %
+586         mesh\&.n_processors();
+587       processor_id_type procdown = (mesh\&.n_processors() +
+588                                     mesh\&.processor_id() - p) %
+589         mesh\&.n_processors();
+590       std::vector<dof_id_type> request_to_fill;
+591       mesh\&.comm()\&.send_receive(procup, requested_node_ids[procup],
+592                                procdown, request_to_fill);
+593 
+594       // Fill those requests in-place
+595       for (std::size_t i=0; i != request_to_fill\&.size(); ++i)
+596         {
+597           Node *node = mesh\&.node_ptr(request_to_fill[i]);
+598           libmesh_assert(node);
+599           const processor_id_type new_pid = node->processor_id();
+600           libmesh_assert_not_equal_to (new_pid, DofObject::invalid_processor_id);
+601           libmesh_assert_less (new_pid, mesh\&.n_partitions()); // this is the correct test --
+602           request_to_fill[i] = new_pid;           //  the number of partitions may
+603         }                                         //  not equal the number of processors
+604 
+605       // Trade back the results
+606       std::vector<dof_id_type> filled_request;
+607       mesh\&.comm()\&.send_receive(procdown, request_to_fill,
+608                                procup,   filled_request);
+609       libmesh_assert_equal_to (filled_request\&.size(), requested_node_ids[procup]\&.size());
+610 
+611       // And copy the id changes we've now been informed of
+612       for (std::size_t i=0; i != filled_request\&.size(); ++i)
+613         {
+614           Node *node = mesh\&.node_ptr(requested_node_ids[procup][i]);
+615           libmesh_assert(node);
+616           libmesh_assert_less (filled_request[i], mesh\&.n_partitions()); // this is the correct test --
+617           node->processor_id(filled_request[i]);           //  the number of partitions may
+618         }                                                  //  not equal the number of processors
+619     }
+620 
+621 #ifdef DEBUG
+622   MeshTools::libmesh_assert_valid_procids<Node>(mesh);
+623 #endif
+624 
+625   STOP_LOG("set_node_processor_ids()","Partitioner");
+626 }
+.fi
+.SS "void libMesh::Partitioner::set_parent_processor_ids (\fBMeshBase\fP &mesh)\fC [static]\fP, \fC [inherited]\fP"
+This function is called after partitioning to set the processor IDs for the inactive parent elements\&. A Parent's processor ID is the same as its first child\&. 
+.PP
+Definition at line 261 of file partitioner\&.C\&.
+.PP
+References libMesh::Elem::active_family_tree(), libMesh::Elem::child(), libMesh::Partitioner::communication_blocksize, end, libMesh::DofObject::id(), libMesh::DofObject::invalid_processor_id, libMesh::DofObject::invalidate_processor_id(), libMesh::Elem::is_remote(), libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), mesh, std::min(), libMesh::Elem::n_children(), libMesh::MeshTools::n_elem(), libMesh::Elem::parent(), libMesh::processor_id(), libMesh::DofObject::processor_id(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Elem::total_family_tree()\&.
+.PP
+Referenced by libMesh::Partitioner::partition(), and libMesh::Partitioner::repartition()\&.
+.PP
+.nf
+266 {
+267   START_LOG("set_parent_processor_ids()","Partitioner");
+268 
+269 #ifdef LIBMESH_ENABLE_AMR
+270 
+271   // If the mesh is serial we have access to all the elements,
+272   // in particular all the active ones\&.  We can therefore set
+273   // the parent processor ids indirecly through their children, and
+274   // set the subactive processor ids while examining their active
+275   // ancestors\&.
+276   // By convention a parent is assigned to the minimum processor
+277   // of all its children, and a subactive is assigned to the processor
+278   // of its active ancestor\&.
+279   if (mesh\&.is_serial())
+280     {
+281       // Loop over all the active elements in the mesh
+282       MeshBase::element_iterator       it  = mesh\&.active_elements_begin();
+283       const MeshBase::element_iterator end = mesh\&.active_elements_end();
+284 
+285       for ( ; it!=end; ++it)
+286         {
+287           Elem *child  = *it;
+288 
+289           // First set descendents
+290 
+291           std::vector<const Elem*> subactive_family;
+292           child->total_family_tree(subactive_family);
+293           for (unsigned int i = 0; i != subactive_family\&.size(); ++i)
+294             const_cast<Elem*>(subactive_family[i])->processor_id() = child->processor_id();
+295 
+296           // Then set ancestors
+297 
+298           Elem *parent = child->parent();
+299 
+300           while (parent)
+301             {
+302               // invalidate the parent id, otherwise the min below
+303               // will not work if the current parent id is less
+304               // than all the children!
+305               parent->invalidate_processor_id();
+306 
+307               for(unsigned int c=0; c<parent->n_children(); c++)
+308                 {
+309                   child = parent->child(c);
+310                   libmesh_assert(child);
+311                   libmesh_assert(!child->is_remote());
+312                   libmesh_assert_not_equal_to (child->processor_id(), DofObject::invalid_processor_id);
+313                   parent->processor_id() = std::min(parent->processor_id(),
+314                                                     child->processor_id());
+315                 }
+316               parent = parent->parent();
+317             }
+318         }
+319     }
+320 
+321   // When the mesh is parallel we cannot guarantee that parents have access to
+322   // all their children\&.
+323   else
+324     {
+325       // Setting subactive processor ids is easy: we can guarantee
+326       // that children have access to all their parents\&.
+327 
+328       // Loop over all the active elements in the mesh
+329       MeshBase::element_iterator       it  = mesh\&.active_elements_begin();
+330       const MeshBase::element_iterator end = mesh\&.active_elements_end();
+331 
+332       for ( ; it!=end; ++it)
+333         {
+334           Elem *child  = *it;
+335 
+336           std::vector<const Elem*> subactive_family;
+337           child->total_family_tree(subactive_family);
+338           for (unsigned int i = 0; i != subactive_family\&.size(); ++i)
+339             const_cast<Elem*>(subactive_family[i])->processor_id() = child->processor_id();
+340         }
+341 
+342       // When the mesh is parallel we cannot guarantee that parents have access to
+343       // all their children\&.
+344 
+345       // We will use a brute-force approach here\&.  Each processor finds its parent
+346       // elements and sets the parent pid to the minimum of its
+347       // semilocal descendants\&.
+348       // A global reduction is then performed to make sure the true minimum is found\&.
+349       // As noted, this is required because we cannot guarantee that a parent has
+350       // access to all its children on any single processor\&.
+351       libmesh_parallel_only(mesh\&.comm());
+352       libmesh_assert(MeshTools::n_elem(mesh\&.unpartitioned_elements_begin(),
+353                                        mesh\&.unpartitioned_elements_end()) == 0);
+354 
+355       const dof_id_type max_elem_id = mesh\&.max_elem_id();
+356 
+357       std::vector<processor_id_type>
+358         parent_processor_ids (std::min(communication_blocksize,
+359                                        max_elem_id));
+360 
+361       for (dof_id_type blk=0, last_elem_id=0; last_elem_id<max_elem_id; blk++)
+362         {
+363           last_elem_id =
+364             std::min(static_cast<dof_id_type>((blk+1)*communication_blocksize),
+365                      max_elem_id);
+366           const dof_id_type first_elem_id = blk*communication_blocksize;
+367 
+368           std::fill (parent_processor_ids\&.begin(),
+369                      parent_processor_ids\&.end(),
+370                      DofObject::invalid_processor_id);
+371 
+372           // first build up local contributions to parent_processor_ids
+373           MeshBase::element_iterator       not_it  = mesh\&.ancestor_elements_begin();
+374           const MeshBase::element_iterator not_end = mesh\&.ancestor_elements_end();
+375 
+376           bool have_parent_in_block = false;
+377 
+378           for ( ; not_it != not_end; ++not_it)
+379             {
+380               Elem *parent = *not_it;
+381 
+382               const dof_id_type parent_idx = parent->id();
+383               libmesh_assert_less (parent_idx, max_elem_id);
+384 
+385               if ((parent_idx >= first_elem_id) &&
+386                   (parent_idx <  last_elem_id))
+387                 {
+388                   have_parent_in_block = true;
+389                   processor_id_type parent_pid = DofObject::invalid_processor_id;
+390 
+391                   std::vector<const Elem*> active_family;
+392                   parent->active_family_tree(active_family);
+393                   for (unsigned int i = 0; i != active_family\&.size(); ++i)
+394                     parent_pid = std::min (parent_pid, active_family[i]->processor_id());
+395 
+396                   const dof_id_type packed_idx = parent_idx - first_elem_id;
+397                   libmesh_assert_less (packed_idx, parent_processor_ids\&.size());
+398 
+399                   parent_processor_ids[packed_idx] = parent_pid;
+400                 }
+401             }
+402 
+403           // then find the global minimum
+404           mesh\&.comm()\&.min (parent_processor_ids);
+405 
+406           // and assign the ids, if we have a parent in this block\&.
+407           if (have_parent_in_block)
+408             for (not_it = mesh\&.ancestor_elements_begin();
+409                  not_it != not_end; ++not_it)
+410               {
+411                 Elem *parent = *not_it;
+412 
+413                 const dof_id_type parent_idx = parent->id();
+414 
+415                 if ((parent_idx >= first_elem_id) &&
+416                     (parent_idx <  last_elem_id))
+417                   {
+418                     const dof_id_type packed_idx = parent_idx - first_elem_id;
+419                     libmesh_assert_less (packed_idx, parent_processor_ids\&.size());
+420 
+421                     const processor_id_type parent_pid =
+422                       parent_processor_ids[packed_idx];
+423 
+424                     libmesh_assert_not_equal_to (parent_pid, DofObject::invalid_processor_id);
+425 
+426                     parent->processor_id() = parent_pid;
+427                   }
+428               }
+429         }
+430     }
+431 
+432 #endif // LIBMESH_ENABLE_AMR
+433 
+434   STOP_LOG("set_parent_processor_ids()","Partitioner");
+435 }
+.fi
+.SS "void libMesh::Partitioner::single_partition (\fBMeshBase\fP &mesh)\fC [protected]\fP, \fC [inherited]\fP"
+Trivially 'partitions' the mesh for one processor\&. Simply loops through the elements and assigns all of them to processor 0\&. Is is provided as a separate function so that derived classes may use it without reimplementing it\&. 
+.PP
+Definition at line 157 of file partitioner\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), _do_partition(), libMesh::SFCPartitioner::_do_partition(), libMesh::CentroidPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::Partitioner::partition(), and libMesh::Partitioner::repartition()\&.
+.PP
+.nf
+158 {
+159   START_LOG("single_partition()","Partitioner");
+160 
+161   // Loop over all the elements and assign them to processor 0\&.
+162   MeshBase::element_iterator       elem_it  = mesh\&.elements_begin();
+163   const MeshBase::element_iterator elem_end = mesh\&.elements_end();
+164 
+165   for ( ; elem_it != elem_end; ++elem_it)
+166     (*elem_it)->processor_id() = 0;
+167 
+168   // For a single partition, all the nodes are on processor 0
+169   MeshBase::node_iterator       node_it  = mesh\&.nodes_begin();
+170   const MeshBase::node_iterator node_end = mesh\&.nodes_end();
+171 
+172   for ( ; node_it != node_end; ++node_it)
+173     (*node_it)->processor_id() = 0;
+174 
+175   STOP_LOG("single_partition()","Partitioner");
+176 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBErrorVector\fP* libMesh::Partitioner::_weights\fC [protected]\fP, \fC [inherited]\fP"
+The weights that might be used for partitioning\&. 
+.PP
+Definition at line 168 of file partitioner\&.h\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), and libMesh::MetisPartitioner::attach_weights()\&.
+.SS "const \fBdof_id_type\fP libMesh::Partitioner::communication_blocksize = 1000000\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The blocksize to use when doing blocked parallel communication\&. This limits the maximum vector size which can be used in a single communication step\&. 
+.PP
+Definition at line 163 of file partitioner\&.h\&.
+.PP
+Referenced by libMesh::Partitioner::set_parent_processor_ids()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

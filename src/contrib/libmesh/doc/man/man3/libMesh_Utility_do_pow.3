@@ -1,0 +1,52 @@
+.TH "libMesh::Utility::do_pow< N, T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Utility::do_pow< N, T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <utility\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static T \fBapply\fP (const T &\fBx\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<int N, typename T>struct libMesh::Utility::do_pow< N, T >"
+An efficient template instantiation for raising to an arbitrary integer power\&. 
+.PP
+Definition at line 153 of file utility\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<int N, typename T > static T \fBlibMesh::Utility::do_pow\fP< N, T >::apply (const T &x)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Definition at line 154 of file utility\&.h\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::Utility::pow()\&.
+.PP
+.nf
+155   {
+156     libmesh_assert(N>1);
+157 
+158     if (N%2) // odd exponent
+159       return x * do_pow<N-1,T>::apply(x);
+160 
+161     const T xNover2 = do_pow<N/2,T>::apply(x);
+162 
+163     return xNover2*xNover2;
+164   }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,99 @@
+.TH "libMesh::Parallel::Utils" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::Utils \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename KeyType > bool \fBis_sorted\fP (const std::vector< KeyType > &v)"
+.br
+.ti -1c
+.RI "template<typename KeyType > double \fBto_double\fP (const KeyType &k)"
+.br
+.ti -1c
+.RI "template<typename KeyType > KeyType \fBto_key_type\fP (const double f)"
+.br
+.ti -1c
+.RI "template<> double \fBto_double\fP (const Hilbert::HilbertIndices &bvt)"
+.br
+.ti -1c
+.RI "template<> Hilbert::HilbertIndices \fBto_key_type\fP (const double f)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "template<typename KeyType > bool libMesh::Parallel::Utils::is_sorted (const std::vector< KeyType > &v)\fC [inline]\fP"
+\fBUtility\fP function that returns true if the vector v is sorted, false otherwise\&. O(N), the length of the vector\&. This is implemented solely because the std::is_sorted appears to be an STL extension\&. 
+.PP
+Definition at line 50 of file parallel_conversion_utils\&.h\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::BinSorter(), and libMesh::Parallel::Histogram< KeyType, IdxType >::Histogram()\&.
+.PP
+.nf
+51 {
+52   if (v\&.empty())
+53     return true;
+54 
+55   for (unsigned int i=1; i<v\&.size(); i++)
+56     if (v[i] < v[i-1])
+57       return false;
+58 
+59   return true;
+60 }
+.fi
+.SS "template<typename KeyType > double libMesh::Parallel::Utils::to_double (const KeyType &k)\fC [inline]\fP"
+A utility function which converts whatever \fCKeyType\fP is to a \fCdouble\fP for the histogram bounds 
+.PP
+Definition at line 68 of file parallel_conversion_utils\&.h\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort(), and libMesh::Parallel::Histogram< KeyType, IdxType >::make_histogram()\&.
+.PP
+.nf
+69 {
+70   return static_cast<double>(k);
+71 }
+.fi
+.SS "template<> double libMesh::Parallel::Utils::to_double (const Hilbert::HilbertIndices &bvt)\fC [inline]\fP"
+
+.PP
+Definition at line 90 of file parallel_conversion_utils\&.h\&.
+.PP
+.nf
+91 {
+92   return static_cast<double>(bvt\&.rack2);
+93 }
+.fi
+.SS "template<typename KeyType > KeyType libMesh::Parallel::Utils::to_key_type (const doublef)\fC [inline]\fP"
+A utility to convert a \fCdouble\fP to some sort of \fCKeyType\fP, for interpreting how histogram bounds relate to \fCKeyType\fP positions\&. 
+.PP
+Definition at line 81 of file parallel_conversion_utils\&.h\&.
+.PP
+.nf
+82 {
+83   return static_cast<KeyType>(f);
+84 }
+.fi
+.SS "template<> Hilbert::HilbertIndices libMesh::Parallel::Utils::to_key_type (const doublef)\fC [inline]\fP"
+
+.PP
+Definition at line 98 of file parallel_conversion_utils\&.h\&.
+.PP
+.nf
+99 {
+100   Hilbert::HilbertIndices bvt;
+101 
+102   bvt\&.rack0 = 0;
+103   bvt\&.rack1 = 0;
+104   bvt\&.rack2 = static_cast<Hilbert::inttype>(f);
+105 
+106   return bvt;
+107 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

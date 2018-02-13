@@ -1,0 +1,331 @@
+.TH "libMesh::ElementTypes" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ElementTypes \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBbasic_name\fP (const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "std::string \fBname\fP (const \fBElemType\fP t)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const unsigned int \fBnum_types\fP = 24"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "std::string libMesh::ElementTypes::basic_name (const ElemTypet)"
+Returns a standard string representation of the basic name for element type t\&. For example, a HEX27 has the basic name of 'Hexahedron'\&. 
+.PP
+Definition at line 31 of file elem_type\&.C\&.
+.PP
+References libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::INFEDGE2, libMesh::INFHEX16, libMesh::INFHEX18, libMesh::INFHEX8, libMesh::INFPRISM12, libMesh::INFPRISM6, libMesh::INFQUAD4, libMesh::INFQUAD6, libMesh::out, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+.nf
+32 {
+33   std::string its_name;
+34   switch (t)
+35     {
+36     case EDGE2:
+37     case EDGE3:
+38     case EDGE4:
+39       {
+40         its_name = "Edge";
+41         break;
+42       }
+43 
+44     case TRI3:
+45     case TRI6:
+46       {
+47         its_name = "Triangle";
+48         break;
+49       }
+50 
+51     case QUAD4:
+52     case QUAD8:
+53     case QUAD9:
+54       {
+55         its_name = "Quadrilateral";
+56         break;
+57       }
+58 
+59     case TET4:
+60     case TET10:
+61       {
+62         its_name = "Tetrahedron";
+63         break;
+64       }
+65 
+66     case HEX8:
+67     case HEX20:
+68     case HEX27:
+69       {
+70         its_name = "Hexahedron";
+71         break;
+72       }
+73 
+74     case PRISM6:
+75     case PRISM18:
+76       {
+77         its_name = "Prism";
+78         break;
+79       }
+80 
+81     case PYRAMID5:
+82     case PYRAMID13:
+83     case PYRAMID14:
+84       {
+85         its_name = "Pyramid";
+86         break;
+87       }
+88 
+89 
+90 
+91 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+92 
+93       // infinite elements
+94     case INFEDGE2:
+95       {
+96         its_name = "Infinite Edge";
+97         break;
+98       }
+99 
+100     case INFQUAD4:
+101     case INFQUAD6:
+102       {
+103         its_name = "Infinite Quadrilateral";
+104         break;
+105       }
+106 
+107     case INFHEX8:
+108     case INFHEX16:
+109     case INFHEX18:
+110       {
+111         its_name = "Infinite Hexahedron";
+112         break;
+113       }
+114 
+115     case INFPRISM6:
+116     case INFPRISM12:
+117       {
+118         its_name = "Infinite Prism";
+119         break;
+120       }
+121 
+122 #endif
+123 
+124 
+125     default:
+126       {
+127         libMesh::out << "Undefined element type!\&." << std::endl;
+128         libmesh_error();
+129       }
+130     }
+131   return its_name;
+132 }
+.fi
+.SS "std::string libMesh::ElementTypes::name (const ElemTypet)"
+Returns a standard string representation for the specific name of element type t\&. For example, HEX27 returns 'Hex 27'\&. 
+.PP
+Definition at line 135 of file elem_type\&.C\&.
+.PP
+References libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::INFEDGE2, libMesh::INFHEX16, libMesh::INFHEX18, libMesh::INFHEX8, libMesh::INFPRISM12, libMesh::INFPRISM6, libMesh::INFQUAD4, libMesh::INFQUAD6, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+.nf
+136 {
+137   std::string its_name;
+138   switch (t)
+139     {
+140     case EDGE2:
+141       {
+142         its_name = "Edge 2";
+143         break;
+144       }
+145 
+146     case EDGE3:
+147       {
+148         its_name = "Edge 3";
+149         break;
+150       }
+151 
+152     case EDGE4:
+153       {
+154         its_name = "Edge 4";
+155         break;
+156       }
+157 
+158     case TRI3:
+159       {
+160         its_name = "Tri 3";
+161         break;
+162       }
+163 
+164     case TRI6:
+165       {
+166         its_name = "Tri 6";
+167         break;
+168       }
+169 
+170     case QUAD4:
+171       {
+172         its_name = "Quad 4";
+173         break;
+174       }
+175 
+176     case QUAD8:
+177       {
+178         its_name = "Quad 8";
+179         break;
+180       }
+181 
+182     case QUAD9:
+183       {
+184         its_name = "Quad 9";
+185         break;
+186       }
+187 
+188     case TET4:
+189       {
+190         its_name = "Tet 4";
+191         break;
+192       }
+193 
+194     case TET10:
+195       {
+196         its_name = "Tet 10";
+197         break;
+198       }
+199 
+200     case HEX8:
+201       {
+202         its_name = "Hex 8";
+203         break;
+204       }
+205 
+206     case HEX20:
+207       {
+208         its_name = "Hex 20";
+209         break;
+210       }
+211 
+212     case HEX27:
+213       {
+214         its_name = "Hex 27";
+215         break;
+216       }
+217 
+218     case PRISM6:
+219       {
+220         its_name = "Prism 6";
+221         break;
+222       }
+223 
+224     case PRISM18:
+225       {
+226         its_name = "Prism 8";
+227         break;
+228       }
+229 
+230     case PYRAMID5:
+231       {
+232         its_name = "Pyramid 5";
+233         break;
+234       }
+235 
+236     case PYRAMID13:
+237       {
+238         its_name = "Pyramid 13";
+239         break;
+240       }
+241 
+242     case PYRAMID14:
+243       {
+244         its_name = "Pyramid 14";
+245         break;
+246       }
+247 
+248 
+249 
+250 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+251 
+252     case INFEDGE2:
+253       {
+254         its_name = "Infinite Edge 2";
+255         break;
+256       }
+257 
+258     case INFQUAD4:
+259       {
+260         its_name = "Infinite Quad 4";
+261         break;
+262       }
+263 
+264     case INFQUAD6:
+265       {
+266         its_name = "Infinite Quad 6";
+267         break;
+268       }
+269 
+270     case INFHEX8:
+271       {
+272         its_name = "Infinite Hex 8";
+273         break;
+274       }
+275 
+276     case INFHEX16:
+277       {
+278         its_name = "Infinite Hex 16";
+279         break;
+280       }
+281 
+282     case INFHEX18:
+283       {
+284         its_name = "Infinite Hex 18";
+285         break;
+286       }
+287 
+288     case INFPRISM6:
+289       {
+290         its_name = "Infinite Prism 6";
+291         break;
+292       }
+293 
+294     case INFPRISM12:
+295       {
+296         its_name = "Infinite Prism 12";
+297         break;
+298       }
+299 
+300 #endif
+301 
+302 
+303 
+304     default:
+305       {
+306         libMesh::err << "Undefined element type!\&." << std::endl;
+307         libmesh_error();
+308       }
+309     }
+310   return its_name;
+311 }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "const unsigned int libMesh::ElementTypes::num_types = 24"
+The number of element types that are defined (INVALD_ELEM excluded)\&. You might have to update this if you add a new one! 
+.PP
+Definition at line 47 of file elem_type\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

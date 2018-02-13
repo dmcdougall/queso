@@ -1,0 +1,2559 @@
+.TH "libMesh::PltLoader" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PltLoader \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <plt_loader\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBOldZoneType\fP { \fBBLOCK\fP =0, \fBPOINT\fP, \fBFEBLOCK\fP, \fBFEPOINT\fP }"
+.br
+.ti -1c
+.RI "enum \fBNewZoneType\fP { \fBORDERED\fP =0, \fBFELINESEG\fP, \fBFETRIANGLE\fP, \fBFEQUADRILATERAL\fP, \fBFETETRAHEDRON\fP, \fBFEBRICK\fP }"
+.br
+.ti -1c
+.RI "enum \fBDataType\fP { \fBFLOAT\fP =1, \fBDOUBLE\fP, \fBLONGINT\fP, \fBSHORTINT\fP, \fBBYTE\fP, \fBBIT\fP }"
+.br
+.ti -1c
+.RI "enum \fBFEType\fP { \fBTRI\fP =0, \fBQUAD\fP, \fBTET\fP, \fBHEX\fP }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPltLoader\fP (const bool v=false)"
+.br
+.ti -1c
+.RI "\fBPltLoader\fP (const std::string &name, const bool v=false)"
+.br
+.ti -1c
+.RI "\fB~PltLoader\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "bool \fBverbose\fP () const "
+.br
+.ti -1c
+.RI "void \fBread\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBwrite_dat\fP (const std::string &name, const unsigned int \fBversion\fP=10) const "
+.br
+.ti -1c
+.RI "const std::string & \fBversion\fP () const "
+.br
+.ti -1c
+.RI "bool \fBis_foreign\fP () const "
+.br
+.ti -1c
+.RI "const std::string & \fBtitle\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_vars\fP () const "
+.br
+.ti -1c
+.RI "const std::string & \fBvar_name\fP (const unsigned int v) const "
+.br
+.ti -1c
+.RI "unsigned int \fBvar_type\fP (const unsigned int v) const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_zones\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBzone_type\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "const std::string & \fBzone_name\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "unsigned int \fBzone_pack\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "unsigned int \fBimax\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "unsigned int \fBjmax\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "unsigned int \fBkmax\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_nodes\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_elem\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "\fBFEType\fP \fBelem_type\fP (const unsigned int z) const "
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< std::vector< float > > > & \fBget_data\fP () const "
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const unsigned int \fBNNodes\fP [4] = {3, 4, 4, 8}"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBread_header\fP (std::istream &in)"
+.br
+.ti -1c
+.RI "void \fBread_data\fP (std::istream &in)"
+.br
+.ti -1c
+.RI "void \fBread_block_data\fP (std::istream &in, const unsigned int zn)"
+.br
+.ti -1c
+.RI "void \fBread_point_data\fP (std::istream &in, const unsigned int zn)"
+.br
+.ti -1c
+.RI "void \fBread_feblock_data\fP (std::istream &in, const unsigned int zn)"
+.br
+.ti -1c
+.RI "void \fBread_fepoint_data\fP (std::istream &in, const unsigned int zn)"
+.br
+.ti -1c
+.RI "std::string & \fBversion\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBis_foreign\fP ()"
+.br
+.ti -1c
+.RI "std::string & \fBtitle\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_n_vars\fP (const unsigned int nv)"
+.br
+.ti -1c
+.RI "std::string & \fBvar_name\fP (const unsigned int v)"
+.br
+.ti -1c
+.RI "unsigned int & \fBvar_type\fP (const unsigned int v)"
+.br
+.ti -1c
+.RI "void \fBset_n_zones\fP (const unsigned int nz)"
+.br
+.ti -1c
+.RI "unsigned int & \fBzone_type\fP (const unsigned int z)"
+.br
+.ti -1c
+.RI "std::string & \fBzone_name\fP (const unsigned int z)"
+.br
+.ti -1c
+.RI "unsigned int & \fBzone_pack\fP (const unsigned int z)"
+.br
+.ti -1c
+.RI "unsigned int & \fBimax\fP (const unsigned int z)"
+.br
+.ti -1c
+.RI "unsigned int & \fBjmax\fP (const unsigned int z)"
+.br
+.ti -1c
+.RI "unsigned int & \fBkmax\fP (const unsigned int z)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_verbose\fP"
+.br
+.ti -1c
+.RI "std::string \fB_version\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_foreign\fP"
+.br
+.ti -1c
+.RI "std::string \fB_title\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_n_vars\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fB_var_names\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fB_var_types\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_n_zones\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fB_zone_types\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fB_zone_names\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fB_zone_pack\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fB_imax\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fB_jmax\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fB_kmax\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< std::vector< float > > > \fB_data\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector< int > > \fB_conn\fP"
+.br
+.ti -1c
+.RI "char \fBbuf\fP [512]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class will read a binary \fC\fP\&.plt file\&. These types of files are for use with Amtec's \fCTecplot\fP visualization package\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2004\&. 
+.RE
+.PP
+
+.PP
+Definition at line 41 of file plt_loader\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::PltLoader::DataType\fP"
+Enum defining the data type of each variable\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIFLOAT \fP\fP
+.TP
+\fB\fIDOUBLE \fP\fP
+.TP
+\fB\fILONGINT \fP\fP
+.TP
+\fB\fISHORTINT \fP\fP
+.TP
+\fB\fIBYTE \fP\fP
+.TP
+\fB\fIBIT \fP\fP
+.PP
+Definition at line 134 of file plt_loader\&.h\&.
+.PP
+.nf
+134                 { FLOAT=1,
+135                   DOUBLE,
+136                   LONGINT,
+137                   SHORTINT,
+138                   BYTE,
+139                   BIT};
+.fi
+.SS "enum \fBlibMesh::PltLoader::FEType\fP"
+Enum defining the finite element types 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fITRI \fP\fP
+.TP
+\fB\fIQUAD \fP\fP
+.TP
+\fB\fITET \fP\fP
+.TP
+\fB\fIHEX \fP\fP
+.PP
+Definition at line 144 of file plt_loader\&.h\&.
+.PP
+.nf
+144               { TRI=0,
+145                 QUAD,
+146                 TET,
+147                 HEX };
+.fi
+.SS "enum \fBlibMesh::PltLoader::NewZoneType\fP"
+Enum defining the zone type in the Tecplot binary file, for use with the new \&.plt format\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIORDERED \fP\fP
+.TP
+\fB\fIFELINESEG \fP\fP
+.TP
+\fB\fIFETRIANGLE \fP\fP
+.TP
+\fB\fIFEQUADRILATERAL \fP\fP
+.TP
+\fB\fIFETETRAHEDRON \fP\fP
+.TP
+\fB\fIFEBRICK \fP\fP
+.PP
+Definition at line 124 of file plt_loader\&.h\&.
+.PP
+.nf
+124                    { ORDERED=0,
+125                      FELINESEG,
+126                      FETRIANGLE,
+127                      FEQUADRILATERAL,
+128                      FETETRAHEDRON,
+129                      FEBRICK };
+.fi
+.SS "enum \fBlibMesh::PltLoader::OldZoneType\fP"
+Writes a plot3d files\&. The grid will be in basename\&.g and the solution will be in basename\&.q\&. It is assumed that the first three variables from the \&.plt file are the (x,y,z) locations of the grid points\&. The optional parameter \fCreverse\fP specifies if the output file will have reversed byte ordering\&. Writes a Cart3D \&.tri component file\&. The number of components will be the number of zones in the \&.plt file\&. Enum defining the zone type in the Tecplot binary file, for use with the old \&.plt format\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIBLOCK \fP\fP
+.TP
+\fB\fIPOINT \fP\fP
+.TP
+\fB\fIFEBLOCK \fP\fP
+.TP
+\fB\fIFEPOINT \fP\fP
+.PP
+Definition at line 115 of file plt_loader\&.h\&.
+.PP
+.nf
+115                    { BLOCK=0,
+116                      POINT,
+117                      FEBLOCK,
+118                      FEPOINT };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PltLoader::PltLoader (const boolv = \fCfalse\fP)\fC [inline]\fP"
+Constructor\&. Initializes data\&. 
+.PP
+Definition at line 447 of file plt_loader\&.h\&.
+.PP
+.nf
+447                                   :
+448   _verbose      (v),
+449   _is_foreign   (false),
+450   _n_vars       (0),
+451   _n_zones      (0)
+452 {
+453 }
+.fi
+.SS "libMesh::PltLoader::PltLoader (const std::string &name, const boolv = \fCfalse\fP)\fC [inline]\fP"
+Constructor\&. Reads the file specified by \fCname\fP\&. 
+.PP
+Definition at line 458 of file plt_loader\&.h\&.
+.PP
+References read()\&.
+.PP
+.nf
+458                                                          :
+459   _verbose      (v),
+460   _is_foreign   (false),
+461   _n_vars       (0),
+462   _n_zones      (0)
+463 {
+464   this->read (name);
+465 }
+.fi
+.SS "libMesh::PltLoader::~PltLoader ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 470 of file plt_loader\&.h\&.
+.PP
+.nf
+471 {
+472 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::PltLoader::clear ()"
+Clear all data and return to a pristine state\&. 
+.PP
+Definition at line 34 of file plt_loader\&.C\&.
+.PP
+References _conn, _data, _imax, _is_foreign, _jmax, _kmax, _n_vars, _n_zones, _title, _var_names, _var_types, _version, _zone_names, _zone_pack, and _zone_types\&.
+.PP
+.nf
+35 {
+36   // clear vectors & strings\&.  Using \&.erase() for strings instead of \&.clear()
+37   // since GCC 2\&.95\&.3 does not support \&.clear()\&.
+38   _version\&.erase();
+39   _title\&.erase();
+40 
+41   _var_names\&.clear();
+42   _var_types\&.clear();
+43   _zone_types\&.clear();
+44   _zone_names\&.clear();
+45   _zone_pack\&.clear();
+46   _imax\&.clear();
+47   _jmax\&.clear();
+48   _kmax\&.clear();
+49   _data\&.clear();
+50   _conn\&.clear();
+51 
+52   // reinitialize
+53   _is_foreign = false;
+54   _n_vars     = 0;
+55   _n_zones    = 0;
+56 }
+.fi
+.SS "\fBPltLoader::FEType\fP libMesh::PltLoader::elem_type (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the element type for the \fCzth\fP zone (for unstructured meshes)\&. 
+.RE
+.PP
+
+.PP
+Definition at line 689 of file plt_loader\&.h\&.
+.PP
+References kmax(), libMesh::libmesh_assert_greater(), n_zones(), and zone_type()\&.
+.PP
+.nf
+690 {
+691   libmesh_assert_less (z, this->n_zones());
+692 
+693   // Only for unstructured zones!
+694   libmesh_assert_greater (this->zone_type(z), 1);
+695 
+696   return static_cast<FEType>(this->kmax(z));
+697 }
+.fi
+.SS "const std::vector< std::vector< std::vector< float > > > & libMesh::PltLoader::get_data () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the data read from the file 
+.RE
+.PP
+
+.PP
+Definition at line 702 of file plt_loader\&.h\&.
+.PP
+References _data\&.
+.PP
+.nf
+703 {
+704   return _data;
+705 }
+.fi
+.SS "unsigned int libMesh::PltLoader::imax (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCimax\fP for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 597 of file plt_loader\&.h\&.
+.PP
+References _imax, and n_zones()\&.
+.PP
+Referenced by n_nodes(), read_block_data(), read_data(), read_feblock_data(), read_fepoint_data(), read_header(), read_point_data(), and write_dat()\&.
+.PP
+.nf
+598 {
+599   libmesh_assert_less (z, this->n_zones());
+600   libmesh_assert_equal_to (_imax\&.size(), this->n_zones());
+601 
+602   return _imax[z];
+603 }
+.fi
+.SS "unsigned int & libMesh::PltLoader::imax (const unsigned intz)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCimax\fP for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 608 of file plt_loader\&.h\&.
+.PP
+References _imax, and n_zones()\&.
+.PP
+.nf
+609 {
+610   libmesh_assert_less (z, this->n_zones());
+611   libmesh_assert_equal_to (_imax\&.size(), this->n_zones());
+612 
+613   return _imax[z];
+614 }
+.fi
+.SS "bool libMesh::PltLoader::is_foreign () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP if the binary type of the file is different than the machine that is reading it\&. If this is the case we must perform an endian-swap on all input data\&. 
+.RE
+.PP
+
+.PP
+Definition at line 168 of file plt_loader\&.h\&.
+.PP
+References _is_foreign\&.
+.PP
+Referenced by read_block_data(), read_data(), read_feblock_data(), read_fepoint_data(), read_header(), and read_point_data()\&.
+.PP
+.nf
+168 { return _is_foreign; }
+.fi
+.SS "bool& libMesh::PltLoader::is_foreign ()\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP if the binary type of the file is different than the machine that is reading it\&. If this is the case we must perform an endian-swap on all input data\&. 
+.RE
+.PP
+
+.PP
+Definition at line 300 of file plt_loader\&.h\&.
+.PP
+References _is_foreign\&.
+.PP
+.nf
+300 { return _is_foreign; }
+.fi
+.SS "unsigned int libMesh::PltLoader::jmax (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCjmax\fP for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 619 of file plt_loader\&.h\&.
+.PP
+References _jmax, and n_zones()\&.
+.PP
+Referenced by n_elem(), read_block_data(), read_data(), read_feblock_data(), read_fepoint_data(), read_header(), read_point_data(), and write_dat()\&.
+.PP
+.nf
+620 {
+621   libmesh_assert_less (z, this->n_zones());
+622   libmesh_assert_equal_to (_jmax\&.size(), this->n_zones());
+623 
+624   return _jmax[z];
+625 }
+.fi
+.SS "unsigned int & libMesh::PltLoader::jmax (const unsigned intz)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCjmax\fP for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 630 of file plt_loader\&.h\&.
+.PP
+References _jmax, and n_zones()\&.
+.PP
+.nf
+631 {
+632   libmesh_assert_less (z, this->n_zones());
+633   libmesh_assert_equal_to (_jmax\&.size(), this->n_zones());
+634 
+635   return _jmax[z];
+636 }
+.fi
+.SS "unsigned int libMesh::PltLoader::kmax (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCkmax\fP for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 641 of file plt_loader\&.h\&.
+.PP
+References _kmax, and n_zones()\&.
+.PP
+Referenced by elem_type(), read_block_data(), read_data(), read_feblock_data(), read_fepoint_data(), read_header(), read_point_data(), and write_dat()\&.
+.PP
+.nf
+642 {
+643   libmesh_assert_less (z, this->n_zones());
+644   libmesh_assert_equal_to (_kmax\&.size(), this->n_zones());
+645 
+646   return _kmax[z];
+647 }
+.fi
+.SS "unsigned int & libMesh::PltLoader::kmax (const unsigned intz)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCkmax\fP for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 652 of file plt_loader\&.h\&.
+.PP
+References _kmax, and n_zones()\&.
+.PP
+.nf
+653 {
+654   libmesh_assert_less (z, this->n_zones());
+655   libmesh_assert_equal_to (_kmax\&.size(), this->n_zones());
+656 
+657   return _kmax[z];
+658 }
+.fi
+.SS "unsigned int libMesh::PltLoader::n_elem (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of elements in the mesh (for unstructured meshes)\&. 
+.RE
+.PP
+
+.PP
+Definition at line 676 of file plt_loader\&.h\&.
+.PP
+References jmax(), libMesh::libmesh_assert_greater(), n_zones(), and zone_type()\&.
+.PP
+Referenced by read_header()\&.
+.PP
+.nf
+677 {
+678   libmesh_assert_less (z, this->n_zones());
+679 
+680   // Only for unstructured zones!
+681   libmesh_assert_greater (this->zone_type(z), 1);
+682 
+683   return this->jmax(z);
+684 }
+.fi
+.SS "unsigned int libMesh::PltLoader::n_nodes (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of nodes in the mesh (for unstructured meshes)\&. 
+.RE
+.PP
+
+.PP
+Definition at line 663 of file plt_loader\&.h\&.
+.PP
+References imax(), libMesh::libmesh_assert_greater(), n_zones(), and zone_type()\&.
+.PP
+Referenced by read_header()\&.
+.PP
+.nf
+664 {
+665   libmesh_assert_less (z, this->n_zones());
+666 
+667   // Only for unstructured zones!
+668   libmesh_assert_greater (this->zone_type(z), 1);
+669 
+670   return this->imax(z);
+671 }
+.fi
+.SS "unsigned int libMesh::PltLoader::n_vars () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of variables in the data set\&. 
+.RE
+.PP
+
+.PP
+Definition at line 178 of file plt_loader\&.h\&.
+.PP
+References _n_vars\&.
+.PP
+Referenced by read_block_data(), read_data(), read_feblock_data(), read_fepoint_data(), read_header(), read_point_data(), set_n_vars(), set_n_zones(), var_name(), var_type(), and write_dat()\&.
+.PP
+.nf
+178 { return _n_vars; }
+.fi
+.SS "unsigned int libMesh::PltLoader::n_zones () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of zones\&. 
+.RE
+.PP
+
+.PP
+Definition at line 193 of file plt_loader\&.h\&.
+.PP
+References _n_zones\&.
+.PP
+Referenced by elem_type(), imax(), jmax(), kmax(), n_elem(), n_nodes(), read_data(), read_feblock_data(), read_header(), set_n_vars(), set_n_zones(), write_dat(), zone_name(), zone_pack(), and zone_type()\&.
+.PP
+.nf
+193 { return _n_zones; }
+.fi
+.SS "void libMesh::PltLoader::read (const std::string &name)"
+Reads the \&.plt file specified by \fCname\fP\&. 
+.PP
+Definition at line 34 of file plt_loader_read\&.C\&.
+.PP
+References libMesh::err, libMesh::out, read_data(), read_header(), and verbose()\&.
+.PP
+Referenced by PltLoader()\&.
+.PP
+.nf
+35 {
+36   std::ifstream in (name\&.c_str(), std::ios::in|std::ios::binary);
+37 
+38   if (!in\&.good())
+39     {
+40       libMesh::err << "Error reading input file " << name
+41                    << std::endl;
+42 
+43       libmesh_error();
+44     }
+45 
+46 
+47   if (this->verbose())
+48     libMesh::out << std::endl
+49                  << "Reading input file " << name
+50                  << std::endl
+51                  << "-------------------------------------------------------------------------"
+52                  << std::endl;
+53 
+54   this->read_header (in);
+55   this->read_data   (in);
+56 
+57   if (this->verbose())
+58     libMesh::out << std::endl
+59                  << "-------------------------------------------------------------------------"
+60                  << std::endl;
+61 
+62 }
+.fi
+.SS "void libMesh::PltLoader::read_block_data (std::istream &in, const unsigned intzn)\fC [private]\fP"
+Read data for the zth zone in BLOCK structured format\&. 
+.PP
+Definition at line 877 of file plt_loader_read\&.C\&.
+.PP
+References _data, data, DOUBLE, libMesh::err, FLOAT, imax(), is_foreign(), jmax(), kmax(), libMesh::libmesh_assert(), n_vars(), and var_type()\&.
+.PP
+Referenced by read_data()\&.
+.PP
+.nf
+878 {
+879   libmesh_assert (in\&.good());
+880 
+881 
+882   // A byte-reverser in case the data is foreign
+883   Utility::ReverseBytes rb(this->is_foreign());
+884 
+885 
+886   for (unsigned int var=0; var<this->n_vars(); var++)
+887     {
+888 
+889       switch (this->var_type(var))
+890         {
+891 
+892           // Read a single-precision variable
+893         case FLOAT:
+894           {
+895             std::vector<float> & data = _data[zone][var];
+896 
+897             data\&.clear();
+898             data\&.resize (this->imax(zone)*
+899                          this->jmax(zone)*
+900                          this->kmax(zone));
+901 
+902             in\&.read ((char*) &data[0], LIBMESH_SIZEOF_FLOAT*data\&.size());
+903 
+904             for (unsigned int i=0; i<data\&.size(); i++)
+905               rb(data[i]);
+906 
+907             break;
+908           }
+909 
+910           // Read a double-precision variable
+911         case DOUBLE:
+912           {
+913             std::vector<double> ddata;
+914             std::vector<float> & data = _data[zone][var];
+915 
+916             data\&.clear();
+917             data\&.resize (this->imax(zone)*
+918                          this->jmax(zone)*
+919                          this->kmax(zone));
+920 
+921             ddata\&.resize (this->imax(zone)*
+922                           this->jmax(zone)*
+923                           this->kmax(zone));
+924 
+925             in\&.read ((char*) &ddata[0], LIBMESH_SIZEOF_DOUBLE*ddata\&.size());
+926 
+927             for (unsigned int i=0; i<data\&.size(); i++)
+928               data[i] = rb(ddata[i]);
+929 
+930             break;
+931           }
+932 
+933         default:
+934           {
+935             libMesh::err << "ERROR: Unsupported data type: "
+936                          << this->var_type(var)
+937                          << std::endl;
+938             libmesh_error();
+939           }
+940         }
+941     }
+942 }
+.fi
+.SS "void libMesh::PltLoader::read_data (std::istream &in)\fC [private]\fP"
+Read data from the binary file\&. 
+.PP
+Definition at line 621 of file plt_loader_read\&.C\&.
+.PP
+References BLOCK, buf, libMesh::err, FEBLOCK, FEPOINT, libMesh::BasicOStreamProxy< charT, traits >::flush(), imax(), is_foreign(), jmax(), kmax(), libMesh::libmesh_assert(), n_vars(), n_zones(), ORDERED, libMesh::out, POINT, read_block_data(), read_feblock_data(), read_fepoint_data(), read_point_data(), var_type(), verbose(), version(), zone_pack(), and zone_type()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+622 {
+623   libmesh_assert (in\&.good());
+624 
+625   // A byte-reverser in case the data is foreign
+626   Utility::ReverseBytes rb(this->is_foreign());
+627 
+628   //----------------------------------------------------
+629   // Read the TECPLOT data for each zone
+630   if (this->verbose())
+631     {
+632       libMesh::out << "Reading Zones";
+633       libMesh::out\&.flush();
+634     }
+635 
+636 
+637   for (unsigned int zone=0; zone<this->n_zones(); zone++)
+638     {
+639       if (this->verbose())
+640         {
+641           libMesh::out << "\&.";
+642           libMesh::out\&.flush();
+643         }
+644 
+645 
+646       //----------------------------------------------------
+647       // Read plt files written by older versions of Tecplot
+648       if (this->version()\&.rfind("V7") < this->version()\&.size())
+649         {
+650           float f = 0\&.;
+651 
+652           // Find the next Zone marker\&.
+653           do
+654             {
+655               f = 0\&.;
+656               in\&.read (buf, LIBMESH_SIZEOF_FLOAT);
+657               std::memcpy  (&f, buf, LIBMESH_SIZEOF_FLOAT);
+658               rb(f);
+659             }
+660           while ((f != 299\&.) && in\&.good());
+661 
+662           // Did we overrun the file?
+663           if (!in\&.good())
+664             {
+665               libMesh::err << "ERROR: Unexpected end-of-file!"
+666                            << std::endl;
+667               libmesh_error();
+668             }
+669 
+670           // Get the number of repeated vars\&.
+671           unsigned int n_rep_vars=0;
+672           std::vector<int> rep_vars;
+673 
+674           {
+675             in\&.read (buf, LIBMESH_SIZEOF_INT);
+676             std::memcpy  (&n_rep_vars, buf, LIBMESH_SIZEOF_INT);
+677             rb(n_rep_vars);
+678 
+679             rep_vars\&.resize (n_rep_vars);
+680 
+681             // Get the repeated variables number\&.
+682             for (unsigned int v=0; v<n_rep_vars; v++)
+683               {
+684                 libMesh::err << "ERROR:  I don't understand repeated variables yet!"
+685                              << std::endl;
+686                 libmesh_error();
+687 
+688                 in\&.read (buf, LIBMESH_SIZEOF_INT);
+689                 std::memcpy  (&rep_vars[v], buf, LIBMESH_SIZEOF_INT);
+690                 rb(rep_vars[v]);
+691               }
+692           }
+693 
+694           // Get the variable data type
+695           //libMesh::out << "var_types=";
+696           for (unsigned int v=0; v<this->n_vars(); v++)
+697             {
+698               in\&.read (buf, LIBMESH_SIZEOF_INT);
+699               std::memcpy  (&this->var_type(v), buf, LIBMESH_SIZEOF_INT);
+700               rb(this->var_type(v));
+701 
+702               //libMesh::out << this->var_type(v) << " ";
+703             }
+704           //libMesh::out << std::endl;
+705 
+706 
+707 
+708           // Read the data\&.
+709           switch (this->zone_type(zone) )
+710             {
+711               // Block-based data\&.  Structured meshes\&.
+712             case BLOCK:
+713               {
+714                 this->read_block_data (in, zone);
+715                 break;
+716               }
+717 
+718               // Point-based data\&.  Structured meshes\&.
+719             case POINT:
+720               {
+721                 this->read_point_data (in, zone);
+722                 break;
+723               }
+724 
+725               // FE block data\&.  Unstructured meshes\&.
+726             case FEBLOCK:
+727               {
+728                 this->read_feblock_data (in, zone);
+729 
+730                 if (this->verbose())
+731 
+732                   libMesh::out << "Zone " << zone << ":" << std::endl
+733                                << "  nnodes   =" << this->imax(zone) << std::endl
+734                                << "  nelem    =" << this->jmax(zone) << std::endl
+735                                << "  elem_type=" << this->kmax(zone) << std::endl
+736                                << std::endl;
+737                 break;
+738               }
+739 
+740               // FE point data\&.  Unstructured meshes\&.
+741             case FEPOINT:
+742               {
+743                 this->read_fepoint_data (in, zone);
+744                 break;
+745               }
+746 
+747             default:
+748               {
+749                 libMesh::err << "ERROR: Unsupported Zone type: "
+750                              << this->zone_type(zone)
+751                              << std::endl;
+752                 libmesh_error();
+753               }
+754             } // end switch on zone type
+755         }
+756 
+757 
+758       //----------------------------------------------------
+759       // Read plt files written by newer versions of Tecplot
+760       else if (this->version()\&.rfind("V1") < this->version()\&.size())
+761         {
+762           float f = 0\&.;
+763 
+764           // Find the next Zone marker\&.
+765           do
+766             {
+767               f = 0\&.;
+768               in\&.read (buf, LIBMESH_SIZEOF_FLOAT);
+769               std::memcpy  (&f, buf, LIBMESH_SIZEOF_FLOAT);
+770               rb(f);
+771             }
+772           while ((f != 299\&.) && in\&.good());
+773 
+774           // Did we overrun the file?
+775           if (!in\&.good())
+776             {
+777               libMesh::err << "ERROR: Unexpected end-of-file!"
+778                            << std::endl;
+779               libmesh_error();
+780             }
+781 
+782           // Get the variable data type
+783           for (unsigned int v=0; v<this->n_vars(); v++)
+784             {
+785               in\&.read (buf, LIBMESH_SIZEOF_INT);
+786               std::memcpy  (&this->var_type(v), buf, LIBMESH_SIZEOF_INT);
+787               rb(this->var_type(v));
+788 
+789               //libMesh::out << this->var_type(v) << " ";
+790             }
+791 
+792           // Get the variable sharing flag
+793           {
+794             int vs=0;
+795             int sv=0;
+796 
+797             in\&.read (buf, LIBMESH_SIZEOF_INT);
+798             std::memcpy  (&vs, buf, LIBMESH_SIZEOF_INT);
+799             rb(vs);
+800 
+801             if (vs)
+802               {
+803                 for (unsigned int v=0; v<this->n_vars(); v++)
+804                   {
+805                     in\&.read (buf, LIBMESH_SIZEOF_INT);
+806                     std::memcpy  (&sv, buf, LIBMESH_SIZEOF_INT);
+807                     rb(sv);
+808 
+809                     if (sv != -1)
+810                       {
+811                         libMesh::err << "ERROR:  I don't understand variable sharing!"
+812                                      << std::endl;
+813                         libmesh_error();
+814                       }
+815                   }
+816               }
+817           }
+818 
+819           // Get zone to share connectivity with
+820           {
+821             int sc=0;
+822             in\&.read (buf, LIBMESH_SIZEOF_INT);
+823             std::memcpy  (&sc, buf, LIBMESH_SIZEOF_INT);
+824             rb(sc);
+825 
+826             libmesh_assert_equal_to (sc, -1);
+827           }
+828 
+829 
+830           // Read the data\&.
+831           if (this->zone_type(zone) == ORDERED)
+832             {
+833               // Block-based data\&.  Structured meshes\&.
+834               if (this->zone_pack(zone) == 0)
+835                 this->read_block_data (in, zone);
+836 
+837               // Point-based data\&.  Structured meshes\&.
+838               else if (this->zone_pack(zone) == 1)
+839                 this->read_point_data (in, zone);
+840 
+841               else
+842                 libmesh_error();
+843             }
+844           else
+845             {
+846               // Block-based data\&.  Unstructured meshes\&.
+847               if (this->zone_pack(zone) == 0)
+848                 this->read_feblock_data (in, zone);
+849 
+850               // Point-based data\&.  Unstructured meshes\&.
+851               else if (this->zone_pack(zone) == 1)
+852                 this->read_fepoint_data (in, zone);
+853 
+854               else
+855                 libmesh_error();
+856             }
+857         }
+858 
+859 
+860 
+861       //----------------------------------------------------
+862       // Unrecognized Tecplot Version!
+863       else
+864         {
+865           libMesh::err << "ERROR:  This plot file was written by an unrecognized version of Tecplot!:"
+866                        << std::endl
+867                        << this->version()
+868                        << std::endl;
+869           libmesh_error();
+870         }
+871 
+872     } // end loop on zones
+873 }
+.fi
+.SS "void libMesh::PltLoader::read_feblock_data (std::istream &in, const unsigned intzn)\fC [private]\fP"
+Read data for the zth zone in FEBLOCK unstructured format\&. 
+.PP
+Definition at line 1004 of file plt_loader_read\&.C\&.
+.PP
+References _conn, _data, data, DOUBLE, libMesh::err, FLOAT, imax(), is_foreign(), jmax(), kmax(), libMesh::libmesh_assert(), n_vars(), n_zones(), NNodes, and var_type()\&.
+.PP
+Referenced by read_data()\&.
+.PP
+.nf
+1005 {
+1006   libmesh_assert (in\&.good());
+1007 
+1008   // A byte-reverser in case the data is foreign
+1009   Utility::ReverseBytes rb(this->is_foreign());
+1010 
+1011   // Read the variable values at each node\&.
+1012   for (unsigned int var=0; var<this->n_vars(); var++)
+1013     {
+1014       switch (this->var_type(var))
+1015         {
+1016 
+1017           // Read a single-precision variable
+1018         case FLOAT:
+1019           {
+1020             std::vector<float> & data = _data[zone][var];
+1021 
+1022             data\&.clear();
+1023             data\&.resize (this->imax(zone));
+1024 
+1025             in\&.read ((char*) &data[0], LIBMESH_SIZEOF_FLOAT*data\&.size());
+1026 
+1027             for (unsigned int i=0; i<data\&.size(); i++)
+1028               rb(data[i]);
+1029 
+1030             break;
+1031           }
+1032 
+1033           // Read a double-precision variable
+1034         case DOUBLE:
+1035           {
+1036             std::vector<double> ddata;
+1037             std::vector<float> & data = _data[zone][var];
+1038 
+1039             data\&.clear();
+1040             data\&.resize (this->imax(zone));
+1041             ddata\&.resize (this->imax(zone));
+1042 
+1043             in\&.read ((char*) &ddata[0], LIBMESH_SIZEOF_DOUBLE*ddata\&.size());
+1044 
+1045             for (unsigned int i=0; i<data\&.size(); i++)
+1046               data[i] = rb(ddata[i]);
+1047 
+1048             break;
+1049           }
+1050 
+1051         default:
+1052           {
+1053             libMesh::err << "ERROR: Unsupported data type: "
+1054                          << this->var_type(var)
+1055                          << std::endl;
+1056             libmesh_error();
+1057           }
+1058         }
+1059     }
+1060 
+1061   // Read the connectivity
+1062   {
+1063     // Get the connectivity repetition flag
+1064     int rep=0;
+1065     in\&.read ((char*) &rep, LIBMESH_SIZEOF_INT);
+1066     rb(rep);
+1067 
+1068     if (rep == 1 && this->n_zones() > 1)
+1069       {
+1070         libMesh::err << "ERROR:  Repeated connectivity not supported!"
+1071                      << std::endl;
+1072         libmesh_error();
+1073       }
+1074 
+1075     // Read the connectivity
+1076     else
+1077       {
+1078         libmesh_assert_less (zone, _conn\&.size());
+1079         libmesh_assert_less (this->kmax(zone), 4);
+1080 
+1081         _conn[zone]\&.resize (this->jmax(zone)*NNodes[this->kmax(zone)]);
+1082 
+1083         in\&.read ((char*) &_conn[zone][0], LIBMESH_SIZEOF_INT*_conn[zone]\&.size());
+1084 
+1085         for (unsigned int i=0; i<_conn[zone]\&.size(); i++)
+1086           rb(_conn[zone][i]);
+1087       }
+1088   }
+1089 }
+.fi
+.SS "void libMesh::PltLoader::read_fepoint_data (std::istream &in, const unsigned intzn)\fC [private]\fP"
+Read data for the zth zone in FEPOINT unstructured format\&. 
+.PP
+Definition at line 1093 of file plt_loader_read\&.C\&.
+.PP
+References _conn, _data, buf, data, DOUBLE, libMesh::err, FLOAT, imax(), is_foreign(), jmax(), kmax(), libMesh::libmesh_assert(), n_vars(), NNodes, and var_type()\&.
+.PP
+Referenced by read_data()\&.
+.PP
+.nf
+1094 {
+1095   libmesh_assert (in\&.good());
+1096 
+1097   // A byte-reverser in case the data is foreign
+1098   Utility::ReverseBytes rb(this->is_foreign());
+1099 
+1100   // First allocate space
+1101   for (unsigned int var=0; var<this->n_vars(); var++)
+1102     {
+1103       std::vector<float> & data = _data[zone][var];
+1104 
+1105       data\&.clear();
+1106       data\&.reserve (this->imax(zone));
+1107     }
+1108 
+1109 
+1110   for (unsigned int i=0; i<this->imax(zone); i++)
+1111     for (unsigned int var=0; var<this->n_vars(); var++)
+1112       if (this->var_type(var) == FLOAT)
+1113         {
+1114           float f = 0\&.;
+1115 
+1116           libmesh_assert (in\&.good());
+1117 
+1118           in\&.read (buf, LIBMESH_SIZEOF_FLOAT);
+1119           std::memcpy  (&f, buf, LIBMESH_SIZEOF_FLOAT);
+1120           rb(f);
+1121 
+1122           _data[zone][var]\&.push_back(f);
+1123         }
+1124       else if (this->var_type(var) == DOUBLE)
+1125         {
+1126           double d = 0\&.;
+1127 
+1128           libmesh_assert (in\&.good());
+1129 
+1130           in\&.read (buf, LIBMESH_SIZEOF_DOUBLE);
+1131           std::memcpy  (&d, buf, LIBMESH_SIZEOF_DOUBLE);
+1132           rb(d);
+1133 
+1134           _data[zone][var]\&.push_back(d);
+1135         }
+1136       else
+1137         {
+1138           libMesh::err << "ERROR: unsupported data type: "
+1139                        << this->var_type(var)
+1140                        << std::endl;
+1141           libmesh_error();
+1142         }
+1143 
+1144   // Read the connectivity
+1145   {
+1146     // Get the connectivity repetition flag
+1147     int rep=0;
+1148 
+1149     in\&.read ((char*) &rep, LIBMESH_SIZEOF_INT);
+1150     rb(rep);
+1151 
+1152     if (rep == 1)
+1153       {
+1154         libMesh::err << "ERROR:  Repeated connectivity not supported!"
+1155                      << std::endl;
+1156         libmesh_error();
+1157       }
+1158 
+1159     // Read the connectivity
+1160     else
+1161       {
+1162         libmesh_assert_less (zone, _conn\&.size());
+1163         libmesh_assert_less (this->kmax(zone), 4);
+1164 
+1165         _conn[zone]\&.resize (this->jmax(zone)*NNodes[this->kmax(zone)]);
+1166 
+1167         in\&.read ((char*) &_conn[zone][0], LIBMESH_SIZEOF_INT*_conn[zone]\&.size());
+1168 
+1169         for (unsigned int i=0; i<_conn[zone]\&.size(); i++)
+1170           rb(_conn[zone][i]);
+1171       }
+1172   }
+1173 }
+.fi
+.SS "void libMesh::PltLoader::read_header (std::istream &in)\fC [private]\fP"
+Read the header of the binary file\&. 
+.PP
+Definition at line 66 of file plt_loader_read\&.C\&.
+.PP
+References buf, libMesh::err, imax(), is_foreign(), jmax(), kmax(), libMesh::libmesh_assert(), n_elem(), n_nodes(), n_vars(), n_zones(), libMesh::Quality::name(), ORDERED, libMesh::out, set_n_vars(), set_n_zones(), title(), var_name(), var_type(), verbose(), version(), zone_name(), zone_pack(), and zone_type()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+67 {
+68   libmesh_assert (in\&.good());
+69 
+70   //----------------------------------------------------
+71   // Read the TECPLOT header
+72 
+73   // Read the version number
+74   {
+75     in\&.read (buf, 8);
+76 
+77     // Using erase for GCC 2\&.95\&.3
+78     this->version()\&.erase();
+79 
+80     for (unsigned int i=0; i<8; i++)
+81       this->version() += buf[i];
+82 
+83     if (this->verbose())
+84       libMesh::out << "Tecplot Version: "
+85                    << this->version()
+86                    << std::endl;
+87   }
+88 
+89 
+90   //----------------------------------------------------
+91   // Read plt files written by older versions of Tecplot
+92   if (this->version()\&.rfind("V7") < this->version()\&.size())
+93     {
+94       if (this->verbose())
+95         libMesh::out << "Reading legacy \&.plt format (<= v9) \&.\&.\&."
+96                      << std::endl;
+97 
+98       // Read the value of 1 to determine byte ordering
+99       {
+100         int one = 0;
+101         in\&.read (buf, LIBMESH_SIZEOF_INT);
+102         std::memcpy  (&one, buf, LIBMESH_SIZEOF_INT);
+103 
+104         if (one != 1)
+105           {
+106             if (this->verbose())
+107               libMesh::out << "Tecplot data is Foreign!"
+108                            << std::endl;
+109             this->is_foreign() = true;
+110 
+111             // Make sure one reversed is one
+112             Utility::ReverseBytes rb(this->is_foreign());
+113             libmesh_assert_equal_to (rb(one), 1);
+114           }
+115       }
+116 
+117       // A byte-reverser in case the data is foreign
+118       Utility::ReverseBytes rb(this->is_foreign());
+119 
+120       // Read the title
+121       {
+122         int i=0;
+123 
+124         // Using erase for GCC 2\&.95\&.3
+125         this->title()\&.erase();
+126 
+127         do
+128           {
+129             in\&.read (buf, LIBMESH_SIZEOF_INT);
+130             std::memcpy  (&i, buf, LIBMESH_SIZEOF_INT);
+131             rb(i);
+132 
+133             // Don't add trailing \0
+134             if (i)
+135               this->title() += static_cast<char>(i);
+136           }
+137         while (i);
+138       }
+139 
+140       // Read the number of variables in the data set
+141       {
+142         int nv;
+143         in\&.read (buf, LIBMESH_SIZEOF_INT);
+144         std::memcpy  (&nv, buf, LIBMESH_SIZEOF_INT);
+145         rb(nv);
+146 
+147         this->set_n_vars (nv);
+148       }
+149 
+150       // Read the variable names
+151       for (unsigned int v=0; v<this->n_vars(); v++)
+152         {
+153           int i=0;
+154 
+155           // Using erase for GCC 2\&.95\&.3
+156           this->var_name(v)\&.erase();
+157 
+158           do
+159             {
+160               in\&.read (buf, LIBMESH_SIZEOF_INT);
+161               std::memcpy  (&i, buf, LIBMESH_SIZEOF_INT);
+162               rb(i);
+163 
+164               // Don't add trailing \0
+165               if (i)
+166                 this->var_name(v) += static_cast<char>(i);
+167             }
+168           while (i);
+169         }
+170 
+171 
+172 
+173       // Read zones from the header\&.
+174       // Continue reading until the end-of-header
+175       // marker (357\&.) is found\&.
+176       int nz=0;
+177       std::vector<std::string> zname;
+178       std::vector<int>         ztype, zimax, zjmax, zkmax;
+179 
+180       {
+181         float f=0\&.;
+182 
+183         do
+184           {
+185             // find the next Zone marker
+186             do
+187               {
+188                 f = 0\&.;
+189                 in\&.read (buf, LIBMESH_SIZEOF_FLOAT);
+190                 std::memcpy  (&f, buf, LIBMESH_SIZEOF_FLOAT);
+191                 rb(f);
+192               }
+193             while ((f != 299\&.) &&
+194                    (f != 357\&.) &&
+195                    in\&.good());
+196 
+197 
+198             // Did we overrun the file?
+199             if (!in\&.good())
+200               {
+201                 libMesh::err << "ERROR: Unexpected end-of-file!"
+202                              << std::endl;
+203                 libmesh_error();
+204               }
+205 
+206             // Found a Zone marker
+207             else if (f == 299\&.)
+208               {
+209                 // Incriment the Zone counter
+210                 nz++;
+211 
+212                 // Read the zone name
+213                 {
+214                   int i=0;
+215                   std::string name;
+216 
+217                   do
+218                     {
+219                       in\&.read (buf, LIBMESH_SIZEOF_INT);
+220                       std::memcpy  (&i, buf, LIBMESH_SIZEOF_INT);
+221                       rb(i);
+222 
+223                       // Don't add trailing \0
+224                       if (i)
+225                         name += static_cast<char>(i);
+226                     }
+227                   while (i);
+228 
+229                   zname\&.push_back(name);
+230                 }
+231 
+232                 // Read the zone format
+233                 {
+234                   int zt;
+235                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+236                   std::memcpy  (&zt, buf, LIBMESH_SIZEOF_INT);
+237                   rb(zt);
+238 
+239                   ztype\&.push_back(zt);
+240                   //libMesh::out << "zone type=" << ztype\&.back() << std::endl;
+241                 }
+242 
+243                 // Read the zone color
+244                 {
+245                   int zc=0;
+246 
+247                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+248                   std::memcpy  (&zc, buf, LIBMESH_SIZEOF_INT);
+249                   rb(zc);
+250 
+251                   //libMesh::out << "zone color=" << zc << std::endl;
+252                 }
+253 
+254                 // Read in the block dimensions
+255                 {
+256                   int
+257                     i_max=0,
+258                     j_max=0,
+259                     k_max=0;
+260 
+261                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+262                   std::memcpy  (&i_max, buf, LIBMESH_SIZEOF_INT);
+263                   rb(i_max);
+264 
+265                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+266                   std::memcpy  (&j_max, buf, LIBMESH_SIZEOF_INT);
+267                   rb(j_max);
+268 
+269                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+270                   std::memcpy  (&k_max, buf, LIBMESH_SIZEOF_INT);
+271                   rb(k_max);
+272 
+273                   zimax\&.push_back (i_max);
+274                   zjmax\&.push_back (j_max);
+275                   zkmax\&.push_back (k_max);
+276                 }
+277               } // else if (f == 299\&.)
+278           }
+279         while ((f != 357\&.) && in\&.good());
+280       }
+281 
+282       // Set the header data
+283       this->set_n_zones (nz);
+284 
+285       for (unsigned int z=0; z<this->n_zones(); z++)
+286         {
+287           this->zone_type(z) = ztype[z];
+288           this->zone_name(z) = zname[z];
+289           this->imax(z)      = zimax[z];
+290           this->jmax(z)      = zjmax[z];
+291           this->kmax(z)      = zkmax[z];
+292         }
+293     }
+294 
+295 
+296   //----------------------------------------------------
+297   // Read plt files written by newer versions of Tecplot
+298   else if (this->version()\&.rfind("V1") < this->version()\&.size())
+299     {
+300       if (this->verbose())
+301         libMesh::out << "Reading new \&.plt format (>= v10)\&.\&.\&."
+302                      << std::endl;
+303 
+304       // Read the value of 1 to determine byte ordering
+305       {
+306         int one = 0;
+307 
+308         in\&.read (buf, LIBMESH_SIZEOF_INT);
+309         std::memcpy  (&one, buf, LIBMESH_SIZEOF_INT);
+310 
+311         if (one != 1)
+312           {
+313             if (this->verbose())
+314               libMesh::err << "Tecplot data is Foreign!"
+315                            << std::endl;
+316             this->is_foreign() = true;
+317 
+318             // Make sure one reversed is one
+319             Utility::ReverseBytes rb(this->is_foreign());
+320             libmesh_assert_equal_to (rb(one), 1);
+321           }
+322       }
+323 
+324       // A byte-reverser in case the data is foreign
+325       Utility::ReverseBytes rb(this->is_foreign());
+326 
+327       // Read the title
+328       {
+329         int i=0;
+330 
+331         // Using erase() for GCC 2\&.95\&.3
+332         this->title()\&.erase();
+333         do
+334           {
+335             in\&.read (buf, LIBMESH_SIZEOF_INT);
+336             std::memcpy  (&i, buf, LIBMESH_SIZEOF_INT);
+337             rb(i);
+338 
+339             // Don't add trailing \0
+340             if (i)
+341               this->title() += static_cast<char>(i);
+342           }
+343         while (i);
+344       }
+345 
+346       // Read the number of variables in the data set
+347       {
+348         int nv;
+349         in\&.read (buf, LIBMESH_SIZEOF_INT);
+350         std::memcpy  (&nv, buf, LIBMESH_SIZEOF_INT);
+351         rb(nv);
+352 
+353         this->set_n_vars (nv);
+354       }
+355 
+356       // Read the variable names
+357       for (unsigned int v=0; v<this->n_vars(); v++)
+358         {
+359           int i=0;
+360 
+361           // Using erase() for GCC 2\&.95\&.3
+362           this->var_name(v)\&.erase();
+363 
+364           do
+365             {
+366               in\&.read (buf, LIBMESH_SIZEOF_INT);
+367               std::memcpy  (&i, buf, LIBMESH_SIZEOF_INT);
+368               rb(i);
+369 
+370               // Don't add trailing \0
+371               if (i)
+372                 this->var_name(v) += static_cast<char>(i);
+373             }
+374           while (i);
+375         }
+376 
+377 
+378 
+379       // Read zones from the header\&.
+380       // Continue reading until the end-of-header
+381       // marker (357\&.) is found\&.
+382       int nz=0;
+383       std::vector<std::string> zname;
+384       std::vector<int>         zpack, ztype, zimax, zjmax, zkmax;
+385 
+386       {
+387         float f=0\&.;
+388 
+389         do
+390           {
+391             // find the next Zone marker
+392             do
+393               {
+394                 f = 0\&.;
+395                 in\&.read (buf, LIBMESH_SIZEOF_FLOAT);
+396                 std::memcpy  (&f, buf, LIBMESH_SIZEOF_FLOAT);
+397                 rb(f);
+398               }
+399             while ((f != 299\&.) &&
+400                    (f != 357\&.) &&
+401                    in\&.good());
+402 
+403 
+404             // Did we overrun the file?
+405             if (!in\&.good())
+406               {
+407                 libMesh::err << "ERROR: Unexpected end-of-file!"
+408                              << std::endl;
+409                 libmesh_error();
+410               }
+411 
+412             // Found a Zone marker
+413             else if (f == 299\&.)
+414               {
+415                 // Incriment the Zone counter
+416                 nz++;
+417 
+418                 // Read the zone name
+419                 {
+420                   int i=0;
+421                   std::string name;
+422 
+423                   do
+424                     {
+425                       in\&.read (buf, LIBMESH_SIZEOF_INT);
+426                       std::memcpy  (&i, buf, LIBMESH_SIZEOF_INT);
+427                       rb(i);
+428 
+429                       // Don't add trailing \0
+430                       if (i)
+431                         name += static_cast<char>(i);
+432                     }
+433                   while (i);
+434 
+435                   zname\&.push_back(name);
+436                 }
+437 
+438                 // Read the zone color
+439                 {
+440                   int zc=0;
+441                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+442                   std::memcpy  (&zc, buf, LIBMESH_SIZEOF_INT);
+443                   rb(zc);
+444                 }
+445 
+446                 // Read the zone format
+447                 {
+448                   int zt;
+449                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+450                   std::memcpy  (&zt, buf, LIBMESH_SIZEOF_INT);
+451                   rb(zt);
+452 
+453                   ztype\&.push_back(zt);
+454                 }
+455 
+456                 // Read the data packing flag
+457                 {
+458                   int dp=0;
+459                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+460                   std::memcpy (&dp, buf, LIBMESH_SIZEOF_INT);
+461                   rb(dp);
+462 
+463                   zpack\&.push_back (dp);
+464                 }
+465 
+466                 // Will we specify the variable location?
+467                 {
+468                   int svl=0;
+469                   int  vl=0;
+470                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+471                   std::memcpy  (&svl, buf, LIBMESH_SIZEOF_INT);
+472                   rb(svl);
+473 
+474                   if (svl)
+475                     for (unsigned int v=0; v<this->n_vars(); v++)
+476                       {
+477                         in\&.read (buf, LIBMESH_SIZEOF_INT);
+478                         std::memcpy  (&vl, buf, LIBMESH_SIZEOF_INT);
+479                         rb(vl);
+480                         libmesh_assert_equal_to (vl, 0); // Only know about node-based data
+481                         // right now
+482                       }
+483 
+484                 }
+485 
+486                 // Get the number of user-defined face-neighbors
+487                 {
+488                   int fn=0;
+489                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+490                   std::memcpy  (&fn, buf, LIBMESH_SIZEOF_INT);
+491                   rb(fn);
+492                 }
+493 
+494                 // Read in the block dimensions
+495                 {
+496                   if (ztype\&.back() != ORDERED)
+497                     {
+498                       int np=0, ne=0;
+499 
+500                       in\&.read (buf, LIBMESH_SIZEOF_INT);
+501                       std::memcpy  (&np, buf, LIBMESH_SIZEOF_INT);
+502                       rb(np);
+503 
+504                       in\&.read (buf, LIBMESH_SIZEOF_INT);
+505                       std::memcpy  (&ne, buf, LIBMESH_SIZEOF_INT);
+506                       rb(ne);
+507 
+508                       zimax\&.push_back (np);
+509                       zjmax\&.push_back (ne);
+510                       zjmax\&.push_back (0);
+511                     }
+512 
+513                   int
+514                     i_max=0,
+515                     j_max=0,
+516                     k_max=0;
+517 
+518                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+519                   std::memcpy  (&i_max, buf, LIBMESH_SIZEOF_INT);
+520                   rb(i_max);
+521 
+522                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+523                   std::memcpy  (&j_max, buf, LIBMESH_SIZEOF_INT);
+524                   rb(j_max);
+525 
+526                   in\&.read (buf, LIBMESH_SIZEOF_INT);
+527                   std::memcpy  (&k_max, buf, LIBMESH_SIZEOF_INT);
+528                   rb(k_max);
+529 
+530                   // These are only useful for orderd data\&.  Otherwise
+531                   // we grabbed the relevant values above\&.
+532                   if (ztype\&.back() != ORDERED)
+533                     {
+534                       zimax\&.push_back (i_max);
+535                       zjmax\&.push_back (j_max);
+536                       zkmax\&.push_back (k_max);
+537                     }
+538                 }
+539               } // else if (f == 299\&.)
+540           }
+541         while ((f != 357\&.) && in\&.good());
+542       }
+543 
+544       // Set the header data
+545       this->set_n_zones (nz);
+546 
+547       for (unsigned int z=0; z<this->n_zones(); z++)
+548         {
+549           this->zone_type(z) = ztype[z];
+550           this->zone_name(z) = zname[z];
+551           this->zone_pack(z) = zpack[z];
+552           this->imax(z)      = zimax[z];
+553           this->jmax(z)      = zjmax[z];
+554           this->kmax(z)      = zkmax[z];
+555         }
+556     }
+557 
+558 
+559 
+560   //----------------------------------------------------
+561   // Unrecognized Tecplot Version!
+562   else
+563     {
+564       libMesh::err << "ERROR:  This plot file was written by an unrecognized version of Tecplot!:"
+565                    << std::endl
+566                    << this->version()
+567                    << std::endl;
+568       libmesh_error();
+569     }
+570 
+571 
+572 
+573 
+574 
+575 
+576 
+577 
+578   // Print the data to the screen\&.
+579   if (this->verbose())
+580     {
+581       libMesh::out << "Tecplot Header: "
+582                    << this->title() << std::endl;
+583 
+584       libMesh::out << "Variables: ";
+585       for (unsigned int v=0; v<this->n_vars(); v++)
+586         libMesh::out << "\"" << this->var_name (v) << "\"" << " ";
+587       libMesh::out << std::endl;
+588 
+589       libMesh::out << "Variable Types: ";
+590       for (unsigned int v=0; v<this->n_vars(); v++)
+591         libMesh::out << this->var_type (v) << " ";
+592       libMesh::out << std::endl;
+593 
+594       libMesh::out << "Zone Names: ";
+595       for (unsigned int z=0; z<this->n_zones(); z++)
+596         libMesh::out << "\"" << this->zone_name (z) << "\"" << " ";
+597       libMesh::out << std::endl;
+598 
+599       libMesh::out << "Zone Types: ";
+600       for (unsigned int z=0; z<this->n_zones(); z++)
+601         {
+602           libMesh::out << this->zone_type (z) << " ";
+603 
+604           if (this->zone_type (z) != ORDERED)
+605             libMesh::out << "(" << this->n_nodes(z) << "," << this->n_elem(z) << ") ";
+606         }
+607       libMesh::out << std::endl;
+608 
+609       libMesh::out << "Zone Dimensions: " << std::endl;
+610       for (unsigned int z=0; z<this->n_zones(); z++)
+611         libMesh::out << "  ("
+612                      << this->imax(z) << ","
+613                      << this->jmax(z) << ","
+614                      << this->kmax(z) << ")"
+615                      << std::endl;
+616     }
+617 }
+.fi
+.SS "void libMesh::PltLoader::read_point_data (std::istream &in, const unsigned intzn)\fC [private]\fP"
+Read data for the zth zone in POINT structured format\&. 
+.PP
+Definition at line 946 of file plt_loader_read\&.C\&.
+.PP
+References _data, buf, data, DOUBLE, libMesh::err, FLOAT, imax(), is_foreign(), jmax(), kmax(), libMesh::libmesh_assert(), n_vars(), and var_type()\&.
+.PP
+Referenced by read_data()\&.
+.PP
+.nf
+947 {
+948   libmesh_assert (in\&.good());
+949 
+950   // A byte-reverser in case the data is foreign
+951   Utility::ReverseBytes rb(this->is_foreign());
+952 
+953   // First allocate space
+954   for (unsigned int var=0; var<this->n_vars(); var++)
+955     {
+956       std::vector<float> & data = _data[zone][var];
+957 
+958       data\&.clear();
+959       data\&.reserve (this->imax(zone)*
+960                     this->jmax(zone)*
+961                     this->kmax(zone));
+962     }
+963 
+964 
+965   for (unsigned int k=0; k<this->kmax(zone); k++)
+966     for (unsigned int j=0; j<this->jmax(zone); j++)
+967       for (unsigned int i=0; i<this->imax(zone); i++)
+968         for (unsigned int var=0; var<this->n_vars(); var++)
+969           if (this->var_type(var) == FLOAT)
+970             {
+971               float f = 0\&.;
+972 
+973               libmesh_assert (in\&.good());
+974 
+975               in\&.read (buf, LIBMESH_SIZEOF_FLOAT);
+976               std::memcpy  (&f, buf, LIBMESH_SIZEOF_FLOAT);
+977               rb(f);
+978 
+979               _data[zone][var]\&.push_back(f);
+980             }
+981           else if (this->var_type(var) == DOUBLE)
+982             {
+983               double d = 0\&.;
+984 
+985               libmesh_assert (in\&.good());
+986 
+987               in\&.read (buf, LIBMESH_SIZEOF_DOUBLE);
+988               std::memcpy  (&d, buf, LIBMESH_SIZEOF_DOUBLE);
+989               rb(d);
+990 
+991               _data[zone][var]\&.push_back(d);
+992             }
+993           else
+994             {
+995               libMesh::err << "ERROR: unsupported data type: "
+996                            << this->var_type(var)
+997                            << std::endl;
+998               libmesh_error();
+999             }
+1000 }
+.fi
+.SS "void libMesh::PltLoader::set_n_vars (const unsigned intnv)\fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of variables in the data set\&. 
+.RE
+.PP
+
+.PP
+Definition at line 60 of file plt_loader\&.C\&.
+.PP
+References _data, _n_vars, _var_names, _var_types, n_vars(), n_zones(), and libMesh::resize()\&.
+.PP
+Referenced by read_header()\&.
+.PP
+.nf
+61 {
+62   _n_vars = nv;
+63 
+64   _var_types\&.resize (this->n_vars());
+65   _var_names\&.resize (this->n_vars());
+66 
+67   // Default to float data
+68   std::fill (_var_types\&.begin(), _var_types\&.end(), 1);
+69 
+70   // If the number of zones is set, resize the data\&.
+71   if (this->n_zones())
+72     {
+73       _data\&.resize  (this->n_zones());
+74 
+75       for (unsigned int z=0; z<this->n_zones(); z++)
+76         _data[z]\&.resize  (this->n_vars());
+77     }
+78 }
+.fi
+.SS "void libMesh::PltLoader::set_n_zones (const unsigned intnz)\fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of zones\&. 
+.RE
+.PP
+
+.PP
+Definition at line 82 of file plt_loader\&.C\&.
+.PP
+References _conn, _data, _imax, _jmax, _kmax, _n_zones, _zone_names, _zone_pack, _zone_types, n_vars(), n_zones(), and libMesh::resize()\&.
+.PP
+Referenced by read_header()\&.
+.PP
+.nf
+83 {
+84   _n_zones = nz;
+85 
+86   _zone_types\&.resize (this->n_zones());
+87   _zone_names\&.resize (this->n_zones());
+88   _zone_pack\&.resize  (this->n_zones());
+89 
+90   _imax\&.resize (this->n_zones());
+91   _jmax\&.resize (this->n_zones());
+92   _kmax\&.resize (this->n_zones());
+93 
+94   _data\&.resize (this->n_zones());
+95   _conn\&.resize        (this->n_zones());
+96 
+97   // If the number of variables are set, resize the data\&.
+98   if (this->n_vars())
+99     for (unsigned int z=0; z<this->n_zones(); z++)
+100       _data[z]\&.resize (this->n_vars());
+101 }
+.fi
+.SS "const std::string& libMesh::PltLoader::title () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the data set title 
+.RE
+.PP
+
+.PP
+Definition at line 173 of file plt_loader\&.h\&.
+.PP
+References _title\&.
+.PP
+Referenced by read_header(), and write_dat()\&.
+.PP
+.nf
+173 { return _title; }
+.fi
+.SS "std::string& libMesh::PltLoader::title ()\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the data set title 
+.RE
+.PP
+
+.PP
+Definition at line 305 of file plt_loader\&.h\&.
+.PP
+References _title\&.
+.PP
+.nf
+305 { return _title; }
+.fi
+.SS "const std::string & libMesh::PltLoader::var_name (const unsigned intv) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the name of variable \fCv\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 477 of file plt_loader\&.h\&.
+.PP
+References _var_names, and n_vars()\&.
+.PP
+Referenced by read_header(), and write_dat()\&.
+.PP
+.nf
+478 {
+479   libmesh_assert_less (v, this->n_vars());
+480   libmesh_assert_less (v, _var_names\&.size());
+481   libmesh_assert_equal_to (this->n_vars(), _var_names\&.size());
+482 
+483   return _var_names[v];
+484 }
+.fi
+.SS "std::string & libMesh::PltLoader::var_name (const unsigned intv)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the name of variable \fCv\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 489 of file plt_loader\&.h\&.
+.PP
+References _var_names, and n_vars()\&.
+.PP
+.nf
+490 {
+491   libmesh_assert_less (v, this->n_vars());
+492   libmesh_assert_less (v, _var_names\&.size());
+493   libmesh_assert_equal_to (this->n_vars(), _var_names\&.size());
+494 
+495   return _var_names[v];
+496 }
+.fi
+.SS "unsigned int libMesh::PltLoader::var_type (const unsigned intv) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the type of variable \fCv\fP 
+.RE
+.PP
+
+.PP
+Definition at line 501 of file plt_loader\&.h\&.
+.PP
+References _var_types, and n_vars()\&.
+.PP
+Referenced by read_block_data(), read_data(), read_feblock_data(), read_fepoint_data(), read_header(), and read_point_data()\&.
+.PP
+.nf
+502 {
+503   libmesh_assert_less (v, this->n_vars());
+504   libmesh_assert_less (v, _var_types\&.size());
+505   libmesh_assert_equal_to (this->n_vars(), _var_types\&.size());
+506 
+507   return _var_types[v];
+508 }
+.fi
+.SS "unsigned int & libMesh::PltLoader::var_type (const unsigned intv)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the type of variable \fCv\fP 
+.RE
+.PP
+
+.PP
+Definition at line 513 of file plt_loader\&.h\&.
+.PP
+References _var_types, and n_vars()\&.
+.PP
+.nf
+514 {
+515   libmesh_assert_less (v, this->n_vars());
+516   libmesh_assert_less (v, _var_types\&.size());
+517   libmesh_assert_equal_to (this->n_vars(), _var_types\&.size());
+518 
+519   return _var_types[v];
+520 }
+.fi
+.SS "bool libMesh::PltLoader::verbose () const\fC [inline]\fP"
+Returns the verbosity\&. 
+.PP
+Definition at line 68 of file plt_loader\&.h\&.
+.PP
+References _verbose\&.
+.PP
+Referenced by read(), read_data(), and read_header()\&.
+.PP
+.nf
+68 { return _verbose; }
+.fi
+.SS "const std::string& libMesh::PltLoader::version () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the Tecplot version number string\&. This identifies the version of Tecplot (or preplot) that wrote the binary file\&. Currently, \fBPltLoader\fP understands versions '#!TDV7X ' and '#!TDV1XX' 
+.RE
+.PP
+
+.PP
+Definition at line 161 of file plt_loader\&.h\&.
+.PP
+References _version\&.
+.PP
+Referenced by read_data(), and read_header()\&.
+.PP
+.nf
+161 { return _version; }
+.fi
+.SS "std::string& libMesh::PltLoader::version ()\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the Tecplot version number string\&. 
+.RE
+.PP
+
+.PP
+Definition at line 293 of file plt_loader\&.h\&.
+.PP
+References _version\&.
+.PP
+.nf
+293 { return _version; }
+.fi
+.SS "void libMesh::PltLoader::write_dat (const std::string &name, const unsigned intversion = \fC10\fP) const"
+Writes an ASCII Tecplot file\&. The optional parameter \fCversion\fP specifies the version format to write\&. 
+.PP
+Definition at line 450 of file plt_loader_write\&.C\&.
+.PP
+References _data, BLOCK, libMesh::err, imax(), jmax(), kmax(), n_vars(), n_zones(), POINT, title(), var_name(), zone_name(), and zone_type()\&.
+.PP
+.nf
+452 {
+453   std::ofstream out_stream (name\&.c_str());
+454 
+455   out_stream << "TITLE=\""
+456              << this->title()
+457              << "\""
+458              << '\n';
+459 
+460   out_stream << "VARIABLES = ";
+461 
+462   for (unsigned int v=0; v<this->n_vars(); v++)
+463     out_stream << "\"" << this->var_name(v) << "\"\n";
+464 
+465   for (unsigned int z=0; z<this->n_zones(); z++)
+466     {
+467       out_stream << "ZONE T=\"" << this->zone_name(z) << "\"\n";
+468       out_stream << " I="  << this->imax(z)
+469                  << ", J=" << this->jmax(z)
+470                  << ", K=" << this->kmax(z);
+471 
+472       // Write BLOCK data for this zone
+473       if (this->zone_type(z) == BLOCK)
+474         {
+475           if (version_in < 10)
+476             {
+477               out_stream << ", F=BLOCK\n";
+478             }
+479           else
+480             {
+481               out_stream << ", ZONETYPE=Ordered\n"
+482                          << "DATAPACKING=BLOCK\n";
+483             }
+484 
+485           out_stream << "DT=(";
+486           for (unsigned int v=0; v<this->n_vars(); v++)
+487             out_stream << "SINGLE ";
+488           out_stream << ")\n";
+489 
+490           out_stream\&.precision(9);
+491 
+492           for (unsigned int v=0; v<this->n_vars(); v++)
+493             {
+494               unsigned int l=0;
+495 
+496               for (unsigned int k=0; k<this->kmax(z); k++)
+497                 for (unsigned int j=0; j<this->jmax(z); j++)
+498                   for (unsigned int i=0; i<this->imax(z); i++)
+499                     {
+500                       // GCC 2\&.95\&.3 has scientific in the ios class instead
+501                       // of in namespace std::
+502 #ifndef LIBMESH_BROKEN_IOSTREAM
+503                       out_stream << std::scientific
+504                                  << _data[z][v][l++] << " ";
+505 #else
+506                       out_stream << std::ios::scientific
+507                                  << _data[z][v][l++] << " ";
+508 #endif
+509                       // Throw in a newline every 5 entries to
+510                       // avoid really long lines\&.
+511                       if (l%5 == 0)
+512                         out_stream << '\n';
+513                     }
+514 
+515               if (l%5 != 0)
+516                 out_stream << '\n';
+517             }
+518         } // end if (this->zone_type(z) == BLOCK)
+519 
+520       // Write POINT data for this zone
+521       else if (this->zone_type(z) == POINT)
+522         {
+523           if (version_in < 10)
+524             {
+525               out_stream << ", F=POINT\n";
+526             }
+527           else
+528             {
+529               out_stream << ", ZONETYPE=Ordered\n"
+530                          << "DATAPACKING=POINT\n";
+531             }
+532 
+533           out_stream << "DT=(";
+534           for (unsigned int v=0; v<this->n_vars(); v++)
+535             out_stream << "SINGLE ";
+536           out_stream << ")\n";
+537 
+538           out_stream\&.precision(9);
+539 
+540           {
+541             unsigned int l=0;
+542 
+543             for (unsigned int k=0; k<this->kmax(z); k++)
+544               for (unsigned int j=0; j<this->jmax(z); j++)
+545                 for (unsigned int i=0; i<this->imax(z); i++)
+546                   {
+547                     for (unsigned int v=0; v<this->n_vars(); v++)
+548 
+549                       // GCC 2\&.95\&.3 has scientific in the ios class instead
+550                       // of in namespace std::
+551 #ifndef LIBMESH_BROKEN_IOSTREAM
+552                       out_stream << std::scientific
+553                                  << _data[z][v][l] << " ";
+554 #else
+555                     out_stream << std::ios::scientific
+556                                << _data[z][v][l] << " ";
+557 #endif
+558                     out_stream << '\n';
+559 
+560                     l++;
+561                   }
+562           }
+563         } // end else if (this->zone_type(z) == POINT)
+564 
+565       // Otherwise, unrecognized zone type
+566       else
+567         {
+568           libMesh::err << "Unrecognized zone type: ";
+569           libMesh::err << "this->zone_type(z)==" << this->zone_type(z) << std::endl;
+570           libmesh_error();
+571         }
+572     }
+573 }
+.fi
+.SS "const std::string & libMesh::PltLoader::zone_name (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the name of zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 549 of file plt_loader\&.h\&.
+.PP
+References _zone_names, and n_zones()\&.
+.PP
+Referenced by read_header(), and write_dat()\&.
+.PP
+.nf
+550 {
+551   libmesh_assert_less (z, this->n_zones());
+552   libmesh_assert_less (z, _zone_names\&.size());
+553   libmesh_assert_equal_to (this->n_zones(), _zone_names\&.size());
+554 
+555   return _zone_names[z];
+556 }
+.fi
+.SS "std::string & libMesh::PltLoader::zone_name (const unsigned intz)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the name of zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 561 of file plt_loader\&.h\&.
+.PP
+References _zone_names, and n_zones()\&.
+.PP
+.nf
+562 {
+563   libmesh_assert_less (z, this->n_zones());
+564   libmesh_assert_less (z, _zone_names\&.size());
+565   libmesh_assert_equal_to (this->n_zones(), _zone_names\&.size());
+566 
+567   return _zone_names[z];
+568 }
+.fi
+.SS "unsigned int libMesh::PltLoader::zone_pack (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the data packing flag for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 573 of file plt_loader\&.h\&.
+.PP
+References _zone_pack, and n_zones()\&.
+.PP
+Referenced by read_data(), and read_header()\&.
+.PP
+.nf
+574 {
+575   libmesh_assert_less (z, this->n_zones());
+576   libmesh_assert_less (z, _zone_pack\&.size());
+577   libmesh_assert_equal_to (this->n_zones(), _zone_pack\&.size());
+578 
+579   return _zone_pack[z];
+580 }
+.fi
+.SS "unsigned int & libMesh::PltLoader::zone_pack (const unsigned intz)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the data pack flag for zone \fCz\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 585 of file plt_loader\&.h\&.
+.PP
+References _zone_pack, and n_zones()\&.
+.PP
+.nf
+586 {
+587   libmesh_assert_less (z, this->n_zones());
+588   libmesh_assert_less (z, _zone_pack\&.size());
+589   libmesh_assert_equal_to (this->n_zones(), _zone_pack\&.size());
+590 
+591   return _zone_pack[z];
+592 }
+.fi
+.SS "unsigned int libMesh::PltLoader::zone_type (const unsigned intz) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the type of zone \fCz\fP 
+.RE
+.PP
+
+.PP
+Definition at line 525 of file plt_loader\&.h\&.
+.PP
+References _zone_types, and n_zones()\&.
+.PP
+Referenced by elem_type(), n_elem(), n_nodes(), read_data(), read_header(), and write_dat()\&.
+.PP
+.nf
+526 {
+527   libmesh_assert_less (z, this->n_zones());
+528   libmesh_assert_less (z, _zone_types\&.size());
+529   libmesh_assert_equal_to (this->n_zones(), _zone_types\&.size());
+530 
+531   return _zone_types[z];
+532 }
+.fi
+.SS "unsigned int & libMesh::PltLoader::zone_type (const unsigned intz)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the type of zone \fCz\fP 
+.RE
+.PP
+
+.PP
+Definition at line 537 of file plt_loader\&.h\&.
+.PP
+References _zone_types, and n_zones()\&.
+.PP
+.nf
+538 {
+539   libmesh_assert_less (z, this->n_zones());
+540   libmesh_assert_less (z, _zone_types\&.size());
+541   libmesh_assert_equal_to (this->n_zones(), _zone_types\&.size());
+542 
+543   return _zone_types[z];
+544 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<std::vector<int> > libMesh::PltLoader::_conn\fC [private]\fP"
+Vectors to hold the connectivity for each zone (only for unstructured files)\&. 
+.PP
+Definition at line 434 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), read_feblock_data(), read_fepoint_data(), and set_n_zones()\&.
+.SS "std::vector<std::vector<std::vector<float> > > libMesh::PltLoader::_data\fC [private]\fP"
+Vector to hold the data\&. 
+.PP
+Definition at line 428 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), get_data(), read_block_data(), read_feblock_data(), read_fepoint_data(), read_point_data(), set_n_vars(), set_n_zones(), and write_dat()\&.
+.SS "std::vector<unsigned int> libMesh::PltLoader::_imax\fC [private]\fP"
+The (imax,jmax,kmax) value for each zone\&. 
+.PP
+Definition at line 421 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), imax(), and set_n_zones()\&.
+.SS "bool libMesh::PltLoader::_is_foreign\fC [private]\fP"
+Is the data foreign? 
+.PP
+Definition at line 375 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), and is_foreign()\&.
+.SS "std::vector<unsigned int> libMesh::PltLoader::_jmax\fC [private]\fP"
+
+.PP
+Definition at line 422 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), jmax(), and set_n_zones()\&.
+.SS "std::vector<unsigned int> libMesh::PltLoader::_kmax\fC [private]\fP"
+
+.PP
+Definition at line 423 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), kmax(), and set_n_zones()\&.
+.SS "unsigned int libMesh::PltLoader::_n_vars\fC [private]\fP"
+The number of variables in the data set\&. 
+.PP
+Definition at line 385 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), n_vars(), and set_n_vars()\&.
+.SS "unsigned int libMesh::PltLoader::_n_zones\fC [private]\fP"
+The number of zones\&. 
+.PP
+Definition at line 401 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), n_zones(), and set_n_zones()\&.
+.SS "std::string libMesh::PltLoader::_title\fC [private]\fP"
+The Tecplot data set title\&. 
+.PP
+Definition at line 380 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), and title()\&.
+.SS "std::vector<std::string> libMesh::PltLoader::_var_names\fC [private]\fP"
+The name for each variable\&. 
+.PP
+Definition at line 390 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), set_n_vars(), and var_name()\&.
+.SS "std::vector<unsigned int> libMesh::PltLoader::_var_types\fC [private]\fP"
+The type of each variable\&. Must be one of the enumerated \fCDataType\fP types\&. 
+.PP
+Definition at line 396 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), set_n_vars(), and var_type()\&.
+.SS "const bool libMesh::PltLoader::_verbose\fC [private]\fP"
+Verbosity 
+.PP
+Definition at line 365 of file plt_loader\&.h\&.
+.PP
+Referenced by verbose()\&.
+.SS "std::string libMesh::PltLoader::_version\fC [private]\fP"
+The Tecplot Version number string\&. 
+.PP
+Definition at line 370 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), and version()\&.
+.SS "std::vector<std::string> libMesh::PltLoader::_zone_names\fC [private]\fP"
+The name of each zone\&. 
+.PP
+Definition at line 411 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), set_n_zones(), and zone_name()\&.
+.SS "std::vector<unsigned int> libMesh::PltLoader::_zone_pack\fC [private]\fP"
+The data packing for each zone (new version only) 
+.PP
+Definition at line 416 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), set_n_zones(), and zone_pack()\&.
+.SS "std::vector<unsigned int> libMesh::PltLoader::_zone_types\fC [private]\fP"
+The type of each zone\&. 
+.PP
+Definition at line 406 of file plt_loader\&.h\&.
+.PP
+Referenced by clear(), set_n_zones(), and zone_type()\&.
+.SS "char libMesh::PltLoader::buf[512]\fC [mutable]\fP, \fC [private]\fP"
+Scratch data & relevant sizes\&. 
+.PP
+Definition at line 439 of file plt_loader\&.h\&.
+.PP
+Referenced by read_data(), read_fepoint_data(), read_header(), and read_point_data()\&.
+.SS "const unsigned int libMesh::PltLoader::NNodes = {3, 4, 4, 8}\fC [static]\fP"
+Enum defining the number of nodes for each element type\&. 
+.PP
+Definition at line 248 of file plt_loader\&.h\&.
+.PP
+Referenced by read_feblock_data(), and read_fepoint_data()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

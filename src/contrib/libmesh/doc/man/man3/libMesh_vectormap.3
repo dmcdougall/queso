@@ -1,0 +1,242 @@
+.TH "libMesh::vectormap< Key, Tp >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::vectormap< Key, Tp > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <vectormap\&.h>\fP
+.PP
+Inherits vector< std::pair< Key, Tp > >\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBFirstCompare\fP"
+.br
+.ti -1c
+.RI "struct \fBFirstOrder\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef Key \fBkey_type\fP"
+.br
+.ti -1c
+.RI "typedef Tp \fBmapped_type\fP"
+.br
+.ti -1c
+.RI "typedef std::pair< Key, Tp > \fBvalue_type\fP"
+.br
+.ti -1c
+.RI "typedef std::vector< \fBvalue_type\fP > \fBvector_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBvectormap\fP ()"
+.br
+.ti -1c
+.RI "\fBvectormap\fP (const \fBvectormap\fP< Key, Tp > &other)"
+.br
+.ti -1c
+.RI "void \fBinsert\fP (const \fBvalue_type\fP &\fBx\fP)"
+.br
+.ti -1c
+.RI "void \fBsort\fP ()"
+.br
+.ti -1c
+.RI "const Tp & \fBoperator[]\fP (const \fBkey_type\fP &key) const "
+.br
+.ti -1c
+.RI "unsigned int \fBcount\fP (const \fBkey_type\fP &key) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_sorted\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Key, typename Tp>class libMesh::vectormap< Key, Tp >"
+This \fCvectormap\fP templated class is intended to provide the performance characteristics of a sorted std::vector with an interface more closely resembling that of a std::map, for use in particular when memory is tight\&.
+.PP
+This class is limited in its applicability\&. The typical use case is:
+.PP
+.PP
+.nf
+vectormap<KeyType,ValType> vmap;
+for ( ; ;)
+vmap.insert (std::make_pair(key,val));
+
+val1 = vmap[key1];
+val2 = vmap[key2];
+.fi
+.PP
+.PP
+Note in particular the two-phase usage\&. It is not advised to do intermediate insert/lookups, as each time an insertion is done the sort is invalidated, and must be reperformed\&. Additionally, during the insersion phase, there is no accounting for duplicate keys\&. Each insertion is accepted regardless of key value, and then duplicate keys are removed later\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+
+.PP
+Definition at line 61 of file vectormap\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename Key, typename Tp> typedef Key \fBlibMesh::vectormap\fP< Key, Tp >::\fBkey_type\fP"
+
+.PP
+Definition at line 66 of file vectormap\&.h\&.
+.SS "template<typename Key, typename Tp> typedef Tp \fBlibMesh::vectormap\fP< Key, Tp >::\fBmapped_type\fP"
+
+.PP
+Definition at line 67 of file vectormap\&.h\&.
+.SS "template<typename Key, typename Tp> typedef std::pair<Key, Tp> \fBlibMesh::vectormap\fP< Key, Tp >::\fBvalue_type\fP"
+
+.PP
+Definition at line 68 of file vectormap\&.h\&.
+.SS "template<typename Key, typename Tp> typedef std::vector<\fBvalue_type\fP> \fBlibMesh::vectormap\fP< Key, Tp >::\fBvector_type\fP"
+
+.PP
+Definition at line 69 of file vectormap\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Key, typename Tp> \fBlibMesh::vectormap\fP< Key, Tp >::\fBvectormap\fP ()\fC [inline]\fP"
+Default constructor\&. Initializes sorted member to false\&. 
+.PP
+Definition at line 98 of file vectormap\&.h\&.
+.PP
+.nf
+98               :
+99     _sorted(false)
+100   {}
+.fi
+.SS "template<typename Key, typename Tp> \fBlibMesh::vectormap\fP< Key, Tp >::\fBvectormap\fP (const \fBvectormap\fP< Key, Tp > &other)\fC [inline]\fP"
+Copy constructor\&. 
+.PP
+Definition at line 105 of file vectormap\&.h\&.
+.PP
+.nf
+105                                             :
+106     std::vector<std::pair<Key, Tp> > (other),
+107     _sorted(other\&._sorted)
+108   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Key, typename Tp> unsigned int \fBlibMesh::vectormap\fP< Key, Tp >::count (const \fBkey_type\fP &key) const\fC [inline]\fP"
+*returns the number of occurances of \fCkey\fP\&. For a map-like object, this should be 1 or 0\&. 
+.PP
+Definition at line 162 of file vectormap\&.h\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParmetisPartitioner::build_graph(), and libMesh::ParmetisPartitioner::initialize()\&.
+.PP
+.nf
+163   {
+164     if (!_sorted)
+165       const_cast<vectormap<Key, Tp>*>(this)->sort();
+166 
+167     libmesh_assert (_sorted);
+168 
+169     value_type to_find;
+170     to_find\&.first = key;
+171 
+172     FirstOrder order;
+173 
+174     std::pair<typename vectormap<Key,Tp>::const_iterator,
+175       typename vectormap<Key,Tp>::const_iterator>
+176       bounds = std::equal_range (this->begin(), this->end(), to_find, order);
+177 
+178     return std::distance (bounds\&.first, bounds\&.second);
+179   }
+.fi
+.SS "template<typename Key, typename Tp> void \fBlibMesh::vectormap\fP< Key, Tp >::insert (const \fBvalue_type\fP &x)\fC [inline]\fP"
+Inserts \fCx\fP into the vectormap\&. 
+.PP
+Definition at line 113 of file vectormap\&.h\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), and libMesh::ParmetisPartitioner::initialize()\&.
+.PP
+.nf
+114   {
+115     _sorted = false;
+116     this->push_back(x);
+117   }
+.fi
+.SS "template<typename Key, typename Tp> const Tp& \fBlibMesh::vectormap\fP< Key, Tp >::operator[] (const \fBkey_type\fP &key) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value corresponding to \fCkey\fP 
+.RE
+.PP
+
+.PP
+Definition at line 137 of file vectormap\&.h\&.
+.PP
+.nf
+138   {
+139     if (!_sorted)
+140       const_cast<vectormap<Key, Tp>*>(this)->sort();
+141 
+142     libmesh_assert (_sorted);
+143 
+144     value_type to_find;
+145     to_find\&.first = key;
+146 
+147     FirstOrder order;
+148 
+149     typename vectormap<Key,Tp>::const_iterator
+150       lower_bound = std::lower_bound (this->begin(), this->end(), to_find, order);
+151 
+152     libmesh_assert (lower_bound != this->end());
+153     libmesh_assert_equal_to (lower_bound->first, key);
+154 
+155     return lower_bound->second;
+156   }
+.fi
+.SS "template<typename Key, typename Tp> void \fBlibMesh::vectormap\fP< Key, Tp >::sort ()\fC [inline]\fP"
+Sort & unique the vectormap, preparing for use\&. 
+.PP
+Definition at line 122 of file vectormap\&.h\&.
+.PP
+Referenced by libMesh::vectormap< dof_id_type, dof_id_type >::count(), and libMesh::vectormap< dof_id_type, dof_id_type >::operator[]()\&.
+.PP
+.nf
+123   {
+124     FirstOrder   order;
+125     FirstCompare comp;
+126 
+127     std::sort (this->begin(), this->end(), order);
+128 
+129     this->erase (std::unique (this->begin(), this->end(), comp), this->end());
+130 
+131     _sorted = true;
+132   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Key, typename Tp> bool \fBlibMesh::vectormap\fP< Key, Tp >::_sorted\fC [private]\fP"
+
+.PP
+Definition at line 184 of file vectormap\&.h\&.
+.PP
+Referenced by libMesh::vectormap< dof_id_type, dof_id_type >::count(), libMesh::vectormap< dof_id_type, dof_id_type >::insert(), libMesh::vectormap< dof_id_type, dof_id_type >::operator[](), and libMesh::vectormap< dof_id_type, dof_id_type >::sort()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

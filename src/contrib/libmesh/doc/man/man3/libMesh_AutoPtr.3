@@ -1,0 +1,416 @@
+.TH "libMesh::AutoPtr< Tp >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::AutoPtr< Tp > \- 
+.PP
+A simple smart pointer providing strict ownership semantics\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <auto_ptr\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef Tp \fBelement_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP (\fBelement_type\fP *p=0)"
+.br
+.RI "\fIAn AutoPtr is usually constructed from a raw pointer\&. \fP"
+.ti -1c
+.RI "\fBAutoPtr\fP (\fBAutoPtr\fP &a)"
+.br
+.RI "\fIAn AutoPtr can be constructed from another AutoPtr\&. \fP"
+.ti -1c
+.RI "template<typename Tp1 > \fBAutoPtr\fP (\fBAutoPtr\fP< Tp1 > &a)"
+.br
+.RI "\fIAn AutoPtr can be constructed from another AutoPtr\&. \fP"
+.ti -1c
+.RI "\fBAutoPtr\fP & \fBoperator=\fP (\fBAutoPtr\fP &a)"
+.br
+.RI "\fIAutoPtr assignment operator\&. \fP"
+.ti -1c
+.RI "template<typename Tp1 > \fBAutoPtr\fP & \fBoperator=\fP (\fBAutoPtr\fP< Tp1 > &a)"
+.br
+.RI "\fIAutoPtr assignment operator\&. \fP"
+.ti -1c
+.RI "\fB~AutoPtr\fP ()"
+.br
+.ti -1c
+.RI "\fBelement_type\fP & \fBoperator*\fP () const "
+.br
+.RI "\fISmart pointer dereferencing\&. \fP"
+.ti -1c
+.RI "\fBelement_type\fP * \fBoperator->\fP () const "
+.br
+.RI "\fISmart pointer dereferencing\&. \fP"
+.ti -1c
+.RI "\fBelement_type\fP * \fBget\fP () const "
+.br
+.RI "\fIBypassing the smart pointer\&. \fP"
+.ti -1c
+.RI "\fBelement_type\fP * \fBrelease\fP ()"
+.br
+.RI "\fIBypassing the smart pointer\&. \fP"
+.ti -1c
+.RI "void \fBreset\fP (\fBelement_type\fP *p=0)"
+.br
+.RI "\fIForcibly deletes the managed object\&. \fP"
+.in -1c
+.PP
+.RI "\fB\fP"
+.br
+
+.in +1c
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP (\fBAutoPtrRef\fP< \fBelement_type\fP > ref)"
+.br
+.RI "\fIAutomatic conversions\&. \fP"
+.ti -1c
+.RI "\fBAutoPtr\fP & \fBoperator=\fP (\fBAutoPtrRef\fP< \fBelement_type\fP > ref)"
+.br
+.ti -1c
+.RI "template<typename Tp1 > \fBoperator AutoPtrRef< Tp1 >\fP ()"
+.br
+.ti -1c
+.RI "template<typename Tp1 > \fBoperator AutoPtr< Tp1 >\fP ()"
+.br
+.in -1c
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "Tp * \fB_ptr\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Tp>class libMesh::AutoPtr< Tp >"
+A simple smart pointer providing strict ownership semantics\&. 
+
+The Standard says: 
+.PP
+.nf
+
+ An \fC\fBAutoPtr\fP\fP owns the object it holds a pointer to\&.  Copying an
+ \fC\fBAutoPtr\fP\fP copies the pointer and transfers ownership to the destination\&.
+ If more than one \fC\fBAutoPtr\fP\fP owns the same object at the same time the
+ behavior of the program is undefined\&.
+.fi
+.PP
+.PP
+.PP
+.nf
+ The uses of \fC\fBAutoPtr\fP\fP include providing temporary exception-safety for
+ dynamically allocated memory, passing ownership of dynamically allocated
+ memory to a function, and returning dynamically allocated memory from a
+ function\&.  \fC\fBAutoPtr\fP\fP does not meet the CopyConstructible and Assignable
+ requirements for Standard Library \fCcontainer\fP
+ elements and thus instantiating a Standard Library container with an
+ \fC\fBAutoPtr\fP\fP results in undefined behavior\&.
+ 
+.fi
+.PP
+ Quoted from [20\&.4\&.5]/3\&.
+.PP
+This class is adopted from the GCC 3\&.2\&.1 source tree and should function as a replacement for \fCstd::auto_ptr<>\fP\&. Unfortunately the \fCstd::auto_ptr<>\fP is not particularly portable since various compilers implement various revisions of the standard\&. Using \fCAutoPtr<>\fP instead of \fCstd::auto_ptr<>\fP allows for easy portability\&. 
+.PP
+Definition at line 102 of file auto_ptr\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename Tp> typedef Tp \fBlibMesh::AutoPtr\fP< Tp >::\fBelement_type\fP"
+The pointed-to type\&. 
+.PP
+Definition at line 115 of file auto_ptr\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Tp> \fBlibMesh::AutoPtr\fP< Tp >::\fBAutoPtr\fP (\fBelement_type\fP *p = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+An AutoPtr is usually constructed from a raw pointer\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp\fP A pointer (defaults to NULL)\&.
+.RE
+.PP
+This object now \fIowns\fP the object pointed to by \fIp\fP\&. 
+.PP
+Definition at line 124 of file auto_ptr\&.h\&.
+.PP
+.nf
+125     : _ptr(p) {}
+.fi
+.SS "template<typename Tp> \fBlibMesh::AutoPtr\fP< Tp >::\fBAutoPtr\fP (\fBAutoPtr\fP< Tp > &a)\fC [inline]\fP"
+
+.PP
+An AutoPtr can be constructed from another AutoPtr\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Another AutoPtr of the same type\&.
+.RE
+.PP
+This object now \fIowns\fP the object previously owned by \fIa\fP, which has given up ownsership\&. 
+.PP
+Definition at line 134 of file auto_ptr\&.h\&.
+.PP
+.nf
+135     : _ptr(a\&.release()) {}
+.fi
+.SS "template<typename Tp> template<typename Tp1 > \fBlibMesh::AutoPtr\fP< Tp >::\fBAutoPtr\fP (\fBAutoPtr\fP< Tp1 > &a)\fC [inline]\fP"
+
+.PP
+An AutoPtr can be constructed from another AutoPtr\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Another AutoPtr of a different but related type\&.
+.RE
+.PP
+A pointer-to-Tp1 must be convertible to a pointer-to-Tp/element_type\&.
+.PP
+This object now \fIowns\fP the object previously owned by \fIa\fP, which has given up ownsership\&. 
+.PP
+Definition at line 147 of file auto_ptr\&.h\&.
+.PP
+.nf
+148     : _ptr(a\&.release()) {}
+.fi
+.SS "template<typename Tp> \fBlibMesh::AutoPtr\fP< Tp >::~\fBAutoPtr\fP ()\fC [inline]\fP"
+When the AutoPtr goes out of scope, the object it owns is deleted\&. If it no longer owns anything (i\&.e\&., \fC\fBget()\fP\fP is \fCNULL\fP), then this has no effect\&.
+.PP
+maint 
+.PP
+Definition at line 195 of file auto_ptr\&.h\&.
+.PP
+.nf
+195 { delete _ptr; }
+.fi
+.SS "template<typename Tp> \fBlibMesh::AutoPtr\fP< Tp >::\fBAutoPtr\fP (\fBAutoPtrRef\fP< \fBelement_type\fP >ref)\fC [inline]\fP"
+
+.PP
+Automatic conversions\&. These operations convert an AutoPtr into and from an \fBAutoPtrRef\fP automatically as needed\&. This allows constructs such as 
+.PP
+.nf
+*    AutoPtr<Derived>  func_returning_AutoPtr(\&.\&.\&.\&.\&.);
+*    \&.\&.\&.
+*    AutoPtr<Base> ptr = func_returning_AutoPtr(\&.\&.\&.\&.\&.);
+*  
+
+.fi
+.PP
+ 
+.PP
+Definition at line 277 of file auto_ptr\&.h\&.
+.PP
+.nf
+278     : _ptr(ref\&._ptr) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Tp> \fBelement_type\fP* \fBlibMesh::AutoPtr\fP< Tp >::get () const\fC [inline]\fP"
+
+.PP
+Bypassing the smart pointer\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+The raw pointer being managed\&.
+.RE
+.PP
+You can get a copy of the pointer that this object owns, for situations such as passing to a function which only accepts a raw pointer\&.
+.PP
+\fBNote:\fP
+.RS 4
+This AutoPtr still owns the memory\&. 
+.RE
+.PP
+
+.PP
+Definition at line 228 of file auto_ptr\&.h\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::ImplicitSystem::adjoint_qoi_parameter_sensitivity(), libMesh::DofMap::attach_matrix(), libMesh::System::calculate_norm(), libMesh::DofMap::clear_sparsity(), libMesh::Xdr::close(), libMesh::Xdr::comment(), libMesh::Xdr::data(), libMesh::Xdr::data_stream(), libMesh::Xdr::do_read(), libMesh::Xdr::do_write(), libMesh::DofMap::enforce_adjoint_constraints_exactly(), libMesh::DofMap::enforce_constraints_exactly(), libMesh::for(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::inverse_map(), libMesh::Xdr::is_open(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::map(), libMesh::Xdr::open(), libMesh::PostscriptIO::plot_quadratic_elem(), libMesh::System::project_vector(), libMesh::Parallel::StandardType< TypeVector< T > >::StandardType(), libMesh::Parallel::StandardType< VectorValue< T > >::StandardType(), libMesh::Parallel::StandardType< Point >::StandardType(), libMesh::MeshRefinement::test_level_one(), and libMesh::System::write_serialized_blocked_dof_objects()\&.
+.PP
+.nf
+228 { return _ptr; }
+.fi
+.SS "template<typename Tp> template<typename Tp1 > \fBlibMesh::AutoPtr\fP< Tp >::operator \fBAutoPtr\fP< Tp1 > ()\fC [inline]\fP"
+op() for AutoPtr<Tp1>\&. Calls the release member\&. 
+.PP
+Definition at line 308 of file auto_ptr\&.h\&.
+.PP
+.nf
+309   { return AutoPtr<Tp1>(this->release()); }
+.fi
+.SS "template<typename Tp> template<typename Tp1 > \fBlibMesh::AutoPtr\fP< Tp >::operator \fBAutoPtrRef\fP< Tp1 > ()\fC [inline]\fP"
+op() for AutoPtrRef<Tp1>\&. Calls the release member\&. 
+.PP
+Definition at line 301 of file auto_ptr\&.h\&.
+.PP
+.nf
+302   { return AutoPtrRef<Tp1>(this->release()); }
+.fi
+.SS "template<typename Tp> \fBelement_type\fP& \fBlibMesh::AutoPtr\fP< Tp >::operator* () const\fC [inline]\fP"
+
+.PP
+Smart pointer dereferencing\&. If this AutoPtr no longer owns anything, then this operation will crash\&. (For a smart pointer, 'no longer owns anything' is the same as being a null pointer, and you know what happens when you dereference one of those\&.\&.\&.) 
+.PP
+Definition at line 206 of file auto_ptr\&.h\&.
+.PP
+.nf
+206 { return *_ptr; }
+.fi
+.SS "template<typename Tp> \fBelement_type\fP* \fBlibMesh::AutoPtr\fP< Tp >::operator-> () const\fC [inline]\fP"
+
+.PP
+Smart pointer dereferencing\&. This returns the pointer itself, which the language then will automatically cause to be dereferenced\&. 
+.PP
+Definition at line 215 of file auto_ptr\&.h\&.
+.PP
+.nf
+215 { return _ptr; }
+.fi
+.SS "template<typename Tp> \fBAutoPtr\fP& \fBlibMesh::AutoPtr\fP< Tp >::operator= (\fBAutoPtr\fP< Tp > &a)\fC [inline]\fP"
+
+.PP
+AutoPtr assignment operator\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Another AutoPtr of the same type\&.
+.RE
+.PP
+This object now \fIowns\fP the object previously owned by \fIa\fP, which has given up ownsership\&. The object that this one \fIused\fP to own and track has been deleted\&. 
+.PP
+Definition at line 159 of file auto_ptr\&.h\&.
+.PP
+.nf
+160   {
+161     reset(a\&.release());
+162     return *this;
+163   }
+.fi
+.SS "template<typename Tp> template<typename Tp1 > \fBAutoPtr\fP& \fBlibMesh::AutoPtr\fP< Tp >::operator= (\fBAutoPtr\fP< Tp1 > &a)\fC [inline]\fP"
+
+.PP
+AutoPtr assignment operator\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIa\fP Another AutoPtr of a different but related type\&.
+.RE
+.PP
+A pointer-to-Tp1 must be convertible to a pointer-to-Tp/element_type\&.
+.PP
+This object now \fIowns\fP the object previously owned by \fIa\fP, which has given up ownsership\&. The object that this one \fIused\fP to own and track has been deleted\&. 
+.PP
+Definition at line 177 of file auto_ptr\&.h\&.
+.PP
+.nf
+178   {
+179     reset(a\&.release());
+180     return *this;
+181   }
+.fi
+.SS "template<typename Tp> \fBAutoPtr\fP& \fBlibMesh::AutoPtr\fP< Tp >::operator= (\fBAutoPtrRef\fP< \fBelement_type\fP >ref)\fC [inline]\fP"
+op= for \fBAutoPtr\fP\&. Allows you to write: 
+.PP
+.nf
+* AutoPtr<Base> ptr = func_returning_AutoPtr(\&.\&.\&.\&.\&.);
+* 
+
+.fi
+.PP
+ 
+.PP
+Definition at line 287 of file auto_ptr\&.h\&.
+.PP
+.nf
+288   {
+289     if (ref\&._ptr != this->get())
+290       {
+291         delete _ptr;
+292         _ptr = ref\&._ptr;
+293       }
+294     return *this;
+295   }
+.fi
+.SS "template<typename Tp> \fBelement_type\fP* \fBlibMesh::AutoPtr\fP< Tp >::release ()\fC [inline]\fP"
+
+.PP
+Bypassing the smart pointer\&. 
+.PP
+\fBReturns:\fP
+.RS 4
+The raw pointer being managed\&.
+.RE
+.PP
+You can get a copy of the pointer that this object owns, for situations such as passing to a function which only accepts a raw pointer\&.
+.PP
+\fBNote:\fP
+.RS 4
+This AutoPtr no longer owns the memory\&. When this object goes out of scope, nothing will happen\&. 
+.RE
+.PP
+
+.PP
+Definition at line 242 of file auto_ptr\&.h\&.
+.PP
+Referenced by libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::attach_quadrature_rule(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Base::build_elem(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::InfFE(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::init_face_shape_functions(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator AutoPtr< Tp1 >(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator AutoPtrRef< Tp1 >(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator=(), and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::reinit()\&.
+.PP
+.nf
+243   {
+244     element_type* tmp = _ptr;
+245     _ptr = 0;
+246     return tmp;
+247   }
+.fi
+.SS "template<typename Tp> void \fBlibMesh::AutoPtr\fP< Tp >::reset (\fBelement_type\fP *p = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Forcibly deletes the managed object\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIp\fP A pointer (defaults to NULL)\&.
+.RE
+.PP
+This object now \fIowns\fP the object pointed to by \fIp\fP\&. The previous object has been deleted\&. 
+.PP
+Definition at line 257 of file auto_ptr\&.h\&.
+.PP
+Referenced by libMesh::NonlinearSolver< T >::build(), libMesh::Prism6::build_side(), libMesh::Pyramid5::build_side(), libMesh::InfQuad4::build_side(), libMesh::InfQuad6::build_side(), libMesh::InfHex8::build_side(), libMesh::InfPrism6::build_side(), libMesh::InfPrism12::build_side(), libMesh::InfHex16::build_side(), libMesh::InfHex18::build_side(), libMesh::Pyramid13::build_side(), libMesh::Prism15::build_side(), libMesh::Pyramid14::build_side(), libMesh::Prism18::build_side(), libMesh::DofMap::clear_sparsity(), libMesh::Xdr::close(), libMesh::DofMap::compute_sparsity(), libMesh::Xdr::open(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator=(), libMesh::Parallel::StandardType< TypeVector< T > >::StandardType(), libMesh::Parallel::StandardType< VectorValue< T > >::StandardType(), libMesh::Parallel::StandardType< Point >::StandardType(), and libMesh::System::write_serialized_blocked_dof_objects()\&.
+.PP
+.nf
+258   {
+259     if (p != _ptr)
+260       {
+261         delete _ptr;
+262         _ptr = p;
+263       }
+264   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Tp> Tp* \fBlibMesh::AutoPtr\fP< Tp >::_ptr\fC [private]\fP"
+The actual dumb pointer this class wraps\&. 
+.PP
+Definition at line 109 of file auto_ptr\&.h\&.
+.PP
+Referenced by libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::get(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator*(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator->(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::operator=(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::release(), libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::reset(), and libMesh::AutoPtr< libMesh::FETransformationBase< OutputType > >::~AutoPtr()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

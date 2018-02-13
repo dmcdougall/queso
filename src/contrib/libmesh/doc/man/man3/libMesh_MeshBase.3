@@ -1,0 +1,2517 @@
+.TH "libMesh::MeshBase" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshBase \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_base\&.h>\fP
+.PP
+Inherits \fBlibMesh::ParallelObject\fP\&.
+.PP
+Inherited by \fBlibMesh::UnstructuredMesh\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBconst_element_iterator\fP"
+.br
+.ti -1c
+.RI "struct \fBconst_node_iterator\fP"
+.br
+.ti -1c
+.RI "struct \fBelement_iterator\fP"
+.br
+.ti -1c
+.RI "struct \fBnode_iterator\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBPredicates::multi_predicate\fP \fBPredicate\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, unsigned int \fBdim\fP=1)"
+.br
+.ti -1c
+.RI "\fBMeshBase\fP (unsigned int \fBdim\fP=1)"
+.br
+.ti -1c
+.RI "\fBMeshBase\fP (const \fBMeshBase\fP &other_mesh)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBMeshBase\fP > \fBclone\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fB~MeshBase\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBPartitioner\fP > & \fBpartitioner\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "bool \fBis_prepared\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBis_serial\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBallgather\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBdelete_remote_elements\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBmesh_dimension\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_mesh_dimension\fP (unsigned int d)"
+.br
+.ti -1c
+.RI "unsigned int \fBspatial_dimension\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBn_nodes\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBparallel_n_nodes\fP () const =0"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_nodes_on_proc\fP (const \fBprocessor_id_type\fP proc) const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_local_nodes\fP () const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_unpartitioned_nodes\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBmax_node_id\fP () const =0"
+.br
+.ti -1c
+.RI "\fBunique_id_type\fP \fBnext_unique_id\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_next_unique_id\fP (\fBunique_id_type\fP id)"
+.br
+.ti -1c
+.RI "virtual void \fBreserve_nodes\fP (const \fBdof_id_type\fP nn)=0"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBn_elem\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBparallel_n_elem\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBmax_elem_id\fP () const =0"
+.br
+.ti -1c
+.RI "virtual void \fBreserve_elem\fP (const \fBdof_id_type\fP ne)=0"
+.br
+.ti -1c
+.RI "virtual void \fBupdate_parallel_id_counts\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBn_active_elem\fP () const =0"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_elem_on_proc\fP (const \fBprocessor_id_type\fP proc) const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_local_elem\fP () const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_unpartitioned_elem\fP () const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_active_elem_on_proc\fP (const \fBprocessor_id_type\fP proc) const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_active_local_elem\fP () const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_sub_elem\fP () const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_active_sub_elem\fP () const "
+.br
+.ti -1c
+.RI "virtual const \fBPoint\fP & \fBpoint\fP (const \fBdof_id_type\fP i) const =0"
+.br
+.ti -1c
+.RI "virtual const \fBNode\fP & \fBnode\fP (const \fBdof_id_type\fP i) const =0"
+.br
+.ti -1c
+.RI "virtual \fBNode\fP & \fBnode\fP (const \fBdof_id_type\fP i)=0"
+.br
+.ti -1c
+.RI "virtual const \fBNode\fP * \fBnode_ptr\fP (const \fBdof_id_type\fP i) const =0"
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBnode_ptr\fP (const \fBdof_id_type\fP i)=0"
+.br
+.ti -1c
+.RI "virtual const \fBNode\fP * \fBquery_node_ptr\fP (const \fBdof_id_type\fP i) const =0"
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBquery_node_ptr\fP (const \fBdof_id_type\fP i)=0"
+.br
+.ti -1c
+.RI "virtual const \fBElem\fP * \fBelem\fP (const \fBdof_id_type\fP i) const =0"
+.br
+.ti -1c
+.RI "virtual \fBElem\fP * \fBelem\fP (const \fBdof_id_type\fP i)=0"
+.br
+.ti -1c
+.RI "virtual const \fBElem\fP * \fBquery_elem\fP (const \fBdof_id_type\fP i) const =0"
+.br
+.ti -1c
+.RI "virtual \fBElem\fP * \fBquery_elem\fP (const \fBdof_id_type\fP i)=0"
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBadd_point\fP (const \fBPoint\fP &p, const \fBdof_id_type\fP id=\fBDofObject::invalid_id\fP, const \fBprocessor_id_type\fP proc_id=\fBDofObject::invalid_processor_id\fP)=0"
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBadd_node\fP (\fBNode\fP *n)=0"
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBinsert_node\fP (\fBNode\fP *n)=0"
+.br
+.ti -1c
+.RI "virtual void \fBdelete_node\fP (\fBNode\fP *n)=0"
+.br
+.ti -1c
+.RI "virtual void \fBrenumber_node\fP (\fBdof_id_type\fP old_id, \fBdof_id_type\fP new_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBElem\fP * \fBadd_elem\fP (\fBElem\fP *e)=0"
+.br
+.ti -1c
+.RI "virtual \fBElem\fP * \fBinsert_elem\fP (\fBElem\fP *e)=0"
+.br
+.ti -1c
+.RI "virtual void \fBdelete_elem\fP (\fBElem\fP *e)=0"
+.br
+.ti -1c
+.RI "virtual void \fBrenumber_elem\fP (\fBdof_id_type\fP old_id, \fBdof_id_type\fP new_id)=0"
+.br
+.ti -1c
+.RI "virtual void \fBfind_neighbors\fP (const bool reset_remote_elements=false, const bool reset_current_list=true)=0"
+.br
+.ti -1c
+.RI "virtual void \fBrenumber_nodes_and_elements\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBfix_broken_node_and_element_numbering\fP ()=0"
+.br
+.ti -1c
+.RI "virtual bool \fBcontract\fP ()=0"
+.br
+.ti -1c
+.RI "void \fBprepare_for_use\fP (const bool skip_renumber_nodes_and_elements=false, const bool skip_find_neighbors=false)"
+.br
+.ti -1c
+.RI "virtual void \fBpartition\fP (const unsigned int n_parts)"
+.br
+.ti -1c
+.RI "void \fBpartition\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBredistribute\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBupdate_post_partitioning\fP ()"
+.br
+.ti -1c
+.RI "void \fBallow_renumbering\fP (bool allow)"
+.br
+.ti -1c
+.RI "bool \fBallow_renumbering\fP () const "
+.br
+.ti -1c
+.RI "void \fBskip_partitioning\fP (bool skip)"
+.br
+.ti -1c
+.RI "bool \fBskip_partitioning\fP () const "
+.br
+.ti -1c
+.RI "void \fBsubdomain_ids\fP (std::set< \fBsubdomain_id_type\fP > &ids) const "
+.br
+.ti -1c
+.RI "\fBsubdomain_id_type\fP \fBn_subdomains\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_partitions\fP () const "
+.br
+.ti -1c
+.RI "std::string \fBget_info\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_info\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &name, \fBMeshData\fP *mesh_data=NULL, bool skip_renumber_nodes_and_elements=false)=0"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &name, \fBMeshData\fP *mesh_data=NULL)=0"
+.br
+.ti -1c
+.RI "virtual void \fBall_first_order\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBall_second_order\fP (const bool full_ordered=true)=0"
+.br
+.ti -1c
+.RI "unsigned int \fBrecalculate_n_partitions\fP ()"
+.br
+.ti -1c
+.RI "const \fBPointLocatorBase\fP & \fBpoint_locator\fP () const "
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBPointLocatorBase\fP > \fBsub_point_locator\fP () const "
+.br
+.ti -1c
+.RI "void \fBclear_point_locator\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBlibmesh_assert_valid_parallel_ids\fP () const "
+.br
+.ti -1c
+.RI "std::string & \fBsubdomain_name\fP (\fBsubdomain_id_type\fP id)"
+.br
+.ti -1c
+.RI "const std::string & \fBsubdomain_name\fP (\fBsubdomain_id_type\fP id) const "
+.br
+.ti -1c
+.RI "\fBsubdomain_id_type\fP \fBget_id_by_name\fP (const std::string &name) const "
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBelements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBelements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBancestor_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBancestor_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBsubactive_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBsubactive_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_active_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_active_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_ancestor_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_ancestor_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_subactive_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_subactive_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlocal_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlocal_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_local_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_local_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_local_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_local_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_not_local_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_not_local_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlevel_elements_begin\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlevel_elements_end\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_level_elements_begin\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBnot_level_elements_end\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlocal_level_elements_begin\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlocal_level_elements_end\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlocal_not_level_elements_begin\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBlocal_not_level_elements_end\fP (const unsigned int level)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBpid_elements_begin\fP (const \fBprocessor_id_type\fP proc_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBpid_elements_end\fP (const \fBprocessor_id_type\fP proc_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBtype_elements_begin\fP (const \fBElemType\fP type)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBtype_elements_end\fP (const \fBElemType\fP type)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_type_elements_begin\fP (const \fBElemType\fP type)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_type_elements_end\fP (const \fBElemType\fP type)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_pid_elements_begin\fP (const \fBprocessor_id_type\fP proc_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_pid_elements_end\fP (const \fBprocessor_id_type\fP proc_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBunpartitioned_elements_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBunpartitioned_elements_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_local_subdomain_elements_begin\fP (const \fBsubdomain_id_type\fP subdomain_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_local_subdomain_elements_end\fP (const \fBsubdomain_id_type\fP subdomain_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_subdomain_elements_begin\fP (const \fBsubdomain_id_type\fP subdomain_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBelement_iterator\fP \fBactive_subdomain_elements_end\fP (const \fBsubdomain_id_type\fP subdomain_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBelements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBelements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBancestor_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBancestor_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBsubactive_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBsubactive_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_active_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_active_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_ancestor_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_ancestor_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_subactive_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_subactive_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlocal_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlocal_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_local_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_local_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_local_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_local_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_not_local_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_not_local_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlevel_elements_begin\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlevel_elements_end\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_level_elements_begin\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBnot_level_elements_end\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlocal_level_elements_begin\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlocal_level_elements_end\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlocal_not_level_elements_begin\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBlocal_not_level_elements_end\fP (const unsigned int level) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBpid_elements_begin\fP (const \fBprocessor_id_type\fP proc_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBpid_elements_end\fP (const \fBprocessor_id_type\fP proc_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBtype_elements_begin\fP (const \fBElemType\fP type) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBtype_elements_end\fP (const \fBElemType\fP type) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_type_elements_begin\fP (const \fBElemType\fP type) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_type_elements_end\fP (const \fBElemType\fP type) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_pid_elements_begin\fP (const \fBprocessor_id_type\fP proc_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_pid_elements_end\fP (const \fBprocessor_id_type\fP proc_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBunpartitioned_elements_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBunpartitioned_elements_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_local_subdomain_elements_begin\fP (const \fBsubdomain_id_type\fP subdomain_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_local_subdomain_elements_end\fP (const \fBsubdomain_id_type\fP subdomain_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_subdomain_elements_begin\fP (const \fBsubdomain_id_type\fP subdomain_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_element_iterator\fP \fBactive_subdomain_elements_end\fP (const \fBsubdomain_id_type\fP subdomain_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBnodes_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBnodes_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBactive_nodes_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBactive_nodes_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBlocal_nodes_begin\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBlocal_nodes_end\fP ()=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBpid_nodes_begin\fP (const \fBprocessor_id_type\fP proc_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBnode_iterator\fP \fBpid_nodes_end\fP (const \fBprocessor_id_type\fP proc_id)=0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBnodes_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBnodes_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBactive_nodes_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBactive_nodes_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBlocal_nodes_begin\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBlocal_nodes_end\fP () const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBpid_nodes_begin\fP (const \fBprocessor_id_type\fP proc_id) const =0"
+.br
+.ti -1c
+.RI "virtual \fBconst_node_iterator\fP \fBpid_nodes_end\fP (const \fBprocessor_id_type\fP proc_id) const =0"
+.br
+.ti -1c
+.RI "std::map< \fBsubdomain_id_type\fP, 
+.br
+std::string > & \fBset_subdomain_name_map\fP ()"
+.br
+.ti -1c
+.RI "const std::map
+.br
+< \fBsubdomain_id_type\fP, 
+.br
+std::string > & \fBget_subdomain_name_map\fP () const "
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBBoundaryInfo\fP > \fBboundary_info\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBassign_unique_ids\fP ()=0"
+.br
+.ti -1c
+.RI "unsigned int & \fBset_n_partitions\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fB_n_parts\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_dim\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_prepared\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBPointLocatorBase\fP > \fB_point_locator\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBPartitioner\fP > \fB_partitioner\fP"
+.br
+.ti -1c
+.RI "\fBunique_id_type\fP \fB_next_unique_id\fP"
+.br
+.ti -1c
+.RI "bool \fB_skip_partitioning\fP"
+.br
+.ti -1c
+.RI "bool \fB_skip_renumber_nodes_and_elements\fP"
+.br
+.ti -1c
+.RI "std::map< \fBsubdomain_id_type\fP, 
+.br
+std::string > \fB_block_id_to_name\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBoperator=\fP (const \fBMeshBase\fP &other)"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBPartitioner\fP"
+.br
+.ti -1c
+.RI "class \fBBoundaryInfo\fP"
+.br
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const \fBMeshBase\fP &m)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is the \fC\fBMeshBase\fP\fP class\&. This class provides all the data necessary to describe a geometric entity\&. It allows for the description of a \fCdim\fP dimensional object that lives in \fCLIBMESH_DIM-dimensional\fP space\&. 
+.PP
+\fB\fP
+.RS 4
+A mesh is made of nodes and elements, and this class provides data structures to store and access both\&. A mesh may be partitioned into a number of subdomains, and this class provides that functionality\&. Furthermore, this class provides functions for reading and writing a mesh to disk in various formats\&.
+.RE
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+
+.PP
+Definition at line 69 of file mesh_base\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef \fBPredicates::multi_predicate\fP \fBlibMesh::MeshBase::Predicate\fP"
+We need an empty, generic class to act as a predicate for this and derived mesh classes\&. 
+.PP
+Definition at line 632 of file mesh_base\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshBase::MeshBase (const \fBParallel::Communicator\fP &comm, unsigned intdim = \fC1\fP)"
+Constructor\&. Takes \fCdim\fP, the dimension of the mesh\&. The mesh dimension can be changed (and may automatically be changed by mesh generation/loading) later\&. 
+.PP
+Definition at line 45 of file mesh_base\&.C\&.
+.PP
+References _dim, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+46                                     :
+47   ParallelObject (comm),
+48   boundary_info  (new BoundaryInfo(*this)),
+49   _n_parts       (1),
+50   _dim           (d),
+51   _is_prepared   (false),
+52   _point_locator (NULL),
+53   _partitioner   (NULL),
+54 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+55   _next_unique_id(DofObject::invalid_unique_id),
+56 #endif
+57   _skip_partitioning(false),
+58   _skip_renumber_nodes_and_elements(false)
+59 {
+60   libmesh_assert_less_equal (LIBMESH_DIM, 3);
+61   libmesh_assert_greater_equal (LIBMESH_DIM, _dim);
+62   libmesh_assert (libMesh::initialized());
+63 }
+.fi
+.SS "libMesh::MeshBase::MeshBase (unsigned intdim = \fC1\fP)"
+Deprecated constructor\&. Takes \fCdim\fP, the dimension of the mesh\&. The mesh dimension can be changed (and may automatically be changed by mesh generation/loading) later\&. 
+.PP
+Definition at line 67 of file mesh_base\&.C\&.
+.PP
+References _dim, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+67                                   :
+68   ParallelObject (CommWorld),
+69   boundary_info  (new BoundaryInfo(*this)),
+70   _n_parts       (1),
+71   _dim           (d),
+72   _is_prepared   (false),
+73   _point_locator (NULL),
+74   _partitioner   (NULL),
+75 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+76   _next_unique_id(DofObject::invalid_unique_id),
+77 #endif
+78   _skip_partitioning(false),
+79   _skip_renumber_nodes_and_elements(false)
+80 {
+81   libmesh_assert_less_equal (LIBMESH_DIM, 3);
+82   libmesh_assert_greater_equal (LIBMESH_DIM, _dim);
+83   libmesh_assert (libMesh::initialized());
+84 }
+.fi
+.SS "libMesh::MeshBase::MeshBase (const \fBMeshBase\fP &other_mesh)"
+Copy-constructor\&. 
+.PP
+Definition at line 89 of file mesh_base\&.C\&.
+.PP
+References _partitioner\&.
+.PP
+.nf
+89                                               :
+90   ParallelObject (other_mesh),
+91   boundary_info  (new BoundaryInfo(*this)),
+92   _n_parts       (other_mesh\&._n_parts),
+93   _dim           (other_mesh\&._dim),
+94   _is_prepared   (other_mesh\&._is_prepared),
+95   _point_locator (NULL),
+96   _partitioner   (NULL),
+97 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+98   _next_unique_id(other_mesh\&._next_unique_id),
+99 #endif
+100   _skip_partitioning(other_mesh\&._skip_partitioning),
+101   _skip_renumber_nodes_and_elements(false)
+102 {
+103   if(other_mesh\&._partitioner\&.get())
+104     {
+105       _partitioner = other_mesh\&._partitioner->clone();
+106     }
+107 }
+.fi
+.SS "libMesh::MeshBase::~MeshBase ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 111 of file mesh_base\&.C\&.
+.PP
+References clear(), and libMesh::closed()\&.
+.PP
+.nf
+112 {
+113   this->clear();
+114 
+115   libmesh_exceptionless_assert (!libMesh::closed());
+116 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::LinearPartitioner::_do_partition(), libMesh::SFCPartitioner::_do_partition(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::BoundaryInfo::build_side_list_from_node_list(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshTools::Modification::distort(), DMLibMeshSetSystem(), libMesh::TecplotIO::elem_dimension(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::LocationMap< T >::fill(), libMesh::MeshTools::find_boundary_nodes(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_error_tolerance(), libMesh::MeshRefinement::flag_elements_by_mean_stddev(), libMesh::MeshTools::Modification::flatten(), libMesh::PointLocatorList::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::DofMap::invalidate_dofs(), libMesh::MeshTools::libmesh_assert_valid_elem_ids(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::CheckpointIO::n_active_levels_on_processor(), n_active_sub_elem(), libMesh::System::read_legacy_data(), libMesh::GmshIO::read_mesh(), libMesh::VariationalMeshSmoother::readgr(), recalculate_n_partitions(), libMesh::DofMap::reinit(), libMesh::Partitioner::set_node_processor_ids(), libMesh::LaplaceMeshSmoother::smooth(), subdomain_ids(), libMesh::Tree< N >::Tree(), libMesh::MeshRefinement::uniformly_coarsen(), libMesh::MeshRefinement::uniformly_p_coarsen(), libMesh::MeshRefinement::uniformly_p_refine(), libMesh::MeshRefinement::uniformly_refine(), libMesh::FroIO::write(), libMesh::PostscriptIO::write(), libMesh::TetGenIO::write(), libMesh::MEDITIO::write_ascii(), libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::GmshIO::write_mesh(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::GmshIO::write_post(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::LinearPartitioner::_do_partition(), libMesh::SFCPartitioner::_do_partition(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::BoundaryInfo::build_side_list_from_node_list(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshTools::Modification::distort(), DMLibMeshSetSystem(), libMesh::TecplotIO::elem_dimension(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::LocationMap< T >::fill(), libMesh::MeshTools::find_boundary_nodes(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_error_tolerance(), libMesh::MeshRefinement::flag_elements_by_mean_stddev(), libMesh::MeshTools::Modification::flatten(), libMesh::PointLocatorList::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::DofMap::invalidate_dofs(), libMesh::MeshTools::libmesh_assert_valid_elem_ids(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::CheckpointIO::n_active_levels_on_processor(), n_active_sub_elem(), libMesh::System::read_legacy_data(), libMesh::GmshIO::read_mesh(), libMesh::VariationalMeshSmoother::readgr(), recalculate_n_partitions(), libMesh::DofMap::reinit(), libMesh::Partitioner::set_node_processor_ids(), libMesh::LaplaceMeshSmoother::smooth(), subdomain_ids(), libMesh::Tree< N >::Tree(), libMesh::MeshRefinement::uniformly_coarsen(), libMesh::MeshRefinement::uniformly_p_coarsen(), libMesh::MeshRefinement::uniformly_p_refine(), libMesh::MeshRefinement::uniformly_refine(), libMesh::FroIO::write(), libMesh::PostscriptIO::write(), libMesh::TetGenIO::write(), libMesh::MEDITIO::write_ascii(), libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::GmshIO::write_mesh(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::GmshIO::write_post(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_local_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::FEMSystem::assemble_qoi(), libMesh::FEMSystem::assemble_qoi_derivative(), libMesh::FEMSystem::assembly(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::EquationSystems::build_solution_vector(), libMesh::DofMap::build_sparsity(), libMesh::System::calculate_norm(), libMesh::VTKIO::cells_to_vtk(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshTools::find_hanging_nodes_and_parents(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::EquationSystems::get_solution(), libMesh::LaplaceMeshSmoother::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::System::local_dof_indices(), libMesh::DofMap::local_variable_indices(), libMesh::DofMap::max_constraint_error(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshTools::n_active_local_levels(), libMesh::ErrorVector::plot_error(), libMesh::FEMSystem::postprocess(), libMesh::System::project_vector(), libMesh::HPSingularity::select_refinement(), libMesh::HPCoarsenTest::select_refinement(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::Nemesis_IO_Helper::write_exodus_initialization_info(), libMesh::EnsightIO::write_geometry_ascii(), libMesh::EnsightIO::write_scalar_ascii(), libMesh::EnsightIO::write_vector_ascii(), and libMesh::System::zero_variable()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_local_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_local_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::FEMSystem::assemble_qoi(), libMesh::FEMSystem::assemble_qoi_derivative(), libMesh::FEMSystem::assembly(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::EquationSystems::build_solution_vector(), libMesh::DofMap::build_sparsity(), libMesh::System::calculate_norm(), libMesh::VTKIO::cells_to_vtk(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshTools::find_hanging_nodes_and_parents(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::EquationSystems::get_solution(), libMesh::LaplaceMeshSmoother::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::System::local_dof_indices(), libMesh::DofMap::local_variable_indices(), libMesh::DofMap::max_constraint_error(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshTools::n_active_local_levels(), libMesh::ErrorVector::plot_error(), libMesh::FEMSystem::postprocess(), libMesh::HPSingularity::select_refinement(), libMesh::HPCoarsenTest::select_refinement(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::Nemesis_IO_Helper::write_exodus_initialization_info(), libMesh::EnsightIO::write_geometry_ascii(), libMesh::EnsightIO::write_scalar_ascii(), libMesh::EnsightIO::write_vector_ascii(), and libMesh::System::zero_variable()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_local_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_local_subdomain_elements_begin (const \fBsubdomain_id_type\fPsubdomain_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by DMCreateDomainDecomposition_libMesh(), and DMCreateFieldDecomposition_libMesh()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_local_subdomain_elements_begin (const \fBsubdomain_id_type\fPsubdomain_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_local_subdomain_elements_end (const \fBsubdomain_id_type\fPsubdomain_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by DMCreateDomainDecomposition_libMesh(), and DMCreateFieldDecomposition_libMesh()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_local_subdomain_elements_end (const \fBsubdomain_id_type\fPsubdomain_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::active_nodes_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::active_nodes_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::active_nodes_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::active_nodes_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_not_local_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::DofMap::allgather_recursive_constraints(), and libMesh::DofMap::scatter_constraints()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_not_local_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_not_local_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::DofMap::allgather_recursive_constraints(), and libMesh::DofMap::scatter_constraints()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_not_local_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_pid_elements_begin (const \fBprocessor_id_type\fPproc_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::ParmetisPartitioner::initialize(), and n_active_elem_on_proc()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_pid_elements_begin (const \fBprocessor_id_type\fPproc_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_pid_elements_end (const \fBprocessor_id_type\fPproc_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::ParmetisPartitioner::initialize(), and n_active_elem_on_proc()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_pid_elements_end (const \fBprocessor_id_type\fPproc_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_subdomain_elements_begin (const \fBsubdomain_id_type\fPsubdomain_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::TecplotIO::write_binary()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_subdomain_elements_begin (const \fBsubdomain_id_type\fPsubdomain_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_subdomain_elements_end (const \fBsubdomain_id_type\fPsubdomain_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::TecplotIO::write_binary()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_subdomain_elements_end (const \fBsubdomain_id_type\fPsubdomain_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_type_elements_begin (const \fBElemType\fPtype)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::n_active_elem_of_type()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_type_elements_begin (const \fBElemType\fPtype) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::active_type_elements_end (const \fBElemType\fPtype)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::n_active_elem_of_type()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::active_type_elements_end (const \fBElemType\fPtype) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBElem\fP* libMesh::MeshBase::add_elem (\fBElem\fP *e)\fC [pure virtual]\fP"
+Add elem \fCe\fP to the end of the element array\&. To add an element locally, set e->\fBprocessor_id()\fP before adding it\&. To ensure a specific element id, call e->set_id() before adding it; only do this in parallel if you are manually keeping ids consistent\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::MeshTools::Subdivision::add_boundary_ghosts(), libMesh::MeshRefinement::add_elem(), libMesh::MeshTools::Modification::all_tri(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::TriangleWrapper::copy_tri_to_mesh(), libMesh::UnstructuredMesh::create_submesh(), libMesh::UNVIO::element_in(), libMesh::MeshTools::Modification::flatten(), libMesh::mesh_inserter_iterator< T >::operator=(), libMesh::TetGenMeshInterface::pointset_convexhull(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::VTKIO::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::AbaqusIO::read_elements(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::BoundaryInfo::sync(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), and libMesh::TetGenMeshInterface::triangulate_pointset()\&.
+.SS "virtual \fBNode\fP* libMesh::MeshBase::add_node (\fBNode\fP *n)\fC [pure virtual]\fP"
+Add \fC\fBNode\fP\fP \fCn\fP to the end of the vertex array\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBNode\fP* libMesh::MeshBase::add_point (const \fBPoint\fP &p, const \fBdof_id_type\fPid = \fC\fBDofObject::invalid_id\fP\fP, const \fBprocessor_id_type\fPproc_id = \fC\fBDofObject::invalid_processor_id\fP\fP)\fC [pure virtual]\fP"
+Add a new \fC\fBNode\fP\fP at \fC\fBPoint\fP\fP \fCp\fP to the end of the vertex array, with processor_id \fCprocid\fP\&. Use \fBDofObject::invalid_processor_id\fP (default) to add a node to all processors, or this->\fBprocessor_id()\fP to add a node to the local processor only\&. If adding a node locally, passing an \fCid\fP other than \fBDofObject::invalid_id\fP will set that specific node id\&. Only do this in parallel if you are manually keeping ids consistent\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::Subdivision::add_boundary_ghosts(), libMesh::MeshRefinement::add_point(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Modification::all_tri(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::TriangleWrapper::copy_tri_to_mesh(), libMesh::UnstructuredMesh::create_submesh(), libMesh::UNVIO::node_in(), libMesh::mesh_inserter_iterator< T >::operator=(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::VTKIO::read(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::AbaqusIO::read_nodes(), libMesh::CheckpointIO::read_nodes(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::BoundaryInfo::sync(), libMesh::TriangleInterface::triangulate(), and libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.SS "virtual void libMesh::MeshBase::all_first_order ()\fC [pure virtual]\fP"
+Converts a mesh with higher-order elements into a mesh with linear elements\&. For example, a mesh consisting of \fC\fBTet10\fP\fP will be converted to a mesh with \fC\fBTet4\fP\fP etc\&. 
+.PP
+Implemented in \fBlibMesh::UnstructuredMesh\fP\&.
+.PP
+Referenced by libMesh::ErrorVector::plot_error()\&.
+.SS "virtual void libMesh::MeshBase::all_second_order (const boolfull_ordered = \fCtrue\fP)\fC [pure virtual]\fP"
+Converts a (conforming, non-refined) mesh with linear elements into a mesh with second-order elements\&. For example, a mesh consisting of \fC\fBTet4\fP\fP will be converted to a mesh with \fC\fBTet10\fP\fP etc\&. Note that for some elements like \fC\fBHex8\fP\fP there exist \fItwo\fP higher order equivalents, \fC\fBHex20\fP\fP and \fC\fBHex27\fP\fP\&. When \fCfull_ordered\fP is \fCtrue\fP (default), then \fC\fBHex27\fP\fP is built\&. Otherwise, \fC\fBHex20\fP\fP is built\&. The same holds obviously for \fC\fBQuad4\fP\fP, \fC\fBPrism6\fP\fP \&.\&.\&. 
+.PP
+Implemented in \fBlibMesh::UnstructuredMesh\fP\&.
+.SS "virtual void libMesh::MeshBase::allgather ()\fC [inline]\fP, \fC [virtual]\fP"
+Gathers all elements and nodes of the mesh onto every processor 
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP\&.
+.PP
+Definition at line 140 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::allgather(), and libMesh::MeshSerializer::MeshSerializer()\&.
+.PP
+.nf
+140 {}
+.fi
+.SS "void libMesh::MeshBase::allow_renumbering (boolallow)\fC [inline]\fP"
+If false is passed in then this mesh will no longer be renumbered when being prepared for use\&. This may slightly adversely affect performance during subsequent element access, particulary when using a distributed mesh\&. 
+.PP
+Definition at line 536 of file mesh_base\&.h\&.
+.PP
+References _skip_renumber_nodes_and_elements\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::AdjointRefinementEstimator::estimate_error(), and libMesh::ErrorVector::plot_error()\&.
+.PP
+.nf
+536 { _skip_renumber_nodes_and_elements = !allow; }
+.fi
+.SS "bool libMesh::MeshBase::allow_renumbering () const\fC [inline]\fP"
+
+.PP
+Definition at line 537 of file mesh_base\&.h\&.
+.PP
+References _skip_renumber_nodes_and_elements\&.
+.PP
+Referenced by prepare_for_use(), and libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+537 { return !_skip_renumber_nodes_and_elements; }
+.fi
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::ancestor_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::ancestor_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::ancestor_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::ancestor_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual void libMesh::MeshBase::assign_unique_ids ()\fC [protected]\fP, \fC [pure virtual]\fP"
+Assign globally unique IDs to all DOF objects (Elements and Nodes) if the library has been configured with unique_id support\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by prepare_for_use()\&.
+.SS "void libMesh::MeshBase::clear ()\fC [virtual]\fP"
+Deletes all the data that are currently stored\&. 
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Definition at line 190 of file mesh_base\&.C\&.
+.PP
+References _is_prepared, _n_parts, boundary_info, and clear_point_locator()\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::SerialMesh::clear(), libMesh::ParallelMesh::clear(), libMesh::TriangleWrapper::copy_tri_to_mesh(), libMesh::UnstructuredMesh::create_submesh(), libMesh::AbaqusIO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::BoundaryInfo::sync(), libMesh::TriangleInterface::triangulate(), and ~MeshBase()\&.
+.PP
+.nf
+191 {
+192   // Reset the number of partitions
+193   _n_parts = 1;
+194 
+195   // Reset the _is_prepared flag
+196   _is_prepared = false;
+197 
+198   // Clear boundary information
+199   this->boundary_info->clear();
+200 
+201   // Clear our point locator\&.
+202   this->clear_point_locator();
+203 }
+.fi
+.SS "void libMesh::MeshBase::clear_point_locator ()"
+Releases the current \fCPointLocator\fP object\&. 
+.PP
+Definition at line 415 of file mesh_base\&.C\&.
+.PP
+References _point_locator\&.
+.PP
+Referenced by clear(), libMesh::UnstructuredMesh::contract(), and prepare_for_use()\&.
+.PP
+.nf
+416 {
+417   _point_locator\&.reset(NULL);
+418 }
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBMeshBase\fP> libMesh::MeshBase::clone () const\fC [pure virtual]\fP"
+Virtual 'copy constructor' 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::ErrorVector::plot_error()\&.
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "virtual bool libMesh::MeshBase::contract ()\fC [pure virtual]\fP"
+Delete subactive (i\&.e\&. children of coarsened) elements\&. This removes all elements descended from currently active elements in the mesh\&. 
+.PP
+Implemented in \fBlibMesh::UnstructuredMesh\fP\&.
+.PP
+Referenced by libMesh::EquationSystems::reinit()\&.
+.SS "virtual void libMesh::MeshBase::delete_elem (\fBElem\fP *e)\fC [pure virtual]\fP"
+Removes element \fCe\fP from the mesh\&. Note that calling this method may produce isolated nodes, i\&.e\&. nodes not connected to any element\&. This method must be implemented in derived classes in such a way that it does not invalidate element iterators\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::Modification::all_tri(), libMesh::MeshTools::Generation::build_cube(), libMesh::UnstructuredMesh::contract(), libMesh::TetGenMeshInterface::delete_2D_hull_elements(), libMesh::MeshTools::Modification::flatten(), libMesh::TetGenMeshInterface::pointset_convexhull(), and libMesh::GmshIO::read_mesh()\&.
+.SS "virtual void libMesh::MeshBase::delete_node (\fBNode\fP *n)\fC [pure virtual]\fP"
+Removes the \fBNode\fP n from the mesh\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_first_order()\&.
+.SS "virtual void libMesh::MeshBase::delete_remote_elements ()\fC [inline]\fP, \fC [virtual]\fP"
+When supported, deletes all nonlocal elements of the mesh except for 'ghosts' which touch a local element, and deletes all nodes which are not part of a local or ghost element 
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP\&.
+.PP
+Definition at line 147 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_extrusion(), libMesh::EquationSystems::init(), prepare_for_use(), libMesh::Nemesis_IO::read(), libMesh::BoundaryInfo::sync(), and libMesh::MeshSerializer::~MeshSerializer()\&.
+.PP
+.nf
+147 {}
+.fi
+.SS "virtual const \fBElem\fP* libMesh::MeshBase::elem (const \fBdof_id_type\fPi) const\fC [pure virtual]\fP"
+Return a pointer to the $ i^{th} $ element, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::Subdivision::add_boundary_ghosts(), libMesh::BoundaryInfo::add_edge(), libMesh::BoundaryInfo::add_side(), libMesh::AbaqusIO::assign_sideset_ids(), libMesh::AbaqusIO::assign_subdomain_ids(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::DofMap::elem_ptr(), libMesh::MeshData::foreign_id_to_elem(), libMesh::ErrorVector::is_active_elem(), libMesh::BoundaryInfo::operator=(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::MeshTools::subdomain_bounding_box(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::Elem::topological_neighbor(), libMesh::Parallel::unpack(), libMesh::FroIO::write(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::Nemesis_IO_Helper::write_elements(), libMesh::LegacyXdrIO::write_mesh(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), and libMesh::DivaIO::write_stream()\&.
+.SS "virtual \fBElem\fP* libMesh::MeshBase::elem (const \fBdof_id_type\fPi)\fC [pure virtual]\fP"
+Return a writeable pointer to the $ i^{th} $ element, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::elements_begin ()\fC [pure virtual]\fP"
+\fBElem\fP iterator accessor functions\&. These must be defined in Concrete base classes\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::EquationSystems::_add_system_to_nodes_and_elems(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::MeshRefinement::_refine_elements(), libMesh::MeshRefinement::add_p_to_h_refinement(), libMesh::VariationalMeshSmoother::adjust_adapt_data(), libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Subdivision::all_subdivision(), libMesh::MeshTools::Modification::all_tri(), libMesh::EquationSystems::allgather(), libMesh::MeshData::assign(), libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::MeshTools::build_nodes_to_elem_map(), libMesh::MeshTools::Modification::change_subdomain_id(), libMesh::TetGenMeshInterface::check_hull_integrity(), libMesh::MeshRefinement::clean_refinement_flags(), libMesh::MeshRefinement::coarsen_elements(), libMesh::CentroidPartitioner::compute_centroids(), libMesh::UnstructuredMesh::contract(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::DofMap::create_dof_constraints(), libMesh::TetGenMeshInterface::delete_2D_hull_elements(), libMesh::DofMap::distribute_dofs(), libMesh::MeshTools::elem_types(), libMesh::UNVIO::element_out(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::MeshTools::Modification::flatten(), libMesh::MeshTools::get_not_subactive_node_ids(), libMesh::EquationSystems::init(), libMesh::MeshTools::libmesh_assert_connected_nodes(), libMesh::MeshTools::libmesh_assert_equal_n_systems(), libMesh::MeshTools::libmesh_assert_no_links_to_elem(), libMesh::MeshTools::libmesh_assert_old_dof_objects(), libMesh::MeshTools::libmesh_assert_valid_amr_elem_ids(), libMesh::MeshTools::libmesh_assert_valid_neighbors(), libMesh::MeshTools::libmesh_assert_valid_node_pointers(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshTools::libmesh_assert_valid_refinement_tree(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshRefinement::make_flags_parallel_consistent(), n_sub_elem(), libMesh::TetGenMeshInterface::pointset_convexhull(), libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::EquationSystems::reinit(), libMesh::DofMap::reinit(), libMesh::Partitioner::single_partition(), libMesh::MeshRefinement::switch_h_to_p_refinement(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::Subdivision::tag_boundary_ghosts(), libMesh::MeshTools::total_weight(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), libMesh::UCDIO::write_interior_elems(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::elements_begin () const\fC [pure virtual]\fP"
+const \fBElem\fP iterator accessor functions\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::EquationSystems::_add_system_to_nodes_and_elems(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::MeshRefinement::_refine_elements(), libMesh::MeshRefinement::add_p_to_h_refinement(), libMesh::VariationalMeshSmoother::adjust_adapt_data(), libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Subdivision::all_subdivision(), libMesh::MeshTools::Modification::all_tri(), libMesh::EquationSystems::allgather(), libMesh::MeshData::assign(), libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::MeshTools::build_nodes_to_elem_map(), libMesh::MeshTools::Modification::change_subdomain_id(), libMesh::TetGenMeshInterface::check_hull_integrity(), libMesh::MeshRefinement::clean_refinement_flags(), libMesh::MeshRefinement::coarsen_elements(), libMesh::CentroidPartitioner::compute_centroids(), libMesh::UnstructuredMesh::contract(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::DofMap::create_dof_constraints(), libMesh::TetGenMeshInterface::delete_2D_hull_elements(), libMesh::DofMap::distribute_dofs(), libMesh::MeshTools::elem_types(), libMesh::UNVIO::element_out(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::MeshTools::Modification::flatten(), libMesh::MeshTools::get_not_subactive_node_ids(), libMesh::EquationSystems::init(), libMesh::MeshTools::libmesh_assert_connected_nodes(), libMesh::MeshTools::libmesh_assert_equal_n_systems(), libMesh::MeshTools::libmesh_assert_no_links_to_elem(), libMesh::MeshTools::libmesh_assert_old_dof_objects(), libMesh::MeshTools::libmesh_assert_valid_amr_elem_ids(), libMesh::MeshTools::libmesh_assert_valid_neighbors(), libMesh::MeshTools::libmesh_assert_valid_node_pointers(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshTools::libmesh_assert_valid_refinement_tree(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshRefinement::make_flags_parallel_consistent(), n_sub_elem(), libMesh::TetGenMeshInterface::pointset_convexhull(), libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::EquationSystems::reinit(), libMesh::DofMap::reinit(), libMesh::Partitioner::single_partition(), libMesh::MeshRefinement::switch_h_to_p_refinement(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::Subdivision::tag_boundary_ghosts(), libMesh::MeshTools::total_weight(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), libMesh::UCDIO::write_interior_elems(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual void libMesh::MeshBase::find_neighbors (const boolreset_remote_elements = \fCfalse\fP, const boolreset_current_list = \fCtrue\fP)\fC [pure virtual]\fP"
+Locate element face (edge in 2D) neighbors\&. This is done with the help of a \fCstd::map\fP that functions like a hash table\&. After this routine is called all the elements with a \fCNULL\fP neighbor pointer are guaranteed to be on the boundary\&. Thus this routine is useful for automatically determining the boundaries of the domain\&. If reset_remote_elements is left to false, remote neighbor links are not reset and searched for in the local mesh\&. If reset_current_list is left as true, then any existing links will be reset before initiating the algorithm, while honoring the value of the reset_remote_elements flag\&. 
+.PP
+Implemented in \fBlibMesh::UnstructuredMesh\fP\&.
+.PP
+Referenced by libMesh::InfElemBuilder::build_inf_elem(), and prepare_for_use()\&.
+.SS "virtual void libMesh::MeshBase::fix_broken_node_and_element_numbering ()\fC [pure virtual]\fP"
+There is no reason for a user to ever call this function\&.
+.PP
+This function restores a previously broken element/node numbering such that \fCmesh\&.node(n)->id()\fP == n\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::EquationSystems::_read_impl()\&.
+.SS "\fBsubdomain_id_type\fP libMesh::MeshBase::get_id_by_name (const std::string &name) const"
+Returns a the id of the requested block by name\&. Throws an error if a block by name is not found 
+.PP
+Definition at line 442 of file mesh_base\&.C\&.
+.PP
+References _block_id_to_name, and libMesh::err\&.
+.PP
+.nf
+443 {
+444   // This function is searching the *values* of the map (linear search)
+445   // We might want to make this more efficient\&.\&.\&.
+446   std::map<subdomain_id_type, std::string>::const_iterator
+447     iter = _block_id_to_name\&.begin(),
+448     end_iter = _block_id_to_name\&.end();
+449 
+450   for ( ; iter != end_iter; ++iter)
+451     {
+452       if (iter->second == name)
+453         return iter->first;
+454     }
+455 
+456   libMesh::err << "Block '" << name << "' does not exist in mesh" << std::endl;
+457   libmesh_error();
+458 }
+.fi
+.SS "std::string libMesh::MeshBase::get_info () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing relevant information about the mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 306 of file mesh_base\&.C\&.
+.PP
+References mesh_dimension(), n_active_elem(), n_elem(), n_local_elem(), n_local_nodes(), n_nodes(), n_partitions(), libMesh::ParallelObject::n_processors(), n_subdomains(), libMesh::n_threads, libMesh::ParallelObject::processor_id(), and spatial_dimension()\&.
+.PP
+Referenced by print_info()\&.
+.PP
+.nf
+307 {
+308   std::ostringstream oss;
+309 
+310   oss << " Mesh Information:"                                  << '\n'
+311       << "  mesh_dimension()="    << this->mesh_dimension()    << '\n'
+312       << "  spatial_dimension()=" << this->spatial_dimension() << '\n'
+313       << "  n_nodes()="           << this->n_nodes()           << '\n'
+314       << "    n_local_nodes()="   << this->n_local_nodes()     << '\n'
+315       << "  n_elem()="            << this->n_elem()            << '\n'
+316       << "    n_local_elem()="    << this->n_local_elem()      << '\n'
+317 #ifdef LIBMESH_ENABLE_AMR
+318       << "    n_active_elem()="   << this->n_active_elem()     << '\n'
+319 #endif
+320       << "  n_subdomains()="      << static_cast<std::size_t>(this->n_subdomains()) << '\n'
+321       << "  n_partitions()="      << static_cast<std::size_t>(this->n_partitions()) << '\n'
+322       << "  n_processors()="      << static_cast<std::size_t>(this->n_processors()) << '\n'
+323       << "  n_threads()="         << static_cast<std::size_t>(libMesh::n_threads()) << '\n'
+324       << "  processor_id()="      << static_cast<std::size_t>(this->processor_id()) << '\n';
+325 
+326   return oss\&.str();
+327 }
+.fi
+.SS "const std::map<\fBsubdomain_id_type\fP, std::string>& libMesh::MeshBase::get_subdomain_name_map () const\fC [inline]\fP"
+
+.PP
+Definition at line 843 of file mesh_base\&.h\&.
+.PP
+References _block_id_to_name\&.
+.PP
+Referenced by libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.PP
+.nf
+844   { return _block_id_to_name; }
+.fi
+.SS "virtual \fBElem\fP* libMesh::MeshBase::insert_elem (\fBElem\fP *e)\fC [pure virtual]\fP"
+Insert elem \fCe\fP to the element array, preserving its id and replacing/deleting any existing element with the same id\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), and libMesh::MeshTools::Subdivision::all_subdivision()\&.
+.SS "virtual \fBNode\fP* libMesh::MeshBase::insert_node (\fBNode\fP *n)\fC [pure virtual]\fP"
+Insert \fC\fBNode\fP\fP \fCn\fP into the \fBMesh\fP at a location consistent with n->id(), allocating extra storage if necessary\&. Will error rather than overwriting an existing \fBNode\fP\&. Primarily intended for use with the \fBmesh_inserter_iterator\fP, only use if you know what you are doing\&.\&.\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::mesh_inserter_iterator< T >::operator=()\&.
+.SS "bool libMesh::MeshBase::is_prepared () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP if the mesh has been prepared via a call to \fCprepare_for_use\fP, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 126 of file mesh_base\&.h\&.
+.PP
+References _is_prepared\&.
+.PP
+Referenced by libMesh::DofMap::build_sparsity(), libMesh::DofMap::create_dof_constraints(), libMesh::DofMap::distribute_dofs(), and libMesh::DofMap::reinit()\&.
+.PP
+.nf
+127   { return _is_prepared; }
+.fi
+.SS "virtual bool libMesh::MeshBase::is_serial () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP if all elements and nodes of the mesh exist on the current processor, \fCfalse\fP otherwise 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP\&.
+.PP
+Definition at line 133 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), libMesh::MetisPartitioner::_do_partition(), libMesh::MeshRefinement::_refine_elements(), libMesh::UnstructuredMesh::all_second_order(), libMesh::EquationSystems::allgather(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::MeshRefinement::coarsen_elements(), libMesh::DofMap::create_dof_constraints(), libMesh::LocationMap< T >::init(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshSerializer::MeshSerializer(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::BoundaryInfo::n_nodeset_conds(), partition(), prepare_for_use(), libMesh::DofMap::process_constraints(), libMesh::Nemesis_IO::read(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::EquationSystems::write(), libMesh::LegacyXdrIO::write_mesh(), and libMesh::XdrIO::write_parallel()\&.
+.PP
+.nf
+134   { return true; }
+.fi
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::level_elements_begin (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::Modification::change_boundary_id(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::MeshRefinement::make_coarsening_compatible(), and libMesh::MeshTools::Modification::smooth()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::level_elements_begin (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::level_elements_end (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::Modification::change_boundary_id(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::MeshRefinement::make_coarsening_compatible(), and libMesh::MeshTools::Modification::smooth()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::level_elements_end (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual void libMesh::MeshBase::libmesh_assert_valid_parallel_ids () const\fC [inline]\fP, \fC [virtual]\fP"
+Verify id and processor_id consistency of our elements and nodes containers\&. Calls \fBlibmesh_assert()\fP on each possible failure\&. Currently only implemented on \fBParallelMesh\fP; a serial data structure is much harder to get out of sync\&. 
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP\&.
+.PP
+Definition at line 692 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::MeshRefinement::_refine_elements(), libMesh::InfElemBuilder::build_inf_elem(), and libMesh::MeshRefinement::refine_and_coarsen_elements()\&.
+.PP
+.nf
+692 {}
+.fi
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::local_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), libMesh::DofMap::create_dof_constraints(), libMesh::EquationSystems::get_solution(), libMesh::MeshTools::libmesh_assert_valid_remote_elems(), libMesh::MeshTools::n_local_levels(), and libMesh::MeshTools::n_p_levels()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::local_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::local_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), libMesh::DofMap::create_dof_constraints(), libMesh::EquationSystems::get_solution(), libMesh::MeshTools::libmesh_assert_valid_remote_elems(), libMesh::MeshTools::n_local_levels(), libMesh::MeshTools::n_p_levels(), and libMesh::XdrIO::write_serialized_connectivity()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::local_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::local_level_elements_begin (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::XdrIO::write_serialized_connectivity()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::local_level_elements_begin (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::local_level_elements_end (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::XdrIO::write_serialized_connectivity()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::local_level_elements_end (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::local_nodes_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::bounding_box(), libMesh::EquationSystems::build_solution_vector(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::DofMap::local_variable_indices(), libMesh::VTKIO::nodes_to_vtk(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::System::zero_variable()\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::local_nodes_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::local_nodes_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::bounding_box(), libMesh::EquationSystems::build_solution_vector(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::DofMap::local_variable_indices(), libMesh::VTKIO::nodes_to_vtk(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::System::zero_variable()\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::local_nodes_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::local_not_level_elements_begin (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::local_not_level_elements_begin (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::local_not_level_elements_end (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::local_not_level_elements_end (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::max_elem_id () const\fC [pure virtual]\fP"
+Returns a number greater than or equal to the maximum element id in the mesh\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::EquationSystems::get_solution(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), and libMesh::ErrorVector::plot_error()\&.
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::max_node_id () const\fC [pure virtual]\fP"
+Returns a number greater than or equal to the maximum node id in the mesh\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::DofMap::add_neighbors_to_send_list(), libMesh::UnstructuredMesh::all_first_order(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::EquationSystems::build_solution_vector(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::ErrorVector::plot_error(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "unsigned int libMesh::MeshBase::mesh_dimension () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the logical dimension of the mesh; i\&.e\&. the manifold dimension of the elements in the mesh\&. If we ever support multi-dimensional meshes (e\&.g\&. hexes and quads in the same mesh) then this will return the largest such dimension\&. 
+.RE
+.PP
+
+.PP
+Definition at line 155 of file mesh_base\&.h\&.
+.PP
+References _dim\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::HPCoarsenTest::add_projection(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Generation::build_cube(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::EquationSystems::build_solution_vector(), libMesh::EquationSystems::build_variable_names(), libMesh::System::calculate_norm(), libMesh::DofMap::create_dof_constraints(), libMesh::MeshTools::Modification::distort(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), get_info(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::LaplaceMeshSmoother::init(), libMesh::PointLocatorTree::init(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::FEInterface::n_vec_dim(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::ProjectSolution::operator()(), libMesh::MeshFunction::operator()(), libMesh::BoundaryProjectSolution::operator()(), prepare_for_use(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::System::read_header(), libMesh::LegacyXdrIO::read_mesh(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::MeshTools::Modification::rotate(), libMesh::HPCoarsenTest::select_refinement(), libMesh::MeshTools::Modification::smooth(), libMesh::BoundaryInfo::sync(), libMesh::DofMap::use_coupled_neighbor_dofs(), libMesh::PostscriptIO::write(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::UCDIO::write_nodal_data(), libMesh::EnsightIO::write_scalar_ascii(), libMesh::GnuPlotIO::write_solution(), libMesh::DivaIO::write_stream(), and libMesh::EnsightIO::write_vector_ascii()\&.
+.PP
+.nf
+156   { return static_cast<unsigned int>(_dim); }
+.fi
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::n_active_elem () const\fC [pure virtual]\fP"
+Returns the number of active elements in the mesh\&. Implemented in terms of active_element_iterators\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::LinearPartitioner::_do_partition(), libMesh::SFCPartitioner::_do_partition(), libMesh::MeshRefinement::flag_elements_by_error_tolerance(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::MeshTools::Modification::flatten(), get_info(), libMesh::PointLocatorList::init(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::Partitioner::partition(), libMesh::Partitioner::repartition(), libMesh::VariationalMeshSmoother::smooth(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::GmshIO::write_mesh(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_active_elem_on_proc (const \fBprocessor_id_type\fPproc) const"
+Returns the number of active elements on processor \fCproc\fP\&. 
+.PP
+Definition at line 267 of file mesh_base\&.C\&.
+.PP
+References active_pid_elements_begin(), active_pid_elements_end(), and libMesh::ParallelObject::n_processors()\&.
+.PP
+Referenced by n_active_local_elem()\&.
+.PP
+.nf
+268 {
+269   libmesh_assert_less (proc_id, this->n_processors());
+270   return static_cast<dof_id_type>(std::distance (this->active_pid_elements_begin(proc_id),
+271                                                  this->active_pid_elements_end  (proc_id)));
+272 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_active_local_elem () const\fC [inline]\fP"
+Returns the number of active elements on the local processor\&. 
+.PP
+Definition at line 300 of file mesh_base\&.h\&.
+.PP
+References n_active_elem_on_proc(), and libMesh::ParallelObject::processor_id()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParmetisPartitioner::build_graph(), libMesh::VTKIO::cells_to_vtk(), and libMesh::ParmetisPartitioner::initialize()\&.
+.PP
+.nf
+301   { return this->n_active_elem_on_proc (this->processor_id()); }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_active_sub_elem () const"
+Same, but only counts active elements\&. 
+.PP
+Definition at line 291 of file mesh_base\&.C\&.
+.PP
+References active_elements_begin(), active_elements_end(), and end\&.
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_old_impl(), and libMesh::TecplotIO::write_binary()\&.
+.PP
+.nf
+292 {
+293   dof_id_type ne=0;
+294 
+295   const_element_iterator       el  = this->active_elements_begin();
+296   const const_element_iterator end = this->active_elements_end();
+297 
+298   for (; el!=end; ++el)
+299     ne += (*el)->n_sub_elem();
+300 
+301   return ne;
+302 }
+.fi
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::n_elem () const\fC [pure virtual]\fP"
+Returns the number of elements in the mesh\&. The standard \fBn_elem()\fP function may return a cached value on distributed meshes, and so can be called by any processor at any time\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::SFCPartitioner::_do_partition(), libMesh::CentroidPartitioner::_do_partition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::MeshTools::Subdivision::add_boundary_ghosts(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Subdivision::all_subdivision(), libMesh::MeshTools::Modification::all_tri(), libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::MeshTools::build_nodes_to_elem_map(), libMesh::TetGenMeshInterface::check_hull_integrity(), libMesh::CentroidPartitioner::compute_centroids(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::UnstructuredMesh::create_submesh(), libMesh::MeshTools::Modification::distort(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), get_info(), libMesh::EquationSystems::get_solution(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ErrorVector::plot_error(), libMesh::AbaqusIO::read(), libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshTools::Modification::redistribute(), libMesh::HPCoarsenTest::select_refinement(), libMesh::MeshTools::subdomain_bounding_box(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), libMesh::FroIO::write(), libMesh::TetGenIO::write(), libMesh::XdrIO::write(), libMesh::UNVIO::write_implementation(), libMesh::LegacyXdrIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_vectors(), and libMesh::DivaIO::write_stream()\&.
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_elem_on_proc (const \fBprocessor_id_type\fPproc) const"
+Returns the number of elements on processor \fCproc\fP\&. 
+.PP
+Definition at line 254 of file mesh_base\&.C\&.
+.PP
+References libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::ParallelObject::n_processors(), pid_elements_begin(), and pid_elements_end()\&.
+.PP
+Referenced by n_local_elem(), and n_unpartitioned_elem()\&.
+.PP
+.nf
+255 {
+256   // We're either counting a processor's elements or unpartitioned
+257   // elements
+258   libmesh_assert (proc_id < this->n_processors() ||
+259                   proc_id == DofObject::invalid_processor_id);
+260 
+261   return static_cast<dof_id_type>(std::distance (this->pid_elements_begin(proc_id),
+262                                                  this->pid_elements_end  (proc_id)));
+263 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_local_elem () const\fC [inline]\fP"
+Returns the number of elements on the local processor\&. 
+.PP
+Definition at line 283 of file mesh_base\&.h\&.
+.PP
+References n_elem_on_proc(), and libMesh::ParallelObject::processor_id()\&.
+.PP
+Referenced by get_info(), and libMesh::ParallelMesh::parallel_n_elem()\&.
+.PP
+.nf
+284   { return this->n_elem_on_proc (this->processor_id()); }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_local_nodes () const\fC [inline]\fP"
+Returns the number of nodes on the local processor\&. 
+.PP
+Definition at line 197 of file mesh_base\&.h\&.
+.PP
+References n_nodes_on_proc(), and libMesh::ParallelObject::processor_id()\&.
+.PP
+Referenced by get_info(), libMesh::VTKIO::nodes_to_vtk(), and libMesh::ParallelMesh::parallel_n_nodes()\&.
+.PP
+.nf
+198   { return this->n_nodes_on_proc (this->processor_id()); }
+.fi
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::n_nodes () const\fC [pure virtual]\fP"
+Returns the number of nodes in the mesh\&. This function and others must be defined in derived classes since the \fBMeshBase\fP class has no specific storage for nodes or elements\&. The standard \fBn_nodes()\fP function may return a cached value on distributed meshes, and so can be called by any processor at any time\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::MeshTools::build_nodes_to_elem_map(), libMesh::EquationSystems::build_solution_vector(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::UnstructuredMesh::create_submesh(), libMesh::MeshTools::Modification::distort(), libMesh::TetGenMeshInterface::fill_pointlist(), libMesh::MeshTools::find_boundary_nodes(), get_info(), libMesh::LaplaceMeshSmoother::init(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::TreeNode< N >::insert(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::ErrorVector::plot_error(), libMesh::AbaqusIO::read(), libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshTools::Modification::redistribute(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshTools::Modification::smooth(), libMesh::VariationalMeshSmoother::smooth(), libMesh::MeshTools::subdomain_bounding_box(), libMesh::VTKIO::system_vectors_to_vtk(), libMesh::TreeNode< N >::transform_nodes_to_elements(), libMesh::MeshData::translate(), libMesh::TriangleInterface::triangulate(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), libMesh::FroIO::write(), libMesh::TetGenIO::write(), libMesh::XdrIO::write(), libMesh::MEDITIO::write_ascii(), libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::UCDIO::write_header(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_nodes(), libMesh::System::write_serialized_vectors(), libMesh::UCDIO::write_soln(), libMesh::LegacyXdrIO::write_soln(), libMesh::DivaIO::write_stream(), and libMesh::VariationalMeshSmoother::writegr()\&.
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_nodes_on_proc (const \fBprocessor_id_type\fPproc) const"
+Returns the number of nodes on processor \fCproc\fP\&. 
+.PP
+Definition at line 241 of file mesh_base\&.C\&.
+.PP
+References libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::ParallelObject::n_processors(), pid_nodes_begin(), and pid_nodes_end()\&.
+.PP
+Referenced by n_local_nodes(), and n_unpartitioned_nodes()\&.
+.PP
+.nf
+242 {
+243   // We're either counting a processor's nodes or unpartitioned
+244   // nodes
+245   libmesh_assert (proc_id < this->n_processors() ||
+246                   proc_id == DofObject::invalid_processor_id);
+247 
+248   return static_cast<dof_id_type>(std::distance (this->pid_nodes_begin(proc_id),
+249                                                  this->pid_nodes_end  (proc_id)));
+250 }
+.fi
+.SS "unsigned int libMesh::MeshBase::n_partitions () const\fC [inline]\fP"
+Returns the number of partitions which have been defined via a call to either mesh\&.partition() or by building a \fBPartitioner\fP object and calling partition\&. Note that the partitioner objects are responsible for setting this value\&. 
+.PP
+Definition at line 578 of file mesh_base\&.h\&.
+.PP
+References _n_parts\&.
+.PP
+Referenced by get_info(), libMesh::Partitioner::set_node_processor_ids(), libMesh::BoundaryInfo::sync(), libMesh::UnstructuredMesh::write(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.PP
+.nf
+579   { return _n_parts; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), n_active_elem_on_proc(), n_elem_on_proc(), n_nodes_on_proc(), libMesh::Partitioner::partition(), partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_sub_elem () const"
+This function returns the number of elements that will be written out in the Tecplot format\&. For example, a 9-noded quadrilateral will be broken into 4 linear sub-elements for plotting purposes\&. Thus, for a mesh of 2 \fCQUAD9\fP elements \fCn_tecplot_elem()\fP will return 8\&. Implemented in terms of element_iterators\&. 
+.PP
+Definition at line 276 of file mesh_base\&.C\&.
+.PP
+References elements_begin(), elements_end(), and end\&.
+.PP
+.nf
+277 {
+278   dof_id_type ne=0;
+279 
+280   const_element_iterator       el  = this->elements_begin();
+281   const const_element_iterator end = this->elements_end();
+282 
+283   for (; el!=end; ++el)
+284     ne += (*el)->n_sub_elem();
+285 
+286   return ne;
+287 }
+.fi
+.SS "\fBsubdomain_id_type\fP libMesh::MeshBase::n_subdomains () const"
+Returns the number of subdomains in the global mesh\&. Subdomains correspond to separate subsets of the mesh which could correspond e\&.g\&. to different materials in a solid mechanics application, or regions where different physical processes are important\&. The subdomain mapping is independent from the parallel decomposition\&. 
+.PP
+Definition at line 226 of file mesh_base\&.C\&.
+.PP
+References subdomain_ids()\&.
+.PP
+Referenced by get_info(), libMesh::XdrIO::write(), and libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+227 {
+228   // This requires an inspection on every processor
+229   parallel_object_only();
+230 
+231   std::set<subdomain_id_type> ids;
+232 
+233   this->subdomain_ids (ids);
+234 
+235   return ids\&.size();
+236 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_unpartitioned_elem () const\fC [inline]\fP"
+Returns the number of elements owned by no processor\&. 
+.PP
+Definition at line 289 of file mesh_base\&.h\&.
+.PP
+References libMesh::DofObject::invalid_processor_id, and n_elem_on_proc()\&.
+.PP
+Referenced by libMesh::ParallelMesh::parallel_n_elem()\&.
+.PP
+.nf
+290   { return this->n_elem_on_proc (DofObject::invalid_processor_id); }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshBase::n_unpartitioned_nodes () const\fC [inline]\fP"
+Returns the number of nodes owned by no processor\&. 
+.PP
+Definition at line 203 of file mesh_base\&.h\&.
+.PP
+References libMesh::DofObject::invalid_processor_id, and n_nodes_on_proc()\&.
+.PP
+Referenced by libMesh::ParallelMesh::parallel_n_nodes()\&.
+.PP
+.nf
+204   { return this->n_nodes_on_proc (DofObject::invalid_processor_id); }
+.fi
+.SS "\fBunique_id_type\fP libMesh::MeshBase::next_unique_id ()\fC [inline]\fP"
+Returns the next unique id to be used\&. 
+.PP
+Definition at line 216 of file mesh_base\&.h\&.
+.PP
+References _next_unique_id\&.
+.PP
+.nf
+216 { return _next_unique_id; }
+.fi
+.SS "virtual const \fBNode\fP& libMesh::MeshBase::node (const \fBdof_id_type\fPi) const\fC [pure virtual]\fP"
+Return a constant reference (for reading only) to the $ i^{th} $ node, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Modification::all_tri(), libMesh::MeshTools::Generation::build_cube(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshTools::Modification::smooth(), libMesh::GmshIO::write_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.SS "virtual \fBNode\fP& libMesh::MeshBase::node (const \fBdof_id_type\fPi)\fC [pure virtual]\fP"
+Return a reference to the $ i^{th} $ node, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual const \fBNode\fP* libMesh::MeshBase::node_ptr (const \fBdof_id_type\fPi) const\fC [pure virtual]\fP"
+Return a pointer to the $ i^{th} $ node, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::SyncNodalPositions::act_on_data(), libMesh::BoundaryInfo::add_node(), libMesh::DofMap::allgather_recursive_constraints(), libMesh::AbaqusIO::assign_boundary_node_ids(), libMesh::TetGenMeshInterface::assign_nodes_to_elem(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::VTKIO::cells_to_vtk(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::TriangleWrapper::copy_tri_to_mesh(), libMesh::UnstructuredMesh::create_submesh(), libMesh::MeshTools::Modification::distort(), libMesh::UNVIO::element_in(), libMesh::MeshData::foreign_id_to_node(), libMesh::SyncNodalPositions::gather_data(), libMesh::DofMap::node_ptr(), libMesh::BoundaryInfo::operator=(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::VTKIO::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::AbaqusIO::read_elements(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::DofMap::scatter_constraints(), libMesh::Partitioner::set_node_processor_ids(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::unpack(), libMesh::Elem::PackedElem::unpack(), and libMesh::Nemesis_IO_Helper::write_nodal_coordinates()\&.
+.SS "virtual \fBNode\fP* libMesh::MeshBase::node_ptr (const \fBdof_id_type\fPi)\fC [pure virtual]\fP"
+Return a writeable pointer to the $ i^{th} $ node, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::nodes_begin ()\fC [pure virtual]\fP"
+non-const \fBNode\fP iterator accessor functions\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::EquationSystems::_add_system_to_nodes_and_elems(), libMesh::UnstructuredMesh::all_first_order(), libMesh::EquationSystems::allgather(), libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::DofMap::distribute_dofs(), libMesh::LocationMap< T >::fill(), libMesh::TetGenMeshInterface::fill_pointlist(), libMesh::LocationMap< T >::init(), libMesh::EquationSystems::init(), libMesh::DofMap::invalidate_dofs(), libMesh::MeshTools::libmesh_assert_connected_nodes(), libMesh::MeshTools::libmesh_assert_equal_n_systems(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::FEMSystem::mesh_position_set(), libMesh::UNVIO::node_out(), libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), libMesh::System::read_legacy_data(), libMesh::VariationalMeshSmoother::readgr(), libMesh::MeshTools::Modification::redistribute(), libMesh::EquationSystems::reinit(), libMesh::DofMap::reinit(), libMesh::MeshTools::Modification::rotate(), libMesh::MeshTools::Modification::scale(), libMesh::Partitioner::set_node_processor_ids(), libMesh::Partitioner::single_partition(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::Modification::translate(), libMesh::MeshData::translate(), libMesh::Tree< N >::Tree(), libMesh::TriangleInterface::triangulate(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodes(), libMesh::CheckpointIO::write_nodes(), and libMesh::VariationalMeshSmoother::writegr()\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::nodes_begin () const\fC [pure virtual]\fP"
+const \fBNode\fP iterator accessor functions\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::nodes_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::EquationSystems::_add_system_to_nodes_and_elems(), libMesh::UnstructuredMesh::all_first_order(), libMesh::EquationSystems::allgather(), libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::DofMap::distribute_dofs(), libMesh::LocationMap< T >::fill(), libMesh::TetGenMeshInterface::fill_pointlist(), libMesh::LocationMap< T >::init(), libMesh::EquationSystems::init(), libMesh::DofMap::invalidate_dofs(), libMesh::MeshTools::libmesh_assert_connected_nodes(), libMesh::MeshTools::libmesh_assert_equal_n_systems(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::FEMSystem::mesh_position_set(), libMesh::UNVIO::node_out(), libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), libMesh::System::read_legacy_data(), libMesh::VariationalMeshSmoother::readgr(), libMesh::MeshTools::Modification::redistribute(), libMesh::EquationSystems::reinit(), libMesh::DofMap::reinit(), libMesh::MeshTools::Modification::rotate(), libMesh::MeshTools::Modification::scale(), libMesh::Partitioner::set_node_processor_ids(), libMesh::Partitioner::single_partition(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::Modification::translate(), libMesh::MeshData::translate(), libMesh::Tree< N >::Tree(), libMesh::TriangleInterface::triangulate(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodes(), libMesh::CheckpointIO::write_nodes(), and libMesh::VariationalMeshSmoother::writegr()\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::nodes_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_active_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::Partitioner::set_node_processor_ids()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_active_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_active_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::Partitioner::set_node_processor_ids()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_active_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_ancestor_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_ancestor_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_ancestor_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_ancestor_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_level_elements_begin (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_level_elements_begin (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_level_elements_end (const unsigned intlevel)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_level_elements_end (const unsigned intlevel) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_local_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_local_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_local_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_local_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_subactive_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_subactive_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::not_subactive_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::not_subactive_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "\fBMeshBase\fP& libMesh::MeshBase::operator= (const \fBMeshBase\fP &other)\fC [private]\fP"
+The default shallow assignment operator is a very bad idea, so we'll make it a compile-time error to try and do it from other classes and a link-time error to try and do it from this class\&. Use \fBclone()\fP if necessary\&. 
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::parallel_n_elem () const\fC [pure virtual]\fP"
+Returns the number of elements in the mesh\&. The \fBparallel_n_elem()\fP function returns a newly calculated parallel-synchronized value on distributed meshes, and so must be called in parallel only\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::initialize(), and libMesh::Nemesis_IO::read()\&.
+.SS "virtual \fBdof_id_type\fP libMesh::MeshBase::parallel_n_nodes () const\fC [pure virtual]\fP"
+Returns the number of nodes in the mesh\&. This function and others must be defined in derived classes since the \fBMeshBase\fP class has no specific storage for nodes or elements\&. The \fBparallel_n_nodes()\fP function returns a newly calculated parallel-synchronized value on distributed meshes, and so must be called in parallel only\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::initialize(), and libMesh::Nemesis_IO::read()\&.
+.SS "void libMesh::MeshBase::partition (const unsigned intn_parts)\fC [virtual]\fP"
+Call the default partitioner (currently \fCmetis_partition()\fP)\&. 
+.PP
+Definition at line 344 of file mesh_base\&.C\&.
+.PP
+References is_serial(), partitioner(), recalculate_n_partitions(), skip_partitioning(), and update_post_partitioning()\&.
+.PP
+.nf
+345 {
+346   // NULL partitioner means don't partition
+347   // Non-serial meshes aren't ready for partitioning yet\&.
+348   if(!skip_partitioning() &&
+349      partitioner()\&.get() &&
+350      this->is_serial())
+351     {
+352       partitioner()->partition (*this, n_parts);
+353     }
+354   else
+355     {
+356       // Make sure locally cached partition count
+357       this->recalculate_n_partitions();
+358 
+359       // Make sure any other locally cached data is correct
+360       this->update_post_partitioning();
+361     }
+362 }
+.fi
+.SS "void libMesh::MeshBase::partition ()\fC [inline]\fP"
+
+.PP
+Definition at line 514 of file mesh_base\&.h\&.
+.PP
+References libMesh::ParallelObject::n_processors()\&.
+.PP
+Referenced by prepare_for_use()\&.
+.PP
+.nf
+515   { this->partition(this->n_processors()); }
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBPartitioner\fP>& libMesh::MeshBase::partitioner ()\fC [inline]\fP, \fC [virtual]\fP"
+A partitioner to use at each \fBprepare_for_use()\fP 
+.PP
+Definition at line 115 of file mesh_base\&.h\&.
+.PP
+References _partitioner\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), partition(), and libMesh::BoundaryInfo::sync()\&.
+.PP
+.nf
+115 { return _partitioner; }
+.fi
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::pid_elements_begin (const \fBprocessor_id_type\fPproc_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by n_elem_on_proc(), libMesh::MeshTools::processor_bounding_box(), libMesh::BoundaryInfo::sync(), and libMesh::MeshTools::weight()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::pid_elements_begin (const \fBprocessor_id_type\fPproc_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::pid_elements_end (const \fBprocessor_id_type\fPproc_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by n_elem_on_proc(), libMesh::MeshTools::processor_bounding_box(), libMesh::BoundaryInfo::sync(), and libMesh::MeshTools::weight()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::pid_elements_end (const \fBprocessor_id_type\fPproc_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::pid_nodes_begin (const \fBprocessor_id_type\fPproc_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::bounding_box(), and n_nodes_on_proc()\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::pid_nodes_begin (const \fBprocessor_id_type\fPproc_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBnode_iterator\fP libMesh::MeshBase::pid_nodes_end (const \fBprocessor_id_type\fPproc_id)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::bounding_box(), and n_nodes_on_proc()\&.
+.SS "virtual \fBconst_node_iterator\fP libMesh::MeshBase::pid_nodes_end (const \fBprocessor_id_type\fPproc_id) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual const \fBPoint\fP& libMesh::MeshBase::point (const \fBdof_id_type\fPi) const\fC [pure virtual]\fP"
+Return a constant reference (for reading only) to the $ i^{th} $ point, which should be present in this processor's subset of the mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_second_order(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshTools::subdomain_bounding_box(), libMesh::FroIO::write(), libMesh::TetGenIO::write(), libMesh::MEDITIO::write_ascii(), libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::GnuPlotIO::write_solution(), and libMesh::DivaIO::write_stream()\&.
+.SS "const \fBPointLocatorBase\fP & libMesh::MeshBase::point_locator () const"
+\fCreturns\fP a pointer to a \fC\fBPointLocatorBase\fP\fP object for this mesh, constructing a master PointLocator first if necessary\&. This should never be used in threaded or non-parallel_only code, and so is deprecated\&. 
+.PP
+Definition at line 384 of file mesh_base\&.C\&.
+.PP
+References _point_locator, libMesh::PointLocatorBase::build(), libMesh::Threads::in_threads, libMesh::libmesh_assert(), and libMesh::TREE\&.
+.PP
+.nf
+385 {
+386   libmesh_deprecated();
+387 
+388   if (_point_locator\&.get() == NULL)
+389     {
+390       // PointLocator construction may not be safe within threads
+391       libmesh_assert(!Threads::in_threads);
+392 
+393       _point_locator\&.reset (PointLocatorBase::build(TREE, *this)\&.release());
+394     }
+395 
+396   return *_point_locator;
+397 }
+.fi
+.SS "void libMesh::MeshBase::prepare_for_use (const boolskip_renumber_nodes_and_elements = \fCfalse\fP, const boolskip_find_neighbors = \fCfalse\fP)"
+Prepare a newly created (or read) mesh for use\&. This involves 3 steps: 1\&.) call \fC\fBfind_neighbors()\fP\fP 2\&.) call \fC\fBpartition()\fP\fP 3\&.) call \fC\fBrenumber_nodes_and_elements()\fP\fP 
+.PP
+The argument to skip renumbering is now deprecated - to prevent a mesh from being renumbered, set allow_renumbering(false)\&. 
+.PP
+Definition at line 120 of file mesh_base\&.C\&.
+.PP
+References _is_prepared, _skip_renumber_nodes_and_elements, allow_renumbering(), assign_unique_ids(), clear_point_locator(), libMesh::ParallelObject::comm(), delete_remote_elements(), libMesh::dim, find_neighbors(), is_serial(), libMesh::libmesh_assert(), libMesh::Parallel::Communicator::max(), mesh_dimension(), partition(), renumber_nodes_and_elements(), set_mesh_dimension(), update_parallel_id_counts(), and libMesh::Parallel::verify()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Subdivision::all_subdivision(), libMesh::MeshTools::Modification::all_tri(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::MeshRefinement::coarsen_elements(), libMesh::UnstructuredMesh::create_submesh(), libMesh::MeshTools::Modification::flatten(), libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), libMesh::GMVIO::read(), libMesh::UnstructuredMesh::read(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::SerialMesh::stitching_helper(), libMesh::BoundaryInfo::sync(), libMesh::MeshRefinement::uniformly_coarsen(), and libMesh::MeshRefinement::uniformly_refine()\&.
+.PP
+.nf
+121 {
+122   parallel_object_only();
+123 
+124   // A distributed mesh may have processors with no elements (or
+125   // processors with no elements of higher dimension, if we ever
+126   // support mixed-dimension meshes), but we want consistent
+127   // mesh_dimension anyways\&.
+128   libmesh_assert(this->comm()\&.verify(this->is_serial()));
+129 
+130   if (!this->is_serial())
+131     {
+132       unsigned int dim = this->mesh_dimension();
+133       this->comm()\&.max(dim);
+134       this->set_mesh_dimension(dim);
+135     }
+136 
+137   // Renumber the nodes and elements so that they in contiguous
+138   // blocks\&.  By default, _skip_renumber_nodes_and_elements is false\&.
+139   //
+140   // We may currently change that by passing
+141   // skip_renumber_nodes_and_elements==true to this function, but we
+142   // should use the allow_renumbering() accessor instead\&.
+143   //
+144   // Instances where you if prepare_for_use() should not renumber the nodes
+145   // and elements include reading in e\&.g\&. an xda/r or gmv file\&. In
+146   // this case, the ordering of the nodes may depend on an accompanying
+147   // solution, and the node ordering cannot be changed\&.
+148 
+149   if (skip_renumber_nodes_and_elements)
+150     {
+151       libmesh_deprecated();
+152       this->allow_renumbering(false);
+153     }
+154 
+155   // Mesh modification operations might not leave us with consistent
+156   // id counts, but our partitioner might need that consistency\&.
+157   if(!_skip_renumber_nodes_and_elements)
+158     this->renumber_nodes_and_elements();
+159   else
+160     this->update_parallel_id_counts();
+161 
+162   // Let all the elements find their neighbors
+163   if(!skip_find_neighbors)
+164     this->find_neighbors();
+165 
+166   // Partition the mesh\&.
+167   this->partition();
+168 
+169   // If we're using ParallelMesh, we'll want it parallelized\&.
+170   this->delete_remote_elements();
+171 
+172 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+173   // Assign DOF object unique ids
+174   this->assign_unique_ids();
+175 #endif
+176 
+177   if(!_skip_renumber_nodes_and_elements)
+178     this->renumber_nodes_and_elements();
+179 
+180   // Reset our PointLocator\&.  This needs to happen any time the elements
+181   // in the underlying elements in the mesh have changed, so we do it here\&.
+182   this->clear_point_locator();
+183 
+184   // The mesh is now prepared for use\&.
+185   _is_prepared = true;
+186 }
+.fi
+.SS "void libMesh::MeshBase::print_info (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const"
+Prints relevant information about the mesh\&. 
+.PP
+Definition at line 330 of file mesh_base\&.C\&.
+.PP
+References get_info()\&.
+.PP
+Referenced by libMesh::InfElemBuilder::build_inf_elem(), and libMesh::operator<<()\&.
+.PP
+.nf
+331 {
+332   os << this->get_info()
+333      << std::endl;
+334 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), n_local_elem(), n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "virtual const \fBElem\fP* libMesh::MeshBase::query_elem (const \fBdof_id_type\fPi) const\fC [pure virtual]\fP"
+Return a pointer to the $ i^{th} $ element, or NULL if no such element exists in this processor's mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::Parallel::unpack(), and libMesh::Elem::PackedElem::unpack()\&.
+.SS "virtual \fBElem\fP* libMesh::MeshBase::query_elem (const \fBdof_id_type\fPi)\fC [pure virtual]\fP"
+Return a writeable pointer to the $ i^{th} $ element, or NULL if no such element exists in this processor's mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual const \fBNode\fP* libMesh::MeshBase::query_node_ptr (const \fBdof_id_type\fPi) const\fC [pure virtual]\fP"
+Return a pointer to the $ i^{th} $ node, or NULL if no such node exists in this processor's mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), and libMesh::Parallel::unpack()\&.
+.SS "virtual \fBNode\fP* libMesh::MeshBase::query_node_ptr (const \fBdof_id_type\fPi)\fC [pure virtual]\fP"
+Return a writeable pointer to the $ i^{th} $ node, or NULL if no such node exists in this processor's mesh data structure\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual void libMesh::MeshBase::read (const std::string &name, \fBMeshData\fP *mesh_data = \fCNULL\fP, boolskip_renumber_nodes_and_elements = \fCfalse\fP)\fC [pure virtual]\fP"
+Interfaces for reading/writing a mesh to/from a file\&. Must be implemented in derived classes\&. 
+.PP
+Implemented in \fBlibMesh::UnstructuredMesh\fP\&.
+.SS "unsigned int libMesh::MeshBase::recalculate_n_partitions ()"
+In a few (very rare) cases, the user may have manually tagged the elements with specific processor IDs by hand, without using a partitioner\&. In this case, the \fBMesh\fP will not know that the total number of partitions, _n_parts, has changed, unless you call this function\&. This is an O(N active elements) calculation\&. The return value is the number of partitions, and _n_parts is also set by this function\&. 
+.PP
+Definition at line 364 of file mesh_base\&.C\&.
+.PP
+References _n_parts, active_elements_begin(), active_elements_end(), libMesh::ParallelObject::comm(), end, std::max(), and libMesh::Parallel::Communicator::max()\&.
+.PP
+Referenced by partition()\&.
+.PP
+.nf
+365 {
+366   const_element_iterator       el  = this->active_elements_begin();
+367   const const_element_iterator end = this->active_elements_end();
+368 
+369   unsigned int max_proc_id=0;
+370 
+371   for (; el!=end; ++el)
+372     max_proc_id = std::max(max_proc_id, static_cast<unsigned int>((*el)->processor_id()));
+373 
+374   // The number of partitions is one more than the max processor ID\&.
+375   _n_parts = max_proc_id+1;
+376 
+377   this->comm()\&.max(_n_parts);
+378 
+379   return _n_parts;
+380 }
+.fi
+.SS "virtual void libMesh::MeshBase::redistribute ()\fC [inline]\fP, \fC [virtual]\fP"
+Redistribute elements between processors\&. This gets called automatically by the \fBPartitioner\fP, and is a no-op in the case of a \fBSerialMesh\fP or serialized \fBParallelMesh\fP 
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP\&.
+.PP
+Definition at line 522 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::Partitioner::partition()\&.
+.PP
+.nf
+522 {}
+.fi
+.SS "virtual void libMesh::MeshBase::renumber_elem (\fBdof_id_type\fPold_id, \fBdof_id_type\fPnew_id)\fC [pure virtual]\fP"
+Changes the id of element \fCold_id\fP, both by changing elem(old_id)->id() and by moving elem(old_id) in the mesh's internal container\&. No element with the id \fCnew_id\fP should already exist\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshCommunication::make_elems_parallel_consistent()\&.
+.SS "virtual void libMesh::MeshBase::renumber_node (\fBdof_id_type\fPold_id, \fBdof_id_type\fPnew_id)\fC [pure virtual]\fP"
+Changes the id of node \fCold_id\fP, both by changing node(old_id)->id() and by moving node(old_id) in the mesh's internal container\&. No element with the id \fCnew_id\fP should already exist\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshCommunication::make_node_ids_parallel_consistent()\&.
+.SS "virtual void libMesh::MeshBase::renumber_nodes_and_elements ()\fC [pure virtual]\fP"
+After partitoning a mesh it is useful to renumber the nodes and elements so that they lie in contiguous blocks on the processors\&. This method does just that\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), libMesh::UnstructuredMesh::contract(), libMesh::ErrorVector::plot_error(), and prepare_for_use()\&.
+.SS "virtual void libMesh::MeshBase::reserve_elem (const \fBdof_id_type\fPne)\fC [pure virtual]\fP"
+Reserves space for a known number of elements\&. Note that this method may or may not do anything, depending on the actual \fC\fBMesh\fP\fP implementation\&. If you know the number of elements you will add and call this method before repeatedly calling \fC\fBadd_point()\fP\fP the implementation will be more efficient\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::ExodusII_IO::read(), libMesh::XdrIO::read(), libMesh::GmshIO::read_mesh(), and libMesh::LegacyXdrIO::read_mesh()\&.
+.SS "virtual void libMesh::MeshBase::reserve_nodes (const \fBdof_id_type\fPnn)\fC [pure virtual]\fP"
+Reserves space for a known number of nodes\&. Note that this method may or may not do anything, depending on the actual \fC\fBMesh\fP\fP implementation\&. If you know the number of nodes you will add and call this method before repeatedly calling \fC\fBadd_point()\fP\fP the implementation will be more efficient\&. 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::ExodusII_IO::read(), libMesh::XdrIO::read(), libMesh::GmshIO::read_mesh(), and libMesh::LegacyXdrIO::read_mesh()\&.
+.SS "void libMesh::MeshBase::set_mesh_dimension (unsigned intd)\fC [inline]\fP"
+Resets the logical dimension of the mesh\&. 
+.PP
+Definition at line 161 of file mesh_base\&.h\&.
+.PP
+References _dim\&.
+.PP
+Referenced by libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::TriangleWrapper::copy_tri_to_mesh(), prepare_for_use(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::AbaqusIO::read_elements(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::BoundaryInfo::sync(), and libMesh::TriangleInterface::triangulate()\&.
+.PP
+.nf
+162   { _dim = d; }
+.fi
+.SS "unsigned int& libMesh::MeshBase::set_n_partitions ()\fC [inline]\fP, \fC [protected]\fP"
+Returns a writeable reference to the number of partitions\&. 
+.PP
+Definition at line 859 of file mesh_base\&.h\&.
+.PP
+References _n_parts\&.
+.PP
+Referenced by libMesh::Partitioner::partition(), libMesh::Partitioner::repartition(), and libMesh::BoundaryInfo::sync()\&.
+.PP
+.nf
+860   { return _n_parts; }
+.fi
+.SS "void libMesh::MeshBase::set_next_unique_id (\fBunique_id_type\fPid)\fC [inline]\fP"
+Sets the next unique id to be used\&. 
+.PP
+Definition at line 221 of file mesh_base\&.h\&.
+.PP
+References _next_unique_id\&.
+.PP
+.nf
+221 { _next_unique_id = id; }
+.fi
+.SS "std::map<\fBsubdomain_id_type\fP, std::string>& libMesh::MeshBase::set_subdomain_name_map ()\fC [inline]\fP"
+Return a writeable reference to the whole subdomain name map 
+.PP
+Definition at line 841 of file mesh_base\&.h\&.
+.PP
+References _block_id_to_name\&.
+.PP
+Referenced by libMesh::XdrIO::read_serialized_subdomain_names(), and libMesh::CheckpointIO::read_subdomain_names()\&.
+.PP
+.nf
+842   { return _block_id_to_name; }
+.fi
+.SS "void libMesh::MeshBase::skip_partitioning (boolskip)\fC [inline]\fP"
+If true is passed in then this mesh will no longer be (re)partitioned\&. It would probably be a bad idea to call this on a Serial \fBMesh\fP \fIbefore\fP the first partitioning has happened\&.\&.\&. because no elements would get assigned to your processor pool\&.
+.PP
+Note that turning on \fBskip_partitioning()\fP can have adverse effects on your performance when using AMR\&.\&.\&. ie you could get large load imbalances\&.
+.PP
+However you might still want to use this if the communication and computation of the rebalance and repartition is too high for your application\&. 
+.PP
+Definition at line 551 of file mesh_base\&.h\&.
+.PP
+References _skip_partitioning\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::copy_nodes_and_elements()\&.
+.PP
+.nf
+551 { _skip_partitioning = skip; }
+.fi
+.SS "bool libMesh::MeshBase::skip_partitioning () const\fC [inline]\fP"
+
+.PP
+Definition at line 552 of file mesh_base\&.h\&.
+.PP
+References _skip_partitioning\&.
+.PP
+Referenced by partition()\&.
+.PP
+.nf
+552 { return _skip_partitioning; }
+.fi
+.SS "unsigned int libMesh::MeshBase::spatial_dimension () const\fC [inline]\fP"
+Returns the spatial dimension of the mesh\&. Note that this is defined at compile time in the header \fC\fBlibmesh_common\&.h\fP\fP\&. 
+.PP
+Definition at line 168 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), get_info(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::UNVIO::node_out(), libMesh::MeshTools::Modification::scale(), libMesh::MeshTools::subdomain_bounding_box(), and libMesh::Nemesis_IO_Helper::write_exodus_initialization_info()\&.
+.PP
+.nf
+169   { return static_cast<unsigned int>(LIBMESH_DIM); }
+.fi
+.SS "\fBAutoPtr\fP< \fBPointLocatorBase\fP > libMesh::MeshBase::sub_point_locator () const"
+\fCreturns\fP a pointer to a subordinate \fC\fBPointLocatorBase\fP\fP object for this mesh, constructing a master PointLocator first if necessary\&. This should not be used in threaded or non-parallel_only code unless the master has already been constructed\&. 
+.PP
+Definition at line 400 of file mesh_base\&.C\&.
+.PP
+References _point_locator, libMesh::PointLocatorBase::build(), libMesh::Threads::in_threads, libMesh::libmesh_assert(), and libMesh::TREE\&.
+.PP
+Referenced by libMesh::DofMap::create_dof_constraints(), libMesh::MeshFunction::init(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), and libMesh::MeshRefinement::test_level_one()\&.
+.PP
+.nf
+401 {
+402   if (_point_locator\&.get() == NULL)
+403     {
+404       // PointLocator construction may not be safe within threads
+405       libmesh_assert(!Threads::in_threads);
+406 
+407       _point_locator\&.reset (PointLocatorBase::build(TREE, *this)\&.release());
+408     }
+409 
+410   return PointLocatorBase::build(TREE, *this, _point_locator\&.get());
+411 }
+.fi
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::subactive_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::Partitioner::set_node_processor_ids()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::subactive_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::subactive_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::Partitioner::set_node_processor_ids()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::subactive_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "void libMesh::MeshBase::subdomain_ids (std::set< \fBsubdomain_id_type\fP > &ids) const"
+Constructs a list of all subdomain identifiers in the global mesh\&. Subdomains correspond to separate subsets of the mesh which could correspond e\&.g\&. to different materials in a solid mechanics application, or regions where different physical processes are important\&. The subdomain mapping is independent from the parallel decomposition\&. 
+.PP
+Definition at line 207 of file mesh_base\&.C\&.
+.PP
+References active_elements_begin(), active_elements_end(), libMesh::ParallelObject::comm(), end, and libMesh::Parallel::Communicator::set_union()\&.
+.PP
+Referenced by n_subdomains(), and libMesh::TecplotIO::TecplotIO()\&.
+.PP
+.nf
+208 {
+209   // This requires an inspection on every processor
+210   parallel_object_only();
+211 
+212   ids\&.clear();
+213 
+214   const_element_iterator       el  = this->active_elements_begin();
+215   const const_element_iterator end = this->active_elements_end();
+216 
+217   for (; el!=end; ++el)
+218     ids\&.insert((*el)->subdomain_id());
+219 
+220   // Some subdomains may only live on other processors
+221   this->comm()\&.set_union(ids);
+222 }
+.fi
+.SS "std::string & libMesh::MeshBase::subdomain_name (\fBsubdomain_id_type\fPid)"
+Returns a writable reference for getting/setting an optional name for a subdomain\&. 
+.PP
+Definition at line 422 of file mesh_base\&.C\&.
+.PP
+References _block_id_to_name\&.
+.PP
+Referenced by DMLibMeshSetSystem(), libMesh::ExodusII_IO::read(), libMesh::TecplotIO::write_binary(), and libMesh::ExodusII_IO_Helper::write_elements()\&.
+.PP
+.nf
+423 {
+424   return _block_id_to_name[id];
+425 }
+.fi
+.SS "const std::string & libMesh::MeshBase::subdomain_name (\fBsubdomain_id_type\fPid) const"
+
+.PP
+Definition at line 427 of file mesh_base\&.C\&.
+.PP
+References _block_id_to_name\&.
+.PP
+.nf
+428 {
+429   // An empty string to return when no matching subdomain name is found
+430   static const std::string empty;
+431 
+432   std::map<subdomain_id_type, std::string>::const_iterator iter = _block_id_to_name\&.find(id);
+433   if (iter == _block_id_to_name\&.end())
+434     return empty;
+435   else
+436     return iter->second;
+437 }
+.fi
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::type_elements_begin (const \fBElemType\fPtype)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::n_elem_of_type(), and libMesh::MeshTools::n_non_subactive_elem_of_type_at_level()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::type_elements_begin (const \fBElemType\fPtype) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::type_elements_end (const \fBElemType\fPtype)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::n_elem_of_type(), and libMesh::MeshTools::n_non_subactive_elem_of_type_at_level()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::type_elements_end (const \fBElemType\fPtype) const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::unpartitioned_elements_begin ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::n_active_levels(), libMesh::MeshTools::n_levels(), libMesh::MeshTools::n_p_levels(), libMesh::Partitioner::partition_unpartitioned_elements(), and libMesh::Partitioner::set_node_processor_ids()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::unpartitioned_elements_begin () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual \fBelement_iterator\fP libMesh::MeshBase::unpartitioned_elements_end ()\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshTools::n_active_levels(), libMesh::MeshTools::n_levels(), libMesh::MeshTools::n_p_levels(), libMesh::Partitioner::partition_unpartitioned_elements(), and libMesh::Partitioner::set_node_processor_ids()\&.
+.SS "virtual \fBconst_element_iterator\fP libMesh::MeshBase::unpartitioned_elements_end () const\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.SS "virtual void libMesh::MeshBase::update_parallel_id_counts ()\fC [pure virtual]\fP"
+Updates parallel caches so that methods like \fBn_elem()\fP accurately reflect changes on other processors 
+.PP
+Implemented in \fBlibMesh::ParallelMesh\fP, and \fBlibMesh::SerialMesh\fP\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), libMesh::MeshRefinement::_refine_elements(), and prepare_for_use()\&.
+.SS "virtual void libMesh::MeshBase::update_post_partitioning ()\fC [inline]\fP, \fC [virtual]\fP"
+Recalculate any cached data after elements and nodes have been repartitioned\&. 
+.PP
+Reimplemented in \fBlibMesh::ParallelMesh\fP\&.
+.PP
+Definition at line 528 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::Partitioner::partition(), partition(), and libMesh::Nemesis_IO::read()\&.
+.PP
+.nf
+528 {}
+.fi
+.SS "virtual void libMesh::MeshBase::write (const std::string &name, \fBMeshData\fP *mesh_data = \fCNULL\fP)\fC [pure virtual]\fP"
+
+.PP
+Implemented in \fBlibMesh::UnstructuredMesh\fP\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBBoundaryInfo\fP\fC [friend]\fP"
+Make the \fC\fBBoundaryInfo\fP\fP class a friend so that it can create and interact with \fC\fBBoundaryMesh\fP\fP\&. 
+.PP
+Definition at line 936 of file mesh_base\&.h\&.
+.SS "std::ostream& operator<< (std::ostream &os, const \fBMeshBase\fP &m)\fC [friend]\fP"
+Equivalent to calling \fBprint_info()\fP above, but now you can write: \fBMesh\fP mesh; \fBlibMesh::out\fP << mesh << std::endl; 
+.PP
+Definition at line 337 of file mesh_base\&.C\&.
+.PP
+.nf
+338 {
+339   m\&.print_info(os);
+340   return os;
+341 }
+.fi
+.SS "friend class \fBPartitioner\fP\fC [friend]\fP"
+The partitioner class is a friend so that it can set the number of partitions\&. 
+.PP
+Definition at line 930 of file mesh_base\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "std::map<\fBsubdomain_id_type\fP, std::string> libMesh::MeshBase::_block_id_to_name\fC [protected]\fP"
+This structure maintains the mapping of named blocks for file formats that support named blocks\&. Currently this is only implemented for ExodusII 
+.PP
+Definition at line 924 of file mesh_base\&.h\&.
+.PP
+Referenced by get_id_by_name(), get_subdomain_name_map(), set_subdomain_name_map(), and subdomain_name()\&.
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "unsigned int libMesh::MeshBase::_dim\fC [protected]\fP"
+The logical dimension of the mesh\&. 
+.PP
+Definition at line 876 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::UnstructuredMesh::find_neighbors(), mesh_dimension(), MeshBase(), and set_mesh_dimension()\&.
+.SS "bool libMesh::MeshBase::_is_prepared\fC [protected]\fP"
+Flag indicating if the mesh has been prepared for use\&. 
+.PP
+Definition at line 881 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), clear(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), is_prepared(), and prepare_for_use()\&.
+.SS "unsigned int libMesh::MeshBase::_n_parts\fC [protected]\fP"
+The number of partitions the mesh has\&. This is set by the partitioners, and may not be changed directly by the user\&. \fBNOTE\fP The number of partitions \fIneed not\fP equal this->\fBn_processors()\fP, consider for example the case where you simply want to partition a mesh on one processor and view the result in GMV\&. 
+.PP
+Definition at line 871 of file mesh_base\&.h\&.
+.PP
+Referenced by clear(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), n_partitions(), recalculate_n_partitions(), and set_n_partitions()\&.
+.SS "\fBunique_id_type\fP libMesh::MeshBase::_next_unique_id\fC [protected]\fP"
+The next available unique id for assigning ids to DOF objects 
+.PP
+Definition at line 904 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::SerialMesh::add_elem(), libMesh::ParallelMesh::add_elem(), libMesh::SerialMesh::add_node(), libMesh::ParallelMesh::add_node(), libMesh::SerialMesh::assign_unique_ids(), libMesh::ParallelMesh::assign_unique_ids(), next_unique_id(), libMesh::ParallelMesh::ParallelMesh(), libMesh::SerialMesh::SerialMesh(), and set_next_unique_id()\&.
+.SS "\fBAutoPtr\fP<\fBPartitioner\fP> libMesh::MeshBase::_partitioner\fC [protected]\fP"
+A partitioner to use at each \fBprepare_for_use()\fP\&.
+.PP
+This will be built in the constructor of each derived class, but can be replaced by the user through the \fBpartitioner()\fP accessor\&. 
+.PP
+Definition at line 898 of file mesh_base\&.h\&.
+.PP
+Referenced by MeshBase(), libMesh::ParallelMesh::ParallelMesh(), partitioner(), and libMesh::SerialMesh::SerialMesh()\&.
+.SS "\fBAutoPtr\fP<\fBPointLocatorBase\fP> libMesh::MeshBase::_point_locator\fC [mutable]\fP, \fC [protected]\fP"
+A \fCPointLocator\fP class for this mesh\&. This will not actually be built unless needed\&. Further, since we want our \fC\fBpoint_locator()\fP\fP method to be \fCconst\fP (yet do the dynamic allocating) this needs to be mutable\&. Since the \fBPointLocatorBase::build()\fP member is used, and it operates on a constant reference to the mesh, this is OK\&. 
+.PP
+Definition at line 890 of file mesh_base\&.h\&.
+.PP
+Referenced by clear_point_locator(), point_locator(), and sub_point_locator()\&.
+.SS "bool libMesh::MeshBase::_skip_partitioning\fC [protected]\fP"
+If this is true then no partitioning should be done\&. 
+.PP
+Definition at line 910 of file mesh_base\&.h\&.
+.PP
+Referenced by skip_partitioning()\&.
+.SS "bool libMesh::MeshBase::_skip_renumber_nodes_and_elements\fC [protected]\fP"
+If this is true then renumbering will be kept to a miniumum\&.
+.PP
+This is set when \fBprepare_for_use()\fP is called\&. 
+.PP
+Definition at line 917 of file mesh_base\&.h\&.
+.PP
+Referenced by allow_renumbering(), prepare_for_use(), libMesh::SerialMesh::renumber_nodes_and_elements(), and libMesh::ParallelMesh::renumber_nodes_and_elements()\&.
+.SS "\fBAutoPtr\fP<\fBBoundaryInfo\fP> libMesh::MeshBase::boundary_info"
+This class holds the boundary information\&. It can store nodes, edges, and faces with a corresponding id that facilitates setting boundary conditions\&. 
+.PP
+Definition at line 110 of file mesh_base\&.h\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), libMesh::MeshTools::Subdivision::add_boundary_ghosts(), libMesh::UnstructuredMesh::all_first_order(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshTools::Subdivision::all_subdivision(), libMesh::MeshTools::Modification::all_tri(), libMesh::AbaqusIO::assign_boundary_node_ids(), libMesh::AbaqusIO::assign_sideset_ids(), libMesh::MeshTools::Generation::build_cube(), libMesh::MeshTools::Generation::build_delaunay_square(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::MeshTools::Modification::change_boundary_id(), clear(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), libMesh::UnstructuredMesh::create_submesh(), libMesh::SerialMesh::delete_elem(), libMesh::ParallelMesh::delete_elem(), libMesh::SerialMesh::delete_node(), libMesh::ParallelMesh::delete_node(), libMesh::MeshTools::Modification::flatten(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::BoundaryProjectSolution::operator()(), libMesh::Parallel::pack(), libMesh::Parallel::packable_size(), libMesh::ParallelMesh::ParallelMesh(), libMesh::AbaqusIO::read(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::CheckpointIO::read_bcs(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::CheckpointIO::read_nodesets(), libMesh::SerialMesh::renumber_nodes_and_elements(), libMesh::ParallelMesh::renumber_nodes_and_elements(), libMesh::SerialMesh::SerialMesh(), libMesh::SerialMesh::stitching_helper(), libMesh::Elem::topological_neighbor(), libMesh::Parallel::unpack(), libMesh::FroIO::write(), libMesh::Nemesis_IO::write(), libMesh::ExodusII_IO::write(), libMesh::XdrIO::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::Nemesis_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::LegacyXdrIO::write_soln(), and libMesh::DivaIO::write_stream()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,1567 @@
+.TH "libMesh::MeshTools" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshTools \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBGeneration\fP"
+.br
+.ti -1c
+.RI "\fBModification\fP"
+.br
+.ti -1c
+.RI "\fBPrivate\fP"
+.br
+.ti -1c
+.RI "\fBSubdivision\fP"
+.br
+.in -1c
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBBoundingBox\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_dof_ids\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBlibmesh_assert_valid_procids< Elem >\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBlibmesh_assert_valid_procids< Node >\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBtotal_weight\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBweight\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBprocessor_id_type\fP pid)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBweight\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBbuild_nodes_to_elem_map\fP (const \fBMeshBase\fP &\fBmesh\fP, std::vector< std::vector< \fBdof_id_type\fP > > &nodes_to_elem_map)"
+.br
+.ti -1c
+.RI "void \fBbuild_nodes_to_elem_map\fP (const \fBMeshBase\fP &\fBmesh\fP, std::vector< std::vector< const \fBElem\fP * > > &nodes_to_elem_map)"
+.br
+.ti -1c
+.RI "void \fBfind_boundary_nodes\fP (const \fBMeshBase\fP &\fBmesh\fP, std::vector< bool > &on_boundary)"
+.br
+.ti -1c
+.RI "\fBBoundingBox\fP \fBbounding_box\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fBSphere\fP \fBbounding_sphere\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fBBoundingBox\fP \fBprocessor_bounding_box\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBprocessor_id_type\fP pid)"
+.br
+.ti -1c
+.RI "\fBSphere\fP \fBprocessor_bounding_sphere\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBprocessor_id_type\fP pid)"
+.br
+.ti -1c
+.RI "\fBBoundingBox\fP \fBsubdomain_bounding_box\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBsubdomain_id_type\fP sid)"
+.br
+.ti -1c
+.RI "\fBSphere\fP \fBsubdomain_bounding_sphere\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBsubdomain_id_type\fP sid)"
+.br
+.ti -1c
+.RI "void \fBelem_types\fP (const \fBMeshBase\fP &\fBmesh\fP, std::vector< \fBElemType\fP > &et)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_elem_of_type\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBElemType\fP type)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_active_elem_of_type\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBElemType\fP type)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_non_subactive_elem_of_type_at_level\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBElemType\fP type, const unsigned int level)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_levels\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_local_levels\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_active_levels\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_active_local_levels\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_p_levels\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBget_not_subactive_node_ids\fP (const \fBMeshBase\fP &\fBmesh\fP, std::set< \fBdof_id_type\fP > &not_subactive_node_ids)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_elem\fP (const \fBMeshBase::const_element_iterator\fP &begin, const \fBMeshBase::const_element_iterator\fP &\fBend\fP)"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBn_nodes\fP (const \fBMeshBase::const_node_iterator\fP &begin, const \fBMeshBase::const_node_iterator\fP &\fBend\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBmax_level\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBfind_nodal_neighbors\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBNode\fP &n, std::vector< std::vector< const \fBElem\fP * > > &nodes_to_elem_map, std::vector< const \fBNode\fP * > &neighbors)"
+.br
+.ti -1c
+.RI "void \fBfind_hanging_nodes_and_parents\fP (const \fBMeshBase\fP &\fBmesh\fP, std::map< \fBdof_id_type\fP, std::vector< \fBdof_id_type\fP > > &hanging_nodes)"
+.br
+.ti -1c
+.RI "void \fBcorrect_node_proc_ids\fP (\fBMeshBase\fP &, \fBLocationMap\fP< \fBNode\fP > &)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_no_links_to_elem\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBElem\fP *bad_elem)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_equal_n_systems\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_old_dof_objects\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_node_pointers\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_remote_elems\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_elem_ids\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_amr_elem_ids\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_connected_nodes\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<typename DofObjectSubclass > void \fBlibmesh_assert_valid_procids\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_refinement_flags\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_refinement_tree\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_assert_valid_neighbors\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBUtility\fP functions for operations on a \fC\fBMesh\fP\fP object\&. Here is where useful functions for interfacing with a \fC\fBMesh\fP\fP should be defined\&. In general this namespace should be used to prevent the \fC\fBMesh\fP\fP class from becoming too cluttered\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2004 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "\fBMeshTools::BoundingBox\fP libMesh::MeshTools::bounding_box (const \fBMeshBase\fP &mesh)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+two points defining a cartesian box that bounds the mesh\&. The first entry in the pair is the mininum, the second is the maximim\&. 
+.RE
+.PP
+
+.PP
+Definition at line 417 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::DofObject::invalid_processor_id, libMesh::libmesh_parallel_only(), libMesh::MeshBase::local_nodes_begin(), libMesh::MeshBase::local_nodes_end(), libMesh::Parallel::Communicator::max(), libMesh::Parallel::Communicator::min(), libMesh::Threads::parallel_reduce(), libMesh::MeshBase::pid_nodes_begin(), and libMesh::MeshBase::pid_nodes_end()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::MeshCommunication::assign_global_indices(), bounding_sphere(), libMesh::TreeNode< N >::bounds_point(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::TreeNode< N >::create_bounding_box(), libMesh::PointLocatorTree::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::TreeNode< N >::insert(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::TreeNode< N >::set_bounding_box(), libMesh::Tree< N >::Tree(), and libMesh::PostscriptIO::write()\&.
+.PP
+.nf
+418 {
+419   // This function must be run on all processors at once
+420   libmesh_parallel_only(mesh\&.comm());
+421 
+422   FindBBox find_bbox;
+423 
+424   Threads::parallel_reduce (ConstNodeRange (mesh\&.local_nodes_begin(),
+425                                             mesh\&.local_nodes_end()),
+426                             find_bbox);
+427 
+428   // and the unpartitioned nodes
+429   Threads::parallel_reduce (ConstNodeRange (mesh\&.pid_nodes_begin(DofObject::invalid_processor_id),
+430                                             mesh\&.pid_nodes_end(DofObject::invalid_processor_id)),
+431                             find_bbox);
+432 
+433   // Compare the bounding boxes across processors
+434   mesh\&.comm()\&.min(find_bbox\&.min());
+435   mesh\&.comm()\&.max(find_bbox\&.max());
+436 
+437   return find_bbox\&.bbox();
+438 }
+.fi
+.SS "\fBSphere\fP libMesh::MeshTools::bounding_sphere (const \fBMeshBase\fP &mesh)"
+Same, but returns a sphere instead of a box\&. 
+.PP
+Definition at line 443 of file mesh_tools\&.C\&.
+.PP
+References bounding_box(), and libMesh::Real\&.
+.PP
+.nf
+444 {
+445   BoundingBox bbox = bounding_box(mesh);
+446 
+447   const Real  diag = (bbox\&.second - bbox\&.first)\&.size();
+448   const Point cent = (bbox\&.second + bbox\&.first)/2;
+449 
+450   return Sphere (cent, \&.5*diag);
+451 }
+.fi
+.SS "void libMesh::MeshTools::build_nodes_to_elem_map (const \fBMeshBase\fP &mesh, std::vector< std::vector< \fBdof_id_type\fP > > &nodes_to_elem_map)"
+After calling this function the input vector \fCnodes_to_elem_map\fP will contain the node to element connectivity\&. That is to say \fCnodes_to_elem_map\fP[i][j] is the global number of $ j^{th} $ element connected to node \fCi\fP\&. 
+.PP
+Definition at line 350 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::MeshBase::n_elem(), and libMesh::MeshBase::n_nodes()\&.
+.PP
+Referenced by libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), libMesh::VariationalMeshSmoother::readgr(), and libMesh::Tree< N >::Tree()\&.
+.PP
+.nf
+352 {
+353   nodes_to_elem_map\&.resize (mesh\&.n_nodes());
+354 
+355   MeshBase::const_element_iterator       el  = mesh\&.elements_begin();
+356   const MeshBase::const_element_iterator end = mesh\&.elements_end();
+357 
+358   for (; el != end; ++el)
+359     for (unsigned int n=0; n<(*el)->n_nodes(); n++)
+360       {
+361         libmesh_assert_less ((*el)->node(n), nodes_to_elem_map\&.size());
+362         libmesh_assert_less ((*el)->id(), mesh\&.n_elem());
+363 
+364         nodes_to_elem_map[(*el)->node(n)]\&.push_back((*el)->id());
+365       }
+366 }
+.fi
+.SS "void libMesh::MeshTools::build_nodes_to_elem_map (const \fBMeshBase\fP &mesh, std::vector< std::vector< const \fBElem\fP * > > &nodes_to_elem_map)"
+The same, except element pointers are returned instead of indices\&. 
+.PP
+Definition at line 370 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, and libMesh::MeshBase::n_nodes()\&.
+.PP
+.nf
+372 {
+373   nodes_to_elem_map\&.resize (mesh\&.n_nodes());
+374 
+375   MeshBase::const_element_iterator       el  = mesh\&.elements_begin();
+376   const MeshBase::const_element_iterator end = mesh\&.elements_end();
+377 
+378   for (; el != end; ++el)
+379     for (unsigned int n=0; n<(*el)->n_nodes(); n++)
+380       {
+381         libmesh_assert_less ((*el)->node(n), nodes_to_elem_map\&.size());
+382 
+383         nodes_to_elem_map[(*el)->node(n)]\&.push_back(*el);
+384       }
+385 }
+.fi
+.SS "void libMesh::MeshTools::correct_node_proc_ids (\fBMeshBase\fP &mesh, \fBLocationMap\fP< \fBNode\fP > &loc_map)"
+Changes the processor ids on each node so be the same as the id of the lowest element touching that node\&.
+.PP
+This corrects 'orphaned' processor ids that may occur from element coarsening\&.
+.PP
+On a distributed mesh, this function must be called in parallel to sync everyone's corrected processor ids on ghost nodes\&. 
+.PP
+Definition at line 891 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::ParallelObject::comm(), libMesh::LocationMap< T >::empty(), libMesh::Elem::get_node(), libMesh::DofObject::invalid_processor_id, libMesh::DofObject::invalidate_processor_id(), libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::Elem::n_nodes(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by libMesh::MeshCommunication::make_nodes_parallel_consistent()\&.
+.PP
+.nf
+893 {
+894   // This function must be run on all processors at once
+895   libmesh_parallel_only(mesh\&.comm());
+896 
+897   // We'll need the new_nodes_map to answer other processors'
+898   // requests\&.  It should never be empty unless we don't have any
+899   // nodes\&.
+900   libmesh_assert(mesh\&.nodes_begin() == mesh\&.nodes_end() ||
+901                  !loc_map\&.empty());
+902 
+903   // Fix all nodes' processor ids\&.  Coarsening may have left us with
+904   // nodes which are no longer touched by any elements of the same
+905   // processor id, and for DofMap to work we need to fix that\&.
+906 
+907   // In the first pass, invalidate processor ids for nodes on active
+908   // elements\&.  We avoid touching subactive-only nodes\&.
+909   MeshBase::element_iterator       e_it  = mesh\&.active_elements_begin();
+910   const MeshBase::element_iterator e_end = mesh\&.active_elements_end();
+911   for (; e_it != e_end; ++e_it)
+912     {
+913       Elem *elem = *e_it;
+914       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+915         {
+916           Node *node = elem->get_node(n);
+917           node->invalidate_processor_id();
+918         }
+919     }
+920 
+921   // In the second pass, find the lowest processor ids on active
+922   // elements touching each node, and set the node processor id\&.
+923   for (e_it = mesh\&.active_elements_begin(); e_it != e_end; ++e_it)
+924     {
+925       Elem *elem = *e_it;
+926       processor_id_type proc_id = elem->processor_id();
+927       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+928         {
+929           Node *node = elem->get_node(n);
+930           if (node->processor_id() == DofObject::invalid_processor_id ||
+931               node->processor_id() > proc_id)
+932             node->processor_id() = proc_id;
+933         }
+934     }
+935 
+936   // Those two passes will correct every node that touches a local
+937   // element, but we can't be sure about nodes touching remote
+938   // elements\&.  Fix those now\&.
+939   MeshCommunication()\&.make_node_proc_ids_parallel_consistent
+940     (mesh, loc_map);
+941 }
+.fi
+.SS "void libMesh::MeshTools::elem_types (const \fBMeshBase\fP &mesh, std::vector< \fBElemType\fP > &et)"
+Return a vector of all element types for the mesh\&. Implemented in terms of element_iterators\&. 
+.PP
+Definition at line 523 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), and end\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+525 {
+526   MeshBase::const_element_iterator       el  = mesh\&.elements_begin();
+527   const MeshBase::const_element_iterator end = mesh\&.elements_end();
+528 
+529   // Automatically get the first type
+530   et\&.push_back((*el)->type());  ++el;
+531 
+532   // Loop over the rest of the elements\&.
+533   // If the current element type isn't in the
+534   // vector, insert it\&.
+535   for (; el != end; ++el)
+536     if (!std::count(et\&.begin(), et\&.end(), (*el)->type()))
+537       et\&.push_back((*el)->type());
+538 }
+.fi
+.SS "void libMesh::MeshTools::find_boundary_nodes (const \fBMeshBase\fP &mesh, std::vector< bool > &on_boundary)"
+Calling this function on a 2D mesh will convert all the elements to triangles\&. \fCQUAD4s\fP will be converted to \fCTRI3s\fP, \fCQUAD8s\fP and \fCQUAD9s\fP will be converted to \fCTRI6s\fP\&. Fills the vector 'on_boundary' with flags that tell whether each node is on the domain boundary (true)) or not (false)\&. 
+.PP
+Definition at line 389 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), end, libMesh::MeshBase::n_nodes(), and side\&.
+.PP
+Referenced by libMesh::MeshTools::Modification::distort(), libMesh::VariationalMeshSmoother::readgr(), libMesh::LaplaceMeshSmoother::smooth(), and libMesh::MeshTools::Modification::smooth()\&.
+.PP
+.nf
+391 {
+392   // Resize the vector which holds boundary nodes and fill with false\&.
+393   on_boundary\&.resize(mesh\&.n_nodes());
+394   std::fill(on_boundary\&.begin(),
+395             on_boundary\&.end(),
+396             false);
+397 
+398   // Loop over elements, find those on boundary, and
+399   // mark them as true in on_boundary\&.
+400   MeshBase::const_element_iterator       el  = mesh\&.active_elements_begin();
+401   const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+402 
+403   for (; el != end; ++el)
+404     for (unsigned int s=0; s<(*el)->n_neighbors(); s++)
+405       if ((*el)->neighbor(s) == NULL) // on the boundary
+406         {
+407           const AutoPtr<Elem> side((*el)->build_side(s));
+408 
+409           for (unsigned int n=0; n<side->n_nodes(); n++)
+410             on_boundary[side->node(n)] = true;
+411         }
+412 }
+.fi
+.SS "void libMesh::MeshTools::find_hanging_nodes_and_parents (const \fBMeshBase\fP &mesh, std::map< \fBdof_id_type\fP, std::vector< \fBdof_id_type\fP > > &hanging_nodes)"
+Given a mesh hanging_nodes will be filled with an associative array keyed off the global id of all the hanging nodes in the mesh\&. It will hold an array of the parents of the node (meaning the two nodes to either side of it that make up the side the hanging node is on\&. 
+.PP
+Definition at line 787 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), end, libMesh::Elem::is_node_on_side(), libMesh::Elem::level(), libMesh::Elem::n_neighbors(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::Elem::parent(), libMesh::QUAD4, libMesh::Elem::type(), and libMesh::Elem::which_neighbor_am_i()\&.
+.PP
+Referenced by libMesh::VariationalMeshSmoother::smooth()\&.
+.PP
+.nf
+788 {
+789   MeshBase::const_element_iterator it  = mesh\&.active_local_elements_begin();
+790   const MeshBase::const_element_iterator end = mesh\&.active_local_elements_end();
+791 
+792   //Loop through all the elements
+793   for (; it != end; ++it)
+794     {
+795       //Save it off for easier access
+796       const Elem* elem = (*it);
+797 
+798       //Right now this only works for quad4's
+799       //libmesh_assert_equal_to (elem->type(), QUAD4);
+800       if(elem->type() == QUAD4)
+801         {
+802           //Loop over the sides looking for sides that have hanging nodes
+803           //This code is inspired by compute_proj_constraints()
+804           for (unsigned int s=0; s<elem->n_sides(); s++)
+805             {
+806               //If not a boundary node
+807               if (elem->neighbor(s) != NULL)
+808                 {
+809                   // Get pointers to the element's neighbor\&.
+810                   const Elem* neigh = elem->neighbor(s);
+811 
+812                   //Is there a coarser element next to this one?
+813                   if (neigh->level() < elem->level())
+814                     {
+815                       const Elem *ancestor = elem;
+816                       while (neigh->level() < ancestor->level())
+817                         ancestor = ancestor->parent();
+818                       unsigned int s_neigh = neigh->which_neighbor_am_i(ancestor);
+819                       libmesh_assert_less (s_neigh, neigh->n_neighbors());
+820 
+821                       //Couple of helper uints\&.\&.\&.
+822                       unsigned int local_node1=0;
+823                       unsigned int local_node2=0;
+824 
+825                       bool found_in_neighbor = false;
+826 
+827                       //Find the two vertices that make up this side
+828                       while(!elem->is_node_on_side(local_node1++,s)) { }
+829                       local_node1--;
+830 
+831                       //Start looking for the second one with the next node
+832                       local_node2=local_node1+1;
+833 
+834                       //Find the other one
+835                       while(!elem->is_node_on_side(local_node2++,s)) { }
+836                       local_node2--;
+837 
+838                       //Pull out their global ids:
+839                       dof_id_type node1 = elem->node(local_node1);
+840                       dof_id_type node2 = elem->node(local_node2);
+841 
+842                       //Now find which node is present in the neighbor
+843                       //FIXME This assumes a level one rule!
+844                       //The _other_ one is the hanging node
+845 
+846                       //First look for the first one
+847                       //FIXME could be streamlined a bit
+848                       for(unsigned int n=0;n<neigh->n_sides();n++)
+849                         {
+850                           if(neigh->node(n) == node1)
+851                             found_in_neighbor=true;
+852                         }
+853 
+854                       dof_id_type hanging_node=0;
+855 
+856                       if(!found_in_neighbor)
+857                         hanging_node=node1;
+858                       else //If it wasn't node1 then it must be node2!
+859                         hanging_node=node2;
+860 
+861                       //Reset these for reuse
+862                       local_node1=0;
+863                       local_node2=0;
+864 
+865                       //Find the first node that makes up the side in the neighbor (these should be the parent nodes)
+866                       while(!neigh->is_node_on_side(local_node1++,s_neigh)) { }
+867                       local_node1--;
+868 
+869                       local_node2=local_node1+1;
+870 
+871                       //Find the second node\&.\&.\&.
+872                       while(!neigh->is_node_on_side(local_node2++,s_neigh)) { }
+873                       local_node2--;
+874 
+875                       //Save them if we haven't already found the parents for this one
+876                       if(hanging_nodes[hanging_node]\&.size()<2)
+877                         {
+878                           hanging_nodes[hanging_node]\&.push_back(neigh->node(local_node1));
+879                           hanging_nodes[hanging_node]\&.push_back(neigh->node(local_node2));
+880                         }
+881                     }
+882                 }
+883             }
+884         }
+885     }
+886 }
+.fi
+.SS "void libMesh::MeshTools::find_nodal_neighbors (const \fBMeshBase\fP &mesh, const \fBNode\fP &n, std::vector< std::vector< const \fBElem\fP * > > &nodes_to_elem_map, std::vector< const \fBNode\fP * > &neighbors)"
+Given a mesh and a node in the mesh, the vector will be filled with every node directly attached to the given one\&. 
+.PP
+Definition at line 705 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::get_node(), libMesh::DofObject::id(), libMesh::invalid_uint, libMesh::Elem::is_node_on_edge(), libMesh::libmesh_assert(), libMesh::Elem::local_node(), libMesh::Elem::n_edges(), libMesh::Elem::n_nodes(), and libMesh::Elem::node()\&.
+.PP
+Referenced by libMesh::MeshTools::Subdivision::prepare_subdivision_mesh(), and libMesh::VariationalMeshSmoother::readgr()\&.
+.PP
+.nf
+709 {
+710   // We'll refer back to the Node ID several times
+711   dof_id_type global_id = node\&.id();
+712 
+713   // Iterators to iterate through the elements that include this node
+714   std::vector<const Elem*>::const_iterator el     = nodes_to_elem_map[global_id]\&.begin();
+715   std::vector<const Elem*>::const_iterator end_el = nodes_to_elem_map[global_id]\&.end();
+716 
+717   // Look through the elements that contain this node
+718   // find the local node id\&.\&.\&. then find the side that
+719   // node lives on in the element
+720   // next, look for the _other_ node on that side
+721   // That other node is a "nodal_neighbor"\&.\&.\&. save it
+722   for (; el != end_el; ++el)
+723     {
+724       // Grab an Elem pointer to use in the subsequent loop
+725       const Elem* elem = *el;
+726 
+727       // We only care about active elements\&.\&.\&.
+728       if (elem->active())
+729         {
+730           // Which local node number is global_id?
+731           unsigned local_node_number = elem->local_node(global_id);
+732 
+733           // Make sure it was found
+734           libmesh_assert_not_equal_to(local_node_number, libMesh::invalid_uint);
+735 
+736           // Index of the current edge
+737           unsigned current_edge = 0;
+738 
+739           while (current_edge < elem->n_edges())
+740             {
+741               // Find the edge the node is on
+742               bool found_edge = false;
+743               for (; current_edge<elem->n_edges(); ++current_edge)
+744                 if ( elem->is_node_on_edge(local_node_number, current_edge) )
+745                   {
+746                     found_edge = true;
+747                     break;
+748                   }
+749 
+750               // Did we find one?
+751               if (found_edge)
+752                 {
+753                   Node* node_to_save = NULL;
+754 
+755                   // Find another node in this element on this edge
+756                   for (unsigned other_node_this_edge = 0; other_node_this_edge<elem->n_nodes(); other_node_this_edge++)
+757                     if ( (elem->is_node_on_edge(other_node_this_edge, current_edge)) && // On the current edge
+758                          (elem->node(other_node_this_edge) != global_id))               // But not the original node
+759                       {
+760                         // We've found a nodal neighbor!  Save a pointer to it\&.\&.
+761                         node_to_save = elem->get_node(other_node_this_edge);
+762                         break;
+763                       }
+764 
+765                   // Make sure we found something
+766                   libmesh_assert(node_to_save != NULL);
+767 
+768                   // Search to see if we've already found this one
+769                   std::vector<const Node*>::const_iterator result = std::find(neighbors\&.begin(),
+770                                                                               neighbors\&.end(),
+771                                                                               node_to_save);
+772 
+773                   // If we didn't already have it, add it to the vector
+774                   if (result == neighbors\&.end())
+775                     neighbors\&.push_back(node_to_save);
+776                 }
+777 
+778               // Keep looking for edges, node may be on more than one edge
+779               current_edge++;
+780             }
+781         }
+782     }
+783 }
+.fi
+.SS "void libMesh::MeshTools::get_not_subactive_node_ids (const \fBMeshBase\fP &mesh, std::set< \fBdof_id_type\fP > &not_subactive_node_ids)"
+Builds a set of node IDs for nodes which belong to non-subactive elements\&. Non-subactive elements are those which are either active or inactive\&. This is useful for determining which nodes should be written to a data file, and is used by the XDA mesh writing methods\&. 
+.PP
+Definition at line 646 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), and libMesh::Elem::subactive()\&.
+.PP
+.nf
+648 {
+649   MeshBase::const_element_iterator el           = mesh\&.elements_begin();
+650   const MeshBase::const_element_iterator end_el = mesh\&.elements_end();
+651   for( ; el != end_el; ++el)
+652     {
+653       const Elem* elem = (*el);
+654       if(!elem->subactive())
+655         for (unsigned int n=0; n<elem->n_nodes(); ++n)
+656           not_subactive_node_ids\&.insert(elem->node(n));
+657     }
+658 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_connected_nodes (const \fBMeshBase\fP &mesh)"
+A function for verifying that all nodes are connected to at least one element\&.
+.PP
+This will fail in the most general case\&. When \fBParallelMesh\fP and \fBNodeConstraints\fP are enabled, we expect the possibility that a processor will be given remote nodes to satisfy node constraints without also being given the remote elements connected to those nodes\&. 
+.PP
+Definition at line 1131 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::get_node(), libMesh::libmesh_assert(), libMesh::Elem::n_nodes(), libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+.nf
+1132 {
+1133   std::set<const Node*> used_nodes;
+1134 
+1135   const MeshBase::const_element_iterator el_end =
+1136     mesh\&.elements_end();
+1137   for (MeshBase::const_element_iterator el =
+1138          mesh\&.elements_begin(); el != el_end; ++el)
+1139     {
+1140       const Elem* elem = *el;
+1141       libmesh_assert (elem);
+1142 
+1143       for (unsigned int n=0; n<elem->n_nodes(); ++n)
+1144         used_nodes\&.insert(elem->get_node(n));
+1145     }
+1146 
+1147   const MeshBase::const_node_iterator node_end = mesh\&.nodes_end();
+1148 
+1149   for (MeshBase::const_node_iterator node_it = mesh\&.nodes_begin();
+1150        node_it != node_end; ++node_it)
+1151     {
+1152       Node *node = *node_it;
+1153       libmesh_assert(node);
+1154       libmesh_assert(used_nodes\&.count(node));
+1155     }
+1156 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_equal_n_systems (const \fBMeshBase\fP &mesh)"
+A function for testing that all DofObjects within a mesh have the same n_systems count 
+.PP
+Definition at line 946 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::n_systems(), libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+.nf
+947 {
+948   MeshBase::const_element_iterator el =
+949     mesh\&.elements_begin();
+950   const MeshBase::const_element_iterator el_end =
+951     mesh\&.elements_end();
+952   if (el == el_end)
+953     return;
+954 
+955   const unsigned int n_sys = (*el)->n_systems();
+956 
+957   for (; el != el_end; ++el)
+958     {
+959       const Elem *elem = *el;
+960       libmesh_assert_equal_to (elem->n_systems(), n_sys);
+961     }
+962 
+963   MeshBase::const_node_iterator node_it =
+964     mesh\&.nodes_begin();
+965   const MeshBase::const_node_iterator node_end =
+966     mesh\&.nodes_end();
+967 
+968   if (node_it == node_end)
+969     return;
+970 
+971   for (; node_it != node_end; ++node_it)
+972     {
+973       const Node *node = *node_it;
+974       libmesh_assert_equal_to (node->n_systems(), n_sys);
+975     }
+976 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_no_links_to_elem (const \fBMeshBase\fP &mesh, const \fBElem\fP *bad_elem)"
+A function for verifying that an element has been cut off from the rest of the mesh 
+.PP
+Definition at line 1061 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Elem::child(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::has_children(), libMesh::libmesh_assert(), libMesh::Elem::n_children(), libMesh::Elem::n_neighbors(), libMesh::Elem::neighbor(), and libMesh::Elem::parent()\&.
+.PP
+.nf
+1063 {
+1064   const MeshBase::const_element_iterator el_end =
+1065     mesh\&.elements_end();
+1066   for (MeshBase::const_element_iterator el =
+1067          mesh\&.elements_begin(); el != el_end; ++el)
+1068     {
+1069       const Elem* elem = *el;
+1070       libmesh_assert (elem);
+1071       libmesh_assert_not_equal_to (elem->parent(), bad_elem);
+1072       for (unsigned int n=0; n != elem->n_neighbors(); ++n)
+1073         libmesh_assert_not_equal_to (elem->neighbor(n), bad_elem);
+1074 #ifdef LIBMESH_ENABLE_AMR
+1075       if (elem->has_children())
+1076         for (unsigned int c=0; c != elem->n_children(); ++c)
+1077           libmesh_assert_not_equal_to (elem->child(c), bad_elem);
+1078 #endif
+1079     }
+1080 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_old_dof_objects (const \fBMeshBase\fP &mesh)"
+A function for testing that all non-recently-created DofObjects within a mesh have old_dof_object data\&. This is not expected to be true at all points within a simulation code\&. 
+.PP
+Definition at line 981 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::get_node(), libMesh::DofObject::has_dofs(), libMesh::Elem::INACTIVE, libMesh::Elem::JUST_REFINED, libMesh::libmesh_assert(), libMesh::Elem::n_nodes(), libMesh::DofObject::old_dof_object, and libMesh::Elem::refinement_flag()\&.
+.PP
+.nf
+982 {
+983   MeshBase::const_element_iterator el =
+984     mesh\&.elements_begin();
+985   const MeshBase::const_element_iterator el_end =
+986     mesh\&.elements_end();
+987 
+988   for (; el != el_end; ++el)
+989     {
+990       const Elem *elem = *el;
+991 
+992       if (elem->refinement_flag() == Elem::JUST_REFINED ||
+993           elem->refinement_flag() == Elem::INACTIVE)
+994         continue;
+995 
+996       if (elem->has_dofs())
+997         libmesh_assert(elem->old_dof_object);
+998 
+999       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1000         {
+1001           const Node *node = elem->get_node(n);
+1002           if (node->has_dofs())
+1003             libmesh_assert(elem->get_node(n)->old_dof_object);
+1004         }
+1005     }
+1006 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_amr_elem_ids (const \fBMeshBase\fP &mesh)"
+A function for verifying that ids of elements are correctly sorted for AMR (parents have lower ids than children) 
+.PP
+Definition at line 1109 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::id(), libMesh::libmesh_assert(), libMesh::Elem::parent(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::copy_nodes_and_elements()\&.
+.PP
+.nf
+1110 {
+1111   const MeshBase::const_element_iterator el_end =
+1112     mesh\&.elements_end();
+1113   for (MeshBase::const_element_iterator el =
+1114          mesh\&.elements_begin(); el != el_end; ++el)
+1115     {
+1116       const Elem* elem = *el;
+1117       libmesh_assert (elem);
+1118 
+1119       const Elem* parent = elem->parent();
+1120 
+1121       if (parent)
+1122         {
+1123           libmesh_assert_greater_equal (elem->id(), parent->id());
+1124           libmesh_assert_greater_equal (elem->processor_id(), parent->processor_id());
+1125         }
+1126     }
+1127 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_dof_ids (const \fBMeshBase\fP &mesh)"
+A function for verifying that degree of freedom indexing matches across processors\&. 
+.PP
+Definition at line 1162 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::max_elem_id(), libMesh::MeshBase::max_node_id(), libMesh::ParallelObject::n_processors(), libMesh::MeshBase::query_elem(), and libMesh::MeshBase::query_node_ptr()\&.
+.PP
+Referenced by libMesh::DofMap::distribute_dofs()\&.
+.PP
+.nf
+1163 {
+1164   if (mesh\&.n_processors() == 1)
+1165     return;
+1166 
+1167   libmesh_parallel_only(mesh\&.comm());
+1168 
+1169   dof_id_type pmax_elem_id = mesh\&.max_elem_id();
+1170   mesh\&.comm()\&.max(pmax_elem_id);
+1171 
+1172   for (dof_id_type i=0; i != pmax_elem_id; ++i)
+1173     assert_semiverify_dofobj(mesh\&.comm(),
+1174                              mesh\&.query_elem(i));
+1175 
+1176   dof_id_type pmax_node_id = mesh\&.max_node_id();
+1177   mesh\&.comm()\&.max(pmax_node_id);
+1178 
+1179   for (dof_id_type i=0; i != pmax_node_id; ++i)
+1180     assert_semiverify_dofobj(mesh\&.comm(),
+1181                              mesh\&.query_node_ptr(i));
+1182 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_elem_ids (const \fBMeshBase\fP &mesh)"
+A function for verifying that ids and processor assignment of elements are correctly sorted (monotone increasing) 
+.PP
+Definition at line 1084 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::DofObject::id(), libMesh::libmesh_assert(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by libMesh::ParallelMesh::renumber_nodes_and_elements()\&.
+.PP
+.nf
+1085 {
+1086   processor_id_type lastprocid = 0;
+1087   dof_id_type lastelemid = 0;
+1088 
+1089   const MeshBase::const_element_iterator el_end =
+1090     mesh\&.active_elements_end();
+1091   for (MeshBase::const_element_iterator el =
+1092          mesh\&.active_elements_begin(); el != el_end; ++el)
+1093     {
+1094       const Elem* elem = *el;
+1095       libmesh_assert (elem);
+1096       processor_id_type elemprocid = elem->processor_id();
+1097       dof_id_type elemid = elem->id();
+1098 
+1099       libmesh_assert_greater_equal (elemid, lastelemid);
+1100       libmesh_assert_greater_equal (elemprocid, lastprocid);
+1101 
+1102       lastelemid = elemid;
+1103       lastprocid = elemprocid;
+1104     }
+1105 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_neighbors (const \fBMeshBase\fP &mesh)"
+A function for verifying that neighbor connectivity is correct (each element is a neighbor of or descendant of a neighbor of its neighbors) 
+.PP
+Definition at line 1430 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::libmesh_assert(), and libMesh::Elem::libmesh_assert_valid_neighbors()\&.
+.PP
+Referenced by libMesh::ParallelMesh::allgather(), libMesh::ParallelMesh::delete_remote_elements(), and libMesh::UnstructuredMesh::find_neighbors()\&.
+.PP
+.nf
+1431 {
+1432   const MeshBase::const_element_iterator el_end = mesh\&.elements_end();
+1433   for (MeshBase::const_element_iterator el = mesh\&.elements_begin();
+1434        el != el_end; ++el)
+1435     {
+1436       const Elem* elem = *el;
+1437       libmesh_assert (elem);
+1438       elem->libmesh_assert_valid_neighbors();
+1439     }
+1440 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_node_pointers (const \fBMeshBase\fP &mesh)"
+A function for walking across the mesh to try and ferret out invalidated or misassigned pointers 
+.PP
+Definition at line 1013 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::libmesh_assert(), libMesh::Elem::libmesh_assert_valid_node_pointers(), libMesh::Elem::n_neighbors(), libMesh::Elem::neighbor(), libMesh::Elem::parent(), and libMesh::remote_elem\&.
+.PP
+.nf
+1014 {
+1015   const MeshBase::const_element_iterator el_end =
+1016     mesh\&.elements_end();
+1017   for (MeshBase::const_element_iterator el =
+1018          mesh\&.elements_begin(); el != el_end; ++el)
+1019     {
+1020       const Elem* elem = *el;
+1021       libmesh_assert (elem);
+1022       while (elem)
+1023         {
+1024           elem->libmesh_assert_valid_node_pointers();
+1025           for (unsigned int n=0; n != elem->n_neighbors(); ++n)
+1026             if (elem->neighbor(n) &&
+1027                 elem->neighbor(n) != remote_elem)
+1028               elem->neighbor(n)->libmesh_assert_valid_node_pointers();
+1029 
+1030           libmesh_assert_not_equal_to (elem->parent(), remote_elem);
+1031           elem = elem->parent();
+1032         }
+1033     }
+1034 }
+.fi
+.SS "template<typename DofObjectSubclass > void libMesh::MeshTools::libmesh_assert_valid_procids (const MeshBase &mesh)"
+A function for verifying that processor assignment is self-consistent on nodes (each node part of an active element on its processor) or elements (each parent has the processor id of one of its children), and verifying that assignment is consistent (every processor agrees on the processor id of each dof object it can see) 
+.SS "template<> void \fBlibMesh::MeshTools::libmesh_assert_valid_procids\fP< \fBElem\fP > (const \fBMeshBase\fP &mesh)"
+
+.PP
+Definition at line 1185 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::child(), libMesh::ParallelObject::comm(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::has_children(), libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), std::max(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::max_elem_id(), std::min(), libMesh::Parallel::Communicator::min(), libMesh::Elem::n_children(), libMesh::ParallelObject::n_processors(), libMesh::Elem::parent(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::MeshBase::query_elem(), libMesh::remote_elem, and libMesh::Elem::subactive()\&.
+.PP
+Referenced by libMesh::Partitioner::partition()\&.
+.PP
+.nf
+1186 {
+1187   if (mesh\&.n_processors() == 1)
+1188     return;
+1189 
+1190   libmesh_parallel_only(mesh\&.comm());
+1191 
+1192   // We want this test to be valid even when called even after nodes
+1193   // have been added asynchonously but before they're renumbered
+1194   dof_id_type parallel_max_elem_id = mesh\&.max_elem_id();
+1195   mesh\&.comm()\&.max(parallel_max_elem_id);
+1196 
+1197   // Check processor ids for consistency between processors
+1198 
+1199   for (dof_id_type i=0; i != parallel_max_elem_id; ++i)
+1200     {
+1201       const Elem *elem = mesh\&.query_elem(i);
+1202 
+1203       processor_id_type min_id =
+1204         elem ? elem->processor_id() :
+1205         std::numeric_limits<processor_id_type>::max();
+1206       mesh\&.comm()\&.min(min_id);
+1207 
+1208       processor_id_type max_id =
+1209         elem ? elem->processor_id() :
+1210         std::numeric_limits<processor_id_type>::min();
+1211       mesh\&.comm()\&.max(max_id);
+1212 
+1213       if (elem)
+1214         {
+1215           libmesh_assert_equal_to (min_id, elem->processor_id());
+1216           libmesh_assert_equal_to (max_id, elem->processor_id());
+1217         }
+1218 
+1219       if (min_id == mesh\&.processor_id())
+1220         libmesh_assert(elem);
+1221     }
+1222 
+1223   // If we're adaptively refining, check processor ids for consistency
+1224   // between parents and children\&.
+1225 #ifdef LIBMESH_ENABLE_AMR
+1226 
+1227   // Ancestor elements we won't worry about, but subactive and active
+1228   // elements ought to have parents with consistent processor ids
+1229 
+1230   const MeshBase::const_element_iterator el_end =
+1231     mesh\&.elements_end();
+1232   for (MeshBase::const_element_iterator el =
+1233          mesh\&.elements_begin(); el != el_end; ++el)
+1234     {
+1235       const Elem *elem = *el;
+1236       libmesh_assert(elem);
+1237 
+1238       if (!elem->active() && !elem->subactive())
+1239         continue;
+1240 
+1241       const Elem *parent = elem->parent();
+1242 
+1243       if (parent)
+1244         {
+1245           libmesh_assert(parent->has_children());
+1246           processor_id_type parent_procid = parent->processor_id();
+1247           bool matching_child_id = false;
+1248           for (unsigned int c = 0; c != parent->n_children(); ++c)
+1249             {
+1250               const Elem* child = parent->child(c);
+1251               libmesh_assert(child);
+1252 
+1253               // If we've got a remote_elem then we don't know whether
+1254               // it's responsible for the parent's processor id; all
+1255               // we can do is assume it is and let its processor fail
+1256               // an assert if there's something wrong\&.
+1257               if (child == remote_elem ||
+1258                   child->processor_id() == parent_procid)
+1259                 matching_child_id = true;
+1260             }
+1261           libmesh_assert(matching_child_id);
+1262         }
+1263     }
+1264 #endif
+1265 }
+.fi
+.SS "template<> void \fBlibMesh::MeshTools::libmesh_assert_valid_procids\fP< \fBNode\fP > (const \fBMeshBase\fP &mesh)"
+
+.PP
+Definition at line 1270 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::ParallelObject::comm(), libMesh::Elem::get_node(), libMesh::DofObject::id(), libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::MeshBase::local_nodes_begin(), libMesh::MeshBase::local_nodes_end(), std::max(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::max_node_id(), std::min(), libMesh::Parallel::Communicator::min(), libMesh::Elem::n_nodes(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), and libMesh::MeshBase::query_node_ptr()\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), and libMesh::Partitioner::set_node_processor_ids()\&.
+.PP
+.nf
+1271 {
+1272   if (mesh\&.n_processors() == 1)
+1273     return;
+1274 
+1275   libmesh_parallel_only(mesh\&.comm());
+1276 
+1277   // We want this test to be valid even when called even after nodes
+1278   // have been added asynchonously but before they're renumbered
+1279   dof_id_type parallel_max_node_id = mesh\&.max_node_id();
+1280   mesh\&.comm()\&.max(parallel_max_node_id);
+1281 
+1282   // Check processor ids for consistency between processors
+1283 
+1284   for (dof_id_type i=0; i != parallel_max_node_id; ++i)
+1285     {
+1286       const Node *node = mesh\&.query_node_ptr(i);
+1287 
+1288       processor_id_type min_id =
+1289         node ? node->processor_id() :
+1290         std::numeric_limits<processor_id_type>::max();
+1291       mesh\&.comm()\&.min(min_id);
+1292 
+1293       processor_id_type max_id =
+1294         node ? node->processor_id() :
+1295         std::numeric_limits<processor_id_type>::min();
+1296       mesh\&.comm()\&.max(max_id);
+1297 
+1298       if (node)
+1299         {
+1300           libmesh_assert_equal_to (min_id, node->processor_id());
+1301           libmesh_assert_equal_to (max_id, node->processor_id());
+1302         }
+1303 
+1304       if (min_id == mesh\&.processor_id())
+1305         libmesh_assert(node);
+1306     }
+1307 
+1308   std::vector<bool> node_touched_by_me(parallel_max_node_id, false);
+1309 
+1310   const MeshBase::const_element_iterator el_end =
+1311     mesh\&.active_local_elements_end();
+1312   for (MeshBase::const_element_iterator el =
+1313          mesh\&.active_local_elements_begin(); el != el_end; ++el)
+1314     {
+1315       const Elem* elem = *el;
+1316       libmesh_assert (elem);
+1317 
+1318       for (unsigned int i=0; i != elem->n_nodes(); ++i)
+1319         {
+1320           const Node *node = elem->get_node(i);
+1321           dof_id_type nodeid = node->id();
+1322           node_touched_by_me[nodeid] = true;
+1323         }
+1324     }
+1325   std::vector<bool> node_touched_by_anyone(node_touched_by_me);
+1326   mesh\&.comm()\&.max(node_touched_by_anyone);
+1327 
+1328   const MeshBase::const_node_iterator nd_end = mesh\&.local_nodes_end();
+1329   for (MeshBase::const_node_iterator nd = mesh\&.local_nodes_begin();
+1330        nd != nd_end; ++nd)
+1331     {
+1332       const Node *node = *nd;
+1333       libmesh_assert(node);
+1334 
+1335       dof_id_type nodeid = node->id();
+1336       libmesh_assert(!node_touched_by_anyone[nodeid] ||
+1337                      node_touched_by_me[nodeid]);
+1338     }
+1339 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_refinement_flags (const \fBMeshBase\fP &mesh)"
+A function for verifying that refinement flags on elements are consistent between processors 
+.PP
+Definition at line 1346 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::id(), libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::MeshBase::max_elem_id(), libMesh::Parallel::Communicator::min(), libMesh::ParallelObject::n_processors(), libMesh::Elem::p_refinement_flag(), and libMesh::Elem::refinement_flag()\&.
+.PP
+.nf
+1347 {
+1348   libmesh_parallel_only(mesh\&.comm());
+1349   if (mesh\&.n_processors() == 1)
+1350     return;
+1351 
+1352   std::vector<unsigned char> my_elem_h_state(mesh\&.max_elem_id(), 255);
+1353   std::vector<unsigned char> my_elem_p_state(mesh\&.max_elem_id(), 255);
+1354 
+1355   const MeshBase::const_element_iterator el_end =
+1356     mesh\&.elements_end();
+1357   for (MeshBase::const_element_iterator el =
+1358          mesh\&.elements_begin(); el != el_end; ++el)
+1359     {
+1360       const Elem* elem = *el;
+1361       libmesh_assert (elem);
+1362       dof_id_type elemid = elem->id();
+1363 
+1364       my_elem_h_state[elemid] =
+1365         static_cast<unsigned char>(elem->refinement_flag());
+1366 
+1367       my_elem_p_state[elemid] =
+1368         static_cast<unsigned char>(elem->p_refinement_flag());
+1369     }
+1370   std::vector<unsigned char> min_elem_h_state(my_elem_h_state);
+1371   mesh\&.comm()\&.min(min_elem_h_state);
+1372 
+1373   std::vector<unsigned char> min_elem_p_state(my_elem_p_state);
+1374   mesh\&.comm()\&.min(min_elem_p_state);
+1375 
+1376   for (dof_id_type i=0; i!= mesh\&.max_elem_id(); ++i)
+1377     {
+1378       libmesh_assert(my_elem_h_state[i] == 255 ||
+1379                      my_elem_h_state[i] == min_elem_h_state[i]);
+1380       libmesh_assert(my_elem_p_state[i] == 255 ||
+1381                      my_elem_p_state[i] == min_elem_p_state[i]);
+1382     }
+1383 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_refinement_tree (const \fBMeshBase\fP &mesh)"
+A function for verifying that elements on this processor have valid descendants and consistent active flags\&. 
+.PP
+Definition at line 1393 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::ancestor(), libMesh::Elem::child(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::has_children(), libMesh::libmesh_assert(), libMesh::Elem::n_children(), libMesh::Elem::parent(), libMesh::remote_elem, and libMesh::Elem::subactive()\&.
+.PP
+Referenced by libMesh::MeshCommunication::delete_remote_elements(), and libMesh::ParallelMesh::delete_remote_elements()\&.
+.PP
+.nf
+1394 {
+1395   const MeshBase::const_element_iterator el_end =
+1396     mesh\&.elements_end();
+1397   for (MeshBase::const_element_iterator el =
+1398          mesh\&.elements_begin(); el != el_end; ++el)
+1399     {
+1400       const Elem *elem = *el;
+1401       libmesh_assert(elem);
+1402       if (elem->has_children())
+1403         for (unsigned int n=0; n != elem->n_children(); ++n)
+1404           {
+1405             libmesh_assert(elem->child(n));
+1406             if (elem->child(n) != remote_elem)
+1407               libmesh_assert_equal_to (elem->child(n)->parent(), elem);
+1408           }
+1409       if (elem->active())
+1410         {
+1411           libmesh_assert(!elem->ancestor());
+1412           libmesh_assert(!elem->subactive());
+1413         }
+1414       else if (elem->ancestor())
+1415         {
+1416           libmesh_assert(!elem->subactive());
+1417         }
+1418       else
+1419         libmesh_assert(elem->subactive());
+1420     }
+1421 }
+.fi
+.SS "void libMesh::MeshTools::libmesh_assert_valid_remote_elems (const \fBMeshBase\fP &mesh)"
+A function for verifying that active local elements' neighbors are never remote elements 
+.PP
+Definition at line 1037 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Elem::child(), libMesh::libmesh_assert(), libMesh::MeshBase::local_elements_begin(), libMesh::MeshBase::local_elements_end(), libMesh::Elem::n_children(), libMesh::Elem::n_neighbors(), libMesh::Elem::neighbor(), libMesh::Elem::parent(), and libMesh::remote_elem\&.
+.PP
+Referenced by libMesh::Partitioner::partition()\&.
+.PP
+.nf
+1038 {
+1039   const MeshBase::const_element_iterator el_end =
+1040     mesh\&.local_elements_end();
+1041   for (MeshBase::const_element_iterator el =
+1042          mesh\&.local_elements_begin(); el != el_end; ++el)
+1043     {
+1044       const Elem* elem = *el;
+1045       libmesh_assert (elem);
+1046       for (unsigned int n=0; n != elem->n_neighbors(); ++n)
+1047         libmesh_assert_not_equal_to (elem->neighbor(n), remote_elem);
+1048 #ifdef LIBMESH_ENABLE_AMR
+1049       const Elem* parent = elem->parent();
+1050       if (parent)
+1051         {
+1052           libmesh_assert_not_equal_to (parent, remote_elem);
+1053           for (unsigned int c=0; c != elem->n_children(); ++c)
+1054             libmesh_assert_not_equal_to (parent->child(c), remote_elem);
+1055         }
+1056 #endif
+1057     }
+1058 }
+.fi
+.SS "unsigned int libMesh::MeshTools::max_level (const MeshBase &mesh)"
+Find the maxium h-refinement level in a mesh\&. 
+.PP
+Referenced by libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::CheckpointIO::n_active_levels_on_processor(), n_active_local_levels(), and n_local_levels()\&.
+.SS "\fBdof_id_type\fP libMesh::MeshTools::n_active_elem_of_type (const \fBMeshBase\fP &mesh, const \fBElemType\fPtype)"
+Return the number of active elements of type \fCtype\fP\&. Implemented in terms of active_type_element_iterators\&. 
+.PP
+Definition at line 551 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_type_elements_begin(), and libMesh::MeshBase::active_type_elements_end()\&.
+.PP
+Referenced by libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+553 {
+554   return static_cast<dof_id_type>(std::distance(mesh\&.active_type_elements_begin(type),
+555                                                 mesh\&.active_type_elements_end  (type)));
+556 }
+.fi
+.SS "unsigned int libMesh::MeshTools::n_active_levels (const \fBMeshBase\fP &mesh)"
+Return the number of levels of refinement in the active mesh\&. Implemented by looping over all the active local elements and finding the maximum level, then maxxing in parallel\&. 
+.PP
+Definition at line 590 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), std::max(), libMesh::Parallel::Communicator::max(), n_active_local_levels(), libMesh::MeshBase::unpartitioned_elements_begin(), and libMesh::MeshBase::unpartitioned_elements_end()\&.
+.PP
+Referenced by libMesh::CheckpointIO::read_connectivity(), libMesh::CheckpointIO::write_connectivity(), and libMesh::XdrIO::write_serialized_connectivity()\&.
+.PP
+.nf
+591 {
+592   libmesh_parallel_only(mesh\&.comm());
+593 
+594   unsigned int nl = MeshTools::n_active_local_levels(mesh);
+595 
+596   MeshBase::const_element_iterator el =
+597     mesh\&.unpartitioned_elements_begin();
+598   const MeshBase::const_element_iterator end_el =
+599     mesh\&.unpartitioned_elements_end();
+600 
+601   for( ; el != end_el; ++el)
+602     if ((*el)->active())
+603       nl = std::max((*el)->level() + 1, nl);
+604 
+605   mesh\&.comm()\&.max(nl);
+606   return nl;
+607 }
+.fi
+.SS "unsigned int libMesh::MeshTools::n_active_local_levels (const \fBMeshBase\fP &mesh)"
+Return the number of levels of refinement in the active local mesh\&. Implemented by looping over all the active local elements and finding the maximum level\&. 
+.PP
+Definition at line 575 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), std::max(), and max_level()\&.
+.PP
+Referenced by n_active_levels()\&.
+.PP
+.nf
+576 {
+577   unsigned int max_level = 0;
+578 
+579   MeshBase::const_element_iterator el = mesh\&.active_local_elements_begin();
+580   const MeshBase::const_element_iterator end_el = mesh\&.active_local_elements_end();
+581 
+582   for( ; el != end_el; ++el)
+583     max_level = std::max((*el)->level(), max_level);
+584 
+585   return max_level + 1;
+586 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::n_elem (const \fBMeshBase::const_element_iterator\fP &begin, const \fBMeshBase::const_element_iterator\fP &end)"
+Count up the number of elements of a specific type (as defined by an iterator range)\&. 
+.PP
+Definition at line 662 of file mesh_tools\&.C\&.
+.PP
+Referenced by libMesh::SFCPartitioner::_do_partition(), libMesh::CentroidPartitioner::_do_partition(), libMesh::MeshTools::Subdivision::add_boundary_ghosts(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::XdrIO::read(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_tetgen(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::Partitioner::set_parent_processor_ids(), libMesh::XdrIO::write(), libMesh::CheckpointIO::write_connectivity(), libMesh::UCDIO::write_nodal_data(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), and libMesh::MeshData::write_xdr()\&.
+.PP
+.nf
+664 {
+665   return std::distance(begin, end);
+666 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::n_elem_of_type (const \fBMeshBase\fP &mesh, const \fBElemType\fPtype)"
+Return the number of elements of type \fCtype\fP\&. Implemented in terms of type_element_iterators\&. 
+.PP
+Definition at line 542 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::type_elements_begin(), and libMesh::MeshBase::type_elements_end()\&.
+.PP
+.nf
+544 {
+545   return static_cast<dof_id_type>(std::distance(mesh\&.type_elements_begin(type),
+546                                                 mesh\&.type_elements_end  (type)));
+547 }
+.fi
+.SS "unsigned int libMesh::MeshTools::n_levels (const \fBMeshBase\fP &mesh)"
+Return the number of levels of refinement in the mesh\&. Implemented by looping over all the local elements and finding the maximum level, then summing in parallel\&. 
+.PP
+Definition at line 626 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), std::max(), libMesh::Parallel::Communicator::max(), n_local_levels(), libMesh::MeshBase::unpartitioned_elements_begin(), and libMesh::MeshBase::unpartitioned_elements_end()\&.
+.PP
+Referenced by libMesh::MeshCommunication::delete_remote_elements(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::LegacyXdrIO::read_mesh(), libMesh::MeshTools::Modification::smooth(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+627 {
+628   libmesh_parallel_only(mesh\&.comm());
+629 
+630   unsigned int nl = MeshTools::n_local_levels(mesh);
+631 
+632   MeshBase::const_element_iterator el =
+633     mesh\&.unpartitioned_elements_begin();
+634   const MeshBase::const_element_iterator end_el =
+635     mesh\&.unpartitioned_elements_end();
+636 
+637   for( ; el != end_el; ++el)
+638     nl = std::max((*el)->level() + 1, nl);
+639 
+640   mesh\&.comm()\&.max(nl);
+641   return nl;
+642 }
+.fi
+.SS "unsigned int libMesh::MeshTools::n_local_levels (const \fBMeshBase\fP &mesh)"
+Return the number of levels of refinement in the local mesh\&. Implemented by looping over all the local elements and finding the maximum level\&. 
+.PP
+Definition at line 611 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::local_elements_begin(), libMesh::MeshBase::local_elements_end(), std::max(), and max_level()\&.
+.PP
+Referenced by n_levels()\&.
+.PP
+.nf
+612 {
+613   unsigned int max_level = 0;
+614 
+615   MeshBase::const_element_iterator el = mesh\&.local_elements_begin();
+616   const MeshBase::const_element_iterator end_el = mesh\&.local_elements_end();
+617 
+618   for( ; el != end_el; ++el)
+619     max_level = std::max((*el)->level(), max_level);
+620 
+621   return max_level + 1;
+622 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::n_nodes (const \fBMeshBase::const_node_iterator\fP &begin, const \fBMeshBase::const_node_iterator\fP &end)"
+Count up the number of nodes of a specific type (as defined by an iterator range)\&. 
+.PP
+Definition at line 670 of file mesh_tools\&.C\&.
+.PP
+Referenced by libMesh::CheckpointIO::write_nodes()\&.
+.PP
+.nf
+672 {
+673   return std::distance(begin, end);
+674 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::n_non_subactive_elem_of_type_at_level (const \fBMeshBase\fP &mesh, const \fBElemType\fPtype, const unsigned intlevel)"
+Return the number of elements of type \fCtype\fP at the specified refinement level\&.
+.PP
+TODO: Replace all of the n_xxx_elem() functions like this with a single function which takes a range of iterators and returns the std::distance between them\&. 
+.PP
+Definition at line 558 of file mesh_tools\&.C\&.
+.PP
+References end, libMesh::MeshBase::type_elements_begin(), and libMesh::MeshBase::type_elements_end()\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+561 {
+562   dof_id_type cnt = 0;
+563   // iterate over the elements of the specified type
+564   MeshBase::const_element_iterator el = mesh\&.type_elements_begin(type);
+565   const MeshBase::const_element_iterator end = mesh\&.type_elements_end(type);
+566 
+567   for(; el!=end; ++el)
+568     if( ((*el)->level() == level) && !(*el)->subactive())
+569       cnt++;
+570 
+571   return cnt;
+572 }
+.fi
+.SS "unsigned int libMesh::MeshTools::n_p_levels (const \fBMeshBase\fP &mesh)"
+Return the number of p-levels of refinement in the mesh\&. Implemented by looping over all the local elements and finding the maximum p-level, then summing in parallel\&. 
+.PP
+Definition at line 678 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), libMesh::MeshBase::local_elements_begin(), libMesh::MeshBase::local_elements_end(), std::max(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::unpartitioned_elements_begin(), and libMesh::MeshBase::unpartitioned_elements_end()\&.
+.PP
+Referenced by libMesh::XdrIO::write()\&.
+.PP
+.nf
+679 {
+680   libmesh_parallel_only(mesh\&.comm());
+681 
+682   unsigned int max_p_level = 0;
+683 
+684   // first my local elements
+685   MeshBase::const_element_iterator
+686     el     = mesh\&.local_elements_begin(),
+687     end_el = mesh\&.local_elements_end();
+688 
+689   for( ; el != end_el; ++el)
+690     max_p_level = std::max((*el)->p_level(), max_p_level);
+691 
+692   // then any unpartitioned objects
+693   el     = mesh\&.unpartitioned_elements_begin();
+694   end_el = mesh\&.unpartitioned_elements_end();
+695 
+696   for( ; el != end_el; ++el)
+697     max_p_level = std::max((*el)->p_level(), max_p_level);
+698 
+699   mesh\&.comm()\&.max(max_p_level);
+700   return max_p_level + 1;
+701 }
+.fi
+.SS "\fBMeshTools::BoundingBox\fP libMesh::MeshTools::processor_bounding_box (const \fBMeshBase\fP &mesh, const \fBprocessor_id_type\fPpid)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+two points defining a cartesian box that bounds the elements belonging to processor pid\&. 
+.RE
+.PP
+
+.PP
+Definition at line 456 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::n_processors(), libMesh::Threads::parallel_reduce(), libMesh::MeshBase::pid_elements_begin(), and libMesh::MeshBase::pid_elements_end()\&.
+.PP
+Referenced by processor_bounding_sphere()\&.
+.PP
+.nf
+458 {
+459   libmesh_assert_less (pid, mesh\&.n_processors());
+460 
+461   FindBBox find_bbox;
+462 
+463   Threads::parallel_reduce (ConstElemRange (mesh\&.pid_elements_begin(pid),
+464                                             mesh\&.pid_elements_end(pid)),
+465                             find_bbox);
+466 
+467   return find_bbox\&.bbox();
+468 }
+.fi
+.SS "\fBSphere\fP libMesh::MeshTools::processor_bounding_sphere (const \fBMeshBase\fP &mesh, const \fBprocessor_id_type\fPpid)"
+Same, but returns a sphere instead of a box\&. 
+.PP
+Definition at line 473 of file mesh_tools\&.C\&.
+.PP
+References processor_bounding_box(), and libMesh::Real\&.
+.PP
+.nf
+475 {
+476   BoundingBox bbox = processor_bounding_box(mesh,pid);
+477 
+478   const Real  diag = (bbox\&.second - bbox\&.first)\&.size();
+479   const Point cent = (bbox\&.second + bbox\&.first)/2;
+480 
+481   return Sphere (cent, \&.5*diag);
+482 }
+.fi
+.SS "\fBMeshTools::BoundingBox\fP libMesh::MeshTools::subdomain_bounding_box (const \fBMeshBase\fP &mesh, const \fBsubdomain_id_type\fPsid)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+two points defining a Cartesian box that bounds the elements belonging to subdomain sid\&. 
+.RE
+.PP
+
+.PP
+Definition at line 487 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshBase::elem(), std::max(), std::min(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), libMesh::MeshBase::point(), libMesh::MeshBase::spatial_dimension(), and libMesh::Elem::subdomain_id()\&.
+.PP
+Referenced by subdomain_bounding_sphere()\&.
+.PP
+.nf
+489 {
+490   libmesh_assert_not_equal_to (mesh\&.n_nodes(), 0);
+491 
+492   Point min( 1\&.e30,  1\&.e30,  1\&.e30);
+493   Point max(-1\&.e30, -1\&.e30, -1\&.e30);
+494 
+495   for (unsigned int e=0; e<mesh\&.n_elem(); e++)
+496     if (mesh\&.elem(e)->subdomain_id() == sid)
+497       for (unsigned int n=0; n<mesh\&.elem(e)->n_nodes(); n++)
+498         for (unsigned int i=0; i<mesh\&.spatial_dimension(); i++)
+499           {
+500             min(i) = std::min(min(i), mesh\&.point(mesh\&.elem(e)->node(n))(i));
+501             max(i) = std::max(max(i), mesh\&.point(mesh\&.elem(e)->node(n))(i));
+502           }
+503 
+504   return BoundingBox (min, max);
+505 }
+.fi
+.SS "\fBSphere\fP libMesh::MeshTools::subdomain_bounding_sphere (const \fBMeshBase\fP &mesh, const \fBsubdomain_id_type\fPsid)"
+Same, but returns a sphere instead of a box\&. 
+.PP
+Definition at line 510 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Real, and subdomain_bounding_box()\&.
+.PP
+.nf
+512 {
+513   BoundingBox bbox = subdomain_bounding_box(mesh,sid);
+514 
+515   const Real  diag = (bbox\&.second - bbox\&.first)\&.size();
+516   const Point cent = (bbox\&.second + bbox\&.first)/2;
+517 
+518   return Sphere (cent, \&.5*diag);
+519 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::total_weight (const \fBMeshBase\fP &mesh)"
+This function returns the sum over all the elemenents of the number of nodes per element\&. This can be useful for partitioning hybrid meshes\&. A feasible load balancing scheme is to keep the weight per processor as uniform as possible\&. 
+.PP
+Definition at line 315 of file mesh_tools\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::invalid_processor_id, libMesh::MeshBase::is_serial(), libMesh::libmesh_parallel_only(), libMesh::Threads::parallel_reduce(), libMesh::ParallelObject::processor_id(), libMesh::Parallel::Communicator::sum(), and weight()\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+316 {
+317   if (!mesh\&.is_serial())
+318     {
+319       libmesh_parallel_only(mesh\&.comm());
+320       dof_id_type weight = MeshTools::weight (mesh, mesh\&.processor_id());
+321       mesh\&.comm()\&.sum(weight);
+322       dof_id_type unpartitioned_weight =
+323         MeshTools::weight (mesh, DofObject::invalid_processor_id);
+324       return weight + unpartitioned_weight;
+325     }
+326 
+327   SumElemWeight sew;
+328 
+329   Threads::parallel_reduce (ConstElemRange (mesh\&.elements_begin(),
+330                                             mesh\&.elements_end()),
+331                             sew);
+332   return sew\&.weight();
+333 
+334 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::weight (const \fBMeshBase\fP &mesh, const \fBprocessor_id_type\fPpid)"
+This function returns the sum over all the elemenents on processor \fCpid\fP of nodes per element\&. This can be useful for partitioning hybrid meshes\&. A feasible load balancing scheme is to keep the weight per processor as uniform as possible\&. 
+.PP
+Definition at line 338 of file mesh_tools\&.C\&.
+.PP
+References libMesh::Threads::parallel_reduce(), libMesh::MeshBase::pid_elements_begin(), and libMesh::MeshBase::pid_elements_end()\&.
+.PP
+Referenced by libMesh::QGrundmann_Moller::gm_rule(), libMesh::QGrid::init_2D(), libMesh::QGrid::init_3D(), libMesh::FE< Dim, T >::init_shape_functions(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::init_shape_functions(), libMesh::FEXYZ< Dim >::init_shape_functions(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshTools::Modification::smooth(), total_weight(), and weight()\&.
+.PP
+.nf
+339 {
+340   SumElemWeight sew;
+341 
+342   Threads::parallel_reduce (ConstElemRange (mesh\&.pid_elements_begin(pid),
+343                                             mesh\&.pid_elements_end(pid)),
+344                             sew);
+345   return sew\&.weight();
+346 }
+.fi
+.SS "\fBdof_id_type\fP libMesh::MeshTools::weight (const MeshBase &mesh)\fC [inline]\fP"
+
+.PP
+Definition at line 135 of file mesh_tools\&.h\&.
+.PP
+References libMesh::ParallelObject::processor_id(), and weight()\&.
+.PP
+.nf
+136 { return MeshTools::weight (mesh, mesh\&.processor_id()); }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

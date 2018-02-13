@@ -1,0 +1,167 @@
+.TH "libMesh::DerivedRBConstruction< Base >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DerivedRBConstruction< Base > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <derived_rb_construction\&.h>\fP
+.PP
+Inherits Base\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBDerivedRBConstruction\fP
+.br
+< Base > \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDerivedRBConstruction\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned int number)"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "virtual std::string \fBsystem_type\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBtruth_solve\fP (int plot_solution)"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBtrain_reduced_basis\fP (const std::string &directory_name='offline_data', const bool resize_rb_eval_data=true)"
+.br
+.ti -1c
+.RI "virtual void \fBset_uber_current_parameters\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBRBEvaluation\fP > \fBbuild_rb_evaluation\fP (const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "virtual void \fBload_rb_solution\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBload_basis_function\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "void \fBgenerate_residual_terms_wrt_truth\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBuber_system_name\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBget_derived_basis_function\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "virtual void \fBenrich_RB_space\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBupdate_RB_system_matrices\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBcompute_Fq_representor_innerprods\fP (bool compute_inner_products=true)"
+.br
+.ti -1c
+.RI "virtual void \fBupdate_residual_terms\fP (bool compute_inner_products=true)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Base>class libMesh::DerivedRBConstruction< Base >"
+This class is part of the rbOOmit framework\&.
+.PP
+\fBDerivedRBConstruction\fP implements the Construction stage for the 'two-level' Reduced Basis method\&. In this context we obtain our 'derived' basis functions from a reference reduced basis approximation\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David J\&. Knezevic, 2009 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file derived_rb_construction\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<class Base > typedef \fBDerivedRBConstruction\fP<Base> \fBlibMesh::DerivedRBConstruction\fP< Base >::\fBsys_type\fP"
+The type of system\&. 
+.PP
+Definition at line 62 of file derived_rb_construction\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Base > \fBlibMesh::DerivedRBConstruction\fP< Base >::\fBDerivedRBConstruction\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned intnumber)"
+Constructor\&. Optionally initializes required data structures\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Base > virtual \fBAutoPtr\fP<\fBRBEvaluation\fP> \fBlibMesh::DerivedRBConstruction\fP< Base >::build_rb_evaluation (const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)\fC [virtual]\fP"
+Build a new \fBDerivedRBEvaluation\fP object\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::compute_Fq_representor_innerprods (boolcompute_inner_products = \fCtrue\fP)\fC [protected]\fP, \fC [virtual]\fP"
+Compute the RHS terms that are combined `online' to determine the dual norm of the residual\&. Overloaded here for the two-stage RB method\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::enrich_RB_space ()\fC [protected]\fP, \fC [virtual]\fP"
+Add a new basis function to the RB space\&. Overload for uber-unter style enrichment, i\&.e\&. this function is independent of the number of degrees of freedom in the truth finite element discretization\&. 
+.SS "template<class Base > void \fBlibMesh::DerivedRBConstruction\fP< Base >::generate_residual_terms_wrt_truth ()"
+This function recomputes all the residual terms in order to allow evaluation of the residual wrt the truth space\&. Useful if we have performed the greedy algorithm with respect to the uber space and need to replace with truth residual terms\&. 
+.SS "template<class Base > \fBDenseVector\fP<\fBNumber\fP> \fBlibMesh::DerivedRBConstruction\fP< Base >::get_derived_basis_function (unsigned inti)\fC [protected]\fP"
+Get a copy of the specific derived basis function\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::load_basis_function (unsigned inti)\fC [virtual]\fP"
+Load the i^th derived basis function into vec\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::load_rb_solution ()\fC [virtual]\fP"
+Load the RB solution from the most recent solve into the \fBlibMesh\fP solution vector\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::set_uber_current_parameters ()\fC [virtual]\fP"
+Set the uber_system's current_parameters to match unter_system's current_parameters\&. We require a virtual function here in case the unter system has fewer parameters than the uber system, for example\&. 
+.SS "template<class Base > \fBsys_type\fP& \fBlibMesh::DerivedRBConstruction\fP< Base >::system ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a clever pointer to the system\&. 
+.RE
+.PP
+
+.PP
+Definition at line 67 of file derived_rb_construction\&.h\&.
+.PP
+.nf
+67 { return *this; }
+.fi
+.SS "template<class Base > virtual std::string \fBlibMesh::DerivedRBConstruction\fP< Base >::system_type () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string indicating the type of the system\&. 
+.RE
+.PP
+
+.SS "template<class Base > virtual \fBReal\fP \fBlibMesh::DerivedRBConstruction\fP< Base >::train_reduced_basis (const std::string &directory_name = \fC'offline_data'\fP, const boolresize_rb_eval_data = \fCtrue\fP)\fC [virtual]\fP"
+Overload train_reduced_basis to generate residual terms wrt truth once the Greedy finishes\&. 
+.SS "template<class Base > virtual \fBReal\fP \fBlibMesh::DerivedRBConstruction\fP< Base >::truth_solve (intplot_solution)\fC [virtual]\fP"
+Overload truth_solve so that it computes the associated Unter RB solution\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::update_RB_system_matrices ()\fC [protected]\fP, \fC [virtual]\fP"
+Compute the reduced basis matrices for the current basis\&. This operation is based on the uber system and hence is independent of the number of degrees of freedom in the truth finite element discretization\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBConstruction\fP< Base >::update_residual_terms (boolcompute_inner_products = \fCtrue\fP)\fC [protected]\fP, \fC [virtual]\fP"
+Compute the terms that are combined `online' to determine the dual norm of the residual\&. Overload here so that we perform an update based on the uber system\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Base > std::string \fBlibMesh::DerivedRBConstruction\fP< Base >::uber_system_name"
+The name of the uber RB system, i\&.e\&. the RB system we use to develop the derived RB system\&. 
+.PP
+Definition at line 129 of file derived_rb_construction\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

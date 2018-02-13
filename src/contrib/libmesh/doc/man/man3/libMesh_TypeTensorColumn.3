@@ -1,0 +1,106 @@
+.TH "libMesh::TypeTensorColumn< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TypeTensorColumn< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <type_tensor\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTypeTensorColumn\fP (\fBTypeTensor\fP< T > &tensor, unsigned int j)"
+.br
+.ti -1c
+.RI "T & \fBoperator()\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "T & \fBslice\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "\fBTypeTensorColumn\fP< T > & \fBoperator=\fP (const \fBTypeVector\fP< T > &rhs)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBTypeTensor\fP< T > * \fB_tensor\fP"
+.br
+.ti -1c
+.RI "const unsigned int \fB_j\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::TypeTensorColumn< T >"
+
+.PP
+Definition at line 35 of file type_tensor\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::TypeTensorColumn\fP< T >::\fBTypeTensorColumn\fP (\fBTypeTensor\fP< T > &tensor, unsigned intj)\fC [inline]\fP"
+
+.PP
+Definition at line 362 of file type_tensor\&.h\&.
+.PP
+.nf
+363                                    :
+364     _tensor(&tensor), _j(j) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> T& \fBlibMesh::TypeTensorColumn\fP< T >::operator() (const unsigned inti)\fC [inline]\fP"
+Return a writeable reference to the $ i,this $ element of the tensor\&. 
+.PP
+Definition at line 370 of file type_tensor\&.h\&.
+.PP
+References libMesh::TypeTensorColumn< T >::_j, and libMesh::TypeTensorColumn< T >::_tensor\&.
+.PP
+.nf
+371   { return (*_tensor)(i,_j); }
+.fi
+.SS "template<typename T> \fBTypeTensorColumn\fP<T>& \fBlibMesh::TypeTensorColumn\fP< T >::operator= (const \fBTypeVector\fP< T > &rhs)\fC [inline]\fP"
+Assign values to this column of the tensor\&. 
+.PP
+Definition at line 379 of file type_tensor\&.h\&.
+.PP
+.nf
+380   {
+381     for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+382       (*this)(i) = rhs(i);
+383     return *this;
+384   }
+.fi
+.SS "template<typename T> T& \fBlibMesh::TypeTensorColumn\fP< T >::slice (const unsigned inti)\fC [inline]\fP"
+
+.PP
+Definition at line 373 of file type_tensor\&.h\&.
+.PP
+References libMesh::TypeTensorColumn< T >::_j, and libMesh::TypeTensorColumn< T >::_tensor\&.
+.PP
+.nf
+374   { return (*_tensor)(i,_j); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> const unsigned int \fBlibMesh::TypeTensorColumn\fP< T >::_j\fC [private]\fP"
+
+.PP
+Definition at line 388 of file type_tensor\&.h\&.
+.PP
+Referenced by libMesh::TypeTensorColumn< T >::operator()(), and libMesh::TypeTensorColumn< T >::slice()\&.
+.SS "template<typename T> \fBTypeTensor\fP<T>* \fBlibMesh::TypeTensorColumn\fP< T >::_tensor\fC [private]\fP"
+
+.PP
+Definition at line 387 of file type_tensor\&.h\&.
+.PP
+Referenced by libMesh::TypeTensorColumn< T >::operator()(), and libMesh::TypeTensorColumn< T >::slice()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

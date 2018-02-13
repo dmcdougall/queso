@@ -1,0 +1,943 @@
+.TH "libMesh::TecplotIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TecplotIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <tecplot_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTecplotIO\fP (const \fBMeshBase\fP &, const bool \fBbinary\fP=false, const double \fBtime\fP=0\&., const int \fBstrand_offset\fP=0)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "bool & \fBbinary\fP ()"
+.br
+.ti -1c
+.RI "double & \fBtime\fP ()"
+.br
+.ti -1c
+.RI "int & \fBstrand_offset\fP ()"
+.br
+.ti -1c
+.RI "std::string & \fBzone_title\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBascii_append\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwrite_ascii\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.ti -1c
+.RI "void \fBwrite_binary\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.ti -1c
+.RI "unsigned \fBelem_dimension\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_binary\fP"
+.br
+.ti -1c
+.RI "double \fB_time\fP"
+.br
+.ti -1c
+.RI "int \fB_strand_offset\fP"
+.br
+.ti -1c
+.RI "std::string \fB_zone_title\fP"
+.br
+.ti -1c
+.RI "bool \fB_ascii_append\fP"
+.br
+.ti -1c
+.RI "std::set< \fBsubdomain_id_type\fP > \fB_subdomain_ids\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes in the Tecplot format\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file tecplot_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TecplotIO::TecplotIO (const \fBMeshBase\fP &mesh_in, const boolbinary = \fCfalse\fP, const doubletime = \fC0\&.\fP, const intstrand_offset = \fC0\fP)\fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. The optional parameter \fCbinary\fP can be used to switch between ASCII (\fCfalse\fP, the default) or binary (\fCtrue\fP) output files\&. 
+.PP
+Definition at line 120 of file tecplot_io\&.C\&.
+.PP
+References _subdomain_ids, and libMesh::MeshBase::subdomain_ids()\&.
+.PP
+.nf
+123                                                   :
+124   MeshOutput<MeshBase> (mesh_in),
+125   _binary (binary_in),
+126   _time (time_in),
+127   _strand_offset (strand_offset_in),
+128   _zone_title ("zone"),
+129   _ascii_append(false)
+130 {
+131   // Gather a list of subdomain ids in the mesh\&.
+132   // We must do this now, while we have every
+133   // processor's attention
+134   // (some of the write methods only execute on processor 0)\&.
+135   mesh_in\&.subdomain_ids (_subdomain_ids);
+136 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool & libMesh::TecplotIO::ascii_append ()"
+Set to true to write multiple solutions to a single file (ASCII only)\&. Tecplot will read multiple zones in a single file, but currently you have to repeat the mesh information each time\&. 
+.PP
+Definition at line 167 of file tecplot_io\&.C\&.
+.PP
+References _ascii_append\&.
+.PP
+.nf
+168 {
+169   return _ascii_append;
+170 }
+.fi
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "bool & libMesh::TecplotIO::binary ()"
+Flag indicating whether or not to write a binary file (if the tecio\&.a library was found by \fCconfigure\fP)\&. 
+.PP
+Definition at line 140 of file tecplot_io\&.C\&.
+.PP
+References _binary\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+141 {
+142   return _binary;
+143 }
+.fi
+.SS "unsigned libMesh::TecplotIO::elem_dimension ()\fC [private]\fP"
+Determines the logical spatial dimension of the elements in the \fBMesh\fP\&. Ex: A 1D edge element living in 3D is a logically one-dimensional element as far as Tecplot is concerned\&. Throws an error if mixed-dimension element types are found, since I'm not sure how to handle that case currently\&. 
+.PP
+Definition at line 205 of file tecplot_io\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), end, libMesh::err, and libMesh::MeshOutput< MT >::mesh()\&.
+.PP
+Referenced by write_ascii(), and write_binary()\&.
+.PP
+.nf
+206 {
+207   // Get a constant reference to the mesh\&.
+208   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+209 
+210   std::vector<unsigned> elem_dims(3);
+211 
+212   // Loop over all the elements and mark the proper dimension entry in
+213   // the elem_dims vector\&.
+214   MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+215   const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+216   for ( ; it != end; ++it)
+217     elem_dims[(*it)->dim() - 1] = 1;
+218 
+219   // Detect and disallow (for now) the writing of mixed dimension meshes\&.
+220   if (std::count(elem_dims\&.begin(), elem_dims\&.end(), 1) > 1)
+221     {
+222       libMesh::err << "Error, cannot write Mesh with mixed element dimensions to Tecplot file!" << std::endl;
+223       libmesh_error();
+224     }
+225 
+226   if (elem_dims[0])
+227     return 1;
+228   else if (elem_dims[1])
+229     return 2;
+230   else if (elem_dims[2])
+231     return 3;
+232   else
+233     {
+234       libMesh::err << "No 1, 2, or 3D elements detected!" << std::endl;
+235       libmesh_error();
+236     }
+237 }
+.fi
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), write_ascii(), write_binary(), write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "int & libMesh::TecplotIO::strand_offset ()"
+Strand offset for this file\&. Each mesh block will be written to (strand_id=block_id+1+strand_offset)\&. Written to newer binary formats that are time-aware, defaults to 0\&. 
+.PP
+Definition at line 154 of file tecplot_io\&.C\&.
+.PP
+References _strand_offset\&.
+.PP
+Referenced by write_binary()\&.
+.PP
+.nf
+155 {
+156   return _strand_offset;
+157 }
+.fi
+.SS "double & libMesh::TecplotIO::time ()"
+Solution time for transient data\&. Written to newer binary formats that are time-aware\&. 
+.PP
+Definition at line 147 of file tecplot_io\&.C\&.
+.PP
+References _time\&.
+.PP
+.nf
+148 {
+149   return _time;
+150 }
+.fi
+.SS "void libMesh::TecplotIO::write (const std::string &fname)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 173 of file tecplot_io\&.C\&.
+.PP
+References binary(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::processor_id(), write_ascii(), and write_binary()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+174 {
+175   if (this->mesh()\&.processor_id() == 0)
+176     {
+177       if (this->binary())
+178         this->write_binary (fname);
+179       else
+180         this->write_ascii  (fname);
+181     }
+182 }
+.fi
+.SS "void libMesh::TecplotIO::write_ascii (const std::string &fname, const std::vector< \fBNumber\fP > *v = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)\fC [private]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write an ASCII file\&. 
+.PP
+Definition at line 241 of file tecplot_io\&.C\&.
+.PP
+References _ascii_append, _time, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshOutput< MeshBase >::ascii_precision(), elem_dimension(), end, libMesh::MeshOutput< MT >::mesh(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::MeshBase::n_active_sub_elem(), libMesh::MeshBase::n_nodes(), libMesh::n_vars, libMesh::out, libMesh::MeshBase::point(), libMesh::processor_id(), libMesh::TECPLOT, and libMesh::TypeVector< T >::write_unformatted()\&.
+.PP
+Referenced by write(), write_binary(), and write_nodal_data()\&.
+.PP
+.nf
+244 {
+245   // Should only do this on processor 0!
+246   libmesh_assert_equal_to (this->mesh()\&.processor_id(), 0);
+247 
+248   // Create an output stream, possibly in append mode\&.
+249   std::ofstream out_stream(fname\&.c_str(), _ascii_append ? std::ofstream::app : std::ofstream::out);
+250 
+251   // Make sure it opened correctly
+252   if (!out_stream\&.good())
+253     libmesh_file_error(fname\&.c_str());
+254 
+255   // Get a constant reference to the mesh\&.
+256   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+257 
+258   // Write header to stream
+259   {
+260     {
+261       // TODO: We used to print out the SVN revision here when we did keyword expansions\&.\&.\&.
+262       out_stream << "# For a description of the Tecplot format see the Tecplot User's guide\&.\n"
+263                  << "#\n";
+264     }
+265 
+266     out_stream << "Variables=x,y,z";
+267 
+268     if (solution_names != NULL)
+269       for (unsigned int n=0; n<solution_names->size(); n++)
+270         {
+271 #ifdef LIBMESH_USE_REAL_NUMBERS
+272 
+273           // Write variable names for real variables
+274           out_stream << "," << (*solution_names)[n];
+275 
+276 #else
+277 
+278           // Write variable names for complex variables
+279           out_stream << "," << "r_"   << (*solution_names)[n]
+280                      << "," << "i_"   << (*solution_names)[n]
+281                      << "," << "a_"   << (*solution_names)[n];
+282 
+283 #endif
+284         }
+285 
+286     out_stream << '\n';
+287 
+288     out_stream << "Zone f=fepoint, n=" << the_mesh\&.n_nodes() << ", e=" << the_mesh\&.n_active_sub_elem();
+289 
+290     // We cannot choose the element type simply based on the mesh
+291     // dimension\&.\&.\&. there might be 1D elements living in a 3D mesh\&.
+292     // So look at the elements which are actually in the Mesh, and
+293     // choose either "lineseg", "quadrilateral", or "brick" depending
+294     // on if the elements are 1, 2, or 3D\&.
+295 
+296     // Write the element type we've determined to the header\&.
+297     out_stream << ", et=";
+298 
+299     switch (this->elem_dimension())
+300       {
+301       case 1:
+302         out_stream << "lineseg";
+303         break;
+304       case 2:
+305         out_stream << "quadrilateral";
+306         break;
+307       case 3:
+308         out_stream << "brick";
+309         break;
+310       default:
+311         libmesh_error();
+312       }
+313 
+314     // Output the time in the header
+315     out_stream << ", t=\"T " << _time << "\"";
+316 
+317     // Use default mesh color = black
+318     out_stream << ", c=black\n";
+319 
+320   } // finished writing header
+321 
+322   for (unsigned int i=0; i<the_mesh\&.n_nodes(); i++)
+323     {
+324       // Print the point without a newline
+325       the_mesh\&.point(i)\&.write_unformatted(out_stream, false);
+326 
+327       if ((v != NULL) && (solution_names != NULL))
+328         {
+329           const std::size_t n_vars = solution_names->size();
+330 
+331 
+332           for (std::size_t c=0; c<n_vars; c++)
+333             {
+334 #ifdef LIBMESH_USE_REAL_NUMBERS
+335               // Write real data
+336               out_stream << std::setprecision(this->ascii_precision())
+337                          << (*v)[i*n_vars + c] << " ";
+338 
+339 #else
+340               // Write complex data
+341               out_stream << std::setprecision(this->ascii_precision())
+342                          << (*v)[i*n_vars + c]\&.real() << " "
+343                          << (*v)[i*n_vars + c]\&.imag() << " "
+344                          << std::abs((*v)[i*n_vars + c]) << " ";
+345 
+346 #endif
+347             }
+348         }
+349 
+350       // Write a new line after the data for this node
+351       out_stream << '\n';
+352     }
+353 
+354   MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+355   const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+356 
+357   for ( ; it != end; ++it)
+358     (*it)->write_connectivity(out_stream, TECPLOT);
+359 }
+.fi
+.SS "void libMesh::TecplotIO::write_binary (const std::string &fname, const std::vector< \fBNumber\fP > *vec = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)\fC [private]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write a binary file if the tecio\&.a library was found at compile time, otherwise a warning message will be printed and an ASCII file will be created\&. 
+.PP
+Definition at line 363 of file tecplot_io\&.C\&.
+.PP
+References _subdomain_ids, _time, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshBase::active_subdomain_elements_begin(), libMesh::MeshBase::active_subdomain_elements_end(), elem_dimension(), end, libMesh::err, libMesh::ierr, std::max(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_active_sub_elem(), libMesh::MeshBase::n_nodes(), libMesh::n_vars, libMesh::Quality::name(), libMesh::MeshBase::point(), libMesh::processor_id(), strand_offset(), libMesh::MeshBase::subdomain_name(), libMesh::TECPLOT, write_ascii(), and zone_title()\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+366 {
+367   //-----------------------------------------------------------
+368   // Call the ASCII output function if configure did not detect
+369   // the Tecplot binary API
+370 #ifndef LIBMESH_HAVE_TECPLOT_API
+371 
+372   libMesh::err << "WARNING: Tecplot Binary files require the Tecplot API\&." << std::endl
+373                << "Continuing with ASCII output\&."
+374                << std::endl;
+375 
+376   if (this->mesh()\&.processor_id() == 0)
+377     this->write_ascii (fname, vec, solution_names);
+378   return;
+379 
+380 
+381 
+382   //------------------------------------------------------------
+383   // New binary formats, time aware and whatnot
+384 #elif defined(LIBMESH_HAVE_TECPLOT_API_112)
+385 
+386   // Get a constant reference to the mesh\&.
+387   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+388 
+389   // Required variables
+390   std::string tecplot_variable_names;
+391   int
+392     ierr      =  0,
+393     file_type =  0, // full
+394     is_double =  0,
+395 #ifdef DEBUG
+396     tec_debug =  1,
+397 #else
+398     tec_debug =  0,
+399 #endif
+400     cell_type   = -1,
+401     nn_per_elem = -1;
+402 
+403   switch (this->elem_dimension())
+404     {
+405     case 1:
+406       cell_type   = 1;  // FELINESEG
+407       nn_per_elem = 2;
+408       break;
+409 
+410     case 2:
+411       cell_type   = 3; // FEQUADRILATERAL
+412       nn_per_elem = 4;
+413       break;
+414 
+415     case 3:
+416       cell_type   = 5; // FEBRICK
+417       nn_per_elem = 8;
+418       break;
+419 
+420     default:
+421       libmesh_error();
+422     }
+423 
+424   // Build a string containing all the variable names to pass to Tecplot
+425   {
+426     tecplot_variable_names += "x, y, z";
+427 
+428     if (solution_names != NULL)
+429       {
+430         for (unsigned int name=0; name<solution_names->size(); name++)
+431           {
+432 #ifdef LIBMESH_USE_REAL_NUMBERS
+433 
+434             tecplot_variable_names += ", ";
+435             tecplot_variable_names += (*solution_names)[name];
+436 
+437 #else
+438 
+439             tecplot_variable_names += ", ";
+440             tecplot_variable_names += "r_";
+441             tecplot_variable_names += (*solution_names)[name];
+442             tecplot_variable_names += ", ";
+443             tecplot_variable_names += "i_";
+444             tecplot_variable_names += (*solution_names)[name];
+445             tecplot_variable_names += ", ";
+446             tecplot_variable_names += "a_";
+447             tecplot_variable_names += (*solution_names)[name];
+448 
+449 #endif
+450           }
+451       }
+452   }
+453 
+454   // Instantiate a TecplotMacros interface\&.  In 2D the most nodes per
+455   // face should be 4, in 3D it's 8\&.
+456 
+457 
+458   TecplotMacros tm(the_mesh\&.n_nodes(),
+459 #ifdef LIBMESH_USE_REAL_NUMBERS
+460                    (3 + ((solution_names == NULL) ? 0 : solution_names->size())),
+461 #else
+462                    (3 + 3*((solution_names == NULL) ? 0 : solution_names->size())),
+463 #endif
+464                    the_mesh\&.n_active_sub_elem(),
+465                    nn_per_elem
+466                    );
+467 
+468 
+469   // Copy the nodes and data to the TecplotMacros class\&. Note that we store
+470   // everything as a float here since the eye doesn't require a double to
+471   // understand what is going on
+472   for (unsigned int v=0; v<the_mesh\&.n_nodes(); v++)
+473     {
+474       tm\&.nd(0,v) = static_cast<float>(the_mesh\&.point(v)(0));
+475       tm\&.nd(1,v) = static_cast<float>(the_mesh\&.point(v)(1));
+476       tm\&.nd(2,v) = static_cast<float>(the_mesh\&.point(v)(2));
+477 
+478       if ((vec != NULL) &&
+479           (solution_names != NULL))
+480         {
+481           const unsigned int n_vars = solution_names->size();
+482 
+483           for (unsigned int c=0; c<n_vars; c++)
+484             {
+485 #ifdef LIBMESH_USE_REAL_NUMBERS
+486 
+487               tm\&.nd((3+c),v)     = static_cast<float>((*vec)[v*n_vars + c]);
+488 #else
+489               tm\&.nd((3+3*c),v)   = static_cast<float>((*vec)[v*n_vars + c]\&.real());
+490               tm\&.nd((3+3*c+1),v) = static_cast<float>((*vec)[v*n_vars + c]\&.imag());
+491               tm\&.nd((3+3*c+2),v) = static_cast<float>(std::abs((*vec)[v*n_vars + c]));
+492 #endif
+493             }
+494         }
+495     }
+496 
+497 
+498   // Initialize the file
+499   ierr = TECINI112 (NULL,
+500                     (char*) tecplot_variable_names\&.c_str(),
+501                     (char*) fname\&.c_str(),
+502                     (char*) "\&.",
+503                     &file_type,
+504                     &tec_debug,
+505                     &is_double);
+506 
+507   libmesh_assert_equal_to (ierr, 0);
+508 
+509   // A zone for each subdomain
+510   bool firstzone=true;
+511   for (std::set<subdomain_id_type>::const_iterator sbd_it=_subdomain_ids\&.begin();
+512        sbd_it!=_subdomain_ids\&.end(); ++sbd_it)
+513     {
+514       // Copy the connectivity for this subdomain
+515       {
+516         MeshBase::const_element_iterator       it  = the_mesh\&.active_subdomain_elements_begin (*sbd_it);
+517         const MeshBase::const_element_iterator end = the_mesh\&.active_subdomain_elements_end   (*sbd_it);
+518 
+519         unsigned int n_subcells_in_subdomain=0;
+520 
+521         for (; it != end; ++it)
+522           n_subcells_in_subdomain += (*it)->n_sub_elem();
+523 
+524         // update the connectivty array to include only the elements in this subdomain
+525         tm\&.set_n_cells (n_subcells_in_subdomain);
+526 
+527         unsigned int te = 0;
+528 
+529         for (it  = the_mesh\&.active_subdomain_elements_begin (*sbd_it);
+530              it != end; ++it)
+531           {
+532             std::vector<dof_id_type> conn;
+533             for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+534               {
+535                 (*it)->connectivity(se, TECPLOT, conn);
+536 
+537                 for (unsigned int node=0; node<conn\&.size(); node++)
+538                   tm\&.cd(node,te) = conn[node];
+539 
+540                 te++;
+541               }
+542           }
+543       }
+544 
+545 
+546       // Ready to call the Tecplot API for this subdomain
+547       {
+548         int
+549           num_nodes   = static_cast<int>(the_mesh\&.n_nodes()),
+550           num_cells   = static_cast<int>(tm\&.n_cells),
+551           num_faces   = 0,
+552           i_cell_max  = 0,
+553           j_cell_max  = 0,
+554           k_cell_max  = 0,
+555           strand_id   = std::max(*sbd_it,static_cast<subdomain_id_type>(1)) + this->strand_offset(),
+556           parent_zone = 0,
+557           is_block    = 1,
+558           num_face_connect   = 0,
+559           face_neighbor_mode = 0,
+560           tot_num_face_nodes = 0,
+561           num_connect_boundary_faces = 0,
+562           tot_num_boundary_connect   = 0,
+563           share_connect_from_zone=0;
+564 
+565         std::vector<int>
+566           passive_var_list    (tm\&.n_vars, 0),
+567           share_var_from_zone (tm\&.n_vars, 1); // We only write data for the first zone, all other
+568         // zones will share from this one\&.
+569 
+570         // get the subdomain name from libMesh, if there is one\&.
+571         std::string subdomain_name = the_mesh\&.subdomain_name(*sbd_it);
+572         std::ostringstream zone_name;
+573         zone_name << this->zone_title();
+574 
+575         // We will title this
+576         // "{zone_title()}_{subdomain_name}", or
+577         // "{zone_title()}_{subdomain_id}", or
+578         // "{zone_title()}"
+579         if (subdomain_name\&.size())
+580           {
+581             zone_name << "_";
+582             zone_name << subdomain_name;
+583           }
+584         else if (_subdomain_ids\&.size() > 1)
+585           {
+586             zone_name << "_";
+587             zone_name << *sbd_it;
+588           }
+589 
+590         ierr = TECZNE112 ((char*) zone_name\&.str()\&.c_str(),
+591                           &cell_type,
+592                           &num_nodes,
+593                           &num_cells,
+594                           &num_faces,
+595                           &i_cell_max,
+596                           &j_cell_max,
+597                           &k_cell_max,
+598                           &_time,
+599                           &strand_id,
+600                           &parent_zone,
+601                           &is_block,
+602                           &num_face_connect,
+603                           &face_neighbor_mode,
+604                           &tot_num_face_nodes,
+605                           &num_connect_boundary_faces,
+606                           &tot_num_boundary_connect,
+607                           &passive_var_list[0],
+608                           NULL, // = all are node centered
+609                           (firstzone) ? NULL : &share_var_from_zone[0],
+610                           &share_connect_from_zone);
+611 
+612         libmesh_assert_equal_to (ierr, 0);
+613 
+614         // Write *all* the data for the first zone, then share it with the others
+615         if (firstzone)
+616           {
+617             int total =
+618 #ifdef LIBMESH_USE_REAL_NUMBERS
+619               ((3 + ((solution_names == NULL) ? 0 : solution_names->size()))*num_nodes);
+620 #else
+621             ((3 + 3*((solution_names == NULL) ? 0 : solution_names->size()))*num_nodes);
+622 #endif
+623 
+624 
+625             ierr = TECDAT112 (&total,
+626                               &tm\&.nodalData[0],
+627                               &is_double);
+628 
+629             libmesh_assert_equal_to (ierr, 0);
+630           }
+631 
+632         // Write the connectivity
+633         ierr = TECNOD112 (&tm\&.connData[0]);
+634 
+635         libmesh_assert_equal_to (ierr, 0);
+636       }
+637 
+638       firstzone = false;
+639     }
+640 
+641   // Done, close the file\&.
+642   ierr = TECEND112 ();
+643 
+644   libmesh_assert_equal_to (ierr, 0);
+645 
+646 
+647 
+648 
+649   //------------------------------------------------------------
+650   // Legacy binary format
+651 #else
+652 
+653   // Get a constant reference to the mesh\&.
+654   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+655 
+656   // Tecplot binary output only good for dim=2,3
+657   if (the_mesh\&.mesh_dimension() == 1)
+658     {
+659       this->write_ascii (fname, vec, solution_names);
+660 
+661       return;
+662     }
+663 
+664   // Required variables
+665   std::string tecplot_variable_names;
+666   int is_double =  0,
+667     tec_debug =  0,
+668     cell_type = ((the_mesh\&.mesh_dimension()==2) ? (1) : (3));
+669 
+670   // Build a string containing all the variable names to pass to Tecplot
+671   {
+672     tecplot_variable_names += "x, y, z";
+673 
+674     if (solution_names != NULL)
+675       {
+676         for (unsigned int name=0; name<solution_names->size(); name++)
+677           {
+678 #ifdef LIBMESH_USE_REAL_NUMBERS
+679 
+680             tecplot_variable_names += ", ";
+681             tecplot_variable_names += (*solution_names)[name];
+682 
+683 #else
+684 
+685             tecplot_variable_names += ", ";
+686             tecplot_variable_names += "r_";
+687             tecplot_variable_names += (*solution_names)[name];
+688             tecplot_variable_names += ", ";
+689             tecplot_variable_names += "i_";
+690             tecplot_variable_names += (*solution_names)[name];
+691             tecplot_variable_names += ", ";
+692             tecplot_variable_names += "a_";
+693             tecplot_variable_names += (*solution_names)[name];
+694 
+695 #endif
+696           }
+697       }
+698   }
+699 
+700   // Instantiate a TecplotMacros interface\&.  In 2D the most nodes per
+701   // face should be 4, in 3D it's 8\&.
+702 
+703 
+704   TecplotMacros tm(the_mesh\&.n_nodes(),
+705 #ifdef LIBMESH_USE_REAL_NUMBERS
+706                    (3 + ((solution_names == NULL) ? 0 : solution_names->size())),
+707 #else
+708                    (3 + 3*((solution_names == NULL) ? 0 : solution_names->size())),
+709 #endif
+710                    the_mesh\&.n_active_sub_elem(),
+711                    ((the_mesh\&.mesh_dimension() == 2) ? 4 : 8)
+712                    );
+713 
+714 
+715   // Copy the nodes and data to the TecplotMacros class\&. Note that we store
+716   // everything as a float here since the eye doesn't require a double to
+717   // understand what is going on
+718   for (unsigned int v=0; v<the_mesh\&.n_nodes(); v++)
+719     {
+720       tm\&.nd(0,v) = static_cast<float>(the_mesh\&.point(v)(0));
+721       tm\&.nd(1,v) = static_cast<float>(the_mesh\&.point(v)(1));
+722       tm\&.nd(2,v) = static_cast<float>(the_mesh\&.point(v)(2));
+723 
+724       if ((vec != NULL) &&
+725           (solution_names != NULL))
+726         {
+727           const unsigned int n_vars = solution_names->size();
+728 
+729           for (unsigned int c=0; c<n_vars; c++)
+730             {
+731 #ifdef LIBMESH_USE_REAL_NUMBERS
+732 
+733               tm\&.nd((3+c),v)     = static_cast<float>((*vec)[v*n_vars + c]);
+734 #else
+735               tm\&.nd((3+3*c),v)   = static_cast<float>((*vec)[v*n_vars + c]\&.real());
+736               tm\&.nd((3+3*c+1),v) = static_cast<float>((*vec)[v*n_vars + c]\&.imag());
+737               tm\&.nd((3+3*c+2),v) = static_cast<float>(std::abs((*vec)[v*n_vars + c]));
+738 #endif
+739             }
+740         }
+741     }
+742 
+743 
+744   // Copy the connectivity
+745   {
+746     unsigned int te = 0;
+747 
+748     MeshBase::const_element_iterator       it  = the_mesh\&.active_elements_begin();
+749     const MeshBase::const_element_iterator end = the_mesh\&.active_elements_end();
+750 
+751     for ( ; it != end; ++it)
+752       {
+753         std::vector<dof_id_type> conn;
+754         for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+755           {
+756             (*it)->connectivity(se, TECPLOT, conn);
+757 
+758             for (unsigned int node=0; node<conn\&.size(); node++)
+759               tm\&.cd(node,te) = conn[node];
+760 
+761             te++;
+762           }
+763       }
+764   }
+765 
+766 
+767   // Ready to call the Tecplot API
+768   {
+769     int ierr = 0,
+770       num_nodes = static_cast<int>(the_mesh\&.n_nodes()),
+771       num_cells = static_cast<int>(the_mesh\&.n_active_sub_elem());
+772 
+773 
+774     ierr = TECINI (NULL,
+775                    (char*) tecplot_variable_names\&.c_str(),
+776                    (char*) fname\&.c_str(),
+777                    (char*) "\&.",
+778                    &tec_debug,
+779                    &is_double);
+780 
+781     libmesh_assert_equal_to (ierr, 0);
+782 
+783     ierr = TECZNE (NULL,
+784                    &num_nodes,
+785                    &num_cells,
+786                    &cell_type,
+787                    (char*) "FEBLOCK",
+788                    NULL);
+789 
+790     libmesh_assert_equal_to (ierr, 0);
+791 
+792 
+793     int total =
+794 #ifdef LIBMESH_USE_REAL_NUMBERS
+795       ((3 + ((solution_names == NULL) ? 0 : solution_names->size()))*num_nodes);
+796 #else
+797     ((3 + 3*((solution_names == NULL) ? 0 : solution_names->size()))*num_nodes);
+798 #endif
+799 
+800 
+801     ierr = TECDAT (&total,
+802                    &tm\&.nodalData[0],
+803                    &is_double);
+804 
+805     libmesh_assert_equal_to (ierr, 0);
+806 
+807     ierr = TECNOD (&tm\&.connData[0]);
+808 
+809     libmesh_assert_equal_to (ierr, 0);
+810 
+811     ierr = TECEND ();
+812 
+813     libmesh_assert_equal_to (ierr, 0);
+814   }
+815 
+816 #endif
+817 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::TecplotIO::write_nodal_data (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)\fC [virtual]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented from \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 186 of file tecplot_io\&.C\&.
+.PP
+References binary(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::processor_id(), libMesh::START_LOG(), libMesh::STOP_LOG(), write_ascii(), and write_binary()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+189 {
+190   START_LOG("write_nodal_data()", "TecplotIO");
+191 
+192   if (this->mesh()\&.processor_id() == 0)
+193     {
+194       if (this->binary())
+195         this->write_binary (fname, &soln, &names);
+196       else
+197         this->write_ascii  (fname, &soln, &names);
+198     }
+199 
+200   STOP_LOG("write_nodal_data()", "TecplotIO");
+201 }
+.fi
+.SS "std::string & libMesh::TecplotIO::zone_title ()"
+The zone title to write\&. 
+.PP
+Definition at line 161 of file tecplot_io\&.C\&.
+.PP
+References _zone_title\&.
+.PP
+Referenced by write_binary()\&.
+.PP
+.nf
+162 {
+163   return _zone_title;
+164 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::TecplotIO::_ascii_append\fC [private]\fP"
+If true, when writing in ASCII format, open the file in std::ofstream::app mode\&. 
+.PP
+Definition at line 165 of file tecplot_io\&.h\&.
+.PP
+Referenced by ascii_append(), and write_ascii()\&.
+.SS "bool libMesh::TecplotIO::_binary\fC [private]\fP"
+Flag to write binary data\&. 
+.PP
+Definition at line 144 of file tecplot_io\&.h\&.
+.PP
+Referenced by binary()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "int libMesh::TecplotIO::_strand_offset\fC [private]\fP"
+Offset for Tecplot's STRANDID\&. 
+.PP
+Definition at line 154 of file tecplot_io\&.h\&.
+.PP
+Referenced by strand_offset()\&.
+.SS "std::set<\fBsubdomain_id_type\fP> libMesh::TecplotIO::_subdomain_ids\fC [private]\fP"
+The subdomains in the mesh\&. 
+.PP
+Definition at line 170 of file tecplot_io\&.h\&.
+.PP
+Referenced by TecplotIO(), and write_binary()\&.
+.SS "double libMesh::TecplotIO::_time\fC [private]\fP"
+Solution time\&. 
+.PP
+Definition at line 149 of file tecplot_io\&.h\&.
+.PP
+Referenced by time(), write_ascii(), and write_binary()\&.
+.SS "std::string libMesh::TecplotIO::_zone_title\fC [private]\fP"
+The zone title to write\&. 
+.PP
+Definition at line 159 of file tecplot_io\&.h\&.
+.PP
+Referenced by zone_title()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,141 @@
+.TH "libMesh::METIS_CSR_Graph" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::METIS_CSR_Graph \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <metis_csr_graph\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBprep_n_nonzeros\fP (const \fBlibMesh::dof_id_type\fP row, const \fBlibMesh::dof_id_type\fP \fBn_nonzeros\fP)"
+.br
+.ti -1c
+.RI "\fBlibMesh::dof_id_type\fP \fBn_nonzeros\fP (const \fBlibMesh::dof_id_type\fP row) const "
+.br
+.ti -1c
+.RI "void \fBprepare_for_use\fP ()"
+.br
+.ti -1c
+.RI "int & \fBoperator()\fP (const \fBlibMesh::dof_id_type\fP row, const \fBlibMesh::dof_id_type\fP nonzero)"
+.br
+.ti -1c
+.RI "const int & \fBoperator()\fP (const \fBlibMesh::dof_id_type\fP row, const \fBlibMesh::dof_id_type\fP nonzero) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< int > \fBoffsets\fP"
+.br
+.ti -1c
+.RI "std::vector< int > \fBvals\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This utility class provides a convenient implementation for building the compressed-row-storage graph required for the METIS/ParMETIS graph partitioning schemes\&. 
+.PP
+Definition at line 40 of file metis_csr_graph\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBlibMesh::dof_id_type\fP libMesh::METIS_CSR_Graph::n_nonzeros (const \fBlibMesh::dof_id_type\fProw) const\fC [inline]\fP"
+
+.PP
+Definition at line 53 of file metis_csr_graph\&.h\&.
+.PP
+References offsets\&.
+.PP
+Referenced by prep_n_nonzeros()\&.
+.PP
+.nf
+54   {
+55     libmesh_assert_less (row+1, offsets\&.size());
+56     return (offsets[row+1] - offsets[row]);
+57   }
+.fi
+.SS "int& libMesh::METIS_CSR_Graph::operator() (const \fBlibMesh::dof_id_type\fProw, const \fBlibMesh::dof_id_type\fPnonzero)\fC [inline]\fP"
+
+.PP
+Definition at line 72 of file metis_csr_graph\&.h\&.
+.PP
+References libMesh::libmesh_assert_greater(), offsets, and vals\&.
+.PP
+.nf
+73   {
+74     libmesh_assert_greater (vals\&.size(), offsets[row]+nonzero);
+75 
+76     return vals[offsets[row]+nonzero];
+77   }
+.fi
+.SS "const int& libMesh::METIS_CSR_Graph::operator() (const \fBlibMesh::dof_id_type\fProw, const \fBlibMesh::dof_id_type\fPnonzero) const\fC [inline]\fP"
+
+.PP
+Definition at line 81 of file metis_csr_graph\&.h\&.
+.PP
+References libMesh::libmesh_assert_greater(), offsets, and vals\&.
+.PP
+.nf
+82   {
+83     libmesh_assert_greater (vals\&.size(), offsets[row]+nonzero);
+84 
+85     return vals[offsets[row]+nonzero];
+86   }
+.fi
+.SS "void libMesh::METIS_CSR_Graph::prep_n_nonzeros (const \fBlibMesh::dof_id_type\fProw, const \fBlibMesh::dof_id_type\fPn_nonzeros)\fC [inline]\fP"
+
+.PP
+Definition at line 45 of file metis_csr_graph\&.h\&.
+.PP
+References n_nonzeros(), and offsets\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition()\&.
+.PP
+.nf
+46   {
+47     libmesh_assert_less (row+1, offsets\&.size());
+48     offsets[row+1] = n_nonzeros;
+49   }
+.fi
+.SS "void libMesh::METIS_CSR_Graph::prepare_for_use ()\fC [inline]\fP"
+
+.PP
+Definition at line 60 of file metis_csr_graph\&.h\&.
+.PP
+References libMesh::libmesh_assert(), offsets, and vals\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition()\&.
+.PP
+.nf
+61   {
+62     std::partial_sum (offsets\&.begin(), offsets\&.end(), offsets\&.begin());
+63     libmesh_assert (!offsets\&.empty());
+64     vals\&.resize(offsets\&.back());
+65 
+66     if (vals\&.empty())
+67       vals\&.push_back(0);
+68   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<int> libMesh::METIS_CSR_Graph::offsets"
+
+.PP
+Definition at line 43 of file metis_csr_graph\&.h\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), n_nonzeros(), operator()(), prep_n_nonzeros(), and prepare_for_use()\&.
+.SS "std::vector<int> libMesh::METIS_CSR_Graph::vals"
+
+.PP
+Definition at line 43 of file metis_csr_graph\&.h\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), operator()(), and prepare_for_use()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

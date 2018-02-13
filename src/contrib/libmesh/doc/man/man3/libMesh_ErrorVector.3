@@ -1,0 +1,498 @@
+.TH "libMesh::ErrorVector" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ErrorVector \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <error_vector\&.h>\fP
+.PP
+Inherits \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBErrorVector\fP (\fBdof_id_type\fP i=0, \fBMeshBase\fP *\fBmesh\fP=NULL)"
+.br
+.ti -1c
+.RI "\fBErrorVector\fP (\fBdof_id_type\fP i, \fBErrorVectorReal\fP val)"
+.br
+.ti -1c
+.RI "virtual \fBErrorVectorReal\fP \fBminimum\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBmean\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBmedian\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBmedian\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBvariance\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBvariance\fP (const \fBReal\fP \fBmean\fP) const "
+.br
+.ti -1c
+.RI "virtual std::vector< \fBdof_id_type\fP > \fBcut_below\fP (\fBReal\fP cut) const "
+.br
+.ti -1c
+.RI "virtual std::vector< \fBdof_id_type\fP > \fBcut_above\fP (\fBReal\fP cut) const "
+.br
+.ti -1c
+.RI "void \fBplot_error\fP (const std::string &filename, const \fBMeshBase\fP &\fBmesh\fP) const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBl2_norm\fP () const"
+.br
+.ti -1c
+.RI "virtual \fBErrorVectorReal\fP \fBmaximum\fP () const"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBstddev\fP () const"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBstddev\fP (const \fBReal\fP known_mean) const"
+.br
+.ti -1c
+.RI "void \fBnormalize\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBhistogram\fP (std::vector< \fBdof_id_type\fP > &bin_members, unsigned int n_bins=10)"
+.br
+.ti -1c
+.RI "virtual void \fBhistogram\fP (std::vector< \fBdof_id_type\fP > &bin_members, unsigned int n_bins=10) const"
+.br
+.ti -1c
+.RI "void \fBplot_histogram\fP (const \fBprocessor_id_type\fP my_procid, const std::string &filename, unsigned int n_bins)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBis_active_elem\fP (\fBdof_id_type\fP i) const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP * \fB_mesh\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBErrorVector\fP\fP is a specialization of the \fC\fBStatisticsVector\fP\fP for error data computed on a finite element mesh\&. In general, when computing the error on a mesh only the active elements are considered, but the \fC\fBErrorVector\fP\fP is sized according to the total number of elements in the mesh\&. The \fC\fBErrorVector\fP\fP is thus padded with zeros for all the inactive elements, and this must be taken into account when calculating the statistics\&. Since the error is a positive quantity this class assumes it contains positive data (i\&.e\&. min_val >= 0\&.)\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2003\&. 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file error_vector\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ErrorVector::ErrorVector (\fBdof_id_type\fPi = \fC0\fP, \fBMeshBase\fP *mesh = \fCNULL\fP)\fC [inline]\fP"
+\fBErrorVector\fP constructor; sets initial length to \fCi\fP\&.
+.PP
+If mesh is not null, \fBMeshBase::elem()\fP and Elem::is_active() will be used to distinguish active and inactive elements\&. If mesh is null, \fBErrorVector\fP will assume that all 0\&.0 error values correspond to inactive elements and all non-zero error values correspond to active elements\&. 
+.PP
+Definition at line 65 of file error_vector\&.h\&.
+.PP
+.nf
+65 : StatisticsVector<ErrorVectorReal> (i), _mesh(mesh) {}
+.fi
+.SS "libMesh::ErrorVector::ErrorVector (\fBdof_id_type\fPi, \fBErrorVectorReal\fPval)\fC [inline]\fP"
+\fBErrorVector\fP constructor; sets initial length to \fCi\fP and initial values to \fCval\fP\&.
+.PP
+If mesh is not null, \fBMeshBase::elem()\fP and Elem::is_active() will be used to distinguish active and inactive elements\&. If mesh is null, \fBErrorVector\fP will assume that all 0\&.0 error values correspond to inactive elements and all non-zero error values correspond to active elements\&. 
+.PP
+Definition at line 75 of file error_vector\&.h\&.
+.PP
+.nf
+75                                                   :
+76     StatisticsVector<ErrorVectorReal> (i,val) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "std::vector< \fBdof_id_type\fP > libMesh::ErrorVector::cut_above (\fBReal\fPcut) const\fC [virtual]\fP"
+Returns a vector of dof_id_types which correspond to the indices of every member of the data set above the cutoff value cut ignoring inactive elements\&. 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 178 of file error_vector\&.C\&.
+.PP
+References is_active_elem(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+179 {
+180   START_LOG ("cut_above()", "ErrorVector");
+181 
+182   const dof_id_type n   = this->size();
+183 
+184   std::vector<dof_id_type> cut_indices;
+185   cut_indices\&.reserve(n/2);  // Arbitrary
+186 
+187   for (dof_id_type i=0; i<n; i++)
+188     if (this->is_active_elem(i))
+189       {
+190         if ((*this)[i] > cut)
+191           {
+192             cut_indices\&.push_back(i);
+193           }
+194       }
+195 
+196   STOP_LOG ("cut_above()", "ErrorVector");
+197 
+198   return cut_indices;
+199 }
+.fi
+.SS "std::vector< \fBdof_id_type\fP > libMesh::ErrorVector::cut_below (\fBReal\fPcut) const\fC [virtual]\fP"
+Returns a vector of dof_id_types which correspond to the indices of every member of the data set below the cutoff value cut ignoring inactive elements\&. 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 152 of file error_vector\&.C\&.
+.PP
+References is_active_elem(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+153 {
+154   START_LOG ("cut_below()", "ErrorVector");
+155 
+156   const dof_id_type n = this->size();
+157 
+158   std::vector<dof_id_type> cut_indices;
+159   cut_indices\&.reserve(n/2);  // Arbitrary
+160 
+161   for (dof_id_type i=0; i<n; i++)
+162     if (this->is_active_elem(i))
+163       {
+164         if ((*this)[i] < cut)
+165           {
+166             cut_indices\&.push_back(i);
+167           }
+168       }
+169 
+170   STOP_LOG ("cut_below()", "ErrorVector");
+171 
+172   return cut_indices;
+173 }
+.fi
+.SS "virtual void \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::histogram (std::vector< \fBdof_id_type\fP > &bin_members, unsigned intn_bins = \fC10\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+Computes and returns a histogram with n_bins bins for the data set\&. For simplicity, the bins are assumed to be of uniform size\&. Upon return, the bin_members vector will contain unsigned integers which give the number of members in each bin\&. WARNING: This non-const function sorts the vector, changing its order\&. Source: GNU Scientific Library 
+.SS "virtual void \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::histogram (std::vector< \fBdof_id_type\fP > &bin_members, unsigned intn_bins = \fC10\fP) const\fC [virtual]\fP, \fC [inherited]\fP"
+A const version of the histogram function\&. 
+.SS "bool libMesh::ErrorVector::is_active_elem (\fBdof_id_type\fPi) const\fC [protected]\fP"
+\fBUtility\fP function to decide whether element i is active 
+.PP
+Definition at line 203 of file error_vector\&.C\&.
+.PP
+References _mesh, libMesh::Elem::active(), libMesh::MeshBase::elem(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by cut_above(), cut_below(), mean(), median(), minimum(), and variance()\&.
+.PP
+.nf
+204 {
+205   libmesh_assert_less (i, this->size());
+206 
+207   if (_mesh)
+208     {
+209       libmesh_assert(_mesh->elem(i));
+210       return _mesh->elem(i)->active();
+211     }
+212   else
+213     return ((*this)[i] != 0\&.);
+214 }
+.fi
+.SS "virtual \fBReal\fP \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::l2_norm () const\fC [virtual]\fP, \fC [inherited]\fP"
+Returns the l2 norm of the data set\&. 
+.SS "virtual \fBErrorVectorReal\fP  \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::maximum () const\fC [virtual]\fP, \fC [inherited]\fP"
+Returns the maximum value in the data set\&. 
+.SS "\fBReal\fP libMesh::ErrorVector::mean () const\fC [virtual]\fP"
+Returns the mean value of the data set\&. Ignores zero values\&. 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 67 of file error_vector\&.C\&.
+.PP
+References is_active_elem(), libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MeshRefinement::flag_elements_by_mean_stddev(), and variance()\&.
+.PP
+.nf
+68 {
+69   START_LOG ("mean()", "ErrorVector");
+70 
+71   const dof_id_type n = this->size();
+72 
+73   Real the_mean  = 0;
+74   dof_id_type nnz = 0;
+75 
+76   for (dof_id_type i=0; i<n; i++)
+77     if (this->is_active_elem(i))
+78       {
+79         the_mean += ( static_cast<Real>((*this)[i]) - the_mean ) / (nnz + 1);
+80 
+81         nnz++;
+82       }
+83 
+84   STOP_LOG ("mean()", "ErrorVector");
+85 
+86   return the_mean;
+87 }
+.fi
+.SS "\fBReal\fP libMesh::ErrorVector::median ()\fC [virtual]\fP"
+Returns the median (e\&.g\&. the middle) value of the data set, ignoring inactive elements\&. This function modifies the original data by sorting, so it can't be called on const objects\&. Source: GNU Scientific Library 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 92 of file error_vector\&.C\&.
+.PP
+References is_active_elem(), and libMesh::StatisticsVector< T >::median()\&.
+.PP
+Referenced by median()\&.
+.PP
+.nf
+93 {
+94   const dof_id_type n   = this->size();
+95 
+96   if (n == 0)
+97     return 0\&.;
+98 
+99 
+100   // Build a StatisticsVector<ErrorVectorReal> containing
+101   // only our active entries and take its mean
+102   StatisticsVector<ErrorVectorReal> sv;
+103 
+104   sv\&.reserve (n);
+105 
+106   for (dof_id_type i=0; i<n; i++)
+107     if(this->is_active_elem(i))
+108       sv\&.push_back((*this)[i]);
+109 
+110   return sv\&.median();
+111 }
+.fi
+.SS "\fBReal\fP libMesh::ErrorVector::median () const\fC [virtual]\fP"
+A const version of the median funtion\&. Requires twice the memory of original data set but does not change the original\&. 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 116 of file error_vector\&.C\&.
+.PP
+References median()\&.
+.PP
+.nf
+117 {
+118   ErrorVector ev = (*this);
+119 
+120   return ev\&.median();
+121 }
+.fi
+.SS "\fBErrorVectorReal\fP libMesh::ErrorVector::minimum () const\fC [virtual]\fP"
+Returns the minimum nonzero value in the data set\&. 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 43 of file error_vector\&.C\&.
+.PP
+References libMesh::ErrorVectorReal, is_active_elem(), std::max(), std::min(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+44 {
+45   START_LOG ("minimum()", "ErrorVector");
+46 
+47   const dof_id_type n = this->size();
+48   ErrorVectorReal min = std::numeric_limits<ErrorVectorReal>::max();
+49 
+50   for (dof_id_type i=0; i<n; i++)
+51     {
+52       // Only positive (or zero) values in the error vector
+53       libmesh_assert_greater_equal ((*this)[i], 0\&.);
+54       if (this->is_active_elem(i))
+55         min = std::min (min, (*this)[i]);
+56     }
+57   STOP_LOG ("minimum()", "ErrorVector");
+58 
+59   // ErrorVectors are for positive values
+60   libmesh_assert_greater_equal (min, 0\&.);
+61 
+62   return min;
+63 }
+.fi
+.SS "void \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::normalize ()\fC [inherited]\fP"
+Divides all entries by the largest entry and stores the result 
+.SS "void libMesh::ErrorVector::plot_error (const std::string &filename, const \fBMeshBase\fP &mesh) const"
+Plots a data file, of a type determined by looking at the file extension in \fCfilename\fP, of the error values on the active elements of \fCmesh\fP\&. 
+.PP
+Definition at line 217 of file error_vector\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::EquationSystems::add_system(), libMesh::System::add_variable(), libMesh::MeshBase::all_first_order(), libMesh::MeshBase::allow_renumbering(), libMesh::MeshBase::clone(), libMesh::CONSTANT, libMesh::DofMap::dof_indices(), libMesh::err, libMesh::System::get_dof_map(), libMesh::DofObject::id(), libMesh::EquationSystems::init(), libMesh::MeshBase::max_elem_id(), libMesh::MeshBase::max_node_id(), mesh, libMesh::MONOMIAL, libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::MeshBase::renumber_nodes_and_elements(), libMesh::System::solution, libMesh::ExodusII_IO::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), and libMesh::MeshOutput< MT >::write_equation_systems()\&.
+.PP
+Referenced by libMesh::AdjointResidualErrorEstimator::estimate_error()\&.
+.PP
+.nf
+219 {
+220   AutoPtr<MeshBase> meshptr = oldmesh\&.clone();
+221   MeshBase &mesh = *meshptr;
+222   mesh\&.all_first_order();
+223   EquationSystems temp_es (mesh);
+224   ExplicitSystem& error_system
+225     = temp_es\&.add_system<ExplicitSystem> ("Error");
+226   error_system\&.add_variable("error", CONSTANT, MONOMIAL);
+227   temp_es\&.init();
+228 
+229   const DofMap& error_dof_map = error_system\&.get_dof_map();
+230 
+231   MeshBase::const_element_iterator       el     =
+232     mesh\&.active_local_elements_begin();
+233   const MeshBase::const_element_iterator end_el =
+234     mesh\&.active_local_elements_end();
+235   std::vector<dof_id_type> dof_indices;
+236 
+237   for ( ; el != end_el; ++el)
+238     {
+239       const Elem* elem = *el;
+240 
+241       error_dof_map\&.dof_indices(elem, dof_indices);
+242 
+243       const dof_id_type elem_id = elem->id();
+244 
+245       //0 for the monomial basis
+246       const dof_id_type solution_index = dof_indices[0];
+247 
+248       // libMesh::out << "elem_number=" << elem_number << std::endl;
+249       libmesh_assert_less (elem_id, (*this)\&.size());
+250 
+251       // We may have zero error values in special circumstances
+252       // libmesh_assert_greater ((*this)[elem_id], 0\&.);
+253       error_system\&.solution->set(solution_index, (*this)[elem_id]);
+254     }
+255 
+256   // We may have to renumber if the original numbering was not
+257   // contiguous\&.  Since this is just a temporary mesh, that's probably
+258   // fine\&.
+259   if (mesh\&.max_elem_id() != mesh\&.n_elem() ||
+260       mesh\&.max_node_id() != mesh\&.n_nodes())
+261     {
+262       mesh\&.allow_renumbering(true);
+263       mesh\&.renumber_nodes_and_elements();
+264     }
+265 
+266   if (filename\&.rfind("\&.gmv") < filename\&.size())
+267     {
+268       GMVIO(mesh)\&.write_discontinuous_gmv(filename,
+269                                           temp_es, false);
+270     }
+271   else if (filename\&.rfind("\&.plt") < filename\&.size())
+272     {
+273       TecplotIO (mesh)\&.write_equation_systems
+274         (filename, temp_es);
+275     }
+276 #ifdef LIBMESH_HAVE_EXODUS_API
+277   else if( (filename\&.rfind("\&.exo") < filename\&.size()) ||
+278            (filename\&.rfind("\&.e") < filename\&.size()) )
+279     {
+280       ExodusII_IO io(mesh);
+281       io\&.write(filename);
+282       io\&.write_element_data(temp_es);
+283     }
+284 #endif
+285   else
+286     {
+287       libmesh_here();
+288       libMesh::err << "Warning: ErrorVector::plot_error currently only"
+289                    << " supports \&.gmv and \&.plt and \&.exo/\&.e (if enabled) output;" << std::endl;
+290       libMesh::err << "Could not recognize filename: " << filename
+291                    << std::endl;
+292     }
+293 }
+.fi
+.SS "void \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::plot_histogram (const \fBprocessor_id_type\fPmy_procid, const std::string &filename, unsigned intn_bins)\fC [inherited]\fP"
+Generates a Matlab/Octave style file which can be used to make a plot of the histogram having the desired number of bins\&. Uses the histogram(\&.\&.\&.) function in this class WARNING: The histogram(\&.\&.\&.) function is non-const, and changes the order of the vector\&. 
+.SS "virtual \fBReal\fP \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::stddev () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Computes the standard deviation of the data set, which is simply the square-root of the variance\&. 
+.PP
+Definition at line 165 of file statistics\&.h\&.
+.PP
+References libMesh::StatisticsVector< T >::variance()\&.
+.PP
+.nf
+166   { return std::sqrt(this->variance()); }
+.fi
+.SS "virtual \fBReal\fP \fBlibMesh::StatisticsVector\fP< \fBErrorVectorReal\fP  >::stddev (const Realknown_mean) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Computes the standard deviation of the data set, which is simply the square-root of the variance\&. This method can be used for efficiency when the \fCmean\fP has already been computed\&. 
+.PP
+Definition at line 174 of file statistics\&.h\&.
+.PP
+References libMesh::StatisticsVector< T >::variance()\&.
+.PP
+.nf
+175   { return std::sqrt(this->variance(known_mean)); }
+.fi
+.SS "virtual \fBReal\fP libMesh::ErrorVector::variance () const\fC [inline]\fP, \fC [virtual]\fP"
+Computes the variance of the data set ignoring inactive elements\&. Uses a recurrence relation to prevent data overflow for large sums\&. Note: The variance is equal to the standard deviation squared\&. The variance is normalized by N in this case\&. Source: GNU Scientific Library 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 116 of file error_vector\&.h\&.
+.PP
+References mean()\&.
+.PP
+Referenced by libMesh::MeshRefinement::flag_elements_by_mean_stddev()\&.
+.PP
+.nf
+117   { return this->variance(this->mean()); }
+.fi
+.SS "\fBReal\fP libMesh::ErrorVector::variance (const \fBReal\fPmean) const\fC [virtual]\fP"
+Computes the variance of the data set ignoring inactive elements\&. where the \fCmean\fP is provided\&. This is useful for efficiency when you have already calculated the mean\&. Uses a recurrence relation to prevent data overflow for large sums\&. Note: The variance is equal to the standard deviation squared\&. Source: GNU Scientific Library 
+.PP
+Reimplemented from \fBlibMesh::StatisticsVector< ErrorVectorReal >\fP\&.
+.PP
+Definition at line 126 of file error_vector\&.C\&.
+.PP
+References is_active_elem(), libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+127 {
+128   const dof_id_type n   = this->size();
+129 
+130   START_LOG ("variance()", "ErrorVector");
+131 
+132   Real the_variance = 0;
+133   dof_id_type nnz = 0;
+134 
+135   for (dof_id_type i=0; i<n; i++)
+136     if (this->is_active_elem(i))
+137       {
+138         const Real delta = ( static_cast<Real>((*this)[i]) - mean_in );
+139         the_variance += (delta * delta - the_variance) / (nnz + 1);
+140 
+141         nnz++;
+142       }
+143 
+144   STOP_LOG ("variance()", "ErrorVector");
+145 
+146   return the_variance;
+147 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMeshBase\fP* libMesh::ErrorVector::_mesh\fC [protected]\fP"
+Pointer to the mesh, which may be used to decide which elements are active 
+.PP
+Definition at line 164 of file error_vector\&.h\&.
+.PP
+Referenced by is_active_elem()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

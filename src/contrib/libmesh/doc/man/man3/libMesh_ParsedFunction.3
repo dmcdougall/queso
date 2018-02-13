@@ -1,0 +1,560 @@
+.TH "libMesh::ParsedFunction< Output >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ParsedFunction< Output > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parsed_function\&.h>\fP
+.PP
+Inherits \fBlibMesh::FunctionBase< Output >\fP, and \fBlibMesh::FunctionBase< Output >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBParsedFunction\fP (const std::string &expression, const std::vector< std::string > *additional_vars=NULL, const std::vector< Output > *initial_vals=NULL)"
+.br
+.ti -1c
+.RI "virtual Output \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time=0)"
+.br
+.ti -1c
+.RI "virtual void \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "virtual Output \fBcomponent\fP (unsigned int i, const \fBPoint\fP &p, \fBReal\fP time)"
+.br
+.ti -1c
+.RI "virtual Output & \fBgetVarAddress\fP (const std::string &variable_name)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBFunctionBase\fP
+.br
+< Output > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "\fBParsedFunction\fP (std::string)"
+.br
+.ti -1c
+.RI "virtual Output \fBoperator()\fP (const \fBPoint\fP &, const \fBReal\fP=0)"
+.br
+.ti -1c
+.RI "virtual void \fBoperator()\fP (const \fBPoint\fP &, const \fBReal\fP, \fBDenseVector\fP< Output > &)"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual Output & \fBgetVarAddress\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBFunctionBase\fP
+.br
+< Output > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBFunctionBase\fP * \fB_master\fP"
+.br
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "Output \fBeval\fP (unsigned int i)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fB_expression\fP"
+.br
+.ti -1c
+.RI "std::vector
+.br
+< FunctionParserBase< Output > > \fBparsers\fP"
+.br
+.ti -1c
+.RI "std::vector< Output > \fB_spacetime\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fB_additional_vars\fP"
+.br
+.ti -1c
+.RI "std::vector< Output > \fB_initial_vals\fP"
+.br
+.ti -1c
+.RI "Output \fB_dummy\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Output = Number>class libMesh::ParsedFunction< Output >"
+
+.PP
+Definition at line 44 of file parsed_function\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Output  = Number> \fBlibMesh::ParsedFunction\fP< Output >::\fBParsedFunction\fP (const std::string &expression, const std::vector< std::string > *additional_vars = \fCNULL\fP, const std::vector< Output > *initial_vals = \fCNULL\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 48 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_additional_vars, libMesh::ParsedFunction< Output >::_initial_vals, libMesh::FunctionBase< Output >::_initialized, libMesh::ParsedFunction< Output >::_spacetime, end, libMesh::libmesh_assert(), libMesh::ParsedFunction< Output >::parsers, and libMesh::Real\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::clone()\&.
+.PP
+.nf
+50     : _expression(expression)
+51       // Size the spacetime vector to account for space, time, and any additional
+52       // variables passed
+53       //_spacetime(LIBMESH_DIM+1 + (additional_vars ? additional_vars->size() : 0)),
+54   {
+55     std::string variables = "x";
+56 #if LIBMESH_DIM > 1
+57     variables += ",y";
+58 #endif
+59 #if LIBMESH_DIM > 2
+60     variables += ",z";
+61 #endif
+62     variables += ",t";
+63 
+64     _spacetime\&.resize(LIBMESH_DIM+1 + (additional_vars ? additional_vars->size() : 0));
+65 
+66     // If additional vars were passed, append them to the string
+67     // that we send to the function parser\&. Also add them to the
+68     // end of our spacetime vector
+69     if (additional_vars)
+70       {
+71         if (initial_vals)
+72           std::copy(initial_vals->begin(), initial_vals->end(), std::back_inserter(_initial_vals));
+73 
+74         std::copy(additional_vars->begin(), additional_vars->end(), std::back_inserter(_additional_vars));
+75 
+76         for (unsigned int i=0; i < additional_vars->size(); ++i)
+77           {
+78             variables += "," + (*additional_vars)[i];
+79             // Initialize extra variables to the vector passed in or zero
+80             // Note: The initial_vals vector can be shorter than the additional_vars vector
+81             _spacetime[LIBMESH_DIM+1 + i] = (initial_vals && i < initial_vals->size()) ? (*initial_vals)[i] : 0;
+82           }
+83       }
+84 
+85     size_t nextstart = 0, end = 0;
+86 
+87     while (end != std::string::npos)
+88       {
+89         // If we're past the end of the string, we can't make any more
+90         // subparsers
+91         if (nextstart >= expression\&.size())
+92           break;
+93 
+94         // If we're at the start of a brace delimited section, then we
+95         // parse just that section:
+96         if (expression[nextstart] == '{')
+97           {
+98             nextstart++;
+99             end = expression\&.find('}', nextstart);
+100           }
+101         // otherwise we parse the whole thing
+102         else
+103           end = std::string::npos;
+104 
+105         // We either want the whole end of the string (end == npos) or
+106         // a substring in the middle\&.
+107         std::string subexpression =
+108           expression\&.substr(nextstart, (end == std::string::npos) ?
+109                             std::string::npos : end - nextstart);
+110 
+111         // fparser can crash on empty expressions
+112         libmesh_assert(!subexpression\&.empty());
+113 
+114         // Parse (and optimize if possible) the subexpression\&.
+115         // Add some basic constants, to Real precision\&.
+116         FunctionParserBase<Output> fp;
+117         fp\&.AddConstant("NaN", std::numeric_limits<Real>::quiet_NaN());
+118         fp\&.AddConstant("pi", std::acos(Real(-1)));
+119         fp\&.AddConstant("e", std::exp(Real(1)));
+120         if (fp\&.Parse(subexpression, variables) != -1) // -1 for success
+121           libmesh_error_msg("ERROR: FunctionParser is unable to parse expression: " << subexpression << '\n' << fp\&.ErrorMsg());
+122 
+123         fp\&.Optimize();
+124         parsers\&.push_back(fp);
+125 
+126         // If at end, use nextstart=maxSize\&.  Else start at next
+127         // character\&.
+128         nextstart = (end == std::string::npos) ?
+129           std::string::npos : end + 1;
+130       }
+131 
+132     this->_initialized = true;
+133   }
+.fi
+.SS "template<typename Output  = Number> \fBlibMesh::ParsedFunction\fP< Output >::\fBParsedFunction\fP (std::string)\fC [inline]\fP"
+
+.PP
+Definition at line 286 of file parsed_function\&.h\&.
+.PP
+.nf
+286                                : _dummy(0)
+287   {
+288     libmesh_not_implemented();
+289   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Output  = Number> virtual void \fBlibMesh::ParsedFunction\fP< Output >::clear ()\fC [inline]\fP, \fC [virtual]\fP"
+Clears the function\&. 
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 300 of file parsed_function\&.h\&.
+.PP
+.nf
+300 {}
+.fi
+.SS "template<typename Output  = Number> virtual \fBAutoPtr\fP<\fBFunctionBase\fP<Output> > \fBlibMesh::ParsedFunction\fP< Output >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Returns a new copy of the function\&. The new copy should be as ``deep'' as necessary to allow independent destruction and simultaneous evaluations of the copies in different threads\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 218 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_additional_vars, libMesh::ParsedFunction< Output >::_expression, libMesh::ParsedFunction< Output >::_initial_vals, and libMesh::ParsedFunction< Output >::ParsedFunction()\&.
+.PP
+.nf
+218                                                        {
+219     return AutoPtr<FunctionBase<Output> >
+220       (new ParsedFunction(_expression, &_additional_vars, &_initial_vals));
+221   }
+.fi
+.SS "template<typename Output  = Number> virtual \fBAutoPtr\fP<\fBFunctionBase\fP<Output> > \fBlibMesh::ParsedFunction\fP< Output >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Returns a new copy of the function\&. The new copy should be as ``deep'' as necessary to allow independent destruction and simultaneous evaluations of the copies in different threads\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 302 of file parsed_function\&.h\&.
+.PP
+.nf
+302                                                        {
+303     return AutoPtr<FunctionBase<Output> >
+304       (new ParsedFunction<Output>(""));
+305   }
+.fi
+.SS "template<typename Output  = Number> virtual Output \fBlibMesh::ParsedFunction\fP< Output >::component (unsigned inti, const \fBPoint\fP &p, \fBReal\fPtime)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the vector component \fCi\fP at coordinate \fCp\fP and time \fCtime\fP\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 179 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_spacetime, libMesh::ParsedFunction< Output >::eval(), and libMesh::ParsedFunction< Output >::parsers\&.
+.PP
+.nf
+182   {
+183     _spacetime[0] = p(0);
+184 #if LIBMESH_DIM > 1
+185     _spacetime[1] = p(1);
+186 #endif
+187 #if LIBMESH_DIM > 2
+188     _spacetime[2] = p(2);
+189 #endif
+190     _spacetime[LIBMESH_DIM] = time;
+191 
+192     libmesh_assert_less (i, parsers\&.size());
+193 
+194     // The remaining locations in _spacetime are currently fixed at construction
+195     // but could potentially be made dynamic
+196     return eval(i);
+197   }
+.fi
+.SS "template<typename Output  = Number> Output \fBlibMesh::ParsedFunction\fP< Output >::eval (unsigned inti)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 225 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_spacetime, libMesh::err, and libMesh::ParsedFunction< Output >::parsers\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::component(), and libMesh::ParsedFunction< Output >::operator()()\&.
+.PP
+.nf
+226   {
+227 #ifndef DEBUG
+228     return parsers[i]\&.Eval(&_spacetime[0]);
+229 #else
+230     libmesh_assert_less(i, parsers\&.size());
+231 
+232     Output result = parsers[i]\&.Eval(&_spacetime[0]);
+233     int error_code = parsers[i]\&.EvalError();
+234     if (error_code)
+235     {
+236       libMesh::err << "ERROR: FunctionParser is unable to evaluate the expression at index " << i << " with arguments:\n";
+237       for (unsigned int j=0; j<_spacetime\&.size(); ++j)
+238         libMesh::err << '\t' << _spacetime[j] << '\n';
+239       libMesh::err << '\n';
+240 
+241       // Currently no API to report error messages, we'll do it manually
+242       switch (error_code)
+243       {
+244       case 1:
+245         libMesh::err << "Reason: Division by zero\n"; break;
+246       case 2:
+247         libMesh::err << "Reason: Square Root error (negative value)\n"; break;
+248       case 3:
+249         libMesh::err << "Reason: Log error (negative value)\n"; break;
+250       case 4:
+251         libMesh::err << "Reason: Trigonometric error (asin or acos of illegal value)\n"; break;
+252       case 5:
+253         libMesh::err << "Reason: Maximum recursion level reached\n"; break;
+254       default:
+255         libMesh::err << "Reason: Unknown\n"; break;
+256       }
+257       libmesh_error();
+258     }
+259     return result;
+260 #endif
+261   }
+.fi
+.SS "template<typename Output  = Number> virtual Output& \fBlibMesh::ParsedFunction\fP< Output >::getVarAddress (const std::string &variable_name)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the address of a parsed variable so you can supply a parameterized value 
+.RE
+.PP
+
+.PP
+Definition at line 202 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_additional_vars, libMesh::ParsedFunction< Output >::_spacetime, and libMesh::err\&.
+.PP
+.nf
+203   {
+204     const std::vector<std::string>::iterator it =
+205       std::find(_additional_vars\&.begin(), _additional_vars\&.end(), variable_name);
+206 
+207     if (it == _additional_vars\&.end())
+208       {
+209         libMesh::err << "ERROR: Requested variable not found in parsed function\n" << std::endl;
+210         libmesh_error();
+211       }
+212 
+213     // Iterator Arithmetic (How far from the end of the array is our target address?)
+214     return _spacetime[_spacetime\&.size() - (_additional_vars\&.end() - it)];
+215   }
+.fi
+.SS "template<typename Output  = Number> virtual Output& \fBlibMesh::ParsedFunction\fP< Output >::getVarAddress (const std::string &)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Definition at line 301 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_dummy\&.
+.PP
+.nf
+301 { return _dummy; }
+.fi
+.SS "template<typename Output  = Number> virtual void \fBlibMesh::ParsedFunction\fP< Output >::init ()\fC [inline]\fP, \fC [virtual]\fP"
+The actual initialization process\&. 
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 299 of file parsed_function\&.h\&.
+.PP
+.nf
+299 {}
+.fi
+.SS "template<typename Output > bool \fBlibMesh::FunctionBase\fP< Output >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 194 of file function_base\&.h\&.
+.PP
+.nf
+195 {
+196   return (this->_initialized);
+197 }
+.fi
+.SS "template<typename Output> void \fBlibMesh::FunctionBase\fP< Output >::operator() (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [inherited]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP\&. 
+.PP
+Definition at line 216 of file function_base\&.h\&.
+.PP
+.nf
+218 {
+219   // Call the time-dependent function with t=0\&.
+220   this->operator()(p, 0\&., output);
+221 }
+.fi
+.SS "template<typename Output  = Number> virtual Output \fBlibMesh::ParsedFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the scalar value at coordinate \fCp\fP and time \fCtime\fP, which defaults to zero\&. Purely virtual, so you have to overload it\&. Note that this cannot be a const method, check \fC\fBMeshFunction\fP\fP\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 135 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_spacetime, and libMesh::ParsedFunction< Output >::eval()\&.
+.PP
+.nf
+137   {
+138     _spacetime[0] = p(0);
+139 #if LIBMESH_DIM > 1
+140     _spacetime[1] = p(1);
+141 #endif
+142 #if LIBMESH_DIM > 2
+143     _spacetime[2] = p(2);
+144 #endif
+145     _spacetime[LIBMESH_DIM] = time;
+146 
+147     // The remaining locations in _spacetime are currently fixed at construction
+148     // but could potentially be made dynamic
+149     return eval(0);
+150   }
+.fi
+.SS "template<typename Output  = Number> virtual void \fBlibMesh::ParsedFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [virtual]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP and for time \fCtime\fP\&. Purely virtual, so you have to overload it\&. Note that this cannot be a const method, check \fC\fBMeshFunction\fP\fP\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 152 of file parsed_function\&.h\&.
+.PP
+References libMesh::ParsedFunction< Output >::_spacetime, libMesh::ParsedFunction< Output >::eval(), libMesh::ParsedFunction< Output >::parsers, and libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+155   {
+156     _spacetime[0] = p(0);
+157 #if LIBMESH_DIM > 1
+158     _spacetime[1] = p(1);
+159 #endif
+160 #if LIBMESH_DIM > 2
+161     _spacetime[2] = p(2);
+162 #endif
+163     _spacetime[LIBMESH_DIM] = time;
+164 
+165     unsigned int size = output\&.size();
+166 
+167     libmesh_assert_equal_to (size, parsers\&.size());
+168 
+169     // The remaining locations in _spacetime are currently fixed at construction
+170     // but could potentially be made dynamic
+171     for (unsigned int i=0; i != size; ++i)
+172       output(i) = eval(i);
+173   }
+.fi
+.SS "template<typename Output  = Number> virtual Output \fBlibMesh::ParsedFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the scalar value at coordinate \fCp\fP and time \fCtime\fP, which defaults to zero\&. Purely virtual, so you have to overload it\&. Note that this cannot be a const method, check \fC\fBMeshFunction\fP\fP\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 291 of file parsed_function\&.h\&.
+.PP
+.nf
+293   { return 0\&.; }
+.fi
+.SS "template<typename Output  = Number> virtual void \fBlibMesh::ParsedFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [virtual]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP and for time \fCtime\fP\&. Purely virtual, so you have to overload it\&. Note that this cannot be a const method, check \fC\fBMeshFunction\fP\fP\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 295 of file parsed_function\&.h\&.
+.PP
+.nf
+297                                                    {}
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Output  = Number> std::vector<std::string> \fBlibMesh::ParsedFunction\fP< Output >::_additional_vars\fC [private]\fP"
+
+.PP
+Definition at line 268 of file parsed_function\&.h\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::clone(), libMesh::ParsedFunction< Output >::getVarAddress(), and libMesh::ParsedFunction< Output >::ParsedFunction()\&.
+.SS "template<typename Output  = Number> Output \fBlibMesh::ParsedFunction\fP< Output >::_dummy\fC [private]\fP"
+
+.PP
+Definition at line 307 of file parsed_function\&.h\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::getVarAddress()\&.
+.SS "template<typename Output  = Number> std::string \fBlibMesh::ParsedFunction\fP< Output >::_expression\fC [private]\fP"
+
+.PP
+Definition at line 263 of file parsed_function\&.h\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::clone()\&.
+.SS "template<typename Output  = Number> std::vector<Output> \fBlibMesh::ParsedFunction\fP< Output >::_initial_vals\fC [private]\fP"
+
+.PP
+Definition at line 269 of file parsed_function\&.h\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::clone(), and libMesh::ParsedFunction< Output >::ParsedFunction()\&.
+.SS "template<typename Output> bool \fBlibMesh::FunctionBase\fP< Output >::_initialized\fC [protected]\fP, \fC [inherited]\fP"
+When \fC\fBinit()\fP\fP was called so that everything is ready for calls to \fCoperator()\fP (\&.\&.\&.), then this \fCbool\fP is true\&. 
+.PP
+Definition at line 166 of file function_base\&.h\&.
+.PP
+Referenced by libMesh::AnalyticFunction< Output >::AnalyticFunction(), libMesh::ConstFunction< Output >::ConstFunction(), libMesh::ParsedFunction< Output >::ParsedFunction(), and libMesh::WrappedFunction< Output >::WrappedFunction()\&.
+.SS "template<typename Output> const \fBFunctionBase\fP* \fBlibMesh::FunctionBase\fP< Output >::_master\fC [protected]\fP, \fC [inherited]\fP"
+Const pointer to our master, initialized to \fCNULL\fP\&. There may be cases where multiple functions are required, but to save memory, one master handles some centralized data\&. 
+.PP
+Definition at line 160 of file function_base\&.h\&.
+.SS "template<typename Output  = Number> std::vector<Output> \fBlibMesh::ParsedFunction\fP< Output >::_spacetime\fC [private]\fP"
+
+.PP
+Definition at line 265 of file parsed_function\&.h\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::component(), libMesh::ParsedFunction< Output >::eval(), libMesh::ParsedFunction< Output >::getVarAddress(), libMesh::ParsedFunction< Output >::operator()(), and libMesh::ParsedFunction< Output >::ParsedFunction()\&.
+.SS "template<typename Output  = Number> std::vector<FunctionParserBase<Output> > \fBlibMesh::ParsedFunction\fP< Output >::parsers\fC [private]\fP"
+
+.PP
+Definition at line 264 of file parsed_function\&.h\&.
+.PP
+Referenced by libMesh::ParsedFunction< Output >::component(), libMesh::ParsedFunction< Output >::eval(), libMesh::ParsedFunction< Output >::operator()(), and libMesh::ParsedFunction< Output >::ParsedFunction()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

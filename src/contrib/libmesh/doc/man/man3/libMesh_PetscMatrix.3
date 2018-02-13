@@ -1,0 +1,2011 @@
+.TH "libMesh::PetscMatrix< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PetscMatrix< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <petsc_linear_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::SparseMatrix< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPetscMatrix\fP (const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "\fBPetscMatrix\fP (Mat \fBm\fP, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "\fB~PetscMatrix\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBnumeric_index_type\fP \fBm\fP, const \fBnumeric_index_type\fP \fBn\fP, const \fBnumeric_index_type\fP m_l, const \fBnumeric_index_type\fP n_l, const \fBnumeric_index_type\fP nnz=30, const \fBnumeric_index_type\fP noz=10, const \fBnumeric_index_type\fP blocksize=1)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBnumeric_index_type\fP \fBm\fP, const \fBnumeric_index_type\fP \fBn\fP, const \fBnumeric_index_type\fP m_l, const \fBnumeric_index_type\fP n_l, const std::vector< \fBnumeric_index_type\fP > &n_nz, const std::vector< \fBnumeric_index_type\fP > &n_oz, const \fBnumeric_index_type\fP blocksize=1)"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBzero\fP ()"
+.br
+.ti -1c
+.RI "void \fBzero_rows\fP (std::vector< \fBnumeric_index_type\fP > &rows, T diag_value=0\&.0)"
+.br
+.ti -1c
+.RI "void \fBclose\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBm\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBn\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBrow_start\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBrow_stop\fP () const "
+.br
+.ti -1c
+.RI "void \fBset\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j, const T value)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j, const T value)"
+.br
+.ti -1c
+.RI "void \fBadd_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols)"
+.br
+.ti -1c
+.RI "void \fBadd_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "virtual void \fBadd_block_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &brows, const std::vector< \fBnumeric_index_type\fP > &bcols)"
+.br
+.ti -1c
+.RI "virtual void \fBadd_block_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const T a, \fBSparseMatrix\fP< T > &X)"
+.br
+.ti -1c
+.RI "T \fBoperator()\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl1_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBlinfty_norm\fP () const "
+.br
+.ti -1c
+.RI "bool \fBclosed\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_personal\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "void \fBprint_matlab\fP (const std::string &name='') const "
+.br
+.ti -1c
+.RI "virtual void \fBget_diagonal\fP (\fBNumericVector\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "virtual void \fBget_transpose\fP (\fBSparseMatrix\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "void \fBswap\fP (\fBPetscMatrix\fP< T > &)"
+.br
+.ti -1c
+.RI "Mat \fBmat\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "void \fBattach_dof_map\fP (const \fBDofMap\fP &\fBdof_map\fP)"
+.br
+.ti -1c
+.RI "virtual bool \fBneed_full_sparsity_pattern\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBupdate_sparsity_pattern\fP (const \fBSparsityPattern::Graph\fP &)"
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os=\fBlibMesh::out\fP, const bool sparse=false) const "
+.br
+.ti -1c
+.RI "template<> void \fBprint\fP (std::ostream &os, const bool sparse) const"
+.br
+.ti -1c
+.RI "virtual void \fBcreate_submatrix\fP (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const "
+.br
+.ti -1c
+.RI "virtual void \fBreinit_submatrix\fP (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const "
+.br
+.ti -1c
+.RI "void \fBvector_mult\fP (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "void \fBvector_mult_add\fP (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBSparseMatrix\fP< T > > \fBbuild\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fB_get_submatrix\fP (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols, const bool reuse_submatrix) const "
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBDofMap\fP const * \fB_dof_map\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "Mat \fB_mat\fP"
+.br
+.ti -1c
+.RI "bool \fB_destroy_mat_on_exit\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::PetscMatrix< T >"
+Petsc matrix\&. Provides a nice interface to the Petsc C-based data structures for parallel, sparse matrices\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002 
+.RE
+.PP
+
+.PP
+Definition at line 87 of file petsc_linear_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::PetscMatrix\fP< T >::\fBPetscMatrix\fP (const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)\fC [explicit]\fP"
+Constructor; initializes the matrix to be empty, without any structure, i\&.e\&. the matrix is not usable at all\&. This constructor is therefore only useful for matrices which are members of a class\&. All other matrices should be created at a point in the data flow where all necessary information is available\&.
+.PP
+You have to initialize the matrix before usage with \fCinit\fP(\&.\&.\&.)\&. 
+.SS "template<typename T> \fBlibMesh::PetscMatrix\fP< T >::\fBPetscMatrix\fP (Matm, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)\fC [explicit]\fP"
+Constructor\&. Creates a \fBPetscMatrix\fP assuming you already have a valid Mat object\&. In this case, m is NOT destroyed by the \fBPetscMatrix\fP destructor when this object goes out of scope\&. This allows ownership of m to remain with the original creator, and to simply provide additional functionality with the \fBPetscMatrix\fP\&. 
+.SS "template<typename T > \fBlibMesh::PetscMatrix\fP< T >::~\fBPetscMatrix\fP ()"
+Destructor\&. Free all memory, but do not release the memory of the sparsity structure\&. 
+.PP
+Definition at line 115 of file petsc_matrix\&.C\&.
+.PP
+.nf
+116 {
+117   this->clear();
+118 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::_get_submatrix (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols, const boolreuse_submatrix) const\fC [protected]\fP, \fC [virtual]\fP"
+This function either creates or re-initializes a matrix called 'submatrix' which is defined by the row and column indices given in the 'rows' and 'cols' entries\&. This function is implemented in terms of the MatGetSubMatrix() routine of PETSc\&. The boolean reuse_submatrix parameter determines whether or not PETSc will treat 'submatrix' as one which has already been used (had memory allocated) or as a new matrix\&. 
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 732 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::SparseMatrix< T >::_is_initialized, libMesh::PetscMatrix< T >::_mat, libMesh::SparseMatrix< T >::clear(), libMesh::PetscMatrix< T >::close(), libMesh::comm, ierr, libMesh::SparseMatrix< T >::initialized(), and PETSC_USE_POINTER\&.
+.PP
+.nf
+736 {
+737   // Can only extract submatrices from closed matrices
+738   this->close();
+739 
+740   // Make sure the SparseMatrix passed in is really a PetscMatrix
+741   PetscMatrix<T>* petsc_submatrix = libmesh_cast_ptr<PetscMatrix<T>*>(&submatrix);
+742 
+743   // If we're not reusing submatrix and submatrix is already initialized
+744   // then we need to clear it, otherwise we get a memory leak\&.
+745   if( !reuse_submatrix && submatrix\&.initialized() )
+746     submatrix\&.clear();
+747 
+748   // Construct row and column index sets\&.
+749   PetscErrorCode ierr=0;
+750   IS isrow, iscol;
+751 
+752   ierr = ISCreateLibMesh(this->comm()\&.get(),
+753                          rows\&.size(),
+754                          (PetscInt*) &rows[0],
+755                          PETSC_USE_POINTER,
+756                          &isrow); LIBMESH_CHKERRABORT(ierr);
+757 
+758   ierr = ISCreateLibMesh(this->comm()\&.get(),
+759                          cols\&.size(),
+760                          (PetscInt*) &cols[0],
+761                          PETSC_USE_POINTER,
+762                          &iscol); LIBMESH_CHKERRABORT(ierr);
+763 
+764   // Extract submatrix
+765   ierr = MatGetSubMatrix(_mat,
+766                          isrow,
+767                          iscol,
+768 #if PETSC_RELEASE_LESS_THAN(3,0,1)
+769                          PETSC_DECIDE,
+770 #endif
+771                          (reuse_submatrix ? MAT_REUSE_MATRIX : MAT_INITIAL_MATRIX),
+772                          &(petsc_submatrix->_mat));  LIBMESH_CHKERRABORT(ierr);
+773 
+774   // Specify that the new submatrix is initialized and close it\&.
+775   petsc_submatrix->_is_initialized = true;
+776   petsc_submatrix->close();
+777 
+778   // Clean up PETSc data structures
+779   ierr = LibMeshISDestroy(&isrow); LIBMESH_CHKERRABORT(ierr);
+780   ierr = LibMeshISDestroy(&iscol); LIBMESH_CHKERRABORT(ierr);
+781 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::add (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj, const Tvalue)\fC [virtual]\fP"
+Add \fCvalue\fP to the element \fC\fP(i,j)\&. Throws an error if the entry does not exist\&. Still, it is allowed to store zero values in non-existent fields\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 954 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+957 {
+958   libmesh_assert (this->initialized());
+959 
+960   PetscErrorCode ierr=0;
+961   PetscInt i_val=i, j_val=j;
+962 
+963   PetscScalar petsc_value = static_cast<PetscScalar>(value);
+964   ierr = MatSetValues(_mat, 1, &i_val, 1, &j_val,
+965                       &petsc_value, ADD_VALUES);
+966   LIBMESH_CHKERRABORT(ierr);
+967 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::add (const Ta, \fBSparseMatrix\fP< T > &X)\fC [virtual]\fP"
+Add a Sparse matrix \fCX\fP, scaled with \fCa\fP, to \fCthis\fP, stores the result in \fCthis:\fP $\texttt{this} = a*X + \texttt{this} $\&. Use this with caution, the sparse matrices need to have the same nonzero pattern, otherwise \fCPETSc\fP will crash! It is advisable to not only allocate appropriate memory with \fC\fBinit()\fP\fP , but also explicitly zero the terms of \fCthis\fP whenever you add a non-zero value to \fCX\fP\&. Note: \fCX\fP will be closed, if not already done, before performing any work\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 985 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::_mat, libMesh::PetscMatrix< T >::closed(), ierr, libMesh::initialized(), libMesh::libmesh_assert(), libMesh::SparseMatrix< T >::m(), and libMesh::SparseMatrix< T >::n()\&.
+.PP
+.nf
+986 {
+987   libmesh_assert (this->initialized());
+988 
+989   // sanity check\&. but this cannot avoid
+990   // crash due to incompatible sparsity structure\&.\&.\&.
+991   libmesh_assert_equal_to (this->m(), X_in\&.m());
+992   libmesh_assert_equal_to (this->n(), X_in\&.n());
+993 
+994   PetscScalar     a = static_cast<PetscScalar>      (a_in);
+995   PetscMatrix<T>* X = libmesh_cast_ptr<PetscMatrix<T>*> (&X_in);
+996 
+997   libmesh_assert (X);
+998 
+999   PetscErrorCode ierr=0;
+1000 
+1001   // the matrix from which we copy the values has to be assembled/closed
+1002   // X->close ();
+1003   libmesh_assert(X->closed());
+1004 
+1005   semiparallel_only();
+1006 
+1007   // 2\&.2\&.x & earlier style
+1008 #if PETSC_VERSION_LESS_THAN(2,3,0)
+1009 
+1010   ierr = MatAXPY(&a,  X->_mat, _mat, SAME_NONZERO_PATTERN);
+1011   LIBMESH_CHKERRABORT(ierr);
+1012 
+1013   // 2\&.3\&.x & newer
+1014 #else
+1015 
+1016   ierr = MatAXPY(_mat, a, X->_mat, DIFFERENT_NONZERO_PATTERN);
+1017   LIBMESH_CHKERRABORT(ierr);
+1018 
+1019 #endif
+1020 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::add_block_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &brows, const std::vector< \fBnumeric_index_type\fP > &bcols)\fC [virtual]\fP"
+Add the full matrix \fCdm\fP to the Sparse matrix\&. This is useful for adding an element matrix at assembly time\&. The matrix is assumed blocked, and \fCbrow\fP, \fCbcol\fP correspond to the \fIblock\fP row, columm indices\&. 
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 693 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrix< T >::get_values(), ierr, libMesh::initialized(), libMesh::libmesh_assert(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::add_block_matrix()\&.
+.PP
+.nf
+696 {
+697   libmesh_assert (this->initialized());
+698 
+699   const numeric_index_type n_rows    = dm\&.m();
+700   const numeric_index_type n_cols    = dm\&.n();
+701   const numeric_index_type n_brows   = brows\&.size();
+702   const numeric_index_type n_bcols   = bcols\&.size();
+703   const numeric_index_type blocksize = n_rows / n_brows;
+704 
+705   libmesh_assert_equal_to (n_cols / n_bcols, blocksize);
+706   libmesh_assert_equal_to (blocksize*n_brows, n_rows);
+707   libmesh_assert_equal_to (blocksize*n_bcols, n_cols);
+708 
+709   PetscErrorCode ierr=0;
+710 
+711 #ifndef NDEBUG
+712   PetscInt petsc_blocksize;
+713   ierr = MatGetBlockSize(_mat, &petsc_blocksize);
+714   LIBMESH_CHKERRABORT(ierr);
+715   libmesh_assert_equal_to (blocksize, static_cast<numeric_index_type>(petsc_blocksize));
+716 #endif
+717 
+718   // These casts are required for PETSc <= 2\&.1\&.5
+719   ierr = MatSetValuesBlocked(_mat,
+720                              n_brows, (PetscInt*) &brows[0],
+721                              n_bcols, (PetscInt*) &bcols[0],
+722                              (PetscScalar*) &dm\&.get_values()[0],
+723                              ADD_VALUES);
+724   LIBMESH_CHKERRABORT(ierr);
+725 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::PetscMatrix\fP< T >::add_block_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [inline]\fP, \fC [virtual]\fP"
+Same as \fCadd_block_matrix\fP , but assumes the row and column maps are the same\&. Thus the matrix \fCdm\fP must be square\&. 
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 264 of file petsc_matrix\&.h\&.
+.PP
+References libMesh::PetscMatrix< T >::add_block_matrix()\&.
+.PP
+.nf
+266   { this->add_block_matrix (dm, dof_indices, dof_indices); }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::add_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols)\fC [virtual]\fP"
+Add the full matrix to the Petsc matrix\&. This is useful for adding an element matrix at assembly time 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 664 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrix< T >::get_values(), ierr, libMesh::initialized(), libMesh::libmesh_assert(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+667 {
+668   libmesh_assert (this->initialized());
+669 
+670   const numeric_index_type n_rows = dm\&.m();
+671   const numeric_index_type n_cols = dm\&.n();
+672 
+673   libmesh_assert_equal_to (rows\&.size(), n_rows);
+674   libmesh_assert_equal_to (cols\&.size(), n_cols);
+675 
+676   PetscErrorCode ierr=0;
+677 
+678   // These casts are required for PETSc <= 2\&.1\&.5
+679   ierr = MatSetValues(_mat,
+680                       n_rows, (PetscInt*) &rows[0],
+681                       n_cols, (PetscInt*) &cols[0],
+682                       (PetscScalar*) &dm\&.get_values()[0],
+683                       ADD_VALUES);
+684   LIBMESH_CHKERRABORT(ierr);
+685 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::add_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+Same as \fCadd_matrix\fP, but assumes the row and column maps are the same\&. Thus the matrix \fCdm\fP must be square\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 972 of file petsc_matrix\&.C\&.
+.PP
+.nf
+974 {
+975   this->add_matrix (dm, dof_indices, dof_indices);
+976 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::attach_dof_map (const \fBDofMap\fP &dof_map)\fC [inline]\fP, \fC [inherited]\fP"
+Get a pointer to the \fC\fBDofMap\fP\fP to use\&. 
+.PP
+Definition at line 112 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::DofMap::attach_matrix()\&.
+.PP
+.nf
+113   { _dof_map = &dof_map; }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBSparseMatrix\fP< T > > \fBlibMesh::SparseMatrix\fP< T >::build (const \fBParallel::Communicator\fP &comm, const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fCSparseMatrix<T>\fP using the linear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 134 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::EIGEN_SOLVERS, libMesh::err, libMesh::LASPACK_SOLVERS, libMesh::PETSC_SOLVERS, and libMesh::TRILINOS_SOLVERS\&.
+.PP
+Referenced by libMesh::ImplicitSystem::add_matrix(), libMesh::EigenSystem::init_data(), and libMesh::EigenSystem::init_matrices()\&.
+.PP
+.nf
+136 {
+137   // Build the appropriate vector
+138   switch (solver_package)
+139     {
+140 
+141 
+142 #ifdef LIBMESH_HAVE_LASPACK
+143     case LASPACK_SOLVERS:
+144       {
+145         AutoPtr<SparseMatrix<T> > ap(new LaspackMatrix<T>(comm));
+146         return ap;
+147       }
+148 #endif
+149 
+150 
+151 #ifdef LIBMESH_HAVE_PETSC
+152     case PETSC_SOLVERS:
+153       {
+154         AutoPtr<SparseMatrix<T> > ap(new PetscMatrix<T>(comm));
+155         return ap;
+156       }
+157 #endif
+158 
+159 
+160 #ifdef LIBMESH_HAVE_TRILINOS
+161     case TRILINOS_SOLVERS:
+162       {
+163         AutoPtr<SparseMatrix<T> > ap(new EpetraMatrix<T>(comm));
+164         return ap;
+165       }
+166 #endif
+167 
+168 
+169 #ifdef LIBMESH_HAVE_EIGEN
+170     case EIGEN_SOLVERS:
+171       {
+172         AutoPtr<SparseMatrix<T> > ap(new EigenSparseMatrix<T>(comm));
+173         return ap;
+174       }
+175 #endif
+176 
+177 
+178     default:
+179       libMesh::err << "ERROR:  Unrecognized solver package: "
+180                    << solver_package
+181                    << std::endl;
+182       libmesh_error();
+183     }
+184 
+185   AutoPtr<SparseMatrix<T> > ap(NULL);
+186   return ap;
+187 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::clear ()\fC [virtual]\fP"
+Release all memory and return to a state just like after having called the default constructor\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 437 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, ierr, and libMesh::initialized()\&.
+.PP
+.nf
+438 {
+439   PetscErrorCode ierr=0;
+440 
+441   if ((this->initialized()) && (this->_destroy_mat_on_exit))
+442     {
+443       semiparallel_only();
+444 
+445       ierr = LibMeshMatDestroy (&_mat);
+446       LIBMESH_CHKERRABORT(ierr);
+447 
+448       this->_is_initialized = false;
+449     }
+450 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::close () const\fC [virtual]\fP"
+Call the Petsc assemble routines\&. sends necessary messages to other processors 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 850 of file petsc_matrix\&.C\&.
+.PP
+References ierr\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::PetscLinearSolver< T >::adjoint_solve(), libMesh::PetscMatrix< T >::get_transpose(), libMesh::PetscLinearSolver< T >::solve(), libMesh::SlepcEigenSolver< T >::solve_generalized(), and libMesh::SlepcEigenSolver< T >::solve_standard()\&.
+.PP
+.nf
+851 {
+852   semiparallel_only();
+853 
+854   // BSK - 1/19/2004
+855   // strictly this check should be OK, but it seems to
+856   // fail on matrix-free matrices\&.  Do they falsely
+857   // state they are assembled?  Check with the developers\&.\&.\&.
+858   //   if (this->closed())
+859   //     return;
+860 
+861   PetscErrorCode ierr=0;
+862 
+863   ierr = MatAssemblyBegin (_mat, MAT_FINAL_ASSEMBLY);
+864   LIBMESH_CHKERRABORT(ierr);
+865   ierr = MatAssemblyEnd   (_mat, MAT_FINAL_ASSEMBLY);
+866   LIBMESH_CHKERRABORT(ierr);
+867 }
+.fi
+.SS "template<typename T > bool \fBlibMesh::PetscMatrix\fP< T >::closed () const\fC [virtual]\fP"
+see if Petsc matrix has been closed and fully assembled yet 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 1097 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), libMesh::libmesh_assert(), and PetscBool\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::add()\&.
+.PP
+.nf
+1098 {
+1099   libmesh_assert (this->initialized());
+1100 
+1101   PetscErrorCode ierr=0;
+1102   PetscBool assembled;
+1103 
+1104   ierr = MatAssembled(_mat, &assembled);
+1105   LIBMESH_CHKERRABORT(ierr);
+1106 
+1107   return (assembled == PETSC_TRUE);
+1108 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::create_submatrix (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This function creates a matrix called 'submatrix' which is defined by the row and column indices given in the 'rows' and 'cols' entries\&. Currently this operation is only defined for the \fBPetscMatrix\fP type\&. 
+.PP
+Definition at line 366 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::CondensedEigenSystem::solve()\&.
+.PP
+.nf
+369   {
+370     this->_get_submatrix(submatrix,
+371                          rows,
+372                          cols,
+373                          false); // false means DO NOT REUSE submatrix
+374   }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::get_diagonal (\fBNumericVector\fP< T > &dest) const\fC [virtual]\fP"
+Copies the diagonal part of the matrix into \fCdest\fP\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 786 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::out, and libMesh::PetscVector< T >::vec()\&.
+.PP
+.nf
+787 {
+788   // Make sure the NumericVector passed in is really a PetscVector
+789   PetscVector<T>& petsc_dest = libmesh_cast_ref<PetscVector<T>&>(dest);
+790 
+791   // Call PETSc function\&.
+792 
+793 #if PETSC_VERSION_LESS_THAN(2,3,1)
+794 
+795   libMesh::out << "This method has been developed with PETSc 2\&.3\&.1\&.  "
+796                << "No one has made it backwards compatible with older "
+797                << "versions of PETSc so far; however, it might work "
+798                << "without any change with some older version\&." << std::endl;
+799   libmesh_error();
+800 
+801 #else
+802 
+803   // Needs a const_cast since PETSc does not work with const\&.
+804   PetscErrorCode ierr =
+805     MatGetDiagonal(const_cast<PetscMatrix<T>*>(this)->mat(),petsc_dest\&.vec()); LIBMESH_CHKERRABORT(ierr);
+806 
+807 #endif
+808 
+809 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::get_transpose (\fBSparseMatrix\fP< T > &dest) const\fC [virtual]\fP"
+Copies the transpose of the matrix into \fCdest\fP, which may be *this\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 814 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::SparseMatrix< T >::_is_initialized, libMesh::PetscMatrix< T >::_mat, libMesh::SparseMatrix< T >::clear(), libMesh::PetscMatrix< T >::close(), and ierr\&.
+.PP
+.nf
+815 {
+816   // Make sure the SparseMatrix passed in is really a PetscMatrix
+817   PetscMatrix<T>& petsc_dest = libmesh_cast_ref<PetscMatrix<T>&>(dest);
+818 
+819   // If we aren't reusing the matrix then need to clear dest,
+820   // otherwise we get a memory leak
+821   if(&petsc_dest != this)
+822     dest\&.clear();
+823 
+824   PetscErrorCode ierr;
+825 #if PETSC_VERSION_LESS_THAN(3,0,0)
+826   if (&petsc_dest == this)
+827     ierr = MatTranspose(_mat,PETSC_NULL);
+828   else
+829     ierr = MatTranspose(_mat,&petsc_dest\&._mat);
+830   LIBMESH_CHKERRABORT(ierr);
+831 #else
+832   // FIXME - we can probably use MAT_REUSE_MATRIX in more situations
+833   if (&petsc_dest == this)
+834     ierr = MatTranspose(_mat,MAT_REUSE_MATRIX,&petsc_dest\&._mat);
+835   else
+836     ierr = MatTranspose(_mat,MAT_INITIAL_MATRIX,&petsc_dest\&._mat);
+837   LIBMESH_CHKERRABORT(ierr);
+838 #endif
+839 
+840   // Specify that the transposed matrix is initialized and close it\&.
+841   petsc_dest\&._is_initialized = true;
+842   petsc_dest\&.close();
+843 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::init (const \fBnumeric_index_type\fPm, const \fBnumeric_index_type\fPn, const \fBnumeric_index_type\fPm_l, const \fBnumeric_index_type\fPn_l, const \fBnumeric_index_type\fPnnz = \fC30\fP, const \fBnumeric_index_type\fPnoz = \fC10\fP, const \fBnumeric_index_type\fPblocksize = \fC1\fP)\fC [virtual]\fP"
+Initialize a Petsc matrix that is of global dimension $ m \times n $ with local dimensions $ m_l \times n_l $\&. \fCnnz\fP is the number of on-processor nonzeros per row (defaults to 30)\&. \fCnoz\fP is the number of on-processor nonzeros per row (defaults to 30)\&. Optionally supports a block size, which indicates dense coupled blocks for systems with multiple variables all of the same type\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 122 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::comm, ierr, libMesh::initialized(), libMesh::libmesh_ignore(), libMesh::n_local, and libMesh::zero\&.
+.PP
+Referenced by libMesh::PetscLinearSolver< T >::adjoint_solve(), and libMesh::PetscLinearSolver< T >::solve()\&.
+.PP
+.nf
+129 {
+130   // So compilers don't warn when !LIBMESH_ENABLE_BLOCKED_STORAGE
+131   libmesh_ignore(blocksize_in);
+132 
+133   // Clear initialized matrices
+134   if (this->initialized())
+135     this->clear();
+136 
+137   this->_is_initialized = true;
+138 
+139 
+140   PetscErrorCode ierr = 0;
+141   PetscInt m_global   = static_cast<PetscInt>(m_in);
+142   PetscInt n_global   = static_cast<PetscInt>(n_in);
+143   PetscInt m_local    = static_cast<PetscInt>(m_l);
+144   PetscInt n_local    = static_cast<PetscInt>(n_l);
+145   PetscInt n_nz       = static_cast<PetscInt>(nnz);
+146   PetscInt n_oz       = static_cast<PetscInt>(noz);
+147 
+148   ierr = MatCreate(this->comm()\&.get(), &_mat);
+149   LIBMESH_CHKERRABORT(ierr);
+150   ierr = MatSetSizes(_mat, m_local, n_local, m_global, n_global);
+151   LIBMESH_CHKERRABORT(ierr);
+152 
+153 #ifdef LIBMESH_ENABLE_BLOCKED_STORAGE
+154   PetscInt blocksize  = static_cast<PetscInt>(blocksize_in);
+155   if (blocksize > 1)
+156     {
+157       // specified blocksize, bs>1\&.
+158       // double check sizes\&.
+159       libmesh_assert_equal_to (m_local  % blocksize, 0);
+160       libmesh_assert_equal_to (n_local  % blocksize, 0);
+161       libmesh_assert_equal_to (m_global % blocksize, 0);
+162       libmesh_assert_equal_to (n_global % blocksize, 0);
+163       libmesh_assert_equal_to (n_nz     % blocksize, 0);
+164       libmesh_assert_equal_to (n_oz     % blocksize, 0);
+165 
+166       ierr = MatSetType(_mat, MATBAIJ); // Automatically chooses seqbaij or mpibaij
+167       LIBMESH_CHKERRABORT(ierr);
+168       ierr = MatSetBlockSize(_mat, blocksize);
+169       LIBMESH_CHKERRABORT(ierr);
+170       ierr = MatSeqBAIJSetPreallocation(_mat, blocksize, n_nz/blocksize, PETSC_NULL);
+171       LIBMESH_CHKERRABORT(ierr);
+172       ierr = MatMPIBAIJSetPreallocation(_mat, blocksize,
+173                                         n_nz/blocksize, PETSC_NULL,
+174                                         n_oz/blocksize, PETSC_NULL);
+175       LIBMESH_CHKERRABORT(ierr);
+176     }
+177   else
+178 #endif
+179     {
+180       ierr = MatSetType(_mat, MATAIJ); // Automatically chooses seqaij or mpiaij
+181       LIBMESH_CHKERRABORT(ierr);
+182       ierr = MatSeqAIJSetPreallocation(_mat, n_nz, PETSC_NULL);
+183       LIBMESH_CHKERRABORT(ierr);
+184       ierr = MatMPIAIJSetPreallocation(_mat, n_nz, PETSC_NULL, n_oz, PETSC_NULL);
+185       LIBMESH_CHKERRABORT(ierr);
+186     }
+187 
+188   // Make it an error for PETSc to allocate new nonzero entries during assembly
+189 #if PETSC_VERSION_LESS_THAN(3,0,0)
+190   ierr = MatSetOption(_mat, MAT_NEW_NONZERO_ALLOCATION_ERR);
+191 #else
+192   ierr = MatSetOption(_mat, MAT_NEW_NONZERO_ALLOCATION_ERR, PETSC_TRUE);
+193 #endif
+194   LIBMESH_CHKERRABORT(ierr);
+195 
+196   // Is prefix information available somewhere? Perhaps pass in the system name?
+197   ierr = MatSetOptionsPrefix(_mat, "");
+198   LIBMESH_CHKERRABORT(ierr);
+199   ierr = MatSetFromOptions(_mat);
+200   LIBMESH_CHKERRABORT(ierr);
+201 
+202   this->zero ();
+203 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::init (const \fBnumeric_index_type\fPm, const \fBnumeric_index_type\fPn, const \fBnumeric_index_type\fPm_l, const \fBnumeric_index_type\fPn_l, const std::vector< \fBnumeric_index_type\fP > &n_nz, const std::vector< \fBnumeric_index_type\fP > &n_oz, const \fBnumeric_index_type\fPblocksize = \fC1\fP)"
+Initialize a Petsc matrix that is of global dimension $ m \times n $ with local dimensions $ m_l \times n_l $\&. \fCnnz\fP is the number of on-processor nonzeros per row\&. \fCnoz\fP is the number of off-processor nonzeros per row\&. Optionally supports a block size, which indicates dense coupled blocks for systems with multiple variables all of the same type\&. 
+.PP
+Definition at line 207 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::comm, ierr, libMesh::initialized(), libMesh::libmesh_ignore(), libMesh::n_local, and libMesh::zero\&.
+.PP
+.nf
+214 {
+215   // So compilers don't warn when !LIBMESH_ENABLE_BLOCKED_STORAGE
+216   libmesh_ignore(blocksize_in);
+217 
+218   // Clear initialized matrices
+219   if (this->initialized())
+220     this->clear();
+221 
+222   this->_is_initialized = true;
+223 
+224   // Make sure the sparsity pattern isn't empty unless the matrix is 0x0
+225   libmesh_assert_equal_to (n_nz\&.size(), m_l);
+226   libmesh_assert_equal_to (n_oz\&.size(), m_l);
+227 
+228   PetscErrorCode ierr = 0;
+229   PetscInt m_global   = static_cast<PetscInt>(m_in);
+230   PetscInt n_global   = static_cast<PetscInt>(n_in);
+231   PetscInt m_local    = static_cast<PetscInt>(m_l);
+232   PetscInt n_local    = static_cast<PetscInt>(n_l);
+233 
+234   ierr = MatCreate(this->comm()\&.get(), &_mat);
+235   LIBMESH_CHKERRABORT(ierr);
+236   ierr = MatSetSizes(_mat, m_local, n_local, m_global, n_global);
+237   LIBMESH_CHKERRABORT(ierr);
+238 
+239 #ifdef LIBMESH_ENABLE_BLOCKED_STORAGE
+240   PetscInt blocksize  = static_cast<PetscInt>(blocksize_in);
+241   if (blocksize > 1)
+242     {
+243       // specified blocksize, bs>1\&.
+244       // double check sizes\&.
+245       libmesh_assert_equal_to (m_local  % blocksize, 0);
+246       libmesh_assert_equal_to (n_local  % blocksize, 0);
+247       libmesh_assert_equal_to (m_global % blocksize, 0);
+248       libmesh_assert_equal_to (n_global % blocksize, 0);
+249 
+250       ierr = MatSetType(_mat, MATBAIJ); // Automatically chooses seqbaij or mpibaij
+251       LIBMESH_CHKERRABORT(ierr);
+252       ierr = MatSetBlockSize(_mat, blocksize);
+253       LIBMESH_CHKERRABORT(ierr);
+254 
+255       // transform the per-entry n_nz and n_oz arrays into their block counterparts\&.
+256       std::vector<numeric_index_type> b_n_nz, b_n_oz;
+257 
+258       transform_preallocation_arrays (blocksize,
+259                                       n_nz, n_oz,
+260                                       b_n_nz, b_n_oz);
+261 
+262       ierr = MatSeqBAIJSetPreallocation(_mat, blocksize, 0, (PetscInt*)(b_n_nz\&.empty()?NULL:&b_n_nz[0]));
+263       LIBMESH_CHKERRABORT(ierr);
+264 
+265       ierr = MatMPIBAIJSetPreallocation(_mat, blocksize,
+266                                         0, (PetscInt*)(b_n_nz\&.empty()?NULL:&b_n_nz[0]),
+267                                         0, (PetscInt*)(b_n_oz\&.empty()?NULL:&b_n_oz[0]));
+268       LIBMESH_CHKERRABORT(ierr);
+269     }
+270   else
+271 #endif
+272     {
+273       ierr = MatSetType(_mat, MATAIJ); // Automatically chooses seqaij or mpiaij
+274       LIBMESH_CHKERRABORT(ierr);
+275       ierr = MatSeqAIJSetPreallocation(_mat, 0, (PetscInt*)(n_nz\&.empty()?NULL:&n_nz[0]));
+276       LIBMESH_CHKERRABORT(ierr);
+277       ierr = MatMPIAIJSetPreallocation(_mat,
+278                                        0, (PetscInt*)(n_nz\&.empty()?NULL:&n_nz[0]),
+279                                        0, (PetscInt*)(n_oz\&.empty()?NULL:&n_oz[0]));
+280       LIBMESH_CHKERRABORT(ierr);
+281     }
+282 
+283   // Is prefix information available somewhere? Perhaps pass in the system name?
+284   ierr = MatSetOptionsPrefix(_mat, "");
+285   LIBMESH_CHKERRABORT(ierr);
+286   ierr = MatSetFromOptions(_mat);
+287   LIBMESH_CHKERRABORT(ierr);
+288 
+289 
+290   this->zero();
+291 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::init ()\fC [virtual]\fP"
+Initialize using sparsity structure computed by \fCdof_map\fP\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 295 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::comm, ierr, libMesh::initialized(), libMesh::libmesh_assert(), libMesh::n_local, libMesh::processor_id(), and libMesh::zero\&.
+.PP
+.nf
+296 {
+297   libmesh_assert(this->_dof_map);
+298 
+299   // Clear initialized matrices
+300   if (this->initialized())
+301     this->clear();
+302 
+303   this->_is_initialized = true;
+304 
+305 
+306   const numeric_index_type my_m = this->_dof_map->n_dofs();
+307   const numeric_index_type my_n = my_m;
+308   const numeric_index_type n_l  = this->_dof_map->n_dofs_on_processor(this->processor_id());
+309   const numeric_index_type m_l  = n_l;
+310 
+311 
+312   const std::vector<numeric_index_type>& n_nz = this->_dof_map->get_n_nz();
+313   const std::vector<numeric_index_type>& n_oz = this->_dof_map->get_n_oz();
+314 
+315   // Make sure the sparsity pattern isn't empty unless the matrix is 0x0
+316   libmesh_assert_equal_to (n_nz\&.size(), m_l);
+317   libmesh_assert_equal_to (n_oz\&.size(), m_l);
+318 
+319   PetscErrorCode ierr = 0;
+320   PetscInt m_global   = static_cast<PetscInt>(my_m);
+321   PetscInt n_global   = static_cast<PetscInt>(my_n);
+322   PetscInt m_local    = static_cast<PetscInt>(m_l);
+323   PetscInt n_local    = static_cast<PetscInt>(n_l);
+324 
+325   ierr = MatCreate(this->comm()\&.get(), &_mat);
+326   LIBMESH_CHKERRABORT(ierr);
+327   ierr = MatSetSizes(_mat, m_local, n_local, m_global, n_global);
+328   LIBMESH_CHKERRABORT(ierr);
+329 
+330 #ifdef LIBMESH_ENABLE_BLOCKED_STORAGE
+331   PetscInt blocksize  = static_cast<PetscInt>(this->_dof_map->block_size());
+332   if (blocksize > 1)
+333     {
+334       // specified blocksize, bs>1\&.
+335       // double check sizes\&.
+336       libmesh_assert_equal_to (m_local  % blocksize, 0);
+337       libmesh_assert_equal_to (n_local  % blocksize, 0);
+338       libmesh_assert_equal_to (m_global % blocksize, 0);
+339       libmesh_assert_equal_to (n_global % blocksize, 0);
+340 
+341       ierr = MatSetType(_mat, MATBAIJ); // Automatically chooses seqbaij or mpibaij
+342       LIBMESH_CHKERRABORT(ierr);
+343       ierr = MatSetBlockSize(_mat, blocksize);
+344       LIBMESH_CHKERRABORT(ierr);
+345 
+346       // transform the per-entry n_nz and n_oz arrays into their block counterparts\&.
+347       std::vector<numeric_index_type> b_n_nz, b_n_oz;
+348 
+349       transform_preallocation_arrays (blocksize,
+350                                       n_nz, n_oz,
+351                                       b_n_nz, b_n_oz);
+352 
+353       ierr = MatSeqBAIJSetPreallocation(_mat, blocksize, 0, (PetscInt*)(b_n_nz\&.empty()?NULL:&b_n_nz[0]));
+354       LIBMESH_CHKERRABORT(ierr);
+355 
+356       ierr = MatMPIBAIJSetPreallocation(_mat, blocksize,
+357                                         0, (PetscInt*)(b_n_nz\&.empty()?NULL:&b_n_nz[0]),
+358                                         0, (PetscInt*)(b_n_oz\&.empty()?NULL:&b_n_oz[0]));
+359       LIBMESH_CHKERRABORT(ierr);
+360     }
+361   else
+362 #endif
+363     {
+364       // no block storage case
+365       ierr = MatSetType(_mat, MATAIJ); // Automatically chooses seqaij or mpiaij
+366       LIBMESH_CHKERRABORT(ierr);
+367 
+368       ierr = MatSeqAIJSetPreallocation(_mat, 0, (PetscInt*)(n_nz\&.empty()?NULL:&n_nz[0]));
+369       LIBMESH_CHKERRABORT(ierr);
+370       ierr = MatMPIAIJSetPreallocation(_mat,
+371                                        0, (PetscInt*)(n_nz\&.empty()?NULL:&n_nz[0]),
+372                                        0, (PetscInt*)(n_oz\&.empty()?NULL:&n_oz[0]));
+373       LIBMESH_CHKERRABORT(ierr);
+374     }
+375 
+376   // Is prefix information available somewhere? Perhaps pass in the system name?
+377   ierr = MatSetOptionsPrefix(_mat, "");
+378   LIBMESH_CHKERRABORT(ierr);
+379   ierr = MatSetFromOptions(_mat);
+380   LIBMESH_CHKERRABORT(ierr);
+381 
+382   this->zero();
+383 }
+.fi
+.SS "template<typename T> virtual bool \fBlibMesh::SparseMatrix\fP< T >::initialized () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the matrix has been initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 107 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::ImplicitSystem::assemble(), and libMesh::ImplicitSystem::init_matrices()\&.
+.PP
+.nf
+107 { return _is_initialized; }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::PetscMatrix\fP< T >::l1_norm () const\fC [virtual]\fP"
+Return the l1-norm of the matrix, that is $|M|_1=max_{all columns j}\sum_{all rows i} |M_ij|$, (max\&. sum of columns)\&. This is the natural matrix norm that is compatible to the l1-norm for vectors, i\&.e\&. $|Mv|_1\leq |M|_1 |v|_1$\&. (cf\&. Haemmerlin-Hoffmann : Numerische Mathematik) 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 455 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::closed(), ierr, libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::Real\&.
+.PP
+.nf
+456 {
+457   libmesh_assert (this->initialized());
+458 
+459   semiparallel_only();
+460 
+461   PetscErrorCode ierr=0;
+462   PetscReal petsc_value;
+463   Real value;
+464 
+465   libmesh_assert (this->closed());
+466 
+467   ierr = MatNorm(_mat, NORM_1, &petsc_value);
+468   LIBMESH_CHKERRABORT(ierr);
+469 
+470   value = static_cast<Real>(petsc_value);
+471 
+472   return value;
+473 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::PetscMatrix\fP< T >::linfty_norm () const\fC [virtual]\fP"
+Return the linfty-norm of the matrix, that is $|M|_infty=max_{all rows i}\sum_{all columns j} |M_ij|$, (max\&. sum of rows)\&. This is the natural matrix norm that is compatible to the linfty-norm of vectors, i\&.e\&. $|Mv|_infty \leq |M|_infty |v|_infty$\&. (cf\&. Haemmerlin-Hoffmann : Numerische Mathematik) 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 478 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::closed(), ierr, libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::Real\&.
+.PP
+.nf
+479 {
+480   libmesh_assert (this->initialized());
+481 
+482   semiparallel_only();
+483 
+484   PetscErrorCode ierr=0;
+485   PetscReal petsc_value;
+486   Real value;
+487 
+488   libmesh_assert (this->closed());
+489 
+490   ierr = MatNorm(_mat, NORM_INFINITY, &petsc_value);
+491   LIBMESH_CHKERRABORT(ierr);
+492 
+493   value = static_cast<Real>(petsc_value);
+494 
+495   return value;
+496 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::PetscMatrix\fP< T >::m () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCm\fP, the row-dimension of the matrix where the marix is $ M \times N $\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 872 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+873 {
+874   libmesh_assert (this->initialized());
+875 
+876   PetscInt petsc_m=0, petsc_n=0;
+877   PetscErrorCode ierr=0;
+878 
+879   ierr = MatGetSize (_mat, &petsc_m, &petsc_n);
+880   LIBMESH_CHKERRABORT(ierr);
+881 
+882   return static_cast<numeric_index_type>(petsc_m);
+883 }
+.fi
+.SS "template<typename T> Mat \fBlibMesh::PetscMatrix\fP< T >::mat ()\fC [inline]\fP"
+Returns the raw PETSc matrix context pointer\&. Note this is generally not required in user-level code\&. Just don't do anything crazy like calling LibMeshMatDestroy()! 
+.PP
+Definition at line 362 of file petsc_matrix\&.h\&.
+.PP
+References libMesh::PetscMatrix< T >::_mat, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::PetscLinearSolver< T >::adjoint_solve(), libMesh::PetscPreconditioner< T >::init(), libMesh::PetscLinearSolver< T >::init(), libMesh::PetscDiffSolver::solve(), libMesh::PetscNonlinearSolver< T >::solve(), libMesh::PetscLinearSolver< T >::solve(), libMesh::SlepcEigenSolver< T >::solve_generalized(), and libMesh::SlepcEigenSolver< T >::solve_standard()\&.
+.PP
+.nf
+362 { libmesh_assert (_mat); return _mat; }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::PetscMatrix\fP< T >::n () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCn\fP, the column-dimension of the matrix where the marix is $ M \times N $\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 888 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+889 {
+890   libmesh_assert (this->initialized());
+891 
+892   PetscInt petsc_m=0, petsc_n=0;
+893   PetscErrorCode ierr=0;
+894 
+895   ierr = MatGetSize (_mat, &petsc_m, &petsc_n);
+896   LIBMESH_CHKERRABORT(ierr);
+897 
+898   return static_cast<numeric_index_type>(petsc_n);
+899 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T> virtual bool \fBlibMesh::SparseMatrix\fP< T >::need_full_sparsity_pattern () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+\fCreturns\fP true if this sparse matrix format needs to be fed the graph of the sparse matrix\&. This is true in the case of the \fC\fBLaspackMatrix\fP\fP, but not for the \fC\fBPetscMatrix\fP\fP\&. In the case where the full graph is not required we can efficiently approximate it to provide a good estimate of the required size of the sparse matrix\&. 
+.PP
+Reimplemented in \fBlibMesh::EpetraMatrix< T >\fP, and \fBlibMesh::LaspackMatrix< T >\fP\&.
+.PP
+Definition at line 122 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::DofMap::attach_matrix()\&.
+.PP
+.nf
+123   { return false; }
+.fi
+.SS "template<typename T > T \fBlibMesh::PetscMatrix\fP< T >::operator() (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj) const\fC [virtual]\fP"
+Return the value of the entry \fC\fP(i,j)\&. This may be an expensive operation, and you should always be careful where you call this function\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 1026 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::closed(), ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+1028 {
+1029   libmesh_assert (this->initialized());
+1030 
+1031 #if PETSC_VERSION_LESS_THAN(2,2,1)
+1032 
+1033   // PETSc 2\&.2\&.0 & older
+1034   PetscScalar *petsc_row;
+1035   int* petsc_cols;
+1036 
+1037 #else
+1038 
+1039   // PETSc 2\&.2\&.1 & newer
+1040   const PetscScalar *petsc_row;
+1041   const PetscInt    *petsc_cols;
+1042 
+1043 #endif
+1044 
+1045 
+1046   // If the entry is not in the sparse matrix, it is 0\&.
+1047   T value=0\&.;
+1048 
+1049   PetscErrorCode
+1050     ierr=0;
+1051   PetscInt
+1052     ncols=0,
+1053     i_val=static_cast<PetscInt>(i_in),
+1054     j_val=static_cast<PetscInt>(j_in);
+1055 
+1056 
+1057   // the matrix needs to be closed for this to work
+1058   // this->close();
+1059   // but closing it is a semiparallel operation; we want operator()
+1060   // to run on one processor\&.
+1061   libmesh_assert(this->closed());
+1062 
+1063   ierr = MatGetRow(_mat, i_val, &ncols, &petsc_cols, &petsc_row);
+1064   LIBMESH_CHKERRABORT(ierr);
+1065 
+1066   // Perform a binary search to find the contiguous index in
+1067   // petsc_cols (resp\&. petsc_row) corresponding to global index j_val
+1068   std::pair<const PetscInt*, const PetscInt*> p =
+1069     std::equal_range (&petsc_cols[0], &petsc_cols[0] + ncols, j_val);
+1070 
+1071   // Found an entry for j_val
+1072   if (p\&.first != p\&.second)
+1073     {
+1074       // The entry in the contiguous row corresponding
+1075       // to the j_val column of interest
+1076       const std::size_t j =
+1077         std::distance (const_cast<PetscInt*>(&petsc_cols[0]),
+1078                        const_cast<PetscInt*>(p\&.first));
+1079 
+1080       libmesh_assert_less (static_cast<PetscInt>(j), ncols);
+1081       libmesh_assert_equal_to (petsc_cols[j], j_val);
+1082 
+1083       value = static_cast<T> (petsc_row[j]);
+1084     }
+1085 
+1086   ierr  = MatRestoreRow(_mat, i_val,
+1087                         &ncols, &petsc_cols, &petsc_row);
+1088   LIBMESH_CHKERRABORT(ierr);
+1089 
+1090   return value;
+1091 }
+.fi
+.SS "template<> void \fBlibMesh::SparseMatrix\fP< \fBComplex\fP >::print (std::ostream &os, const boolsparse) const\fC [inherited]\fP"
+
+.PP
+Definition at line 100 of file sparse_matrix\&.C\&.
+.PP
+.nf
+101 {
+102   // std::complex<>::operator<<() is defined, but use this form
+103 
+104   if(sparse)
+105     {
+106       libmesh_not_implemented();
+107     }
+108 
+109   os << "Real part:" << std::endl;
+110   for (numeric_index_type i=0; i<this->m(); i++)
+111     {
+112       for (numeric_index_type j=0; j<this->n(); j++)
+113         os << std::setw(8) << (*this)(i,j)\&.real() << " ";
+114       os << std::endl;
+115     }
+116 
+117   os << std::endl << "Imaginary part:" << std::endl;
+118   for (numeric_index_type i=0; i<this->m(); i++)
+119     {
+120       for (numeric_index_type j=0; j<this->n(); j++)
+121         os << std::setw(8) << (*this)(i,j)\&.imag() << " ";
+122       os << std::endl;
+123     }
+124 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SparseMatrix\fP< T >::print (std::ostream &os = \fC\fBlibMesh::out\fP\fP, const boolsparse = \fCfalse\fP) const\fC [inherited]\fP"
+Print the contents of the matrix to the screen in a uniform style, regardless of matrix/solver package being used\&. 
+.PP
+Definition at line 221 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::comm, libMesh::initialized(), libMesh::libmesh_assert(), libMesh::n_processors(), and libMesh::processor_id()\&.
+.PP
+Referenced by libMesh::EigenSparseMatrix< T >::print_personal(), and libMesh::LaspackMatrix< T >::print_personal()\&.
+.PP
+.nf
+222 {
+223   parallel_object_only();
+224 
+225   libmesh_assert (this->initialized());
+226 
+227   if(!this->_dof_map)
+228     {
+229       os << std::endl << "Error!  Trying to print a matrix with no dof_map set!" << std::endl << std::endl;
+230       libmesh_error();
+231     }
+232 
+233   // We'll print the matrix from processor 0 to make sure
+234   // it's serialized properly
+235   if (this->processor_id() == 0)
+236     {
+237       libmesh_assert_equal_to (this->_dof_map->first_dof(), 0);
+238       for (numeric_index_type i=this->_dof_map->first_dof();
+239            i!=this->_dof_map->end_dof(); ++i)
+240         {
+241           if(sparse)
+242             {
+243               for (numeric_index_type j=0; j<this->n(); j++)
+244                 {
+245                   T c = (*this)(i,j);
+246                   if (c != static_cast<T>(0\&.0))
+247                     {
+248                       os << i << " " << j << " " << c << std::endl;
+249                     }
+250                 }
+251             }
+252           else
+253             {
+254               for (numeric_index_type j=0; j<this->n(); j++)
+255                 os << (*this)(i,j) << " ";
+256               os << std::endl;
+257             }
+258         }
+259 
+260       std::vector<numeric_index_type> ibuf, jbuf;
+261       std::vector<T> cbuf;
+262       numeric_index_type currenti = this->_dof_map->end_dof();
+263       for (processor_id_type p=1; p < this->n_processors(); ++p)
+264         {
+265           this->comm()\&.receive(p, ibuf);
+266           this->comm()\&.receive(p, jbuf);
+267           this->comm()\&.receive(p, cbuf);
+268           libmesh_assert_equal_to (ibuf\&.size(), jbuf\&.size());
+269           libmesh_assert_equal_to (ibuf\&.size(), cbuf\&.size());
+270 
+271           if (ibuf\&.empty())
+272             continue;
+273           libmesh_assert_greater_equal (ibuf\&.front(), currenti);
+274           libmesh_assert_greater_equal (ibuf\&.back(), ibuf\&.front());
+275 
+276           std::size_t currentb = 0;
+277           for (;currenti <= ibuf\&.back(); ++currenti)
+278             {
+279               if(sparse)
+280                 {
+281                   for (numeric_index_type j=0; j<this->n(); j++)
+282                     {
+283                       if (currentb < ibuf\&.size() &&
+284                           ibuf[currentb] == currenti &&
+285                           jbuf[currentb] == j)
+286                         {
+287                           os << currenti << " " << j << " " << cbuf[currentb] << std::endl;
+288                           currentb++;
+289                         }
+290                     }
+291                 }
+292               else
+293                 {
+294                   for (numeric_index_type j=0; j<this->n(); j++)
+295                     {
+296                       if (currentb < ibuf\&.size() &&
+297                           ibuf[currentb] == currenti &&
+298                           jbuf[currentb] == j)
+299                         {
+300                           os << cbuf[currentb] << " ";
+301                           currentb++;
+302                         }
+303                       else
+304                         os << static_cast<T>(0\&.0) << " ";
+305                     }
+306                   os << std::endl;
+307                 }
+308             }
+309         }
+310       if(!sparse)
+311         {
+312           for (; currenti != this->m(); ++currenti)
+313             {
+314               for (numeric_index_type j=0; j<this->n(); j++)
+315                 os << static_cast<T>(0\&.0) << " ";
+316               os << std::endl;
+317             }
+318         }
+319     }
+320   else
+321     {
+322       std::vector<numeric_index_type> ibuf, jbuf;
+323       std::vector<T> cbuf;
+324 
+325       // We'll assume each processor has access to entire
+326       // matrix rows, so (*this)(i,j) is valid if i is a local index\&.
+327       for (numeric_index_type i=this->_dof_map->first_dof();
+328            i!=this->_dof_map->end_dof(); ++i)
+329         {
+330           for (numeric_index_type j=0; j<this->n(); j++)
+331             {
+332               T c = (*this)(i,j);
+333               if (c != static_cast<T>(0\&.0))
+334                 {
+335                   ibuf\&.push_back(i);
+336                   jbuf\&.push_back(j);
+337                   cbuf\&.push_back(c);
+338                 }
+339             }
+340         }
+341       this->comm()\&.send(0,ibuf);
+342       this->comm()\&.send(0,jbuf);
+343       this->comm()\&.send(0,cbuf);
+344     }
+345 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::print_matlab (const std::string &name = \fC''\fP) const\fC [virtual]\fP"
+Print the contents of the matrix in Matlab's sparse matrix format\&. Optionally prints the matrix to the file named \fCname\fP\&. If \fCname\fP is not specified it is dumped to the screen\&. Create an ASCII file containing the matrix if a filename was provided\&.
+.PP
+Otherwise the matrix will be dumped to the screen\&.
+.PP
+Destroy the viewer\&.
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 501 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::comm, ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+502 {
+503   libmesh_assert (this->initialized());
+504 
+505   semiparallel_only();
+506 
+507   // libmesh_assert (this->closed());
+508   this->close();
+509 
+510   PetscErrorCode ierr=0;
+511   PetscViewer petsc_viewer;
+512 
+513 
+514   ierr = PetscViewerCreate (this->comm()\&.get(),
+515                             &petsc_viewer);
+516   LIBMESH_CHKERRABORT(ierr);
+517 
+522   if (name != "")
+523     {
+524       ierr = PetscViewerASCIIOpen( this->comm()\&.get(),
+525                                    name\&.c_str(),
+526                                    &petsc_viewer);
+527       LIBMESH_CHKERRABORT(ierr);
+528 
+529       ierr = PetscViewerSetFormat (petsc_viewer,
+530                                    PETSC_VIEWER_ASCII_MATLAB);
+531       LIBMESH_CHKERRABORT(ierr);
+532 
+533       ierr = MatView (_mat, petsc_viewer);
+534       LIBMESH_CHKERRABORT(ierr);
+535     }
+536 
+540   else
+541     {
+542       ierr = PetscViewerSetFormat (PETSC_VIEWER_STDOUT_WORLD,
+543                                    PETSC_VIEWER_ASCII_MATLAB);
+544       LIBMESH_CHKERRABORT(ierr);
+545 
+546       ierr = MatView (_mat, PETSC_VIEWER_STDOUT_WORLD);
+547       LIBMESH_CHKERRABORT(ierr);
+548     }
+549 
+550 
+554   ierr = LibMeshPetscViewerDestroy (&petsc_viewer);
+555   LIBMESH_CHKERRABORT(ierr);
+556 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::print_personal (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [virtual]\fP"
+Print the contents of the matrix to the screen with the PETSc viewer\&. This function only allows printing to standard out, this is because we have limited ourselves to one PETSc implementation for writing\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 563 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::comm, ierr, libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::processor_id()\&.
+.PP
+.nf
+564 {
+565   libmesh_assert (this->initialized());
+566 
+567   // Routine must be called in parallel on parallel matrices
+568   // and serial on serial matrices\&.
+569   semiparallel_only();
+570 
+571   // #ifndef NDEBUG
+572   //   if (os != std::cout)
+573   //     libMesh::err << "Warning! PETSc can only print to std::cout!" << std::endl;
+574   // #endif
+575 
+576   // Matrix must be in an assembled state to be printed
+577   this->close();
+578 
+579   PetscErrorCode ierr=0;
+580 
+581   // Print to screen if ostream is stdout
+582   if (os == std::cout)
+583     {
+584       ierr = MatView(_mat, PETSC_VIEWER_STDOUT_SELF);
+585       LIBMESH_CHKERRABORT(ierr);
+586     }
+587 
+588   // Otherwise, print to the requested file, in a roundabout way\&.\&.\&.
+589   else
+590     {
+591       // We will create a temporary filename, and file, for PETSc to
+592       // write to\&.
+593       std::string temp_filename;
+594 
+595       {
+596         // Template for temporary filename
+597         char c[] = "temp_petsc_matrix\&.XXXXXX";
+598 
+599         // Generate temporary, unique filename only on processor 0\&.  We will
+600         // use this filename for PetscViewerASCIIOpen, before copying it into
+601         // the user's stream
+602         if (this->processor_id() == 0)
+603           {
+604             int fd = mkstemp(c);
+605 
+606             // Check to see that mkstemp did not fail\&.
+607             if (fd == -1)
+608               libmesh_error();
+609 
+610             // mkstemp returns a file descriptor for an open file,
+611             // so let's close it before we hand it to PETSc!
+612             ::close (fd);
+613           }
+614 
+615         // Store temporary filename as string, makes it easier to broadcast
+616         temp_filename = c;
+617       }
+618 
+619       // Now broadcast the filename from processor 0 to all processors\&.
+620       this->comm()\&.broadcast(temp_filename);
+621 
+622       // PetscViewer object for passing to MatView
+623       PetscViewer petsc_viewer;
+624 
+625       // This PETSc function only takes a string and handles the opening/closing
+626       // of the file internally\&.  Since print_personal() takes a reference to
+627       // an ostream, we have to do an extra step\&.\&.\&.  print_personal() should probably
+628       // have a version that takes a string to get rid of this problem\&.
+629       ierr = PetscViewerASCIIOpen( this->comm()\&.get(),
+630                                    temp_filename\&.c_str(),
+631                                    &petsc_viewer);
+632       LIBMESH_CHKERRABORT(ierr);
+633 
+634       // Probably don't need to set the format if it's default\&.\&.\&.
+635       //      ierr = PetscViewerSetFormat (petsc_viewer,
+636       //   PETSC_VIEWER_DEFAULT);
+637       //      LIBMESH_CHKERRABORT(ierr);
+638 
+639       // Finally print the matrix using the viewer
+640       ierr = MatView (_mat, petsc_viewer);
+641       LIBMESH_CHKERRABORT(ierr);
+642 
+643       if (this->processor_id() == 0)
+644         {
+645           // Now the inefficient bit: open temp_filename as an ostream and copy the contents
+646           // into the user's desired ostream\&.  We can't just do a direct file copy, we don't even have the filename!
+647           std::ifstream input_stream(temp_filename\&.c_str());
+648           os << input_stream\&.rdbuf();  // The "most elegant" way to copy one stream into another\&.
+649           // os\&.close(); // close not defined in ostream
+650 
+651           // Now remove the temporary file
+652           input_stream\&.close();
+653           std::remove(temp_filename\&.c_str());
+654         }
+655     }
+656 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::reinit_submatrix (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This function is similar to the one above, but it allows you to reuse the existing sparsity pattern of 'submatrix' instead of reallocating it again\&. This should hopefully be more efficient if you are frequently extracting submatrices of the same size\&. 
+.PP
+Definition at line 382 of file sparse_matrix\&.h\&.
+.PP
+.nf
+385   {
+386     this->_get_submatrix(submatrix,
+387                          rows,
+388                          cols,
+389                          true); // true means REUSE submatrix
+390   }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::PetscMatrix\fP< T >::row_start () const\fC [virtual]\fP"
+return row_start, the index of the first matrix row stored on this processor 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 904 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::MacroFunctions::stop()\&.
+.PP
+.nf
+905 {
+906   libmesh_assert (this->initialized());
+907 
+908   PetscInt start=0, stop=0;
+909   PetscErrorCode ierr=0;
+910 
+911   ierr = MatGetOwnershipRange(_mat, &start, &stop);
+912   LIBMESH_CHKERRABORT(ierr);
+913 
+914   return static_cast<numeric_index_type>(start);
+915 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::PetscMatrix\fP< T >::row_stop () const\fC [virtual]\fP"
+return row_stop, the index of the last matrix row (+1) stored on this processor 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 920 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), libMesh::libmesh_assert(), and libMesh::MacroFunctions::stop()\&.
+.PP
+.nf
+921 {
+922   libmesh_assert (this->initialized());
+923 
+924   PetscInt start=0, stop=0;
+925   PetscErrorCode ierr=0;
+926 
+927   ierr = MatGetOwnershipRange(_mat, &start, &stop);
+928   LIBMESH_CHKERRABORT(ierr);
+929 
+930   return static_cast<numeric_index_type>(stop);
+931 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::set (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj, const Tvalue)\fC [virtual]\fP"
+Set the element \fC\fP(i,j) to \fCvalue\fP\&. Throws an error if the entry does not exist\&. Still, it is allowed to store zero values in non-existent fields\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 936 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+939 {
+940   libmesh_assert (this->initialized());
+941 
+942   PetscErrorCode ierr=0;
+943   PetscInt i_val=i, j_val=j;
+944 
+945   PetscScalar petsc_value = static_cast<PetscScalar>(value);
+946   ierr = MatSetValues(_mat, 1, &i_val, 1, &j_val,
+947                       &petsc_value, INSERT_VALUES);
+948   LIBMESH_CHKERRABORT(ierr);
+949 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::swap (\fBPetscMatrix\fP< T > &m_in)"
+Swaps the raw PETSc matrix context pointers\&. 
+.PP
+Definition at line 1113 of file petsc_matrix\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::_destroy_mat_on_exit, libMesh::PetscMatrix< T >::_mat, and libMesh::swap()\&.
+.PP
+.nf
+1114 {
+1115   std::swap(_mat, m_in\&._mat);
+1116   std::swap(_destroy_mat_on_exit, m_in\&._destroy_mat_on_exit);
+1117 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::update_sparsity_pattern (const \fBSparsityPattern::Graph\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Updates the matrix sparsity pattern\&. When your \fCSparseMatrix<T>\fP implementation does not need this data simply do not overload this method\&. 
+.PP
+Reimplemented in \fBlibMesh::EpetraMatrix< T >\fP, and \fBlibMesh::LaspackMatrix< T >\fP\&.
+.PP
+Definition at line 130 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::DofMap::attach_matrix()\&.
+.PP
+.nf
+130 {}
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::vector_mult (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const\fC [inherited]\fP"
+Multiplies the matrix with \fCarg\fP and stores the result in \fCdest\fP\&. 
+.PP
+Definition at line 191 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::NumericVector< T >::zero()\&.
+.PP
+.nf
+193 {
+194   dest\&.zero();
+195   this->vector_mult_add(dest,arg);
+196 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::vector_mult_add (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const\fC [inherited]\fP"
+Multiplies the matrix with \fCarg\fP and adds the result to \fCdest\fP\&. 
+.PP
+Definition at line 201 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::NumericVector< T >::add_vector()\&.
+.PP
+Referenced by libMesh::ImplicitSystem::weighted_sensitivity_adjoint_solve()\&.
+.PP
+.nf
+203 {
+204   /* This functionality is actually implemented in the \p
+205      NumericVector class\&.  */
+206   dest\&.add_vector(arg,*this);
+207 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::zero ()\fC [virtual]\fP"
+Set all entries to 0\&. This method retains sparsity structure\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 388 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+389 {
+390   libmesh_assert (this->initialized());
+391 
+392   semiparallel_only();
+393 
+394   PetscErrorCode ierr=0;
+395 
+396   PetscInt m_l, n_l;
+397 
+398   ierr = MatGetLocalSize(_mat,&m_l,&n_l);
+399   LIBMESH_CHKERRABORT(ierr);
+400 
+401   if (n_l)
+402     {
+403       ierr = MatZeroEntries(_mat);
+404       LIBMESH_CHKERRABORT(ierr);
+405     }
+406 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscMatrix\fP< T >::zero_rows (std::vector< \fBnumeric_index_type\fP > &rows, Tdiag_value = \fC0\&.0\fP)\fC [virtual]\fP"
+Set all row entries to 0 then puts diag_value in the diagonal entry 
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 409 of file petsc_matrix\&.C\&.
+.PP
+References ierr, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+410 {
+411   libmesh_assert (this->initialized());
+412 
+413   semiparallel_only();
+414 
+415   PetscErrorCode ierr=0;
+416 
+417 #if PETSC_RELEASE_LESS_THAN(3,1,1)
+418   if(!rows\&.empty())
+419     ierr = MatZeroRows(_mat, rows\&.size(), (PetscInt*)&rows[0], diag_value);
+420   else
+421     ierr = MatZeroRows(_mat, 0, PETSC_NULL, diag_value);
+422 #else
+423   // As of petsc-dev at the time of 3\&.1\&.0, MatZeroRows now takes two additional
+424   // optional arguments\&.  The optional arguments (x,b) can be used to specify the
+425   // solutions for the zeroed rows (x) and right hand side (b) to update\&.
+426   // Could be useful for setting boundary conditions\&.\&.\&.
+427   if(!rows\&.empty())
+428     ierr = MatZeroRows(_mat, rows\&.size(), (PetscInt*)&rows[0], diag_value, PETSC_NULL, PETSC_NULL);
+429   else
+430     ierr = MatZeroRows(_mat, 0, PETSC_NULL, diag_value, PETSC_NULL, PETSC_NULL);
+431 #endif
+432 
+433   LIBMESH_CHKERRABORT(ierr);
+434 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "template<typename T> bool \fBlibMesh::PetscMatrix\fP< T >::_destroy_mat_on_exit\fC [private]\fP"
+This boolean value should only be set to false for the constructor which takes a PETSc Mat object\&. 
+.PP
+Definition at line 391 of file petsc_matrix\&.h\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::swap()\&.
+.SS "template<typename T> \fBDofMap\fP const* \fBlibMesh::SparseMatrix\fP< T >::_dof_map\fC [protected]\fP, \fC [inherited]\fP"
+The \fC\fBDofMap\fP\fP object associated with this object\&. 
+.PP
+Definition at line 436 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::SparseMatrix< Number >::attach_dof_map()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T> bool \fBlibMesh::SparseMatrix\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating whether or not the matrix has been initialized\&. 
+.PP
+Definition at line 442 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::PetscMatrix< T >::get_transpose(), and libMesh::SparseMatrix< Number >::initialized()\&.
+.SS "template<typename T> Mat \fBlibMesh::PetscMatrix\fP< T >::_mat\fC [private]\fP"
+Petsc matrix datatype to store values 
+.PP
+Definition at line 385 of file petsc_matrix\&.h\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::PetscMatrix< T >::add(), libMesh::PetscMatrix< T >::get_transpose(), libMesh::PetscMatrix< T >::mat(), and libMesh::PetscMatrix< T >::swap()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

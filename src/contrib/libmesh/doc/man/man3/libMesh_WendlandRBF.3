@@ -1,0 +1,134 @@
+.TH "libMesh::WendlandRBF< SpaceDim, Continuity >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::WendlandRBF< SpaceDim, Continuity > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <radial_basis_functions\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBWendlandRBF\fP (const \fBReal\fP r_cut=1\&.)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBoperator()\fP (\fBReal\fP) const "
+.br
+.ti -1c
+.RI "template<> \fBReal\fP \fBoperator()\fP (\fBReal\fP rad) const"
+.br
+.ti -1c
+.RI "template<> \fBReal\fP \fBoperator()\fP (\fBReal\fP rad) const"
+.br
+.ti -1c
+.RI "template<> \fBReal\fP \fBoperator()\fP (\fBReal\fP rad) const"
+.br
+.ti -1c
+.RI "template<> \fBReal\fP \fBoperator()\fP (\fBReal\fP rad) const"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBReal\fP \fB_rcut\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<unsigned int SpaceDim, unsigned int Continuity>class libMesh::WendlandRBF< SpaceDim, Continuity >"
+Simple radial basis function\&. Constructor\&. Evaluate the radial basis function at the reqested location\&. Wendland's compactly supported Radial Basis Functions\&. 
+.PP
+Definition at line 71 of file radial_basis_functions\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<unsigned int SpaceDim, unsigned int Continuity> \fBlibMesh::WendlandRBF\fP< SpaceDim, Continuity >::\fBWendlandRBF\fP (const \fBReal\fPr_cut = \fC1\&.\fP)\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 81 of file radial_basis_functions\&.h\&.
+.PP
+.nf
+81                                       :
+82     _rcut (r_cut)
+83   { libmesh_experimental(); }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<unsigned int SpaceDim, unsigned int Continuity> \fBReal\fP \fBlibMesh::WendlandRBF\fP< SpaceDim, Continuity >::operator() (\fBReal\fP) const\fC [inline]\fP"
+Evaluate the radial basis function at the reqested location\&. 
+.PP
+Definition at line 88 of file radial_basis_functions\&.h\&.
+.PP
+.nf
+88 { libmesh_not_implemented(); return 0\&.; }
+.fi
+.SS "template<> \fBReal\fP \fBlibMesh::WendlandRBF\fP< 3, 0 >::operator() (\fBReal\fPrad) const\fC [inline]\fP"
+
+.PP
+Definition at line 97 of file radial_basis_functions\&.h\&.
+.PP
+.nf
+98 {
+99   if (rad > _rcut) return 0\&.;
+100 
+101   rad /= _rcut;
+102 
+103   return Utility::pow<2>(1\&.-rad);
+104 }
+.fi
+.SS "template<> \fBReal\fP \fBlibMesh::WendlandRBF\fP< 3, 2 >::operator() (\fBReal\fPrad) const\fC [inline]\fP"
+
+.PP
+Definition at line 108 of file radial_basis_functions\&.h\&.
+.PP
+.nf
+109 {
+110   if (rad > _rcut) return 0\&.;
+111 
+112   rad /= _rcut;
+113 
+114   return Utility::pow<4>(1\&.-rad)*(4\&.*rad + 1\&.);
+115 }
+.fi
+.SS "template<> \fBReal\fP \fBlibMesh::WendlandRBF\fP< 3, 4 >::operator() (\fBReal\fPrad) const\fC [inline]\fP"
+
+.PP
+Definition at line 119 of file radial_basis_functions\&.h\&.
+.PP
+.nf
+120 {
+121   if (rad > _rcut) return 0\&.;
+122 
+123   rad /= _rcut;
+124 
+125   return Utility::pow<6>(1\&.-rad)*((35\&.*rad + 18\&.)*rad + 3\&.);
+126 }
+.fi
+.SS "template<> \fBReal\fP \fBlibMesh::WendlandRBF\fP< 3, 8 >::operator() (\fBReal\fPrad) const\fC [inline]\fP"
+
+.PP
+Definition at line 130 of file radial_basis_functions\&.h\&.
+.PP
+.nf
+131 {
+132   if (rad > _rcut) return 0\&.;
+133 
+134   rad /= _rcut;
+135 
+136   return Utility::pow<8>(1\&.-rad)*(((32\&.*rad + 25\&.)*rad + 8\&.)*rad + 1\&.);
+137 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<unsigned int SpaceDim, unsigned int Continuity> const \fBReal\fP \fBlibMesh::WendlandRBF\fP< SpaceDim, Continuity >::_rcut\fC [private]\fP"
+
+.PP
+Definition at line 74 of file radial_basis_functions\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

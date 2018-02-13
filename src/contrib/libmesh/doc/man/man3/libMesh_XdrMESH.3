@@ -1,0 +1,1138 @@
+.TH "libMesh::XdrMESH" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::XdrMESH \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <xdr_mesh\&.h>\fP
+.PP
+Inherits \fBlibMesh::XdrMGF\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBXdrIO_TYPE\fP { \fBUNKNOWN\fP = -1, \fBENCODE\fP =0, \fBDECODE\fP, \fBW_ASCII\fP, \fBR_ASCII\fP }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXdrMESH\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (\fBXdrIO_TYPE\fP type, const char *fn, int icnt, int \fBdim\fP=3)"
+.br
+.ti -1c
+.RI "\fB~XdrMESH\fP ()"
+.br
+.ti -1c
+.RI "int \fBheader\fP (\fBXdrMHEAD\fP *hd)"
+.br
+.ti -1c
+.RI "int \fBIcon\fP (int *array, int numvar, int num)"
+.br
+.ti -1c
+.RI "int \fBcoord\fP (\fBReal\fP *array, int \fBdim\fP, int size)"
+.br
+.ti -1c
+.RI "int \fBBC\fP (int *array, int size)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (\fBXdrIO_TYPE\fP t, const char *fn, const char *type, int icnt)"
+.br
+.ti -1c
+.RI "void \fBfini\fP ()"
+.br
+.ti -1c
+.RI "int \fBdataBlk\fP (int *array, int numvar, int size)"
+.br
+.ti -1c
+.RI "int \fBdataBlk\fP (\fBReal\fP *array, int numvar, int size)"
+.br
+.ti -1c
+.RI "\fBLegacyXdrIO::FileFormat\fP \fBget_orig_flag\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_orig_flag\fP (\fBLegacyXdrIO::FileFormat\fP in_orig_flag)"
+.br
+.ti -1c
+.RI "void \fBset_num_levels\fP (unsigned int num_levels)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_num_levels\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fB_num_levels\fP"
+.br
+.ti -1c
+.RI "\fBXdrIO_TYPE\fP \fBm_type\fP"
+.br
+.ti -1c
+.RI "XDR * \fBmp_xdr_handle\fP"
+.br
+.ti -1c
+.RI "\fBLegacyXdrIO::FileFormat\fP \fBorig_flag\fP"
+.br
+.ti -1c
+.RI "std::ifstream \fBmp_in\fP"
+.br
+.ti -1c
+.RI "std::ofstream \fBmp_out\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBm_dim\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBXdrMESH\fP\fP class\&. This class is responsible for reading/writing information about the mesh to \fCxdr\fP style binary files\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Bill Barth, Robert McLay\&. 
+.RE
+.PP
+
+.PP
+Definition at line 41 of file xdr_mesh\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::XdrMGF::XdrIO_TYPE\fP\fC [inherited]\fP"
+This enum specifies the access permission which will be acquired for the current \fCxdr\fP file\&. Note that it is only possible to read (\fCDECODE\fP) or write (\fCENCODE\fP) but not both\&. For ASCII type files, use WRITE or READ instead! 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIUNKNOWN \fP\fP
+.TP
+\fB\fIENCODE \fP\fP
+.TP
+\fB\fIDECODE \fP\fP
+.TP
+\fB\fIW_ASCII \fP\fP
+.TP
+\fB\fIR_ASCII \fP\fP
+.PP
+Definition at line 98 of file xdr_mgf\&.h\&.
+.PP
+.nf
+98                   {UNKNOWN = -1, ENCODE=0, DECODE,
+99                    W_ASCII , R_ASCII};
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::XdrMESH::XdrMESH ()\fC [inline]\fP"
+Constructor\&. Initializes \fCm_dim\fP to -1\&. 
+.PP
+Definition at line 49 of file xdr_mesh\&.h\&.
+.PP
+.nf
+49 : m_dim(-1) {}
+.fi
+.SS "libMesh::XdrMESH::~XdrMESH ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 67 of file xdr_mesh\&.h\&.
+.PP
+.nf
+67 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "int libMesh::XdrMESH::BC (int *array, intsize)\fC [inline]\fP"
+Read/Write a BC of appropriate size
+.PP
+\fBParameters:\fP
+.RS 4
+\fIarray\fP Pointer to an array of \fCReals\fP 
+.br
+\fIsize\fP Size of \fCarray\fP (number of elements) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+3*size 
+.RE
+.PP
+
+.PP
+Definition at line 105 of file xdr_mesh\&.h\&.
+.PP
+References libMesh::XdrMGF::dataBlk()\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+105 { return dataBlk(array, 3, size);}
+.fi
+.SS "int libMesh::XdrMESH::coord (\fBReal\fP *array, intdim, intsize)\fC [inline]\fP"
+Read/Write a coord of appropriate size\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIarray\fP Pointer to an array of \fCReals\fP 
+.br
+\fIsize\fP Size of \fCarray\fP (number of elements) 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+dim*size 
+.RE
+.PP
+
+.PP
+Definition at line 96 of file xdr_mesh\&.h\&.
+.PP
+References libMesh::XdrMGF::dataBlk()\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+96 { return dataBlk(array, dim, size);}
+.fi
+.SS "int libMesh::XdrMGF::dataBlk (int *array, intnumvar, intsize)\fC [inherited]\fP"
+Reads/Writes a block of \fCints\fP to/from the current \fCxdr\fP file/file handle\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIarray\fP Pointer to data to be read/written 
+.br
+\fInumvar\fP The total number of variables (size of the array) 
+.br
+\fIsize\fP The size of each individual variable in the array 
+.RE
+.PP
+
+.PP
+Definition at line 278 of file xdr_mgf\&.C\&.
+.PP
+References libMesh::XdrMGF::DECODE, libMesh::XdrMGF::ENCODE, libMesh::libmesh_assert(), libMesh::XdrMGF::m_type, libMesh::XdrMGF::mp_in, libMesh::XdrMGF::mp_out, libMesh::XdrMGF::mp_xdr_handle, libMesh::XdrMGF::R_ASCII, and libMesh::XdrMGF::W_ASCII\&.
+.PP
+Referenced by BC(), coord(), Icon(), and libMesh::XdrSOLN::values()\&.
+.PP
+.nf
+279 {
+280   int totalSize = numvar*size;
+281 
+282   switch (m_type)
+283     {
+284 
+285 #ifdef LIBMESH_HAVE_XDR
+286 
+287     case (XdrMGF::DECODE):
+288     case (XdrMGF::ENCODE):
+289       {
+290         xdr_vector(mp_xdr_handle,
+291                    (char *) &array[0],
+292                    totalSize,
+293                    sizeof(int),
+294                    (xdrproc_t) xdr_int);
+295         break;
+296       }
+297 
+298 #endif
+299 
+300     case (XdrMGF::W_ASCII):
+301       {
+302         for (int i=0; i<size; i++)
+303           {
+304             for (int j=0; j<numvar; j++)
+305               mp_out << array[i*numvar + j] << " ";
+306 
+307             mp_out << '\n';
+308           }
+309 
+310         mp_out\&.flush();
+311         break;
+312       }
+313 
+314     case (XdrMGF::R_ASCII):
+315       {
+316         libmesh_assert (mp_in\&.good());
+317 
+318         for (int i=0; i<size; i++)
+319           {
+320             for (int j=0; j<numvar; j++)
+321               {
+322                 mp_in >> array[i*numvar + j];
+323               }
+324 
+325             mp_in\&.ignore(); // Read newline
+326           }
+327 
+328         break;
+329       }
+330 
+331     default:
+332       // Unknown access type
+333       libmesh_error();
+334     }
+335 
+336   return totalSize;
+337 }
+.fi
+.SS "int libMesh::XdrMGF::dataBlk (\fBReal\fP *array, intnumvar, intsize)\fC [inherited]\fP"
+Read/Writes a block of \fCReals\fP to/from the current \fCxdr\fP file/file handle\&. 
+.PP
+Definition at line 341 of file xdr_mgf\&.C\&.
+.PP
+References libMesh::XdrMGF::DECODE, libMesh::XdrMGF::ENCODE, libMesh::libmesh_assert(), libMesh::XdrMGF::m_type, libMesh::XdrMGF::mp_in, libMesh::XdrMGF::mp_out, libMesh::XdrMGF::mp_xdr_handle, libMesh::XdrMGF::R_ASCII, libMesh::Real, and libMesh::XdrMGF::W_ASCII\&.
+.PP
+.nf
+342 {
+343   int totalSize = numvar*size;
+344 
+345   // If this function is called by coord(),
+346   // numvar is the problem dimension, and
+347   // size is the number of nodes in the problem\&.
+348 
+349   //libMesh::out << "Total amount of data to be written: " << totalSize << std::endl;
+350 
+351   switch (m_type)
+352     {
+353 
+354 #ifdef LIBMESH_HAVE_XDR
+355 
+356     case (XdrMGF::DECODE):
+357     case (XdrMGF::ENCODE):
+358       {
+359         // FIXME - this is probably broken for Real == long double
+360         // RHS
+361         xdr_vector(mp_xdr_handle,
+362                    (char *) &array[0],
+363                    totalSize,
+364                    sizeof(Real),
+365                    (xdrproc_t) xdr_REAL);
+366       }
+367 
+368 #endif
+369 
+370     case (XdrMGF::W_ASCII):
+371       {
+372         // Save stream flags
+373         std::ios_base::fmtflags out_flags = mp_out\&.flags();
+374 
+375         // We will use scientific notation with a precision of 16
+376         // digits in the following output\&.  The desired precision and
+377         // format will automatically determine the width\&.
+378         mp_out << std::scientific
+379                << std::setprecision(16);
+380 
+381         for (int i=0; i<size; i++)
+382           {
+383             for (int j=0; j<numvar; j++)
+384               mp_out << array[i*numvar + j] << " \t";
+385 
+386             mp_out << '\n';
+387           }
+388 
+389         // Restore stream flags
+390         mp_out\&.flags(out_flags);
+391 
+392         mp_out\&.flush();
+393         break;
+394       }
+395 
+396     case (XdrMGF::R_ASCII):
+397       {
+398         libmesh_assert (mp_in\&.good());
+399 
+400         for (int i=0; i<size; i++)
+401           {
+402             libmesh_assert (mp_in\&.good());
+403 
+404             for (int j=0; j<numvar; j++)
+405               mp_in >> array[i*numvar + j];
+406 
+407             mp_in\&.ignore(); // Read newline
+408           }
+409 
+410         break;
+411       }
+412 
+413     default:
+414       // Unknown access type
+415       libmesh_error();
+416     }
+417 
+418   return totalSize;
+419 }
+.fi
+.SS "void libMesh::XdrMGF::fini ()\fC [inherited]\fP"
+Finalizes operations on the current \fCxdr\fP file handle, and closes the \fCxdr\fP file\&.
+.PP
+Uses \fCxdr_destroy\fP found in \fCrpc/rpc\&.h\fP\&. 
+.PP
+Definition at line 35 of file xdr_mgf\&.C\&.
+.PP
+References libMesh::XdrMGF::mp_fp, and libMesh::XdrMGF::mp_xdr_handle\&.
+.PP
+Referenced by libMesh::XdrMGF::init(), and libMesh::XdrMGF::~XdrMGF()\&.
+.PP
+.nf
+36 {
+37 
+38 #ifdef LIBMESH_HAVE_XDR
+39 
+40   if (mp_xdr_handle)
+41     {
+42       //libMesh::out << "Destroying XDR file handle\&." << std::endl;
+43       xdr_destroy(mp_xdr_handle);
+44     }
+45 
+46   //libMesh::out << "Deleting the file handle pointer\&." << std::endl;
+47   delete mp_xdr_handle;
+48 
+49   mp_xdr_handle = NULL;
+50 
+51 #endif
+52 
+53   if (mp_fp)
+54     {
+55       //libMesh::out << "Closing file\&." << std::endl;
+56       std::fflush(mp_fp);
+57       std::fclose(mp_fp);
+58     }
+59 
+60   mp_fp = NULL;
+61 }
+.fi
+.SS "unsigned int libMesh::XdrMGF::get_num_levels ()\fC [inline]\fP, \fC [inherited]\fP"
+Get number of levels 
+.PP
+Definition at line 190 of file xdr_mgf\&.h\&.
+.PP
+References libMesh::XdrMGF::_num_levels\&.
+.PP
+Referenced by header(), libMesh::XdrMGF::init(), and libMesh::LegacyXdrIO::read_mesh()\&.
+.PP
+.nf
+190 { return _num_levels; }
+.fi
+.SS "\fBLegacyXdrIO::FileFormat\fP libMesh::XdrMGF::get_orig_flag () const\fC [inline]\fP, \fC [inherited]\fP"
+Get the originator flag\&. 
+.PP
+Definition at line 174 of file xdr_mgf\&.h\&.
+.PP
+References libMesh::XdrMGF::orig_flag\&.
+.PP
+Referenced by libMesh::XdrMGF::init(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+174 { return orig_flag; }
+.fi
+.SS "int libMesh::XdrMESH::header (\fBXdrMHEAD\fP *hd)"
+Read/Write the mesh_base\&.header\&. Uses \fCxdr_int\fP found in \fCrpc/rpc\&.h\fP\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIhd\fP Pointer to an \fCxdr\fP mesh_base\&.header object 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+1 on success 
+.RE
+.PP
+
+.PP
+Definition at line 28 of file xdr_mesh\&.C\&.
+.PP
+References libMesh::XdrHEAD::cpyString(), libMesh::XdrMGF::DECODE, libMesh::XdrMGF::ENCODE, libMesh::err, libMesh::XdrMHEAD::get_block_elt_types(), libMesh::XdrMHEAD::get_n_blocks(), libMesh::XdrMHEAD::get_num_elem_each_block(), libMesh::XdrMGF::get_num_levels(), libMesh::XdrHEAD::getId(), libMesh::XdrHEAD::getTitle(), libMesh::libmesh_assert(), libMesh::XdrHEAD::m_numBCs, libMesh::XdrHEAD::m_numel, libMesh::XdrHEAD::m_numNodes, libMesh::XdrHEAD::m_strSize, libMesh::XdrHEAD::m_sumWghts, libMesh::XdrMGF::m_type, libMesh::XdrHEAD::mp_id, libMesh::XdrMGF::mp_in, libMesh::XdrMGF::mp_out, libMesh::XdrHEAD::mp_title, libMesh::XdrMGF::mp_xdr_handle, libMesh::XdrMGF::orig_flag, libMesh::XdrMGF::R_ASCII, libMesh::XdrMHEAD::set_block_elt_types(), libMesh::XdrMHEAD::set_n_blocks(), libMesh::XdrMHEAD::set_num_elem_each_block(), libMesh::XdrHEAD::setId(), libMesh::XdrHEAD::setTitle(), and libMesh::XdrMGF::W_ASCII\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+29 {
+30   // Temporary variables to facilitate stream reading
+31   const int comm_len= 256;
+32   char comment[comm_len];
+33 
+34   switch (m_type)
+35     {
+36 
+37 #ifdef LIBMESH_HAVE_XDR
+38 
+39     case (XdrMGF::DECODE):
+40     case (XdrMGF::ENCODE):
+41       {
+42         xdr_int(mp_xdr_handle, &(hd->m_numel));
+43         xdr_int(mp_xdr_handle, &(hd->m_numNodes));
+44         xdr_int(mp_xdr_handle, &(hd->m_sumWghts));
+45         xdr_int(mp_xdr_handle, &(hd->m_numBCs));
+46         xdr_int(mp_xdr_handle, &(hd->m_strSize));
+47         break;
+48       }
+49 
+50 #endif
+51 
+52     case (XdrMGF::W_ASCII):
+53       {
+54         mp_out << hd->m_numel    << "\t # Num\&. Elements\n";
+55         mp_out << hd->m_numNodes << "\t # Num\&. Nodes\n";
+56         mp_out << hd->m_sumWghts << "\t # Sum of Element Weights\n";
+57         mp_out << hd->m_numBCs   << "\t # Num\&. Boundary Conds\&.\n";
+58         mp_out << hd->m_strSize  << "\t # String Size (ignore)\n";
+59         break;
+60       }
+61 
+62     case (XdrMGF::R_ASCII):
+63       {
+64         libmesh_assert (mp_in\&.good());
+65 
+66         mp_in >> hd->m_numel    ; mp_in\&.getline(comment, comm_len);
+67         mp_in >> hd->m_numNodes ; mp_in\&.getline(comment, comm_len);
+68         mp_in >> hd->m_sumWghts ; mp_in\&.getline(comment, comm_len);
+69         mp_in >> hd->m_numBCs   ; mp_in\&.getline(comment, comm_len);
+70         mp_in >> hd->m_strSize  ; mp_in\&.getline(comment, comm_len);
+71 
+72         libmesh_assert(mp_in\&.good());
+73 
+74         break;
+75       }
+76 
+77     default:
+78       // Unknown access type
+79       libmesh_error();
+80 
+81     }
+82 
+83   // Let's write the augmented header information
+84   // before we write the title and id string
+85 
+86   // Both DEAL and LIBM style files have augmented headers\&.
+87   if ((orig_flag == 0) || (orig_flag == 2))
+88     {
+89 
+90       switch (m_type)
+91         {
+92 
+93 #ifdef LIBMESH_HAVE_XDR
+94 
+95         case (XdrMGF::ENCODE):
+96         case (XdrMGF::DECODE):
+97           {
+98             // this used to be 0\&.  How did that work?
+99             unsigned int temp_n_blocks = hd->get_n_blocks();
+100             xdr_u_int(mp_xdr_handle, &temp_n_blocks);
+101             hd->set_n_blocks(temp_n_blocks);
+102 
+103             // The number of blocks (i\&.e\&. the number of element types)
+104             // for any mesh must always
+105             // be at least 1\&.
+106             libmesh_assert_not_equal_to (hd->get_n_blocks(), 0);
+107             break;
+108           }
+109 
+110 #endif
+111 
+112         case (XdrMGF::W_ASCII):
+113           {
+114             mp_out << hd->get_n_blocks() << "\t # Num\&. Element Blocks\&.\n";
+115             break;
+116           }
+117 
+118         case (XdrMGF::R_ASCII):
+119           {
+120             libmesh_assert (mp_in\&.good());
+121             unsigned int temp_n_blocks=0;
+122             mp_in >> temp_n_blocks;
+123             hd->set_n_blocks(temp_n_blocks);
+124             mp_in\&.getline(comment, comm_len);
+125             break;
+126           }
+127 
+128         default:
+129           // Unknown access type
+130           libmesh_error();
+131         }
+132 
+133 
+134       std::vector<ElemType> et;
+135       hd->get_block_elt_types(et);
+136 
+137 
+138       // Note:  If DECODING or READING, allocate space in the vector
+139       if ((m_type == DECODE) || (m_type == R_ASCII))
+140         et\&.resize(hd->get_n_blocks());
+141 
+142 
+143       switch (m_type)
+144         {
+145 
+146 #ifdef LIBMESH_HAVE_XDR
+147 
+148         case (XdrMGF::ENCODE):
+149         case (XdrMGF::DECODE):
+150           {
+151             xdr_vector(mp_xdr_handle,
+152                        (char *) &et[0],
+153                        et\&.size(),
+154                        sizeof(unsigned int),
+155                        (xdrproc_t) xdr_u_int);
+156             break;
+157           }
+158 
+159 #endif
+160 
+161         case (XdrMGF::W_ASCII):
+162           {
+163             for (unsigned int i=0; i<hd->get_n_blocks(); i++)
+164               mp_out << et[i] << " ";
+165 
+166             mp_out << "\t # Element types in each block\&.\n";
+167             break;
+168           }
+169 
+170         case (XdrMGF::R_ASCII):
+171           {
+172             libmesh_assert (mp_in\&.good());
+173 
+174             for (unsigned int i=0; i<hd->get_n_blocks(); i++)
+175               {
+176                 // convoluted way of doing it to
+177                 // satisfy icc
+178                 unsigned int type;
+179 
+180                 mp_in >> type ;
+181 
+182                 et[i] = static_cast<ElemType>(type) ;
+183               }
+184             mp_in\&.getline(comment, comm_len);
+185             break;
+186           }
+187 
+188         default:
+189           // Unknown access type
+190           libmesh_error();
+191         }
+192 
+193 
+194 
+195       // Note:  If DECODING or READING, you need to set the value
+196       // in the header data structure\&.
+197       if ((m_type == DECODE) || (m_type == R_ASCII))
+198         hd->set_block_elt_types(et);
+199 
+200 
+201       std::vector<unsigned int> neeb;
+202       hd->get_num_elem_each_block(neeb);
+203 
+204       // If DECODING or READING, allocate space for the vector
+205       if ((m_type == DECODE) || (m_type == R_ASCII))
+206         neeb\&.resize( hd->get_n_blocks()*(this->get_num_levels()+1) );
+207 
+208       switch (m_type)
+209         {
+210 
+211 #ifdef LIBMESH_HAVE_XDR
+212 
+213         case (XdrMGF::ENCODE):
+214         case (XdrMGF::DECODE):
+215           {
+216             xdr_vector(mp_xdr_handle,
+217                        (char *) &neeb[0],
+218                        neeb\&.size(),
+219                        sizeof(unsigned int),
+220                        (xdrproc_t) xdr_u_int);
+221           }
+222 
+223 #endif
+224 
+225         case (XdrMGF::W_ASCII):
+226           {
+227             for (unsigned int i=0; i<neeb\&.size(); i++)
+228               mp_out << neeb[i] << " ";
+229 
+230             mp_out << "\t # Num\&. of elements in each block at each level\&.\n";
+231             break;
+232           }
+233 
+234         case (XdrMGF::R_ASCII):
+235           {
+236 
+237             // We will treat this line as containing
+238             // 1\&.) The number of elements in each block OR
+239             // 2\&.) The number of elements at each level in each block
+240             // Therefore, we don't know a-priori how many ints to read\&.
+241 
+242             // Get the full line from the stream up to the newline
+243             mp_in\&.getline(comment, comm_len);
+244 
+245             // Construct a char buffer to hold the tokens as we
+246             // process them, and construct a std::string object and
+247             // a std::stringstream object for tokenizing this line\&.
+248             char token[comm_len];
+249             std::string s_temp(comment);
+250             std::stringstream ss(s_temp);
+251 
+252             // Resize the neeb vector to zero so we can push back
+253             // values onto it\&.  Note that we are using a tokenizer
+254             // scheme again here to read the line, but it's not entirely
+255             // necessary since we know the size neeb should have\&.
+256             neeb\&.resize(0);
+257 
+258             // Process the tokens one at a time
+259             while (ss >> token)
+260               {
+261                 // If you reach the hash, the rest of the line is a comment,
+262                 // so quit reading\&.
+263                 if (token[0] == '#')
+264                   break;
+265 
+266                 // If you reach an alphabetic character, this is an error
+267                 if (!isdigit(token[0]))
+268                   {
+269                     libMesh::err << "Error: Unrecognized character detected\&."
+270                                  << std::endl;
+271                     libmesh_error();
+272                   }
+273 
+274                 // Otherwise, add the value to the neeb vector
+275                 neeb\&.push_back( std::atoi(token) );
+276               }
+277 
+278             // Be sure you have the right number of entries in neeb
+279             libmesh_assert_equal_to (neeb\&.size(), (hd->get_n_blocks() * (this->get_num_levels()+1)));
+280 
+281             break;
+282           }
+283 
+284         default:
+285           // Unknown access type
+286           libmesh_error();
+287         }
+288 
+289       if ((m_type == DECODE) || (m_type == R_ASCII))
+290         hd->set_num_elem_each_block(neeb);
+291     }
+292 
+293 
+294   else if (orig_flag == 1) // MGF originator
+295     {
+296     }
+297   else  // Unknown Originator!
+298     {
+299       libmesh_error();
+300     }
+301 
+302 
+303 
+304 
+305   // Write the ID and TITLE strings (can be safely ignored)
+306   switch (m_type)
+307     {
+308 
+309 #ifdef LIBMESH_HAVE_XDR
+310 
+311     case (XdrMGF::ENCODE):
+312     case (XdrMGF::DECODE):
+313       {
+314         char* temp = hd->cpyString(hd->getId());
+315         xdr_string(mp_xdr_handle,&temp, ((m_type == XdrMGF::ENCODE) ? std::strlen(temp) : hd->m_strSize));
+316         hd->setId(temp);
+317         delete [] temp;
+318 
+319         temp = hd->cpyString(hd->getTitle());
+320 
+321         xdr_string(mp_xdr_handle,&temp, ((m_type == XdrMGF::ENCODE) ? std::strlen(temp) : hd->m_strSize));
+322         hd->setTitle(temp);
+323         delete [] temp;
+324         break;
+325       }
+326 
+327 #endif
+328 
+329     case (XdrMGF::W_ASCII):
+330       {
+331         mp_out << hd->mp_id    << '\n';
+332         mp_out << hd->mp_title << '\n';
+333         break;
+334       }
+335 
+336     case (XdrMGF::R_ASCII):
+337       {
+338         libmesh_assert (mp_in\&.good());
+339 
+340         mp_in\&.getline(comment, comm_len);
+341         hd->setId(comment);
+342 
+343         libmesh_assert (mp_in\&.good());
+344 
+345         mp_in\&.getline(comment, comm_len);
+346         hd->setTitle(comment);
+347 
+348         break;
+349       }
+350 
+351     default:
+352       // Unknown access type
+353       libmesh_error();
+354     }
+355 
+356   return 1;
+357 }
+.fi
+.SS "int libMesh::XdrMESH::Icon (int *array, intnumvar, intnum)\fC [inline]\fP"
+Read/Write an integer connectivity array
+.PP
+\fBParameters:\fP
+.RS 4
+\fIarray\fP Pointer to an array of \fCints\fP 
+.br
+\fInumvar\fP Total number of variables to be read/written 
+.br
+\fInum\fP Basically a dummy parameter 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+numvar*num 
+.RE
+.PP
+
+.PP
+Definition at line 87 of file xdr_mesh\&.h\&.
+.PP
+References libMesh::XdrMGF::dataBlk()\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+87 { return dataBlk(array, numvar, num);}
+.fi
+.SS "void libMesh::XdrMESH::init (\fBXdrIO_TYPE\fPtype, const char *fn, inticnt, intdim = \fC3\fP)\fC [inline]\fP"
+Calls the \fCinit\fP method in the parent class, \fC\fBXdrMGF\fP\fP with the appropriate parameters\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fItype\fP One of: \fCUNKNOWN\fP, \fCENCODE\fP, \fCDECODE\fP 
+.br
+\fIfn\fP const char pointer which points to the filename 
+.br
+\fIicnt\fP Number to be appended to file e\&.g\&. \fCname\&.mesh\&.0000\fP 
+.br
+\fIdim\fP Problem dimension (always three in MGF) 
+.RE
+.PP
+
+.PP
+Definition at line 61 of file xdr_mesh\&.h\&.
+.PP
+References libMesh::dim, libMesh::XdrMGF::init(), and m_dim\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+62   { XdrMGF::init(type, fn, "mesh", icnt); m_dim = dim;}
+.fi
+.SS "void libMesh::XdrMGF::init (\fBXdrMGF::XdrIO_TYPE\fPt, const char *fn, const char *type, inticnt)\fC [inherited]\fP"
+Initialization of the \fCxdr\fP file\&. This function performs the following operations: {itemize}  Closes the old \fCxdr\fP file if necessary\&.
+.PP
+Creates a new \fCxdr\fP file name and opens this file\&.
+.PP
+Opens the appropriate \fCxdr\fP file handle\&.
+.PP
+Reads/Writes a signature to the file\&.
+.PP
+{itemize} 
+.PP
+Definition at line 68 of file xdr_mgf\&.C\&.
+.PP
+References libMesh::LegacyXdrIO::DEAL, libMesh::XdrMGF::DECODE, libMesh::XdrMGF::ENCODE, libMesh::err, libMesh::XdrMGF::fini(), libMesh::XdrMGF::get_num_levels(), libMesh::XdrMGF::get_orig_flag(), libMesh::LegacyXdrIO::LIBM, libMesh::XdrMGF::m_type, libMesh::LegacyXdrIO::MGF, libMesh::XdrMGF::mp_fp, libMesh::XdrMGF::mp_in, libMesh::XdrMGF::mp_out, libMesh::XdrMGF::mp_xdr_handle, libMesh::Quality::name(), libMesh::XdrMGF::orig_flag, libMesh::out, libMesh::XdrMGF::R_ASCII, libMesh::XdrMGF::tokenize_first_line(), and libMesh::XdrMGF::W_ASCII\&.
+.PP
+Referenced by libMesh::XdrSOLN::init(), and init()\&.
+.PP
+.nf
+69 {
+70   m_type=t;
+71 
+72   // Close old file if necessary
+73   if (mp_fp) this->fini();
+74 
+75 
+76   // Open file
+77   switch (m_type)
+78     {
+79 
+80 #ifdef LIBMESH_HAVE_XDR
+81 
+82     case (XdrMGF::ENCODE):
+83     case (XdrMGF::DECODE):
+84       {
+85         mp_fp = fopen (fn, (m_type == ENCODE) ? "w" : "r");
+86 
+87         // Make sure the file is ready for use
+88         if (!mp_fp)
+89           {
+90             libMesh::err << "XDR Error: Accessing file: "
+91                          << fn
+92                          << " failed\&."
+93                          << std::endl;
+94             libmesh_error();
+95           }
+96 
+97         // Create the XDR handle
+98         mp_xdr_handle = new XDR;
+99         xdrstdio_create(mp_xdr_handle,
+100                         mp_fp,
+101                         ((m_type == ENCODE) ? XDR_ENCODE : XDR_DECODE));
+102 
+103         break;
+104       }
+105 
+106 #endif
+107 
+108     case (XdrMGF::R_ASCII):
+109       {
+110         mp_in\&.open(fn, std::ios::in);
+111 
+112         // Make sure it opened correctly
+113         if (!mp_in\&.good())
+114           libmesh_file_error(fn);
+115 
+116         break;
+117       }
+118 
+119     case (XdrMGF::W_ASCII):
+120       {
+121         mp_out\&.open(fn, std::ios::out);
+122 
+123         // Make sure it opened correctly
+124         if (!mp_out\&.good())
+125           libmesh_file_error(fn);
+126 
+127         break;
+128       }
+129 
+130     default:
+131       {
+132         libMesh::out << "Unrecognized file access type!" << std::endl;
+133         libmesh_error();
+134       }
+135     }
+136 
+137 
+138 
+139 
+140 
+141   // Read/Write the file signature
+142   const int  bufLen = 12;
+143   char       buf[bufLen+1];
+144 
+145   switch (m_type)
+146     {
+147 
+148 #ifdef LIBMESH_HAVE_XDR
+149 
+150     case (XdrMGF::ENCODE):
+151       {
+152         char* p = &buf[0];
+153         const LegacyXdrIO::FileFormat orig = this->get_orig_flag();
+154 
+155         std::ostringstream name;
+156         if (orig == LegacyXdrIO::DEAL)
+157           name << "DEAL 003:003";
+158 
+159         else if (orig == LegacyXdrIO::MGF)
+160           name << "MGF  002:000";
+161 
+162         else if (orig == LegacyXdrIO::LIBM)
+163           name << "LIBM " << this->get_num_levels();
+164 
+165         else
+166           libmesh_error();
+167 
+168         // Fill the buffer
+169         std::sprintf(&buf[0], "%s", name\&.str()\&.c_str());
+170 
+171         xdr_string(mp_xdr_handle, &p, bufLen);  // Writes binary signature
+172 
+173         break;
+174       }
+175 
+176     case (XdrMGF::DECODE):
+177       {
+178         char* p = &buf[0];
+179         xdr_string(mp_xdr_handle, &p, bufLen); // Reads binary signature
+180 
+181         // Set the number of levels used in the mesh
+182         this->tokenize_first_line(p);
+183 
+184         break;
+185       }
+186 
+187 #endif
+188 
+189     case (XdrMGF::W_ASCII):
+190       {
+191         const LegacyXdrIO::FileFormat orig = this->get_orig_flag();
+192 
+193         if (orig == LegacyXdrIO::DEAL)
+194           std::sprintf(&buf[0], "%s %03d:%03d", "DEAL", 3, 3);
+195 
+196         else if (orig == LegacyXdrIO::MGF)
+197           std::sprintf(&buf[0], "%s %03d:%03d", "MGF ", 2, 0);
+198 
+199         else if (orig == LegacyXdrIO::LIBM)
+200           std::sprintf(&buf[0], "%s %d", "LIBM", this->get_num_levels());
+201 
+202         mp_out << buf << '\n';
+203 
+204         break;
+205       }
+206 
+207     case (XdrMGF::R_ASCII):
+208       {
+209 
+210 #ifdef __HP_aCC
+211         // weirdly, _only_ here aCC
+212         // is not fond of mp_in\&.getline()
+213         // however, using mp_in\&.getline()
+214         // further below is ok\&.\&.\&.
+215         std::string buf_buf;
+216         std::getline (mp_in, buf_buf, '\n');
+217         libmesh_assert_less_equal (buf_buf\&.size(), bufLen);
+218 
+219         buf_buf\&.copy (buf, std::string::npos);
+220 #else
+221 
+222         // Here we first use getline() to grab the very
+223         // first line of the file into a char buffer\&.  Then
+224         // this line is tokenized to look for:
+225         // 1\&.) The name LIBM, which specifies the new Mesh style\&.
+226         // 2\&.) The number of levels in the Mesh which is being read\&.
+227         // Note that "buf" will be further processed below, here we
+228         // are just attempting to get the number of levels\&.
+229         mp_in\&.getline(buf, bufLen+1);
+230 
+231 #endif
+232 
+233         // Determine the number of levels in this mesh
+234         this->tokenize_first_line(buf);
+235 
+236         break;
+237       }
+238 
+239     default:
+240       libmesh_error();
+241     }
+242 
+243 
+244 
+245   // If you are reading or decoding, process the signature
+246   if ((m_type == R_ASCII) || (m_type == DECODE))
+247     {
+248       char name[5];
+249       std::strncpy(name, &buf[0], 4);
+250       name[4] = '\0';
+251 
+252       if (std::strcmp (name, "DEAL") == 0)
+253         {
+254           this->orig_flag = LegacyXdrIO::DEAL; // 0 is the DEAL identifier by definition
+255         }
+256       else if (std::strcmp (name, "MGF ") == 0)
+257         {
+258           this->orig_flag = LegacyXdrIO::MGF; // 1 is the MGF identifier by definition
+259         }
+260       else if (std::strcmp (name, "LIBM") == 0)
+261         {
+262           this->orig_flag = LegacyXdrIO::LIBM; // the New and Improved XDA
+263         }
+264 
+265       else
+266         {
+267           libMesh::err <<
+268             "No originating software can be determined for header string '" <<
+269             name << "'\&. Error\&." << std::endl;
+270           libmesh_error();
+271         }
+272     }
+273 
+274 }
+.fi
+.SS "void libMesh::XdrMGF::set_num_levels (unsigned intnum_levels)\fC [inline]\fP, \fC [inherited]\fP"
+Set number of levels 
+.PP
+Definition at line 185 of file xdr_mgf\&.h\&.
+.PP
+References libMesh::XdrMGF::_num_levels\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+185 { _num_levels = num_levels; }
+.fi
+.SS "void libMesh::XdrMGF::set_orig_flag (\fBLegacyXdrIO::FileFormat\fPin_orig_flag)\fC [inline]\fP, \fC [inherited]\fP"
+Set the originator flag\&. 
+.PP
+Definition at line 179 of file xdr_mgf\&.h\&.
+.PP
+References libMesh::XdrMGF::orig_flag\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::write_mesh()\&.
+.PP
+.nf
+179 { orig_flag = in_orig_flag; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "unsigned int libMesh::XdrMGF::_num_levels\fC [protected]\fP, \fC [inherited]\fP"
+Number of levels of refinement in the mesh 
+.PP
+Definition at line 197 of file xdr_mgf\&.h\&.
+.PP
+Referenced by libMesh::XdrMGF::get_num_levels(), libMesh::XdrMGF::set_num_levels(), and libMesh::XdrMGF::tokenize_first_line()\&.
+.SS "int libMesh::XdrMESH::m_dim\fC [private]\fP"
+Dimension of the mesh 
+.PP
+Definition at line 113 of file xdr_mesh\&.h\&.
+.PP
+Referenced by init()\&.
+.SS "\fBXdrIO_TYPE\fP libMesh::XdrMGF::m_type\fC [protected]\fP, \fC [inherited]\fP"
+Specifies the read/write permission for the current \fCxdr\fP file\&. Possibilities are: {itemize}  \fCUNKNOWN\fP = -1  \fCENCODE\fP = 0  \fCDECODE\fP = 1 {itemize} 
+.PP
+Definition at line 210 of file xdr_mgf\&.h\&.
+.PP
+Referenced by libMesh::XdrMGF::dataBlk(), libMesh::XdrSOLN::header(), header(), and libMesh::XdrMGF::init()\&.
+.SS "std::ifstream libMesh::XdrMGF::mp_in\fC [protected]\fP, \fC [inherited]\fP"
+An input file stream object 
+.PP
+Definition at line 244 of file xdr_mgf\&.h\&.
+.PP
+Referenced by libMesh::XdrMGF::dataBlk(), libMesh::XdrSOLN::header(), header(), and libMesh::XdrMGF::init()\&.
+.SS "std::ofstream libMesh::XdrMGF::mp_out\fC [protected]\fP, \fC [inherited]\fP"
+An output file stream object\&. 
+.PP
+Definition at line 249 of file xdr_mgf\&.h\&.
+.PP
+Referenced by libMesh::XdrMGF::dataBlk(), libMesh::XdrSOLN::header(), header(), and libMesh::XdrMGF::init()\&.
+.SS "XDR* libMesh::XdrMGF::mp_xdr_handle\fC [protected]\fP, \fC [inherited]\fP"
+Pointer to the standard \fC\fP{xdr} struct\&. See the standard header file \fCrpc/rpc\&.h\fP for more information\&. 
+.PP
+Definition at line 220 of file xdr_mgf\&.h\&.
+.PP
+Referenced by libMesh::XdrMGF::dataBlk(), libMesh::XdrMGF::fini(), libMesh::XdrSOLN::header(), header(), and libMesh::XdrMGF::init()\&.
+.SS "\fBLegacyXdrIO::FileFormat\fP libMesh::XdrMGF::orig_flag\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating how much checking we need to do\&. We can read in mgf meshes more quickly because there is only one type of element in these meshes\&. Deal meshes on the other hand will require a check for each element to find out what type it is\&. Possible values are: {itemize}  0: It's an DEAL style mesh  1: It's a MGF style mesh {itemize} 
+.PP
+Definition at line 239 of file xdr_mgf\&.h\&.
+.PP
+Referenced by libMesh::XdrMGF::get_orig_flag(), header(), libMesh::XdrMGF::init(), and libMesh::XdrMGF::set_orig_flag()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

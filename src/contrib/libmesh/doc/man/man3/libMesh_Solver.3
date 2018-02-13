@@ -1,0 +1,467 @@
+.TH "libMesh::Solver" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Solver \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::ReferenceCountedObject< Solver >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBEquationSystems\fP \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fB~Solver\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBpre_process\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBsolve\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBpost_process\fP ()"
+.br
+.ti -1c
+.RI "const \fBsys_type\fP & \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSolver\fP (\fBEquationSystems\fP &es)"
+.br
+.ti -1c
+.RI "\fBSolver\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned int number)"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBsys_type\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "\fBMeshBase\fP & \fB_mesh\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is a generic class that defines a solver to be used in a simulation\&. A user can define a solver by deriving from this class and implementing certain functions\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2003-2004\&. 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "typedef \fBEquationSystems\fP \fBlibMesh::Solver::sys_type\fP"
+The type of system 
+.PP
+Definition at line 78 of file solver\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Solver::Solver (\fBEquationSystems\fP &es)\fC [inline]\fP, \fC [explicit]\fP, \fC [protected]\fP"
+Constructor\&. Requires a reference to the system to be solved\&. The constructor is protected since it should not be instantiated by users\&. 
+.PP
+Definition at line 145 of file solver\&.h\&.
+.PP
+.nf
+145                                    :
+146   _system (es),
+147   _mesh   (es\&.get_mesh())
+148 {
+149   libmesh_deprecated();
+150 }
+.fi
+.SS "libMesh::Solver::Solver (\fBEquationSystems\fP &es, const std::string &name, const unsigned intnumber)\fC [protected]\fP"
+Constructor\&. Requires a reference to the \fC\fBEquationSystems\fP\fP object, a name for the system, and the system number\&. 
+.SS "libMesh::Solver::~Solver ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 155 of file solver\&.h\&.
+.PP
+.nf
+156 {
+157 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::Solver::init ()\fC [inline]\fP, \fC [virtual]\fP"
+The initialization function\&. This method is used to initialize data structures befor a simulation begins\&. 
+.PP
+Definition at line 162 of file solver\&.h\&.
+.PP
+References libMesh::EquationSystems::init(), and system()\&.
+.PP
+.nf
+163 {
+164   // Initialize the system\&.
+165   this->system()\&.init ();
+166 }
+.fi
+.SS "const \fBMeshBase\fP& libMesh::Solver::mesh () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBMesh\fP\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 113 of file solver\&.h\&.
+.PP
+References _mesh\&.
+.PP
+.nf
+113 { return _mesh; }
+.fi
+.SS "\fBMeshBase\fP& libMesh::Solver::mesh ()\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBMesh\fP\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 126 of file solver\&.h\&.
+.PP
+References _mesh\&.
+.PP
+.nf
+126 { return _mesh; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "void libMesh::Solver::post_process ()\fC [inline]\fP, \fC [virtual]\fP"
+This method may be called after each solve step in order to perform any required post-processing\&. 
+.PP
+Definition at line 195 of file solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.PP
+.nf
+196 {
+197   //  libMesh::out << "Post-processing"
+198   //         << std::endl;
+199 }
+.fi
+.SS "void libMesh::Solver::pre_process ()\fC [inline]\fP, \fC [virtual]\fP"
+This method may be called before each solve step in order to perform any required pre-processing\&. 
+.PP
+Definition at line 171 of file solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.PP
+.nf
+172 {
+173   //  libMesh::out << "Pre-processing"
+174   //         << std::endl;
+175 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::Solver::solve ()\fC [inline]\fP, \fC [virtual]\fP"
+This method performs a solve step\&. What occurs in this method will depend on the type of solver\&. See the example programs for more details\&. 
+.PP
+Definition at line 180 of file solver\&.h\&.
+.PP
+References post_process(), pre_process(), libMesh::EquationSystems::solve(), and system()\&.
+.PP
+.nf
+181 {
+182   // Perform any necessary pre-processing
+183   Solver::pre_process ();
+184 
+185   // Solve the system
+186   this->system()\&.solve ();
+187 
+188   // Perform any necessary post-processing
+189   Solver::post_process ();
+190 }
+.fi
+.SS "const \fBsys_type\fP& libMesh::Solver::system () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 108 of file solver\&.h\&.
+.PP
+References _system\&.
+.PP
+Referenced by init(), and solve()\&.
+.PP
+.nf
+108 { return _system; }
+.fi
+.SS "\fBsys_type\fP& libMesh::Solver::system ()\fC [inline]\fP, \fC [protected]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 121 of file solver\&.h\&.
+.PP
+References _system\&.
+.PP
+.nf
+121 { return _system; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBMeshBase\fP& libMesh::Solver::_mesh\fC [protected]\fP"
+A reference to the \fC\fBMesh\fP\fP for the system we are solving\&. 
+.PP
+Definition at line 137 of file solver\&.h\&.
+.PP
+Referenced by mesh()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBsys_type\fP& libMesh::Solver::_system\fC [protected]\fP"
+A reference to the system we are solving\&. 
+.PP
+Definition at line 131 of file solver\&.h\&.
+.PP
+Referenced by system()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

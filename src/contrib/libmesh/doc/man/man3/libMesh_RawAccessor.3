@@ -1,0 +1,192 @@
+.TH "libMesh::RawAccessor< FieldType >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::RawAccessor< FieldType > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <raw_accessor\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRawAccessor\fP (FieldType &\fBdata\fP, const unsigned int \fBdim\fP)"
+.br
+.ti -1c
+.RI "\fB~RawAccessor\fP ()"
+.br
+.ti -1c
+.RI "\fBRawFieldType\fP< FieldType >::type & \fBoperator()\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "const \fBRawFieldType\fP< FieldType >
+.br
+::type & \fBoperator()\fP (unsigned int i) const "
+.br
+.ti -1c
+.RI "template<> \fBNumber\fP & \fBoperator()\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "template<> \fBNumber\fP & \fBoperator()\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "template<> \fBNumber\fP & \fBoperator()\fP (unsigned int k)"
+.br
+.ti -1c
+.RI "template<> \fBReal\fP & \fBoperator()\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "template<> \fBReal\fP & \fBoperator()\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "template<> \fBReal\fP & \fBoperator()\fP (unsigned int k)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRawAccessor\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "FieldType & \fB_data\fP"
+.br
+.ti -1c
+.RI "const unsigned int \fB_dim\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename FieldType>class libMesh::RawAccessor< FieldType >"
+This class provides single index access to FieldType (i\&.e\&. Number, Gradient, Tensor, etc\&.)\&. 
+.PP
+Definition at line 93 of file raw_accessor\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename FieldType> \fBlibMesh::RawAccessor\fP< FieldType >::\fBRawAccessor\fP (FieldType &data, const unsigned intdim)\fC [inline]\fP"
+
+.PP
+Definition at line 97 of file raw_accessor\&.h\&.
+.PP
+.nf
+98     : _data(data),
+99       _dim(dim)
+100   {}
+.fi
+.SS "template<typename FieldType> \fBlibMesh::RawAccessor\fP< FieldType >::~\fBRawAccessor\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 102 of file raw_accessor\&.h\&.
+.PP
+.nf
+102 {}
+.fi
+.SS "template<typename FieldType> \fBlibMesh::RawAccessor\fP< FieldType >::\fBRawAccessor\fP ()\fC [private]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename FieldType> \fBRawFieldType\fP<FieldType>::type& \fBlibMesh::RawAccessor\fP< FieldType >::operator() (unsigned inti)"
+
+.SS "template<typename FieldType> const \fBRawFieldType\fP<FieldType>::type& \fBlibMesh::RawAccessor\fP< FieldType >::operator() (unsigned inti) const"
+
+.SS "template<> \fBNumber\fP & \fBlibMesh::RawAccessor\fP< \fBNumber\fP >::operator() (unsigned inti)\fC [inline]\fP"
+
+.PP
+Definition at line 117 of file raw_accessor\&.h\&.
+.PP
+.nf
+118 {
+119   libmesh_assert_equal_to (i, 0);
+120   return this->_data;
+121 }
+.fi
+.SS "template<> \fBNumber\fP & \fBlibMesh::RawAccessor\fP< \fBGradient\fP >::operator() (unsigned inti)\fC [inline]\fP"
+
+.PP
+Definition at line 125 of file raw_accessor\&.h\&.
+.PP
+.nf
+126 {
+127   libmesh_assert_less (i, this->_dim);
+128   return this->_data(i);
+129 }
+.fi
+.SS "template<> \fBNumber\fP & \fBlibMesh::RawAccessor\fP< \fBTensor\fP >::operator() (unsigned intk)\fC [inline]\fP"
+
+.PP
+Definition at line 133 of file raw_accessor\&.h\&.
+.PP
+.nf
+134 {
+135   libmesh_assert_less (k, this->_dim*this->_dim);
+136 
+137   // For tensors, each row is filled first, i\&.e\&. for 2-D
+138   // [ 0 1; 2 3]
+139   // Thus, k(i,j) = j + i*dim
+140   unsigned int ii = k/_dim;
+141   unsigned int jj = k - ii*_dim;
+142 
+143   return this->_data(ii,jj);
+144 }
+.fi
+.SS "template<> \fBReal\fP & \fBlibMesh::RawAccessor\fP< \fBReal\fP >::operator() (unsigned inti)\fC [inline]\fP"
+
+.PP
+Definition at line 181 of file raw_accessor\&.h\&.
+.PP
+.nf
+182 {
+183   libmesh_assert_equal_to (i, 0);
+184   return this->_data;
+185 }
+.fi
+.SS "template<> \fBReal\fP & \fBlibMesh::RawAccessor\fP< \fBRealGradient\fP >::operator() (unsigned inti)\fC [inline]\fP"
+
+.PP
+Definition at line 189 of file raw_accessor\&.h\&.
+.PP
+.nf
+190 {
+191   libmesh_assert_less (i, this->_dim);
+192   return this->_data(i);
+193 }
+.fi
+.SS "template<> \fBReal\fP & \fBlibMesh::RawAccessor\fP< \fBRealTensor\fP >::operator() (unsigned intk)\fC [inline]\fP"
+
+.PP
+Definition at line 197 of file raw_accessor\&.h\&.
+.PP
+.nf
+198 {
+199   libmesh_assert_less (k, this->_dim*this->_dim);
+200 
+201   // For tensors, each row is filled first, i\&.e\&. for 2-D
+202   // [ 0 1; 2 3]
+203   // Thus, k(i,j) = i + j*dim
+204   unsigned int jj = k/_dim;
+205   unsigned int ii = k - jj*_dim;
+206 
+207   return this->_data(ii,jj);
+208 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename FieldType> FieldType& \fBlibMesh::RawAccessor\fP< FieldType >::_data\fC [private]\fP"
+
+.PP
+Definition at line 110 of file raw_accessor\&.h\&.
+.SS "template<typename FieldType> const unsigned int \fBlibMesh::RawAccessor\fP< FieldType >::_dim\fC [private]\fP"
+
+.PP
+Definition at line 111 of file raw_accessor\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

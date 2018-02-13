@@ -1,0 +1,385 @@
+.TH "libMesh::HCurlFETransformation< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::HCurlFETransformation< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fe_transformation_base\&.h>\fP
+.PP
+Inherits \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBHCurlFETransformation\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~HCurlFETransformation\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBmap_phi\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &phi) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_dphi\fP (const unsigned int, const \fBElem\fP *const , const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputGradient > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_d2phi\fP (const unsigned int, const \fBElem\fP *const , const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputTensor > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_curl\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &curl_phi) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_div\fP (const unsigned int, const \fBElem\fP *const , const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputDivergence > > &) const "
+.br
+.ti -1c
+.RI "template<> void \fBmap_phi\fP (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBReal\fP > > &) const"
+.br
+.ti -1c
+.RI "template<> void \fBmap_curl\fP (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBReal\fP > > &) const"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP
+.br
+< \fBFETransformationBase\fP
+.br
+< OutputShape > > \fBbuild\fP (const \fBFEType\fP &type)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::HCurlFETransformation< T >"
+This class handles the computation of the shape functions in the physical domain for HCurl conforming elements\&. This class assumes the \fC\fBFEGenericBase\fP\fP object has been initialized in the reference domain (i\&.e\&. \fCinit_shape_functions\fP has been called)\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Paul T\&. Bauman, 2012 
+.RE
+.PP
+
+.PP
+Definition at line 30 of file fe_transformation_base\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::HCurlFETransformation\fP< T >::\fBHCurlFETransformation\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 38 of file hcurl_fe_transformation\&.h\&.
+.PP
+.nf
+39     : FETransformationBase<OutputShape>(){}
+.fi
+.SS "template<typename T > virtual \fBlibMesh::HCurlFETransformation\fP< T >::~\fBHCurlFETransformation\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Definition at line 41 of file hcurl_fe_transformation\&.h\&.
+.PP
+.nf
+41 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "static \fBAutoPtr\fP<\fBFETransformationBase\fP<OutputShape> > \fBlibMesh::FETransformationBase\fP< OutputShape  >::build (const \fBFEType\fP &type)\fC [static]\fP, \fC [inherited]\fP"
+Builds an FETransformation object based on the finite element type 
+.SS "template<typename OutputShape > void \fBlibMesh::HCurlFETransformation\fP< OutputShape >::map_curl (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &curl_phi) const\fC [virtual]\fP"
+Evaluates the shape function curl in physical coordinates based on HCurl conforming finite element transformation\&. In 2-D, the transformation is $ \nabla \times \phi = J^{-1} * \nabla \times \hat{\phi} $ where $ J = \det( dx/d\xi ) $ In 3-D, the transformation is $ \nabla \times \phi = J^{-1} dx/d\xi \nabla \times \hat{\phi} $ 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 132 of file hcurl_fe_transformation\&.C\&.
+.PP
+References libMesh::FEGenericBase< T >::get_dphideta(), libMesh::FEGenericBase< T >::get_dphidxi(), libMesh::FEGenericBase< T >::get_dphidzeta(), libMesh::FEMap::get_dxyzdeta(), libMesh::FEMap::get_dxyzdxi(), libMesh::FEMap::get_dxyzdzeta(), libMesh::FEAbstract::get_fe_map(), libMesh::FEMap::get_jacobian(), and libMesh::Real\&.
+.PP
+.nf
+137 {
+138   switch(dim)
+139     {
+140       // These element transformations only make sense in 2D and 3D
+141     case 0:
+142     case 1:
+143       {
+144         libmesh_error();
+145       }
+146 
+147     case 2:
+148       {
+149         const std::vector<std::vector<OutputShape> >& dphi_dxi = fe\&.get_dphidxi();
+150         const std::vector<std::vector<OutputShape> >& dphi_deta = fe\&.get_dphideta();
+151 
+152         const std::vector<Real>& J = fe\&.get_fe_map()\&.get_jacobian();
+153 
+154         // FIXME: I don't think this is valid for 2D elements in 3D space
+155         /* In 2D: curl(phi) = J^{-1} * curl(\hat{phi}) */
+156         for (unsigned int i=0; i<curl_phi\&.size(); i++)
+157           for (unsigned int p=0; p<curl_phi[i]\&.size(); p++)
+158             {
+159               curl_phi[i][p]\&.slice(0) = curl_phi[i][p]\&.slice(1) = 0\&.0;
+160 
+161               curl_phi[i][p]\&.slice(2) = ( dphi_dxi[i][p]\&.slice(1) - dphi_deta[i][p]\&.slice(0) )/J[p];
+162             }
+163 
+164         break;
+165       }
+166 
+167     case 3:
+168       {
+169         const std::vector<std::vector<OutputShape> >& dphi_dxi = fe\&.get_dphidxi();
+170         const std::vector<std::vector<OutputShape> >& dphi_deta = fe\&.get_dphideta();
+171         const std::vector<std::vector<OutputShape> >& dphi_dzeta = fe\&.get_dphidzeta();
+172 
+173         const std::vector<RealGradient>& dxyz_dxi   = fe\&.get_fe_map()\&.get_dxyzdxi();
+174         const std::vector<RealGradient>& dxyz_deta  = fe\&.get_fe_map()\&.get_dxyzdeta();
+175         const std::vector<RealGradient>& dxyz_dzeta = fe\&.get_fe_map()\&.get_dxyzdzeta();
+176 
+177         const std::vector<Real>& J = fe\&.get_fe_map()\&.get_jacobian();
+178 
+179         for (unsigned int i=0; i<curl_phi\&.size(); i++)
+180           for (unsigned int p=0; p<curl_phi[i]\&.size(); p++)
+181             {
+182               Real dx_dxi   = dxyz_dxi[p](0);
+183               Real dx_deta  = dxyz_deta[p](0);
+184               Real dx_dzeta = dxyz_dzeta[p](0);
+185 
+186               Real dy_dxi   = dxyz_dxi[p](1);
+187               Real dy_deta  = dxyz_deta[p](1);
+188               Real dy_dzeta = dxyz_dzeta[p](1);
+189 
+190               Real dz_dxi   = dxyz_dxi[p](2);
+191               Real dz_deta  = dxyz_deta[p](2);
+192               Real dz_dzeta = dxyz_dzeta[p](2);
+193 
+194               const Real inv_jac = 1\&.0/J[p];
+195 
+196               /* In 3D: curl(phi) = J^{-1} dx/dxi * curl(\hat{phi})
+197 
+198                  dx/dxi = [  dx/dxi  dx/deta  dx/dzeta
+199                  dy/dxi  dy/deta  dy/dzeta
+200                  dz/dxi  dz/deta  dz/dzeta ]
+201 
+202                  curl(u) = [ du_z/deta  - du_y/dzeta
+203                  du_x/dzeta - du_z/dxi
+204                  du_y/dxi   - du_x/deta ]
+205               */
+206               curl_phi[i][p]\&.slice(0) = inv_jac*( dx_dxi*( dphi_deta[i][p]\&.slice(2)  -
+207                                                            dphi_dzeta[i][p]\&.slice(1)   ) +
+208                                                   dx_deta*( dphi_dzeta[i][p]\&.slice(0) -
+209                                                             dphi_dxi[i][p]\&.slice(2)     ) +
+210                                                   dx_dzeta*( dphi_dxi[i][p]\&.slice(1) -
+211                                                              dphi_deta[i][p]\&.slice(0)    ) );
+212 
+213               curl_phi[i][p]\&.slice(1) = inv_jac*( dy_dxi*( dphi_deta[i][p]\&.slice(2) -
+214                                                            dphi_dzeta[i][p]\&.slice(1)  ) +
+215                                                   dy_deta*( dphi_dzeta[i][p]\&.slice(0)-
+216                                                             dphi_dxi[i][p]\&.slice(2)    ) +
+217                                                   dy_dzeta*( dphi_dxi[i][p]\&.slice(1) -
+218                                                              dphi_deta[i][p]\&.slice(0)   ) );
+219 
+220               curl_phi[i][p]\&.slice(2) = inv_jac*( dz_dxi*( dphi_deta[i][p]\&.slice(2) -
+221                                                            dphi_dzeta[i][p]\&.slice(1)   ) +
+222                                                   dz_deta*( dphi_dzeta[i][p]\&.slice(0) -
+223                                                             dphi_dxi[i][p]\&.slice(2)     ) +
+224                                                   dz_dzeta*( dphi_dxi[i][p]\&.slice(1) -
+225                                                              dphi_deta[i][p]\&.slice(0)    ) );
+226             }
+227 
+228         break;
+229       }
+230 
+231     default:
+232       libmesh_error();
+233 
+234     } // switch(dim)
+235 
+236   return;
+237 }
+.fi
+.SS "template<> void \fBlibMesh::HCurlFETransformation\fP< \fBReal\fP >::map_curl (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBReal\fP > > &) const"
+
+.PP
+Definition at line 254 of file hcurl_fe_transformation\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+259 {
+260   libMesh::err << "HCurl transformations only make sense for vector-valued elements\&."
+261                << std::endl;
+262   libmesh_error();
+263 }
+.fi
+.SS "template<typename T > virtual void \fBlibMesh::HCurlFETransformation\fP< T >::map_d2phi (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputTensor > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &) const\fC [inline]\fP, \fC [virtual]\fP"
+Evaluates shape function Hessians in physical coordinates based on HCurl conforming finite element transformation\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 75 of file hcurl_fe_transformation\&.h\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+86   { libmesh_do_once( libMesh::err << "WARNING: Shape function Hessians for HCurl elements are not currently "
+87                      << "being computed!" << std::endl; ); return; }
+.fi
+.SS "template<typename T > virtual void \fBlibMesh::HCurlFETransformation\fP< T >::map_div (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputDivergence > > &) const\fC [inline]\fP, \fC [virtual]\fP"
+Evaluates the shape function divergence in physical coordinates based on HCurl conforming finite element transformation\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 107 of file hcurl_fe_transformation\&.h\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+112   { libmesh_do_once( libMesh::err << "WARNING: Shape function divergences for HCurl elements are not currently "
+113                      << "being computed!" << std::endl; ); return; }
+.fi
+.SS "template<typename T > virtual void \fBlibMesh::HCurlFETransformation\fP< T >::map_dphi (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputGradient > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &, std::vector< std::vector< OutputShape > > &) const\fC [inline]\fP, \fC [virtual]\fP"
+Evaluates shape function gradients in physical coordinates for HCurl conforming elements\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 59 of file hcurl_fe_transformation\&.h\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+67   { libmesh_do_once( libMesh::err << "WARNING: Shape function gradients for HCurl elements are not currently "
+68                      << "being computed!" << std::endl; ); return; }
+.fi
+.SS "template<typename OutputShape > void \fBlibMesh::HCurlFETransformation\fP< OutputShape >::map_phi (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &phi) const\fC [virtual]\fP"
+Evaluates shape functions in physical coordinates for HCurl conforming elements\&. In this case $ \phi = (dx/d\xi)^{-T} \hat{\phi} $, where $ (dx/d\xi)^{-T} $ is the inverse-transpose of the Jacobian matrix of the element map\&. Note here $ x, \xi $ are vectors\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 25 of file hcurl_fe_transformation\&.C\&.
+.PP
+References libMesh::FEMap::get_detadx(), libMesh::FEMap::get_detady(), libMesh::FEMap::get_detadz(), libMesh::FEMap::get_dxidx(), libMesh::FEMap::get_dxidy(), libMesh::FEMap::get_dxidz(), libMesh::FEMap::get_dzetadx(), libMesh::FEMap::get_dzetady(), libMesh::FEMap::get_dzetadz(), libMesh::FEAbstract::get_fe_map(), and libMesh::FEAbstract::get_fe_type()\&.
+.PP
+.nf
+30 {
+31   switch(dim)
+32     {
+33       // These element transformations only make sense in 2D and 3D
+34     case 0:
+35     case 1:
+36       {
+37         libmesh_error();
+38       }
+39 
+40     case 2:
+41       {
+42         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+43         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+44 
+45         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+46         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+47 
+48         // FIXME: Need to update for 2D elements in 3D space
+49         /* phi = (dx/dxi)^-T * \hat{phi}
+50            In 2D:
+51            (dx/dxi)^{-1} = [  dxi/dx   dxi/dy
+52            deta/dx  deta/dy ]
+53 
+54            so: dxi/dx^{-T} * \hat{phi} = [ dxi/dx  deta/dx   [ \hat{phi}_xi
+55            dxi/dy  deta/dy ]   \hat{phi}_eta ]
+56 
+57            or in indicial notation:  phi_j = xi_{i,j}*\hat{phi}_i */
+58 
+59         for (unsigned int i=0; i<phi\&.size(); i++)
+60           for (unsigned int p=0; p<phi[i]\&.size(); p++)
+61             {
+62               // Need to temporarily cache reference shape functions
+63               // TODO: PB: Might be worth trying to build phi_ref separately to see
+64               //           if we can get vectorization
+65               OutputShape phi_ref;
+66               FEInterface::shape<OutputShape>(2, fe\&.get_fe_type(), elem, i, qp[p], phi_ref);
+67 
+68               phi[i][p](0) = dxidx_map[p]*phi_ref\&.slice(0) + detadx_map[p]*phi_ref\&.slice(1);
+69 
+70               phi[i][p](1) = dxidy_map[p]*phi_ref\&.slice(0) + detady_map[p]*phi_ref\&.slice(1);
+71             }
+72 
+73         break;
+74       }
+75 
+76     case 3:
+77       {
+78         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+79         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+80         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+81 
+82         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+83         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+84         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+85 
+86         const std::vector<Real>& dzetadx_map = fe\&.get_fe_map()\&.get_dzetadx();
+87         const std::vector<Real>& dzetady_map = fe\&.get_fe_map()\&.get_dzetady();
+88         const std::vector<Real>& dzetadz_map = fe\&.get_fe_map()\&.get_dzetadz();
+89 
+90         /* phi = (dx/dxi)^-T * \hat{phi}
+91            In 3D:
+92            dx/dxi^-1 = [  dxi/dx    dxi/dy    dxi/dz
+93            deta/dx   deta/dy   deta/dz
+94            dzeta/dx  dzeta/dy  dzeta/dz]
+95 
+96            so: dxi/dx^-T * \hat{phi} = [ dxi/dx  deta/dx  dzeta/dx   [ \hat{phi}_xi
+97            dxi/dy  deta/dy  dzeta/dy     \hat{phi}_eta
+98            dxi/dz  deta/dz  dzeta/dz ]   \hat{phi}_zeta ]
+99 
+100            or in indicial notation:  phi_j = xi_{i,j}*\hat{phi}_i */
+101 
+102         for (unsigned int i=0; i<phi\&.size(); i++)
+103           for (unsigned int p=0; p<phi[i]\&.size(); p++)
+104             {
+105               // Need to temporarily cache reference shape functions
+106               // TODO: PB: Might be worth trying to build phi_ref separately to see
+107               //           if we can get vectorization
+108               OutputShape phi_ref;
+109               FEInterface::shape<OutputShape>(3, fe\&.get_fe_type(), elem, i, qp[p], phi_ref);
+110 
+111               phi[i][p]\&.slice(0) = dxidx_map[p]*phi_ref\&.slice(0) + detadx_map[p]*phi_ref\&.slice(1)
+112                 + dzetadx_map[p]*phi_ref\&.slice(2);
+113 
+114               phi[i][p]\&.slice(1) = dxidy_map[p]*phi_ref\&.slice(0) + detady_map[p]*phi_ref\&.slice(1)
+115                 + dzetady_map[p]*phi_ref\&.slice(2);
+116 
+117               phi[i][p]\&.slice(2) = dxidz_map[p]*phi_ref\&.slice(0) + detadz_map[p]*phi_ref\&.slice(1)
+118                 + dzetadz_map[p]*phi_ref\&.slice(2);
+119             }
+120         break;
+121       }
+122 
+123     default:
+124       libmesh_error();
+125 
+126     } // switch(dim)
+127 
+128   return;
+129 }
+.fi
+.SS "template<> void \fBlibMesh::HCurlFETransformation\fP< \fBReal\fP >::map_phi (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBReal\fP > > &) const"
+
+.PP
+Definition at line 242 of file hcurl_fe_transformation\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+247 {
+248   libMesh::err << "HCurl transformations only make sense for vector-valued elements\&."
+249                << std::endl;
+250   libmesh_error();
+251 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

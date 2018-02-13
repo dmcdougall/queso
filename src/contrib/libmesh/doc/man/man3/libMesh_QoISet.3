@@ -1,0 +1,291 @@
+.TH "libMesh::QoISet" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::QoISet \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <qoi_set\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBiterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBQoISet\fP ()"
+.br
+.ti -1c
+.RI "\fBQoISet\fP (const \fBSystem\fP &\fBsys\fP)"
+.br
+.ti -1c
+.RI "\fBQoISet\fP (const std::vector< bool > &indices)"
+.br
+.ti -1c
+.RI "\fBQoISet\fP (const std::vector< unsigned int > &indices)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP (const \fBSystem\fP &\fBsys\fP) const "
+.br
+.ti -1c
+.RI "void \fBadd_indices\fP (const std::vector< unsigned int > &indices)"
+.br
+.ti -1c
+.RI "void \fBadd_index\fP (unsigned int)"
+.br
+.ti -1c
+.RI "void \fBremove_indices\fP (const std::vector< unsigned int > &indices)"
+.br
+.ti -1c
+.RI "void \fBremove_index\fP (unsigned int)"
+.br
+.ti -1c
+.RI "void \fBset_weight\fP (unsigned int, \fBReal\fP)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBweight\fP (unsigned int) const "
+.br
+.ti -1c
+.RI "bool \fBhas_index\fP (unsigned int) const "
+.br
+.ti -1c
+.RI "\fBiterator\fP \fBbegin\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fB_indices\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fB_weights\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Data structure for specifying which Quantities of Interest should be calculated in an adjoint or a parameter sensitivity calculation\&. 
+.PP
+Definition at line 41 of file qoi_set\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::QoISet::QoISet ()\fC [inline]\fP"
+Empty constructor: 'calculate all QoIs in the System'
+.PP
+No further changes to this special \fBQoISet\fP should be made; it doesn't even know how many QoIs your system has, it just knows to instruct a function to use all of them\&. 
+.PP
+Definition at line 93 of file qoi_set\&.h\&.
+.PP
+.nf
+93 : _indices(), _weights() {}
+.fi
+.SS "libMesh::QoISet::QoISet (const \fBSystem\fP &sys)\fC [explicit]\fP"
+Default constructor: 'calculate all QoIs in the System', 'give every QoI weight 1\&.0' 
+.PP
+Definition at line 34 of file qoi_set\&.C\&.
+.PP
+.nf
+34 : _indices(sys\&.qoi\&.size(), true) {}
+.fi
+.SS "libMesh::QoISet::QoISet (const std::vector< bool > &indices)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor-from-vector-of-bool: 'calculate the QoIs for which
+\\p indices[q] is true' 
+.PP
+Definition at line 107 of file qoi_set\&.h\&.
+.PP
+.nf
+107                                          :
+108     _indices(indices), _weights() {}
+.fi
+.SS "libMesh::QoISet::QoISet (const std::vector< unsigned int > &indices)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor-from-vector: 'calculate the listed QoIs', 'give every
+QoI weight 1\&.0' 
+.PP
+Definition at line 188 of file qoi_set\&.h\&.
+.PP
+References add_indices()\&.
+.PP
+.nf
+188                                                      :
+189   _indices(), _weights()
+190 {
+191   this->add_indices(indices);
+192 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::QoISet::add_index (unsigned inti)\fC [inline]\fP"
+Add this index to the set to be calculated 
+.PP
+Definition at line 197 of file qoi_set\&.h\&.
+.PP
+References _indices\&.
+.PP
+.nf
+198 {
+199   if (i >= _indices\&.size())
+200     _indices\&.resize(i+1, true);
+201   _indices[i] = true;
+202 }
+.fi
+.SS "void libMesh::QoISet::add_indices (const std::vector< unsigned int > &indices)"
+Add this indices to the set to be calculated 
+.PP
+Definition at line 49 of file qoi_set\&.C\&.
+.PP
+References _indices, and std::max()\&.
+.PP
+Referenced by QoISet()\&.
+.PP
+.nf
+50 {
+51   unsigned int max_size = 0;
+52   for (std::vector<unsigned int>::const_iterator i = indices\&.begin();
+53        i != indices\&.end(); ++i)
+54     max_size = std::max(max_size, *i + 1);
+55 
+56   _indices\&.resize(max_size);
+57 
+58   for (std::vector<unsigned int>::const_iterator i = indices\&.begin();
+59        i != indices\&.end(); ++i)
+60     _indices[*i] = true;
+61 }
+.fi
+.SS "\fBiterator\fP libMesh::QoISet::begin () const\fC [inline]\fP"
+Return an iterator pointing to the first index in the set 
+.PP
+Definition at line 166 of file qoi_set\&.h\&.
+.PP
+References _indices\&.
+.PP
+.nf
+166 { return iterator(0, _indices); }
+.fi
+.SS "void libMesh::QoISet::clear ()\fC [inline]\fP"
+Resets to 'calculate all QoIs, give every QoI weight 1\&.0' 
+.PP
+Definition at line 120 of file qoi_set\&.h\&.
+.PP
+References _indices, and _weights\&.
+.PP
+.nf
+120 { _indices\&.clear(); _weights\&.clear(); }
+.fi
+.SS "bool libMesh::QoISet::has_index (unsigned inti) const\fC [inline]\fP"
+Return whether or not this index is in the set to be calculated 
+.PP
+Definition at line 217 of file qoi_set\&.h\&.
+.PP
+References _indices\&.
+.PP
+Referenced by libMesh::ImplicitSystem::adjoint_qoi_parameter_sensitivity(), libMesh::ImplicitSystem::adjoint_solve(), libMesh::SensitivityData::allocate_data(), libMesh::SensitivityData::allocate_hessian_data(), libMesh::ExplicitSystem::assemble_qoi(), libMesh::FEMSystem::assemble_qoi(), libMesh::ExplicitSystem::assemble_qoi_derivative(), libMesh::FEMSystem::assemble_qoi_derivative(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::ImplicitSystem::forward_qoi_parameter_sensitivity(), libMesh::ImplicitSystem::qoi_parameter_hessian(), libMesh::ImplicitSystem::qoi_parameter_hessian_vector_product(), size(), and libMesh::ImplicitSystem::weighted_sensitivity_adjoint_solve()\&.
+.PP
+.nf
+218 {
+219   return (_indices\&.size() <= i || _indices[i]);
+220 }
+.fi
+.SS "void libMesh::QoISet::remove_index (unsigned inti)\fC [inline]\fP"
+Remove this index from the set to be calculated 
+.PP
+Definition at line 207 of file qoi_set\&.h\&.
+.PP
+References _indices\&.
+.PP
+.nf
+208 {
+209   if (i >= _indices\&.size())
+210     _indices\&.resize(i+1, true);
+211   _indices[i] = false;
+212 }
+.fi
+.SS "void libMesh::QoISet::remove_indices (const std::vector< unsigned int > &indices)\fC [inline]\fP"
+Remove these indices from the set to be calculated 
+.PP
+Definition at line 66 of file qoi_set\&.C\&.
+.PP
+References _indices\&.
+.PP
+.nf
+67 {
+68   for (std::vector<unsigned int>::const_iterator i = indices\&.begin();
+69        i != indices\&.end(); ++i)
+70     _indices[*i] = false;
+71 }
+.fi
+.SS "void libMesh::QoISet::set_weight (unsigned inti, \fBReal\fPw)\fC [inline]\fP"
+Set the weight for this index 
+.PP
+Definition at line 225 of file qoi_set\&.h\&.
+.PP
+References _weights\&.
+.PP
+.nf
+226 {
+227   if (_weights\&.size() <= i)
+228     _weights\&.resize(i+1, 1\&.0);
+229 
+230   _weights[i] = w;
+231 }
+.fi
+.SS "unsigned int libMesh::QoISet::size (const \fBSystem\fP &sys) const"
+Returns the number of QoIs that would be computed for the \fBSystem\fP \fCsys\fP 
+.PP
+Definition at line 38 of file qoi_set\&.C\&.
+.PP
+References has_index(), and libMesh::System::qoi\&.
+.PP
+Referenced by libMesh::System::qoi_parameter_sensitivity()\&.
+.PP
+.nf
+39 {
+40   unsigned int qoi_count = 0;
+41   for (unsigned int i=0; i != sys\&.qoi\&.size(); ++i)
+42     if (this->has_index(i))
+43       qoi_count++;
+44   return qoi_count;
+45 }
+.fi
+.SS "\fBReal\fP libMesh::QoISet::weight (unsigned inti) const\fC [inline]\fP"
+Get the weight for this index (default 1\&.0) 
+.PP
+Definition at line 236 of file qoi_set\&.h\&.
+.PP
+References _weights\&.
+.PP
+Referenced by libMesh::AdjointRefinementEstimator::estimate_error(), and libMesh::AdjointResidualErrorEstimator::estimate_error()\&.
+.PP
+.nf
+237 {
+238   if (_weights\&.size() <= i)
+239     return 1\&.0;
+240   return _weights[i];
+241 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<bool> libMesh::QoISet::_indices\fC [private]\fP"
+Interpret _indices\&.empty() to mean 'calculate all indices' 
+.PP
+Definition at line 172 of file qoi_set\&.h\&.
+.PP
+Referenced by add_index(), add_indices(), begin(), clear(), has_index(), remove_index(), and remove_indices()\&.
+.SS "std::vector<\fBReal\fP> libMesh::QoISet::_weights\fC [private]\fP"
+Interpret _weights\&.size() <= i to mean 'weight i = 1\&.0' 
+.PP
+Definition at line 177 of file qoi_set\&.h\&.
+.PP
+Referenced by clear(), set_weight(), and weight()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

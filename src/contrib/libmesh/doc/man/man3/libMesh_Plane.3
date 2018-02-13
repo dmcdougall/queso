@@ -1,0 +1,471 @@
+.TH "libMesh::Plane" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Plane \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <plane\&.h>\fP
+.PP
+Inherits \fBlibMesh::Surface\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPlane\fP ()"
+.br
+.ti -1c
+.RI "\fBPlane\fP (const \fBPoint\fP &p, const \fBPoint\fP &n)"
+.br
+.ti -1c
+.RI "\fBPlane\fP (const \fBPoint\fP &p0, const \fBPoint\fP &p1, const \fBPoint\fP &p2)"
+.br
+.ti -1c
+.RI "\fBPlane\fP (const \fBPlane\fP &other_plane)"
+.br
+.ti -1c
+.RI "\fB~Plane\fP ()"
+.br
+.ti -1c
+.RI "void \fBcreate_from_point_normal\fP (const \fBPoint\fP &p, const \fBPoint\fP &n)"
+.br
+.ti -1c
+.RI "void \fBcreate_from_three_points\fP (const \fBPoint\fP &p0, const \fBPoint\fP &p1, const \fBPoint\fP &p2)"
+.br
+.ti -1c
+.RI "void \fBxy_plane\fP (const \fBReal\fP zpos=0\&.)"
+.br
+.ti -1c
+.RI "void \fBxz_plane\fP (const \fBReal\fP ypos=0\&.)"
+.br
+.ti -1c
+.RI "void \fByz_plane\fP (const \fBReal\fP xpos=0\&.)"
+.br
+.ti -1c
+.RI "bool \fBabove_surface\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "bool \fBbelow_surface\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "bool \fBon_surface\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBclosest_point\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBunit_normal\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "const \fBPoint\fP & \fBget_planar_point\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBsurface_coords\fP (const \fBPoint\fP &\fBworld_coords\fP) const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBworld_coords\fP (const \fBPoint\fP &surf_coords) const "
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBPoint\fP & \fBnormal\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP \fB_point\fP"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fB_normal\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a plane\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002 
+.RE
+.PP
+
+.PP
+Definition at line 40 of file plane\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Plane::Plane ()"
+Dummy Constructor\&. 
+.PP
+Definition at line 32 of file plane\&.C\&.
+.PP
+.nf
+33 {
+34 }
+.fi
+.SS "libMesh::Plane::Plane (const \fBPoint\fP &p, const \fBPoint\fP &n)"
+Constructs a plane containing point p with normal n\&. 
+.PP
+Definition at line 38 of file plane\&.C\&.
+.PP
+References create_from_point_normal()\&.
+.PP
+.nf
+40 {
+41   this->create_from_point_normal (p, n);
+42 }
+.fi
+.SS "libMesh::Plane::Plane (const \fBPoint\fP &p0, const \fBPoint\fP &p1, const \fBPoint\fP &p2)"
+Constructs a plane containing the three points\&. The normal is determined in a counter-clockwise sense\&. See the create_from_three_points method for more details\&. 
+.PP
+Definition at line 46 of file plane\&.C\&.
+.PP
+References create_from_three_points()\&.
+.PP
+.nf
+49 {
+50   this->create_from_three_points (p0, p1, p2);
+51 }
+.fi
+.SS "libMesh::Plane::Plane (const \fBPlane\fP &other_plane)"
+Copy-constructor\&. 
+.PP
+Definition at line 55 of file plane\&.C\&.
+.PP
+References _normal, _point, and create_from_point_normal()\&.
+.PP
+.nf
+55                                       :
+56   Surface()
+57 {
+58   this->create_from_point_normal(other_plane\&._point,
+59                                  other_plane\&._normal);
+60 }
+.fi
+.SS "libMesh::Plane::~Plane ()"
+Destructor\&. Does nothing at the moment\&. 
+.PP
+Definition at line 64 of file plane\&.C\&.
+.PP
+.nf
+65 {
+66 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::Plane::above_surface (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is above the surface, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 127 of file plane\&.C\&.
+.PP
+References _point, normal(), and libMesh::Real\&.
+.PP
+Referenced by below_surface()\&.
+.PP
+.nf
+128 {
+129   // Create a vector from the surface to point p;
+130   const Point w = p - _point;
+131 
+132   // The point is above the surface if the projection
+133   // of that vector onto the normal is positive
+134   const Real proj = w*this->normal();
+135 
+136   if (proj > 0\&.)
+137     return true;
+138 
+139   return false;
+140 }
+.fi
+.SS "bool libMesh::Plane::below_surface (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is below the surface, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 144 of file plane\&.C\&.
+.PP
+References above_surface()\&.
+.PP
+.nf
+145 {
+146   return ( !this->above_surface (p) );
+147 }
+.fi
+.SS "\fBPoint\fP libMesh::Plane::closest_point (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the closest point on the surface to point p\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 169 of file plane\&.C\&.
+.PP
+References _point, and normal()\&.
+.PP
+.nf
+170 {
+171   // Create a vector from the surface to point p;
+172   const Point w = p - _point;
+173 
+174   // The closest point in the plane to point p
+175   // is in the negative normal direction
+176   // a distance w (dot) p\&.
+177   const Point cp = p - this->normal()*(w*this->normal());
+178 
+179   return cp;
+180 }
+.fi
+.SS "void libMesh::Plane::create_from_point_normal (const \fBPoint\fP &p, const \fBPoint\fP &n)"
+Defines a plane containing point p with normal n\&. 
+.PP
+Definition at line 70 of file plane\&.C\&.
+.PP
+References _normal, _point, and libMesh::TypeVector< T >::unit()\&.
+.PP
+Referenced by Plane()\&.
+.PP
+.nf
+71 {
+72   _normal = n\&.unit();
+73   _point  = p;
+74 }
+.fi
+.SS "void libMesh::Plane::create_from_three_points (const \fBPoint\fP &p0, const \fBPoint\fP &p1, const \fBPoint\fP &p2)"
+Defines a plane intersecting the three points p0, p1, and p2\&. The normal is constructed in a counter-clockwise sense, i\&.e\&. (p1-p0)x(p2-p0); 
+.PP
+Definition at line 78 of file plane\&.C\&.
+.PP
+References _normal, _point, libMesh::TypeVector< T >::cross(), and libMesh::TypeVector< T >::unit()\&.
+.PP
+Referenced by Plane()\&.
+.PP
+.nf
+81 {
+82   // Just use p0 for the point\&.
+83   _point = p0;
+84 
+85   const Point e0 = p1 - p0;
+86   const Point e1 = p2 - p0;
+87   const Point n  = e0\&.cross(e1);
+88 
+89   _normal = n\&.unit();
+90 }
+.fi
+.SS "const \fBPoint\fP & libMesh::Plane::get_planar_point () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a point on the plane useful for determining position 
+.RE
+.PP
+
+.PP
+Definition at line 189 of file plane\&.C\&.
+.PP
+References _point\&.
+.PP
+.nf
+190 {
+191   return _point;
+192 }
+.fi
+.SS "const \fBPoint\fP & libMesh::Plane::normal () const\fC [inline]\fP, \fC [private]\fP"
+Returns the normal for the plane\&. 
+.PP
+Definition at line 158 of file plane\&.h\&.
+.PP
+References _normal\&.
+.PP
+Referenced by above_surface(), closest_point(), and on_surface()\&.
+.PP
+.nf
+159 {
+160   return _normal;
+161 }
+.fi
+.SS "bool libMesh::Plane::on_surface (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is on the surface, false otherwise\&. Note that the definition of on the surface really means 'very close' to account for roundoff error\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 151 of file plane\&.C\&.
+.PP
+References _point, std::abs(), normal(), and libMesh::Real\&.
+.PP
+.nf
+152 {
+153   // Create a vector from the surface to point p;
+154   const Point w = p - _point;
+155 
+156   // If the projection of that vector onto the
+157   // plane's normal is 0 then the point is in
+158   // the plane\&.
+159   const Real proj = w * this->normal();
+160 
+161   if (std::abs(proj) < 1\&.e-10)
+162     return true;
+163 
+164   return false;
+165 }
+.fi
+.SS "\fBPoint\fP libMesh::Surface::surface_coords (const \fBPoint\fP &world_coords) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBPoint\fP\fP \fCworld_coords\fP in the surface's coordinate system\&. \fCworld_coords\fP is in the world coordinate system\&. This method is not purely virtual, because there may be surfaces that do not have an own coordinate system\&. These simply do not have to overload this method\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::Sphere\fP\&.
+.PP
+Definition at line 121 of file surface\&.h\&.
+.PP
+.nf
+122 {
+123   Point p (from_world_coords);
+124   return p;
+125 }
+.fi
+.SS "\fBPoint\fP libMesh::Plane::unit_normal (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a unit vector normal to the surface at point p\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 184 of file plane\&.C\&.
+.PP
+References _normal\&.
+.PP
+.nf
+185 {
+186   return _normal;
+187 }
+.fi
+.SS "\fBPoint\fP libMesh::Surface::world_coords (const \fBPoint\fP &surf_coords) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the world (cartesian) coordinates for the surface coordinates \fCsurf_coords\fP\&. This method is not purely virtual, because there may be surfaces that do not have an own coordinate system\&. These simply do not have to overload this method\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::Sphere\fP\&.
+.PP
+Definition at line 130 of file surface\&.h\&.
+.PP
+.nf
+131 {
+132   Point p (surf_coords);
+133   return p;
+134 }
+.fi
+.SS "void libMesh::Plane::xy_plane (const \fBReal\fPzpos = \fC0\&.\fP)"
+Creates an XY plane located at z=zpos, 
+.PP
+Definition at line 94 of file plane\&.C\&.
+.PP
+References _normal, and _point\&.
+.PP
+.nf
+95 {
+96   const Point p (0\&., 0\&., zpos);
+97   const Point n (0\&., 0\&., 1\&.);
+98 
+99   _point  = p;
+100   _normal = n;
+101 }
+.fi
+.SS "void libMesh::Plane::xz_plane (const \fBReal\fPypos = \fC0\&.\fP)"
+Creates an XZ plane located at y=ypos, 
+.PP
+Definition at line 105 of file plane\&.C\&.
+.PP
+References _normal, and _point\&.
+.PP
+.nf
+106 {
+107   const Point p (0\&., ypos, 0\&.);
+108   const Point n (0\&., 1\&., 0\&.);
+109 
+110   _point  = p;
+111   _normal = n;
+112 }
+.fi
+.SS "void libMesh::Plane::yz_plane (const \fBReal\fPxpos = \fC0\&.\fP)"
+Creates an YZ plane located at x=xpos, 
+.PP
+Definition at line 116 of file plane\&.C\&.
+.PP
+References _normal, and _point\&.
+.PP
+.nf
+117 {
+118   const Point p (xpos, 0\&., 0\&.);
+119   const Point n (1\&., 0\&., 0\&.);
+120 
+121   _point  = p;
+122   _normal = n;
+123 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBPoint\fP libMesh::Plane::_normal\fC [private]\fP"
+
+.PP
+Definition at line 150 of file plane\&.h\&.
+.PP
+Referenced by create_from_point_normal(), create_from_three_points(), normal(), Plane(), unit_normal(), xy_plane(), xz_plane(), and yz_plane()\&.
+.SS "\fBPoint\fP libMesh::Plane::_point\fC [private]\fP"
+The plane is defined by a point and a normal\&. 
+.PP
+Definition at line 149 of file plane\&.h\&.
+.PP
+Referenced by above_surface(), closest_point(), create_from_point_normal(), create_from_three_points(), get_planar_point(), on_surface(), Plane(), xy_plane(), xz_plane(), and yz_plane()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,605 @@
+.TH "libMesh::UCDIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::UCDIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ucd_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP, and \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUCDIO\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "\fBUCDIO\fP (const \fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBread_implementation\fP (std::istream &in_stream)"
+.br
+.ti -1c
+.RI "void \fBwrite_implementation\fP (std::ostream &out_stream)"
+.br
+.ti -1c
+.RI "void \fBwrite_header\fP (std::ostream &\fBout\fP, const \fBMeshBase\fP &\fBmesh\fP, \fBdof_id_type\fP n_elems, unsigned int \fBn_vars\fP)"
+.br
+.ti -1c
+.RI "void \fBwrite_nodes\fP (std::ostream &\fBout\fP, const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBwrite_interior_elems\fP (std::ostream &\fBout\fP, const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBwrite_soln\fP (std::ostream &\fBout\fP, const \fBMeshBase\fP &\fBmesh\fP, const std::vector< std::string > &names, const std::vector< \fBNumber\fP > &soln)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements reading & writing meshes in the AVS's UCD format\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file ucd_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::UCDIO::UCDIO (\fBMeshBase\fP &mesh)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a writeable reference to a mesh object\&. This is the constructor required to read a mesh\&. 
+.PP
+Definition at line 133 of file ucd_io\&.h\&.
+.PP
+.nf
+133                             :
+134   MeshInput<MeshBase> (mesh),
+135   MeshOutput<MeshBase>(mesh)
+136 {
+137 }
+.fi
+.SS "libMesh::UCDIO::UCDIO (const \fBMeshBase\fP &mesh)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. 
+.PP
+Definition at line 142 of file ucd_io\&.h\&.
+.PP
+.nf
+142                                   :
+143   MeshOutput<MeshBase> (mesh)
+144 {
+145 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), write_implementation(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::UCDIO::read (const std::string &file_name)\fC [virtual]\fP"
+This method implements reading a mesh from a specified file in UCD format\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 46 of file ucd_io\&.C\&.
+.PP
+References libMesh::err, and read_implementation()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+47 {
+48   if (file_name\&.rfind("\&.gz") < file_name\&.size())
+49     {
+50 #ifdef LIBMESH_HAVE_GZSTREAM
+51 
+52       igzstream in_stream (file_name\&.c_str());
+53       this->read_implementation (in_stream);
+54 
+55 #else
+56 
+57       libMesh::err << "ERROR:  You must have the zlib\&.h header "
+58                    << "files and libraries to read and write "
+59                    << "compressed streams\&."
+60                    << std::endl;
+61       libmesh_error();
+62 
+63 #endif
+64       return;
+65     }
+66 
+67   else
+68     {
+69       std::ifstream in_stream (file_name\&.c_str());
+70       this->read_implementation (in_stream);
+71       return;
+72     }
+73 }
+.fi
+.SS "void libMesh::UCDIO::read_implementation (std::istream &in_stream)\fC [private]\fP"
+The actual implementation of the read function\&. The public read interface simply decides which type of stream to pass the implementation\&. 
+.PP
+Definition at line 108 of file ucd_io\&.C\&.
+.PP
+References libMesh::Elem::dim(), libMesh::MeshInput< MeshBase >::elems_of_dimension, libMesh::err, libMesh::libmesh_assert(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::Elem::n_nodes(), libMesh::processor_id(), libMesh::DofObject::set_id(), libMesh::Elem::set_node(), and libMesh::MeshInput< MeshBase >::skip_comment_lines()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+109 {
+110   // This is a serial-only process for now;
+111   // the Mesh should be read on processor 0 and
+112   // broadcast later
+113   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.processor_id(), 0);
+114 
+115   // Check input buffer
+116   libmesh_assert (in\&.good());
+117 
+118   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+119 
+120   // Keep track of what kinds of elements this file contains
+121   elems_of_dimension\&.clear();
+122   elems_of_dimension\&.resize(4, false);
+123 
+124   this->skip_comment_lines (in, '#');
+125 
+126   unsigned int nNodes=0, nElem=0, dummy=0;
+127 
+128   in >> nNodes   // Read the number of nodes from the stream
+129      >> nElem    // Read the number of elements from the stream
+130      >> dummy
+131      >> dummy
+132      >> dummy;
+133 
+134 
+135   // Read the nodal coordinates\&. Note that UCD format always
+136   // stores (x,y,z), and in 2D z=0\&. We don't need to store this,
+137   // however\&.  So, we read in x,y,z for each node and make a point
+138   // in the proper way based on what dimension we're in
+139   {
+140     Point xyz;
+141 
+142     for (unsigned int i=0; i<nNodes; i++)
+143       {
+144         libmesh_assert (in\&.good());
+145 
+146         in >> dummy   // Point number
+147            >> xyz(0)  // x-coordinate value
+148            >> xyz(1)  // y-coordinate value
+149            >> xyz(2); // z-coordinate value
+150 
+151         // Build the node
+152         mesh\&.add_point (xyz, i);
+153       }
+154   }
+155 
+156 
+157 
+158   // Read the elements from the stream\&. Notice that the UCD node-numbering
+159   // scheme is 1-based, and we just created a 0-based scheme above
+160   // (which is of course what we want)\&. So, when we read in the nodal
+161   // connectivity for each element we need to take 1 off the value of
+162   // each node so that we get the right thing\&.
+163   {
+164     unsigned int material_id=0, node=0;
+165     std::string type;
+166 
+167     for (unsigned int i=0; i<nElem; i++)
+168       {
+169         Elem* elem = NULL;
+170 
+171         libmesh_assert (in\&.good());
+172 
+173         in >> dummy        // Cell number, means nothing to us
+174            >> material_id  // doesn't mean anything at present, might later
+175            >> type;        // string describing cell type:
+176         // either tri, quad, tet, hex, or prism for the
+177         // obvious cases
+178 
+179 
+180         // Now read the connectivity\&.
+181         if (type == "quad")
+182           elem = new Quad4;
+183         else if (type == "tri")
+184           elem = new Tri3;
+185         else if (type == "hex")
+186           elem = new Hex8;
+187         else if (type == "tet")
+188           elem = new Tet4;
+189         else if (type == "prism")
+190           elem = new Prism6;
+191         else
+192           libmesh_error();
+193 
+194         for (unsigned int n=0; n<elem->n_nodes(); n++)
+195           {
+196             libmesh_assert (in\&.good());
+197 
+198             in >> node; // read the current node
+199             node -= 1;  // UCD is 1-based, so subtract
+200 
+201             libmesh_assert_less (node, mesh\&.n_nodes());
+202 
+203             elem->set_node(n) =
+204               mesh\&.node_ptr(node); // assign the node
+205           }
+206 
+207         elems_of_dimension[elem->dim()] = true;
+208 
+209         // Add the element to the mesh
+210         elem->set_id(i);
+211         mesh\&.add_elem (elem);
+212       }
+213 
+214     // Set the mesh dimension to the largest encountered for an element
+215     for (unsigned int i=0; i!=4; ++i)
+216       if (elems_of_dimension[i])
+217         mesh\&.set_mesh_dimension(i);
+218 
+219 #if LIBMESH_DIM < 3
+220     if (mesh\&.mesh_dimension() > LIBMESH_DIM)
+221       {
+222         libMesh::err << "Cannot open dimension " <<
+223           mesh\&.mesh_dimension() <<
+224           " mesh file when configured without " <<
+225           mesh\&.mesh_dimension() << "D support\&." <<
+226           std::endl;
+227         libmesh_error();
+228       }
+229 #endif
+230   }
+231 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and read_implementation()\&.
+.SS "void libMesh::UCDIO::write (const std::string &file_name)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file in UCD format\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 77 of file ucd_io\&.C\&.
+.PP
+References libMesh::err, and write_implementation()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+78 {
+79   if (file_name\&.rfind("\&.gz") < file_name\&.size())
+80     {
+81 #ifdef LIBMESH_HAVE_GZSTREAM
+82 
+83       ogzstream out_stream (file_name\&.c_str());
+84       this->write_implementation (out_stream);
+85 
+86 #else
+87 
+88       libMesh::err << "ERROR:  You must have the zlib\&.h header "
+89                    << "files and libraries to read and write "
+90                    << "compressed streams\&."
+91                    << std::endl;
+92       libmesh_error();
+93 
+94 #endif
+95       return;
+96     }
+97 
+98   else
+99     {
+100       std::ofstream out_stream (file_name\&.c_str());
+101       this->write_implementation (out_stream);
+102       return;
+103     }
+104 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::UCDIO::write_header (std::ostream &out, const \fBMeshBase\fP &mesh, \fBdof_id_type\fPn_elems, unsigned intn_vars)\fC [private]\fP"
+Write UCD format header 
+.PP
+Definition at line 263 of file ucd_io\&.C\&.
+.PP
+References libMesh::libmesh_assert(), and libMesh::MeshBase::n_nodes()\&.
+.PP
+Referenced by write_implementation(), and write_nodal_data()\&.
+.PP
+.nf
+265 {
+266   libmesh_assert (out_stream\&.good());
+267   // TODO: We used to print out the SVN revision here when we did keyword expansions\&.\&.\&.
+268   out_stream << "# For a description of the UCD format see the AVS Developer's guide\&.\n"
+269              << "#\n";
+270 
+271   // Write the mesh info
+272   out_stream << mesh\&.n_nodes() << " "
+273              << n_elems  << " "
+274              << n_vars << " "
+275              << " 0 0\n";
+276   return;
+277 }
+.fi
+.SS "void libMesh::UCDIO::write_implementation (std::ostream &out_stream)\fC [private]\fP"
+The actual implementation of the write function\&. The public write interface simply decides which type of stream to pass the implementation\&. 
+.PP
+Definition at line 235 of file ucd_io\&.C\&.
+.PP
+References libMesh::err, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), write_header(), write_interior_elems(), and write_nodes()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+236 {
+237   libmesh_assert (out_stream\&.good());
+238 
+239   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+240 
+241   // UCD doesn't work in 1D
+242   libmesh_assert_not_equal_to (mesh\&.mesh_dimension(), 1);
+243   if(mesh\&.mesh_dimension() != 3)
+244     {
+245       libMesh::err << "Error: Can't write boundary elements for meshes of dimension less than 3"
+246                    << "Mesh dimension = " << mesh\&.mesh_dimension()
+247                    << std::endl;
+248       libmesh_error();
+249     }
+250 
+251   // Write header
+252   this->write_header(out_stream,mesh,mesh\&.n_elem(),0);
+253 
+254   // Write the node coordinates
+255   this->write_nodes(out_stream,mesh);
+256 
+257   // Write the elements
+258   this->write_interior_elems(out_stream,mesh);
+259 
+260   return;
+261 }
+.fi
+.SS "void libMesh::UCDIO::write_interior_elems (std::ostream &out, const \fBMeshBase\fP &mesh)\fC [private]\fP"
+Write element information 
+.PP
+Definition at line 298 of file ucd_io\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::err, libMesh::HEX8, libMesh::libmesh_assert(), libMesh::PRISM6, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::TET4, libMesh::TRI3, and libMesh::UCD\&.
+.PP
+Referenced by write_implementation(), and write_nodal_data()\&.
+.PP
+.nf
+299 {
+300   std::string type[] =
+301     { "edge",  "edge",  "edge",
+302       "tri",   "tri",
+303       "quad",  "quad",  "quad",
+304       "tet",   "tet",
+305       "hex",   "hex",   "hex",
+306       "prism", "prism", "prism",
+307       "pyramid" };
+308 
+309   MeshBase::const_element_iterator it  = mesh\&.elements_begin();
+310   const MeshBase::const_element_iterator end = mesh\&.elements_end();
+311 
+312   unsigned int e=1; // 1-based element number for UCD
+313 
+314   // Write element information
+315   for (; it != end; ++it)
+316     {
+317       libmesh_assert (out_stream\&.good());
+318 
+319       // PB: I believe these are the only supported ElemTypes\&.
+320       const ElemType etype = (*it)->type();
+321       if( (etype != TRI3) && (etype != QUAD4) &&
+322           (etype != TET4) && (etype != HEX8) &&
+323           (etype != PRISM6) && (etype != PYRAMID5) )
+324         {
+325           libMesh::err << "Error: Unsupported ElemType for UCDIO\&."
+326                        << std::endl;
+327           libmesh_error();
+328         }
+329 
+330       out_stream << e++ << " 0 " << type[etype] << "\t";
+331       // (*it)->write_ucd_connectivity(out_stream);
+332       (*it)->write_connectivity(out_stream, UCD);
+333     }
+334 
+335   return;
+336 }
+.fi
+.SS "void libMesh::UCDIO::write_nodal_data (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)\fC [virtual]\fP"
+This method implements writing a mesh and solution to a specified file in UCD format\&. This is internally called by \fBMeshOutput::write_equation_systems\fP 
+.PP
+Reimplemented from \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 338 of file ucd_io\&.C\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_elem(), libMesh::MeshTools::n_elem(), libMesh::ParallelObject::processor_id(), write_header(), write_interior_elems(), write_nodes(), and write_soln()\&.
+.PP
+.nf
+341 {
+342   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+343 
+344   const dof_id_type n_elem = mesh\&.n_elem();
+345 
+346   // Only processor 0 does the writing
+347   if (mesh\&.processor_id())
+348     return;
+349 
+350   std::ofstream out_stream(fname\&.c_str());
+351 
+352   // UCD doesn't work in 1D
+353   libmesh_assert (mesh\&.mesh_dimension() != 1);
+354 
+355   // Write header
+356   this->write_header(out_stream,mesh,n_elem,names\&.size());
+357 
+358   // Write the node coordinates
+359   this->write_nodes(out_stream,mesh);
+360 
+361   // Write the elements
+362   this->write_interior_elems(out_stream,mesh);
+363 
+364   // Write the solution
+365   this->write_soln(out_stream,mesh,names,soln);
+366 
+367   return;
+368 }
+.fi
+.SS "void libMesh::UCDIO::write_nodes (std::ostream &out, const \fBMeshBase\fP &mesh)\fC [private]\fP"
+Write node information 
+.PP
+Definition at line 279 of file ucd_io\&.C\&.
+.PP
+References end, libMesh::libmesh_assert(), libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+Referenced by write_implementation(), and write_nodal_data()\&.
+.PP
+.nf
+280 {
+281   MeshBase::const_node_iterator       it  = mesh\&.nodes_begin();
+282   const MeshBase::const_node_iterator end = mesh\&.nodes_end();
+283 
+284   unsigned int n=1; // 1-based node number for UCD
+285 
+286   // Write the node coordinates
+287   for (; it != end; ++it)
+288     {
+289       libmesh_assert (out_stream\&.good());
+290 
+291       out_stream << n++ << "\t";
+292       (*it)->write_unformatted(out_stream);
+293     }
+294 
+295   return;
+296 }
+.fi
+.SS "void libMesh::UCDIO::write_soln (std::ostream &out, const \fBMeshBase\fP &mesh, const std::vector< std::string > &names, const std::vector< \fBNumber\fP > &soln)\fC [private]\fP"
+Writes all nodal solution variables 
+.PP
+Definition at line 370 of file ucd_io\&.C\&.
+.PP
+References libMesh::MeshTools::Generation::Private::idx(), libMesh::libmesh_assert(), and libMesh::MeshBase::n_nodes()\&.
+.PP
+Referenced by write_nodal_data()\&.
+.PP
+.nf
+373 {
+374   libmesh_assert (out_stream\&.good());
+375 
+376   // First write out how many variables and how many components per variable
+377   out_stream << names\&.size();
+378   for( unsigned int i = 0; i < names\&.size(); i++ )
+379     {
+380       libmesh_assert (out_stream\&.good());
+381       // Each named variable has only 1 component
+382       out_stream << " 1";
+383     }
+384   out_stream << std::endl;
+385 
+386   // Now write out variable names and units\&. Since we don't store units
+387   // We just write out dummy\&.
+388   for( std::vector<std::string>::const_iterator var = names\&.begin();
+389        var != names\&.end();
+390        ++var)
+391     {
+392       libmesh_assert (out_stream\&.good());
+393       out_stream << (*var) << ", dummy" << std::endl;
+394     }
+395 
+396   // Now, for each node, write out the solution variables
+397   std::size_t nv = names\&.size();
+398   for( std::size_t n = 1; // 1-based node number for UCD
+399        n <= mesh\&.n_nodes(); n++)
+400     {
+401       libmesh_assert (out_stream\&.good());
+402       out_stream << n;
+403 
+404       for( std::size_t var = 0; var != nv; var++ )
+405         {
+406           std::size_t idx = nv*(n-1) + var;
+407 
+408           out_stream << " " << soln[idx];
+409         }
+410       out_stream << std::endl;
+411     }
+412 
+413   return;
+414 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

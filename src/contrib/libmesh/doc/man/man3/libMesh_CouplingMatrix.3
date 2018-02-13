@@ -1,0 +1,205 @@
+.TH "libMesh::CouplingMatrix" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::CouplingMatrix \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <coupling_matrix\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBCouplingMatrix\fP (const unsigned int n=0)"
+.br
+.ti -1c
+.RI "unsigned char \fBoperator()\fP (const unsigned int i, const unsigned int j) const "
+.br
+.ti -1c
+.RI "unsigned char & \fBoperator()\fP (const unsigned int i, const unsigned int j)"
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBresize\fP (const unsigned int n)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "bool \fBempty\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< unsigned char > \fB_values\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_size\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a coupling matrix\&. A coupling matrix is simply a matrix of ones and zeros describing how different components in a system couple with each other\&. A coupling matrix is necessarily square but not necessarily symmetric\&. 
+.PP
+Definition at line 42 of file coupling_matrix\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::CouplingMatrix::CouplingMatrix (const unsigned intn = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. 
+.PP
+Definition at line 111 of file coupling_matrix\&.h\&.
+.PP
+References resize()\&.
+.PP
+.nf
+111                                                     :
+112   _values(), _size(n)
+113 {
+114   this->resize(n);
+115 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::CouplingMatrix::clear ()\fC [inline]\fP"
+Clears the matrix\&. 
+.PP
+Definition at line 165 of file coupling_matrix\&.h\&.
+.PP
+References _size, and _values\&.
+.PP
+.nf
+166 {
+167   _size = 0;
+168 
+169   _values\&.clear();
+170 }
+.fi
+.SS "bool libMesh::CouplingMatrix::empty () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the matrix is empty\&. 
+.RE
+.PP
+
+.PP
+Definition at line 175 of file coupling_matrix\&.h\&.
+.PP
+References _size\&.
+.PP
+Referenced by libMesh::SparsityPattern::Build::operator()()\&.
+.PP
+.nf
+176 {
+177   return (_size == 0);
+178 }
+.fi
+.SS "unsigned char libMesh::CouplingMatrix::operator() (const unsigned inti, const unsigned intj) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the (i,j) entry of the matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 120 of file coupling_matrix\&.h\&.
+.PP
+References _size, and _values\&.
+.PP
+.nf
+122 {
+123   libmesh_assert_less (i, _size);
+124   libmesh_assert_less (j, _size);
+125 
+126   return _values[i*_size + j];
+127 }
+.fi
+.SS "unsigned char & libMesh::CouplingMatrix::operator() (const unsigned inti, const unsigned intj)\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the (i,j) entry of the matrix as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 132 of file coupling_matrix\&.h\&.
+.PP
+References _size, and _values\&.
+.PP
+.nf
+134 {
+135   libmesh_assert_less (i, _size);
+136   libmesh_assert_less (j, _size);
+137 
+138   return _values[i*_size + j];
+139 }
+.fi
+.SS "void libMesh::CouplingMatrix::resize (const unsigned intn)\fC [inline]\fP"
+Resizes the matrix and initializes all entries to be 0\&. 
+.PP
+Definition at line 152 of file coupling_matrix\&.h\&.
+.PP
+References _size, and _values\&.
+.PP
+Referenced by CouplingMatrix()\&.
+.PP
+.nf
+153 {
+154   _size = n;
+155 
+156   _values\&.resize(_size*_size);
+157 
+158   for (unsigned int i=0; i<_values\&.size(); i++)
+159     _values[i] = 0;
+160 }
+.fi
+.SS "unsigned int libMesh::CouplingMatrix::size () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the size of the matrix, i\&.e\&. N for an NxN matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 144 of file coupling_matrix\&.h\&.
+.PP
+References _size\&.
+.PP
+Referenced by libMesh::SparsityPattern::Build::operator()()\&.
+.PP
+.nf
+145 {
+146   return _size;
+147 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "unsigned int libMesh::CouplingMatrix::_size\fC [private]\fP"
+The size of the matrix\&. 
+.PP
+Definition at line 100 of file coupling_matrix\&.h\&.
+.PP
+Referenced by clear(), empty(), operator()(), resize(), and size()\&.
+.SS "std::vector<unsigned char> libMesh::CouplingMatrix::_values\fC [private]\fP"
+The actual matrix values\&. These are stored as unsigned chars because a vector of bools is not what you think\&. 
+.PP
+Definition at line 95 of file coupling_matrix\&.h\&.
+.PP
+Referenced by clear(), operator()(), and resize()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

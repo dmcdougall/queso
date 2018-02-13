@@ -1,0 +1,363 @@
+.TH "libMesh::DenseMatrixBase< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DenseMatrixBase< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dense_matrix_base\&.h>\fP
+.PP
+Inherited by \fBlibMesh::DenseMatrix< Number >\fP, \fBlibMesh::DenseMatrix< T >\fP, and \fBlibMesh::DenseSubMatrix< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~DenseMatrixBase\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBzero\fP ()=0"
+.br
+.ti -1c
+.RI "virtual T \fBel\fP (const unsigned int i, const unsigned int j) const =0"
+.br
+.ti -1c
+.RI "virtual T & \fBel\fP (const unsigned int i, const unsigned int j)=0"
+.br
+.ti -1c
+.RI "virtual void \fBleft_multiply\fP (const \fBDenseMatrixBase\fP< T > &M2)=0"
+.br
+.ti -1c
+.RI "virtual void \fBright_multiply\fP (const \fBDenseMatrixBase\fP< T > &M3)=0"
+.br
+.ti -1c
+.RI "unsigned int \fBm\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "void \fBprint_scientific\fP (std::ostream &os) const "
+.br
+.ti -1c
+.RI "template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP
+.br
+< \fBScalarTraits\fP< T2 >::value, 
+.br
+void >::type \fBadd\fP (const T2 factor, const \fBDenseMatrixBase\fP< T3 > &mat)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDenseMatrixBase\fP (const unsigned int new_m=0, const unsigned int new_n=0)"
+.br
+.ti -1c
+.RI "void \fBmultiply\fP (\fBDenseMatrixBase\fP< T > &M1, const \fBDenseMatrixBase\fP< T > &M2, const \fBDenseMatrixBase\fP< T > &M3)"
+.br
+.ti -1c
+.RI "void \fBcondense\fP (const unsigned int i, const unsigned int j, const T val, \fBDenseVectorBase\fP< T > &rhs)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fB_m\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_n\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const \fBDenseMatrixBase\fP< T > &\fBm\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::DenseMatrixBase< T >"
+Defines an abstract dense matrix base class for use in Finite Element-type computations\&. Specialized dense matrices, for example DenseSubMatrices, can be derived from this class\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 46 of file dense_matrix_base\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::DenseMatrixBase\fP< T >::\fBDenseMatrixBase\fP (const unsigned intnew_m = \fC0\fP, const unsigned intnew_n = \fC0\fP)\fC [inline]\fP, \fC [protected]\fP"
+Constructor\&. Creates a dense matrix of dimension \fCm\fP by \fCn\fP\&. Protected so that there is no way the user can create one\&. 
+.PP
+Definition at line 54 of file dense_matrix_base\&.h\&.
+.PP
+.nf
+55                                               : _m(new_m), _n(new_n) {}
+.fi
+.SS "template<typename T> virtual \fBlibMesh::DenseMatrixBase\fP< T >::~\fBDenseMatrixBase\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. Empty\&. 
+.PP
+Definition at line 61 of file dense_matrix_base\&.h\&.
+.PP
+.nf
+61 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP< \fBScalarTraits\fP< T2 >::value, void >::type \fBlibMesh::DenseMatrixBase\fP< T >::add (const T2factor, const \fBDenseMatrixBase\fP< T3 > &mat)\fC [inline]\fP"
+Adds \fCfactor\fP to every element in the matrix\&. This should only work if T += T2 * T3 is valid C++ and if T2 is scalar\&. Return type is void 
+.PP
+Definition at line 184 of file dense_matrix_base\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::el(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+186 {
+187   libmesh_assert_equal_to (this->m(), mat\&.m());
+188   libmesh_assert_equal_to (this->n(), mat\&.n());
+189 
+190   for (unsigned int j=0; j<this->n(); j++)
+191     for (unsigned int i=0; i<this->m(); i++)
+192       this->el(i,j) += factor*mat\&.el(i,j);
+193 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::condense (const unsigned inti, const unsigned intj, const Tval, \fBDenseVectorBase\fP< T > &rhs)\fC [protected]\fP"
+Condense-out the \fC\fP(i,j) entry of the matrix, forcing it to take on the value \fCval\fP\&. This is useful in numerical simulations for applying boundary conditions\&. Preserves the symmetry of the matrix\&. 
+.PP
+Definition at line 58 of file dense_matrix_base\&.C\&.
+.PP
+References libMesh::DenseVectorBase< T >::el(), and libMesh::DenseVectorBase< T >::size()\&.
+.PP
+Referenced by libMesh::DenseMatrix< Number >::condense()\&.
+.PP
+.nf
+62 {
+63   libmesh_assert_equal_to (this->_m, rhs\&.size());
+64   libmesh_assert_equal_to (iv, jv);
+65 
+66 
+67   // move the known value into the RHS
+68   // and zero the column
+69   for (unsigned int i=0; i<this->m(); i++)
+70     {
+71       rhs\&.el(i) -= this->el(i,jv)*val;
+72       this->el(i,jv) = 0\&.;
+73     }
+74 
+75   // zero the row
+76   for (unsigned int j=0; j<this->n(); j++)
+77     this->el(iv,j) = 0\&.;
+78 
+79   this->el(iv,jv) = 1\&.;
+80   rhs\&.el(iv) = val;
+81 
+82 }
+.fi
+.SS "template<typename T> virtual T \fBlibMesh::DenseMatrixBase\fP< T >::el (const unsigned inti, const unsigned intj) const\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the matrix\&. Since internal data representations may differ, you must redefine this function\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::DenseMatrix< T >\fP, and \fBlibMesh::DenseMatrix< Number >\fP\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::add(), and libMesh::DenseMatrixBase< T >::multiply()\&.
+.SS "template<typename T> virtual T& \fBlibMesh::DenseMatrixBase\fP< T >::el (const unsigned inti, const unsigned intj)\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the matrix as a writeable reference\&. Since internal data representations may differ, you must redefine this function\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::DenseMatrix< T >\fP, and \fBlibMesh::DenseMatrix< Number >\fP\&.
+.SS "template<typename T> virtual void \fBlibMesh::DenseMatrixBase\fP< T >::left_multiply (const \fBDenseMatrixBase\fP< T > &M2)\fC [pure virtual]\fP"
+Performs the operation: (*this) <- M2 * (*this) 
+.PP
+Implemented in \fBlibMesh::DenseMatrix< T >\fP\&.
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::m () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the row-dimension of the matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 99 of file dense_matrix_base\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::_m\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_multiply_blas(), libMesh::DenseMatrix< T >::_svd_lapack(), libMesh::DenseMatrixBase< T >::add(), libMesh::DenseMatrix< T >::add(), libMesh::SparseMatrix< T >::add_block_matrix(), libMesh::PetscMatrix< T >::add_block_matrix(), libMesh::EigenSparseMatrix< T >::add_matrix(), libMesh::LaspackMatrix< T >::add_matrix(), libMesh::EpetraMatrix< T >::add_matrix(), libMesh::PetscMatrix< T >::add_matrix(), libMesh::DofMap::build_constraint_matrix(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::DofMap::constrain_element_dyad_matrix(), libMesh::DofMap::constrain_element_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::constrain_element_vector(), libMesh::DofMap::extract_local_vector(), libMesh::DenseMatrix< T >::get_transpose(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), libMesh::DofMap::heterogenously_constrain_element_vector(), libMesh::DenseMatrix< T >::left_multiply(), libMesh::DenseMatrix< T >::left_multiply_transpose(), libMesh::DofMap::max_constraint_error(), libMesh::DenseMatrixBase< T >::multiply(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::DenseMatrix< T >::operator=(), libMesh::DenseMatrix< T >::right_multiply(), and libMesh::DenseMatrix< T >::right_multiply_transpose()\&.
+.PP
+.nf
+99 { return _m; }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::multiply (\fBDenseMatrixBase\fP< T > &M1, const \fBDenseMatrixBase\fP< T > &M2, const \fBDenseMatrixBase\fP< T > &M3)\fC [protected]\fP"
+Performs the computation M1 = M2 * M3 where: M1 = (m x n) M2 = (m x p) M3 = (p x n) 
+.PP
+Definition at line 31 of file dense_matrix_base\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::el(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+34 {
+35   // Assertions to make sure we have been
+36   // passed matrices of the correct dimension\&.
+37   libmesh_assert_equal_to (M1\&.m(), M2\&.m());
+38   libmesh_assert_equal_to (M1\&.n(), M3\&.n());
+39   libmesh_assert_equal_to (M2\&.n(), M3\&.m());
+40 
+41   const unsigned int m_s = M2\&.m();
+42   const unsigned int p_s = M2\&.n();
+43   const unsigned int n_s = M1\&.n();
+44 
+45   // Do it this way because there is a
+46   // decent chance (at least for constraint matrices)
+47   // that M3(k,j) = 0\&. when right-multiplying\&.
+48   for (unsigned int k=0; k<p_s; k++)
+49     for (unsigned int j=0; j<n_s; j++)
+50       if (M3\&.el(k,j) != 0\&.)
+51         for (unsigned int i=0; i<m_s; i++)
+52           M1\&.el(i,j) += M2\&.el(i,k) * M3\&.el(k,j);
+53 }
+.fi
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::n () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the column-dimension of the matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file dense_matrix_base\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::_n\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_multiply_blas(), libMesh::DenseMatrix< T >::_svd_lapack(), libMesh::DenseMatrixBase< T >::add(), libMesh::DenseMatrix< T >::add(), libMesh::SparseMatrix< T >::add_block_matrix(), libMesh::PetscMatrix< T >::add_block_matrix(), libMesh::EigenSparseMatrix< T >::add_matrix(), libMesh::LaspackMatrix< T >::add_matrix(), libMesh::EpetraMatrix< T >::add_matrix(), libMesh::PetscMatrix< T >::add_matrix(), libMesh::DofMap::build_constraint_matrix(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::DofMap::constrain_element_dyad_matrix(), libMesh::DofMap::constrain_element_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::constrain_element_vector(), libMesh::DofMap::extract_local_vector(), libMesh::DenseMatrix< T >::get_transpose(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), libMesh::DofMap::heterogenously_constrain_element_vector(), libMesh::DenseMatrix< T >::left_multiply(), libMesh::DenseMatrix< T >::left_multiply_transpose(), libMesh::DofMap::max_constraint_error(), libMesh::DenseMatrixBase< T >::multiply(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::DenseMatrix< T >::operator=(), libMesh::DenseMatrix< T >::right_multiply(), and libMesh::DenseMatrix< T >::right_multiply_transpose()\&.
+.PP
+.nf
+104 { return _n; }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::print (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const"
+Pretty-print the matrix, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 128 of file dense_matrix_base\&.C\&.
+.PP
+.nf
+129 {
+130   for (unsigned int i=0; i<this->m(); i++)
+131     {
+132       for (unsigned int j=0; j<this->n(); j++)
+133         os << std::setw(8)
+134            << this->el(i,j) << " ";
+135 
+136       os << std::endl;
+137     }
+138 
+139   return;
+140 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::print_scientific (std::ostream &os) const"
+Prints the matrix entries with more decimal places in scientific notation\&. 
+.PP
+Definition at line 86 of file dense_matrix_base\&.C\&.
+.PP
+.nf
+87 {
+88 #ifndef LIBMESH_BROKEN_IOSTREAM
+89 
+90   // save the initial format flags
+91   std::ios_base::fmtflags os_flags = os\&.flags();
+92 
+93   // Print the matrix entries\&.
+94   for (unsigned int i=0; i<this->m(); i++)
+95     {
+96       for (unsigned int j=0; j<this->n(); j++)
+97         os << std::setw(15)
+98            << std::scientific
+99            << std::setprecision(8)
+100            << this->el(i,j) << " ";
+101 
+102       os << std::endl;
+103     }
+104 
+105   // reset the original format flags
+106   os\&.flags(os_flags);
+107 
+108 #else
+109 
+110   // Print the matrix entries\&.
+111   for (unsigned int i=0; i<this->m(); i++)
+112     {
+113       for (unsigned int j=0; j<this->n(); j++)
+114         os << std::setprecision(8)
+115            << this->el(i,j)
+116            << " ";
+117 
+118       os << std::endl;
+119     }
+120 
+121 
+122 #endif
+123 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::DenseMatrixBase\fP< T >::right_multiply (const \fBDenseMatrixBase\fP< T > &M3)\fC [pure virtual]\fP"
+Performs the operation: (*this) <- (*this) * M3 
+.PP
+Implemented in \fBlibMesh::DenseMatrix< T >\fP\&.
+.SS "template<typename T> virtual void \fBlibMesh::DenseMatrixBase\fP< T >::zero ()\fC [pure virtual]\fP"
+Set every element in the matrix to 0\&. You must redefine what you mean by zeroing the matrix since it depends on how your values are stored\&. 
+.PP
+Implemented in \fBlibMesh::DenseMatrix< T >\fP, and \fBlibMesh::DenseMatrix< Number >\fP\&.
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename T> std::ostream& operator<< (std::ostream &os, const \fBDenseMatrixBase\fP< T > &m)\fC [friend]\fP"
+Formatted print as above but allows you to do \fBDenseMatrix\fP K; \fBlibMesh::out\fP << K << std::endl; 
+.PP
+Definition at line 116 of file dense_matrix_base\&.h\&.
+.PP
+.nf
+117   {
+118     m\&.print(os);
+119     return os;
+120   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::_m\fC [protected]\fP"
+The row dimension\&. 
+.PP
+Definition at line 165 of file dense_matrix_base\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrix< T >::operator=(), and libMesh::DenseMatrix< T >::swap()\&.
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::_n\fC [protected]\fP"
+The column dimension\&. 
+.PP
+Definition at line 170 of file dense_matrix_base\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::n(), libMesh::DenseMatrix< T >::operator=(), and libMesh::DenseMatrix< T >::swap()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

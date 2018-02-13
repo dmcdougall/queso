@@ -1,0 +1,473 @@
+.TH "libMesh::DivaIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DivaIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <diva_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDivaIO\fP (const \fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBwrite_stream\fP (std::ostream &\fBout\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes in the Diva format\&. This is a scientific visualization program created by Kelly Gaither\&. More information on Diva can be found here: http://www.erc.msstate.edu/simcenter/docs/diva/
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file diva_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::DivaIO::DivaIO (const \fBMeshBase\fP &mesh_in)\fC [inline]\fP, \fC [explicit]\fP"
+Note that only writing diva files is supported since Diva is not a mesh generator\&. 
+.PP
+Definition at line 79 of file diva_io\&.h\&.
+.PP
+.nf
+79                                        :
+80   MeshOutput<MeshBase>  (mesh_in)
+81 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::DivaIO::write (const std::string &fname)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 34 of file diva_io\&.C\&.
+.PP
+References libMesh::MeshOutput< MeshBase >::_is_parallel_format, libMesh::MeshOutput< MeshBase >::mesh(), and write_stream()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+35 {
+36   // We may need to gather a ParallelMesh to output it, making that
+37   // const qualifier in our constructor a dirty lie
+38   MeshSerializer serialize(const_cast<MeshBase&>(this->mesh()), !_is_parallel_format);
+39 
+40   // Open the output file stream
+41   std::ofstream out_file(fname\&.c_str());
+42 
+43   // Make sure it opened correctly
+44   if (!out_file\&.good())
+45     libmesh_file_error(fname\&.c_str());
+46 
+47   this->write_stream (out_file);
+48 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SS "void libMesh::DivaIO::write_stream (std::ostream &out)\fC [private]\fP, \fC [virtual]\fP"
+The actual implementation of writing the diva file\&. This file is called by the public interface file after it constructs an ofstream\&. Write the header
+.PP
+Write the nodes
+.PP
+Write the BC faces
+.PP
+Write the triangles
+.PP
+Write the quadrilaterals
+.PP
+Write the BC IDs
+.PP
+Write the triangles
+.PP
+Write the quadrilaterals
+.PP
+Write all the Tets
+.PP
+Write all the Pyramids
+.PP
+Write all the Prisms
+.PP
+Write all the Hexes
+.PP
+Definition at line 53 of file diva_io\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::MeshBase::boundary_info, libMesh::Elem::build_side(), libMesh::ParallelObject::comm(), libMesh::Elem::connectivity(), libMesh::MeshBase::elem(), libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::libmesh_assert(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshTools::n_active_elem_of_type(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_sides(), libMesh::Elem::n_sub_elem(), libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::MeshBase::point(), libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, side, libMesh::TECPLOT, libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI6, libMesh::Elem::type(), and libMesh::TypeVector< T >::write_unformatted()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+54 {
+55   /*
+56     From Kelly: (kelly@tacc\&.utexas\&.edu)
+57 
+58     Ok, the following is the format:
+59 
+60     #points #triangles #quads #tets #prisms #pyramids #hexs
+61     loop over all points (written out x y z x y z \&.\&.\&.)
+62     loop over all triangles (written out i1 i2 i3) (These are indices into
+63     the points going from
+64     1 to #points)
+65     loop over all quads (written out i1 i2 i3 i4) (Same numbering scheme)
+66     loop over all triangles and quads (write out b1) (This is a boundary
+67     condition for each
+68     triangle and each
+69     hex\&. You can put
+70     anything you want
+71     here)
+72     loop over all tets (written out i1 i2 i3 i4) (Same)
+73     loop over all pyramids (written out i1 i2 i3 i4 i5) (Same)
+74     loop over all prisms (written out i1 i2 i3 i4 i5 i6) (Same)
+75     loop over all hexs (written out i1 i2 i3 i4 i5 i6 i7 i8) (Same)
+76 
+77   */
+78 
+79   // Be sure the stream has been created successfully\&.
+80   libmesh_assert (out_file\&.good());
+81 
+82   // Can't use a constant mesh reference since we have to
+83   // sync the boundary info\&.
+84   libmesh_here();
+85   libMesh::err << "WARNING\&.\&.\&.  Sure you want to do this?"
+86                << std::endl;
+87   MeshBase& the_mesh = const_cast<MeshBase&>
+88     (MeshOutput<MeshBase>::mesh());
+89 
+90   if (the_mesh\&.mesh_dimension() < 3)
+91     {
+92       libMesh::err << "WARNING: DIVA only supports 3D meshes\&.\n\n"
+93                    << "Exiting without producing output\&.\n";
+94       return;
+95     }
+96 
+97 
+98 
+99   BoundaryMesh boundary_mesh (the_mesh\&.comm(),
+100                               the_mesh\&.mesh_dimension()-1);
+101   the_mesh\&.boundary_info->sync(boundary_mesh);
+102 
+103 
+107   out_file << the_mesh\&.n_nodes()
+108            << ' '
+109            << (MeshTools::n_active_elem_of_type(boundary_mesh,TRI3) +
+110                MeshTools::n_active_elem_of_type(boundary_mesh,TRI6)*4)
+111            << ' '
+112            << (MeshTools::n_active_elem_of_type(boundary_mesh, QUAD4) +
+113                MeshTools::n_active_elem_of_type(boundary_mesh, QUAD8) +
+114                MeshTools::n_active_elem_of_type(boundary_mesh, QUAD9)*4)
+115            << ' '
+116            << (MeshTools::n_active_elem_of_type(the_mesh, TET4) +
+117                MeshTools::n_active_elem_of_type(the_mesh, TET10)*8)
+118            << ' '
+119            << MeshTools::n_active_elem_of_type(the_mesh, PYRAMID5)
+120            << ' '
+121            << (MeshTools::n_active_elem_of_type(the_mesh, PRISM6) +
+122                MeshTools::n_active_elem_of_type(the_mesh, PRISM18)*8)
+123            << ' '
+124            << (MeshTools::n_active_elem_of_type(the_mesh, HEX8)  +
+125                MeshTools::n_active_elem_of_type(the_mesh, HEX20) +
+126                MeshTools::n_active_elem_of_type(the_mesh, HEX27)*8)
+127            << ' '
+128            << '\n';
+129 
+130   boundary_mesh\&.clear();
+131 
+132 
+136   for (unsigned int v=0; v<the_mesh\&.n_nodes(); v++)
+137     the_mesh\&.point(v)\&.write_unformatted(out_file);
+138 
+139 
+143   {
+147     for(unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+148       if (the_mesh\&.elem(e)->active())
+149         for (unsigned int s=0; s<the_mesh\&.elem(e)->n_sides(); s++)
+150           if (the_mesh\&.elem(e)->neighbor(s) == NULL)
+151             {
+152               const AutoPtr<Elem> side(the_mesh\&.elem(e)->build_side(s));
+153 
+154               if (side->type() == TRI3)
+155                 {
+156                   out_file << side->node(0)+1 << " "
+157                            << side->node(1)+1 << " "
+158                            << side->node(2)+1 << '\n';
+159                 }
+160               else if (side->type() == TRI6)
+161                 {
+162                   out_file << side->node(0)+1 << " "
+163                            << side->node(3)+1 << " "
+164                            << side->node(5)+1 << '\n'
+165 
+166                            << side->node(3)+1 << " "
+167                            << side->node(1)+1 << " "
+168                            << side->node(4)+1 << '\n'
+169 
+170                            << side->node(5)+1 << " "
+171                            << side->node(4)+1 << " "
+172                            << side->node(2)+1 << '\n'
+173 
+174                            << side->node(3)+1 << " "
+175                            << side->node(4)+1 << " "
+176                            << side->node(5)+1 << '\n';
+177                 }
+178             }
+179 
+180 
+184     for(unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+185       if (the_mesh\&.elem(e)->active())
+186         for (unsigned int s=0; s<the_mesh\&.elem(e)->n_sides(); s++)
+187           if (the_mesh\&.elem(e)->neighbor(s) == NULL)
+188             {
+189               const AutoPtr<Elem> side(the_mesh\&.elem(e)->build_side(s));
+190 
+191               if ((side->type() == QUAD4) ||
+192                   (side->type() == QUAD8)  )
+193                 {
+194                   out_file << side->node(0)+1 << " "
+195                            << side->node(1)+1 << " "
+196                            << side->node(2)+1 << " "
+197                            << side->node(3)+1 << '\n';
+198                 }
+199               else if (side->type() == QUAD9)
+200                 {
+201                   out_file << side->node(0)+1 << " "
+202                            << side->node(4)+1 << " "
+203                            << side->node(8)+1 << " "
+204                            << side->node(7)+1 << '\n'
+205 
+206                            << side->node(4)+1 << " "
+207                            << side->node(1)+1 << " "
+208                            << side->node(5)+1 << " "
+209                            << side->node(8)+1 << '\n'
+210 
+211                            << side->node(7)+1 << " "
+212                            << side->node(8)+1 << " "
+213                            << side->node(6)+1 << " "
+214                            << side->node(3)+1 << '\n'
+215 
+216                            << side->node(8)+1 << " "
+217                            << side->node(5)+1 << " "
+218                            << side->node(2)+1 << " "
+219                            << side->node(6)+1 << '\n';
+220                 }
+221             }
+222   }
+223 
+224 
+225 
+229   {
+233     for(unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+234       if (the_mesh\&.elem(e)->active())
+235         for (unsigned int s=0; s<the_mesh\&.elem(e)->n_sides(); s++)
+236           if (the_mesh\&.elem(e)->neighbor(s) == NULL)
+237             {
+238               const AutoPtr<Elem> side(the_mesh\&.elem(e)->build_side(s));
+239 
+240               if ((side->type() == TRI3) ||
+241                   (side->type() == TRI6)  )
+242 
+243                 out_file << the_mesh\&.boundary_info->boundary_id(the_mesh\&.elem(e), s)
+244                          << '\n';
+245             }
+246 
+247 
+251     for(unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+252       if (the_mesh\&.elem(e)->active())
+253         for (unsigned int s=0; s<the_mesh\&.elem(e)->n_sides(); s++)
+254           if (the_mesh\&.elem(e)->neighbor(s) == NULL)
+255             {
+256               const AutoPtr<Elem> side(the_mesh\&.elem(e)->build_side(s));
+257 
+258               if ((side->type() == QUAD4) ||
+259                   (side->type() == QUAD8) ||
+260                   (side->type() == QUAD9))
+261 
+262                 out_file << the_mesh\&.boundary_info->boundary_id(the_mesh\&.elem(e), s);
+263             }
+264   }
+265 
+266 
+267 
+271   for (unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+272     if (the_mesh\&.elem(e)->active())
+273       {
+274         if (the_mesh\&.elem(e)->type() == TET4)
+275           {
+276             out_file << the_mesh\&.elem(e)->node(0)+1 << " "
+277                      << the_mesh\&.elem(e)->node(1)+1 << " "
+278                      << the_mesh\&.elem(e)->node(2)+1 << " "
+279                      << the_mesh\&.elem(e)->node(3)+1 << '\n';
+280           }
+281         else if (the_mesh\&.elem(e)->type() == TET10)
+282           {
+283             out_file << the_mesh\&.elem(e)->node(0)+1 << " "
+284                      << the_mesh\&.elem(e)->node(4)+1 << " "
+285                      << the_mesh\&.elem(e)->node(6)+1 << " "
+286                      << the_mesh\&.elem(e)->node(7)+1 << '\n';
+287 
+288             out_file << the_mesh\&.elem(e)->node(4)+1 << " "
+289                      << the_mesh\&.elem(e)->node(1)+1 << " "
+290                      << the_mesh\&.elem(e)->node(5)+1 << " "
+291                      << the_mesh\&.elem(e)->node(8)+1 << '\n';
+292 
+293             out_file << the_mesh\&.elem(e)->node(6)+1 << " "
+294                      << the_mesh\&.elem(e)->node(5)+1 << " "
+295                      << the_mesh\&.elem(e)->node(2)+1 << " "
+296                      << the_mesh\&.elem(e)->node(9)+1 << '\n';
+297 
+298             out_file << the_mesh\&.elem(e)->node(7)+1 << " "
+299                      << the_mesh\&.elem(e)->node(8)+1 << " "
+300                      << the_mesh\&.elem(e)->node(9)+1 << " "
+301                      << the_mesh\&.elem(e)->node(3)+1 << '\n';
+302 
+303             out_file << the_mesh\&.elem(e)->node(4)+1 << " "
+304                      << the_mesh\&.elem(e)->node(8)+1 << " "
+305                      << the_mesh\&.elem(e)->node(6)+1 << " "
+306                      << the_mesh\&.elem(e)->node(7)+1 << '\n';
+307 
+308             out_file << the_mesh\&.elem(e)->node(4)+1 << " "
+309                      << the_mesh\&.elem(e)->node(5)+1 << " "
+310                      << the_mesh\&.elem(e)->node(6)+1 << " "
+311                      << the_mesh\&.elem(e)->node(8)+1 << '\n';
+312 
+313             out_file << the_mesh\&.elem(e)->node(6)+1 << " "
+314                      << the_mesh\&.elem(e)->node(5)+1 << " "
+315                      << the_mesh\&.elem(e)->node(9)+1 << " "
+316                      << the_mesh\&.elem(e)->node(8)+1 << '\n';
+317 
+318             out_file << the_mesh\&.elem(e)->node(6)+1 << " "
+319                      << the_mesh\&.elem(e)->node(8)+1 << " "
+320                      << the_mesh\&.elem(e)->node(9)+1 << " "
+321                      << the_mesh\&.elem(e)->node(7)+1 << '\n';
+322           }
+323       }
+324 
+325 
+329   for (unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+330     if (the_mesh\&.elem(e)->active())
+331       if (the_mesh\&.elem(e)->type() == PYRAMID5)
+332         {
+333           out_file << the_mesh\&.elem(e)->node(0)+1 << " "
+334                    << the_mesh\&.elem(e)->node(1)+1 << " "
+335                    << the_mesh\&.elem(e)->node(2)+1 << " "
+336                    << the_mesh\&.elem(e)->node(3)+1 << " "
+337                    << the_mesh\&.elem(e)->node(4)+1 << '\n';
+338         }
+339 
+340 
+341 
+345   for (unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+346     if (the_mesh\&.elem(e)->active())
+347       {
+348         if (the_mesh\&.elem(e)->type() == PRISM6)
+349           {
+350             out_file << the_mesh\&.elem(e)->node(0)+1 << " "
+351                      << the_mesh\&.elem(e)->node(1)+1 << " "
+352                      << the_mesh\&.elem(e)->node(2)+1 << " "
+353                      << the_mesh\&.elem(e)->node(3)+1 << " "
+354                      << the_mesh\&.elem(e)->node(4)+1 << " "
+355                      << the_mesh\&.elem(e)->node(5)+1 << '\n';
+356           }
+357         else if (the_mesh\&.elem(e)->type() == PRISM18)
+358           {
+359             libmesh_error();
+360           }
+361       }
+362 
+363 
+367   for (unsigned int e=0; e<the_mesh\&.n_elem(); e++)
+368     if (the_mesh\&.elem(e)->active())
+369       if ((the_mesh\&.elem(e)->type() == HEX8)   ||
+370           (the_mesh\&.elem(e)->type() == HEX20) ||
+371           (the_mesh\&.elem(e)->type() == HEX27)   )
+372         {
+373           std::vector<dof_id_type> conn;
+374           for (unsigned int se=0; se<the_mesh\&.elem(e)->n_sub_elem(); se++)
+375             {
+376               the_mesh\&.elem(e)->connectivity(se, TECPLOT, conn);
+377 
+378               out_file << conn[0] << ' '
+379                        << conn[1] << ' '
+380                        << conn[2] << ' '
+381                        << conn[3] << ' '
+382                        << conn[4] << ' '
+383                        << conn[5] << ' '
+384                        << conn[6] << ' '
+385                        << conn[7] << '\n';
+386             }
+387         }
+388 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

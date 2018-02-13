@@ -1,0 +1,57 @@
+.TH "libMesh::ReferenceElem" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ReferenceElem \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBElem\fP & \fBget\fP (const \fBElemType\fP Type)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This namespace implements singleton reference elements for each fundamental element type supported by \fC\fBlibMesh\fP\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2013\&. 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "const \fBElem\fP & libMesh::ReferenceElem::get (const \fBElemType\fPType)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the reference element of the user-requested type\&. 
+.RE
+.PP
+
+.PP
+Definition at line 241 of file reference_elem\&.C\&.
+.PP
+References libMesh::INVALID_ELEM, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::Elem::reference_elem()\&.
+.PP
+.nf
+242 {
+243   libmesh_assert_less (Type, INVALID_ELEM);
+244 
+245   init_ref_elem_table();
+246 
+247   libmesh_assert (ref_elem_map[Type] != NULL);
+248 
+249   return *ref_elem_map[Type];
+250 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

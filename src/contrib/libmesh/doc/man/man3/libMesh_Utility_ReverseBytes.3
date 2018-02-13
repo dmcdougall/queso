@@ -1,0 +1,104 @@
+.TH "libMesh::Utility::ReverseBytes" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Utility::ReverseBytes \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <utility\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBReverseBytes\fP (const bool dr)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (T &\fBdata\fP) const "
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBreverse\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_do_reverse\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This Functor simply takes an object and reverses its byte representation\&. This is useful for changing endian-ness for file IO\&. This class has been tested on x86 architectures with 4-byte words\&. 
+.PP
+Definition at line 263 of file utility\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Utility::ReverseBytes::ReverseBytes (const booldr)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a bool, determines if we will actually do byte reversing\&. 
+.PP
+Definition at line 299 of file utility\&.h\&.
+.PP
+.nf
+299                                          :
+300   _do_reverse (rb)
+301 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > T libMesh::Utility::ReverseBytes::operator() (T &data) const\fC [inline]\fP"
+Functor\&. Takes the data to reverse and performs the byte-ordering reversal\&. 
+.PP
+Definition at line 306 of file utility\&.h\&.
+.PP
+References data, reverse(), and libMesh::swap()\&.
+.PP
+.nf
+307 {
+308   // Possibly reverse the byte ordering
+309   if (this->reverse())
+310     {
+311       unsigned char* b = (unsigned char*) &data;
+312 
+313       register int i=0;
+314       register int j=(sizeof(T) - 1);
+315 
+316       while (i < j)
+317         {
+318           std::swap (b[i], b[j]);
+319           i++; j--;
+320         }
+321     }
+322 
+323   return data;
+324 }
+.fi
+.SS "bool libMesh::Utility::ReverseBytes::reverse () const\fC [inline]\fP, \fC [private]\fP"
+Returns the value of the reverse flag\&. 
+.PP
+Definition at line 286 of file utility\&.h\&.
+.PP
+References _do_reverse\&.
+.PP
+Referenced by operator()()\&.
+.PP
+.nf
+286 { return _do_reverse; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const bool libMesh::Utility::ReverseBytes::_do_reverse\fC [private]\fP"
+flag 
+.PP
+Definition at line 291 of file utility\&.h\&.
+.PP
+Referenced by reverse()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

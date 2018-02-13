@@ -1,0 +1,508 @@
+.TH "libMesh::PostscriptIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PostscriptIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <postscript_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPostscriptIO\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~PostscriptIO\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "void \fBplot_quadratic_elem\fP (const \fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "void \fBplot_linear_elem\fP (const \fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBshade_value\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBline_width\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB_compute_edge_bezier_coeffs\fP (const \fBElem\fP *elem)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBPoint\fP > \fB_bezier_coeffs\fP"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fB_offset\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_scale\fP"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fB_current_point\fP"
+.br
+.ti -1c
+.RI "std::ostringstream \fB_cell_string\fP"
+.br
+.ti -1c
+.RI "std::ofstream \fB_out\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const float \fB_bezier_transform\fP [3][3]"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing 2D meshes in Postscript\&. It borrows several ideas from, and is a more simple-minded version of, the DataOutBase::write_eps() function from Deal II\&. Only output is supported here, and only the \fBMesh\fP (none of the data) is written\&. The main use I imagined for this class is creating nice \fBMesh\fP images for publications, since I didn't find/don't know of a free visualization program which would do this\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2008 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file postscript_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PostscriptIO::PostscriptIO (const \fBMeshBase\fP &mesh)\fC [explicit]\fP"
+Constructor\&. 
+.PP
+Definition at line 42 of file postscript_io\&.C\&.
+.PP
+References _bezier_coeffs\&.
+.PP
+.nf
+43   : MeshOutput<MeshBase> (mesh_in),
+44     shade_value(0\&.0),
+45     line_width(0\&.5),
+46     //_M(3,3),
+47     _offset(0\&., 0\&.),
+48     _scale(1\&.0),
+49     _current_point(0\&., 0\&.)
+50 {
+51   // This code is still undergoing some development\&.
+52   libmesh_experimental();
+53 
+54   // Entries of transformation matrix from physical to Bezier coords\&.
+55   // _M(0,0) = -1\&./6\&.;    _M(0,1) = 1\&./6\&.;    _M(0,2) = 1\&.;
+56   // _M(1,0) = -1\&./6\&.;    _M(1,1) = 0\&.5  ;    _M(1,2) = 1\&./6\&.;
+57   // _M(2,0) = 0\&.    ;    _M(2,1) = 1\&.   ;    _M(2,2) = 0\&.;
+58 
+59   // Make sure there is enough room to store Bezier coefficients\&.
+60   _bezier_coeffs\&.resize(3);
+61 }
+.fi
+.SS "libMesh::PostscriptIO::~PostscriptIO ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 65 of file postscript_io\&.C\&.
+.PP
+.nf
+66 {
+67 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::PostscriptIO::_compute_edge_bezier_coeffs (const \fBElem\fP *elem)\fC [private]\fP"
+Given a quadratic edge \fBElem\fP which lies in the x-y plane, computes the Bezier coefficients\&. These may be passed to the Postscript routine 'curveto'\&. 
+.PP
+Definition at line 271 of file postscript_io\&.C\&.
+.PP
+References _bezier_coeffs, _bezier_transform, _offset, _scale, libMesh::EDGE3, libMesh::Elem::point(), and libMesh::Elem::type()\&.
+.PP
+Referenced by plot_quadratic_elem()\&.
+.PP
+.nf
+272 {
+273   // I only know how to do this for an Edge3!
+274   libmesh_assert_equal_to (elem->type(), EDGE3);
+275 
+276   // Get x-coordinates into an array, transform them,
+277   // and repeat for y\&.
+278   float
+279     phys_coords[3] = {0\&., 0\&., 0\&.},
+280     bez_coords[3]  = {0\&., 0\&., 0\&.};
+281 
+282     for (unsigned int i=0; i<2; ++i)
+283       {
+284         // Initialize vectors\&.  Physical coordinates are initialized
+285         // by their postscript-scaled values\&.
+286         for (unsigned int j=0; j<3; ++j)
+287           {
+288             phys_coords[j] = (elem->point(j)(i) - _offset(i)) * _scale;
+289             bez_coords[j] = 0\&.; // zero out result vector
+290           }
+291 
+292         // Multiply matrix times vector
+293         for (unsigned int j=0; j<3; ++j)
+294           for (unsigned int k=0; k<3; ++k)
+295             bez_coords[j] += _bezier_transform[j][k]*phys_coords[k];
+296 
+297         // Store result in _bezier_coeffs
+298         for (unsigned int j=0; j<3; ++j)
+299           _bezier_coeffs[j](i) = phys_coords[j];
+300       }
+301 }
+.fi
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::PostscriptIO::plot_linear_elem (const \fBElem\fP *elem)"
+Draws an element with straight lines 
+.PP
+Definition at line 197 of file postscript_io\&.C\&.
+.PP
+References _cell_string, _current_point, _offset, _out, _scale, libMesh::Elem::n_vertices(), libMesh::Elem::point(), and shade_value\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+198 {
+199   // Clear the string contents\&.  Yes, this really is how you do that\&.\&.\&.
+200   _cell_string\&.str("");
+201 
+202   // The general strategy is:
+203   // 1\&.) Use m  := {moveto} to go to vertex 0\&.
+204   // 2\&.) Use l  := {lineto} commands to draw lines to vertex 1, 2, \&.\&.\&. N-1\&.
+205   // 3a\&.) Use lx := {lineto closepath stroke} command at  vertex N to draw the last line\&.
+206   // 3b\&.)     lf := {lineto closepath fill} command to shade the cell just drawn
+207   // All of our 2D elements' vertices are numbered in counterclockwise order,
+208   // so we can just draw them in the same order\&.
+209 
+210   // 1\&.)
+211   _current_point = (elem->point(0) - _offset) * _scale;
+212   _cell_string << _current_point(0) << " " << _current_point(1) << " "; // write x y
+213   _cell_string << "m ";
+214 
+215   // 2\&.)
+216   const unsigned int nv=elem->n_vertices();
+217   for (unsigned int v=1; v<nv-1; ++v)
+218     {
+219       _current_point = (elem->point(v) - _offset) * _scale;
+220       _cell_string << _current_point(0) << " " << _current_point(1) << " "; // write x y
+221       _cell_string << "l ";
+222     }
+223 
+224   // 3\&.)
+225   _current_point = (elem->point(nv-1) - _offset) * _scale;
+226   _cell_string << _current_point(0) << " " << _current_point(1) << " "; // write x y
+227 
+228   // We draw the shaded (interior) parts first, if applicable\&.
+229   if (shade_value > 0\&.0)
+230     _out << shade_value << " sg " << _cell_string\&.str() << "lf\n";
+231 
+232   // Draw the black lines (I guess we will always do this)
+233   _out << "0 sg " << _cell_string\&.str() << "lx\n";
+234 }
+.fi
+.SS "void libMesh::PostscriptIO::plot_quadratic_elem (const \fBElem\fP *elem)"
+Draws an element with Bezier curves 
+.PP
+Definition at line 239 of file postscript_io\&.C\&.
+.PP
+References _bezier_coeffs, _compute_edge_bezier_coeffs(), _current_point, _offset, _out, _scale, libMesh::Elem::build_side(), libMesh::EDGE3, libMesh::AutoPtr< Tp >::get(), libMesh::Elem::n_sides(), and side\&.
+.PP
+.nf
+240 {
+241   for (unsigned int ns=0; ns<elem->n_sides(); ++ns)
+242     {
+243       // Build the quadratic side
+244       AutoPtr<Elem> side = elem->build_side(ns);
+245 
+246       // Be sure it's quadratic (Edge2)\&.  Eventually we could
+247       // handle cubic elements as well\&.\&.\&.
+248       libmesh_assert_equal_to ( side->type(), EDGE3 );
+249 
+250       _out << "0 sg ";
+251 
+252       // Move to the first point on this side\&.
+253       _current_point = (side->point(0) - _offset) * _scale;
+254       _out << _current_point(0) << " " << _current_point(1) << " "; // write x y
+255       _out << "m ";
+256 
+257       // Compute _bezier_coeffs for this edge\&.  This fills up
+258       // the _bezier_coeffs vector\&.
+259       this->_compute_edge_bezier_coeffs(side\&.get());
+260 
+261       // Print curveto path to file
+262       for (unsigned int i=0; i<_bezier_coeffs\&.size(); ++i)
+263         _out << _bezier_coeffs[i](0) << " " << _bezier_coeffs[i](1) << " ";
+264       _out << " cs\n";
+265     }
+266 }
+.fi
+.SS "void libMesh::PostscriptIO::write (const std::string &fname)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 71 of file postscript_io\&.C\&.
+.PP
+References libMesh::MeshOutput< MeshBase >::_is_parallel_format, _offset, _out, _scale, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshTools::bounding_box(), libMesh::libmesh_assert_greater(), line_width, libMesh::MeshOutput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), plot_linear_elem(), libMesh::processor_id(), and libMesh::Real\&.
+.PP
+.nf
+72 {
+73   // We may need to gather a ParallelMesh to output it, making that
+74   // const qualifier in our constructor a dirty lie
+75   MeshSerializer serialize(const_cast<MeshBase&>(this->mesh()), !_is_parallel_format);
+76 
+77   if (this->mesh()\&.processor_id() == 0)
+78     {
+79       // Get a constant reference to the mesh\&.
+80       const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+81 
+82       // Only works in 2D
+83       libmesh_assert_equal_to (the_mesh\&.mesh_dimension(), 2);
+84 
+85       // Create output file stream\&.
+86       // _out is now a private member of the class\&.
+87       _out\&.open(fname\&.c_str());
+88 
+89       // Make sure it opened correctly
+90       if (!_out\&.good())
+91         libmesh_file_error(fname\&.c_str());
+92 
+93       // The mesh bounding box gives us info about what the
+94       // Postscript bounding box should be\&.
+95       MeshTools::BoundingBox bbox = MeshTools::bounding_box(the_mesh);
+96 
+97       // Add a little extra padding to the "true" bounding box so
+98       // that we can still see the boundary
+99       const Real percent_padding = 0\&.01;
+100       const Real dx=bbox\&.second(0)-bbox\&.first(0); libmesh_assert_greater (dx, 0\&.0);
+101       const Real dy=bbox\&.second(1)-bbox\&.first(1); libmesh_assert_greater (dy, 0\&.0);
+102 
+103       const Real x_min = bbox\&.first(0)  - percent_padding*dx;
+104       const Real y_min = bbox\&.first(1)  - percent_padding*dy;
+105       const Real x_max = bbox\&.second(0) + percent_padding*dx;
+106       const Real y_max = bbox\&.second(1) + percent_padding*dy;
+107 
+108       // Width of the output as given in postscript units\&.
+109       // This usually is given by the strange unit 1/72 inch\&.
+110       // A width of 300 represents a size of roughly 10 cm\&.
+111       const Real width = 300;
+112       _scale = width / (x_max-x_min);
+113       _offset(0) = x_min;
+114       _offset(1) = y_min;
+115 
+116       // Header writing stuff stolen from Deal\&.II
+117       std::time_t  time1= std::time (0);
+118       std::tm     *time = std::localtime(&time1);
+119       _out << "%!PS-Adobe-2\&.0 EPSF-1\&.2" << '\n'
+120         //<< "%!PS-Adobe-1\&.0" << '\n' // Lars' PS version
+121            << "%%Filename: " << fname << '\n'
+122            << "%%Title: LibMesh Output" << '\n'
+123            << "%%Creator: LibMesh: A C++ finite element library" << '\n'
+124            << "%%Creation Date: "
+125            << time->tm_year+1900 << "/"
+126            << time->tm_mon+1 << "/"
+127            << time->tm_mday << " - "
+128            << time->tm_hour << ":"
+129            << std::setw(2) << time->tm_min << ":"
+130            << std::setw(2) << time->tm_sec << '\n'
+131            << "%%BoundingBox: "
+132         // lower left corner
+133            << "0 0 "
+134         // upper right corner
+135            << static_cast<unsigned int>( rint((x_max-x_min) * _scale ))
+136            << ' '
+137            << static_cast<unsigned int>( rint((y_max-y_min) * _scale ))
+138            << '\n';
+139 
+140       // define some abbreviations to keep
+141       // the output small:
+142       // m=move turtle to
+143       // l=define a line
+144       // s=set rgb color
+145       // sg=set gray value
+146       // lx=close the line and plot the line
+147       // lf=close the line and fill the interior
+148       _out << "/m {moveto} bind def"      << '\n'
+149            << "/l {lineto} bind def"      << '\n'
+150            << "/s {setrgbcolor} bind def" << '\n'
+151            << "/sg {setgray} bind def"    << '\n'
+152            << "/cs {curveto stroke} bind def" << '\n'
+153            << "/lx {lineto closepath stroke} bind def" << '\n'
+154            << "/lf {lineto closepath fill} bind def"   << '\n';
+155 
+156       _out << "%%EndProlog" << '\n';
+157       //  << '\n';
+158 
+159       // Set line width in the postscript file\&.
+160       _out << line_width << " setlinewidth" << '\n';
+161 
+162       // Set line cap and join options
+163       _out << "1 setlinecap" << '\n';
+164       _out << "1 setlinejoin" << '\n';
+165 
+166       // allow only five digits for output (instead of the default
+167       // six); this should suffice even for fine grids, but reduces
+168       // the file size significantly
+169       _out << std::setprecision (5);
+170 
+171       // Loop over the active elements, draw lines for the edges\&.  We
+172       // draw even quadratic elements with straight sides, i\&.e\&. a straight
+173       // line sits between each pair of vertices\&.  Also we draw every edge
+174       // for an element regardless of the fact that it may overlap with
+175       // another\&.  This would probably be a useful optimization\&.\&.\&.
+176       MeshBase::const_element_iterator       el     = the_mesh\&.active_elements_begin();
+177       const MeshBase::const_element_iterator end_el = the_mesh\&.active_elements_end();
+178       for ( ; el != end_el; ++el)
+179         {
+180           //const Elem* elem = *el;
+181 
+182           this->plot_linear_elem(*el);
+183           //this->plot_quadratic_elem(*el); // Experimental
+184         }
+185 
+186       // Issue the showpage command, and we're done\&.
+187       _out << "showpage" << std::endl;
+188 
+189     } // end if (this->mesh()\&.processor_id() == 0)
+190 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<\fBPoint\fP> libMesh::PostscriptIO::_bezier_coeffs\fC [private]\fP"
+Vector containing 3 points corresponding to Bezier coefficients, as computed by _compute_edge_bezier_coeffs\&. 
+.PP
+Definition at line 119 of file postscript_io\&.h\&.
+.PP
+Referenced by _compute_edge_bezier_coeffs(), plot_quadratic_elem(), and PostscriptIO()\&.
+.SS "const float libMesh::PostscriptIO::_bezier_transform\fC [static]\fP, \fC [private]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+=
+  {
+    {-1\&.f/6\&.f, 1\&.f/6\&.f, 1\&.},
+    {-1\&.f/6\&.f, 0\&.5,     1\&.f/6\&.f},
+    {0\&.,       1\&.,      0\&.}
+  }
+.fi
+Coefficients of the transformation from physical-space edge coordinates to Bezier basis coefficients\&. Transforms x and y separately\&. 
+.PP
+Definition at line 113 of file postscript_io\&.h\&.
+.PP
+Referenced by _compute_edge_bezier_coeffs()\&.
+.SS "std::ostringstream libMesh::PostscriptIO::_cell_string\fC [private]\fP"
+Drawing style-independent data for a single cell\&. This can be used as a temporary buffer for storing data which may be sent to the output stream multiple times\&. 
+.PP
+Definition at line 141 of file postscript_io\&.h\&.
+.PP
+Referenced by plot_linear_elem()\&.
+.SS "\fBPoint\fP libMesh::PostscriptIO::_current_point\fC [private]\fP"
+A point object used for temporary calculations 
+.PP
+Definition at line 134 of file postscript_io\&.h\&.
+.PP
+Referenced by plot_linear_elem(), and plot_quadratic_elem()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), write(), and libMesh::EnsightIO::write()\&.
+.SS "\fBPoint\fP libMesh::PostscriptIO::_offset\fC [private]\fP"
+Amount to add to every (x,y) point to place it in Postscript coordinates\&. 
+.PP
+Definition at line 124 of file postscript_io\&.h\&.
+.PP
+Referenced by _compute_edge_bezier_coeffs(), plot_linear_elem(), plot_quadratic_elem(), and write()\&.
+.SS "std::ofstream libMesh::PostscriptIO::_out\fC [private]\fP"
+Output file stream which will be opened when the file name is known 
+.PP
+Definition at line 146 of file postscript_io\&.h\&.
+.PP
+Referenced by plot_linear_elem(), plot_quadratic_elem(), and write()\&.
+.SS "\fBReal\fP libMesh::PostscriptIO::_scale\fC [private]\fP"
+Amount by which to stretch each point to place it in Postscript coordinates\&. 
+.PP
+Definition at line 129 of file postscript_io\&.h\&.
+.PP
+Referenced by _compute_edge_bezier_coeffs(), plot_linear_elem(), plot_quadratic_elem(), and write()\&.
+.SS "\fBReal\fP libMesh::PostscriptIO::line_width"
+Control the thickness of the lines used\&. 0\&.5 is a reasonable default for printed images, but you may need to decrease this value (or choose it adaptively) when there are very slim cells present in the mesh\&. 
+.PP
+Definition at line 87 of file postscript_io\&.h\&.
+.PP
+Referenced by write()\&.
+.SS "\fBReal\fP libMesh::PostscriptIO::shade_value"
+Controls greyscale shading of cells\&. By default this value is 0\&.0 (which actually corresponds to black) and this indicates 'no shading' i\&.e\&. only mesh lines will be drawn\&. Any other value in (0,1] will cause the cells to be grey-shaded to some degree, with higher values being lighter\&. A value of 0\&.75 gives decent results\&. 
+.PP
+Definition at line 79 of file postscript_io\&.h\&.
+.PP
+Referenced by plot_linear_elem()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

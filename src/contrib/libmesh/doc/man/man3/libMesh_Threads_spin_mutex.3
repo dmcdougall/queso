@@ -1,0 +1,193 @@
+.TH "libMesh::Threads::spin_mutex" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Threads::spin_mutex \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <threads\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBscoped_lock\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBspin_mutex\fP ()"
+.br
+.ti -1c
+.RI "\fB~spin_mutex\fP ()"
+.br
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.ti -1c
+.RI "\fBspin_mutex\fP ()"
+.br
+.ti -1c
+.RI "\fB~spin_mutex\fP ()"
+.br
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.ti -1c
+.RI "\fBspin_mutex\fP ()"
+.br
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "OSSpinLock \fBslock\fP"
+.br
+.ti -1c
+.RI "pthread_spinlock_t \fBslock\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Spin mutex\&. Implements mutual exclusion by busy-waiting in user space for the lock to be acquired\&. 
+.PP
+Definition at line 334 of file threads\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Threads::spin_mutex::spin_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 337 of file threads\&.h\&.
+.PP
+.nf
+337 : slock(0) {} // The convention is that the lock being zero is _unlocked_
+.fi
+.SS "libMesh::Threads::spin_mutex::~spin_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 338 of file threads\&.h\&.
+.PP
+.nf
+338 {}
+.fi
+.SS "libMesh::Threads::spin_mutex::spin_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 366 of file threads\&.h\&.
+.PP
+References slock\&.
+.PP
+.nf
+366 { pthread_spin_init(&slock, PTHREAD_PROCESS_PRIVATE); }
+.fi
+.SS "libMesh::Threads::spin_mutex::~spin_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 367 of file threads\&.h\&.
+.PP
+References slock\&.
+.PP
+.nf
+367 { pthread_spin_destroy(&slock); }
+.fi
+.SS "libMesh::Threads::spin_mutex::spin_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 849 of file threads\&.h\&.
+.PP
+.nf
+849 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Threads::spin_mutex::lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 340 of file threads\&.h\&.
+.PP
+References slock\&.
+.PP
+Referenced by libMesh::Threads::spin_mutex::scoped_lock::acquire(), and libMesh::Threads::spin_mutex::scoped_lock::scoped_lock()\&.
+.PP
+.nf
+340 { OSSpinLockLock(&slock); }
+.fi
+.SS "void libMesh::Threads::spin_mutex::lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 369 of file threads\&.h\&.
+.PP
+References slock\&.
+.PP
+.nf
+369 { pthread_spin_lock(&slock); }
+.fi
+.SS "void libMesh::Threads::spin_mutex::lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 850 of file threads\&.h\&.
+.PP
+.nf
+850 {}
+.fi
+.SS "void libMesh::Threads::spin_mutex::unlock ()\fC [inline]\fP"
+
+.PP
+Definition at line 341 of file threads\&.h\&.
+.PP
+References slock\&.
+.PP
+Referenced by libMesh::Threads::spin_mutex::scoped_lock::release()\&.
+.PP
+.nf
+341 { OSSpinLockUnlock(&slock); }
+.fi
+.SS "void libMesh::Threads::spin_mutex::unlock ()\fC [inline]\fP"
+
+.PP
+Definition at line 370 of file threads\&.h\&.
+.PP
+References slock\&.
+.PP
+.nf
+370 { pthread_spin_unlock(&slock); }
+.fi
+.SS "void libMesh::Threads::spin_mutex::unlock ()\fC [inline]\fP"
+
+.PP
+Definition at line 851 of file threads\&.h\&.
+.PP
+.nf
+851 {}
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "OSSpinLock libMesh::Threads::spin_mutex::slock\fC [private]\fP"
+
+.PP
+Definition at line 359 of file threads\&.h\&.
+.PP
+Referenced by lock(), spin_mutex(), unlock(), and ~spin_mutex()\&.
+.SS "pthread_spinlock_t libMesh::Threads::spin_mutex::slock\fC [private]\fP"
+
+.PP
+Definition at line 388 of file threads\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,162 @@
+.TH "libMesh::FETransformationBase< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::FETransformationBase< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fe_base\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFETransformationBase\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~FETransformationBase\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBmap_phi\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &phi) const =0"
+.br
+.ti -1c
+.RI "virtual void \fBmap_dphi\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputGradient > > &dphi, std::vector< std::vector< OutputShape > > &dphidx, std::vector< std::vector< OutputShape > > &dphidy, std::vector< std::vector< OutputShape > > &dphidz) const =0"
+.br
+.ti -1c
+.RI "virtual void \fBmap_d2phi\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputTensor > > &d2phi, std::vector< std::vector< OutputShape > > &d2phidx2, std::vector< std::vector< OutputShape > > &d2phidxdy, std::vector< std::vector< OutputShape > > &d2phidxdz, std::vector< std::vector< OutputShape > > &d2phidy2, std::vector< std::vector< OutputShape > > &d2phidydz, std::vector< std::vector< OutputShape > > &d2phidz2) const =0"
+.br
+.ti -1c
+.RI "virtual void \fBmap_curl\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &curl_phi) const =0"
+.br
+.ti -1c
+.RI "virtual void \fBmap_div\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputDivergence > > &div_phi) const =0"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP
+.br
+< \fBFETransformationBase\fP
+.br
+< OutputShape > > \fBbuild\fP (const \fBFEType\fP &type)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::FETransformationBase< T >"
+This class handles the computation of the shape functions in the physical domain\&. Derived classes implement the particular mapping: H1, HCurl, HDiv, or L2\&. This class assumes the \fC\fBFEGenericBase\fP\fP object has been initialized in the reference domain (i\&.e\&. init_shape_functions has been called)\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Paul T\&. Bauman, 2012 
+.RE
+.PP
+
+.PP
+Definition at line 55 of file fe_base\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::FETransformationBase\fP< T >::\fBFETransformationBase\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 45 of file fe_transformation_base\&.h\&.
+.PP
+.nf
+45 {}
+.fi
+.SS "template<typename T> virtual \fBlibMesh::FETransformationBase\fP< T >::~\fBFETransformationBase\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Definition at line 46 of file fe_transformation_base\&.h\&.
+.PP
+.nf
+46 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename OutputShape > \fBAutoPtr\fP< \fBFETransformationBase\fP< OutputShape > > \fBlibMesh::FETransformationBase\fP< OutputShape >::build (const \fBFEType\fP &type)\fC [static]\fP"
+Builds an FETransformation object based on the finite element type 
+.PP
+Definition at line 26 of file fe_transformation_base\&.C\&.
+.PP
+References libMesh::BERNSTEIN, libMesh::CLOUGH, libMesh::FEType::family, libMesh::HERMITE, libMesh::HIERARCHIC, libMesh::JACOBI_20_00, libMesh::JACOBI_30_00, libMesh::L2_HIERARCHIC, libMesh::L2_LAGRANGE, libMesh::LAGRANGE, libMesh::LAGRANGE_VEC, libMesh::MONOMIAL, libMesh::NEDELEC_ONE, libMesh::SCALAR, libMesh::SUBDIVISION, libMesh::SZABAB, and libMesh::XYZ\&.
+.PP
+.nf
+27 {
+28   switch( fe_type\&.family )
+29     {
+30       /* H1 Conforming Elements */
+31     case LAGRANGE:
+32     case HIERARCHIC:
+33     case BERNSTEIN:
+34     case SZABAB:
+35     case CLOUGH: /* PB: Really H2 */
+36     case HERMITE: /* PB: Really H2 */
+37     case SUBDIVISION:
+38     case LAGRANGE_VEC:
+39     case MONOMIAL: /* PB: Shouldn't this be L2 conforming? */
+40     case XYZ: /* PB: Shouldn't this be L2 conforming? */
+41     case L2_HIERARCHIC: /* PB: Shouldn't this be L2 conforming? */
+42     case L2_LAGRANGE: /* PB: Shouldn't this be L2 conforming? */
+43     case JACOBI_20_00: /* PB: For infinite elements\&.\&.\&. */
+44     case JACOBI_30_00: /* PB: For infinite elements\&.\&.\&. */
+45       {
+46         AutoPtr<FETransformationBase<OutputShape> > ap( new H1FETransformation<OutputShape> );
+47         return ap;
+48       }
+49       /* HCurl Conforming Elements */
+50     case NEDELEC_ONE:
+51       {
+52         AutoPtr<FETransformationBase<OutputShape> > ap( new HCurlFETransformation<OutputShape> );
+53         return ap;
+54       }
+55 
+56       /* HDiv Conforming Elements */
+57       /* L2 Conforming Elements */
+58 
+59       /* Other\&.\&.\&. */
+60     case SCALAR:
+61       {
+62         // Should never need this for SCALARs
+63         AutoPtr<FETransformationBase<OutputShape> > ap( new H1FETransformation<OutputShape> );
+64         return ap;
+65       }
+66 
+67     default:
+68       libmesh_error();
+69     }
+70 
+71   // Should never get here\&.\&.\&.
+72   libmesh_error();
+73   AutoPtr<FETransformationBase<OutputShape> > ap( NULL );
+74   return ap;
+75 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::FETransformationBase\fP< T >::map_curl (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &curl_phi) const\fC [pure virtual]\fP"
+Evaluates the shape function curl in physical coordinates based on proper finite element transformation\&. 
+.PP
+Implemented in \fBlibMesh::HCurlFETransformation< T >\fP, and \fBlibMesh::H1FETransformation< T >\fP\&.
+.SS "template<typename T> virtual void \fBlibMesh::FETransformationBase\fP< T >::map_d2phi (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputTensor > > &d2phi, std::vector< std::vector< OutputShape > > &d2phidx2, std::vector< std::vector< OutputShape > > &d2phidxdy, std::vector< std::vector< OutputShape > > &d2phidxdz, std::vector< std::vector< OutputShape > > &d2phidy2, std::vector< std::vector< OutputShape > > &d2phidydz, std::vector< std::vector< OutputShape > > &d2phidz2) const\fC [pure virtual]\fP"
+Evaluates shape function Hessians in physical coordinates based on proper finite element transformation\&. 
+.PP
+Implemented in \fBlibMesh::HCurlFETransformation< T >\fP, and \fBlibMesh::H1FETransformation< T >\fP\&.
+.SS "template<typename T> virtual void \fBlibMesh::FETransformationBase\fP< T >::map_div (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputDivergence > > &div_phi) const\fC [pure virtual]\fP"
+Evaluates the shape function divergence in physical coordinates based on proper finite element transformation\&. 
+.PP
+Implemented in \fBlibMesh::HCurlFETransformation< T >\fP, and \fBlibMesh::H1FETransformation< T >\fP\&.
+.SS "template<typename T> virtual void \fBlibMesh::FETransformationBase\fP< T >::map_dphi (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputGradient > > &dphi, std::vector< std::vector< OutputShape > > &dphidx, std::vector< std::vector< OutputShape > > &dphidy, std::vector< std::vector< OutputShape > > &dphidz) const\fC [pure virtual]\fP"
+Evaluates shape function gradients in physical coordinates based on proper finite element transformation\&. 
+.PP
+Implemented in \fBlibMesh::HCurlFETransformation< T >\fP, and \fBlibMesh::H1FETransformation< T >\fP\&.
+.SS "template<typename T> virtual void \fBlibMesh::FETransformationBase\fP< T >::map_phi (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &phi) const\fC [pure virtual]\fP"
+Evaluates shape functions in physical coordinates based on proper finite element transformation\&. 
+.PP
+Implemented in \fBlibMesh::HCurlFETransformation< T >\fP, and \fBlibMesh::H1FETransformation< T >\fP\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

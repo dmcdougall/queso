@@ -1,0 +1,539 @@
+.TH "libMesh::Parallel::Sort< KeyType, IdxType >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::Sort< KeyType, IdxType > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel_sort\&.h>\fP
+.PP
+Inherits \fBlibMesh::ParallelObject\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSort\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, std::vector< KeyType > &d)"
+.br
+.ti -1c
+.RI "void \fBsort\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< KeyType > & \fBbin\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBbinsort\fP ()"
+.br
+.ti -1c
+.RI "void \fBcommunicate_bins\fP ()"
+.br
+.ti -1c
+.RI "void \fBsort_local_bin\fP ()"
+.br
+.ti -1c
+.RI "template<> void \fBbinsort\fP ()"
+.br
+.ti -1c
+.RI "template<> void \fBcommunicate_bins\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBprocessor_id_type\fP \fB_n_procs\fP"
+.br
+.ti -1c
+.RI "const \fBprocessor_id_type\fP \fB_proc_id\fP"
+.br
+.ti -1c
+.RI "bool \fB_bin_is_sorted\fP"
+.br
+.ti -1c
+.RI "std::vector< KeyType > & \fB_data\fP"
+.br
+.ti -1c
+.RI "std::vector< IdxType > \fB_local_bin_sizes\fP"
+.br
+.ti -1c
+.RI "std::vector< KeyType > \fB_my_bin\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename KeyType, typename IdxType = unsigned int>class libMesh::Parallel::Sort< KeyType, IdxType >"
+The parallel sorting method is templated on the type of data which is to be sorted\&. It may later be templated on other things if we are ambitious\&. This class knows about MPI, and knows how many processors there are\&. It is responsible for transmitting data between the processors and ensuring that the data is properly sorted between all the processors\&. We assume that a \fBSort\fP is instantiated on all processors\&. 
+.PP
+Definition at line 48 of file parallel_sort\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename KeyType , typename IdxType > \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::\fBSort\fP (const \fBParallel::Communicator\fP &comm, std::vector< KeyType > &d)"
+Constructor takes the number of processors, the processor id, and a reference to a vector of data to be sorted\&. This vector is sorted by the constructor, therefore, construction of a \fBSort\fP object takes O(nlogn) time, where n is the length of the vector\&. 
+.PP
+Definition at line 44 of file parallel_sort\&.C\&.
+.PP
+References libMesh::Parallel::Sort< KeyType, IdxType >::_data, libMesh::Parallel::Sort< KeyType, IdxType >::_local_bin_sizes, and libMesh::Parallel::Sort< KeyType, IdxType >::_n_procs\&.
+.PP
+.nf
+45                                                    :
+46   ParallelObject(comm_in),
+47   _n_procs(comm_in\&.size()),
+48   _proc_id(comm_in\&.rank()),
+49   _bin_is_sorted(false),
+50   _data(d)
+51 {
+52   std::sort(_data\&.begin(), _data\&.end());
+53 
+54   // Allocate storage
+55   _local_bin_sizes\&.resize(_n_procs);
+56 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename KeyType , typename IdxType > const std::vector< KeyType > & \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::bin ()"
+Return a constant reference to _my_bin\&. This allows us to do things like check if sorting was successful by printing _my_bin\&. 
+.PP
+Definition at line 355 of file parallel_sort\&.C\&.
+.PP
+References libMesh::out\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), and libMesh::MeshCommunication::find_global_indices()\&.
+.PP
+.nf
+356 {
+357   if (!_bin_is_sorted)
+358     {
+359       libMesh::out << "Warning! Bin is not yet sorted!" << std::endl;
+360     }
+361 
+362   return _my_bin;
+363 }
+.fi
+.SS "template<typename KeyType , typename IdxType > void \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::binsort ()\fC [private]\fP"
+Sorts the local data into bins across all processors\&. Right now it constructs a BenSorter<KeyType> object\&. In the future this could be a template parameter\&. 
+.PP
+Definition at line 99 of file parallel_sort\&.C\&.
+.PP
+References libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort(), libMesh::comm, and libMesh::Parallel::BinSorter< KeyType, IdxType >::sizeof_bin()\&.
+.PP
+.nf
+100 {
+101   // Find the global min and max from all the
+102   // processors\&.
+103   std::vector<KeyType> global_min_max(2);
+104 
+105   // Insert the local min and max for this processor
+106   global_min_max[0] = -_data\&.front();
+107   global_min_max[1] =  _data\&.back();
+108 
+109   // Communicate to determine the global
+110   // min and max for all processors\&.
+111   this->comm()\&.max(global_min_max);
+112 
+113   // Multiply the min by -1 to obtain the true min
+114   global_min_max[0] *= -1;
+115 
+116   // Bin-Sort based on the global min and max
+117   Parallel::BinSorter<KeyType> bs(this->comm(), _data);
+118   bs\&.binsort(_n_procs, global_min_max[1], global_min_max[0]);
+119 
+120   // Now save the local bin sizes in a vector so
+121   // we don't have to keep around the BinSorter\&.
+122   for (processor_id_type i=0; i<_n_procs; ++i)
+123     _local_bin_sizes[i] = bs\&.sizeof_bin(i);
+124 }
+.fi
+.SS "template<> void \fBlibMesh::Parallel::Sort\fP< Hilbert::HilbertIndices, unsigned int >::binsort ()\fC [private]\fP"
+
+.PP
+Definition at line 133 of file parallel_sort\&.C\&.
+.PP
+References libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort(), libMesh::comm, and libMesh::Parallel::BinSorter< KeyType, IdxType >::sizeof_bin()\&.
+.PP
+.nf
+134 {
+135   // Find the global min and max from all the
+136   // processors\&.  Do this using MPI_Allreduce\&.
+137   Hilbert::HilbertIndices
+138     local_min,  local_max,
+139     global_min, global_max;
+140 
+141   if (_data\&.empty())
+142     {
+143       local_min\&.rack0 = local_min\&.rack1 = local_min\&.rack2 = static_cast<Hilbert::inttype>(-1);
+144       local_max\&.rack0 = local_max\&.rack1 = local_max\&.rack2 = 0;
+145     }
+146   else
+147     {
+148       local_min = _data\&.front();
+149       local_max = _data\&.back();
+150     }
+151 
+152   MPI_Op hilbert_max, hilbert_min;
+153 
+154   MPI_Op_create       ((MPI_User_function*)__hilbert_max_op, true, &hilbert_max);
+155   MPI_Op_create       ((MPI_User_function*)__hilbert_min_op, true, &hilbert_min);
+156 
+157   // Communicate to determine the global
+158   // min and max for all processors\&.
+159   MPI_Allreduce(&local_min,
+160                 &global_min,
+161                 1,
+162                 Parallel::StandardType<Hilbert::HilbertIndices>(),
+163                 hilbert_min,
+164                 this->comm()\&.get());
+165 
+166   MPI_Allreduce(&local_max,
+167                 &global_max,
+168                 1,
+169                 Parallel::StandardType<Hilbert::HilbertIndices>(),
+170                 hilbert_max,
+171                 this->comm()\&.get());
+172 
+173   MPI_Op_free   (&hilbert_max);
+174   MPI_Op_free   (&hilbert_min);
+175 
+176   // Bin-Sort based on the global min and max
+177   Parallel::BinSorter<Hilbert::HilbertIndices> bs(this->comm(),_data);
+178   bs\&.binsort(_n_procs, global_max, global_min);
+179 
+180   // Now save the local bin sizes in a vector so
+181   // we don't have to keep around the BinSorter\&.
+182   for (processor_id_type i=0; i<_n_procs; ++i)
+183     _local_bin_sizes[i] = bs\&.sizeof_bin(i);
+184 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "template<typename KeyType , typename IdxType > void \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::communicate_bins ()\fC [private]\fP"
+Communicates the bins from each processor to the appropriate processor\&. By the time this function is finished, each processor will hold only its own bin(s)\&. 
+.PP
+Definition at line 190 of file parallel_sort\&.C\&.
+.PP
+References libMesh::comm\&.
+.PP
+.nf
+191 {
+192 #ifdef LIBMESH_HAVE_MPI
+193   // Create storage for the global bin sizes\&.  This
+194   // is the number of keys which will be held in
+195   // each bin over all processors\&.
+196   std::vector<IdxType> global_bin_sizes = _local_bin_sizes;
+197 
+198   // Sum to find the total number of entries in each bin\&.
+199   this->comm()\&.sum(global_bin_sizes);
+200 
+201   // Create a vector to temporarily hold the results of MPI_Gatherv
+202   // calls\&.  The vector dest  may be saved away to _my_bin depending on which
+203   // processor is being MPI_Gatherv'd\&.
+204   std::vector<KeyType> dest;
+205 
+206   IdxType local_offset = 0;
+207 
+208   for (processor_id_type i=0; i<_n_procs; ++i)
+209     {
+210       // Vector to receive the total bin size for each
+211       // processor\&.  Processor i's bin size will be
+212       // held in proc_bin_size[i]
+213       std::vector<IdxType> proc_bin_size;
+214 
+215       // Find the number of contributions coming from each
+216       // processor for this bin\&.  Note: allgather combines
+217       // the MPI_Gather and MPI_Bcast operations into one\&.
+218       this->comm()\&.allgather(_local_bin_sizes[i], proc_bin_size);
+219 
+220       // Compute the offsets into my_bin for each processor's
+221       // portion of the bin\&.  These are basically partial sums
+222       // of the proc_bin_size vector\&.
+223       std::vector<IdxType> displacements(_n_procs);
+224       for (processor_id_type j=1; j<_n_procs; ++j)
+225         displacements[j] = proc_bin_size[j-1] + displacements[j-1];
+226 
+227       // Resize the destination buffer
+228       dest\&.resize (global_bin_sizes[i]);
+229 
+230       MPI_Gatherv((_data\&.size() > local_offset) ?
+231                   &_data[local_offset] :
+232                   NULL,                            // Points to the beginning of the bin to be sent
+233                   _local_bin_sizes[i],               // How much data is in the bin being sent\&.
+234                   Parallel::StandardType<KeyType>(), // The data type we are sorting
+235                   (dest\&.empty()) ?
+236                   NULL :
+237                   &dest[0],                        // Enough storage to hold all bin contributions
+238                   (int*) &proc_bin_size[0],          // How much is to be received from each processor
+239                   (int*) &displacements[0],          // Offsets into the receive buffer
+240                   Parallel::StandardType<KeyType>(), // The data type we are sorting
+241                   i,                                 // The root process (we do this once for each proc)
+242                   this->comm()\&.get());
+243 
+244       // Copy the destination buffer if it
+245       // corresponds to the bin for this processor
+246       if (i == _proc_id)
+247         _my_bin = dest;
+248 
+249       // Increment the local offset counter
+250       local_offset += _local_bin_sizes[i];
+251     }
+252 #endif // LIBMESH_HAVE_MPI
+253 }
+.fi
+.SS "template<> void \fBlibMesh::Parallel::Sort\fP< Hilbert::HilbertIndices, unsigned int >::communicate_bins ()\fC [private]\fP"
+
+.PP
+Definition at line 262 of file parallel_sort\&.C\&.
+.PP
+References libMesh::comm\&.
+.PP
+.nf
+263 {
+264   // Create storage for the global bin sizes\&.  This
+265   // is the number of keys which will be held in
+266   // each bin over all processors\&.
+267   std::vector<unsigned int> global_bin_sizes(_n_procs);
+268 
+269   libmesh_assert_equal_to (_local_bin_sizes\&.size(), global_bin_sizes\&.size());
+270 
+271   // Sum to find the total number of entries in each bin\&.
+272   // This is stored in global_bin_sizes\&.  Note, we
+273   // explicitly know that we are communicating MPI_UNSIGNED's here\&.
+274   MPI_Allreduce(&_local_bin_sizes[0],
+275                 &global_bin_sizes[0],
+276                 _n_procs,
+277                 MPI_UNSIGNED,
+278                 MPI_SUM,
+279                 this->comm()\&.get());
+280 
+281   // Create a vector to temporarily hold the results of MPI_Gatherv
+282   // calls\&.  The vector dest  may be saved away to _my_bin depending on which
+283   // processor is being MPI_Gatherv'd\&.
+284   std::vector<Hilbert::HilbertIndices> dest;
+285 
+286   unsigned int local_offset = 0;
+287 
+288   for (unsigned int i=0; i<_n_procs; ++i)
+289     {
+290       // Vector to receive the total bin size for each
+291       // processor\&.  Processor i's bin size will be
+292       // held in proc_bin_size[i]
+293       std::vector<unsigned int> proc_bin_size(_n_procs);
+294 
+295       // Find the number of contributions coming from each
+296       // processor for this bin\&.  Note: Allgather combines
+297       // the MPI_Gather and MPI_Bcast operations into one\&.
+298       // Note: Here again we know that we are communicating
+299       // MPI_UNSIGNED's so there is no need to check the MPI_traits\&.
+300       MPI_Allgather(&_local_bin_sizes[i], // Source: # of entries on this proc in bin i
+301                     1,                    // Number of items to gather
+302                     MPI_UNSIGNED,
+303                     &proc_bin_size[0],    // Destination: Total # of entries in bin i
+304                     1,
+305                     MPI_UNSIGNED,
+306                     this->comm()\&.get());
+307 
+308       // Compute the offsets into my_bin for each processor's
+309       // portion of the bin\&.  These are basically partial sums
+310       // of the proc_bin_size vector\&.
+311       std::vector<unsigned int> displacements(_n_procs);
+312       for (unsigned int j=1; j<_n_procs; ++j)
+313         displacements[j] = proc_bin_size[j-1] + displacements[j-1];
+314 
+315       // Resize the destination buffer
+316       dest\&.resize (global_bin_sizes[i]);
+317 
+318       MPI_Gatherv((_data\&.size() > local_offset) ?
+319                   &_data[local_offset] :
+320                   NULL,                   // Points to the beginning of the bin to be sent
+321                   _local_bin_sizes[i],      // How much data is in the bin being sent\&.
+322                   Parallel::StandardType<Hilbert::HilbertIndices>(), // The data type we are sorting
+323                   (dest\&.empty()) ?
+324                   NULL :
+325                   &dest[0],               // Enough storage to hold all bin contributions
+326                   (int*) &proc_bin_size[0], // How much is to be received from each processor
+327                   (int*) &displacements[0], // Offsets into the receive buffer
+328                   Parallel::StandardType<Hilbert::HilbertIndices>(), // The data type we are sorting
+329                   i,                        // The root process (we do this once for each proc)
+330                   this->comm()\&.get());
+331 
+332       // Copy the destination buffer if it
+333       // corresponds to the bin for this processor
+334       if (i == _proc_id)
+335         _my_bin = dest;
+336 
+337       // Increment the local offset counter
+338       local_offset += _local_bin_sizes[i];
+339     }
+340 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename KeyType , typename IdxType > void \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::sort ()"
+This is the only method which needs to be called by the user\&. Its only responsibility is to call three private methods in the correct order\&. 
+.PP
+Definition at line 61 of file parallel_sort\&.C\&.
+.PP
+References libMesh::comm, and libMesh::n_processors()\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), and libMesh::MeshCommunication::find_global_indices()\&.
+.PP
+.nf
+62 {
+63   // Find the global data size\&.  The sorting
+64   // algorithms assume they have a range to
+65   // work with, so catch the degenerate cases here
+66   IdxType global_data_size = libmesh_cast_int<IdxType>(_data\&.size());
+67 
+68   this->comm()\&.sum (global_data_size);
+69 
+70   if (global_data_size < 2)
+71     {
+72       // the entire global range is either empty
+73       // or contains only one element
+74       _my_bin = _data;
+75 
+76       this->comm()\&.allgather (static_cast<IdxType>(_my_bin\&.size()),
+77                               _local_bin_sizes);
+78     }
+79   else
+80     {
+81       if (this->n_processors() > 1)
+82         {
+83           this->binsort();
+84           this->communicate_bins();
+85         }
+86       else
+87         _my_bin = _data;
+88 
+89       this->sort_local_bin();
+90     }
+91 
+92   // Set sorted flag to true
+93   _bin_is_sorted = true;
+94 }
+.fi
+.SS "template<typename KeyType , typename IdxType > void \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::sort_local_bin ()\fC [private]\fP"
+After all the bins have been communicated, we can sort our local bin\&. This is nothing more than a call to std::sort 
+.PP
+Definition at line 347 of file parallel_sort\&.C\&.
+.PP
+.nf
+348 {
+349   std::sort(_my_bin\&.begin(), _my_bin\&.end());
+350 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename KeyType, typename IdxType = unsigned int> bool \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::_bin_is_sorted\fC [private]\fP"
+Flag which lets you know if sorting is complete 
+.PP
+Definition at line 93 of file parallel_sort\&.h\&.
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> std::vector<KeyType>& \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::_data\fC [private]\fP"
+The raw, unsorted data which will need to be sorted (in parallel) across all processors\&. 
+.PP
+Definition at line 100 of file parallel_sort\&.h\&.
+.PP
+Referenced by libMesh::Parallel::Sort< KeyType, IdxType >::Sort()\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> std::vector<IdxType> \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::_local_bin_sizes\fC [private]\fP"
+Vector which holds the size of each bin on this processor\&. It has size equal to _n_procs\&. 
+.PP
+Definition at line 107 of file parallel_sort\&.h\&.
+.PP
+Referenced by libMesh::Parallel::Sort< KeyType, IdxType >::Sort()\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> std::vector<KeyType> \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::_my_bin\fC [private]\fP"
+The bin which will eventually be held by this processor\&. It may be shorter or longer than _data\&. It will be dynamically resized when it is needed\&. 
+.PP
+Definition at line 115 of file parallel_sort\&.h\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> const \fBprocessor_id_type\fP \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::_n_procs\fC [private]\fP"
+The number of processors to work with\&. 
+.PP
+Definition at line 83 of file parallel_sort\&.h\&.
+.PP
+Referenced by libMesh::Parallel::Sort< KeyType, IdxType >::Sort()\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> const \fBprocessor_id_type\fP \fBlibMesh::Parallel::Sort\fP< KeyType, IdxType >::_proc_id\fC [private]\fP"
+The identity of this processor\&. 
+.PP
+Definition at line 88 of file parallel_sort\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

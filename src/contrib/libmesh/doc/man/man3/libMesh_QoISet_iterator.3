@@ -1,0 +1,144 @@
+.TH "libMesh::QoISet::iterator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::QoISet::iterator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <qoi_set\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBiterator\fP (unsigned int i, const std::vector< bool > &v)"
+.br
+.ti -1c
+.RI "unsigned int \fBoperator*\fP () const "
+.br
+.ti -1c
+.RI "\fBiterator\fP & \fBoperator++\fP ()"
+.br
+.ti -1c
+.RI "\fBiterator\fP \fBoperator++\fP (int)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBiterator\fP &other) const "
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBiterator\fP &other) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fB_i\fP"
+.br
+.ti -1c
+.RI "const std::vector< bool > & \fB_vecbool\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 44 of file qoi_set\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::QoISet::iterator::iterator (unsigned inti, const std::vector< bool > &v)\fC [inline]\fP"
+
+.PP
+Definition at line 47 of file qoi_set\&.h\&.
+.PP
+References _i, and _vecbool\&.
+.PP
+.nf
+47                                                        : _i(i), _vecbool(v)
+48     {
+49       while (_i < _vecbool\&.size() && !_vecbool[_i])
+50         _i++;
+51     }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::QoISet::iterator::operator!= (const \fBiterator\fP &other) const\fC [inline]\fP"
+
+.PP
+Definition at line 74 of file qoi_set\&.h\&.
+.PP
+References _i, and _vecbool\&.
+.PP
+.nf
+74                                                  {
+75       libmesh_assert_equal_to (&_vecbool, &other\&._vecbool);
+76       return _i != other\&._i;
+77     }
+.fi
+.SS "unsigned int libMesh::QoISet::iterator::operator* () const\fC [inline]\fP"
+
+.PP
+Definition at line 53 of file qoi_set\&.h\&.
+.PP
+References _i\&.
+.PP
+.nf
+53 { return _i; }
+.fi
+.SS "\fBiterator\fP& libMesh::QoISet::iterator::operator++ ()\fC [inline]\fP"
+
+.PP
+Definition at line 55 of file qoi_set\&.h\&.
+.PP
+References _i, and _vecbool\&.
+.PP
+.nf
+56     {
+57       do {
+58         _i++;
+59       } while (_i < _vecbool\&.size() && !_vecbool[_i]);
+60       return *this;
+61     }
+.fi
+.SS "\fBiterator\fP libMesh::QoISet::iterator::operator++ (int)\fC [inline]\fP"
+
+.PP
+Definition at line 63 of file qoi_set\&.h\&.
+.PP
+.nf
+63                              {
+64       iterator it = *this;
+65       ++(*this);
+66       return it;
+67     }
+.fi
+.SS "bool libMesh::QoISet::iterator::operator== (const \fBiterator\fP &other) const\fC [inline]\fP"
+
+.PP
+Definition at line 69 of file qoi_set\&.h\&.
+.PP
+References _i, and _vecbool\&.
+.PP
+.nf
+69                                                  {
+70       libmesh_assert_equal_to (&_vecbool, &other\&._vecbool);
+71       return _i == other\&._i;
+72     }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "unsigned int libMesh::QoISet::iterator::_i\fC [private]\fP"
+
+.PP
+Definition at line 81 of file qoi_set\&.h\&.
+.PP
+Referenced by iterator(), operator!=(), operator*(), operator++(), and operator==()\&.
+.SS "const std::vector<bool>& libMesh::QoISet::iterator::_vecbool\fC [private]\fP"
+
+.PP
+Definition at line 83 of file qoi_set\&.h\&.
+.PP
+Referenced by iterator(), operator!=(), operator++(), and operator==()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

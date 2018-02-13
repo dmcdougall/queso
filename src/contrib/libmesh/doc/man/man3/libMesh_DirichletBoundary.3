@@ -1,0 +1,158 @@
+.TH "libMesh::DirichletBoundary" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DirichletBoundary \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dirichlet_boundaries\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDirichletBoundary\fP (const std::set< \fBboundary_id_type\fP > &b_in, const std::vector< unsigned int > &variables_in, const \fBFunctionBase\fP< \fBNumber\fP > *f_in, const \fBFunctionBase\fP< \fBGradient\fP > *g_in=NULL)"
+.br
+.ti -1c
+.RI "\fBDirichletBoundary\fP (const std::set< \fBboundary_id_type\fP > &b_in, const std::vector< unsigned int > &variables_in, const \fBFunctionBase\fP< \fBNumber\fP > &f_in)"
+.br
+.ti -1c
+.RI "\fBDirichletBoundary\fP (const std::set< \fBboundary_id_type\fP > &b_in, const std::vector< unsigned int > &variables_in, const \fBFunctionBase\fP< \fBNumber\fP > &f_in, const \fBFunctionBase\fP< \fBGradient\fP > &g_in)"
+.br
+.ti -1c
+.RI "\fBDirichletBoundary\fP (const \fBDirichletBoundary\fP &dirichlet_in)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::set< \fBboundary_id_type\fP > \fBb\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned int > \fBvariables\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFunctionBase\fP< \fBNumber\fP > > \fBf\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFunctionBase\fP< \fBGradient\fP > > \fBg\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class allows one to associate dirichlet boundary values with a given set of mesh boundary ids and system variable ids\&.
+.PP
+Dirichlet values must be supplied as the input function 'f'; when using some specialized elements, gradient values must be supplied via the input function 'g'\&.
+.PP
+Dirichlet functions are allowed to return NaN; if this is encountered, then the degree of freedom values in a patch around the location of the returned NaN will be left unconstrained\&. E\&.g\&. a NaN on a boundary edge in 3D would leave that edge and the two adjoining face interiors unconstrained, but would still permit the other edge and node DoFs around those faces to be constrained\&. 
+.PP
+Definition at line 62 of file dirichlet_boundaries\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::DirichletBoundary::DirichletBoundary (const std::set< \fBboundary_id_type\fP > &b_in, const std::vector< unsigned int > &variables_in, const \fBFunctionBase\fP< \fBNumber\fP > *f_in, const \fBFunctionBase\fP< \fBGradient\fP > *g_in = \fCNULL\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 65 of file dirichlet_boundaries\&.h\&.
+.PP
+References f, g, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+68                                                                :
+69     b(b_in),
+70     variables(variables_in),
+71     f(f_in ? f_in->clone() : AutoPtr<FunctionBase<Number> >(NULL)),
+72     g(g_in ? g_in->clone() : AutoPtr<FunctionBase<Gradient> >(NULL))
+73   {
+74     libmesh_assert(f\&.get());
+75     f->init();
+76     if (g\&.get())
+77       g->init();
+78   }
+.fi
+.SS "libMesh::DirichletBoundary::DirichletBoundary (const std::set< \fBboundary_id_type\fP > &b_in, const std::vector< unsigned int > &variables_in, const \fBFunctionBase\fP< \fBNumber\fP > &f_in)\fC [inline]\fP"
+
+.PP
+Definition at line 80 of file dirichlet_boundaries\&.h\&.
+.PP
+References f\&.
+.PP
+.nf
+82                                                       :
+83     b(b_in),
+84     variables(variables_in),
+85     f(f_in\&.clone()),
+86     g(AutoPtr<FunctionBase<Gradient> >(NULL))
+87   {
+88     f->init();
+89   }
+.fi
+.SS "libMesh::DirichletBoundary::DirichletBoundary (const std::set< \fBboundary_id_type\fP > &b_in, const std::vector< unsigned int > &variables_in, const \fBFunctionBase\fP< \fBNumber\fP > &f_in, const \fBFunctionBase\fP< \fBGradient\fP > &g_in)\fC [inline]\fP"
+
+.PP
+Definition at line 92 of file dirichlet_boundaries\&.h\&.
+.PP
+References f, and g\&.
+.PP
+.nf
+95                                                         :
+96     b(b_in),
+97     variables(variables_in),
+98     f(f_in\&.clone()),
+99     g(g_in\&.clone())
+100   {
+101     f->init();
+102     g->init();
+103   }
+.fi
+.SS "libMesh::DirichletBoundary::DirichletBoundary (const \fBDirichletBoundary\fP &dirichlet_in)\fC [inline]\fP"
+
+.PP
+Definition at line 106 of file dirichlet_boundaries\&.h\&.
+.PP
+References f, g, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+106                                                             :
+107     b(dirichlet_in\&.b),
+108     variables(dirichlet_in\&.variables),
+109     f(dirichlet_in\&.f\&.get() ? dirichlet_in\&.f->clone() : AutoPtr<FunctionBase<Number> >(NULL)),
+110     g(dirichlet_in\&.g\&.get() ? dirichlet_in\&.g->clone() : AutoPtr<FunctionBase<Gradient> >(NULL))
+111   {
+112     libmesh_assert(f\&.get());
+113     f->init();
+114     if (g\&.get())
+115       g->init();
+116   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::set<\fBboundary_id_type\fP> libMesh::DirichletBoundary::b"
+
+.PP
+Definition at line 118 of file dirichlet_boundaries\&.h\&.
+.PP
+Referenced by libMesh::DofMap::remove_adjoint_dirichlet_boundary(), and libMesh::DofMap::remove_dirichlet_boundary()\&.
+.SS "\fBAutoPtr\fP<\fBFunctionBase\fP<\fBNumber\fP> > libMesh::DirichletBoundary::f"
+
+.PP
+Definition at line 120 of file dirichlet_boundaries\&.h\&.
+.PP
+Referenced by DirichletBoundary()\&.
+.SS "\fBAutoPtr\fP<\fBFunctionBase\fP<\fBGradient\fP> > libMesh::DirichletBoundary::g"
+
+.PP
+Definition at line 121 of file dirichlet_boundaries\&.h\&.
+.PP
+Referenced by DirichletBoundary()\&.
+.SS "std::vector<unsigned int> libMesh::DirichletBoundary::variables"
+
+.PP
+Definition at line 119 of file dirichlet_boundaries\&.h\&.
+.PP
+Referenced by libMesh::DofMap::remove_adjoint_dirichlet_boundary(), and libMesh::DofMap::remove_dirichlet_boundary()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

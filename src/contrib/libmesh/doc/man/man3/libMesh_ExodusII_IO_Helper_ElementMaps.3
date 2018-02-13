@@ -1,0 +1,688 @@
+.TH "libMesh::ExodusII_IO_Helper::ElementMaps" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ExodusII_IO_Helper::ElementMaps \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <exodusII_io_helper\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBElementMaps\fP ()"
+.br
+.ti -1c
+.RI "\fBExodusII_IO_Helper::Conversion\fP \fBassign_conversion\fP (std::string type_str)"
+.br
+.ti -1c
+.RI "\fBExodusII_IO_Helper::Conversion\fP \fBassign_conversion\fP (const \fBElemType\fP type)"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBedge2_node_map\fP [2] = {0, 1}"
+.br
+.ti -1c
+.RI "static const int \fBedge3_node_map\fP [3] = {0, 1, 2}"
+.br
+.ti -1c
+.RI "static const int \fBedge_edge_map\fP [2] = {0, 1}"
+.br
+.ti -1c
+.RI "static const int \fBedge_inverse_edge_map\fP [2] = {1, 2}"
+.br
+.ti -1c
+.RI "static const int \fBquad4_node_map\fP [4] = {0, 1, 2, 3}"
+.br
+.ti -1c
+.RI "static const int \fBquad8_node_map\fP [8] = {0, 1, 2, 3, 4, 5, 6, 7}"
+.br
+.ti -1c
+.RI "static const int \fBquad9_node_map\fP [9] = {0, 1, 2, 3, 4, 5, 6, 7, 8}"
+.br
+.ti -1c
+.RI "static const int \fBtri3_node_map\fP [3] = {0, 1, 2}"
+.br
+.ti -1c
+.RI "static const int \fBtri6_node_map\fP [6] = {0, 1, 2, 3, 4, 5}"
+.br
+.ti -1c
+.RI "static const int \fBtri_edge_map\fP [3] = {0, 1, 2}"
+.br
+.ti -1c
+.RI "static const int \fBquad_edge_map\fP [4] = {0, 1, 2, 3}"
+.br
+.ti -1c
+.RI "static const int \fBtri_inverse_edge_map\fP [3] = {1, 2, 3}"
+.br
+.ti -1c
+.RI "static const int \fBquad_inverse_edge_map\fP [4] = {1, 2, 3, 4}"
+.br
+.ti -1c
+.RI "static const int \fBhex8_node_map\fP [8] = {0, 1, 2, 3, 4, 5, 6, 7}"
+.br
+.ti -1c
+.RI "static const int \fBhex20_node_map\fP [20]"
+.br
+.ti -1c
+.RI "static const int \fBhex27_node_map\fP [27]"
+.br
+.ti -1c
+.RI "static const int \fBhex27_inverse_node_map\fP [27]"
+.br
+.ti -1c
+.RI "static const int \fBtet4_node_map\fP [4] = {0, 1, 2, 3}"
+.br
+.ti -1c
+.RI "static const int \fBtet10_node_map\fP [10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}"
+.br
+.ti -1c
+.RI "static const int \fBprism6_node_map\fP [6] = {0, 1, 2, 3, 4, 5}"
+.br
+.ti -1c
+.RI "static const int \fBprism15_node_map\fP [15]"
+.br
+.ti -1c
+.RI "static const int \fBprism18_node_map\fP [18]"
+.br
+.ti -1c
+.RI "static const int \fBpyramid5_node_map\fP [5] = {0, 1, 2, 3, 4}"
+.br
+.ti -1c
+.RI "static const int \fBpyramid13_node_map\fP [13] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}"
+.br
+.ti -1c
+.RI "static const int \fBpyramid14_node_map\fP [14] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}"
+.br
+.ti -1c
+.RI "static const int \fBhex_face_map\fP [6] = {1, 2, 3, 4, 0, 5}"
+.br
+.ti -1c
+.RI "static const int \fBhex27_face_map\fP [6] = {1, 2, 3, 4, 0, 5}"
+.br
+.ti -1c
+.RI "static const int \fBtet_face_map\fP [4] = {1, 2, 3, 0}"
+.br
+.ti -1c
+.RI "static const int \fBprism_face_map\fP [5] = {1, 2, 3, 0, 4}"
+.br
+.ti -1c
+.RI "static const int \fBpyramid_face_map\fP [5] = {-1,-1,-1,-1,-1}"
+.br
+.ti -1c
+.RI "static const int \fBhex_inverse_face_map\fP [6] = {5, 1, 2, 3, 4, 6}"
+.br
+.ti -1c
+.RI "static const int \fBhex27_inverse_face_map\fP [6] = {5, 1, 2, 3, 4, 6}"
+.br
+.ti -1c
+.RI "static const int \fBtet_inverse_face_map\fP [4] = {4, 1, 2, 3}"
+.br
+.ti -1c
+.RI "static const int \fBprism_inverse_face_map\fP [5] = {4, 1, 2, 3, 5}"
+.br
+.ti -1c
+.RI "static const int \fBpyramid_inverse_face_map\fP [5] = {-1,-1,-1,-1,-1}"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 741 of file exodusII_io_helper\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ExodusII_IO_Helper::ElementMaps::ElementMaps ()\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 748 of file exodusII_io_helper\&.h\&.
+.PP
+.nf
+748 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBExodusII_IO_Helper::Conversion\fP libMesh::ExodusII_IO_Helper::ElementMaps::assign_conversion (std::stringtype_str)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a conversion object given an element type name\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1815 of file exodusII_io_helper\&.C\&.
+.PP
+References libMesh::EDGE2, and libMesh::err\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::Nemesis_IO_Helper::write_elements(), libMesh::ExodusII_IO_Helper::write_sidesets(), and libMesh::Nemesis_IO_Helper::write_sidesets()\&.
+.PP
+.nf
+1816 {
+1817   init_element_equivalence_map();
+1818 
+1819   // Do only upper-case comparisons
+1820   std::transform(type_str\&.begin(), type_str\&.end(), type_str\&.begin(), ::toupper);
+1821 
+1822   std::map<std::string, ElemType>::iterator it =
+1823     element_equivalence_map\&.find(type_str);
+1824 
+1825   if (it != element_equivalence_map\&.end())
+1826     return assign_conversion( it->second );
+1827   else
+1828     {
+1829       libMesh::err << "ERROR! Unrecognized element type_str: " << type_str << std::endl;
+1830       libmesh_error();
+1831     }
+1832 
+1833   libmesh_error();
+1834 
+1835   // dummy return value, we won't get here
+1836   return assign_conversion (EDGE2);
+1837 }
+.fi
+.SS "\fBExodusII_IO_Helper::Conversion\fP libMesh::ExodusII_IO_Helper::ElementMaps::assign_conversion (const \fBElemType\fPtype)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a conversion object given an element type\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1841 of file exodusII_io_helper\&.C\&.
+.PP
+References libMesh::EDGE2, libMesh::EDGE3, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI3SUBDIVISION, and libMesh::TRI6\&.
+.PP
+.nf
+1842 {
+1843   switch (type)
+1844     {
+1845     case EDGE2:
+1846       {
+1847         const Conversion conv(edge2_node_map,
+1848                               ARRAY_LENGTH(edge2_node_map),
+1849                               edge2_node_map, // inverse node map same as forward node map
+1850                               ARRAY_LENGTH(edge2_node_map),
+1851                               edge_edge_map,
+1852                               ARRAY_LENGTH(edge_edge_map),
+1853                               edge_inverse_edge_map,
+1854                               ARRAY_LENGTH(edge_inverse_edge_map),
+1855                               EDGE2, "EDGE2");
+1856         return conv;
+1857       }
+1858     case EDGE3:
+1859       {
+1860         const Conversion conv(edge3_node_map,
+1861                               ARRAY_LENGTH(edge3_node_map),
+1862                               edge3_node_map, // inverse node map same as forward node map
+1863                               ARRAY_LENGTH(edge3_node_map),
+1864                               edge_edge_map,
+1865                               ARRAY_LENGTH(edge_edge_map),
+1866                               edge_inverse_edge_map,
+1867                               ARRAY_LENGTH(edge_inverse_edge_map),
+1868                               EDGE3, "EDGE3");
+1869         return conv;
+1870       }
+1871     case QUAD4:
+1872       {
+1873         const Conversion conv(quad4_node_map,
+1874                               ARRAY_LENGTH(quad4_node_map),
+1875                               quad4_node_map, // inverse node map same as forward node map
+1876                               ARRAY_LENGTH(quad4_node_map),
+1877                               quad_edge_map,
+1878                               ARRAY_LENGTH(quad_edge_map),
+1879                               quad_inverse_edge_map,
+1880                               ARRAY_LENGTH(quad_inverse_edge_map),
+1881                               QUAD4,
+1882                               "QUAD4");
+1883         return conv;
+1884       }
+1885 
+1886     case QUAD8:
+1887       {
+1888         const Conversion conv(quad8_node_map,
+1889                               ARRAY_LENGTH(quad8_node_map),
+1890                               quad8_node_map, // inverse node map same as forward node map
+1891                               ARRAY_LENGTH(quad8_node_map),
+1892                               quad_edge_map,
+1893                               ARRAY_LENGTH(quad_edge_map),
+1894                               quad_inverse_edge_map,
+1895                               ARRAY_LENGTH(quad_inverse_edge_map),
+1896                               QUAD8,
+1897                               "QUAD8");
+1898         return conv;
+1899       }
+1900 
+1901     case QUAD9:
+1902       {
+1903         const Conversion conv(quad9_node_map,
+1904                               ARRAY_LENGTH(quad9_node_map),
+1905                               quad9_node_map, // inverse node map same as forward node map
+1906                               ARRAY_LENGTH(quad9_node_map),
+1907                               quad_edge_map,
+1908                               ARRAY_LENGTH(quad_edge_map),
+1909                               quad_inverse_edge_map,
+1910                               ARRAY_LENGTH(quad_inverse_edge_map),
+1911                               QUAD9,
+1912                               "QUAD9");
+1913         return conv;
+1914       }
+1915 
+1916     case TRI3:
+1917       {
+1918         const Conversion conv(tri3_node_map,
+1919                               ARRAY_LENGTH(tri3_node_map),
+1920                               tri3_node_map, // inverse node map same as forward node map
+1921                               ARRAY_LENGTH(tri3_node_map),
+1922                               tri_edge_map,
+1923                               ARRAY_LENGTH(tri_edge_map),
+1924                               tri_inverse_edge_map,
+1925                               ARRAY_LENGTH(tri_inverse_edge_map),
+1926                               TRI3,
+1927                               "TRI3");
+1928         return conv;
+1929       }
+1930 
+1931     case TRI3SUBDIVISION:
+1932       {
+1933         const Conversion conv(tri3_node_map,
+1934                               ARRAY_LENGTH(tri3_node_map),
+1935                               tri3_node_map, // inverse node map same as forward node map
+1936                               ARRAY_LENGTH(tri3_node_map),
+1937                               tri_edge_map,
+1938                               ARRAY_LENGTH(tri_edge_map),
+1939                               tri_inverse_edge_map,
+1940                               ARRAY_LENGTH(tri_inverse_edge_map),
+1941                               TRI3SUBDIVISION,
+1942                               "TRI3");
+1943         return conv;
+1944       }
+1945 
+1946     case TRI6:
+1947       {
+1948         const Conversion conv(tri6_node_map,
+1949                               ARRAY_LENGTH(tri6_node_map),
+1950                               tri6_node_map, // inverse node map same as forward node map
+1951                               ARRAY_LENGTH(tri6_node_map),
+1952                               tri_edge_map,
+1953                               ARRAY_LENGTH(tri_edge_map),
+1954                               tri_inverse_edge_map,
+1955                               ARRAY_LENGTH(tri_inverse_edge_map),
+1956                               TRI6,
+1957                               "TRI6");
+1958         return conv;
+1959       }
+1960 
+1961     case HEX8:
+1962       {
+1963         const Conversion conv(hex8_node_map,
+1964                               ARRAY_LENGTH(hex8_node_map),
+1965                               hex8_node_map, // inverse node map same as forward node map
+1966                               ARRAY_LENGTH(hex8_node_map),
+1967                               hex_face_map,
+1968                               ARRAY_LENGTH(hex_face_map),
+1969                               hex_inverse_face_map,
+1970                               ARRAY_LENGTH(hex_inverse_face_map),
+1971                               HEX8,
+1972                               "HEX8");
+1973         return conv;
+1974       }
+1975 
+1976     case HEX20:
+1977       {
+1978         const Conversion conv(hex20_node_map,
+1979                               ARRAY_LENGTH(hex20_node_map),
+1980                               hex20_node_map, // inverse node map same as forward node map
+1981                               ARRAY_LENGTH(hex20_node_map),
+1982                               hex_face_map,
+1983                               ARRAY_LENGTH(hex_face_map),
+1984                               hex_inverse_face_map,
+1985                               ARRAY_LENGTH(hex_inverse_face_map),
+1986                               HEX20,
+1987                               "HEX20");
+1988         return conv;
+1989       }
+1990 
+1991     case HEX27:
+1992       {
+1993         const Conversion conv(hex27_node_map,
+1994                               ARRAY_LENGTH(hex27_node_map),
+1995                               hex27_inverse_node_map, // different inverse node map for Hex27!
+1996                               ARRAY_LENGTH(hex27_inverse_node_map),
+1997                               hex27_face_map,
+1998                               ARRAY_LENGTH(hex27_face_map),
+1999                               hex27_inverse_face_map,
+2000                               ARRAY_LENGTH(hex27_inverse_face_map),
+2001                               HEX27,
+2002                               "HEX27");
+2003         return conv;
+2004       }
+2005 
+2006     case TET4:
+2007       {
+2008         const Conversion conv(tet4_node_map,
+2009                               ARRAY_LENGTH(tet4_node_map),
+2010                               tet4_node_map, // inverse node map same as forward node map
+2011                               ARRAY_LENGTH(tet4_node_map),
+2012                               tet_face_map,
+2013                               ARRAY_LENGTH(tet_face_map),
+2014                               tet_inverse_face_map,
+2015                               ARRAY_LENGTH(tet_inverse_face_map),
+2016                               TET4,
+2017                               "TETRA4");
+2018         return conv;
+2019       }
+2020 
+2021     case TET10:
+2022       {
+2023         const Conversion conv(tet10_node_map,
+2024                               ARRAY_LENGTH(tet10_node_map),
+2025                               tet10_node_map, // inverse node map same as forward node map
+2026                               ARRAY_LENGTH(tet10_node_map),
+2027                               tet_face_map,
+2028                               ARRAY_LENGTH(tet_face_map),
+2029                               tet_inverse_face_map,
+2030                               ARRAY_LENGTH(tet_inverse_face_map),
+2031                               TET10,
+2032                               "TETRA10");
+2033         return conv;
+2034       }
+2035 
+2036     case PRISM6:
+2037       {
+2038         const Conversion conv(prism6_node_map,
+2039                               ARRAY_LENGTH(prism6_node_map),
+2040                               prism6_node_map, // inverse node map same as forward node map
+2041                               ARRAY_LENGTH(prism6_node_map),
+2042                               prism_face_map,
+2043                               ARRAY_LENGTH(prism_face_map),
+2044                               prism_inverse_face_map,
+2045                               ARRAY_LENGTH(prism_inverse_face_map),
+2046                               PRISM6,
+2047                               "WEDGE");
+2048         return conv;
+2049       }
+2050 
+2051     case PRISM15:
+2052       {
+2053         const Conversion conv(prism15_node_map,
+2054                               ARRAY_LENGTH(prism15_node_map),
+2055                               prism15_node_map, // inverse node map same as forward node map
+2056                               ARRAY_LENGTH(prism15_node_map),
+2057                               prism_face_map,
+2058                               ARRAY_LENGTH(prism_face_map),
+2059                               prism_inverse_face_map,
+2060                               ARRAY_LENGTH(prism_inverse_face_map),
+2061                               PRISM15,
+2062                               "WEDGE15");
+2063         return conv;
+2064       }
+2065 
+2066     case PRISM18:
+2067       {
+2068         const Conversion conv(prism18_node_map,
+2069                               ARRAY_LENGTH(prism18_node_map),
+2070                               prism18_node_map, // inverse node map same as forward node map
+2071                               ARRAY_LENGTH(prism18_node_map),
+2072                               prism_face_map,
+2073                               ARRAY_LENGTH(prism_face_map),
+2074                               prism_inverse_face_map,
+2075                               ARRAY_LENGTH(prism_inverse_face_map),
+2076                               PRISM18,
+2077                               "WEDGE18");
+2078         return conv;
+2079       }
+2080 
+2081     case PYRAMID5:
+2082       {
+2083         const Conversion conv(pyramid5_node_map,
+2084                               ARRAY_LENGTH(pyramid5_node_map),
+2085                               pyramid5_node_map, // inverse node map same as forward node map
+2086                               ARRAY_LENGTH(pyramid5_node_map),
+2087                               pyramid_face_map,
+2088                               ARRAY_LENGTH(pyramid_face_map),
+2089                               pyramid_inverse_face_map,
+2090                               ARRAY_LENGTH(pyramid_inverse_face_map),
+2091                               PYRAMID5,
+2092                               "PYRAMID5");
+2093         return conv;
+2094       }
+2095 
+2096     case PYRAMID13:
+2097       {
+2098         const Conversion conv(pyramid13_node_map,
+2099                               ARRAY_LENGTH(pyramid13_node_map),
+2100                               pyramid13_node_map, // inverse node map same as forward node map
+2101                               ARRAY_LENGTH(pyramid13_node_map),
+2102                               pyramid_face_map,
+2103                               ARRAY_LENGTH(pyramid_face_map),
+2104                               pyramid_inverse_face_map,
+2105                               ARRAY_LENGTH(pyramid_inverse_face_map),
+2106                               PYRAMID13,
+2107                               "PYRAMID13");
+2108         return conv;
+2109       }
+2110 
+2111     case PYRAMID14:
+2112       {
+2113         const Conversion conv(pyramid14_node_map,
+2114                               ARRAY_LENGTH(pyramid14_node_map),
+2115                               pyramid14_node_map, // inverse node map same as forward node map
+2116                               ARRAY_LENGTH(pyramid14_node_map),
+2117                               pyramid_face_map,
+2118                               ARRAY_LENGTH(pyramid_face_map),
+2119                               pyramid_inverse_face_map,
+2120                               ARRAY_LENGTH(pyramid_inverse_face_map),
+2121                               PYRAMID14,
+2122                               "PYRAMID14");
+2123         return conv;
+2124       }
+2125 
+2126     default:
+2127       libmesh_error();
+2128     }
+2129 
+2130   libmesh_error();
+2131 
+2132   // dummy return value, we will never get here
+2133   const Conversion conv(tri3_node_map,
+2134                         ARRAY_LENGTH(tri3_node_map),
+2135                         tri3_node_map, // inverse node map same as forward node map
+2136                         ARRAY_LENGTH(tri3_node_map),
+2137                         tri_edge_map,
+2138                         ARRAY_LENGTH(tri_edge_map),
+2139                         tri_inverse_edge_map,
+2140                         ARRAY_LENGTH(tri_inverse_edge_map),
+2141                         TRI3,
+2142                         "TRI3");
+2143   return conv;
+2144 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::edge2_node_map = {0, 1}\fC [static]\fP"
+1D node maps\&. These define mappings from ExodusII-formatted element numberings\&. The \fBEdge2\fP node map\&. Use this map for linear elements in 1D\&. 
+.PP
+Definition at line 758 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::edge3_node_map = {0, 1, 2}\fC [static]\fP"
+The \fBEdge3\fP node map\&. Use this map for quadratic elements in 1D\&. 
+.PP
+Definition at line 763 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::edge_edge_map = {0, 1}\fC [static]\fP"
+1D edge maps Maps the Exodus edge numbering for line elements\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 774 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::edge_inverse_edge_map = {1, 2}\fC [static]\fP"
+Maps the Exodus edge numbering for line elements\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 780 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex20_node_map\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= { 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+                                                                  10, 11, 12, 13, 14, 15, 16, 17, 18, 19}
+.fi
+The \fBHex20\fP node map\&. Use this map for serendipity hexahedral elements in 3D\&. 
+.PP
+Definition at line 859 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex27_face_map = {1, 2, 3, 4, 0, 5}\fC [static]\fP"
+Maps the Exodus face numbering for 27-noded hexahedrals\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 934 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex27_inverse_face_map = {5, 1, 2, 3, 4, 6}\fC [static]\fP"
+Maps the Exodus face numbering for 27-noded hexahedrals\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 964 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex27_inverse_node_map\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+  
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+  
+  26, 20, 25, 24, 22, 21, 23}
+.fi
+The \fBHex27\fP inverse node map\&. Use this map for writing tri-quadratic hexahedral elements in 3D\&. 
+.PP
+Definition at line 871 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex27_node_map\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {
+  
+  0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
+  
+  21, 25, 24, 26, 23, 22, 20}
+.fi
+The \fBHex27\fP node map\&. Use this map for reading tri-quadratic hexahedral elements in 3D\&. 
+.PP
+Definition at line 865 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex8_node_map = {0, 1, 2, 3, 4, 5, 6, 7}\fC [static]\fP"
+3D maps\&. These define mappings from ExodusII-formatted element numberings\&. The \fBHex8\fP node map\&. Use this map for bi-linear hexahedral elements in 3D\&. 
+.PP
+Definition at line 853 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex_face_map = {1, 2, 3, 4, 0, 5}\fC [static]\fP"
+3D face maps\&. Maps the Exodus face numbering for general hexahedrals\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 928 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::hex_inverse_face_map = {5, 1, 2, 3, 4, 6}\fC [static]\fP"
+Maps the Exodus face numbering for general hexahedrals\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 958 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::prism15_node_map\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {0, 1, 2, 3, 4, 5, 6,  7,  8,  9,
+                                                                     10, 11, 12, 13, 14}
+.fi
+The \fBPrism15\fP node map\&. Use this map for 'serendipity' prisms in 3D\&. 
+.PP
+Definition at line 894 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::prism18_node_map\fC [static]\fP"
+\fBInitial value:\fP
+.PP
+.nf
+= {0, 1, 2, 3, 4, 5, 6,  7,  8,  9,
+                                                                     10, 11, 12, 13, 14, 15, 16, 17}
+.fi
+The \fBPrism18\fP node map\&. 
+.PP
+Definition at line 899 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::prism6_node_map = {0, 1, 2, 3, 4, 5}\fC [static]\fP"
+The \fBPrism6\fP node map\&. 
+.PP
+Definition at line 888 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::prism_face_map = {1, 2, 3, 0, 4}\fC [static]\fP"
+Maps the Exodus face numbering for general prisms\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 946 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::prism_inverse_face_map = {4, 1, 2, 3, 5}\fC [static]\fP"
+Maps the Exodus face numbering for general prisms\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 976 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::pyramid13_node_map = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}\fC [static]\fP"
+The \fBPyramid13\fP node map\&. Use this map for 'serendipity' pyramid elements in 3D\&. 
+.PP
+Definition at line 911 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::pyramid14_node_map = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}\fC [static]\fP"
+The \fBPyramid14\fP node map\&. Use this map for biquadratic pyramid elements in 3D\&. 
+.PP
+Definition at line 917 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::pyramid5_node_map = {0, 1, 2, 3, 4}\fC [static]\fP"
+The \fBPyramid5\fP node map\&. Use this map for linear pyramid elements in 3D\&. 
+.PP
+Definition at line 905 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::pyramid_face_map = {-1,-1,-1,-1,-1}\fC [static]\fP"
+Maps the Exodus face numbering for general pyramids\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 952 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::pyramid_inverse_face_map = {-1,-1,-1,-1,-1}\fC [static]\fP"
+Maps the Exodus face numbering for general pyramids\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 982 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::quad4_node_map = {0, 1, 2, 3}\fC [static]\fP"
+2D node maps\&. These define mappings from ExodusII-formatted element numberings\&. The \fBQuad4\fP node map\&. Use this map for bi-linear quadrilateral elements in 2D\&. 
+.PP
+Definition at line 791 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::quad8_node_map = {0, 1, 2, 3, 4, 5, 6, 7}\fC [static]\fP"
+The \fBQuad8\fP node map\&. Use this map for serendipity quadrilateral elements in 2D\&. 
+.PP
+Definition at line 797 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::quad9_node_map = {0, 1, 2, 3, 4, 5, 6, 7, 8}\fC [static]\fP"
+The \fBQuad9\fP node map\&. Use this map for bi-quadratic quadrilateral elements in 2D\&. 
+.PP
+Definition at line 803 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::quad_edge_map = {0, 1, 2, 3}\fC [static]\fP"
+Maps the Exodus edge numbering for quadrilaterals\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 830 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::quad_inverse_edge_map = {1, 2, 3, 4}\fC [static]\fP"
+Maps the Exodus edge numbering for quadrilaterals\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 842 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tet10_node_map = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}\fC [static]\fP"
+The \fBTet10\fP node map\&. Use this map for quadratic tetrahedral elements in 3D\&. 
+.PP
+Definition at line 883 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tet4_node_map = {0, 1, 2, 3}\fC [static]\fP"
+The \fBTet4\fP node map\&. Use this map for linear tetrahedral elements in 3D\&. 
+.PP
+Definition at line 877 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tet_face_map = {1, 2, 3, 0}\fC [static]\fP"
+Maps the Exodus face numbering for general tetrahedrals\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 940 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tet_inverse_face_map = {4, 1, 2, 3}\fC [static]\fP"
+Maps the Exodus face numbering for general tetrahedrals\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 970 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tri3_node_map = {0, 1, 2}\fC [static]\fP"
+The \fBTri3\fP node map\&. Use this map for linear triangles in 2D\&. 
+.PP
+Definition at line 808 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tri6_node_map = {0, 1, 2, 3, 4, 5}\fC [static]\fP"
+The \fBTri6\fP node map\&. Use this map for quadratic triangular elements in 2D\&. 
+.PP
+Definition at line 814 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tri_edge_map = {0, 1, 2}\fC [static]\fP"
+2D edge maps Maps the Exodus edge numbering for triangles\&. Useful for reading sideset information\&. 
+.PP
+Definition at line 824 of file exodusII_io_helper\&.h\&.
+.SS "const int libMesh::ExodusII_IO_Helper::ElementMaps::tri_inverse_edge_map = {1, 2, 3}\fC [static]\fP"
+Maps the Exodus edge numbering for triangles\&. Useful for writing sideset information\&. 
+.PP
+Definition at line 836 of file exodusII_io_helper\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

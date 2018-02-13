@@ -1,0 +1,1034 @@
+.TH "libMesh::PerfLog" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PerfLog \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <perf_log\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPerfLog\fP (const std::string &\fBlabel_name\fP='', const bool \fBlog_events\fP=true)"
+.br
+.ti -1c
+.RI "\fB~PerfLog\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBdisable_logging\fP ()"
+.br
+.ti -1c
+.RI "void \fBenable_logging\fP ()"
+.br
+.ti -1c
+.RI "bool \fBlogging_enabled\fP () const "
+.br
+.ti -1c
+.RI "void \fBpush\fP (const std::string &label, const std::string &header='')"
+.br
+.ti -1c
+.RI "void \fBpop\fP (const std::string &label, const std::string &header='')"
+.br
+.ti -1c
+.RI "void \fBstart_event\fP (const std::string &label, const std::string &header='')"
+.br
+.ti -1c
+.RI "void \fBstop_event\fP (const std::string &label, const std::string &header='')"
+.br
+.ti -1c
+.RI "void \fBpause_event\fP (const std::string &label, const std::string &header='')"
+.br
+.ti -1c
+.RI "void \fBrestart_event\fP (const std::string &label, const std::string &header='')"
+.br
+.ti -1c
+.RI "std::string \fBget_log\fP () const "
+.br
+.ti -1c
+.RI "std::string \fBget_info_header\fP () const "
+.br
+.ti -1c
+.RI "std::string \fBget_perf_info\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_log\fP () const "
+.br
+.ti -1c
+.RI "double \fBget_elapsed_time\fP () const "
+.br
+.ti -1c
+.RI "double \fBget_active_time\fP () const "
+.br
+.ti -1c
+.RI "\fBPerfData\fP \fBget_perf_data\fP (const std::string &label, const std::string &header='')"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBsplit_on_whitespace\fP (const std::string &input, std::vector< std::string > &output) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const std::string \fBlabel_name\fP"
+.br
+.ti -1c
+.RI "bool \fBlog_events\fP"
+.br
+.ti -1c
+.RI "double \fBtotal_time\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBtstart\fP"
+.br
+.ti -1c
+.RI "std::map< std::pair
+.br
+< std::string, std::string >
+.br
+, \fBPerfData\fP > \fBlog\fP"
+.br
+.ti -1c
+.RI "std::stack< \fBPerfData\fP * > \fBlog_stack\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBcalled\fP = false"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBPerfLog\fP\fP class allows monitoring of specific events\&. An event is defined by a unique string that functions as a label\&. Each time the event is executed data are recorded\&. This class is particulary useful for finding performance bottlenecks\&. 
+.PP
+Definition at line 123 of file perf_log\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PerfLog::PerfLog (const std::string &label_name = \fC''\fP, const boollog_events = \fCtrue\fP)"
+Constructor\&. \fClabel_name\fP is the name of the object, which will bw print in the log to distinguish it from other objects\&. \fClog_events\fP is a flag to optionally disable logging\&. You can use this flag to turn off logging without touching any other code\&. 
+.PP
+Definition at line 45 of file perf_log\&.C\&.
+.PP
+References clear(), log_events, and tstart\&.
+.PP
+.nf
+46                                 :
+47   label_name(ln),
+48   log_events(le),
+49   total_time(0\&.)
+50 {
+51   gettimeofday (&tstart, NULL);
+52 
+53   if (log_events)
+54     this->clear();
+55 }
+.fi
+.SS "libMesh::PerfLog::~PerfLog ()"
+Destructor\&. Calls \fC\fBclear()\fP\fP and \fC\fBprint_log()\fP\fP\&. 
+.PP
+Definition at line 59 of file perf_log\&.C\&.
+.PP
+References log_events, and print_log()\&.
+.PP
+.nf
+60 {
+61   if (log_events)
+62     this->print_log();
+63 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::PerfLog::clear ()"
+Clears all the internal data and returns the data structures to a pristine state\&. This function checks to see if it is currently monitoring any events, and if so errors\&. Be sure you are not logging any events when you call this function\&. 
+.PP
+Definition at line 67 of file perf_log\&.C\&.
+.PP
+References label_name, log, log_events, log_stack, libMesh::out, and tstart\&.
+.PP
+Referenced by PerfLog()\&.
+.PP
+.nf
+68 {
+69   if (log_events)
+70     {
+71       //  check that all events are closed
+72       for (std::map<std::pair<std::string,std::string>, PerfData>::iterator
+73              pos = log\&.begin(); pos != log\&.end(); ++pos)
+74         if (pos->second\&.open)
+75           {
+76             libMesh::out
+77               << "ERROR clearning performance log for class "
+78               << label_name << std::endl
+79               << "event " << pos->first\&.second << " is still being monitored!"
+80               << std::endl;
+81 
+82             libmesh_error();
+83           }
+84 
+85 
+86       gettimeofday (&tstart, NULL);
+87 
+88       log\&.clear();
+89 
+90       while (!log_stack\&.empty())
+91         log_stack\&.pop();
+92     }
+93 }
+.fi
+.SS "void libMesh::PerfLog::disable_logging ()\fC [inline]\fP"
+Disables performance logging for an active object\&. 
+.PP
+Definition at line 155 of file perf_log\&.h\&.
+.PP
+References log_events\&.
+.PP
+Referenced by libMesh::Threads::parallel_for(), and libMesh::Threads::parallel_reduce()\&.
+.PP
+.nf
+155 { log_events = false; }
+.fi
+.SS "void libMesh::PerfLog::enable_logging ()\fC [inline]\fP"
+Enables performance logging for an active object\&. 
+.PP
+Definition at line 160 of file perf_log\&.h\&.
+.PP
+References log_events\&.
+.PP
+Referenced by libMesh::Threads::parallel_for(), and libMesh::Threads::parallel_reduce()\&.
+.PP
+.nf
+160 { log_events = true; }
+.fi
+.SS "double libMesh::PerfLog::get_active_time () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the active time 
+.RE
+.PP
+
+.PP
+Definition at line 432 of file perf_log\&.h\&.
+.PP
+References total_time\&.
+.PP
+.nf
+433 {
+434   return total_time;
+435 }
+.fi
+.SS "double libMesh::PerfLog::get_elapsed_time () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the total time spent on this event\&. 
+.RE
+.PP
+
+.PP
+Definition at line 420 of file perf_log\&.h\&.
+.PP
+References tstart\&.
+.PP
+.nf
+421 {
+422   struct timeval tnow;
+423 
+424   gettimeofday (&tnow, NULL);
+425 
+426   const double elapsed_time = (static_cast<double>(tnow\&.tv_sec  - tstart\&.tv_sec) +
+427                                static_cast<double>(tnow\&.tv_usec - tstart\&.tv_usec)*1\&.e-6);
+428   return elapsed_time;
+429 }
+.fi
+.SS "std::string libMesh::PerfLog::get_info_header () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing ONLY the information header\&. 
+.RE
+.PP
+
+.PP
+Definition at line 96 of file perf_log\&.C\&.
+.PP
+References libMesh::Utility::get_timestamp(), libMesh::global_n_processors(), libMesh::global_processor_id(), libMesh::libmesh_assert_greater(), log_events, and split_on_whitespace()\&.
+.PP
+Referenced by get_log()\&.
+.PP
+.nf
+97 {
+98   std::ostringstream oss;
+99 
+100   if (log_events)
+101     {
+102       std::string date = Utility::get_timestamp();
+103 
+104       // Get system information
+105       struct utsname sysInfo;
+106       uname(&sysInfo);
+107 
+108       // Get user information
+109       //
+110       // Some systems, for example Crays, actually have getpwuid on the head-node
+111       // but (if I understand correctly) a dynamically-linked glibc is not available
+112       // on the backend, which is running a reduced operating system like Compute
+113       // Node Linux\&.  Thus functions like getpwuid cannot be called\&.  This makes
+114       // automatically testing for the existence of getpwuid on the login node
+115       // difficult\&.  The configure test would work on the login node but will fail
+116       // on the backend\&.  Hence we have added a configure flag, --disable-getpwuid,
+117       // to manually turn this off\&.
+118 #ifdef LIBMESH_HAVE_GETPWUID
+119       struct passwd* p = getpwuid(getuid());
+120 #endif
+121       oss << "\n";
+122 
+123       // Construct string stream objects for each of the outputs
+124       std::ostringstream
+125         pid_stream,
+126         nprocs_stream,
+127         time_stream,
+128         os_stream,
+129         host_stream,
+130         osrel_stream,
+131         osver_stream,
+132         machine_stream,
+133         user_stream;
+134 
+135 
+136       // Put pointers to these streams in a vector
+137       std::vector<std::ostringstream*> v;
+138       v\&.push_back(&pid_stream);
+139       v\&.push_back(&nprocs_stream);
+140       v\&.push_back(&time_stream);
+141       v\&.push_back(&os_stream);
+142       v\&.push_back(&host_stream);
+143       v\&.push_back(&osrel_stream);
+144       v\&.push_back(&osver_stream);
+145       v\&.push_back(&machine_stream);
+146       v\&.push_back(&user_stream);
+147 
+148       // Fill string stream objects
+149       if (libMesh::global_n_processors() > 1)
+150         {
+151           pid_stream     << "| Processor id:   " << libMesh::global_processor_id();
+152           nprocs_stream  << "| Num Processors: " << libMesh::global_n_processors();
+153         }
+154 
+155       time_stream    << "| Time:           " << date                   ;
+156       os_stream      << "| OS:             " << sysInfo\&.sysname        ;
+157       host_stream    << "| HostName:       " << sysInfo\&.nodename       ;
+158       osrel_stream   << "| OS Release:     " << sysInfo\&.release        ;
+159       osver_stream   << "| OS Version:     " << sysInfo\&.version        ;
+160       machine_stream << "| Machine:        " << sysInfo\&.machine        ;
+161       user_stream    << "| Username:       ";
+162 #ifdef LIBMESH_HAVE_GETPWUID
+163       if (p && p->pw_name)
+164         user_stream  << p->pw_name;
+165       else
+166 #endif
+167         user_stream  << "Unknown";
+168 
+169       // Parse the LIBMESH_CONFIGURE_INFO string literal before using it in PerfLog output
+170       std::string libmesh_configure_info(LIBMESH_CONFIGURE_INFO);
+171       std::vector<std::string> parsed_libmesh_configure_info;
+172       this->split_on_whitespace(libmesh_configure_info,
+173                                 parsed_libmesh_configure_info);
+174 
+175       // There should always be at at least one entry in
+176       // parsed_libmesh_configure_info, even if the user just ran
+177       // \&.\&./configure\&.
+178       libmesh_assert_greater (parsed_libmesh_configure_info\&.size(), 0);
+179 
+180       // Find the longest string in all the streams
+181       unsigned int max_length = 0;
+182       for (unsigned int i=0; i<v\&.size(); ++i)
+183         if (v[i]->str()\&.size() > max_length)
+184           max_length = libmesh_cast_int<unsigned int>
+185             (v[i]->str()\&.size());
+186 
+187       // Find the longest string in the parsed_libmesh_configure_info
+188       for (unsigned i=0; i<parsed_libmesh_configure_info\&.size(); ++i)
+189         if (parsed_libmesh_configure_info[i]\&.size() > max_length)
+190           max_length = libmesh_cast_int<unsigned int>
+191             (parsed_libmesh_configure_info[i]\&.size());
+192 
+193       // Print dashed line for the header
+194       oss << ' '
+195           << std::string(max_length+1, '-')
+196           << '\n';
+197 
+198       // Loop over all the strings and add end formatting
+199       for (unsigned int i=0; i<v\&.size(); ++i)
+200         {
+201           if (v[i]->str()\&.size())
+202             oss << v[i]->str()
+203                 << std::setw(max_length + 4 - v[i]->str()\&.size())
+204                 << std::right
+205                 << "|\n";
+206         }
+207 
+208       // Print out configuration header plus first parsed string\&.  The
+209       // magic number 18 below accounts for the length of the word
+210       // 'Configuration'\&.
+211       oss << "| Configuration:  "
+212           << parsed_libmesh_configure_info[0]
+213           << std::setw(max_length + 4 - parsed_libmesh_configure_info[0]\&.size() - 18)
+214           << std::right
+215           << "|\n";
+216 
+217       // Loop over the parsed_libmesh_configure_info and add end formatting\&.  The magic
+218       // number 3 below accounts for the leading 'pipe' character and indentation
+219       for (unsigned i=1; i<parsed_libmesh_configure_info\&.size(); ++i)
+220         {
+221           oss << "|  "
+222               << parsed_libmesh_configure_info[i]
+223               << std::setw(max_length + 4 - parsed_libmesh_configure_info[i]\&.size() - 3)
+224               << std::right
+225               << "|\n";
+226         }
+227 
+228 
+229       // Print dashed line
+230       oss << ' '
+231           << std::string(max_length+1, '-')
+232           << '\n';
+233     }
+234 
+235   return oss\&.str();
+236 }
+.fi
+.SS "std::string libMesh::PerfLog::get_log () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing: (1) Basic machine information (if first call) (2) The performance log 
+.RE
+.PP
+
+.PP
+Definition at line 556 of file perf_log\&.C\&.
+.PP
+References called, get_info_header(), get_perf_info(), log, and log_events\&.
+.PP
+Referenced by print_log()\&.
+.PP
+.nf
+557 {
+558   std::ostringstream oss;
+559 
+560   if (log_events)
+561     {
+562       // Only print the log
+563       // if it isn't empty
+564       if (!log\&.empty())
+565         {
+566           // Possibly print machine info,
+567           // but only do this once
+568           if (!called)
+569             {
+570               called = true;
+571               oss << get_info_header();
+572             }
+573           oss << get_perf_info();
+574         }
+575     }
+576 
+577   return oss\&.str();
+578 }
+.fi
+.SS "\fBPerfData\fP libMesh::PerfLog::get_perf_data (const std::string &label, const std::string &header = \fC''\fP)"
+Return the \fBPerfData\fP object associated with a label and header\&. 
+.PP
+Definition at line 594 of file perf_log\&.C\&.
+.PP
+References log\&.
+.PP
+.nf
+595 {
+596   return log[std::make_pair(header, label)];
+597 }
+.fi
+.SS "std::string libMesh::PerfLog::get_perf_info () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing ONLY the log information 
+.RE
+.PP
+
+.PP
+Definition at line 241 of file perf_log\&.C\&.
+.PP
+References libMesh::PerfData::count, label_name, log, log_events, libMesh::Real, libMesh::PerfData::tot_time, libMesh::PerfData::tot_time_incl_sub, total_time, and tstart\&.
+.PP
+Referenced by get_log()\&.
+.PP
+.nf
+242 {
+243   std::ostringstream oss;
+244 
+245   if (log_events && !log\&.empty())
+246     {
+247       // Stop timing for this event\&.
+248       struct timeval tstop;
+249 
+250       gettimeofday (&tstop, NULL);
+251 
+252       const double elapsed_time = (static_cast<double>(tstop\&.tv_sec  - tstart\&.tv_sec) +
+253                                    static_cast<double>(tstop\&.tv_usec - tstart\&.tv_usec)*1\&.e-6);
+254 
+255       // Figure out the formatting required based on the event names
+256       // Unsigned ints for each of the column widths
+257       unsigned int event_col_width            = 30;
+258       const unsigned int ncalls_col_width     = 11;
+259       const unsigned int tot_time_col_width   = 12;
+260       const unsigned int avg_time_col_width   = 12;
+261       const unsigned int tot_time_incl_sub_col_width   = 12;
+262       const unsigned int avg_time_incl_sub_col_width   = 12;
+263       const unsigned int pct_active_col_width = 9;
+264       const unsigned int pct_active_incl_sub_col_width = 9;
+265 
+266       // Iterator to be used to loop over the map of timed events
+267       std::map<std::pair<std::string,std::string>, PerfData>::const_iterator pos;
+268 
+269       // Reset the event column width based on the longest event name plus
+270       // a possible 2-character indentation, plus a space\&.
+271       for (pos = log\&.begin(); pos != log\&.end(); ++pos)
+272         if (pos->first\&.second\&.size()+3 > event_col_width)
+273           event_col_width = libmesh_cast_int<unsigned int>
+274             (pos->first\&.second\&.size()+3);
+275 
+276       // Set the total width of the column
+277       const unsigned int total_col_width =
+278         event_col_width     +
+279         ncalls_col_width    +
+280         tot_time_col_width  +
+281         avg_time_col_width  +
+282         tot_time_incl_sub_col_width  +
+283         avg_time_incl_sub_col_width  +
+284         pct_active_col_width+
+285         pct_active_incl_sub_col_width+1;
+286 
+287       // Print dashed line
+288       oss << ' '
+289           << std::string(total_col_width, '-')
+290           << '\n';
+291 
+292       {
+293         // Construct temporary message string
+294         std::ostringstream temp;
+295         temp << "| " << label_name << " Performance: Alive time=" << elapsed_time
+296              << ", Active time=" << total_time;
+297 
+298         // Get the size of the temporary string
+299         const unsigned int temp_size = libmesh_cast_int<unsigned int>
+300           (temp\&.str()\&.size());
+301 
+302         // Send the temporary message to the output
+303         oss << temp\&.str();
+304 
+305         // If this string is longer than the previously computed total
+306         // column width, skip the additional formatting\&.\&.\&. this shouldn't
+307         // happen often, hopefully\&.  Add two additional characters for a
+308         // space and a "|" character at the end\&.
+309         if (temp_size < total_col_width+2)
+310           oss << std::setw(total_col_width - temp_size + 2)
+311               << std::right
+312               << "|";
+313 
+314         oss << '\n';
+315       }
+316 
+317       // Print dashed line
+318       oss << ' '
+319           << std::string(total_col_width, '-')
+320           << '\n';
+321 
+322 
+323       // Write out the header for the events listing
+324       oss << "| "
+325           << std::setw(event_col_width)
+326           << std::left
+327           << "Event"
+328           << std::setw(ncalls_col_width)
+329           << std::left
+330           << "nCalls"
+331           << std::setw(tot_time_col_width)
+332           << std::left
+333           << "Total Time"
+334           << std::setw(avg_time_col_width)
+335           << std::left
+336           << "Avg Time"
+337           << std::setw(tot_time_incl_sub_col_width)
+338           << std::left
+339           << "Total Time"
+340           << std::setw(avg_time_incl_sub_col_width)
+341           << std::left
+342           << "Avg Time"
+343           << std::setw(pct_active_col_width+pct_active_incl_sub_col_width)
+344           << std::left
+345           << "% of Active Time"
+346           << "|\n"
+347           << "| "
+348           << std::setw(event_col_width)
+349           << std::left
+350           << ""
+351           << std::setw(ncalls_col_width)
+352           << std::left
+353           << ""
+354           << std::setw(tot_time_col_width)
+355           << std::left
+356           << "w/o Sub"
+357           << std::setw(avg_time_col_width)
+358           << std::left
+359           << "w/o Sub"
+360           << std::setw(tot_time_incl_sub_col_width)
+361           << std::left
+362           << "With Sub"
+363           << std::setw(avg_time_incl_sub_col_width)
+364           << std::left
+365           << "With Sub"
+366           << std::setw(pct_active_col_width)
+367           << std::left
+368           << "w/o S"
+369           << std::setw(pct_active_incl_sub_col_width)
+370           << std::left
+371           << "With S"
+372           << "|\n|"
+373           << std::string(total_col_width, '-')
+374           << "|\n|"
+375           << std::string(total_col_width, ' ')
+376           << "|\n";
+377 
+378       unsigned int summed_function_calls = 0;
+379       double       summed_total_time     = 0;
+380       double       summed_percentage     = 0;
+381 
+382       std::string last_header("");
+383 
+384       for (pos = log\&.begin(); pos != log\&.end(); ++pos)
+385         {
+386           const PerfData& perf_data = pos->second;
+387 
+388           // Only print the event if the count is non-zero\&.
+389           if (perf_data\&.count != 0)
+390             {
+391               const unsigned int perf_count    = perf_data\&.count;
+392               const double       perf_time     = perf_data\&.tot_time;
+393               const double       perf_avg_time = perf_time / static_cast<double>(perf_count);
+394               const double       perf_time_incl_sub     = perf_data\&.tot_time_incl_sub;
+395               const double       perf_avg_time_incl_sub = perf_time_incl_sub / static_cast<double>(perf_count);
+396               const double       perf_percent  = (total_time != 0\&.) ? perf_time / total_time * 100\&. : 0\&.;
+397               const double       perf_percent_incl_sub  = (total_time != 0\&.) ? perf_time_incl_sub / total_time * 100\&. : 0\&.;
+398 
+399               summed_function_calls += perf_count;
+400               summed_total_time     += perf_time;
+401               summed_percentage     += perf_percent;
+402 
+403               // Print the event name
+404               if (pos->first\&.first == "")
+405                 oss << "| "
+406                     << std::setw(event_col_width)
+407                     << std::left
+408                     << pos->first\&.second;
+409 
+410               else
+411                 {
+412                   if (last_header != pos->first\&.first)
+413                     {
+414                       last_header = pos->first\&.first;
+415 
+416                       // print blank line followed by header name
+417                       // (account for additional space before the
+418                       // header)
+419                       oss << "|"
+420                           << std::string(total_col_width, ' ')
+421                           << "|\n| "
+422                           << std::setw(total_col_width-1)
+423                           << std::left
+424                           << pos->first\&.first
+425                           << "|\n";
+426                     }
+427 
+428                   oss << "|   "
+429                       << std::setw(event_col_width-2)
+430                       << std::left
+431                       << pos->first\&.second;
+432                 }
+433 
+434 
+435               // Print the number of calls to the event\&.
+436               oss << std::setw(ncalls_col_width)
+437                   << perf_count;
+438 
+439               // Save the original stream flags
+440               std::ios_base::fmtflags out_flags = oss\&.flags();
+441 
+442               // Print the total time spent in the event
+443               oss << std::fixed
+444                   << std::setprecision(4)
+445                   << std::setw(tot_time_col_width)
+446                   << std::left
+447                   << perf_time;
+448 
+449 
+450               // Print the average time per function call
+451               oss << std::fixed
+452                   << std::setprecision(6)
+453                   << std::setw(avg_time_col_width)
+454                   << std::left
+455                   << perf_avg_time;
+456 
+457               // Print the total time spent in the event incl\&. sub-events
+458               oss << std::fixed
+459                   << std::setprecision(4)
+460                   << std::setw(tot_time_incl_sub_col_width)
+461                   << std::left
+462                   << perf_time_incl_sub;
+463 
+464               // Print the average time per function call incl\&. sub-events
+465               oss << std::fixed
+466                   << std::setprecision(6)
+467                   << std::setw(avg_time_incl_sub_col_width)
+468                   << std::left
+469                   << perf_avg_time_incl_sub;
+470 
+471               // Print the percentage of the time spent in the event
+472               oss << std::fixed
+473                   << std::setprecision(2)
+474                   << std::setw(pct_active_col_width)
+475                   << std::left
+476                   << perf_percent;
+477 
+478               // Print the percentage of the time spent in the event incl\&. sub-events
+479               oss << std::fixed
+480                   << std::setprecision(2)
+481                   << std::setw(pct_active_incl_sub_col_width)
+482                   << std::left
+483                   << perf_percent_incl_sub;
+484 
+485               // Reset the stream flags
+486               oss\&.flags(out_flags);
+487 
+488               oss << "|\n";
+489             }
+490         }
+491 
+492       oss << ' '
+493           << std::string(total_col_width, '-')
+494           << "\n| "
+495           << std::setw(event_col_width)
+496           << std::left
+497           << "Totals:";
+498 
+499       // Print the total number of logged function calls
+500       // For routines which are called many times, summed_function_calls may
+501       // exceed 7 digits\&.  If this happens use, scientific notation\&.
+502       if (summed_function_calls < 9999999)
+503         oss << std::setw(ncalls_col_width)
+504             << summed_function_calls;
+505 
+506       else
+507         {
+508           // Save the original stream flags
+509           std::ios_base::fmtflags out_flags = oss\&.flags();
+510 
+511           oss << std::scientific
+512               << std::setprecision(3)
+513               << std::setw(ncalls_col_width)
+514               << std::left
+515               << static_cast<Real>(summed_function_calls);
+516 
+517           // Reset the stream flags
+518           oss\&.flags(out_flags);
+519         }
+520 
+521       // Print the total time spent in logged function calls\&.  Don't bother saving/restoring
+522       // the flags here since we are almost done with this stream anyway\&.\&.\&.
+523       oss << std::fixed
+524           << std::setprecision(4)
+525           << std::setw(tot_time_col_width)
+526           << std::left
+527           << summed_total_time;
+528 
+529       // Null, the average time doesn't make sense as a total
+530       oss << std::setw(avg_time_col_width) << "";
+531 
+532       // Same for times that include sub-events
+533       oss << std::setw(tot_time_incl_sub_col_width)
+534           << ""
+535           << std::setw(avg_time_incl_sub_col_width)
+536           << "";
+537 
+538       // Print the total percentage followed by dashed line
+539       oss << std::fixed
+540           << std::setprecision(2)
+541           << std::setw(pct_active_col_width)
+542           << std::left
+543           << summed_percentage
+544           << std::setw(pct_active_incl_sub_col_width)
+545           << ""
+546           << "|\n "
+547           << std::string(total_col_width, '-')
+548           << '\n';
+549     }
+550 
+551   return oss\&.str();
+552 }
+.fi
+.SS "bool libMesh::PerfLog::logging_enabled () const\fC [inline]\fP"
+Returns true iff performance logging is enabled 
+.PP
+Definition at line 165 of file perf_log\&.h\&.
+.PP
+References log_events\&.
+.PP
+Referenced by libMesh::Threads::parallel_for(), and libMesh::Threads::parallel_reduce()\&.
+.PP
+.nf
+165 { return log_events; }
+.fi
+.SS "void libMesh::PerfLog::pause_event (const std::string &label, const std::string &header = \fC''\fP)"
+Suspend monitoring of the event\&. 
+.PP
+Definition at line 615 of file perf_log\&.C\&.
+.PP
+.nf
+617 {
+618   // nothing to do\&.  pushing the next object on the stack will handle it
+619 }
+.fi
+.SS "void libMesh::PerfLog::pop (const std::string &label, const std::string &header = \fC''\fP)\fC [inline]\fP"
+Pop the event \fClabel\fP off the stack, resuming any lower event\&. 
+.PP
+Definition at line 385 of file perf_log\&.h\&.
+.PP
+References libMesh::err, libMesh::libmesh_assert(), log, log_events, log_stack, and total_time\&.
+.PP
+Referenced by stop_event()\&.
+.PP
+.nf
+387 {
+388   if (this->log_events)
+389     {
+390       libmesh_assert (!log_stack\&.empty());
+391 
+392 #ifndef NDEBUG
+393       PerfData *perf_data = &(log[std::make_pair(header,label)]);
+394       if (perf_data != log_stack\&.top())
+395         {
+396           libMesh::err << "PerfLog can't pop (" << header << ',' << label << ')' << std::endl;
+397           libMesh::err << "From top of stack of running logs:" << std::endl;
+398           std::map<std::pair<std::string, std::string>, PerfData>::iterator
+399             i = log\&.begin(), endi = log\&.end();
+400           for (; i != endi; ++i)
+401             if (&(i->second) == log_stack\&.top())
+402               libMesh::err << '(' << i->first\&.first << ',' << i->first\&.second << ')' << std::endl;
+403 
+404           libmesh_assert_equal_to (perf_data, log_stack\&.top());
+405         }
+406 #endif
+407 
+408       total_time += log_stack\&.top()->stopit();
+409 
+410       log_stack\&.pop();
+411 
+412       if (!log_stack\&.empty())
+413         log_stack\&.top()->restart();
+414     }
+415 }
+.fi
+.SS "void libMesh::PerfLog::print_log () const"
+Print the log\&. 
+.PP
+Definition at line 582 of file perf_log\&.C\&.
+.PP
+References get_log(), log_events, and libMesh::out\&.
+.PP
+Referenced by ~PerfLog()\&.
+.PP
+.nf
+583 {
+584   if (log_events)
+585     {
+586       // Check to see if the log_string is empty, and if so,
+587       // avoid printing an unnecessary newline\&.
+588       std::string log_string = this->get_log();
+589       if (log_string\&.size() > 0)
+590         libMesh::out << log_string << std::endl;
+591     }
+592 }
+.fi
+.SS "void libMesh::PerfLog::push (const std::string &label, const std::string &header = \fC''\fP)\fC [inline]\fP"
+Push the event \fClabel\fP onto the stack, pausing any active event\&. 
+.PP
+Definition at line 364 of file perf_log\&.h\&.
+.PP
+References log, log_events, log_stack, libMesh::PerfData::start(), and total_time\&.
+.PP
+Referenced by start_event()\&.
+.PP
+.nf
+366 {
+367   if (this->log_events)
+368     {
+369       // Get a reference to the event data to avoid
+370       // repeated map lookups
+371       PerfData *perf_data = &(log[std::make_pair(header,label)]);
+372 
+373       if (!log_stack\&.empty())
+374         total_time +=
+375           log_stack\&.top()->pause();
+376 
+377       perf_data->start();
+378       log_stack\&.push(perf_data);
+379     }
+380 }
+.fi
+.SS "void libMesh::PerfLog::restart_event (const std::string &label, const std::string &header = \fC''\fP)"
+Restart monitoring the event\&. 
+.PP
+Definition at line 623 of file perf_log\&.C\&.
+.PP
+.nf
+625 {
+626   // nothing to do\&.  popping the top off the stack will handle it\&.
+627 }
+.fi
+.SS "void libMesh::PerfLog::split_on_whitespace (const std::string &input, std::vector< std::string > &output) const\fC [private]\fP"
+Splits a string on whitespace into a vector of separate strings\&. This is used to make the LIBMESH_CONFIGURE_INFO a little more manageable\&. 
+.PP
+Definition at line 631 of file perf_log\&.C\&.
+.PP
+Referenced by get_info_header()\&.
+.PP
+.nf
+632 {
+633   // Check for easy return
+634   if (input\&.size()==0)
+635     return;
+636 
+637   // Here we hard-code the string to split on, since the algorithm below
+638   // is somewhat specific to it\&.\&.\&.
+639   const std::string split_on("' '");
+640 
+641   size_t current_pos = 0;
+642   while (true)
+643     {
+644       // Find next end location
+645       size_t end_pos = input\&.find(split_on, current_pos);
+646 
+647       if (end_pos != std::string::npos)
+648         {
+649           // Create substring\&.  Note: the second argument to substr is
+650           // the *length* of string to create, not the ending position!
+651           output\&.push_back( input\&.substr(current_pos, end_pos - current_pos + 1) );
+652 
+653           // Update search starting position, make sure to go past the end of the split_on string, but
+654           // include the previous single quote (hence the -1)\&.
+655           current_pos = end_pos + split_on\&.size() - 1;
+656         }
+657       else
+658         {
+659           // Push back whatever remains of the string onto the output\&.
+660           // Note that substr with only 1 argument pushes back
+661           // whatever remains of the string\&.  This also handles the
+662           // case where the string does not contain any matches\&.
+663           output\&.push_back( input\&.substr(current_pos) );
+664 
+665           // We are done searching the string, so break out of the while loop
+666           break;
+667         }
+668     }
+669 }
+.fi
+.SS "void libMesh::PerfLog::start_event (const std::string &label, const std::string &header = \fC''\fP)"
+Start monitoring the event named \fClabel\fP\&. 
+.PP
+Definition at line 599 of file perf_log\&.C\&.
+.PP
+References push()\&.
+.PP
+.nf
+601 {
+602   this->push(label,header);
+603 }
+.fi
+.SS "void libMesh::PerfLog::stop_event (const std::string &label, const std::string &header = \fC''\fP)"
+Stop monitoring the event named \fClabel\fP\&. 
+.PP
+Definition at line 607 of file perf_log\&.C\&.
+.PP
+References pop()\&.
+.PP
+.nf
+609 {
+610   this->pop(label,header);
+611 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::PerfLog::called = false\fC [static]\fP, \fC [private]\fP"
+Flag indicating if \fBprint_log()\fP has been called\&. This is used to print a header with machine-specific data the first time that \fBprint_log()\fP is called\&. 
+.PP
+Definition at line 280 of file perf_log\&.h\&.
+.PP
+Referenced by get_log()\&.
+.SS "const std::string libMesh::PerfLog::label_name\fC [private]\fP"
+The label for this object\&. 
+.PP
+Definition at line 246 of file perf_log\&.h\&.
+.PP
+Referenced by clear(), and get_perf_info()\&.
+.SS "std::map<std::pair<std::string, std::string>, \fBPerfData\fP> libMesh::PerfLog::log\fC [private]\fP"
+The actual log\&. 
+.PP
+Definition at line 268 of file perf_log\&.h\&.
+.PP
+Referenced by clear(), get_log(), get_perf_data(), get_perf_info(), pop(), and push()\&.
+.SS "bool libMesh::PerfLog::log_events\fC [private]\fP"
+Flag to optionally disable all logging\&. 
+.PP
+Definition at line 251 of file perf_log\&.h\&.
+.PP
+Referenced by clear(), disable_logging(), enable_logging(), get_info_header(), get_log(), get_perf_info(), logging_enabled(), PerfLog(), pop(), print_log(), push(), and ~PerfLog()\&.
+.SS "std::stack<\fBPerfData\fP*> libMesh::PerfLog::log_stack\fC [private]\fP"
+A stack to hold the current performance log trace\&. 
+.PP
+Definition at line 273 of file perf_log\&.h\&.
+.PP
+Referenced by clear(), pop(), and push()\&.
+.SS "double libMesh::PerfLog::total_time\fC [private]\fP"
+The total running time for recorded events\&. 
+.PP
+Definition at line 256 of file perf_log\&.h\&.
+.PP
+Referenced by get_active_time(), get_perf_info(), pop(), and push()\&.
+.SS "struct timeval libMesh::PerfLog::tstart\fC [private]\fP"
+The time we were constructed or last cleared\&. 
+.PP
+Definition at line 261 of file perf_log\&.h\&.
+.PP
+Referenced by clear(), get_elapsed_time(), get_perf_info(), and PerfLog()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

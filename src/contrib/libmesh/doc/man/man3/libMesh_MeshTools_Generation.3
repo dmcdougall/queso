@@ -1,0 +1,1799 @@
+.TH "libMesh::MeshTools::Generation" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshTools::Generation \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBPrivate\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBbuild_cube\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const unsigned int nx=0, const unsigned int ny=0, const unsigned int nz=0, const \fBReal\fP xmin=0\&., const \fBReal\fP xmax=1\&., const \fBReal\fP ymin=0\&., const \fBReal\fP ymax=1\&., const \fBReal\fP zmin=0\&., const \fBReal\fP zmax=1\&., const \fBElemType\fP type=\fBINVALID_ELEM\fP, const bool gauss_lobatto_grid=false)"
+.br
+.ti -1c
+.RI "void \fBbuild_point\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const \fBElemType\fP type=\fBINVALID_ELEM\fP, const bool gauss_lobatto_grid=false)"
+.br
+.ti -1c
+.RI "void \fBbuild_line\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const unsigned int nx, const \fBReal\fP xmin=0\&., const \fBReal\fP xmax=1\&., const \fBElemType\fP type=\fBINVALID_ELEM\fP, const bool gauss_lobatto_grid=false)"
+.br
+.ti -1c
+.RI "void \fBbuild_square\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const unsigned int nx, const unsigned int ny, const \fBReal\fP xmin=0\&., const \fBReal\fP xmax=1\&., const \fBReal\fP ymin=0\&., const \fBReal\fP ymax=1\&., const \fBElemType\fP type=\fBINVALID_ELEM\fP, const bool gauss_lobatto_grid=false)"
+.br
+.ti -1c
+.RI "void \fBbuild_sphere\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const \fBReal\fP rad=1, const unsigned int nr=2, const \fBElemType\fP type=\fBINVALID_ELEM\fP, const unsigned int n_smooth=2, const bool flat=true)"
+.br
+.ti -1c
+.RI "void \fBbuild_extrusion\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const \fBMeshBase\fP &cross_section, const unsigned int nz, \fBRealVectorValue\fP extrusion_vector)"
+.br
+.ti -1c
+.RI "void \fBbuild_delaunay_square\fP (\fBUnstructuredMesh\fP &\fBmesh\fP, const unsigned int nx, const unsigned int ny, const \fBReal\fP xmin, const \fBReal\fP xmax, const \fBReal\fP ymin, const \fBReal\fP ymax, const \fBElemType\fP type, const std::vector< \fBTriangleInterface::Hole\fP * > *holes=NULL)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Tools for \fC\fBMesh\fP\fP generation\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2004 
+.RE
+.PP
+
+.SH "Function Documentation"
+.PP 
+.SS "void libMesh::MeshTools::Generation::build_cube (UnstructuredMesh &mesh, const unsigned intnx = \fC0\fP, const unsigned intny = \fC0\fP, const unsigned intnz = \fC0\fP, const Realxmin = \fC0\&.\fP, const Realxmax = \fC1\&.\fP, const Realymin = \fC0\&.\fP, const Realymax = \fC1\&.\fP, const Realzmin = \fC0\&.\fP, const Realzmax = \fC1\&.\fP, const ElemTypetype = \fCINVALID_ELEM\fP, const boolgauss_lobatto_grid = \fCfalse\fP)"
+Builds a $ nx \times ny \times nz $ (elements) cube\&. Defaults to a unit cube (or line in 1D, square in 2D), but the dimensions can be specified through the optional arguments\&.
+.PP
+Boundary ids are set to be equal to the side indexing on a master hex 
+.PP
+Definition at line 147 of file mesh_generation\&.C\&.
+.PP
+References libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::UnstructuredMesh::all_second_order(), libMesh::MeshBase::boundary_info, libMesh::Elem::build_side(), libMesh::MeshBase::clear(), libMesh::MeshBase::delete_elem(), libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::err, libMesh::Elem::get_node(), libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::MeshTools::Generation::Private::idx(), libMesh::INVALID_ELEM, libMesh::BoundaryInfo::invalid_id, libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_sides(), libMesh::MeshBase::node(), libMesh::MeshBase::node_ptr(), libMesh::NODEELEM, libMesh::pi, libMesh::MeshBase::prepare_for_use(), libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::Real, libMesh::MeshBase::reserve_elem(), libMesh::MeshBase::reserve_nodes(), libMesh::MeshBase::set_mesh_dimension(), libMesh::Elem::set_node(), side, libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI6, and libMesh::x\&.
+.PP
+Referenced by build_line(), build_point(), and build_square()\&.
+.PP
+.nf
+156 {
+157   START_LOG("build_cube()", "MeshTools::Generation");
+158 
+159   // Declare that we are using the indexing utility routine
+160   // in the "Private" part of our current namespace\&.  If this doesn't
+161   // work in GCC 2\&.95\&.3 we can either remove it or stop supporting
+162   // 2\&.95\&.3 altogether\&.
+163   // Changing this to import the whole namespace\&.\&.\&. just importing idx
+164   // causes an internal compiler error for Intel Compiler 11\&.0 on Linux
+165   // in debug mode\&.
+166   using namespace MeshTools::Generation::Private;
+167 
+168   // Clear the mesh and start from scratch
+169   mesh\&.clear();
+170 
+171   if (nz != 0)
+172     mesh\&.set_mesh_dimension(3);
+173   else if (ny != 0)
+174     mesh\&.set_mesh_dimension(2);
+175   else if (nx != 0)
+176     mesh\&.set_mesh_dimension(1);
+177   else
+178     mesh\&.set_mesh_dimension(0);
+179 
+180   switch (mesh\&.mesh_dimension())
+181     {
+182       //---------------------------------------------------------------------
+183       // Build a 0D point
+184     case 0:
+185       {
+186         libmesh_assert_equal_to (nx, 0);
+187         libmesh_assert_equal_to (ny, 0);
+188         libmesh_assert_equal_to (nz, 0);
+189 
+190         libmesh_assert (type == INVALID_ELEM || type == NODEELEM);
+191 
+192         // Build one nodal element for the mesh
+193         mesh\&.add_point (Point(0, 0, 0), 0);
+194         Elem* elem = mesh\&.add_elem (new NodeElem);
+195         elem->set_node(0) = mesh\&.node_ptr(0);
+196 
+197         break;
+198       }
+199 
+200 
+201 
+202       //---------------------------------------------------------------------
+203       // Build a 1D line
+204     case 1:
+205       {
+206         libmesh_assert_not_equal_to (nx, 0);
+207         libmesh_assert_equal_to (ny, 0);
+208         libmesh_assert_equal_to (nz, 0);
+209         libmesh_assert_less (xmin, xmax);
+210 
+211         // Reserve elements
+212         switch (type)
+213           {
+214           case INVALID_ELEM:
+215           case EDGE2:
+216           case EDGE3:
+217           case EDGE4:
+218             {
+219               mesh\&.reserve_elem (nx);
+220               break;
+221             }
+222 
+223           default:
+224             {
+225               libMesh::err << "ERROR: Unrecognized 1D element type\&." << std::endl;
+226               libmesh_error();
+227             }
+228           }
+229 
+230         // Reserve nodes
+231         switch (type)
+232           {
+233           case INVALID_ELEM:
+234           case EDGE2:
+235             {
+236               mesh\&.reserve_nodes(nx+1);
+237               break;
+238             }
+239 
+240           case EDGE3:
+241             {
+242               mesh\&.reserve_nodes(2*nx+1);
+243               break;
+244             }
+245 
+246           case EDGE4:
+247             {
+248               mesh\&.reserve_nodes(3*nx+1);
+249               break;
+250             }
+251 
+252           default:
+253             {
+254               libMesh::err << "ERROR: Unrecognized 1D element type\&." << std::endl;
+255               libmesh_error();
+256             }
+257           }
+258 
+259 
+260         // Build the nodes, depends on whether we're using linears,
+261         // quadratics or cubics and whether using uniform grid or Gauss-Lobatto
+262         unsigned int node_id = 0;
+263         switch(type)
+264           {
+265           case INVALID_ELEM:
+266           case EDGE2:
+267             {
+268               for (unsigned int i=0; i<=nx; i++)
+269                 {
+270                   if (gauss_lobatto_grid)
+271                     mesh\&.add_point (Point(0\&.5*(std::cos(libMesh::pi*static_cast<Real>(nx-i)/static_cast<Real>(nx))+1\&.0),
+272                                           0,
+273                                           0), node_id++);
+274                   else
+275                     mesh\&.add_point (Point(static_cast<Real>(i)/static_cast<Real>(nx),
+276                                           0,
+277                                           0), node_id++);
+278                 }
+279               break;
+280             }
+281 
+282           case EDGE3:
+283             {
+284               for (unsigned int i=0; i<=2*nx; i++)
+285                 {
+286                   if (gauss_lobatto_grid)
+287                     {
+288                       // The x location of the point\&.
+289                       Real x=0\&.;
+290 
+291                       // Shortcut quantities (do not depend on i)
+292                       const Real c = std::cos( libMesh::pi*i / static_cast<Real>(2*nx) );
+293 
+294                       // If i is even, compute a normal Gauss-Lobatto point
+295                       if (i%2 == 0)
+296                         x = 0\&.5*(1\&.0 - c);
+297 
+298                       // Otherwise, it is the average of the previous and next points
+299                       else
+300                         {
+301                           Real cmin = std::cos( libMesh::pi*(i-1) / static_cast<Real>(2*nx) );
+302                           Real cmax = std::cos( libMesh::pi*(i+1) / static_cast<Real>(2*nx) );
+303 
+304                           Real gl_xmin = 0\&.5*(1\&.0 - cmin);
+305                           Real gl_xmax = 0\&.5*(1\&.0 - cmax);
+306                           x = 0\&.5*(gl_xmin + gl_xmax);
+307                         }
+308 
+309                       mesh\&.add_point (Point(x,0\&.,0\&.), node_id++);
+310                     }
+311                   else
+312                     mesh\&.add_point (Point(static_cast<Real>(i)/static_cast<Real>(2*nx),
+313                                           0,
+314                                           0), node_id++);
+315                 }
+316               break;
+317             }
+318 
+319           case EDGE4:
+320             {
+321               for (unsigned int i=0; i<=3*nx; i++)
+322                 {
+323                   if (gauss_lobatto_grid)
+324                     {
+325                       // The x location of the point
+326                       Real x=0\&.;
+327 
+328                       // Shortcut quantities
+329                       const Real c = std::cos( libMesh::pi*i / static_cast<Real>(3*nx) );
+330 
+331                       // If i is multiple of 3, compute a normal Gauss-Lobatto point
+332                       if (i%3 == 0)
+333                         x = 0\&.5*(1\&.0 - c);
+334 
+335                       // Otherwise, distribute points evenly within the element
+336                       else
+337                         {
+338                           if(i%3 == 1)
+339                             {
+340                               Real cmin = std::cos( libMesh::pi*(i-1) / static_cast<Real>(3*nx) );
+341                               Real cmax = std::cos( libMesh::pi*(i+2) / static_cast<Real>(3*nx) );
+342 
+343                               Real gl_xmin = 0\&.5*(1\&.0 - cmin);
+344                               Real gl_xmax = 0\&.5*(1\&.0 - cmax);
+345 
+346                               x = (2\&.*gl_xmin + gl_xmax)/3\&.;
+347                             }
+348                           else
+349                             if(i%3 == 2)
+350                               {
+351                                 Real cmin = std::cos( libMesh::pi*(i-2) / static_cast<Real>(3*nx) );
+352                                 Real cmax = std::cos( libMesh::pi*(i+1) / static_cast<Real>(3*nx) );
+353 
+354                                 Real gl_xmin = 0\&.5*(1\&.0 - cmin);
+355                                 Real gl_xmax = 0\&.5*(1\&.0 - cmax);
+356 
+357                                 x = (gl_xmin + 2\&.*gl_xmax)/3\&.;
+358                               }
+359 
+360                         }
+361 
+362                       mesh\&.add_point (Point(x,0\&.,0\&.), node_id++);
+363                     }
+364                   else
+365                     mesh\&.add_point (Point(static_cast<Real>(i)/static_cast<Real>(3*nx),
+366                                           0,
+367                                           0), node_id++);
+368                 }
+369 
+370 
+371 
+372               break;
+373             }
+374 
+375           default:
+376             {
+377               libMesh::err << "ERROR: Unrecognized 1D element type\&." << std::endl;
+378               libmesh_error();
+379             }
+380 
+381           }
+382 
+383         // Build the elements of the mesh
+384         switch(type)
+385           {
+386           case INVALID_ELEM:
+387           case EDGE2:
+388             {
+389               for (unsigned int i=0; i<nx; i++)
+390                 {
+391                   Elem* elem = mesh\&.add_elem (new Edge2);
+392                   elem->set_node(0) = mesh\&.node_ptr(i);
+393                   elem->set_node(1) = mesh\&.node_ptr(i+1);
+394 
+395                   if (i == 0)
+396                     mesh\&.boundary_info->add_side(elem, 0, 0);
+397 
+398                   if (i == (nx-1))
+399                     mesh\&.boundary_info->add_side(elem, 1, 1);
+400                 }
+401               break;
+402             }
+403 
+404           case EDGE3:
+405             {
+406               for (unsigned int i=0; i<nx; i++)
+407                 {
+408                   Elem* elem = mesh\&.add_elem (new Edge3);
+409                   elem->set_node(0) = mesh\&.node_ptr(2*i);
+410                   elem->set_node(2) = mesh\&.node_ptr(2*i+1);
+411                   elem->set_node(1) = mesh\&.node_ptr(2*i+2);
+412 
+413                   if (i == 0)
+414                     mesh\&.boundary_info->add_side(elem, 0, 0);
+415 
+416                   if (i == (nx-1))
+417                     mesh\&.boundary_info->add_side(elem, 1, 1);
+418                 }
+419               break;
+420             }
+421 
+422           case EDGE4:
+423             {
+424               for (unsigned int i=0; i<nx; i++)
+425                 {
+426                   Elem* elem = mesh\&.add_elem (new Edge4);
+427                   elem->set_node(0) = mesh\&.node_ptr(3*i);
+428                   elem->set_node(2) = mesh\&.node_ptr(3*i+1);
+429                   elem->set_node(3) = mesh\&.node_ptr(3*i+2);
+430                   elem->set_node(1) = mesh\&.node_ptr(3*i+3);
+431 
+432                   if (i == 0)
+433                     mesh\&.boundary_info->add_side(elem, 0, 0);
+434 
+435                   if (i == (nx-1))
+436                     mesh\&.boundary_info->add_side(elem, 1, 1);
+437                 }
+438               break;
+439             }
+440 
+441           default:
+442             {
+443               libMesh::err << "ERROR: Unrecognized 1D element type\&." << std::endl;
+444               libmesh_error();
+445             }
+446           }
+447 
+448         // Scale the nodal positions
+449         for (unsigned int p=0; p<mesh\&.n_nodes(); p++)
+450           mesh\&.node(p)(0) = (mesh\&.node(p)(0))*(xmax-xmin) + xmin;
+451 
+452         // Add sideset names to boundary info
+453         mesh\&.boundary_info->sideset_name(0) = "left";
+454         mesh\&.boundary_info->sideset_name(1) = "right";
+455 
+456         // Add nodeset names to boundary info
+457         mesh\&.boundary_info->nodeset_name(0) = "left";
+458         mesh\&.boundary_info->nodeset_name(1) = "right";
+459 
+460         break;
+461       }
+462 
+463 
+464 
+465 
+466 
+467 
+468 
+469 
+470 
+471 
+472       //---------------------------------------------------------------------
+473       // Build a 2D quadrilateral
+474     case 2:
+475       {
+476         libmesh_assert_not_equal_to (nx, 0);
+477         libmesh_assert_not_equal_to (ny, 0);
+478         libmesh_assert_equal_to (nz, 0);
+479         libmesh_assert_less (xmin, xmax);
+480         libmesh_assert_less (ymin, ymax);
+481 
+482         // Reserve elements\&.  The TRI3 and TRI6 meshes
+483         // have twice as many elements\&.\&.\&.
+484         switch (type)
+485           {
+486           case INVALID_ELEM:
+487           case QUAD4:
+488           case QUAD8:
+489           case QUAD9:
+490             {
+491               mesh\&.reserve_elem (nx*ny);
+492               break;
+493             }
+494 
+495           case TRI3:
+496           case TRI6:
+497             {
+498               mesh\&.reserve_elem (2*nx*ny);
+499               break;
+500             }
+501 
+502           default:
+503             {
+504               libMesh::err << "ERROR: Unrecognized 2D element type\&." << std::endl;
+505               libmesh_error();
+506             }
+507           }
+508 
+509 
+510 
+511         // Reserve nodes\&.  The quadratic element types
+512         // need to reserve more nodes than the linear types\&.
+513         switch (type)
+514           {
+515           case INVALID_ELEM:
+516           case QUAD4:
+517           case TRI3:
+518             {
+519               mesh\&.reserve_nodes( (nx+1)*(ny+1) );
+520               break;
+521             }
+522 
+523           case QUAD8:
+524           case QUAD9:
+525           case TRI6:
+526             {
+527               mesh\&.reserve_nodes( (2*nx+1)*(2*ny+1) );
+528               break;
+529             }
+530 
+531 
+532           default:
+533             {
+534               libMesh::err << "ERROR: Unrecognized 2D element type\&." << std::endl;
+535               libmesh_error();
+536             }
+537           }
+538 
+539 
+540 
+541         // Build the nodes\&. Depends on whether you are using a linear
+542         // or quadratic element, and whether you are using a uniform
+543         // grid or the Gauss-Lobatto grid points\&.
+544         unsigned int node_id = 0;
+545         switch (type)
+546           {
+547           case INVALID_ELEM:
+548           case QUAD4:
+549           case TRI3:
+550             {
+551               for (unsigned int j=0; j<=ny; j++)
+552                 for (unsigned int i=0; i<=nx; i++)
+553                   {
+554                     if (gauss_lobatto_grid)
+555                       {
+556                         mesh\&.add_point (Point(0\&.5*(1\&.0 - std::cos(libMesh::pi*static_cast<Real>(i)/static_cast<Real>(nx))),
+557                                               0\&.5*(1\&.0 - std::cos(libMesh::pi*static_cast<Real>(j)/static_cast<Real>(ny))),
+558                                               0\&.), node_id++);
+559                       }
+560 
+561                     else
+562                       mesh\&.add_point (Point(static_cast<Real>(i)/static_cast<Real>(nx),
+563                                             static_cast<Real>(j)/static_cast<Real>(ny),
+564                                             0\&.), node_id++);
+565                   }
+566 
+567               break;
+568             }
+569 
+570           case QUAD8:
+571           case QUAD9:
+572           case TRI6:
+573             {
+574               for (unsigned int j=0; j<=(2*ny); j++)
+575                 for (unsigned int i=0; i<=(2*nx); i++)
+576                   {
+577                     if (gauss_lobatto_grid)
+578                       {
+579                         // The x,y locations of the point\&.
+580                         Real x=0\&., y=0\&.;
+581 
+582                         // Shortcut quantities (do not depend on i,j)
+583                         const Real a = std::cos( libMesh::pi / static_cast<Real>(2*nx) );
+584                         const Real b = std::cos( libMesh::pi / static_cast<Real>(2*ny) );
+585 
+586                         // Shortcut quantities (depend on i,j)
+587                         const Real c = std::cos( libMesh::pi*i / static_cast<Real>(2*nx) );
+588                         const Real d = std::cos( libMesh::pi*j / static_cast<Real>(2*ny) );
+589 
+590                         // If i is even, compute a normal Gauss-Lobatto point
+591                         if (i%2 == 0)
+592                           x = 0\&.5*(1\&.0 - c);
+593 
+594                         // Otherwise, it is the average of the previous and next points
+595                         else
+596                           x = 0\&.5*(1\&.0 - a*c);
+597 
+598                         // If j is even, compute a normal Gauss-Lobatto point
+599                         if (j%2 == 0)
+600                           y = 0\&.5*(1\&.0 - d);
+601 
+602                         // Otherwise, it is the average of the previous and next points
+603                         else
+604                           y = 0\&.5*(1\&.0 - b*d);
+605 
+606 
+607                         mesh\&.add_point (Point(x,y,0\&.), node_id++);
+608                       }
+609 
+610 
+611                     else
+612                       mesh\&.add_point (Point(static_cast<Real>(i)/static_cast<Real>(2*nx),
+613                                             static_cast<Real>(j)/static_cast<Real>(2*ny),
+614                                             0), node_id++);
+615                   }
+616 
+617               break;
+618             }
+619 
+620 
+621           default:
+622             {
+623               libMesh::err << "ERROR: Unrecognized 2D element type\&." << std::endl;
+624               libmesh_error();
+625             }
+626           }
+627 
+628 
+629 
+630 
+631 
+632 
+633         // Build the elements\&.  Each one is a bit different\&.
+634         switch (type)
+635           {
+636 
+637           case INVALID_ELEM:
+638           case QUAD4:
+639             {
+640               for (unsigned int j=0; j<ny; j++)
+641                 for (unsigned int i=0; i<nx; i++)
+642                   {
+643                     Elem* elem = mesh\&.add_elem(new Quad4);
+644 
+645                     elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,i,j)    );
+646                     elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,i+1,j)  );
+647                     elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,i+1,j+1));
+648                     elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,i,j+1)  );
+649 
+650                     if (j == 0)
+651                       mesh\&.boundary_info->add_side(elem, 0, 0);
+652 
+653                     if (j == (ny-1))
+654                       mesh\&.boundary_info->add_side(elem, 2, 2);
+655 
+656                     if (i == 0)
+657                       mesh\&.boundary_info->add_side(elem, 3, 3);
+658 
+659                     if (i == (nx-1))
+660                       mesh\&.boundary_info->add_side(elem, 1, 1);
+661                   }
+662               break;
+663             }
+664 
+665 
+666           case TRI3:
+667             {
+668               for (unsigned int j=0; j<ny; j++)
+669                 for (unsigned int i=0; i<nx; i++)
+670                   {
+671                     Elem* elem = NULL;
+672 
+673                     // Add first Tri3
+674                     elem = mesh\&.add_elem(new Tri3);
+675 
+676                     elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,i,j)    );
+677                     elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,i+1,j)  );
+678                     elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,i+1,j+1));
+679 
+680                     if (j == 0)
+681                       mesh\&.boundary_info->add_side(elem, 0, 0);
+682 
+683                     if (i == (nx-1))
+684                       mesh\&.boundary_info->add_side(elem, 1, 1);
+685 
+686                     // Add second Tri3
+687                     elem = mesh\&.add_elem(new Tri3);
+688 
+689                     elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,i,j)    );
+690                     elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,i+1,j+1));
+691                     elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,i,j+1)  );
+692 
+693                     if (j == (ny-1))
+694                       mesh\&.boundary_info->add_side(elem, 1, 2);
+695 
+696                     if (i == 0)
+697                       mesh\&.boundary_info->add_side(elem, 2, 3);
+698                   }
+699               break;
+700             }
+701 
+702 
+703 
+704           case QUAD8:
+705           case QUAD9:
+706             {
+707               for (unsigned int j=0; j<(2*ny); j += 2)
+708                 for (unsigned int i=0; i<(2*nx); i += 2)
+709                   {
+710                     Elem* elem = (type == QUAD8) ?
+711                       mesh\&.add_elem(new Quad8) :
+712                       mesh\&.add_elem(new Quad9);
+713 
+714 
+715                     elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,i,j)    );
+716                     elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,i+2,j)  );
+717                     elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,i+2,j+2));
+718                     elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,i,j+2)  );
+719                     elem->set_node(4) = mesh\&.node_ptr(idx(type,nx,i+1,j)  );
+720                     elem->set_node(5) = mesh\&.node_ptr(idx(type,nx,i+2,j+1));
+721                     elem->set_node(6) = mesh\&.node_ptr(idx(type,nx,i+1,j+2));
+722                     elem->set_node(7) = mesh\&.node_ptr(idx(type,nx,i,j+1)  );
+723                     if (type == QUAD9)
+724                       elem->set_node(8) = mesh\&.node_ptr(idx(type,nx,i+1,j+1));
+725 
+726 
+727                     if (j == 0)
+728                       mesh\&.boundary_info->add_side(elem, 0, 0);
+729 
+730                     if (j == 2*(ny-1))
+731                       mesh\&.boundary_info->add_side(elem, 2, 2);
+732 
+733                     if (i == 0)
+734                       mesh\&.boundary_info->add_side(elem, 3, 3);
+735 
+736                     if (i == 2*(nx-1))
+737                       mesh\&.boundary_info->add_side(elem, 1, 1);
+738                   }
+739               break;
+740             }
+741 
+742 
+743           case TRI6:
+744             {
+745               for (unsigned int j=0; j<(2*ny); j += 2)
+746                 for (unsigned int i=0; i<(2*nx); i += 2)
+747                   {
+748                     Elem* elem = NULL;
+749 
+750                     // Add first Tri6
+751                     elem = mesh\&.add_elem(new Tri6);
+752 
+753                     elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,i,j)    );
+754                     elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,i+2,j)  );
+755                     elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,i+2,j+2));
+756                     elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,i+1,j)  );
+757                     elem->set_node(4) = mesh\&.node_ptr(idx(type,nx,i+2,j+1));
+758                     elem->set_node(5) = mesh\&.node_ptr(idx(type,nx,i+1,j+1));
+759 
+760                     if (j == 0)
+761                       mesh\&.boundary_info->add_side(elem, 0, 0);
+762 
+763                     if (i == 2*(nx-1))
+764                       mesh\&.boundary_info->add_side(elem, 1, 1);
+765 
+766                     // Add second Tri6
+767                     elem = mesh\&.add_elem(new Tri6);
+768 
+769                     elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,i,j)    );
+770                     elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,i+2,j+2));
+771                     elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,i,j+2)  );
+772                     elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,i+1,j+1));
+773                     elem->set_node(4) = mesh\&.node_ptr(idx(type,nx,i+1,j+2));
+774                     elem->set_node(5) = mesh\&.node_ptr(idx(type,nx,i,j+1)  );
+775 
+776                     if (j == 2*(ny-1))
+777                       mesh\&.boundary_info->add_side(elem, 1, 2);
+778 
+779                     if (i == 0)
+780                       mesh\&.boundary_info->add_side(elem, 2, 3);
+781 
+782                   }
+783               break;
+784             };
+785 
+786 
+787           default:
+788             {
+789               libMesh::err << "ERROR: Unrecognized 2D element type\&." << std::endl;
+790               libmesh_error();
+791             }
+792           }
+793 
+794 
+795 
+796 
+797         // Scale the nodal positions
+798         for (unsigned int p=0; p<mesh\&.n_nodes(); p++)
+799           {
+800             mesh\&.node(p)(0) = (mesh\&.node(p)(0))*(xmax-xmin) + xmin;
+801             mesh\&.node(p)(1) = (mesh\&.node(p)(1))*(ymax-ymin) + ymin;
+802           }
+803 
+804         // Add sideset names to boundary info
+805         mesh\&.boundary_info->sideset_name(0) = "bottom";
+806         mesh\&.boundary_info->sideset_name(1) = "right";
+807         mesh\&.boundary_info->sideset_name(2) = "top";
+808         mesh\&.boundary_info->sideset_name(3) = "left";
+809 
+810         // Add nodeset names to boundary info
+811         mesh\&.boundary_info->nodeset_name(0) = "bottom";
+812         mesh\&.boundary_info->nodeset_name(1) = "right";
+813         mesh\&.boundary_info->nodeset_name(2) = "top";
+814         mesh\&.boundary_info->nodeset_name(3) = "left";
+815 
+816         break;
+817       }
+818 
+819 
+820 
+821 
+822 
+823 
+824 
+825 
+826 
+827 
+828 
+829       //---------------------------------------------------------------------
+830       // Build a 3D mesh using hexes, tets, prisms, or pyramids\&.
+831     case 3:
+832       {
+833         libmesh_assert_not_equal_to (nx, 0);
+834         libmesh_assert_not_equal_to (ny, 0);
+835         libmesh_assert_not_equal_to (nz, 0);
+836         libmesh_assert_less (xmin, xmax);
+837         libmesh_assert_less (ymin, ymax);
+838         libmesh_assert_less (zmin, zmax);
+839 
+840 
+841         // Reserve elements\&.  Meshes with prismatic elements require
+842         // twice as many elements\&.
+843         switch (type)
+844           {
+845           case INVALID_ELEM:
+846           case HEX8:
+847           case HEX20:
+848           case HEX27:
+849           case TET4:  // TET4's are created from an initial HEX27 discretization
+850           case TET10: // TET10's are created from an initial HEX27 discretization
+851           case PYRAMID5: // PYRAMIDs are created from an initial HEX27 discretization
+852           case PYRAMID13:
+853           case PYRAMID14:
+854             {
+855               mesh\&.reserve_elem(nx*ny*nz);
+856               break;
+857             }
+858 
+859           case PRISM6:
+860           case PRISM15:
+861           case PRISM18:
+862             {
+863               mesh\&.reserve_elem(2*nx*ny*nz);
+864               break;
+865             }
+866 
+867           default:
+868             {
+869               libMesh::err << "ERROR: Unrecognized 3D element type\&." << std::endl;
+870               libmesh_error();
+871             }
+872           }
+873 
+874 
+875 
+876 
+877 
+878         // Reserve nodes\&.  Quadratic elements need twice as many nodes as linear elements\&.
+879         switch (type)
+880           {
+881           case INVALID_ELEM:
+882           case HEX8:
+883           case PRISM6:
+884             {
+885               mesh\&.reserve_nodes( (nx+1)*(ny+1)*(nz+1) );
+886               break;
+887             }
+888 
+889           case HEX20:
+890           case HEX27:
+891           case TET4: // TET4's are created from an initial HEX27 discretization
+892           case TET10: // TET10's are created from an initial HEX27 discretization
+893           case PYRAMID5: // PYRAMIDs are created from an initial HEX27 discretization
+894           case PYRAMID13:
+895           case PYRAMID14:
+896           case PRISM15:
+897           case PRISM18:
+898             {
+899               // FYI: The resulting TET4 mesh will have exactly
+900               // 5*(nx*ny*nz) + 2*(nx*ny + nx*nz + ny*nz) + (nx+ny+nz) + 1
+901               // nodes once the additional mid-edge nodes for the HEX27 discretization
+902               // have been deleted\&.
+903               mesh\&.reserve_nodes( (2*nx+1)*(2*ny+1)*(2*nz+1) );
+904               break;
+905             }
+906 
+907           default:
+908             {
+909               libMesh::err << "ERROR: Unrecognized 3D element type\&." << std::endl;
+910               libmesh_error();
+911             }
+912           }
+913 
+914 
+915 
+916 
+917         // Build the nodes\&.
+918         unsigned int node_id = 0;
+919         switch (type)
+920           {
+921           case INVALID_ELEM:
+922           case HEX8:
+923           case PRISM6:
+924             {
+925               for (unsigned int k=0; k<=nz; k++)
+926                 for (unsigned int j=0; j<=ny; j++)
+927                   for (unsigned int i=0; i<=nx; i++)
+928                     {
+929                       if (gauss_lobatto_grid)
+930                         {
+931                           mesh\&.add_point (Point(0\&.5*(1\&.0 - std::cos(libMesh::pi*static_cast<Real>(i)/static_cast<Real>(nx))),
+932                                                 0\&.5*(1\&.0 - std::cos(libMesh::pi*static_cast<Real>(j)/static_cast<Real>(ny))),
+933                                                 0\&.5*(1\&.0 - std::cos(libMesh::pi*static_cast<Real>(k)/static_cast<Real>(nz)))), node_id++);
+934                         }
+935 
+936                       else
+937                         mesh\&.add_point(Point(static_cast<Real>(i)/static_cast<Real>(nx),
+938                                              static_cast<Real>(j)/static_cast<Real>(ny),
+939                                              static_cast<Real>(k)/static_cast<Real>(nz)), node_id++);
+940                     }
+941               break;
+942             }
+943 
+944           case HEX20:
+945           case HEX27:
+946           case TET4: // TET4's are created from an initial HEX27 discretization
+947           case TET10: // TET10's are created from an initial HEX27 discretization
+948           case PYRAMID5: // PYRAMIDs are created from an initial HEX27 discretization
+949           case PYRAMID13:
+950           case PYRAMID14:
+951           case PRISM15:
+952           case PRISM18:
+953             {
+954               for (unsigned int k=0; k<=(2*nz); k++)
+955                 for (unsigned int j=0; j<=(2*ny); j++)
+956                   for (unsigned int i=0; i<=(2*nx); i++)
+957                     {
+958                       if (gauss_lobatto_grid)
+959                         {
+960                           // The x,y locations of the point\&.
+961                           Real x=0\&., y=0\&., z=0\&.;
+962 
+963                           // Shortcut quantities (do not depend on i,j)
+964                           const Real a = std::cos( libMesh::pi / static_cast<Real>(2*nx) );
+965                           const Real b = std::cos( libMesh::pi / static_cast<Real>(2*ny) );
+966 
+967                           // Shortcut quantities (depend on i,j)
+968                           const Real c = std::cos( libMesh::pi*i / static_cast<Real>(2*nx) );
+969                           const Real d = std::cos( libMesh::pi*j / static_cast<Real>(2*ny) );
+970 
+971                           // Additional shortcut quantities (for 3D)
+972                           const Real e = std::cos( libMesh::pi / static_cast<Real>(2*nz) );
+973                           const Real f = std::cos( libMesh::pi*k / static_cast<Real>(2*nz) );
+974 
+975                           // If i is even, compute a normal Gauss-Lobatto point
+976                           if (i%2 == 0)
+977                             x = 0\&.5*(1\&.0 - c);
+978 
+979                           // Otherwise, it is the average of the previous and next points
+980                           else
+981                             x = 0\&.5*(1\&.0 - a*c);
+982 
+983                           // If j is even, compute a normal Gauss-Lobatto point
+984                           if (j%2 == 0)
+985                             y = 0\&.5*(1\&.0 - d);
+986 
+987                           // Otherwise, it is the average of the previous and next points
+988                           else
+989                             y = 0\&.5*(1\&.0 - b*d);
+990 
+991                           // If k is even, compute a normal Gauss-Lobatto point
+992                           if (k%2 == 0)
+993                             z = 0\&.5*(1\&.0 - f);
+994 
+995                           // Otherwise, it is the average of the previous and next points
+996                           else
+997                             z = 0\&.5*(1\&.0 - e*f);
+998 
+999 
+1000                           mesh\&.add_point (Point(x,y,z), node_id++);
+1001                         }
+1002 
+1003                       else
+1004                         mesh\&.add_point(Point(static_cast<Real>(i)/static_cast<Real>(2*nx),
+1005                                              static_cast<Real>(j)/static_cast<Real>(2*ny),
+1006                                              static_cast<Real>(k)/static_cast<Real>(2*nz)), node_id++);
+1007                     }
+1008               break;
+1009             }
+1010 
+1011 
+1012           default:
+1013             {
+1014               libMesh::err << "ERROR: Unrecognized 3D element type\&." << std::endl;
+1015               libmesh_error();
+1016             }
+1017           }
+1018 
+1019 
+1020 
+1021 
+1022         // Build the elements\&.
+1023         switch (type)
+1024           {
+1025           case INVALID_ELEM:
+1026           case HEX8:
+1027             {
+1028               for (unsigned int k=0; k<nz; k++)
+1029                 for (unsigned int j=0; j<ny; j++)
+1030                   for (unsigned int i=0; i<nx; i++)
+1031                     {
+1032                       Elem* elem = mesh\&.add_elem(new Hex8);
+1033 
+1034                       elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,ny,i,j,k)      );
+1035                       elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,k)    );
+1036                       elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k)  );
+1037                       elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,ny,i,j+1,k)    );
+1038                       elem->set_node(4) = mesh\&.node_ptr(idx(type,nx,ny,i,j,k+1)    );
+1039                       elem->set_node(5) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,k+1)  );
+1040                       elem->set_node(6) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+1));
+1041                       elem->set_node(7) = mesh\&.node_ptr(idx(type,nx,ny,i,j+1,k+1)  );
+1042 
+1043                       if (k == 0)
+1044                         mesh\&.boundary_info->add_side(elem, 0, 0);
+1045 
+1046                       if (k == (nz-1))
+1047                         mesh\&.boundary_info->add_side(elem, 5, 5);
+1048 
+1049                       if (j == 0)
+1050                         mesh\&.boundary_info->add_side(elem, 1, 1);
+1051 
+1052                       if (j == (ny-1))
+1053                         mesh\&.boundary_info->add_side(elem, 3, 3);
+1054 
+1055                       if (i == 0)
+1056                         mesh\&.boundary_info->add_side(elem, 4, 4);
+1057 
+1058                       if (i == (nx-1))
+1059                         mesh\&.boundary_info->add_side(elem, 2, 2);
+1060                     }
+1061               break;
+1062             }
+1063 
+1064 
+1065 
+1066 
+1067           case PRISM6:
+1068             {
+1069               for (unsigned int k=0; k<nz; k++)
+1070                 for (unsigned int j=0; j<ny; j++)
+1071                   for (unsigned int i=0; i<nx; i++)
+1072                     {
+1073                       // First Prism
+1074                       Elem* elem = NULL;
+1075                       elem = mesh\&.add_elem(new Prism6);
+1076 
+1077                       elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,ny,i,j,k)      );
+1078                       elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,k)    );
+1079                       elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,ny,i,j+1,k)    );
+1080                       elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,ny,i,j,k+1)    );
+1081                       elem->set_node(4) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,k+1)  );
+1082                       elem->set_node(5) = mesh\&.node_ptr(idx(type,nx,ny,i,j+1,k+1)  );
+1083 
+1084                       // Add sides for first prism to boundary info object
+1085                       if (i==0)
+1086                         mesh\&.boundary_info->add_side(elem, 3, 4);
+1087 
+1088                       if (j==0)
+1089                         mesh\&.boundary_info->add_side(elem, 1, 1);
+1090 
+1091                       if (k==0)
+1092                         mesh\&.boundary_info->add_side(elem, 0, 0);
+1093 
+1094                       if (k == (nz-1))
+1095                         mesh\&.boundary_info->add_side(elem, 4, 5);
+1096 
+1097                       // Second Prism
+1098                       elem = mesh\&.add_elem(new Prism6);
+1099 
+1100                       elem->set_node(0) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,k)    );
+1101                       elem->set_node(1) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k)  );
+1102                       elem->set_node(2) = mesh\&.node_ptr(idx(type,nx,ny,i,j+1,k)    );
+1103                       elem->set_node(3) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,k+1)  );
+1104                       elem->set_node(4) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+1));
+1105                       elem->set_node(5) = mesh\&.node_ptr(idx(type,nx,ny,i,j+1,k+1)  );
+1106 
+1107                       // Add sides for second prism to boundary info object
+1108                       if (i == (nx-1))
+1109                         mesh\&.boundary_info->add_side(elem, 1, 2);
+1110 
+1111                       if (j == (ny-1))
+1112                         mesh\&.boundary_info->add_side(elem, 2, 3);
+1113 
+1114                       if (k==0)
+1115                         mesh\&.boundary_info->add_side(elem, 0, 0);
+1116 
+1117                       if (k == (nz-1))
+1118                         mesh\&.boundary_info->add_side(elem, 4, 5);
+1119                     }
+1120               break;
+1121             }
+1122 
+1123 
+1124 
+1125 
+1126 
+1127 
+1128           case HEX20:
+1129           case HEX27:
+1130           case TET4: // TET4's are created from an initial HEX27 discretization
+1131           case TET10: // TET10's are created from an initial HEX27 discretization
+1132           case PYRAMID5: // PYRAMIDs are created from an initial HEX27 discretization
+1133           case PYRAMID13:
+1134           case PYRAMID14:
+1135             {
+1136               for (unsigned int k=0; k<(2*nz); k += 2)
+1137                 for (unsigned int j=0; j<(2*ny); j += 2)
+1138                   for (unsigned int i=0; i<(2*nx); i += 2)
+1139                     {
+1140                       Elem* elem = (type == HEX20) ?
+1141                         mesh\&.add_elem(new Hex20) :
+1142                         mesh\&.add_elem(new Hex27);
+1143 
+1144                       elem->set_node(0)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j,  k)  );
+1145                       elem->set_node(1)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,  k)  );
+1146                       elem->set_node(2)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+2,k)  );
+1147                       elem->set_node(3)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j+2,k)  );
+1148                       elem->set_node(4)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j,  k+2));
+1149                       elem->set_node(5)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,  k+2));
+1150                       elem->set_node(6)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+2,k+2));
+1151                       elem->set_node(7)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j+2,k+2));
+1152                       elem->set_node(8)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,  k)  );
+1153                       elem->set_node(9)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+1,k)  );
+1154                       elem->set_node(10) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+2,k)  );
+1155                       elem->set_node(11) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+1,k)  );
+1156                       elem->set_node(12) = mesh\&.node_ptr(idx(type,nx,ny,i,  j,  k+1));
+1157                       elem->set_node(13) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,  k+1));
+1158                       elem->set_node(14) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+2,k+1));
+1159                       elem->set_node(15) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+2,k+1));
+1160                       elem->set_node(16) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,  k+2));
+1161                       elem->set_node(17) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+1,k+2));
+1162                       elem->set_node(18) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+2,k+2));
+1163                       elem->set_node(19) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+1,k+2));
+1164                       if ((type == HEX27) || (type == TET4) || (type == TET10) ||
+1165                           (type == PYRAMID5) || (type == PYRAMID13) || (type == PYRAMID14))
+1166                         {
+1167                           elem->set_node(20) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k)  );
+1168                           elem->set_node(21) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,  k+1));
+1169                           elem->set_node(22) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+1,k+1));
+1170                           elem->set_node(23) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+2,k+1));
+1171                           elem->set_node(24) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+1,k+1));
+1172                           elem->set_node(25) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+2));
+1173                           elem->set_node(26) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+1));
+1174                         }
+1175 
+1176 
+1177                       if (k == 0)
+1178                         mesh\&.boundary_info->add_side(elem, 0, 0);
+1179 
+1180                       if (k == 2*(nz-1))
+1181                         mesh\&.boundary_info->add_side(elem, 5, 5);
+1182 
+1183                       if (j == 0)
+1184                         mesh\&.boundary_info->add_side(elem, 1, 1);
+1185 
+1186                       if (j == 2*(ny-1))
+1187                         mesh\&.boundary_info->add_side(elem, 3, 3);
+1188 
+1189                       if (i == 0)
+1190                         mesh\&.boundary_info->add_side(elem, 4, 4);
+1191 
+1192                       if (i == 2*(nx-1))
+1193                         mesh\&.boundary_info->add_side(elem, 2, 2);
+1194                     }
+1195               break;
+1196             }
+1197 
+1198 
+1199 
+1200 
+1201           case PRISM15:
+1202           case PRISM18:
+1203             {
+1204               for (unsigned int k=0; k<(2*nz); k += 2)
+1205                 for (unsigned int j=0; j<(2*ny); j += 2)
+1206                   for (unsigned int i=0; i<(2*nx); i += 2)
+1207                     {
+1208                       // First Prism
+1209                       Elem* elem = NULL;
+1210                       elem = ((type == PRISM15) ?
+1211                               mesh\&.add_elem(new Prism15) :
+1212                               mesh\&.add_elem(new Prism18));
+1213 
+1214                       elem->set_node(0)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j,  k)  );
+1215                       elem->set_node(1)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,  k)  );
+1216                       elem->set_node(2)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j+2,k)  );
+1217                       elem->set_node(3)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j,  k+2));
+1218                       elem->set_node(4)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,  k+2));
+1219                       elem->set_node(5)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j+2,k+2));
+1220                       elem->set_node(6)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,  k)  );
+1221                       elem->set_node(7)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k)  );
+1222                       elem->set_node(8)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j+1,k)  );
+1223                       elem->set_node(9)  = mesh\&.node_ptr(idx(type,nx,ny,i,  j,  k+1));
+1224                       elem->set_node(10) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,  k+1));
+1225                       elem->set_node(11) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+2,k+1));
+1226                       elem->set_node(12) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,  k+2));
+1227                       elem->set_node(13) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+2));
+1228                       elem->set_node(14) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+1,k+2));
+1229                       if (type == PRISM18)
+1230                         {
+1231                           elem->set_node(15) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j,  k+1));
+1232                           elem->set_node(16) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+1));
+1233                           elem->set_node(17) = mesh\&.node_ptr(idx(type,nx,ny,i,  j+1,k+1));
+1234                         }
+1235 
+1236                       // Add sides for first prism to boundary info object
+1237                       if (i==0)
+1238                         mesh\&.boundary_info->add_side(elem, 3, 4);
+1239 
+1240                       if (j==0)
+1241                         mesh\&.boundary_info->add_side(elem, 1, 1);
+1242 
+1243                       if (k==0)
+1244                         mesh\&.boundary_info->add_side(elem, 0, 0);
+1245 
+1246                       if (k == 2*(nz-1))
+1247                         mesh\&.boundary_info->add_side(elem, 4, 5);
+1248 
+1249 
+1250                       // Second Prism
+1251                       elem = ((type == PRISM15) ?
+1252                               mesh\&.add_elem(new Prism15) :
+1253                               mesh\&.add_elem(new Prism18));
+1254 
+1255                       elem->set_node(0)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,k)     );
+1256                       elem->set_node(1)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+2,k)   );
+1257                       elem->set_node(2)  = mesh\&.node_ptr(idx(type,nx,ny,i,j+2,k)     );
+1258                       elem->set_node(3)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,k+2)   );
+1259                       elem->set_node(4)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+2,k+2) );
+1260                       elem->set_node(5)  = mesh\&.node_ptr(idx(type,nx,ny,i,j+2,k+2)   );
+1261                       elem->set_node(6)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+1,k)  );
+1262                       elem->set_node(7)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+2,k)  );
+1263                       elem->set_node(8)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k)  );
+1264                       elem->set_node(9)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j,k+1)  );
+1265                       elem->set_node(10) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+2,k+1));
+1266                       elem->set_node(11) = mesh\&.node_ptr(idx(type,nx,ny,i,j+2,k+1)  );
+1267                       elem->set_node(12) = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+1,k+2));
+1268                       elem->set_node(13) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+2,k+2));
+1269                       elem->set_node(14) = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+2));
+1270                       if (type == PRISM18)
+1271                         {
+1272                           elem->set_node(15)  = mesh\&.node_ptr(idx(type,nx,ny,i+2,j+1,k+1));
+1273                           elem->set_node(16)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+2,k+1));
+1274                           elem->set_node(17)  = mesh\&.node_ptr(idx(type,nx,ny,i+1,j+1,k+1));
+1275                         }
+1276 
+1277                       // Add sides for second prism to boundary info object
+1278                       if (i == 2*(nx-1))
+1279                         mesh\&.boundary_info->add_side(elem, 1, 2);
+1280 
+1281                       if (j == 2*(ny-1))
+1282                         mesh\&.boundary_info->add_side(elem, 2, 3);
+1283 
+1284                       if (k==0)
+1285                         mesh\&.boundary_info->add_side(elem, 0, 0);
+1286 
+1287                       if (k == 2*(nz-1))
+1288                         mesh\&.boundary_info->add_side(elem, 4, 5);
+1289 
+1290                     }
+1291               break;
+1292             }
+1293 
+1294 
+1295 
+1296 
+1297 
+1298           default:
+1299             {
+1300               libMesh::err << "ERROR: Unrecognized 3D element type\&." << std::endl;
+1301               libmesh_error();
+1302             }
+1303           }
+1304 
+1305 
+1306 
+1307 
+1308         //\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.\&.
+1309         // Scale the nodal positions
+1310         for (unsigned int p=0; p<mesh\&.n_nodes(); p++)
+1311           {
+1312             mesh\&.node(p)(0) = (mesh\&.node(p)(0))*(xmax-xmin) + xmin;
+1313             mesh\&.node(p)(1) = (mesh\&.node(p)(1))*(ymax-ymin) + ymin;
+1314             mesh\&.node(p)(2) = (mesh\&.node(p)(2))*(zmax-zmin) + zmin;
+1315           }
+1316 
+1317 
+1318 
+1319 
+1320         // Additional work for tets and pyramids: we take the existing
+1321         // HEX27 discretization and split each element into 24
+1322         // sub-tets or 6 sub-pyramids\&.
+1323         //
+1324         // 24 isn't the minimum-possible number of tets, but it
+1325         // obviates any concerns about the edge orientations between
+1326         // the various elements\&.
+1327         if ((type == TET4) ||
+1328             (type == TET10) ||
+1329             (type == PYRAMID5) ||
+1330             (type == PYRAMID13) ||
+1331             (type == PYRAMID14))
+1332           {
+1333             // Temporary storage for new elements\&. (24 tets per hex, 6 pyramids)
+1334             std::vector<Elem*> new_elements;
+1335 
+1336             if ((type == TET4) || (type == TET10))
+1337               new_elements\&.reserve(24*mesh\&.n_elem());
+1338             else
+1339               new_elements\&.reserve(6*mesh\&.n_elem());
+1340 
+1341             // Create tetrahedra or pyramids
+1342             {
+1343               MeshBase::element_iterator       el     = mesh\&.elements_begin();
+1344               const MeshBase::element_iterator end_el = mesh\&.elements_end();
+1345 
+1346               for ( ; el != end_el;  ++el)
+1347                 {
+1348                   // Get a pointer to the HEX27 element\&.
+1349                   Elem* base_hex = *el;
+1350 
+1351                   // Get a pointer to the node located at the HEX27 centroid
+1352                   Node* apex_node = base_hex->get_node(26);
+1353 
+1354                   for (unsigned int s=0; s<base_hex->n_sides(); ++s)
+1355                     {
+1356                       // Get the boundary ID for this side
+1357                       boundary_id_type b_id = mesh\&.boundary_info->boundary_id(*el, s);
+1358 
+1359                       // Need to build the full-ordered side!
+1360                       AutoPtr<Elem> side = base_hex->build_side(s);
+1361 
+1362                       if ((type == TET4) || (type == TET10))
+1363                         {
+1364                           // Build 4 sub-tets per side
+1365                           for (unsigned int sub_tet=0; sub_tet<4; ++sub_tet)
+1366                             {
+1367                               new_elements\&.push_back( new Tet4 );
+1368                               Elem* sub_elem = new_elements\&.back();
+1369                               sub_elem->set_node(0) = side->get_node(sub_tet);
+1370                               sub_elem->set_node(1) = side->get_node(8);                           // centroid of the face
+1371                               sub_elem->set_node(2) = side->get_node(sub_tet==3 ? 0 : sub_tet+1 ); // wrap-around
+1372                               sub_elem->set_node(3) = apex_node;                                   // apex node always used!
+1373 
+1374                               // If the original hex was a boundary hex, add the new sub_tet's side
+1375                               // 0 with the same b_id\&.  Note: the tets are all aligned so that their
+1376                               // side 0 is on the boundary\&.
+1377                               if (b_id != BoundaryInfo::invalid_id)
+1378                                 mesh\&.boundary_info->add_side(sub_elem, 0, b_id);
+1379                             }
+1380                         } // end if ((type == TET4) || (type == TET10))
+1381 
+1382                       else // type==PYRAMID5 || type==PYRAMID13 || type==PYRAMID14
+1383                         {
+1384                           // Build 1 sub-pyramid per side\&.
+1385                           new_elements\&.push_back(new Pyramid5);
+1386                           Elem* sub_elem = new_elements\&.back();
+1387 
+1388                           // Set the base\&.  Note that since the apex is *inside* the base_hex,
+1389                           // and the pyramid uses a counter-clockwise base numbering, we need to
+1390                           // reverse the [1] and [3] node indices\&.
+1391                           sub_elem->set_node(0) = side->get_node(0);
+1392                           sub_elem->set_node(1) = side->get_node(3);
+1393                           sub_elem->set_node(2) = side->get_node(2);
+1394                           sub_elem->set_node(3) = side->get_node(1);
+1395 
+1396                           // Set the apex
+1397                           sub_elem->set_node(4) = apex_node;
+1398 
+1399                           // If the original hex was a boundary hex, add the new sub_pyr's side
+1400                           // 4 (the square base) with the same b_id\&.
+1401                           if (b_id != BoundaryInfo::invalid_id)
+1402                             mesh\&.boundary_info->add_side(sub_elem, 4, b_id);
+1403                         } // end else type==PYRAMID5 || type==PYRAMID13 || type==PYRAMID14
+1404                     }
+1405                 }
+1406             }
+1407 
+1408 
+1409             // Delete the original HEX27 elements from the mesh, and the boundary info structure\&.
+1410             {
+1411               MeshBase::element_iterator       el     = mesh\&.elements_begin();
+1412               const MeshBase::element_iterator end_el = mesh\&.elements_end();
+1413 
+1414               for ( ; el != end_el;  ++el)
+1415                 {
+1416                   mesh\&.boundary_info->remove(*el); // Safe even if *el has no boundary info\&.
+1417                   mesh\&.delete_elem(*el);
+1418                 }
+1419             }
+1420 
+1421             // Add the new elements
+1422             for (unsigned int i=0; i<new_elements\&.size(); ++i)
+1423               mesh\&.add_elem(new_elements[i]);
+1424 
+1425           } // end if (type == TET4,TET10,PYRAMID5,PYRAMID13,PYRAMID14
+1426 
+1427 
+1428         // Use all_second_order to convert the TET4's to TET10's or PYRAMID5's to PYRAMID14's
+1429         if ((type == TET10) || (type == PYRAMID14))
+1430           mesh\&.all_second_order();
+1431 
+1432         else if (type == PYRAMID13)
+1433           mesh\&.all_second_order(/*full_ordered=*/false);
+1434 
+1435 
+1436         // Add sideset names to boundary info (Z axis out of the screen)
+1437         mesh\&.boundary_info->sideset_name(0) = "back";
+1438         mesh\&.boundary_info->sideset_name(1) = "bottom";
+1439         mesh\&.boundary_info->sideset_name(2) = "right";
+1440         mesh\&.boundary_info->sideset_name(3) = "top";
+1441         mesh\&.boundary_info->sideset_name(4) = "left";
+1442         mesh\&.boundary_info->sideset_name(5) = "front";
+1443 
+1444         // Add nodeset names to boundary info
+1445         mesh\&.boundary_info->nodeset_name(0) = "back";
+1446         mesh\&.boundary_info->nodeset_name(1) = "bottom";
+1447         mesh\&.boundary_info->nodeset_name(2) = "right";
+1448         mesh\&.boundary_info->nodeset_name(3) = "top";
+1449         mesh\&.boundary_info->nodeset_name(4) = "left";
+1450         mesh\&.boundary_info->nodeset_name(5) = "front";
+1451 
+1452         break;
+1453       } // end case dim==3
+1454 
+1455     default:
+1456       {
+1457         libmesh_error();
+1458       }
+1459     }
+1460 
+1461   STOP_LOG("build_cube()", "MeshTools::Generation");
+1462 
+1463 
+1464 
+1465   // Done building the mesh\&.  Now prepare it for use\&.
+1466   mesh\&.prepare_for_use (/*skip_renumber =*/ false);
+1467 }
+.fi
+.SS "void libMesh::MeshTools::Generation::build_delaunay_square (UnstructuredMesh &mesh, const unsigned intnx, const unsigned intny, const Realxmin, const Realxmax, const Realymin, const Realymax, const ElemTypetype, const std::vector< TriangleInterface::Hole * > *holes = \fCNULL\fP)"
+Meshes a rectangular (2D) region (with or without holes) with a Delaunay triangulation\&. This function internally calls the triangle library written by J\&.R\&. Shewchuk\&. 
+.PP
+Definition at line 2217 of file mesh_generation\&.C\&.
+.PP
+References libMesh::MeshBase::add_point(), libMesh::TriangleInterface::attach_hole_list(), bc_id, libMesh::MeshBase::boundary_info, libMesh::Elem::build_side(), libMesh::MeshBase::clear(), libMesh::TriangleInterface::desired_area(), libMesh::TriangleInterface::elem_type(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::id(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), libMesh::TriangleInterface::PSLG, libMesh::Real, libMesh::MeshBase::set_mesh_dimension(), side, libMesh::TOLERANCE, libMesh::TriangleInterface::triangulate(), and libMesh::TriangleInterface::triangulation_type()\&.
+.PP
+.nf
+2224 {
+2225   // Check for reasonable size
+2226   libmesh_assert_greater_equal (nx, 1); // need at least 1 element in x-direction
+2227   libmesh_assert_greater_equal (ny, 1); // need at least 1 element in y-direction
+2228   libmesh_assert_less (xmin, xmax);
+2229   libmesh_assert_less (ymin, ymax);
+2230 
+2231   // Clear out any data which may have been in the Mesh
+2232   mesh\&.clear();
+2233 
+2234   // Make sure the new Mesh will be 2D
+2235   mesh\&.set_mesh_dimension(2);
+2236 
+2237   // The x and y spacing between boundary points
+2238   const Real delta_x = (xmax-xmin) / static_cast<Real>(nx);
+2239   const Real delta_y = (ymax-ymin) / static_cast<Real>(ny);
+2240 
+2241   // Bottom
+2242   for (unsigned int p=0; p<=nx; ++p)
+2243     mesh\&.add_point(Point(xmin + p*delta_x, ymin));
+2244 
+2245   // Right side
+2246   for (unsigned int p=1; p<ny; ++p)
+2247     mesh\&.add_point(Point(xmax, ymin + p*delta_y));
+2248 
+2249   // Top
+2250   for (unsigned int p=0; p<=nx; ++p)
+2251     mesh\&.add_point(Point(xmax - p*delta_x, ymax));
+2252 
+2253   // Left side
+2254   for (unsigned int p=1; p<ny; ++p)
+2255     mesh\&.add_point(Point(xmin,  ymax - p*delta_y));
+2256 
+2257   // Be sure we added as many points as we thought we did
+2258   libmesh_assert_equal_to (mesh\&.n_nodes(), 2*(nx+ny));
+2259 
+2260   // Construct the Triangle Interface object
+2261   TriangleInterface t(mesh);
+2262 
+2263   // Set custom variables for the triangulation
+2264   t\&.desired_area()       = 0\&.5 * (xmax-xmin)*(ymax-ymin) / static_cast<Real>(nx*ny);
+2265   t\&.triangulation_type() = TriangleInterface::PSLG;
+2266   t\&.elem_type()          = type;
+2267 
+2268   if (holes != NULL)
+2269     t\&.attach_hole_list(holes);
+2270 
+2271   // Triangulate!
+2272   t\&.triangulate();
+2273 
+2274   // The mesh is now generated, but we still need to mark the boundaries
+2275   // to be consistent with the other build_square routines\&.  Note that all
+2276   // hole boundary elements get the same ID, 4\&.
+2277   MeshBase::element_iterator       el     = mesh\&.elements_begin();
+2278   const MeshBase::element_iterator end_el = mesh\&.elements_end();
+2279   for ( ; el != end_el; ++el)
+2280     {
+2281       const Elem* elem = *el;
+2282 
+2283       for (unsigned int s=0; s<elem->n_sides(); s++)
+2284         if (elem->neighbor(s) == NULL)
+2285           {
+2286             AutoPtr<Elem> side (elem->build_side(s));
+2287 
+2288             // Check the location of the side's midpoint\&.  Since
+2289             // the square has straight sides, the midpoint is not
+2290             // on the corner and thus it is uniquely on one of the
+2291             // sides\&.
+2292             Point side_midpoint= 0\&.5f*( (*side->get_node(0)) + (*side->get_node(1)) );
+2293 
+2294             // The boundary ids are set following the same convention as Quad4 sides
+2295             // bottom = 0
+2296             // right  = 1
+2297             // top = 2
+2298             // left = 3
+2299             // hole = 4
+2300             boundary_id_type bc_id=4;
+2301 
+2302             // bottom
+2303             if      (std::fabs(side_midpoint(1) - ymin) < TOLERANCE)
+2304               bc_id=0;
+2305 
+2306             // right
+2307             else if (std::fabs(side_midpoint(0) - xmax) < TOLERANCE)
+2308               bc_id=1;
+2309 
+2310             // top
+2311             else if (std::fabs(side_midpoint(1) - ymax) < TOLERANCE)
+2312               bc_id=2;
+2313 
+2314             // left
+2315             else if (std::fabs(side_midpoint(0) - xmin) < TOLERANCE)
+2316               bc_id=3;
+2317 
+2318             // If the point is not on any of the external boundaries, it
+2319             // is on one of the holes\&.\&.\&.\&.
+2320 
+2321             // Finally, add this element's information to the boundary info object\&.
+2322             mesh\&.boundary_info->add_side(elem->id(), s, bc_id);
+2323           }
+2324     }
+2325 
+2326 } // end build_delaunay_square
+.fi
+.SS "void libMesh::MeshTools::Generation::build_extrusion (UnstructuredMesh &mesh, const MeshBase &cross_section, const unsigned intnz, RealVectorValueextrusion_vector)"
+Meshes the tensor product of a 1D and a 1D-or-2D domain\&. 
+.PP
+Definition at line 1997 of file mesh_generation\&.C\&.
+.PP
+References libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::MeshBase::boundary_info, libMesh::MeshBase::delete_remote_elements(), libMesh::EDGE2, libMesh::EDGE3, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::Elem::get_node(), libMesh::DofObject::id(), libMesh::MeshBase::is_serial(), libMesh::libmesh_assert(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_sides(), libMesh::MeshBase::node_ptr(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::Elem::parent(), libMesh::MeshBase::prepare_for_use(), libMesh::DofObject::processor_id(), libMesh::QUAD4, libMesh::QUAD9, libMesh::MeshBase::reserve_elem(), libMesh::MeshBase::reserve_nodes(), libMesh::SECOND, libMesh::DofObject::set_id(), libMesh::Elem::set_node(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::Elem::subdomain_id(), libMesh::TRI3, libMesh::TRI6, and libMesh::Elem::type()\&.
+.PP
+.nf
+2001 {
+2002   if (!cross_section\&.n_elem())
+2003     return;
+2004 
+2005   START_LOG("build_extrusion()", "MeshTools::Generation");
+2006 
+2007   dof_id_type orig_elem = cross_section\&.n_elem();
+2008   dof_id_type orig_nodes = cross_section\&.n_nodes();
+2009 
+2010   unsigned int order = 1;
+2011 
+2012   // If cross_section is distributed, so is its extrusion
+2013   if (!cross_section\&.is_serial())
+2014     mesh\&.delete_remote_elements();
+2015 
+2016   // We know a priori how many elements we'll need
+2017   mesh\&.reserve_elem(nz*orig_elem);
+2018 
+2019   // For straightforward meshes we need one or two additional layers per
+2020   // element\&.
+2021   if ((*cross_section\&.elements_begin())->default_order() == SECOND)
+2022     order = 2;
+2023 
+2024   mesh\&.reserve_nodes((order*nz+1)*orig_nodes);
+2025 
+2026   MeshBase::const_node_iterator       nd  = cross_section\&.nodes_begin();
+2027   const MeshBase::const_node_iterator nend = cross_section\&.nodes_end();
+2028   for (; nd!=nend; ++nd)
+2029     {
+2030       const Node* node = *nd;
+2031 
+2032       for (unsigned int k=0; k != order*nz+1; ++k)
+2033         {
+2034           Node *new_node =
+2035             mesh\&.add_point(*node +
+2036                            (extrusion_vector * k / nz / order),
+2037                            node->id() + (k * orig_nodes),
+2038                            node->processor_id());
+2039 
+2040           const std::vector<boundary_id_type> ids_to_copy =
+2041             cross_section\&.boundary_info->boundary_ids(node);
+2042 
+2043           mesh\&.boundary_info->add_node(new_node, ids_to_copy);
+2044         }
+2045     }
+2046 
+2047   const std::set<boundary_id_type> &side_ids =
+2048     cross_section\&.boundary_info->get_side_boundary_ids();
+2049   const boundary_id_type next_side_id = side_ids\&.empty() ?
+2050     0 : *side_ids\&.rbegin() + 1;
+2051 
+2052   MeshBase::const_element_iterator       el  = cross_section\&.elements_begin();
+2053   const MeshBase::const_element_iterator end = cross_section\&.elements_end();
+2054   for (; el!=end; ++el)
+2055     {
+2056       const Elem* elem = *el;
+2057       const ElemType etype = elem->type();
+2058 
+2059       // build_extrusion currently only works on coarse meshes
+2060       libmesh_assert (!elem->parent());
+2061 
+2062       // We need a map from low-D to high-D sides for boundary id
+2063       // setting
+2064       std::vector<unsigned char> sidemap(4);
+2065 
+2066       for (unsigned int k=0; k != nz; ++k)
+2067         {
+2068           Elem *new_elem;
+2069           switch (etype)
+2070             {
+2071             case EDGE2:
+2072               {
+2073                 new_elem = new Quad4;
+2074                 new_elem->set_node(0) = mesh\&.node_ptr(elem->get_node(0)->id() + (k * orig_nodes));
+2075                 new_elem->set_node(1) = mesh\&.node_ptr(elem->get_node(1)->id() + (k * orig_nodes));
+2076                 new_elem->set_node(2) = mesh\&.node_ptr(elem->get_node(1)->id() + ((k+1) * orig_nodes));
+2077                 new_elem->set_node(3) = mesh\&.node_ptr(elem->get_node(0)->id() + ((k+1) * orig_nodes));
+2078                 break;
+2079               }
+2080             case EDGE3:
+2081               {
+2082                 new_elem = new Quad9;
+2083                 new_elem->set_node(0) = mesh\&.node_ptr(elem->get_node(0)->id() + (2*k * orig_nodes));
+2084                 new_elem->set_node(1) = mesh\&.node_ptr(elem->get_node(1)->id() + (2*k * orig_nodes));
+2085                 new_elem->set_node(2) = mesh\&.node_ptr(elem->get_node(1)->id() + ((2*k+2) * orig_nodes));
+2086                 new_elem->set_node(3) = mesh\&.node_ptr(elem->get_node(0)->id() + ((2*k+2) * orig_nodes));
+2087                 new_elem->set_node(4) = mesh\&.node_ptr(elem->get_node(2)->id() + (2*k * orig_nodes));
+2088                 new_elem->set_node(5) = mesh\&.node_ptr(elem->get_node(1)->id() + ((2*k+1) * orig_nodes));
+2089                 new_elem->set_node(6) = mesh\&.node_ptr(elem->get_node(2)->id() + ((2*k+2) * orig_nodes));
+2090                 new_elem->set_node(7) = mesh\&.node_ptr(elem->get_node(0)->id() + ((2*k+1) * orig_nodes));
+2091                 new_elem->set_node(8) = mesh\&.node_ptr(elem->get_node(2)->id() + ((2*k+1) * orig_nodes));
+2092                 break;
+2093               }
+2094             case TRI3:
+2095               {
+2096                 new_elem = new Prism6;
+2097                 new_elem->set_node(0) = mesh\&.node_ptr(elem->get_node(0)->id() + (k * orig_nodes));
+2098                 new_elem->set_node(1) = mesh\&.node_ptr(elem->get_node(1)->id() + (k * orig_nodes));
+2099                 new_elem->set_node(2) = mesh\&.node_ptr(elem->get_node(2)->id() + (k * orig_nodes));
+2100                 new_elem->set_node(3) = mesh\&.node_ptr(elem->get_node(0)->id() + ((k+1) * orig_nodes));
+2101                 new_elem->set_node(4) = mesh\&.node_ptr(elem->get_node(1)->id() + ((k+1) * orig_nodes));
+2102                 new_elem->set_node(5) = mesh\&.node_ptr(elem->get_node(2)->id() + ((k+1) * orig_nodes));
+2103                 break;
+2104               }
+2105             case TRI6:
+2106               {
+2107                 new_elem = new Prism18;
+2108                 new_elem->set_node(0) = mesh\&.node_ptr(elem->get_node(0)->id() + (2*k * orig_nodes));
+2109                 new_elem->set_node(1) = mesh\&.node_ptr(elem->get_node(1)->id() + (2*k * orig_nodes));
+2110                 new_elem->set_node(2) = mesh\&.node_ptr(elem->get_node(2)->id() + (2*k * orig_nodes));
+2111                 new_elem->set_node(3) = mesh\&.node_ptr(elem->get_node(0)->id() + ((2*k+2) * orig_nodes));
+2112                 new_elem->set_node(4) = mesh\&.node_ptr(elem->get_node(1)->id() + ((2*k+2) * orig_nodes));
+2113                 new_elem->set_node(5) = mesh\&.node_ptr(elem->get_node(2)->id() + ((2*k+2) * orig_nodes));
+2114                 new_elem->set_node(6) = mesh\&.node_ptr(elem->get_node(3)->id() + (2*k * orig_nodes));
+2115                 new_elem->set_node(7) = mesh\&.node_ptr(elem->get_node(4)->id() + (2*k * orig_nodes));
+2116                 new_elem->set_node(8) = mesh\&.node_ptr(elem->get_node(5)->id() + (2*k * orig_nodes));
+2117                 new_elem->set_node(9) = mesh\&.node_ptr(elem->get_node(0)->id() + ((2*k+1) * orig_nodes));
+2118                 new_elem->set_node(10) = mesh\&.node_ptr(elem->get_node(1)->id() + ((2*k+1) * orig_nodes));
+2119                 new_elem->set_node(11) = mesh\&.node_ptr(elem->get_node(2)->id() + ((2*k+1) * orig_nodes));
+2120                 new_elem->set_node(12) = mesh\&.node_ptr(elem->get_node(3)->id() + ((2*k+2) * orig_nodes));
+2121                 new_elem->set_node(13) = mesh\&.node_ptr(elem->get_node(4)->id() + ((2*k+2) * orig_nodes));
+2122                 new_elem->set_node(14) = mesh\&.node_ptr(elem->get_node(5)->id() + ((2*k+2) * orig_nodes));
+2123                 new_elem->set_node(15) = mesh\&.node_ptr(elem->get_node(3)->id() + ((2*k+1) * orig_nodes));
+2124                 new_elem->set_node(16) = mesh\&.node_ptr(elem->get_node(4)->id() + ((2*k+1) * orig_nodes));
+2125                 new_elem->set_node(17) = mesh\&.node_ptr(elem->get_node(5)->id() + ((2*k+1) * orig_nodes));
+2126                 break;
+2127               }
+2128             case QUAD4:
+2129               {
+2130                 new_elem = new Hex8;
+2131                 new_elem->set_node(0) = mesh\&.node_ptr(elem->get_node(0)->id() + (k * orig_nodes));
+2132                 new_elem->set_node(1) = mesh\&.node_ptr(elem->get_node(1)->id() + (k * orig_nodes));
+2133                 new_elem->set_node(2) = mesh\&.node_ptr(elem->get_node(2)->id() + (k * orig_nodes));
+2134                 new_elem->set_node(3) = mesh\&.node_ptr(elem->get_node(3)->id() + (k * orig_nodes));
+2135                 new_elem->set_node(4) = mesh\&.node_ptr(elem->get_node(0)->id() + ((k+1) * orig_nodes));
+2136                 new_elem->set_node(5) = mesh\&.node_ptr(elem->get_node(1)->id() + ((k+1) * orig_nodes));
+2137                 new_elem->set_node(6) = mesh\&.node_ptr(elem->get_node(2)->id() + ((k+1) * orig_nodes));
+2138                 new_elem->set_node(7) = mesh\&.node_ptr(elem->get_node(3)->id() + ((k+1) * orig_nodes));
+2139                 break;
+2140               }
+2141             case QUAD9:
+2142               {
+2143                 new_elem = new Hex27;
+2144                 new_elem->set_node(0) = mesh\&.node_ptr(elem->get_node(0)->id() + (2*k * orig_nodes));
+2145                 new_elem->set_node(1) = mesh\&.node_ptr(elem->get_node(1)->id() + (2*k * orig_nodes));
+2146                 new_elem->set_node(2) = mesh\&.node_ptr(elem->get_node(2)->id() + (2*k * orig_nodes));
+2147                 new_elem->set_node(3) = mesh\&.node_ptr(elem->get_node(3)->id() + (2*k * orig_nodes));
+2148                 new_elem->set_node(4) = mesh\&.node_ptr(elem->get_node(0)->id() + ((2*k+2) * orig_nodes));
+2149                 new_elem->set_node(5) = mesh\&.node_ptr(elem->get_node(1)->id() + ((2*k+2) * orig_nodes));
+2150                 new_elem->set_node(6) = mesh\&.node_ptr(elem->get_node(2)->id() + ((2*k+2) * orig_nodes));
+2151                 new_elem->set_node(7) = mesh\&.node_ptr(elem->get_node(3)->id() + ((2*k+2) * orig_nodes));
+2152                 new_elem->set_node(8) = mesh\&.node_ptr(elem->get_node(4)->id() + (2*k * orig_nodes));
+2153                 new_elem->set_node(9) = mesh\&.node_ptr(elem->get_node(5)->id() + (2*k * orig_nodes));
+2154                 new_elem->set_node(10) = mesh\&.node_ptr(elem->get_node(6)->id() + (2*k * orig_nodes));
+2155                 new_elem->set_node(11) = mesh\&.node_ptr(elem->get_node(7)->id() + (2*k * orig_nodes));
+2156                 new_elem->set_node(12) = mesh\&.node_ptr(elem->get_node(0)->id() + ((2*k+1) * orig_nodes));
+2157                 new_elem->set_node(13) = mesh\&.node_ptr(elem->get_node(1)->id() + ((2*k+1) * orig_nodes));
+2158                 new_elem->set_node(14) = mesh\&.node_ptr(elem->get_node(2)->id() + ((2*k+1) * orig_nodes));
+2159                 new_elem->set_node(15) = mesh\&.node_ptr(elem->get_node(3)->id() + ((2*k+1) * orig_nodes));
+2160                 new_elem->set_node(16) = mesh\&.node_ptr(elem->get_node(4)->id() + ((2*k+2) * orig_nodes));
+2161                 new_elem->set_node(17) = mesh\&.node_ptr(elem->get_node(5)->id() + ((2*k+2) * orig_nodes));
+2162                 new_elem->set_node(18) = mesh\&.node_ptr(elem->get_node(6)->id() + ((2*k+2) * orig_nodes));
+2163                 new_elem->set_node(19) = mesh\&.node_ptr(elem->get_node(7)->id() + ((2*k+2) * orig_nodes));
+2164                 new_elem->set_node(20) = mesh\&.node_ptr(elem->get_node(8)->id() + (2*k * orig_nodes));
+2165                 new_elem->set_node(21) = mesh\&.node_ptr(elem->get_node(4)->id() + ((2*k+1) * orig_nodes));
+2166                 new_elem->set_node(22) = mesh\&.node_ptr(elem->get_node(5)->id() + ((2*k+1) * orig_nodes));
+2167                 new_elem->set_node(23) = mesh\&.node_ptr(elem->get_node(6)->id() + ((2*k+1) * orig_nodes));
+2168                 new_elem->set_node(24) = mesh\&.node_ptr(elem->get_node(7)->id() + ((2*k+1) * orig_nodes));
+2169                 new_elem->set_node(25) = mesh\&.node_ptr(elem->get_node(8)->id() + ((2*k+2) * orig_nodes));
+2170                 new_elem->set_node(26) = mesh\&.node_ptr(elem->get_node(8)->id() + ((2*k+1) * orig_nodes));
+2171                 break;
+2172               }
+2173             default:
+2174               {
+2175                 libmesh_not_implemented();
+2176                 break;
+2177               }
+2178             }
+2179 
+2180           new_elem->set_id(elem->id() + (k * orig_elem));
+2181           new_elem->processor_id() = elem->processor_id();
+2182 
+2183           // maintain the subdomain_id
+2184           new_elem->subdomain_id() = elem->subdomain_id();
+2185 
+2186           new_elem = mesh\&.add_elem(new_elem);
+2187 
+2188           // Copy any old boundary ids on all sides
+2189           for (unsigned int s = 0; s != elem->n_sides(); ++s)
+2190             {
+2191               const std::vector<boundary_id_type> ids_to_copy =
+2192                 cross_section\&.boundary_info->boundary_ids(elem, s);
+2193 
+2194               mesh\&.boundary_info->add_side(new_elem, s+1, ids_to_copy);
+2195             }
+2196 
+2197           // Give new boundary ids to bottom and top
+2198           if (k == 0)
+2199             mesh\&.boundary_info->add_side(new_elem, 0, next_side_id);
+2200           if (k == nz-1)
+2201             mesh\&.boundary_info->add_side(new_elem, elem->n_sides()+1, next_side_id+1);
+2202         }
+2203     }
+2204 
+2205   STOP_LOG("build_extrusion()", "MeshTools::Generation");
+2206 
+2207   // Done building the mesh\&.  Now prepare it for use\&.
+2208   mesh\&.prepare_for_use(/*skip_renumber =*/ false);
+2209 }
+.fi
+.SS "void libMesh::MeshTools::Generation::build_line (UnstructuredMesh &mesh, const unsigned intnx, const Realxmin = \fC0\&.\fP, const Realxmax = \fC1\&.\fP, const ElemTypetype = \fCINVALID_ELEM\fP, const boolgauss_lobatto_grid = \fCfalse\fP)"
+A specialized \fC\fBbuild_cube()\fP\fP for 1D meshes
+.PP
+Boundary ids are set to be equal to the side indexing on a master edge 
+.PP
+Definition at line 1489 of file mesh_generation\&.C\&.
+.PP
+References build_cube()\&.
+.PP
+.nf
+1494 {
+1495   // This method only makes sense in 1D!
+1496   // But we now just turn a non-1D mesh into a 1D mesh
+1497   //libmesh_assert_equal_to (mesh\&.mesh_dimension(), 1);
+1498 
+1499   build_cube(mesh,
+1500              nx, 0, 0,
+1501              xmin, xmax,
+1502              0\&., 0\&.,
+1503              0\&., 0\&.,
+1504              type,
+1505              gauss_lobatto_grid);
+1506 }
+.fi
+.SS "void libMesh::MeshTools::Generation::build_point (UnstructuredMesh &mesh, const ElemTypetype = \fCINVALID_ELEM\fP, const boolgauss_lobatto_grid = \fCfalse\fP)"
+A specialized \fC\fBbuild_cube()\fP\fP for 0D meshes\&. The resulting mesh is a single \fBNodeElem\fP suitable for ODE tests 
+.PP
+Definition at line 1471 of file mesh_generation\&.C\&.
+.PP
+References build_cube()\&.
+.PP
+.nf
+1474 {
+1475   // This method only makes sense in 0D!
+1476   // But we now just turn a non-0D mesh into a 0D mesh
+1477   //libmesh_assert_equal_to (mesh\&.mesh_dimension(), 1);
+1478 
+1479   build_cube(mesh,
+1480              0, 0, 0,
+1481              0\&., 0\&.,
+1482              0\&., 0\&.,
+1483              0\&., 0\&.,
+1484              type,
+1485              gauss_lobatto_grid);
+1486 }
+.fi
+.SS "void libMesh::MeshTools::Generation::build_sphere (UnstructuredMesh &mesh, const Realrad = \fC1\fP, const unsigned intnr = \fC2\fP, const ElemTypetype = \fCINVALID_ELEM\fP, const unsigned intn_smooth = \fC2\fP, const boolflat = \fCtrue\fP)"
+Meshes a spherical or mapped-spherical domain\&. 
+.PP
+Definition at line 1541 of file mesh_generation\&.C\&.
+.PP
+References libMesh::out\&.
+.PP
+.nf
+1547 {
+1548   libMesh::out << "Building a circle/sphere only works with AMR\&." << std::endl;
+1549   libmesh_error();
+1550 }
+.fi
+.SS "void libMesh::MeshTools::Generation::build_square (UnstructuredMesh &mesh, const unsigned intnx, const unsigned intny, const Realxmin = \fC0\&.\fP, const Realxmax = \fC1\&.\fP, const Realymin = \fC0\&.\fP, const Realymax = \fC1\&.\fP, const ElemTypetype = \fCINVALID_ELEM\fP, const boolgauss_lobatto_grid = \fCfalse\fP)"
+A specialized \fC\fBbuild_cube()\fP\fP for 2D meshes\&.
+.PP
+Boundary ids are set to be equal to the side indexing on a master quad 
+.PP
+Definition at line 1510 of file mesh_generation\&.C\&.
+.PP
+References build_cube()\&.
+.PP
+.nf
+1517 {
+1518   // This method only makes sense in 2D!
+1519   // But we now just turn a non-2D mesh into a 2D mesh
+1520   //libmesh_assert_equal_to (mesh\&.mesh_dimension(), 2);
+1521 
+1522   // Call the build_cube() member to actually do the work for us\&.
+1523   build_cube (mesh,
+1524               nx, ny, 0,
+1525               xmin, xmax,
+1526               ymin, ymax,
+1527               0\&., 0\&.,
+1528               type,
+1529               gauss_lobatto_grid);
+1530 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,855 @@
+.TH "libMesh::PatchRecoveryErrorEstimator::EstimateError" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PatchRecoveryErrorEstimator::EstimateError \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEstimateError\fP (const \fBSystem\fP &\fBsys\fP, const \fBPatchRecoveryErrorEstimator\fP &ee, \fBErrorVector\fP &epc)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBConstElemRange\fP &range) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBSystem\fP & \fBsystem\fP"
+.br
+.ti -1c
+.RI "const \fBPatchRecoveryErrorEstimator\fP & \fBerror_estimator\fP"
+.br
+.ti -1c
+.RI "\fBErrorVector\fP & \fBerror_per_cell\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class to compute the error contribution for a range of elements\&. May be executed in parallel on separate threads\&. 
+.PP
+Definition at line 115 of file patch_recovery_error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PatchRecoveryErrorEstimator::EstimateError::EstimateError (const \fBSystem\fP &sys, const \fBPatchRecoveryErrorEstimator\fP &ee, \fBErrorVector\fP &epc)\fC [inline]\fP"
+
+.PP
+Definition at line 118 of file patch_recovery_error_estimator\&.h\&.
+.PP
+.nf
+120                                      :
+121       system(sys),
+122       error_estimator(ee),
+123       error_per_cell(epc)
+124     {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::PatchRecoveryErrorEstimator::EstimateError::operator() (const \fBConstElemRange\fP &range) const"
+
+.PP
+Definition at line 190 of file patch_recovery_error_estimator\&.C\&.
+.PP
+References std::abs(), libMesh::TypeVector< T >::add_scaled(), libMesh::TypeTensor< T >::add_scaled(), libMesh::StoredRange< iterator_type, object_type >::begin(), libMesh::FEGenericBase< T >::build(), libMesh::Patch::build_around_element(), libMesh::System::current_solution(), libMesh::FEType::default_quadrature_rule(), libMesh::dim, libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::StoredRange< iterator_type, object_type >::end(), libMesh::err, error_estimator, libMesh::ErrorEstimator::error_norm, error_per_cell, libMesh::ErrorVectorReal, libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::H1_SEMINORM, libMesh::H1_X_SEMINORM, libMesh::H1_Y_SEMINORM, libMesh::H1_Z_SEMINORM, libMesh::H2_SEMINORM, libMesh::DofObject::id(), libMesh::L2, libMesh::L_INF, libMesh::libmesh_assert(), libMesh::libmesh_assert_greater(), libMesh::DenseMatrix< T >::lu_solve(), libMesh::DenseMatrixBase< T >::m(), std::max(), mesh, libMesh::MeshBase::mesh_dimension(), libMesh::DenseMatrixBase< T >::n(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::TensorTools::norm_sq(), libMesh::FEType::order, libMesh::Elem::p_level(), libMesh::PatchRecoveryErrorEstimator::patch_growth_strategy, libMesh::PatchRecoveryErrorEstimator::patch_reuse, libMesh::ParallelObject::processor_id(), libMesh::Real, libMesh::DenseVector< T >::resize(), libMesh::PatchRecoveryErrorEstimator::specpoly(), libMesh::Threads::spin_mtx, system, libMesh::PatchRecoveryErrorEstimator::target_patch_size, libMesh::SystemNorm::type(), libMesh::DofMap::variable_type(), libMesh::W1_INF_SEMINORM, libMesh::W2_INF_SEMINORM, libMesh::SystemNorm::weight(), libMesh::SystemNorm::weight_sq(), and libMesh::zero\&.
+.PP
+.nf
+191 {
+192   // The current mesh
+193   const MeshBase& mesh = system\&.get_mesh();
+194 
+195   // The dimensionality of the mesh
+196   const unsigned int dim = mesh\&.mesh_dimension();
+197 
+198   // The number of variables in the system
+199   const unsigned int n_vars = system\&.n_vars();
+200 
+201   // The DofMap for this system
+202   const DofMap& dof_map = system\&.get_dof_map();
+203 
+204   //------------------------------------------------------------
+205   // Iterate over all the elements in the range\&.
+206   for (ConstElemRange::const_iterator elem_it=range\&.begin(); elem_it!=range\&.end(); ++elem_it)
+207     {
+208       // elem is necessarily an active element on the local processor
+209       const Elem* elem = *elem_it;
+210 
+211       // We'll need an index into the error vector
+212       const dof_id_type e_id=elem->id();
+213 
+214       // We are going to build a patch containing the current element
+215       // and its neighbors on the local processor
+216       Patch patch(mesh\&.processor_id());
+217 
+218       // If we are reusing patches and the current element
+219       // already has an estimate associated with it, move on the
+220       // next element
+221       if(this->error_estimator\&.patch_reuse && error_per_cell[e_id] != 0)
+222         continue;
+223 
+224       // If we are not reusing patches or havent built one containing this element, we build one
+225 
+226       // Use user specified patch size and growth strategy
+227       patch\&.build_around_element (elem, error_estimator\&.target_patch_size,
+228                                   error_estimator\&.patch_growth_strategy);
+229 
+230       // Declare a new_error_per_cell vector to hold error estimates
+231       // from each element in this patch, or one estimate if we are
+232       // not reusing patches since we will only be computing error for
+233       // one cell
+234       std::vector<Real> new_error_per_cell(1, 0\&.);
+235       if(this->error_estimator\&.patch_reuse)
+236         new_error_per_cell\&.resize(patch\&.size(), 0\&.);
+237 
+238       //------------------------------------------------------------
+239       // Process each variable in the system using the current patch
+240       for (unsigned int var=0; var<n_vars; var++)
+241         {
+242 #ifndef DEBUG
+243 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+244           libmesh_assert (error_estimator\&.error_norm\&.type(var) == L2 ||
+245                           error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+246                           error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+247                           error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM ||
+248                           error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM ||
+249                           error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM ||
+250                           error_estimator\&.error_norm\&.type(var) == L_INF ||
+251                           error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM ||
+252                           error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM);
+253 #else
+254           libmesh_assert (error_estimator\&.error_norm\&.type(var) == L2 ||
+255                           error_estimator\&.error_norm\&.type(var) == L_INF ||
+256                           error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+257                           error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM ||
+258                           error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM ||
+259                           error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM ||
+260                           error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM);
+261 #endif
+262           if (var > 0)
+263             // We can't mix L_inf and L_2 norms
+264             libmesh_assert (((error_estimator\&.error_norm\&.type(var) == L2 ||
+265                               error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+266                               error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM ||
+267                               error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM ||
+268                               error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM ||
+269                               error_estimator\&.error_norm\&.type(var) == H2_SEMINORM) &&
+270                              (error_estimator\&.error_norm\&.type(var-1) == L2 ||
+271                               error_estimator\&.error_norm\&.type(var-1) == H1_SEMINORM ||
+272                               error_estimator\&.error_norm\&.type(var-1) == H1_X_SEMINORM ||
+273                               error_estimator\&.error_norm\&.type(var-1) == H1_Y_SEMINORM ||
+274                               error_estimator\&.error_norm\&.type(var-1) == H1_Z_SEMINORM ||
+275                               error_estimator\&.error_norm\&.type(var-1) == H2_SEMINORM)) ||
+276                             ((error_estimator\&.error_norm\&.type(var) == L_INF ||
+277                               error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM ||
+278                               error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM) &&
+279                              (error_estimator\&.error_norm\&.type(var-1) == L_INF ||
+280                               error_estimator\&.error_norm\&.type(var-1) == W1_INF_SEMINORM ||
+281                               error_estimator\&.error_norm\&.type(var-1) == W2_INF_SEMINORM)));
+282 #endif
+283 
+284           // Possibly skip this variable
+285           if (error_estimator\&.error_norm\&.weight(var) == 0\&.0) continue;
+286 
+287           // The type of finite element to use for this variable
+288           const FEType& fe_type = dof_map\&.variable_type (var);
+289 
+290           const Order element_order  = static_cast<Order>
+291             (fe_type\&.order + elem->p_level());
+292 
+293           // Finite element object for use in this patch
+294           AutoPtr<FEBase> fe (FEBase::build (dim, fe_type));
+295 
+296           // Build an appropriate Gaussian quadrature rule
+297           AutoPtr<QBase> qrule (fe_type\&.default_quadrature_rule(dim));
+298 
+299           // Tell the finite element about the quadrature rule\&.
+300           fe->attach_quadrature_rule (qrule\&.get());
+301 
+302           // Get Jacobian values, etc\&.\&.
+303           const std::vector<Real>&                       JxW     = fe->get_JxW();
+304           const std::vector<Point>&                      q_point = fe->get_xyz();
+305 
+306           // Get whatever phi/dphi/d2phi values we need\&.  Avoid
+307           // getting them unless the requested norm is actually going
+308           // to use them\&.
+309 
+310           const std::vector<std::vector<Real> >         *phi = NULL;
+311           // If we're using phi to assert the correct dof_indices
+312           // vector size later, then we'll need to get_phi whether we
+313           // plan to use it or not\&.
+314 #ifdef NDEBUG
+315           if (error_estimator\&.error_norm\&.type(var) == L2 ||
+316               error_estimator\&.error_norm\&.type(var) == L_INF)
+317 #endif
+318             phi = &(fe->get_phi());
+319 
+320           const std::vector<std::vector<RealGradient> > *dphi = NULL;
+321           if (error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+322               error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM ||
+323               error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM ||
+324               error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM ||
+325               error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM)
+326             dphi = &(fe->get_dphi());
+327 
+328 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+329           const std::vector<std::vector<RealTensor> >  *d2phi = NULL;
+330           if (error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+331               error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+332             d2phi = &(fe->get_d2phi());
+333 #endif
+334 
+335           // global DOF indices
+336           std::vector<dof_id_type> dof_indices;
+337 
+338           // Compute the approprite size for the patch projection matrices
+339           // and vectors;
+340           unsigned int matsize = element_order + 1;
+341           if (dim > 1)
+342             {
+343               matsize *= (element_order + 2);
+344               matsize /= 2;
+345             }
+346           if (dim > 2)
+347             {
+348               matsize *= (element_order + 3);
+349               matsize /= 3;
+350             }
+351 
+352           DenseMatrix<Number> Kp(matsize,matsize);
+353           DenseVector<Number> F,    Fx,     Fy,     Fz,     Fxy,     Fxz,     Fyz;
+354           DenseVector<Number> Pu_h, Pu_x_h, Pu_y_h, Pu_z_h, Pu_xy_h, Pu_xz_h, Pu_yz_h;
+355           if (error_estimator\&.error_norm\&.type(var) == L2 ||
+356               error_estimator\&.error_norm\&.type(var) == L_INF)
+357             {
+358               F\&.resize(matsize); Pu_h\&.resize(matsize);
+359             }
+360           else if (error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+361                    error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM ||
+362                    error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+363                    error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+364             {
+365               Fx\&.resize(matsize); Pu_x_h\&.resize(matsize); // stores xx in W2 cases
+366 #if LIBMESH_DIM > 1
+367               Fy\&.resize(matsize); Pu_y_h\&.resize(matsize); // stores yy in W2 cases
+368 #endif
+369 #if LIBMESH_DIM > 2
+370               Fz\&.resize(matsize); Pu_z_h\&.resize(matsize); // stores zz in W2 cases
+371 #endif
+372             }
+373           else if (error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM)
+374             {
+375               Fx\&.resize(matsize); Pu_x_h\&.resize(matsize); // Only need to compute the x gradient for the x component seminorm
+376             }
+377           else if (error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM)
+378             {
+379               libmesh_assert_greater (LIBMESH_DIM, 1);
+380               Fy\&.resize(matsize); Pu_y_h\&.resize(matsize); // Only need to compute the y gradient for the y component seminorm
+381             }
+382           else if (error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM)
+383             {
+384               libmesh_assert_greater (LIBMESH_DIM, 2);
+385               Fz\&.resize(matsize); Pu_z_h\&.resize(matsize); // Only need to compute the z gradient for the z component seminorm
+386             }
+387 
+388 #if LIBMESH_DIM > 1
+389           if (error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+390               error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+391             {
+392               Fxy\&.resize(matsize); Pu_xy_h\&.resize(matsize);
+393 #if LIBMESH_DIM > 2
+394               Fxz\&.resize(matsize); Pu_xz_h\&.resize(matsize);
+395               Fyz\&.resize(matsize); Pu_yz_h\&.resize(matsize);
+396 #endif
+397             }
+398 #endif
+399 
+400           //------------------------------------------------------
+401           // Loop over each element in the patch and compute their
+402           // contribution to the patch gradient projection\&.
+403           Patch::const_iterator        patch_it  = patch\&.begin();
+404           const Patch::const_iterator  patch_end = patch\&.end();
+405 
+406           for (; patch_it != patch_end; ++patch_it)
+407             {
+408               // The pth element in the patch
+409               const Elem* e_p = *patch_it;
+410 
+411               // Reinitialize the finite element data for this element
+412               fe->reinit (e_p);
+413 
+414               // Get the global DOF indices for the current variable
+415               // in the current element
+416               dof_map\&.dof_indices (e_p, dof_indices, var);
+417               libmesh_assert_equal_to (dof_indices\&.size(), phi->size());
+418 
+419               const unsigned int n_dofs =
+420                 libmesh_cast_int<unsigned int>(dof_indices\&.size());
+421               const unsigned int n_qp   = qrule->n_points();
+422 
+423               // Compute the projection components from this cell\&.
+424               // \int_{Omega_e} \psi_i \psi_j = \int_{Omega_e} du_h/dx_k \psi_i
+425               for (unsigned int qp=0; qp<n_qp; qp++)
+426                 {
+427                   // Construct the shape function values for the patch projection
+428                   std::vector<Real> psi(specpoly(dim, element_order, q_point[qp], matsize));
+429 
+430                   // Patch matrix contribution
+431                   for (unsigned int i=0; i<Kp\&.m(); i++)
+432                     for (unsigned int j=0; j<Kp\&.n(); j++)
+433                       Kp(i,j) += JxW[qp]*psi[i]*psi[j];
+434 
+435                   if (error_estimator\&.error_norm\&.type(var) == L2 ||
+436                       error_estimator\&.error_norm\&.type(var) == L_INF)
+437                     {
+438                       // Compute the solution on the current patch element
+439                       // the quadrature point
+440                       Number u_h = libMesh::zero;
+441 
+442                       for (unsigned int i=0; i<n_dofs; i++)
+443                         u_h += (*phi)[i][qp]*system\&.current_solution (dof_indices[i]);
+444 
+445                       // Patch RHS contributions
+446                       for (unsigned int i=0; i<psi\&.size(); i++)
+447                         F(i) = JxW[qp]*u_h*psi[i];
+448 
+449                     }
+450                   else if (error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+451                            error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM)
+452                     {
+453                       // Compute the gradient on the current patch element
+454                       // at the quadrature point
+455                       Gradient grad_u_h;
+456 
+457                       for (unsigned int i=0; i<n_dofs; i++)
+458                         grad_u_h\&.add_scaled ((*dphi)[i][qp],
+459                                              system\&.current_solution(dof_indices[i]));
+460 
+461                       // Patch RHS contributions
+462                       for (unsigned int i=0; i<psi\&.size(); i++)
+463                         {
+464                           Fx(i) += JxW[qp]*grad_u_h(0)*psi[i];
+465 #if LIBMESH_DIM > 1
+466                           Fy(i) += JxW[qp]*grad_u_h(1)*psi[i];
+467 #endif
+468 #if LIBMESH_DIM > 2
+469                           Fz(i) += JxW[qp]*grad_u_h(2)*psi[i];
+470 #endif
+471                         }
+472                     }
+473                   else if (error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM)
+474                     {
+475                       // Compute the gradient on the current patch element
+476                       // at the quadrature point
+477                       Gradient grad_u_h;
+478 
+479                       for (unsigned int i=0; i<n_dofs; i++)
+480                         grad_u_h\&.add_scaled ((*dphi)[i][qp],
+481                                              system\&.current_solution(dof_indices[i]));
+482 
+483                       // Patch RHS contributions
+484                       for (unsigned int i=0; i<psi\&.size(); i++)
+485                         {
+486                           Fx(i) += JxW[qp]*grad_u_h(0)*psi[i];
+487                         }
+488                     }
+489                   else if (error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM)
+490                     {
+491                       // Compute the gradient on the current patch element
+492                       // at the quadrature point
+493                       Gradient grad_u_h;
+494 
+495                       for (unsigned int i=0; i<n_dofs; i++)
+496                         grad_u_h\&.add_scaled ((*dphi)[i][qp],
+497                                              system\&.current_solution(dof_indices[i]));
+498 
+499                       // Patch RHS contributions
+500                       for (unsigned int i=0; i<psi\&.size(); i++)
+501                         {
+502                           Fy(i) += JxW[qp]*grad_u_h(1)*psi[i];
+503                         }
+504                     }
+505                   else if (error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM)
+506                     {
+507                       // Compute the gradient on the current patch element
+508                       // at the quadrature point
+509                       Gradient grad_u_h;
+510 
+511                       for (unsigned int i=0; i<n_dofs; i++)
+512                         grad_u_h\&.add_scaled ((*dphi)[i][qp],
+513                                              system\&.current_solution(dof_indices[i]));
+514 
+515                       // Patch RHS contributions
+516                       for (unsigned int i=0; i<psi\&.size(); i++)
+517                         {
+518                           Fz(i) += JxW[qp]*grad_u_h(2)*psi[i];
+519                         }
+520                     }
+521                   else if (error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+522                            error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+523                     {
+524 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+525                       // Compute the hessian on the current patch element
+526                       // at the quadrature point
+527                       Tensor hess_u_h;
+528 
+529                       for (unsigned int i=0; i<n_dofs; i++)
+530                         hess_u_h\&.add_scaled ((*d2phi)[i][qp],
+531                                              system\&.current_solution(dof_indices[i]));
+532 
+533                       // Patch RHS contributions
+534                       for (unsigned int i=0; i<psi\&.size(); i++)
+535                         {
+536                           Fx(i)  += JxW[qp]*hess_u_h(0,0)*psi[i];
+537 #if LIBMESH_DIM > 1
+538                           Fy(i)  += JxW[qp]*hess_u_h(1,1)*psi[i];
+539                           Fxy(i) += JxW[qp]*hess_u_h(0,1)*psi[i];
+540 #endif
+541 #if LIBMESH_DIM > 2
+542                           Fz(i)  += JxW[qp]*hess_u_h(2,2)*psi[i];
+543                           Fxz(i) += JxW[qp]*hess_u_h(0,2)*psi[i];
+544                           Fyz(i) += JxW[qp]*hess_u_h(1,2)*psi[i];
+545 #endif
+546                         }
+547 #else
+548                       libMesh::err << "ERROR:  --enable-second-derivatives is required\n"
+549                                    << "        for _sobolev_order == 2!\n";
+550                       libmesh_error();
+551 #endif
+552                     }
+553                   else
+554                     libmesh_error();
+555                 } // end quadrature loop
+556             } // end patch loop
+557 
+558 
+559 
+560           //--------------------------------------------------
+561           // Now we have fully assembled the projection system
+562           // for this patch\&.  Project the gradient components\&.
+563           // MAY NEED TO USE PARTIAL PIVOTING!
+564           if (error_estimator\&.error_norm\&.type(var) == L2 ||
+565               error_estimator\&.error_norm\&.type(var) == L_INF)
+566             {
+567               Kp\&.lu_solve(F, Pu_h);
+568             }
+569           else if (error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+570                    error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM ||
+571                    error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+572                    error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+573             {
+574               Kp\&.lu_solve (Fx, Pu_x_h);
+575 #if LIBMESH_DIM > 1
+576               Kp\&.lu_solve (Fy, Pu_y_h);
+577 #endif
+578 #if LIBMESH_DIM > 2
+579               Kp\&.lu_solve (Fz, Pu_z_h);
+580 #endif
+581             }
+582           else if (error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM)
+583             {
+584               Kp\&.lu_solve (Fx, Pu_x_h);
+585             }
+586           else if (error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM)
+587             {
+588               Kp\&.lu_solve (Fy, Pu_y_h);
+589             }
+590           else if (error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM)
+591             {
+592               Kp\&.lu_solve (Fz, Pu_z_h);
+593             }
+594 
+595 #if LIBMESH_DIM > 1
+596           if (error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+597               error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+598             {
+599               Kp\&.lu_solve(Fxy, Pu_xy_h);
+600 #if LIBMESH_DIM > 2
+601               Kp\&.lu_solve(Fxz, Pu_xz_h);
+602               Kp\&.lu_solve(Fyz, Pu_yz_h);
+603 #endif
+604             }
+605 #endif
+606 
+607           // If we are reusing patches, reuse the current patch to loop
+608           // over all elements in the current patch, otherwise build a new
+609           // patch containing just the current element and loop over it
+610           // Note that C++ will not allow patch_re_end to be a const here
+611           Patch::const_iterator patch_re_it;
+612           Patch::const_iterator patch_re_end;
+613 
+614           // Declare a new patch
+615           Patch patch_re(mesh\&.processor_id());
+616 
+617           if(this->error_estimator\&.patch_reuse)
+618             {
+619               // Just get the iterators from the current patch
+620               patch_re_it  = patch\&.begin();
+621               patch_re_end = patch\&.end();
+622             }
+623           else
+624             {
+625               // Use a target patch size of just 0, this will contain
+626               // just the current element
+627               patch_re\&.build_around_element (elem, 0,
+628                                              error_estimator\&.patch_growth_strategy);
+629 
+630               // Get the iterators from this newly constructed patch
+631               patch_re_it = patch_re\&.begin();
+632               patch_re_end = patch_re\&.end();
+633             }
+634 
+635           // If we are reusing patches, loop over all the elements
+636           // in the current patch and develop an estimate
+637           // for all the elements by computing  ||P u_h - u_h|| or ||P grad_u_h - grad_u_h||
+638           // or ||P hess_u_h - hess_u_h|| according to the requested
+639           // seminorm, otherwise just compute it for the current element
+640 
+641           // Loop over every element in the patch
+642           for (unsigned int e = 0 ; patch_re_it != patch_re_end; ++patch_re_it, ++e)
+643             {
+644               // Build the Finite Element for the current element
+645 
+646               // The pth element in the patch
+647               const Elem* e_p = *patch_re_it;
+648 
+649               // We'll need an index into the error vector for this element
+650               const dof_id_type e_p_id = e_p->id();
+651 
+652               // We will update the new_error_per_cell vector with element_error if the
+653               // error_per_cell[e_p_id] entry is non-zero, otherwise update it
+654               // with 0\&. i\&.e\&. leave it unchanged
+655 
+656               // No need to compute the estimate if we are reusing patches and already have one
+657               if (this->error_estimator\&.patch_reuse && error_per_cell[e_p_id] != 0\&.)
+658                 continue;
+659 
+660               // Reinitialize the finite element data for this element
+661               fe->reinit (e_p);
+662 
+663               // Get the global DOF indices for the current variable
+664               // in the current element
+665               dof_map\&.dof_indices (e_p, dof_indices, var);
+666               libmesh_assert_equal_to (dof_indices\&.size(), phi->size());
+667 
+668               // The number of dofs for this variable on this element
+669               const unsigned int n_dofs =
+670                 libmesh_cast_int<unsigned int>(dof_indices\&.size());
+671 
+672               // Variable to hold the error on the current element
+673               Real element_error = 0;
+674 
+675               const Order qorder =
+676                 static_cast<Order>(fe_type\&.order + e_p->p_level());
+677 
+678               // A quadrature rule for this element
+679               QGrid samprule (dim, qorder);
+680 
+681               if (error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM ||
+682                   error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+683                 fe->attach_quadrature_rule (&samprule);
+684 
+685               // The number of points we will sample over
+686               const unsigned int n_sp =
+687                 libmesh_cast_int<unsigned int>(JxW\&.size());
+688 
+689               // Loop over every sample point for the current element
+690               for (unsigned int sp=0; sp<n_sp; sp++)
+691                 {
+692                   // Compute the solution at the current sample point
+693 
+694                   std::vector<Number> temperr(6,0\&.0); // x,y,z or xx,yy,zz,xy,xz,yz
+695 
+696                   if (error_estimator\&.error_norm\&.type(var) == L2 ||
+697                       error_estimator\&.error_norm\&.type(var) == L_INF)
+698                     {
+699                       // Compute the value at the current sample point
+700                       Number u_h = libMesh::zero;
+701 
+702                       for (unsigned int i=0; i<n_dofs; i++)
+703                         u_h += (*phi)[i][sp]*system\&.current_solution (dof_indices[i]);
+704 
+705                       // Compute the phi values at the current sample point
+706                       std::vector<Real> psi(specpoly(dim, element_order, q_point[sp], matsize));
+707                       for (unsigned int i=0; i<matsize; i++)
+708                         {
+709                           temperr[0] += psi[i]*Pu_h(i);
+710                         }
+711 
+712                       temperr[0] -= u_h;
+713                     }
+714                   else if (error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+715                            error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM)
+716                     {
+717                       // Compute the gradient at the current sample point
+718                       Gradient grad_u_h;
+719 
+720                       for (unsigned int i=0; i<n_dofs; i++)
+721                         grad_u_h\&.add_scaled ((*dphi)[i][sp],
+722                                              system\&.current_solution(dof_indices[i]));
+723 
+724                       // Compute the phi values at the current sample point
+725                       std::vector<Real> psi(specpoly(dim, element_order, q_point[sp], matsize));
+726 
+727                       for (unsigned int i=0; i<matsize; i++)
+728                         {
+729                           temperr[0] += psi[i]*Pu_x_h(i);
+730 #if LIBMESH_DIM > 1
+731                           temperr[1] += psi[i]*Pu_y_h(i);
+732 #endif
+733 #if LIBMESH_DIM > 2
+734                           temperr[2] += psi[i]*Pu_z_h(i);
+735 #endif
+736                         }
+737                       temperr[0] -= grad_u_h(0);
+738 #if LIBMESH_DIM > 1
+739                       temperr[1] -= grad_u_h(1);
+740 #endif
+741 #if LIBMESH_DIM > 2
+742                       temperr[2] -= grad_u_h(2);
+743 #endif
+744                     }
+745                   else if (error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM)
+746                     {
+747                       // Compute the gradient at the current sample point
+748                       Gradient grad_u_h;
+749 
+750                       for (unsigned int i=0; i<n_dofs; i++)
+751                         grad_u_h\&.add_scaled ((*dphi)[i][sp],
+752                                              system\&.current_solution(dof_indices[i]));
+753 
+754                       // Compute the phi values at the current sample point
+755                       std::vector<Real> psi(specpoly(dim, element_order, q_point[sp], matsize));
+756                       for (unsigned int i=0; i<matsize; i++)
+757                         {
+758                           temperr[0] += psi[i]*Pu_x_h(i);
+759                         }
+760 
+761                       temperr[0] -= grad_u_h(0);
+762                     }
+763                   else if (error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM)
+764                     {
+765                       // Compute the gradient at the current sample point
+766                       Gradient grad_u_h;
+767 
+768                       for (unsigned int i=0; i<n_dofs; i++)
+769                         grad_u_h\&.add_scaled ((*dphi)[i][sp],
+770                                              system\&.current_solution(dof_indices[i]));
+771 
+772                       // Compute the phi values at the current sample point
+773                       std::vector<Real> psi(specpoly(dim, element_order, q_point[sp], matsize));
+774                       for (unsigned int i=0; i<matsize; i++)
+775                         {
+776                           temperr[1] += psi[i]*Pu_y_h(i);
+777                         }
+778 
+779                       temperr[1] -= grad_u_h(1);
+780                     }
+781                   else if (error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM)
+782                     {
+783                       // Compute the gradient at the current sample point
+784                       Gradient grad_u_h;
+785 
+786                       for (unsigned int i=0; i<n_dofs; i++)
+787                         grad_u_h\&.add_scaled ((*dphi)[i][sp],
+788                                              system\&.current_solution(dof_indices[i]));
+789 
+790                       // Compute the phi values at the current sample point
+791                       std::vector<Real> psi(specpoly(dim, element_order, q_point[sp], matsize));
+792                       for (unsigned int i=0; i<matsize; i++)
+793                         {
+794                           temperr[2] += psi[i]*Pu_z_h(i);
+795                         }
+796 
+797                       temperr[2] -= grad_u_h(2);
+798                     }
+799                   else if (error_estimator\&.error_norm\&.type(var) == H2_SEMINORM ||
+800                            error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+801                     {
+802 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+803                       // Compute the Hessian at the current sample point
+804                       Tensor hess_u_h;
+805 
+806                       for (unsigned int i=0; i<n_dofs; i++)
+807                         hess_u_h\&.add_scaled ((*d2phi)[i][sp],
+808                                              system\&.current_solution(dof_indices[i]));
+809 
+810                       // Compute the phi values at the current sample point
+811                       std::vector<Real> psi(specpoly(dim, element_order, q_point[sp], matsize));
+812                       for (unsigned int i=0; i<matsize; i++)
+813                         {
+814                           temperr[0] += psi[i]*Pu_x_h(i);
+815 #if LIBMESH_DIM > 1
+816                           temperr[1] += psi[i]*Pu_y_h(i);
+817                           temperr[3] += psi[i]*Pu_xy_h(i);
+818 #endif
+819 #if LIBMESH_DIM > 2
+820                           temperr[2] += psi[i]*Pu_z_h(i);
+821                           temperr[4] += psi[i]*Pu_xz_h(i);
+822                           temperr[5] += psi[i]*Pu_yz_h(i);
+823 #endif
+824                         }
+825 
+826                       temperr[0] -= hess_u_h(0,0);
+827 #if LIBMESH_DIM > 1
+828                       temperr[1] -= hess_u_h(1,1);
+829                       temperr[3] -= hess_u_h(0,1);
+830 #endif
+831 #if LIBMESH_DIM > 2
+832                       temperr[2] -= hess_u_h(2,2);
+833                       temperr[4] -= hess_u_h(0,2);
+834                       temperr[5] -= hess_u_h(1,2);
+835 #endif
+836 #else
+837                       libMesh::err << "ERROR:  --enable-second-derivatives is required\n"
+838                                    << "        for _sobolev_order == 2!\n";
+839                       libmesh_error();
+840 #endif
+841                     }
+842                   // Add up relevant terms\&.  We can easily optimize the
+843                   // LIBMESH_DIM < 3 cases a little bit with the exception
+844                   // of the W2 cases
+845 
+846                   if (error_estimator\&.error_norm\&.type(var) == L_INF)
+847                     element_error = std::max(element_error, std::abs(temperr[0]));
+848                   else if (error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM)
+849                     for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+850                       element_error = std::max(element_error, std::abs(temperr[i]));
+851                   else if (error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+852                     for (unsigned int i=0; i != 6; ++i)
+853                       element_error = std::max(element_error, std::abs(temperr[i]));
+854                   else if (error_estimator\&.error_norm\&.type(var) == L2)
+855                     element_error += JxW[sp]*TensorTools::norm_sq(temperr[0]);
+856                   else if (error_estimator\&.error_norm\&.type(var) == H1_SEMINORM)
+857                     for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+858                       element_error += JxW[sp]*TensorTools::norm_sq(temperr[i]);
+859                   else if (error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM)
+860                     element_error += JxW[sp]*TensorTools::norm_sq(temperr[0]);
+861                   else if (error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM)
+862                     element_error += JxW[sp]*TensorTools::norm_sq(temperr[1]);
+863                   else if (error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM)
+864                     element_error += JxW[sp]*TensorTools::norm_sq(temperr[2]);
+865                   else if (error_estimator\&.error_norm\&.type(var) == H2_SEMINORM)
+866                     {
+867                       for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+868                         element_error += JxW[sp]*TensorTools::norm_sq(temperr[i]);
+869                       // Off diagonal terms enter into the Hessian norm twice
+870                       for (unsigned int i=3; i != 6; ++i)
+871                         element_error += JxW[sp]*2*TensorTools::norm_sq(temperr[i]);
+872                     }
+873 
+874                 } // End loop over sample points
+875 
+876               if (error_estimator\&.error_norm\&.type(var) == L_INF ||
+877                   error_estimator\&.error_norm\&.type(var) == W1_INF_SEMINORM ||
+878                   error_estimator\&.error_norm\&.type(var) == W2_INF_SEMINORM)
+879                 new_error_per_cell[e] += error_estimator\&.error_norm\&.weight(var) * element_error;
+880               else if (error_estimator\&.error_norm\&.type(var) == L2 ||
+881                        error_estimator\&.error_norm\&.type(var) == H1_SEMINORM ||
+882                        error_estimator\&.error_norm\&.type(var) == H1_X_SEMINORM ||
+883                        error_estimator\&.error_norm\&.type(var) == H1_Y_SEMINORM ||
+884                        error_estimator\&.error_norm\&.type(var) == H1_Z_SEMINORM ||
+885                        error_estimator\&.error_norm\&.type(var) == H2_SEMINORM)
+886                 new_error_per_cell[e] += error_estimator\&.error_norm\&.weight_sq(var) * element_error;
+887               else
+888                 libmesh_error();
+889             }  // End (re) loop over patch elements
+890 
+891         } // end variables loop
+892 
+893       // Now that we have the contributions from each variable,
+894       // we have take square roots of the entries we
+895       // added to error_per_cell to get an error norm
+896       // If we are reusing patches, once again reuse the current patch to loop
+897       // over all elements in the current patch, otherwise build a new
+898       // patch containing just the current element and loop over it
+899       Patch::const_iterator patch_re_it;
+900       Patch::const_iterator patch_re_end;
+901 
+902       // Build a new patch if necessary
+903       Patch current_elem_patch(mesh\&.processor_id());
+904 
+905       if(this->error_estimator\&.patch_reuse)
+906         {
+907           // Just get the iterators from the current patch
+908           patch_re_it  = patch\&.begin();
+909           patch_re_end = patch\&.end();
+910         }
+911       else
+912         {
+913           // Use a target patch size of just 0, this will contain
+914           // just the current element\&.
+915           current_elem_patch\&.build_around_element (elem, 0,
+916                                                    error_estimator\&.patch_growth_strategy);
+917 
+918           // Get the iterators from this newly constructed patch
+919           patch_re_it = current_elem_patch\&.begin();
+920           patch_re_end = current_elem_patch\&.end();
+921         }
+922 
+923       // Loop over every element in the patch we just constructed
+924       for (unsigned int i = 0 ; patch_re_it != patch_re_end; ++patch_re_it, ++i)
+925         {
+926           // The pth element in the patch
+927           const Elem* e_p = *patch_re_it;
+928 
+929           // We'll need an index into the error vector
+930           const dof_id_type e_p_id = e_p->id();
+931 
+932           // Update the error_per_cell vector for this element
+933           if (error_estimator\&.error_norm\&.type(0) == L2 ||
+934               error_estimator\&.error_norm\&.type(0) == H1_SEMINORM ||
+935               error_estimator\&.error_norm\&.type(0) == H1_X_SEMINORM ||
+936               error_estimator\&.error_norm\&.type(0) == H1_Y_SEMINORM ||
+937               error_estimator\&.error_norm\&.type(0) == H1_Z_SEMINORM ||
+938               error_estimator\&.error_norm\&.type(0) == H2_SEMINORM)
+939             {
+940               Threads::spin_mutex::scoped_lock acquire(Threads::spin_mtx);
+941               if (!error_per_cell[e_p_id])
+942                 error_per_cell[e_p_id] =
+943                   static_cast<ErrorVectorReal>(std::sqrt(new_error_per_cell[i]));
+944             }
+945           else
+946             {
+947               libmesh_assert (error_estimator\&.error_norm\&.type(0) == L_INF ||
+948                               error_estimator\&.error_norm\&.type(0) == W1_INF_SEMINORM ||
+949                               error_estimator\&.error_norm\&.type(0) == W2_INF_SEMINORM);
+950               Threads::spin_mutex::scoped_lock acquire(Threads::spin_mtx);
+951               if (!error_per_cell[e_p_id])
+952                 error_per_cell[e_p_id] =
+953                   static_cast<ErrorVectorReal>(new_error_per_cell[i]);
+954             }
+955 
+956         } // End loop over every element in patch
+957 
+958     } // end element loop
+959 
+960 } // End () operator definition
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBPatchRecoveryErrorEstimator\fP& libMesh::PatchRecoveryErrorEstimator::EstimateError::error_estimator\fC [private]\fP"
+
+.PP
+Definition at line 136 of file patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by operator()()\&.
+.SS "\fBErrorVector\fP& libMesh::PatchRecoveryErrorEstimator::EstimateError::error_per_cell\fC [private]\fP"
+
+.PP
+Definition at line 137 of file patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by operator()()\&.
+.SS "const \fBSystem\fP& libMesh::PatchRecoveryErrorEstimator::EstimateError::system\fC [private]\fP"
+Function to set the boolean patch_reuse in case the user wants to change the default behaviour of patch_recovery_error_estimator 
+.PP
+Definition at line 135 of file patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by operator()()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

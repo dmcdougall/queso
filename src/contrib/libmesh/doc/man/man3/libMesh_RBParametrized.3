@@ -1,0 +1,457 @@
+.TH "libMesh::RBParametrized" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::RBParametrized \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <rb_parametrized\&.h>\fP
+.PP
+Inherits \fBlibMesh::ReferenceCountedObject< RBParametrized >\fP\&.
+.PP
+Inherited by \fBlibMesh::RBConstructionBase< Base >\fP, \fBlibMesh::RBEvaluation\fP, \fBlibMesh::RBSCMEvaluation\fP, \fBlibMesh::RBConstructionBase< CondensedEigenSystem >\fP, and \fBlibMesh::RBConstructionBase< LinearImplicitSystem >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRBParametrized\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~RBParametrized\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinitialize_parameters\fP (const \fBRBParameters\fP &mu_min_in, const \fBRBParameters\fP &mu_max_in, const std::map< std::string, std::vector< \fBReal\fP > > &discrete_parameter_values)"
+.br
+.ti -1c
+.RI "void \fBinitialize_parameters\fP (const \fBRBParametrized\fP &rb_parametrized)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_n_params\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBget_n_continuous_params\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBget_n_discrete_params\fP () const "
+.br
+.ti -1c
+.RI "std::set< std::string > \fBget_parameter_names\fP () const "
+.br
+.ti -1c
+.RI "const \fBRBParameters\fP & \fBget_parameters\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_parameters\fP (const \fBRBParameters\fP &params)"
+.br
+.ti -1c
+.RI "const \fBRBParameters\fP & \fBget_parameters_min\fP () const "
+.br
+.ti -1c
+.RI "const \fBRBParameters\fP & \fBget_parameters_max\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_parameter_min\fP (const std::string &param_name) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_parameter_max\fP (const std::string &param_name) const "
+.br
+.ti -1c
+.RI "void \fBprint_parameters\fP () const "
+.br
+.ti -1c
+.RI "void \fBwrite_parameter_data_to_files\fP (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const bool write_binary_data)"
+.br
+.ti -1c
+.RI "void \fBread_parameter_data_from_files\fP (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const bool read_binary_data)"
+.br
+.ti -1c
+.RI "bool \fBis_discrete_parameter\fP (const std::string &mu_name) const "
+.br
+.ti -1c
+.RI "const std::map< std::string, 
+.br
+std::vector< \fBReal\fP > > & \fBget_discrete_parameter_values\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_discrete_parameter_values\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBReal\fP \fBget_closest_value\fP (\fBReal\fP value, const std::vector< \fBReal\fP > &list_of_values)"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBverbose_mode\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwrite_parameter_ranges_to_file\fP (const std::string &file_name, const bool write_binary)"
+.br
+.ti -1c
+.RI "void \fBwrite_discrete_parameter_values_to_file\fP (const std::string &file_name, const bool write_binary_data)"
+.br
+.ti -1c
+.RI "void \fBread_parameter_ranges_from_file\fP (const std::string &file_name, const bool read_binary, \fBRBParameters\fP &param_min, \fBRBParameters\fP &param_max)"
+.br
+.ti -1c
+.RI "void \fBread_discrete_parameter_values_from_file\fP (const std::string &file_name, const bool read_binary_data, std::map< std::string, std::vector< \fBReal\fP > > &discrete_parameter_values_in)"
+.br
+.ti -1c
+.RI "bool \fBvalid_params\fP (const \fBRBParameters\fP &params)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBis_value_in_list\fP (\fBReal\fP value, const std::vector< \fBReal\fP > &list_of_values, \fBReal\fP tol)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBparameters_initialized\fP"
+.br
+.ti -1c
+.RI "\fBRBParameters\fP \fBparameters\fP"
+.br
+.ti -1c
+.RI "\fBRBParameters\fP \fBparameters_min\fP"
+.br
+.ti -1c
+.RI "\fBRBParameters\fP \fBparameters_max\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, 
+.br
+std::vector< \fBReal\fP > > \fB_discrete_parameter_values\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class is part of the rbOOmit framework\&.
+.PP
+This class defines basic functionality of a parametrized object\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David J\&. Knezevic, 2011 
+.RE
+.PP
+
+.PP
+Definition at line 45 of file rb_parametrized\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::RBParametrized::RBParametrized ()"
+Constructor\&. 
+.SS "virtual libMesh::RBParametrized::~RBParametrized ()\fC [virtual]\fP"
+Destructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void libMesh::RBParametrized::clear ()\fC [virtual]\fP"
+Clear all the data structures associated with the system\&. 
+.PP
+Reimplemented in \fBlibMesh::RBConstruction\fP, \fBlibMesh::RBConstructionBase< Base >\fP, \fBlibMesh::RBConstructionBase< LinearImplicitSystem >\fP, \fBlibMesh::RBConstructionBase< CondensedEigenSystem >\fP, \fBlibMesh::RBSCMConstruction\fP, \fBlibMesh::RBEIMConstruction\fP, \fBlibMesh::TransientRBConstruction\fP, \fBlibMesh::TransientSystem< RBConstruction >\fP, \fBlibMesh::RBEIMEvaluation\fP, \fBlibMesh::TransientRBEvaluation\fP, and \fBlibMesh::RBEvaluation\fP\&.
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "static \fBReal\fP libMesh::RBParametrized::get_closest_value (\fBReal\fPvalue, const std::vector< \fBReal\fP > &list_of_values)\fC [static]\fP"
+Helper function that returns the closest entry to \fCvalue\fP from \fClist_of_values\fP\&. 
+.SS "const std::map< std::string, std::vector<\fBReal\fP> >& libMesh::RBParametrized::get_discrete_parameter_values () const"
+Get a const reference to the discrete parameter values\&. 
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "unsigned int libMesh::RBParametrized::get_n_continuous_params () const"
+Get the number of continuous parameters\&. 
+.SS "unsigned int libMesh::RBParametrized::get_n_discrete_params () const"
+Get the number of discrete parameters\&. 
+.SS "unsigned int libMesh::RBParametrized::get_n_params () const"
+Get the number of parameters\&. 
+.SS "\fBReal\fP libMesh::RBParametrized::get_parameter_max (const std::string &param_name) const"
+Get maximum allowable value of parameter \fCparam_name\fP\&. 
+.SS "\fBReal\fP libMesh::RBParametrized::get_parameter_min (const std::string &param_name) const"
+Get minimum allowable value of parameter \fCparam_name\fP\&. 
+.SS "std::set<std::string> libMesh::RBParametrized::get_parameter_names () const"
+Get a set that stores the parameter names\&. 
+.SS "const \fBRBParameters\fP& libMesh::RBParametrized::get_parameters () const"
+Get the current parameters\&. 
+.SS "const \fBRBParameters\fP& libMesh::RBParametrized::get_parameters_max () const"
+Get an \fBRBParameters\fP object that specifies the maximum allowable value for each parameter\&. 
+.SS "const \fBRBParameters\fP& libMesh::RBParametrized::get_parameters_min () const"
+Get an \fBRBParameters\fP object that specifies the minimum allowable value for each parameter\&. 
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::RBParametrized::initialize_parameters (const \fBRBParameters\fP &mu_min_in, const \fBRBParameters\fP &mu_max_in, const std::map< std::string, std::vector< \fBReal\fP > > &discrete_parameter_values)"
+Initialize the parameter ranges and set current_parameters\&. 
+.SS "void libMesh::RBParametrized::initialize_parameters (const \fBRBParametrized\fP &rb_parametrized)"
+Initialize the parameter ranges and set current_parameters\&. 
+.SS "bool libMesh::RBParametrized::is_discrete_parameter (const std::string &mu_name) const"
+Is parameter \fCmu_name\fP discrete? 
+.SS "static bool libMesh::RBParametrized::is_value_in_list (\fBReal\fPvalue, const std::vector< \fBReal\fP > &list_of_values, \fBReal\fPtol)\fC [static]\fP, \fC [private]\fP"
+Helper function to check if the specified value is in the list of values (within a tolerance given by \fCtol\fP)\&. 
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "void libMesh::RBParametrized::print_discrete_parameter_values () const"
+Print out all the discrete parameter values\&. 
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::RBParametrized::print_parameters () const"
+Print the current parameters\&. 
+.SS "void libMesh::RBParametrized::read_discrete_parameter_values_from_file (const std::string &file_name, const boolread_binary_data, std::map< std::string, std::vector< \fBReal\fP > > &discrete_parameter_values_in)\fC [private]\fP"
+Read in the discrete parameter values from file, if we have any\&. 
+.SS "void libMesh::RBParametrized::read_parameter_data_from_files (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const boolread_binary_data)"
+Read in the parameter ranges from files\&. 
+.SS "void libMesh::RBParametrized::read_parameter_ranges_from_file (const std::string &file_name, const boolread_binary, \fBRBParameters\fP &param_min, \fBRBParameters\fP &param_max)\fC [private]\fP"
+Read in the parameter ranges from file\&. Initialize parameters to the 'minimum' parameter values\&. 
+.SS "void libMesh::RBParametrized::set_parameters (const \fBRBParameters\fP &params)"
+Set the current parameters to \fCparams\fP 
+.SS "bool libMesh::RBParametrized::valid_params (const \fBRBParameters\fP &params)\fC [private]\fP"
+Helper function to check that \fCparams\fP is valid\&. 
+.SS "void libMesh::RBParametrized::write_discrete_parameter_values_to_file (const std::string &file_name, const boolwrite_binary_data)\fC [private]\fP"
+Write out the discrete parameter values to file\&. 
+.SS "void libMesh::RBParametrized::write_parameter_data_to_files (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const boolwrite_binary_data)"
+Write out the parameter ranges to files\&. 
+.SS "void libMesh::RBParametrized::write_parameter_ranges_to_file (const std::string &file_name, const boolwrite_binary)\fC [private]\fP"
+Write out the parameter ranges to file\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "std::map< std::string, std::vector<\fBReal\fP> > libMesh::RBParametrized::_discrete_parameter_values\fC [private]\fP"
+Map that defines the allowable values of any discrete parameters\&. 
+.PP
+Definition at line 237 of file rb_parametrized\&.h\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBRBParameters\fP libMesh::RBParametrized::parameters\fC [private]\fP"
+Vector storing the current parameters\&. 
+.PP
+Definition at line 226 of file rb_parametrized\&.h\&.
+.SS "bool libMesh::RBParametrized::parameters_initialized\fC [private]\fP"
+Flag indicating whether the parameters have been initialized\&. 
+.PP
+Definition at line 221 of file rb_parametrized\&.h\&.
+.SS "\fBRBParameters\fP libMesh::RBParametrized::parameters_max\fC [private]\fP"
+
+.PP
+Definition at line 232 of file rb_parametrized\&.h\&.
+.SS "\fBRBParameters\fP libMesh::RBParametrized::parameters_min\fC [private]\fP"
+Vectors that define the ranges (min and max) for the parameters\&. 
+.PP
+Definition at line 231 of file rb_parametrized\&.h\&.
+.SS "bool libMesh::RBParametrized::verbose_mode"
+Public boolean to toggle verbose mode\&. 
+.PP
+Definition at line 172 of file rb_parametrized\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,237 @@
+.TH "libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Radial" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Radial \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <inf_fe\&.h>\fP
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBReal\fP \fBdecay\fP (const \fBReal\fP v)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBdecay_deriv\fP (const \fBReal\fP)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBD\fP (const \fBReal\fP v)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBD_deriv\fP (const \fBReal\fP v)"
+.br
+.ti -1c
+.RI "static \fBOrder\fP \fBmapping_order\fP ()"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_dofs\fP (const \fBOrder\fP o_radial)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_dofs_at_node\fP (const \fBOrder\fP o_radial, const unsigned int n_onion)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_dofs_per_elem\fP (const \fBOrder\fP o_radial)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRadial\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map>class libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::Radial"
+Infinite elements are in some sense directional, compared to conventional finite elements\&. All methods related to the radial part, which extends perpendicular from the base, are collected in this nested class\&. This class offers static methods, which are only available to \fC\fBInfFE\fP\fP members\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2003 
+.RE
+.PP
+
+.PP
+Definition at line 97 of file inf_fe\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::Radial ()\fC [inline]\fP, \fC [private]\fP"
+Never use an object of this type\&. 
+.PP
+Definition at line 104 of file inf_fe\&.h\&.
+.PP
+.nf
+104 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> static \fBReal\fP \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::D (const \fBReal\fPv)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the radial weight D, used as an additional weight for the test function, evaluated at local radial coordinate \fCv\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 124 of file inf_fe\&.h\&.
+.PP
+.nf
+124 { return (1\&.-v)*(1\&.-v)/4\&.; }
+.fi
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> static \fBReal\fP \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::D_deriv (const \fBReal\fPv)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the first (local) radial derivative of the radial weight D\&. 
+.RE
+.PP
+
+.PP
+Definition at line 129 of file inf_fe\&.h\&.
+.PP
+.nf
+129 { return (v-1\&.)/2\&.; }
+.fi
+.SS "template<unsigned int Dim, FEFamily T_radial, InfMapType T_map> \fBReal\fP \fBlibMesh::InfFE\fP< Dim, T_radial, T_map >::Radial::decay (const \fBReal\fPv)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the decay in radial direction of the \fCDim\fP dimensional infinite element\&. 
+.RE
+.PP
+
+.PP
+Definition at line 846 of file inf_fe\&.h\&.
+.PP
+Referenced by libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::shape()\&.
+.PP
+.nf
+847 {
+848   switch (Dim)
+849     //TODO:[DD] What decay do i have in 2D and 1D?
+850     {
+851     case 3:
+852       return (1\&.-v)/2\&.;
+853 
+854     case 2:
+855       return 0\&.;
+856 
+857     case 1:
+858       return 0\&.;
+859 
+860     default:
+861       libmesh_error();
+862       return 0\&.;
+863     }
+864 }
+.fi
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> static \fBReal\fP \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::decay_deriv (const \fBReal\fP)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the first (local) derivative of the decay in radial direction of the infinite element\&. 
+.RE
+.PP
+
+.PP
+Definition at line 118 of file inf_fe\&.h\&.
+.PP
+.nf
+118 { return -\&.5; }
+.fi
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> static \fBOrder\fP \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::mapping_order ()\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the Order of the mapping functions in radial direction\&. Currently, this is \fIalways\fP \fCFIRST\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 135 of file inf_fe\&.h\&.
+.PP
+References libMesh::FIRST\&.
+.PP
+.nf
+135 { return FIRST; }
+.fi
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> static unsigned int \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::n_dofs (const \fBOrder\fPo_radial)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of shape functions in radial direction associated with this infinite element\&. Either way, if the modes are stored as nodal dofs (\fCn_dofs_at_node\fP) or as element dofs (\fCn_dofs_per_elem\fP), in each case we have the same number of modes in radial direction\&. Note that for the case of 1D infinite elements, in the base the dof-per-node scheme is used\&.
+.RE
+.PP
+From the formulation of the infinite elements, we have 1 mode, when \fCo_radial=CONST\fP\&. Therefore, we have a total of \fCo_radial+1\fP modes in radial direction\&. 
+.PP
+Definition at line 149 of file inf_fe\&.h\&.
+.PP
+.nf
+150     { return static_cast<unsigned int>(o_radial)+1; }
+.fi
+.SS "template<unsigned int Dim, FEFamily T_radial, InfMapType T_map> unsigned int \fBlibMesh::InfFE\fP< Dim, T_radial, T_map >::Radial::n_dofs_at_node (const \fBOrder\fPo_radial, const unsigned intn_onion)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of dofs in radial direction on 'onion slice' \fCn\fP (either 0 or 1) for an infinite element of type \fCinf_elem_type\fP and radial order \fCo_radial\fP\&.
+.RE
+.PP
+Currently, the first radial mode is associated with the nodes in the base\&. All higher radial modes are associated with the physically existing nodes further out\&. 
+.PP
+Definition at line 128 of file inf_fe_base_radial\&.C\&.
+.PP
+.nf
+130 {
+131   libmesh_assert_less (n_onion, 2);
+132 
+133   if (n_onion == 0)
+134     /*
+135      * in the base, no matter what, we have 1 node associated
+136      * with radial direction
+137      */
+138     return 1;
+139   else
+140     /*
+141      * this works, since for Order o_radial=CONST=0, we still
+142      * have the (1-v)/2 mode, associated to the base
+143      */
+144     return static_cast<unsigned int>(o_radial);
+145 }
+.fi
+.SS "template<unsigned int friend_Dim, FEFamily friend_T_radial, InfMapType friend_T_map> static unsigned int \fBlibMesh::InfFE\fP< friend_Dim, friend_T_radial, friend_T_map >::Radial::n_dofs_per_elem (const \fBOrder\fPo_radial)\fC [inline]\fP, \fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of modes in radial direction interior to the element, not associated with any interior nodes\&. Note that these modes are a discontinuous approximation, therefore we have no special formulation for coupling in the base, like in the case of associating (possibly) multiple dofs per (outer) node\&. 
+.RE
+.PP
+
+.PP
+Definition at line 171 of file inf_fe\&.h\&.
+.PP
+.nf
+172     { return static_cast<unsigned int>(o_radial)+1; }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

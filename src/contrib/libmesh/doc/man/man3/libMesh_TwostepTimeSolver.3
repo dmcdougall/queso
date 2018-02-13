@@ -1,0 +1,1139 @@
+.TH "libMesh::TwostepTimeSolver" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TwostepTimeSolver \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <twostep_time_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBAdaptiveTimeSolver\fP \fBParent\fP"
+.br
+.ti -1c
+.RI "typedef \fBDifferentiableSystem\fP \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTwostepTimeSolver\fP (\fBsys_type\fP &s)"
+.br
+.ti -1c
+.RI "\fB~TwostepTimeSolver\fP ()"
+.br
+.ti -1c
+.RI "void \fBsolve\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBreinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadvance_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBerror_order\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBelement_residual\fP (bool get_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual bool \fBside_residual\fP (bool get_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBDiffSolver\fP > & \fBdiff_solver\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit_data\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadjoint_advance_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBretrieve_timestep\fP ()"
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBold_nonlinear_solution\fP (const \fBdof_id_type\fP global_dof_number) const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBdu\fP (const \fBSystemNorm\fP &norm) const "
+.br
+.ti -1c
+.RI "virtual bool \fBis_steady\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBbefore_timestep\fP ()"
+.br
+.ti -1c
+.RI "const \fBsys_type\fP & \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBLinearSolver\fP
+.br
+< \fBNumber\fP > > & \fBlinear_solver\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_solution_history\fP (const \fBSolutionHistory\fP &_solution_history)"
+.br
+.ti -1c
+.RI "bool \fBis_adjoint\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_is_adjoint\fP (bool _is_adjoint_value)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBUnsteadySolver\fP > \fBcore_time_solver\fP"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP \fBcomponent_norm\fP"
+.br
+.ti -1c
+.RI "std::vector< float > \fBcomponent_scale\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBtarget_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBupper_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax_deltat\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmin_deltat\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax_growth\fP"
+.br
+.ti -1c
+.RI "bool \fBglobal_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fBold_local_nonlinear_solution\fP"
+.br
+.ti -1c
+.RI "bool \fBquiet\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBreduce_deltat_on_diffsolver_failure\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fBReal\fP \fBcalculate_norm\fP (\fBSystem\fP &, \fBNumericVector\fP< \fBNumber\fP > &)"
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBlast_deltat\fP"
+.br
+.ti -1c
+.RI "bool \fBfirst_solve\fP"
+.br
+.ti -1c
+.RI "bool \fBfirst_adjoint_step\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBDiffSolver\fP > \fB_diff_solver\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > \fB_linear_solver\fP"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBSolutionHistory\fP > \fBsolution_history\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class wraps another \fBUnsteadySolver\fP derived class, and compares the results of timestepping with deltat and timestepping with 2*deltat to adjust future timestep lengths\&.
+.PP
+Currently this class only works on fully coupled Systems
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2007 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file twostep_time_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "typedef \fBAdaptiveTimeSolver\fP \fBlibMesh::TwostepTimeSolver::Parent\fP"
+The parent class 
+.PP
+Definition at line 58 of file twostep_time_solver\&.h\&.
+.SS "typedef \fBDifferentiableSystem\fP \fBlibMesh::TimeSolver::sys_type\fP\fC [inherited]\fP"
+The type of system 
+.PP
+Definition at line 66 of file time_solver\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TwostepTimeSolver::TwostepTimeSolver (\fBsys_type\fP &s)\fC [explicit]\fP"
+Constructor\&. Requires a reference to the system to be solved\&. 
+.PP
+Definition at line 29 of file twostep_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver\&.
+.PP
+.nf
+30   : AdaptiveTimeSolver(s)
+31 
+32 {
+33   // We start with a reasonable time solver: implicit Euler
+34   core_time_solver\&.reset(new EulerSolver(s));
+35 }
+.fi
+.SS "libMesh::TwostepTimeSolver::~TwostepTimeSolver ()"
+Destructor\&. 
+.PP
+Definition at line 39 of file twostep_time_solver\&.C\&.
+.PP
+.nf
+40 {
+41 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::UnsteadySolver::adjoint_advance_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method advances the adjoint solution to the previous timestep, after an adjoint_solve() has been performed\&. This will be done before every UnsteadySolver::adjoint_solve()\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 178 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DifferentiableSystem::deltat, libMesh::UnsteadySolver::first_adjoint_step, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::NumericVector< T >::localize(), libMesh::UnsteadySolver::old_local_nonlinear_solution, libMesh::TimeSolver::solution_history, and libMesh::System::time\&.
+.PP
+.nf
+179 {
+180   // On the first call of this function, we dont save the adjoint solution or
+181   // decrement the time, we just call the retrieve function below
+182   if(!first_adjoint_step)
+183     {
+184       // Call the store function to store the last adjoint before decrementing the time
+185       solution_history->store();
+186       // Decrement the system time
+187       _system\&.time -= _system\&.deltat;
+188     }
+189   else
+190     {
+191       first_adjoint_step = false;
+192     }
+193 
+194   // Retrieve the primal solution vectors at this time using the
+195   // solution_history object
+196   solution_history->retrieve();
+197 
+198   // Dont forget to localize the old_nonlinear_solution !
+199   _system\&.get_vector("_old_nonlinear_solution")\&.localize
+200     (*old_local_nonlinear_solution,
+201      _system\&.get_dof_map()\&.get_send_list());
+202 }
+.fi
+.SS "void libMesh::AdaptiveTimeSolver::advance_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method advances the solution to the next timestep, after a \fBsolve()\fP has been performed\&. Often this will be done after every \fBUnsteadySolver::solve()\fP, but adaptive mesh refinement and/or adaptive time step selection may require some \fBsolve()\fP steps to be repeated\&. 
+.PP
+Reimplemented from \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 86 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::UnsteadySolver::first_solve, libMesh::System::get_vector(), libMesh::AdaptiveTimeSolver::last_deltat, libMesh::System::solution, and libMesh::System::time\&.
+.PP
+.nf
+87 {
+88   NumericVector<Number> &old_nonlinear_soln =
+89     _system\&.get_vector("_old_nonlinear_solution");
+90   NumericVector<Number> &nonlinear_solution =
+91     *(_system\&.solution);
+92   //    _system\&.get_vector("_nonlinear_solution");
+93 
+94   old_nonlinear_soln = nonlinear_solution;
+95 
+96   if (!first_solve)
+97     _system\&.time += last_deltat;
+98 }
+.fi
+.SS "virtual void libMesh::TimeSolver::before_timestep ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method is for subclasses or users to override to do arbitrary processing between timesteps 
+.PP
+Definition at line 152 of file time_solver\&.h\&.
+.PP
+.nf
+152 {}
+.fi
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::calculate_norm (\fBSystem\fP &s, \fBNumericVector\fP< \fBNumber\fP > &v)\fC [protected]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+A helper function to calculate error norms 
+.PP
+Definition at line 138 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::System::calculate_norm(), and libMesh::AdaptiveTimeSolver::component_norm\&.
+.PP
+Referenced by solve()\&.
+.PP
+.nf
+140 {
+141   return s\&.calculate_norm(v, component_norm);
+142 }
+.fi
+.SS "\fBAutoPtr\fP< \fBDiffSolver\fP > & libMesh::AdaptiveTimeSolver::diff_solver ()\fC [virtual]\fP, \fC [inherited]\fP"
+An implicit linear or nonlinear solver to use at each timestep\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 131 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver\&.
+.PP
+.nf
+132 {
+133   return core_time_solver->diff_solver();
+134 }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "\fBReal\fP libMesh::UnsteadySolver::du (const \fBSystemNorm\fP &norm) const\fC [virtual]\fP, \fC [inherited]\fP"
+Computes the size of ||u^{n+1} - u^{n}|| in some norm\&.
+.PP
+Note that, while you can always call this function, its result may or may not be very meaningful\&. For example, if you call this function right after calling \fBadvance_timestep()\fP then you'll get a result of zero since old_nonlinear_solution is set equal to nonlinear_solution in this function\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 227 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::calculate_norm(), libMesh::System::get_vector(), and libMesh::System::solution\&.
+.PP
+.nf
+228 {
+229 
+230   AutoPtr<NumericVector<Number> > solution_copy =
+231     _system\&.solution->clone();
+232 
+233   solution_copy->add(-1\&., _system\&.get_vector("_old_nonlinear_solution"));
+234 
+235   solution_copy->close();
+236 
+237   return _system\&.calculate_norm(*solution_copy, norm);
+238 }
+.fi
+.SS "bool libMesh::AdaptiveTimeSolver::element_residual (boolget_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP, \fC [inherited]\fP"
+This method is passed on to the core_time_solver 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 111 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+113 {
+114   libmesh_assert(core_time_solver\&.get());
+115 
+116   return core_time_solver->element_residual(request_jacobian, context);
+117 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::error_order () const\fC [virtual]\fP, \fC [inherited]\fP"
+This method is passed on to the core_time_solver 
+.PP
+Implements \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 102 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+103 {
+104   libmesh_assert(core_time_solver\&.get());
+105 
+106   return core_time_solver->error_order();
+107 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::AdaptiveTimeSolver::init ()\fC [virtual]\fP, \fC [inherited]\fP"
+The initialization function\&. This method is used to initialize internal data structures before a simulation begins\&. 
+.PP
+Reimplemented from \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 57 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver, libMesh::libmesh_assert(), and libMesh::UnsteadySolver::old_local_nonlinear_solution\&.
+.PP
+.nf
+58 {
+59   libmesh_assert(core_time_solver\&.get());
+60 
+61   // We override this because our core_time_solver is the one that
+62   // needs to handle new vectors, diff_solver->init(), etc
+63   core_time_solver->init();
+64 
+65   // As an UnsteadySolver, we have an old_local_nonlinear_solution, but it
+66   // isn't pointing to the right place - fix it
+67   //
+68   // This leaves us with two AutoPtrs holding the same pointer - dangerous
+69   // for future use\&.  Replace with shared_ptr?
+70   old_local_nonlinear_solution =
+71     AutoPtr<NumericVector<Number> >(core_time_solver->old_local_nonlinear_solution\&.get());
+72 }
+.fi
+.SS "void libMesh::UnsteadySolver::init_data ()\fC [virtual]\fP, \fC [inherited]\fP"
+The data initialization function\&. This method is used to initialize internal data structures after the underlying \fBSystem\fP has been initialized 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 55 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::GHOSTED, libMesh::TimeSolver::init_data(), libMesh::System::n_dofs(), libMesh::System::n_local_dofs(), libMesh::UnsteadySolver::old_local_nonlinear_solution, and libMesh::SERIAL\&.
+.PP
+.nf
+56 {
+57   TimeSolver::init_data();
+58 
+59 #ifdef LIBMESH_ENABLE_GHOSTED
+60   old_local_nonlinear_solution->init (_system\&.n_dofs(), _system\&.n_local_dofs(),
+61                                       _system\&.get_dof_map()\&.get_send_list(), false,
+62                                       GHOSTED);
+63 #else
+64   old_local_nonlinear_solution->init (_system\&.n_dofs(), false, SERIAL);
+65 #endif
+66 }
+.fi
+.SS "bool libMesh::TimeSolver::is_adjoint () const\fC [inline]\fP, \fC [inherited]\fP"
+Accessor for querying whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 217 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_is_adjoint\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+218   { return _is_adjoint; }
+.fi
+.SS "virtual bool libMesh::UnsteadySolver::is_steady () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This is not a steady-state solver\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 149 of file unsteady_solver\&.h\&.
+.PP
+.nf
+149 { return false; }
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> >& libMesh::TimeSolver::linear_solver ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+An implicit linear solver to use for adjoint and sensitivity problems\&. 
+.PP
+Definition at line 172 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_linear_solver\&.
+.PP
+.nf
+172 { return _linear_solver; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBNumber\fP libMesh::UnsteadySolver::old_nonlinear_solution (const \fBdof_id_type\fPglobal_dof_number) const\fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the old nonlinear solution for the specified global DOF\&. 
+.RE
+.PP
+
+.PP
+Definition at line 216 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::n_dofs(), and libMesh::UnsteadySolver::old_local_nonlinear_solution\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+218 {
+219   libmesh_assert_less (global_dof_number, _system\&.get_dof_map()\&.n_dofs());
+220   libmesh_assert_less (global_dof_number, old_local_nonlinear_solution->size());
+221 
+222   return (*old_local_nonlinear_solution)(global_dof_number);
+223 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::AdaptiveTimeSolver::reinit ()\fC [virtual]\fP, \fC [inherited]\fP"
+The reinitialization function\&. This method is used to resize internal data vectors after a mesh change\&. 
+.PP
+Reimplemented from \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 76 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+77 {
+78   libmesh_assert(core_time_solver\&.get());
+79 
+80   // We override this because our core_time_solver is the one that
+81   // needs to handle new vectors, diff_solver->reinit(), etc
+82   core_time_solver->reinit();
+83 }
+.fi
+.SS "void libMesh::UnsteadySolver::retrieve_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method retrieves all the stored solutions at the current system\&.time 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 204 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::NumericVector< T >::localize(), libMesh::UnsteadySolver::old_local_nonlinear_solution, and libMesh::TimeSolver::solution_history\&.
+.PP
+.nf
+205 {
+206   // Retrieve all the stored vectors at the current time
+207   solution_history->retrieve();
+208 
+209   // Dont forget to localize the old_nonlinear_solution !
+210   _system\&.get_vector("_old_nonlinear_solution")\&.localize
+211     (*old_local_nonlinear_solution,
+212      _system\&.get_dof_map()\&.get_send_list());
+213 }
+.fi
+.SS "void libMesh::TimeSolver::set_is_adjoint (bool_is_adjoint_value)\fC [inline]\fP, \fC [inherited]\fP"
+Accessor for setting whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 224 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_is_adjoint\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::adjoint_solve(), libMesh::FEMSystem::postprocess(), and libMesh::DifferentiableSystem::solve()\&.
+.PP
+.nf
+225   { _is_adjoint = _is_adjoint_value; }
+.fi
+.SS "void libMesh::TimeSolver::set_solution_history (const \fBSolutionHistory\fP &_solution_history)\fC [inherited]\fP"
+A setter function users will employ if they need to do something other than save no solution history 
+.PP
+Definition at line 97 of file time_solver\&.C\&.
+.PP
+References libMesh::SolutionHistory::clone(), and libMesh::TimeSolver::solution_history\&.
+.PP
+.nf
+98 {
+99   solution_history = _solution_history\&.clone();
+100 }
+.fi
+.SS "bool libMesh::AdaptiveTimeSolver::side_residual (boolget_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP, \fC [inherited]\fP"
+This method is passed on to the core_time_solver 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 121 of file adaptive_time_solver\&.C\&.
+.PP
+References libMesh::AdaptiveTimeSolver::core_time_solver, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+123 {
+124   libmesh_assert(core_time_solver\&.get());
+125 
+126   return core_time_solver->side_residual(request_jacobian, context);
+127 }
+.fi
+.SS "void libMesh::TwostepTimeSolver::solve ()\fC [virtual]\fP"
+This method solves for the solution at the next timestep\&. Usually we will only need to solve one (non)linear system per timestep, but more complex subclasses may override this\&. 
+.PP
+Implements \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 45 of file twostep_time_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::AdaptiveTimeSolver::calculate_norm(), libMesh::NumericVector< T >::clone(), libMesh::AdaptiveTimeSolver::core_time_solver, libMesh::DifferentiableSystem::deltat, libMesh::UnsteadySolver::first_solve, libMesh::System::get_vector(), libMesh::AdaptiveTimeSolver::global_tolerance, libMesh::AdaptiveTimeSolver::last_deltat, libMesh::libmesh_assert(), std::max(), libMesh::AdaptiveTimeSolver::max_deltat, libMesh::AdaptiveTimeSolver::max_growth, libMesh::AdaptiveTimeSolver::min_deltat, libMesh::out, std::pow(), libMesh::TimeSolver::quiet, libMesh::Real, libMesh::TimeSolver::reduce_deltat_on_diffsolver_failure, libMesh::System::solution, libMesh::AdaptiveTimeSolver::target_tolerance, libMesh::System::time, and libMesh::AdaptiveTimeSolver::upper_tolerance\&.
+.PP
+.nf
+46 {
+47   libmesh_assert(core_time_solver\&.get());
+48 
+49   // The core_time_solver will handle any first_solve actions
+50   first_solve = false;
+51 
+52   // We may have to repeat timesteps entirely if our error is bad
+53   // enough
+54   bool max_tolerance_met = false;
+55 
+56   // Calculating error values each time
+57   Real single_norm(0\&.), double_norm(0\&.), error_norm(0\&.),
+58     relative_error(0\&.);
+59 
+60   while (!max_tolerance_met)
+61     {
+62       // If we've been asked to reduce deltat if necessary, make sure
+63       // the core timesolver does so
+64       core_time_solver->reduce_deltat_on_diffsolver_failure =
+65         this->reduce_deltat_on_diffsolver_failure;
+66 
+67       if (!quiet)
+68         {
+69           libMesh::out << "\n === Computing adaptive timestep === "
+70                        << std::endl;
+71         }
+72 
+73       // Use the double-length timestep first (so the
+74       // old_nonlinear_solution won't have to change)
+75       core_time_solver->solve();
+76 
+77       // Save a copy of the double-length nonlinear solution
+78       // and the old nonlinear solution
+79       AutoPtr<NumericVector<Number> > double_solution =
+80         _system\&.solution->clone();
+81       AutoPtr<NumericVector<Number> > old_solution =
+82         _system\&.get_vector("_old_nonlinear_solution")\&.clone();
+83 
+84       double_norm = calculate_norm(_system, *double_solution);
+85       if (!quiet)
+86         {
+87           libMesh::out << "Double norm = " << double_norm << std::endl;
+88         }
+89 
+90       // Then reset the initial guess for our single-length calcs
+91       *(_system\&.solution) = _system\&.get_vector("_old_nonlinear_solution");
+92 
+93       // Call two single-length timesteps
+94       // Be sure that the core_time_solver does not change the
+95       // timestep here\&.  (This is unlikely because it just succeeded
+96       // with a timestep twice as large!)
+97       // FIXME: even if diffsolver failure is unlikely, we ought to
+98       // do *something* if it happens
+99       core_time_solver->reduce_deltat_on_diffsolver_failure = 0;
+100 
+101       Real old_time = _system\&.time;
+102       Real old_deltat = _system\&.deltat;
+103       _system\&.deltat *= 0\&.5;
+104       core_time_solver->solve();
+105       core_time_solver->advance_timestep();
+106       core_time_solver->solve();
+107 
+108       single_norm = calculate_norm(_system, *_system\&.solution);
+109       if (!quiet)
+110         {
+111           libMesh::out << "Single norm = " << single_norm << std::endl;
+112         }
+113 
+114       // Reset the core_time_solver's reduce_deltat\&.\&.\&. value\&.
+115       core_time_solver->reduce_deltat_on_diffsolver_failure =
+116         this->reduce_deltat_on_diffsolver_failure;
+117 
+118       // But then back off just in case our advance_timestep() isn't
+119       // called\&.
+120       // FIXME: this probably doesn't work with multistep methods
+121       _system\&.get_vector("_old_nonlinear_solution") = *old_solution;
+122       _system\&.time = old_time;
+123       _system\&.deltat = old_deltat;
+124 
+125       // Find the relative error
+126       *double_solution -= *(_system\&.solution);
+127       error_norm  = calculate_norm(_system, *double_solution);
+128       relative_error = error_norm / _system\&.deltat /
+129         std::max(double_norm, single_norm);
+130 
+131       // If the relative error makes no sense, we're done
+132       if (!double_norm && !single_norm)
+133         return;
+134 
+135       if (!quiet)
+136         {
+137           libMesh::out << "Error norm = " << error_norm << std::endl;
+138           libMesh::out << "Local relative error = "
+139                        << (error_norm /
+140                            std::max(double_norm, single_norm))
+141                        << std::endl;
+142           libMesh::out << "Global relative error = "
+143                        << (error_norm / _system\&.deltat /
+144                            std::max(double_norm, single_norm))
+145                        << std::endl;
+146           libMesh::out << "old delta t = " << _system\&.deltat << std::endl;
+147         }
+148 
+149       // If our upper tolerance is negative, that means we want to set
+150       // it based on the first successful time step
+151       if (this->upper_tolerance < 0)
+152         this->upper_tolerance = -this->upper_tolerance * relative_error;
+153 
+154       // If we haven't met our upper error tolerance, we'll have to
+155       // repeat this timestep entirely
+156       if (this->upper_tolerance && relative_error > this->upper_tolerance)
+157         {
+158           // Reset the initial guess for our next try
+159           *(_system\&.solution) =
+160             _system\&.get_vector("_old_nonlinear_solution");
+161 
+162           // Chop delta t in half
+163           _system\&.deltat /= 2\&.;
+164 
+165           if (!quiet)
+166             {
+167               libMesh::out << "Failed to meet upper error tolerance"
+168                            << std::endl;
+169               libMesh::out << "Retrying with delta t = "
+170                            << _system\&.deltat << std::endl;
+171             }
+172         }
+173       else
+174         max_tolerance_met = true;
+175     }
+176 
+177 
+178   // Otherwise, compare the relative error to the tolerance
+179   // and adjust deltat
+180   last_deltat = _system\&.deltat;
+181 
+182   // If our target tolerance is negative, that means we want to set
+183   // it based on the first successful time step
+184   if (this->target_tolerance < 0)
+185     this->target_tolerance = -this->target_tolerance * relative_error;
+186 
+187   const Real global_shrink_or_growth_factor =
+188     std::pow(this->target_tolerance / relative_error,
+189              static_cast<Real>(1\&. / core_time_solver->error_order()));
+190 
+191   const Real local_shrink_or_growth_factor =
+192     std::pow(this->target_tolerance /
+193              (error_norm/std::max(double_norm, single_norm)),
+194              static_cast<Real>(1\&. / (core_time_solver->error_order()+1\&.)));
+195 
+196   if (!quiet)
+197     {
+198       libMesh::out << "The global growth/shrink factor is: "
+199                    << global_shrink_or_growth_factor << std::endl;
+200       libMesh::out << "The local growth/shrink factor is: "
+201                    << local_shrink_or_growth_factor << std::endl;
+202     }
+203 
+204   // The local s\&.o\&.g\&. factor is based on the expected **local**
+205   // truncation error for the timestepping method, the global
+206   // s\&.o\&.g\&. factor is based on the method's **global** truncation
+207   // error\&.  You can shrink/grow the timestep to attempt to satisfy
+208   // either a global or local time-discretization error tolerance\&.
+209 
+210   Real shrink_or_growth_factor =
+211     this->global_tolerance ? global_shrink_or_growth_factor :
+212     local_shrink_or_growth_factor;
+213 
+214   if (this->max_growth && this->max_growth < shrink_or_growth_factor)
+215     {
+216       if (!quiet && this->global_tolerance)
+217         {
+218           libMesh::out << "delta t is constrained by max_growth" << std::endl;
+219         }
+220       shrink_or_growth_factor = this->max_growth;
+221     }
+222 
+223   _system\&.deltat *= shrink_or_growth_factor;
+224 
+225   // Restrict deltat to max-allowable value if necessary
+226   if ((this->max_deltat != 0\&.0) && (_system\&.deltat > this->max_deltat))
+227     {
+228       if (!quiet)
+229         {
+230           libMesh::out << "delta t is constrained by maximum-allowable delta t\&."
+231                        << std::endl;
+232         }
+233       _system\&.deltat = this->max_deltat;
+234     }
+235 
+236   // Restrict deltat to min-allowable value if necessary
+237   if ((this->min_deltat != 0\&.0) && (_system\&.deltat < this->min_deltat))
+238     {
+239       if (!quiet)
+240         {
+241           libMesh::out << "delta t is constrained by minimum-allowable delta t\&."
+242                        << std::endl;
+243         }
+244       _system\&.deltat = this->min_deltat;
+245     }
+246 
+247   if (!quiet)
+248     {
+249       libMesh::out << "new delta t = " << _system\&.deltat << std::endl;
+250     }
+251 }
+.fi
+.SS "const \fBsys_type\fP& libMesh::TimeSolver::system () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 157 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_system\&.
+.PP
+Referenced by libMesh::TimeSolver::reinit(), and libMesh::TimeSolver::solve()\&.
+.PP
+.nf
+157 { return _system; }
+.fi
+.SS "\fBsys_type\fP& libMesh::TimeSolver::system ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 162 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_system\&.
+.PP
+.nf
+162 { return _system; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "\fBAutoPtr\fP<\fBDiffSolver\fP> libMesh::TimeSolver::_diff_solver\fC [protected]\fP, \fC [inherited]\fP"
+An implicit linear or nonlinear solver to use at each timestep\&. 
+.PP
+Definition at line 232 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TimeSolver::diff_solver(), libMesh::TimeSolver::init(), libMesh::TimeSolver::init_data(), libMesh::TimeSolver::reinit(), libMesh::UnsteadySolver::solve(), and libMesh::TimeSolver::solve()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> > libMesh::TimeSolver::_linear_solver\fC [protected]\fP, \fC [inherited]\fP"
+An implicit linear solver to use for adjoint problems\&. 
+.PP
+Definition at line 237 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TimeSolver::init(), libMesh::TimeSolver::init_data(), libMesh::TimeSolver::linear_solver(), and libMesh::TimeSolver::reinit()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBsys_type\fP& libMesh::TimeSolver::_system\fC [protected]\fP, \fC [inherited]\fP"
+A reference to the system we are solving\&. 
+.PP
+Definition at line 242 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::AdaptiveTimeSolver::advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::UnsteadySolver::du(), libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::SteadySolver::element_residual(), libMesh::EigenTimeSolver::element_residual(), libMesh::UnsteadySolver::init(), libMesh::TimeSolver::init(), libMesh::EigenTimeSolver::init(), libMesh::UnsteadySolver::init_data(), libMesh::TimeSolver::init_data(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::UnsteadySolver::reinit(), libMesh::TimeSolver::reinit(), libMesh::UnsteadySolver::retrieve_timestep(), libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), libMesh::SteadySolver::side_residual(), libMesh::EigenTimeSolver::side_residual(), solve(), libMesh::UnsteadySolver::solve(), libMesh::EigenTimeSolver::solve(), and libMesh::TimeSolver::system()\&.
+.SS "\fBSystemNorm\fP libMesh::AdaptiveTimeSolver::component_norm\fC [inherited]\fP"
+Error calculations are done in this norm, DISCRETE_L2 by default\&. 
+.PP
+Definition at line 109 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::calculate_norm()\&.
+.SS "std::vector<float> libMesh::AdaptiveTimeSolver::component_scale\fC [inherited]\fP"
+If component_norms is non-empty, each variable's contribution to the error of a system will also be scaled by component_scale[var], unless component_scale is empty in which case all variables will be weighted equally\&. 
+.PP
+Definition at line 117 of file adaptive_time_solver\&.h\&.
+.SS "\fBAutoPtr\fP<\fBUnsteadySolver\fP> libMesh::AdaptiveTimeSolver::core_time_solver\fC [inherited]\fP"
+This object is used to take timesteps 
+.PP
+Definition at line 104 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::diff_solver(), libMesh::AdaptiveTimeSolver::element_residual(), libMesh::AdaptiveTimeSolver::error_order(), libMesh::AdaptiveTimeSolver::init(), libMesh::AdaptiveTimeSolver::reinit(), libMesh::AdaptiveTimeSolver::side_residual(), solve(), and TwostepTimeSolver()\&.
+.SS "bool libMesh::UnsteadySolver::first_adjoint_step\fC [protected]\fP, \fC [inherited]\fP"
+A bool that will be true the first time \fBadjoint_advance_timestep()\fP is called, (when the primal solution is to be used to set adjoint boundary conditions) and false thereafter 
+.PP
+Definition at line 163 of file unsteady_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep()\&.
+.SS "bool libMesh::UnsteadySolver::first_solve\fC [protected]\fP, \fC [inherited]\fP"
+A bool that will be true the first time \fBsolve()\fP is called, and false thereafter 
+.PP
+Definition at line 157 of file unsteady_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), solve(), and libMesh::UnsteadySolver::solve()\&.
+.SS "bool libMesh::AdaptiveTimeSolver::global_tolerance\fC [inherited]\fP"
+This flag, which is true by default, grows (shrinks) the timestep based on the expected global accuracy of the timestepping scheme\&. Global in this sense means the cumulative final-time accuracy of the scheme\&. For example, the backward Euler scheme's truncation error is locally of order 2, so that after N timesteps of size deltat, the result is first-order accurate\&. If you set this to false, you can grow (shrink) your timestep based on the local accuracy rather than the global accuracy of the core \fBTimeSolver\fP\&. Note that by setting this value to false you may fail to achieve the predicted convergence in time of the underlying method, however it may be possible to get more fine-grained control over step sizes as well\&. 
+.PP
+Definition at line 187 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::last_deltat\fC [protected]\fP, \fC [inherited]\fP"
+We need to store the value of the last deltat used, so that \fBadvance_timestep()\fP will increment the system time correctly\&. 
+.PP
+Definition at line 196 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::advance_timestep(), and solve()\&.
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::max_deltat\fC [inherited]\fP"
+Do not allow the adaptive time solver to select deltat > max_deltat\&. If you use the default max_deltat=0\&.0, then deltat is unlimited\&. 
+.PP
+Definition at line 157 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::max_growth\fC [inherited]\fP"
+Do not allow the adaptive time solver to select a new deltat greater than max_growth times the old deltat\&. If you use the default max_growth=0\&.0, then the deltat growth is unlimited\&. 
+.PP
+Definition at line 171 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::min_deltat\fC [inherited]\fP"
+Do not allow the adaptive time solver to select deltat < min_deltat\&. The default value is 0\&.0\&. 
+.PP
+Definition at line 163 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBAutoPtr\fP<\fBNumericVector\fP<\fBNumber\fP> > libMesh::UnsteadySolver::old_local_nonlinear_solution\fC [inherited]\fP"
+Serial vector of _system\&.get_vector('_old_nonlinear_solution') 
+.PP
+Definition at line 133 of file unsteady_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::AdaptiveTimeSolver(), libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::AdaptiveTimeSolver::init(), libMesh::UnsteadySolver::init_data(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::UnsteadySolver::reinit(), libMesh::UnsteadySolver::retrieve_timestep(), and libMesh::AdaptiveTimeSolver::~AdaptiveTimeSolver()\&.
+.SS "bool libMesh::TimeSolver::quiet\fC [inherited]\fP"
+Print extra debugging information if quiet == false\&. 
+.PP
+Definition at line 177 of file time_solver\&.h\&.
+.PP
+Referenced by solve(), libMesh::UnsteadySolver::solve(), and libMesh::EigenTimeSolver::solve()\&.
+.SS "unsigned int libMesh::TimeSolver::reduce_deltat_on_diffsolver_failure\fC [inherited]\fP"
+This value (which defaults to zero) is the number of times the \fBTimeSolver\fP is allowed to halve deltat and let the \fBDiffSolver\fP repeat the latest failed solve with a reduced timestep\&. Note that this has no effect for SteadySolvers\&. Note that you must set at least one of the \fBDiffSolver\fP flags 'continue_after_max_iterations' or 'continue_after_backtrack_failure' to allow the \fBTimeSolver\fP to retry the solve\&. 
+.PP
+Definition at line 205 of file time_solver\&.h\&.
+.PP
+Referenced by solve(), and libMesh::UnsteadySolver::solve()\&.
+.SS "\fBAutoPtr\fP<\fBSolutionHistory\fP> libMesh::TimeSolver::solution_history\fC [protected]\fP, \fC [inherited]\fP"
+An \fBAutoPtr\fP to a \fBSolutionHistory\fP object\&. Default is \fBNoSolutionHistory\fP, which the user can override by declaring a different kind of \fBSolutionHistory\fP in the application 
+.PP
+Definition at line 260 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::UnsteadySolver::retrieve_timestep(), and libMesh::TimeSolver::set_solution_history()\&.
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::target_tolerance\fC [inherited]\fP"
+This tolerance is the target relative error between an exact time integration and a single time step output, scaled by deltat\&. integrator, scaled by deltat\&. If the estimated error exceeds or undershoots the target error tolerance, future timesteps will be run with deltat shrunk or grown to compensate\&.
+.PP
+The default value is 1\&.0e-2; obviously users should select their own tolerance\&.
+.PP
+If a \fInegative\fP target_tolerance is specified, then its absolute value is used to scale the estimated error from the first simulation time step, and this becomes the target tolerance of all future time steps\&. 
+.PP
+Definition at line 134 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+.SS "\fBReal\fP libMesh::AdaptiveTimeSolver::upper_tolerance\fC [inherited]\fP"
+This tolerance is the maximum relative error between an exact time integration and a single time step output, scaled by deltat\&. If this error tolerance is exceeded by the estimated error of the current time step, that time step will be repeated with a smaller deltat\&.
+.PP
+If you use the default upper_tolerance=0\&.0, then the current time step will not be repeated regardless of estimated error\&.
+.PP
+If a \fInegative\fP upper_tolerance is specified, then its absolute value is used to scale the estimated error from the first simulation time step, and this becomes the upper tolerance of all future time steps\&. 
+.PP
+Definition at line 151 of file adaptive_time_solver\&.h\&.
+.PP
+Referenced by solve()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

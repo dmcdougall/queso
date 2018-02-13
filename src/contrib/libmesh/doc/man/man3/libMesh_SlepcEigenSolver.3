@@ -1,0 +1,1416 @@
+.TH "libMesh::SlepcEigenSolver< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SlepcEigenSolver< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <slepc_eigen_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::EigenSolver< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSlepcEigenSolver\fP (const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "\fB~SlepcEigenSolver\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fBsolve_standard\fP (\fBSparseMatrix\fP< T > &matrix_A, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fBsolve_standard\fP (\fBShellMatrix\fP< T > &shell_matrix, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fBsolve_generalized\fP (\fBSparseMatrix\fP< T > &matrix_A, \fBSparseMatrix\fP< T > &matrix_B, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fBsolve_generalized\fP (\fBShellMatrix\fP< T > &matrix_A, \fBSparseMatrix\fP< T > &matrix_B, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fBsolve_generalized\fP (\fBSparseMatrix\fP< T > &matrix_A, \fBShellMatrix\fP< T > &matrix_B, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fBsolve_generalized\fP (\fBShellMatrix\fP< T > &matrix_A, \fBShellMatrix\fP< T > &matrix_B, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< \fBReal\fP, \fBReal\fP > \fBget_eigenpair\fP (unsigned int i, \fBNumericVector\fP< T > &solution_in)"
+.br
+.ti -1c
+.RI "std::pair< \fBReal\fP, \fBReal\fP > \fBget_eigenvalue\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_relative_error\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "void \fBattach_deflation_space\fP (\fBNumericVector\fP< T > &deflation_vector)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "\fBEigenSolverType\fP \fBeigen_solver_type\fP () const "
+.br
+.ti -1c
+.RI "\fBEigenProblemType\fP \fBeigen_problem_type\fP () const "
+.br
+.ti -1c
+.RI "\fBPositionOfSpectrum\fP \fBposition_of_spectrum\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_eigensolver_type\fP (const \fBEigenSolverType\fP est)"
+.br
+.ti -1c
+.RI "void \fBset_eigenproblem_type\fP (\fBEigenProblemType\fP ept)"
+.br
+.ti -1c
+.RI "void \fBset_position_of_spectrum\fP (\fBPositionOfSpectrum\fP pos)"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBEigenSolver\fP< T > > \fBbuild\fP (const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD, const \fBSolverPackage\fP solver_package=\fBSLEPC_SOLVERS\fP)"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBEigenSolverType\fP \fB_eigen_solver_type\fP"
+.br
+.ti -1c
+.RI "\fBEigenProblemType\fP \fB_eigen_problem_type\fP"
+.br
+.ti -1c
+.RI "\fBPositionOfSpectrum\fP \fB_position_of_spectrum\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fB_solve_standard_helper\fP (Mat mat, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, 
+.br
+unsigned int > \fB_solve_generalized_helper\fP (Mat mat_A, Mat mat_B, int nev, int ncv, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "void \fBset_slepc_solver_type\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_slepc_problem_type\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_slepc_position_of_spectrum\fP ()"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fB_petsc_shell_matrix_mult\fP (Mat mat, Vec arg, Vec dest)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fB_petsc_shell_matrix_get_diagonal\fP (Mat mat, Vec dest)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "EPS \fB_eps\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::SlepcEigenSolver< T >"
+This class provides an interface to the SLEPc eigenvalue solver library \fCwww\&.grycap\&.upv\&.es/slepc/\fP\&. 
+.PP
+Definition at line 51 of file slepc_eigen_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::SlepcEigenSolver\fP< T >::\fBSlepcEigenSolver\fP (const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)\fC [inline]\fP"
+Constructor\&. Initializes Petsc data structures 
+.PP
+Definition at line 263 of file slepc_eigen_solver\&.h\&.
+.PP
+References libMesh::EigenSolver< T >::_eigen_problem_type, libMesh::EigenSolver< T >::_eigen_solver_type, libMesh::ARNOLDI, and libMesh::NHEP\&.
+.PP
+.nf
+263                                                                        :
+264   EigenSolver<T>(comm)
+265 {
+266   this->_eigen_solver_type  = ARNOLDI;
+267   this->_eigen_problem_type = NHEP;
+268 }
+.fi
+.SS "template<typename T > \fBlibMesh::SlepcEigenSolver\fP< T >::~\fBSlepcEigenSolver\fP ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 274 of file slepc_eigen_solver\&.h\&.
+.PP
+.nf
+275 {
+276   this->clear ();
+277 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > \fBPetscErrorCode\fP \fBlibMesh::SlepcEigenSolver\fP< T >::_petsc_shell_matrix_get_diagonal (Matmat, Vecdest)\fC [static]\fP, \fC [private]\fP"
+Internal function if shell matrix mode is used, this just calls the shell matrix's get_diagonal function\&. Required in order to use Jacobi preconditioning\&. 
+.PP
+Definition at line 778 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::CHKERRABORT(), libMesh::ParallelObject::comm(), libMesh::comm, libMesh::ShellMatrix< T >::get_diagonal(), libMesh::ierr, and libMesh::PetscObjectGetComm()\&.
+.PP
+.nf
+779 {
+780   /* Get the matrix context\&.  */
+781   PetscErrorCode ierr=0;
+782   void* ctx;
+783   ierr = MatShellGetContext(mat,&ctx);
+784 
+785   Parallel::communicator comm;
+786   PetscObjectGetComm((PetscObject)mat,&comm);
+787   CHKERRABORT(comm,ierr);
+788 
+789   /* Get user shell matrix object\&.  */
+790   const ShellMatrix<T>& shell_matrix = *static_cast<const ShellMatrix<T>*>(ctx);
+791 
+792   /* Make \p NumericVector instances around the vector\&.  */
+793   PetscVector<T> dest_global(dest, shell_matrix\&.comm());
+794 
+795   /* Call the user function\&.  */
+796   shell_matrix\&.get_diagonal(dest_global);
+797 
+798   return ierr;
+799 }
+.fi
+.SS "template<typename T > \fBPetscErrorCode\fP \fBlibMesh::SlepcEigenSolver\fP< T >::_petsc_shell_matrix_mult (Matmat, Vecarg, Vecdest)\fC [static]\fP, \fC [private]\fP"
+Internal function if shell matrix mode is used, this just calls the shell matrix's matrix multiplication function\&. See \fBPetscLinearSolver\fP for a similar implementation\&. 
+.PP
+Definition at line 753 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::CHKERRABORT(), libMesh::ParallelObject::comm(), libMesh::comm, libMesh::ierr, libMesh::PetscObjectGetComm(), and libMesh::ShellMatrix< T >::vector_mult()\&.
+.PP
+.nf
+754 {
+755   /* Get the matrix context\&.  */
+756   PetscErrorCode ierr=0;
+757   void* ctx;
+758   ierr = MatShellGetContext(mat,&ctx);
+759 
+760   Parallel::communicator comm;
+761   PetscObjectGetComm((PetscObject)mat,&comm);
+762   CHKERRABORT(comm,ierr);
+763 
+764   /* Get user shell matrix object\&.  */
+765   const ShellMatrix<T>& shell_matrix = *static_cast<const ShellMatrix<T>*>(ctx);
+766 
+767   /* Make \p NumericVector instances around the vectors\&.  */
+768   PetscVector<T> arg_global(arg,   shell_matrix\&.comm());
+769   PetscVector<T> dest_global(dest, shell_matrix\&.comm());
+770 
+771   /* Call the user function\&.  */
+772   shell_matrix\&.vector_mult(dest_global,arg_global);
+773 
+774   return ierr;
+775 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::_solve_generalized_helper (Matmat_A, Matmat_B, intnev, intncv, const doubletol, const unsigned intm_its)\fC [private]\fP"
+Helper function that actually performs the generalized eigensolve\&. 
+.PP
+Definition at line 448 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::comm, libMesh::ierr, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+454 {
+455   START_LOG("solve_generalized()", "SlepcEigenSolver");
+456 
+457   PetscErrorCode ierr=0;
+458 
+459   // converged eigen pairs and number of iterations
+460   PetscInt nconv=0;
+461   PetscInt its=0;
+462 
+463 #ifdef  DEBUG
+464   // The relative error\&.
+465   PetscReal error, re, im;
+466 
+467   // Pointer to vectors of the real parts, imaginary parts\&.
+468   PetscScalar kr, ki;
+469 #endif
+470 
+471   // Set operators\&.
+472   ierr = EPSSetOperators (_eps, mat_A, mat_B);
+473   LIBMESH_CHKERRABORT(ierr);
+474 
+475   //set the problem type and the position of the spectrum
+476   set_slepc_problem_type();
+477   set_slepc_position_of_spectrum();
+478 
+479   // Set eigenvalues to be computed\&.
+480 #if SLEPC_VERSION_LESS_THAN(3,0,0)
+481   ierr = EPSSetDimensions (_eps, nev, ncv);
+482 #else
+483   ierr = EPSSetDimensions (_eps, nev, ncv, PETSC_DECIDE);
+484 #endif
+485   LIBMESH_CHKERRABORT(ierr);
+486 
+487 
+488   // Set the tolerance and maximum iterations\&.
+489   ierr = EPSSetTolerances (_eps, tol, m_its);
+490   LIBMESH_CHKERRABORT(ierr);
+491 
+492   // Set runtime options, e\&.g\&.,
+493   //      -eps_type <type>, -eps_nev <nev>, -eps_ncv <ncv>
+494   // Similar to PETSc, these options will override those specified
+495   // above as long as EPSSetFromOptions() is called _after_ any
+496   // other customization routines\&.
+497   ierr = EPSSetFromOptions (_eps);
+498   LIBMESH_CHKERRABORT(ierr);
+499 
+500   // Solve the eigenproblem\&.
+501   ierr = EPSSolve (_eps);
+502   LIBMESH_CHKERRABORT(ierr);
+503 
+504   // Get the number of iterations\&.
+505   ierr = EPSGetIterationNumber (_eps, &its);
+506   LIBMESH_CHKERRABORT(ierr);
+507 
+508   // Get number of converged eigenpairs\&.
+509   ierr = EPSGetConverged(_eps,&nconv);
+510   LIBMESH_CHKERRABORT(ierr);
+511 
+512 
+513 #ifdef DEBUG
+514   // ierr = PetscPrintf(this->comm()\&.get(),
+515   //         "\n Number of iterations: %d\n"
+516   //         " Number of converged eigenpairs: %d\n\n", its, nconv);
+517 
+518   // Display eigenvalues and relative errors\&.
+519   ierr = PetscPrintf(this->comm()\&.get(),
+520                      "           k           ||Ax-kx||/|kx|\n"
+521                      "   ----------------- -----------------\n" );
+522   LIBMESH_CHKERRABORT(ierr);
+523 
+524   for(PetscInt i=0; i<nconv; i++ )
+525     {
+526       ierr = EPSGetEigenpair(_eps, i, &kr, &ki, PETSC_NULL, PETSC_NULL);
+527       LIBMESH_CHKERRABORT(ierr);
+528 
+529       ierr = EPSComputeRelativeError(_eps, i, &error);
+530       LIBMESH_CHKERRABORT(ierr);
+531 
+532 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+533       re = PetscRealPart(kr);
+534       im = PetscImaginaryPart(kr);
+535 #else
+536       re = kr;
+537       im = ki;
+538 #endif
+539 
+540       if (im != \&.0)
+541         {
+542           ierr = PetscPrintf(this->comm()\&.get()," %9f%+9f i %12f\n", re, im, error);
+543           LIBMESH_CHKERRABORT(ierr);
+544         }
+545       else
+546         {
+547           ierr = PetscPrintf(this->comm()\&.get(),"   %12f       %12f\n", re, error);
+548           LIBMESH_CHKERRABORT(ierr);
+549         }
+550     }
+551 
+552   ierr = PetscPrintf(this->comm()\&.get(),"\n" );
+553   LIBMESH_CHKERRABORT(ierr);
+554 #endif // DEBUG
+555 
+556   STOP_LOG("solve_generalized()", "SlepcEigenSolver");
+557 
+558   // return the number of converged eigenpairs
+559   // and the number of iterations
+560   return std::make_pair(nconv, its);
+561 
+562 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::_solve_standard_helper (Matmat, intnev, intncv, const doubletol, const unsigned intm_its)\fC [private]\fP"
+Helper function that actually performs the standard eigensolve\&. 
+.PP
+Definition at line 167 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::comm, libMesh::ierr, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+172 {
+173   START_LOG("solve_standard()", "SlepcEigenSolver");
+174 
+175   PetscErrorCode ierr=0;
+176 
+177   // converged eigen pairs and number of iterations
+178   PetscInt nconv=0;
+179   PetscInt its=0;
+180 
+181 #ifdef  DEBUG
+182   // The relative error\&.
+183   PetscReal error, re, im;
+184 
+185   // Pointer to vectors of the real parts, imaginary parts\&.
+186   PetscScalar kr, ki;
+187 #endif
+188 
+189   // Set operators\&.
+190   ierr = EPSSetOperators (_eps, mat, PETSC_NULL);
+191   LIBMESH_CHKERRABORT(ierr);
+192 
+193   //set the problem type and the position of the spectrum
+194   set_slepc_problem_type();
+195   set_slepc_position_of_spectrum();
+196 
+197   // Set eigenvalues to be computed\&.
+198 #if SLEPC_VERSION_LESS_THAN(3,0,0)
+199   ierr = EPSSetDimensions (_eps, nev, ncv);
+200 #else
+201   ierr = EPSSetDimensions (_eps, nev, ncv, PETSC_DECIDE);
+202 #endif
+203   LIBMESH_CHKERRABORT(ierr);
+204   // Set the tolerance and maximum iterations\&.
+205   ierr = EPSSetTolerances (_eps, tol, m_its);
+206   LIBMESH_CHKERRABORT(ierr);
+207 
+208   // Set runtime options, e\&.g\&.,
+209   //      -eps_type <type>, -eps_nev <nev>, -eps_ncv <ncv>
+210   // Similar to PETSc, these options will override those specified
+211   // above as long as EPSSetFromOptions() is called _after_ any
+212   // other customization routines\&.
+213   ierr = EPSSetFromOptions (_eps);
+214   LIBMESH_CHKERRABORT(ierr);
+215 
+216   // Solve the eigenproblem\&.
+217   ierr = EPSSolve (_eps);
+218   LIBMESH_CHKERRABORT(ierr);
+219 
+220   // Get the number of iterations\&.
+221   ierr = EPSGetIterationNumber (_eps, &its);
+222   LIBMESH_CHKERRABORT(ierr);
+223 
+224   // Get number of converged eigenpairs\&.
+225   ierr = EPSGetConverged(_eps,&nconv);
+226   LIBMESH_CHKERRABORT(ierr);
+227 
+228 
+229 #ifdef DEBUG
+230   // ierr = PetscPrintf(this->comm()\&.get(),
+231   //         "\n Number of iterations: %d\n"
+232   //         " Number of converged eigenpairs: %d\n\n", its, nconv);
+233 
+234   // Display eigenvalues and relative errors\&.
+235   ierr = PetscPrintf(this->comm()\&.get(),
+236                      "           k           ||Ax-kx||/|kx|\n"
+237                      "   ----------------- -----------------\n" );
+238   LIBMESH_CHKERRABORT(ierr);
+239 
+240   for(PetscInt i=0; i<nconv; i++ )
+241     {
+242       ierr = EPSGetEigenpair(_eps, i, &kr, &ki, PETSC_NULL, PETSC_NULL);
+243       LIBMESH_CHKERRABORT(ierr);
+244 
+245       ierr = EPSComputeRelativeError(_eps, i, &error);
+246       LIBMESH_CHKERRABORT(ierr);
+247 
+248 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+249       re = PetscRealPart(kr);
+250       im = PetscImaginaryPart(kr);
+251 #else
+252       re = kr;
+253       im = ki;
+254 #endif
+255 
+256       if (im != \&.0)
+257         {
+258           ierr = PetscPrintf(this->comm()\&.get()," %9f%+9f i %12f\n", re, im, error);
+259           LIBMESH_CHKERRABORT(ierr);
+260         }
+261       else
+262         {
+263           ierr = PetscPrintf(this->comm()\&.get(),"   %12f       %12f\n", re, error);
+264           LIBMESH_CHKERRABORT(ierr);
+265         }
+266     }
+267 
+268   ierr = PetscPrintf(this->comm()\&.get(),"\n" );
+269   LIBMESH_CHKERRABORT(ierr);
+270 #endif // DEBUG
+271 
+272 
+273   STOP_LOG("solve_standard()", "SlepcEigenSolver");
+274 
+275   // return the number of converged eigenpairs
+276   // and the number of iterations
+277   return std::make_pair(nconv, its);
+278 
+279 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SlepcEigenSolver\fP< T >::attach_deflation_space (\fBNumericVector\fP< T > &deflation_vector)\fC [virtual]\fP"
+Attach a deflation space defined by a single vector\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 737 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::ierr, and libMesh::TriangleWrapper::init()\&.
+.PP
+.nf
+738 {
+739   this->init();
+740 
+741   PetscErrorCode ierr = 0;
+742   Vec deflation_vector = (libmesh_cast_ptr<PetscVector<T>*>(&deflation_vector_in))->vec();
+743   Vec* deflation_space = &deflation_vector;
+744 #if SLEPC_VERSION_LESS_THAN(3,1,0)
+745   ierr = EPSAttachDeflationSpace(_eps, 1, deflation_space, PETSC_FALSE);
+746 #else
+747   ierr = EPSSetDeflationSpace(_eps, 1, deflation_space);
+748 #endif
+749   LIBMESH_CHKERRABORT(ierr);
+750 }
+.fi
+.SS "template<typename T> \fBAutoPtr\fP< \fBEigenSolver\fP< T > > \fBlibMesh::EigenSolver\fP< T >::build (const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD, const \fBSolverPackage\fPsolver_package = \fC\fBSLEPC_SOLVERS\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds an \fC\fBEigenSolver\fP\fP using the linear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 37 of file eigen_solver\&.C\&.
+.PP
+References libMesh::err, and libMesh::SLEPC_SOLVERS\&.
+.PP
+.nf
+39 {
+40   // Build the appropriate solver
+41   switch (solver_package)
+42     {
+43 
+44 
+45 
+46 #ifdef LIBMESH_HAVE_SLEPC
+47     case SLEPC_SOLVERS:
+48       {
+49         AutoPtr<EigenSolver<T> > ap(new SlepcEigenSolver<T>(comm));
+50         return ap;
+51       }
+52 #endif
+53 
+54 
+55     default:
+56       libMesh::err << "ERROR:  Unrecognized eigen solver package: "
+57                    << solver_package
+58                    << std::endl;
+59       libmesh_error();
+60     }
+61 
+62   AutoPtr<EigenSolver<T> > ap(NULL);
+63   return ap;
+64 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SlepcEigenSolver\fP< T >::clear ()\fC [virtual]\fP"
+Release all memory and clear data structures\&. 
+.PP
+Reimplemented from \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 52 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::ARNOLDI, libMesh::ierr, libMesh::initialized(), and libMesh::KRYLOVSCHUR\&.
+.PP
+.nf
+53 {
+54   if (this->initialized())
+55     {
+56       this->_is_initialized = false;
+57 
+58       PetscErrorCode ierr=0;
+59 
+60       ierr = LibMeshEPSDestroy(&_eps);
+61       LIBMESH_CHKERRABORT(ierr);
+62 
+63       // SLEPc default eigenproblem solver
+64 #if SLEPC_VERSION_LESS_THAN(2,3,2)
+65       this->_eigen_solver_type = ARNOLDI;
+66 #else
+67       // Krylov-Schur showed up as of Slepc 2\&.3\&.2
+68       this->_eigen_solver_type = KRYLOVSCHUR;
+69 #endif
+70     }
+71 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "template<typename T> \fBEigenProblemType\fP \fBlibMesh::EigenSolver\fP< T >::eigen_problem_type () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the type of the eigen problem\&. 
+.PP
+Definition at line 103 of file eigen_solver\&.h\&.
+.PP
+.nf
+103 { return _eigen_problem_type;}
+.fi
+.SS "template<typename T> \fBEigenSolverType\fP \fBlibMesh::EigenSolver\fP< T >::eigen_solver_type () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the type of eigensolver to use\&. 
+.PP
+Definition at line 98 of file eigen_solver\&.h\&.
+.PP
+.nf
+98 { return _eigen_solver_type; }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T > std::pair< \fBReal\fP, \fBReal\fP > \fBlibMesh::SlepcEigenSolver\fP< T >::get_eigenpair (unsigned inti, \fBNumericVector\fP< T > &solution_in)\fC [virtual]\fP"
+This function returns the real and imaginary part of the ith eigenvalue and copies the respective eigenvector to the solution vector\&. Note that also in case of purely real matrix entries the eigenpair may be complex values\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 668 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::PetscVector< T >::close(), libMesh::ierr, and libMesh::PetscVector< T >::vec()\&.
+.PP
+.nf
+670 {
+671   PetscErrorCode ierr=0;
+672 
+673   PetscReal re, im;
+674 
+675   // Make sure the NumericVector passed in is really a PetscVector
+676   PetscVector<T>* solution = libmesh_cast_ptr<PetscVector<T>*>(&solution_in);
+677 
+678   // real and imaginary part of the ith eigenvalue\&.
+679   PetscScalar kr, ki;
+680 
+681   solution->close();
+682 
+683   ierr = EPSGetEigenpair(_eps, i, &kr, &ki, solution->vec(), PETSC_NULL);
+684   LIBMESH_CHKERRABORT(ierr);
+685 
+686 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+687   re = PetscRealPart(kr);
+688   im = PetscImaginaryPart(kr);
+689 #else
+690   re = kr;
+691   im = ki;
+692 #endif
+693 
+694   return std::make_pair(re, im);
+695 }
+.fi
+.SS "template<typename T > std::pair< \fBReal\fP, \fBReal\fP > \fBlibMesh::SlepcEigenSolver\fP< T >::get_eigenvalue (unsigned inti)\fC [virtual]\fP"
+Same as above, but does not copy the eigenvector\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 699 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::ierr\&.
+.PP
+.nf
+700 {
+701   PetscErrorCode ierr=0;
+702 
+703   PetscReal re, im;
+704 
+705   // real and imaginary part of the ith eigenvalue\&.
+706   PetscScalar kr, ki;
+707 
+708   ierr = EPSGetEigenvalue(_eps, i, &kr, &ki);
+709   LIBMESH_CHKERRABORT(ierr);
+710 
+711 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+712   re = PetscRealPart(kr);
+713   im = PetscImaginaryPart(kr);
+714 #else
+715   re = kr;
+716   im = ki;
+717 #endif
+718 
+719   return std::make_pair(re, im);
+720 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::SlepcEigenSolver\fP< T >::get_relative_error (unsigned inti)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the relative error ||A*x-lambda*x||/|lambda*x| of the ith eigenpair\&. (or the equivalent for a general eigenvalue problem) 
+.RE
+.PP
+
+.PP
+Definition at line 724 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::ierr\&.
+.PP
+.nf
+725 {
+726   PetscErrorCode ierr=0;
+727   PetscReal error;
+728 
+729   ierr = EPSComputeRelativeError(_eps, i, &error);
+730   LIBMESH_CHKERRABORT(ierr);
+731 
+732   return error;
+733 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SlepcEigenSolver\fP< T >::init ()\fC [virtual]\fP"
+Initialize data structures if not done so already\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 76 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::comm, libMesh::ierr, and libMesh::initialized()\&.
+.PP
+.nf
+77 {
+78 
+79   PetscErrorCode ierr=0;
+80 
+81   // Initialize the data structures if not done so already\&.
+82   if (!this->initialized())
+83     {
+84       this->_is_initialized = true;
+85 
+86       // Create the eigenproblem solver context
+87       ierr = EPSCreate (this->comm()\&.get(), &_eps);
+88       LIBMESH_CHKERRABORT(ierr);
+89 
+90       // Set user-specified  solver
+91       set_slepc_solver_type();
+92     }
+93 }
+.fi
+.SS "template<typename T> bool \fBlibMesh::EigenSolver\fP< T >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the data structures are initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 82 of file eigen_solver\&.h\&.
+.PP
+.nf
+82 { return _is_initialized; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T> \fBPositionOfSpectrum\fP \fBlibMesh::EigenSolver\fP< T >::position_of_spectrum () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the position of the spectrum to compute\&. 
+.PP
+Definition at line 108 of file eigen_solver\&.h\&.
+.PP
+.nf
+109   { return _position_of_spectrum;}
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T> void \fBlibMesh::EigenSolver\fP< T >::set_eigenproblem_type (\fBEigenProblemType\fPept)\fC [inline]\fP, \fC [inherited]\fP"
+Sets the type of the eigenproblem\&. 
+.PP
+Definition at line 120 of file eigen_solver\&.h\&.
+.PP
+.nf
+121   {_eigen_problem_type = ept;}
+.fi
+.SS "template<typename T> void \fBlibMesh::EigenSolver\fP< T >::set_eigensolver_type (const \fBEigenSolverType\fPest)\fC [inline]\fP, \fC [inherited]\fP"
+Sets the type of eigensolver to use\&. 
+.PP
+Definition at line 114 of file eigen_solver\&.h\&.
+.PP
+.nf
+115   { _eigen_solver_type = est; }
+.fi
+.SS "template<typename T> void \fBlibMesh::EigenSolver\fP< T >::set_position_of_spectrum (\fBPositionOfSpectrum\fPpos)\fC [inline]\fP, \fC [inherited]\fP"
+Sets the position of the spectrum\&. 
+.PP
+Definition at line 126 of file eigen_solver\&.h\&.
+.PP
+.nf
+127   {_position_of_spectrum= pos;}
+.fi
+.SS "template<typename T > void \fBlibMesh::SlepcEigenSolver\fP< T >::set_slepc_position_of_spectrum ()\fC [private]\fP"
+Tells Slepc to compute the spectrum at the position stored in \fC_position_of_spectrum\fP 
+.PP
+Definition at line 635 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::err, libMesh::ierr, libMesh::LARGEST_IMAGINARY, libMesh::LARGEST_MAGNITUDE, libMesh::LARGEST_REAL, libMesh::SMALLEST_IMAGINARY, libMesh::SMALLEST_MAGNITUDE, and libMesh::SMALLEST_REAL\&.
+.PP
+.nf
+636 {
+637   PetscErrorCode ierr = 0;
+638 
+639   switch (this->_position_of_spectrum)
+640     {
+641     case LARGEST_MAGNITUDE:
+642       ierr = EPSSetWhichEigenpairs (_eps, EPS_LARGEST_MAGNITUDE);  LIBMESH_CHKERRABORT(ierr); return;
+643     case SMALLEST_MAGNITUDE:
+644       ierr = EPSSetWhichEigenpairs (_eps, EPS_SMALLEST_MAGNITUDE); LIBMESH_CHKERRABORT(ierr); return;
+645     case LARGEST_REAL:
+646       ierr = EPSSetWhichEigenpairs (_eps, EPS_LARGEST_REAL);       LIBMESH_CHKERRABORT(ierr); return;
+647     case SMALLEST_REAL:
+648       ierr = EPSSetWhichEigenpairs (_eps, EPS_SMALLEST_REAL);      LIBMESH_CHKERRABORT(ierr); return;
+649     case LARGEST_IMAGINARY:
+650       ierr = EPSSetWhichEigenpairs (_eps, EPS_LARGEST_IMAGINARY);  LIBMESH_CHKERRABORT(ierr); return;
+651     case SMALLEST_IMAGINARY:
+652       ierr = EPSSetWhichEigenpairs (_eps, EPS_SMALLEST_IMAGINARY); LIBMESH_CHKERRABORT(ierr); return;
+653 
+654 
+655     default:
+656       libMesh::err << "ERROR:  Unsupported SLEPc position of spectrum: "
+657                    << this->_position_of_spectrum        << std::endl;
+658       libmesh_error();
+659     }
+660 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SlepcEigenSolver\fP< T >::set_slepc_problem_type ()\fC [private]\fP"
+Tells Slepc to deal with the type of problem stored in \fC_eigen_problem_type\fP 
+.PP
+Definition at line 610 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::err, libMesh::GHEP, libMesh::GNHEP, libMesh::HEP, libMesh::ierr, and libMesh::NHEP\&.
+.PP
+.nf
+611 {
+612   PetscErrorCode ierr = 0;
+613 
+614   switch (this->_eigen_problem_type)
+615     {
+616     case NHEP:
+617       ierr = EPSSetProblemType (_eps, EPS_NHEP);  LIBMESH_CHKERRABORT(ierr); return;
+618     case GNHEP:
+619       ierr = EPSSetProblemType (_eps, EPS_GNHEP); LIBMESH_CHKERRABORT(ierr); return;
+620     case HEP:
+621       ierr = EPSSetProblemType (_eps, EPS_HEP);   LIBMESH_CHKERRABORT(ierr); return;
+622     case GHEP:
+623       ierr = EPSSetProblemType (_eps, EPS_GHEP);  LIBMESH_CHKERRABORT(ierr); return;
+624 
+625     default:
+626       libMesh::err << "ERROR:  Unsupported SLEPc Eigen Problem: "
+627                    << this->_eigen_problem_type        << std::endl
+628                    << "Continuing with SLEPc defaults" << std::endl;
+629     }
+630 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SlepcEigenSolver\fP< T >::set_slepc_solver_type ()\fC [private]\fP"
+Tells Slepc to use the user-specified solver stored in \fC_eigen_solver_type\fP 
+.PP
+Definition at line 575 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::ARNOLDI, libMesh::Utility::enum_to_string(), libMesh::err, libMesh::ierr, libMesh::KRYLOVSCHUR, libMesh::LANCZOS, libMesh::LAPACK, libMesh::POWER, and libMesh::SUBSPACE\&.
+.PP
+.nf
+576 {
+577   PetscErrorCode ierr = 0;
+578 
+579   switch (this->_eigen_solver_type)
+580     {
+581     case POWER:
+582       ierr = EPSSetType (_eps, (char*) EPSPOWER);    LIBMESH_CHKERRABORT(ierr); return;
+583     case SUBSPACE:
+584       ierr = EPSSetType (_eps, (char*) EPSSUBSPACE); LIBMESH_CHKERRABORT(ierr); return;
+585     case LAPACK:
+586       ierr = EPSSetType (_eps, (char*) EPSLAPACK);   LIBMESH_CHKERRABORT(ierr); return;
+587     case ARNOLDI:
+588       ierr = EPSSetType (_eps, (char*) EPSARNOLDI);  LIBMESH_CHKERRABORT(ierr); return;
+589     case LANCZOS:
+590       ierr = EPSSetType (_eps, (char*) EPSLANCZOS);  LIBMESH_CHKERRABORT(ierr); return;
+591 #if !SLEPC_VERSION_LESS_THAN(2,3,2)
+592       // EPSKRYLOVSCHUR added in 2\&.3\&.2
+593     case KRYLOVSCHUR:
+594       ierr = EPSSetType (_eps, (char*) EPSKRYLOVSCHUR);  LIBMESH_CHKERRABORT(ierr); return;
+595 #endif
+596       // case ARPACK:
+597       // ierr = EPSSetType (_eps, (char*) EPSARPACK);   LIBMESH_CHKERRABORT(ierr); return;
+598 
+599     default:
+600       libMesh::err << "ERROR:  Unsupported SLEPc Eigen Solver: "
+601                    << Utility::enum_to_string(this->_eigen_solver_type) << std::endl
+602                    << "Continuing with SLEPc defaults" << std::endl;
+603     }
+604 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::solve_generalized (\fBSparseMatrix\fP< T > &matrix_A, \fBSparseMatrix\fP< T > &matrix_B, intnev, intncv, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This function calls the SLEPc solver to compute the eigenpairs for the generalized eigenproblem defined by the matrix_A and matrix_B, which are of type \fBSparseMatrix\fP\&. The argument \fCnev\fP is the number of eigenpairs to be computed and \fCncv\fP is the number of basis vectors to be used in the solution procedure\&. Return values are the number of converged eigen values and the number of the iterations carried out by the eigen solver\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 287 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::TriangleWrapper::init(), and libMesh::PetscMatrix< T >::mat()\&.
+.PP
+.nf
+293 {
+294   this->init ();
+295 
+296   // Make sure the data passed in are really of Petsc types
+297   PetscMatrix<T>* matrix_A   = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_A_in);
+298   PetscMatrix<T>* matrix_B   = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_B_in);
+299 
+300   // Close the matrix and vectors in case this wasn't already done\&.
+301   matrix_A->close ();
+302   matrix_B->close ();
+303 
+304 
+305   return _solve_generalized_helper (matrix_A->mat(), matrix_B->mat(), nev, ncv, tol, m_its);
+306 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::solve_generalized (\fBShellMatrix\fP< T > &matrix_A, \fBSparseMatrix\fP< T > &matrix_B, intnev, intncv, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Solve generalized eigenproblem when matrix_A is of type \fBShellMatrix\fP, matrix_B is of type \fBSparseMatrix\fP\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 310 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::ShellMatrix< T >::m(), libMesh::PetscMatrix< T >::mat(), and libMesh::ShellMatrix< T >::n()\&.
+.PP
+.nf
+316 {
+317   this->init ();
+318 
+319   PetscErrorCode ierr=0;
+320 
+321   // Prepare the matrix\&.
+322   Mat mat_A;
+323   ierr = MatCreateShell(this->comm()\&.get(),
+324                         shell_matrix_A\&.m(), // Specify the number of local rows
+325                         shell_matrix_A\&.n(), // Specify the number of local columns
+326                         PETSC_DETERMINE,
+327                         PETSC_DETERMINE,
+328                         const_cast<void*>(static_cast<const void*>(&shell_matrix_A)),
+329                         &mat_A);
+330   LIBMESH_CHKERRABORT(ierr);
+331 
+332   PetscMatrix<T>* matrix_B   = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_B_in);
+333 
+334   // Close the matrix and vectors in case this wasn't already done\&.
+335   matrix_B->close ();
+336 
+337   /* Note that the const_cast above is only necessary because PETSc
+338      does not accept a const void*\&.  Inside the member function
+339      _petsc_shell_matrix() below, the pointer is casted back to a
+340      const ShellMatrix<T>*\&.  */
+341 
+342   ierr = MatShellSetOperation(mat_A,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+343   LIBMESH_CHKERRABORT(ierr);
+344   ierr = MatShellSetOperation(mat_A,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+345   LIBMESH_CHKERRABORT(ierr);
+346 
+347   return _solve_generalized_helper (mat_A, matrix_B->mat(), nev, ncv, tol, m_its);
+348 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::solve_generalized (\fBSparseMatrix\fP< T > &matrix_A, \fBShellMatrix\fP< T > &matrix_B, intnev, intncv, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Solve generalized eigenproblem when matrix_A is of type \fBSparseMatrix\fP, matrix_B is of type \fBShellMatrix\fP\&. When using this function, one should use the command line options: -st_ksp_type gmres -st_pc_type none or -st_ksp_type gmres -st_pc_type jacobi or similar\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 352 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::ShellMatrix< T >::m(), libMesh::PetscMatrix< T >::mat(), and libMesh::ShellMatrix< T >::n()\&.
+.PP
+.nf
+358 {
+359   this->init ();
+360 
+361   PetscErrorCode ierr=0;
+362 
+363   PetscMatrix<T>* matrix_A = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_A_in);
+364 
+365   // Close the matrix and vectors in case this wasn't already done\&.
+366   matrix_A->close ();
+367 
+368   // Prepare the matrix\&.
+369   Mat mat_B;
+370   ierr = MatCreateShell(this->comm()\&.get(),
+371                         shell_matrix_B\&.m(), // Specify the number of local rows
+372                         shell_matrix_B\&.n(), // Specify the number of local columns
+373                         PETSC_DETERMINE,
+374                         PETSC_DETERMINE,
+375                         const_cast<void*>(static_cast<const void*>(&shell_matrix_B)),
+376                         &mat_B);
+377   LIBMESH_CHKERRABORT(ierr);
+378 
+379   /* Note that the const_cast above is only necessary because PETSc
+380      does not accept a const void*\&.  Inside the member function
+381      _petsc_shell_matrix() below, the pointer is casted back to a
+382      const ShellMatrix<T>*\&.  */
+383 
+384   ierr = MatShellSetOperation(mat_B,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+385   LIBMESH_CHKERRABORT(ierr);
+386   ierr = MatShellSetOperation(mat_B,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+387   LIBMESH_CHKERRABORT(ierr);
+388 
+389   return _solve_generalized_helper (matrix_A->mat(), mat_B, nev, ncv, tol, m_its);
+390 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::solve_generalized (\fBShellMatrix\fP< T > &matrix_A, \fBShellMatrix\fP< T > &matrix_B, intnev, intncv, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Solve generalized eigenproblem when both matrix_A and matrix_B are of type \fBShellMatrix\fP\&. When using this function, one should use the command line options: -st_ksp_type gmres -st_pc_type none or -st_ksp_type gmres -st_pc_type jacobi or similar\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 394 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::ShellMatrix< T >::m(), and libMesh::ShellMatrix< T >::n()\&.
+.PP
+.nf
+400 {
+401   this->init ();
+402 
+403   PetscErrorCode ierr=0;
+404 
+405   // Prepare the matrix\&.
+406   Mat mat_A;
+407   ierr = MatCreateShell(this->comm()\&.get(),
+408                         shell_matrix_A\&.m(), // Specify the number of local rows
+409                         shell_matrix_A\&.n(), // Specify the number of local columns
+410                         PETSC_DETERMINE,
+411                         PETSC_DETERMINE,
+412                         const_cast<void*>(static_cast<const void*>(&shell_matrix_A)),
+413                         &mat_A);
+414   LIBMESH_CHKERRABORT(ierr);
+415 
+416   Mat mat_B;
+417   ierr = MatCreateShell(this->comm()\&.get(),
+418                         shell_matrix_B\&.m(), // Specify the number of local rows
+419                         shell_matrix_B\&.n(), // Specify the number of local columns
+420                         PETSC_DETERMINE,
+421                         PETSC_DETERMINE,
+422                         const_cast<void*>(static_cast<const void*>(&shell_matrix_B)),
+423                         &mat_B);
+424   LIBMESH_CHKERRABORT(ierr);
+425 
+426   /* Note that the const_cast above is only necessary because PETSc
+427      does not accept a const void*\&.  Inside the member function
+428      _petsc_shell_matrix() below, the pointer is casted back to a
+429      const ShellMatrix<T>*\&.  */
+430 
+431   ierr = MatShellSetOperation(mat_A,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+432   LIBMESH_CHKERRABORT(ierr);
+433   ierr = MatShellSetOperation(mat_A,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+434   LIBMESH_CHKERRABORT(ierr);
+435 
+436   ierr = MatShellSetOperation(mat_B,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+437   LIBMESH_CHKERRABORT(ierr);
+438   ierr = MatShellSetOperation(mat_B,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+439   LIBMESH_CHKERRABORT(ierr);
+440 
+441   return _solve_generalized_helper (mat_A, mat_B, nev, ncv, tol, m_its);
+442 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::solve_standard (\fBSparseMatrix\fP< T > &matrix_A, intnev, intncv, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This function calls the SLEPc solver to compute the eigenpairs of the \fBSparseMatrix\fP matrix_A\&. \fCnev\fP is the number of eigenpairs to be computed and \fCncv\fP is the number of basis vectors to be used in the solution procedure\&. Return values are the number of converged eigen values and the number of the iterations carried out by the eigen solver\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 99 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::TriangleWrapper::init(), and libMesh::PetscMatrix< T >::mat()\&.
+.PP
+.nf
+104 {
+105   //   START_LOG("solve_standard()", "SlepcEigenSolver");
+106 
+107   this->init ();
+108 
+109   // Make sure the SparseMatrix passed in is really a PetscMatrix
+110   PetscMatrix<T>* matrix_A   = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_A_in);
+111 
+112   // Close the matrix and vectors in case this wasn't already done\&.
+113   matrix_A->close ();
+114 
+115   // just for debugging, remove this
+116   //   char mat_file[] = "matA\&.petsc";
+117   //   PetscViewer petsc_viewer;
+118   //   ierr = PetscViewerBinaryOpen(this->comm()\&.get(), mat_file, PETSC_FILE_CREATE, &petsc_viewer);
+119   //          LIBMESH_CHKERRABORT(ierr);
+120   //   ierr = MatView(matrix_A->mat(),petsc_viewer);
+121   //          LIBMESH_CHKERRABORT(ierr);
+122 
+123   return _solve_standard_helper(matrix_A->mat(), nev, ncv, tol, m_its);
+124 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, unsigned int > \fBlibMesh::SlepcEigenSolver\fP< T >::solve_standard (\fBShellMatrix\fP< T > &shell_matrix, intnev, intncv, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Same as above except that matrix_A is a \fBShellMatrix\fP in this case\&. 
+.PP
+Implements \fBlibMesh::EigenSolver< T >\fP\&.
+.PP
+Definition at line 129 of file slepc_eigen_solver\&.C\&.
+.PP
+References libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::ShellMatrix< T >::m(), and libMesh::ShellMatrix< T >::n()\&.
+.PP
+.nf
+134 {
+135   this->init ();
+136 
+137   PetscErrorCode ierr=0;
+138 
+139   // Prepare the matrix\&.
+140   Mat mat;
+141   ierr = MatCreateShell(this->comm()\&.get(),
+142                         shell_matrix\&.m(), // Specify the number of local rows
+143                         shell_matrix\&.n(), // Specify the number of local columns
+144                         PETSC_DETERMINE,
+145                         PETSC_DETERMINE,
+146                         const_cast<void*>(static_cast<const void*>(&shell_matrix)),
+147                         &mat);
+148   LIBMESH_CHKERRABORT(ierr);
+149 
+150   /* Note that the const_cast above is only necessary because PETSc
+151      does not accept a const void*\&.  Inside the member function
+152      _petsc_shell_matrix() below, the pointer is casted back to a
+153      const ShellMatrix<T>*\&.  */
+154 
+155   ierr = MatShellSetOperation(mat,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+156   LIBMESH_CHKERRABORT(ierr);
+157   ierr = MatShellSetOperation(mat,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+158   LIBMESH_CHKERRABORT(ierr);
+159 
+160 
+161   return _solve_standard_helper(mat, nev, ncv, tol, m_its);
+162 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "template<typename T> \fBEigenProblemType\fP \fBlibMesh::EigenSolver\fP< T >::_eigen_problem_type\fC [protected]\fP, \fC [inherited]\fP"
+Enum stating which type of eigen problem we deal with\&. 
+.PP
+Definition at line 227 of file eigen_solver\&.h\&.
+.PP
+Referenced by libMesh::EigenSolver< Number >::eigen_problem_type(), libMesh::EigenSolver< Number >::set_eigenproblem_type(), and libMesh::SlepcEigenSolver< T >::SlepcEigenSolver()\&.
+.SS "template<typename T> \fBEigenSolverType\fP \fBlibMesh::EigenSolver\fP< T >::_eigen_solver_type\fC [protected]\fP, \fC [inherited]\fP"
+Enum stating which type of eigensolver to use\&. 
+.PP
+Definition at line 222 of file eigen_solver\&.h\&.
+.PP
+Referenced by libMesh::EigenSolver< Number >::eigen_solver_type(), libMesh::EigenSolver< Number >::set_eigensolver_type(), and libMesh::SlepcEigenSolver< T >::SlepcEigenSolver()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T > EPS \fBlibMesh::SlepcEigenSolver\fP< T >::_eps\fC [private]\fP"
+Eigenproblem solver context 
+.PP
+Definition at line 255 of file slepc_eigen_solver\&.h\&.
+.SS "template<typename T> bool \fBlibMesh::EigenSolver\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating if the data structures have been initialized\&. 
+.PP
+Definition at line 237 of file eigen_solver\&.h\&.
+.PP
+Referenced by libMesh::EigenSolver< Number >::initialized()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T> \fBPositionOfSpectrum\fP \fBlibMesh::EigenSolver\fP< T >::_position_of_spectrum\fC [protected]\fP, \fC [inherited]\fP"
+Enum stating where to evaluate the spectrum\&. 
+.PP
+Definition at line 232 of file eigen_solver\&.h\&.
+.PP
+Referenced by libMesh::EigenSolver< Number >::position_of_spectrum(), and libMesh::EigenSolver< Number >::set_position_of_spectrum()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

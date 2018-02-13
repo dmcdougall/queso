@@ -1,0 +1,135 @@
+.TH "libMesh::Parallel::StandardType< TypeTensor< T > >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::StandardType< TypeTensor< T > > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel_algebra\&.h>\fP
+.PP
+Inherits \fBlibMesh::Parallel::DataType\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStandardType\fP (const \fBTypeTensor\fP< T > *example=NULL)"
+.br
+.ti -1c
+.RI "\fB~StandardType\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator const data_type &\fP () const "
+.br
+.ti -1c
+.RI "\fBoperator data_type &\fP ()"
+.br
+.ti -1c
+.RI "void \fBcommit\fP ()"
+.br
+.ti -1c
+.RI "void \fBfree\fP ()"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBdata_type\fP \fB_datatype\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::Parallel::StandardType< TypeTensor< T > >"
+
+.PP
+Definition at line 298 of file parallel_algebra\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::Parallel::StandardType\fP< \fBTypeTensor\fP< T > >::\fBStandardType\fP (const \fBTypeTensor\fP< T > *example = \fCNULL\fP)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 302 of file parallel_algebra\&.h\&.
+.PP
+.nf
+302                                                   :
+303     DataType(StandardType<T>(example ?  &((*example)(0,0)) : NULL), LIBMESH_DIM*LIBMESH_DIM) {}
+.fi
+.SS "template<typename T > \fBlibMesh::Parallel::StandardType\fP< \fBTypeTensor\fP< T > >::~\fBStandardType\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 305 of file parallel_algebra\&.h\&.
+.PP
+References libMesh::Parallel::DataType::free()\&.
+.PP
+.nf
+305 { this->free(); }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Parallel::DataType::commit ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 277 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+Referenced by libMesh::Parallel::DataType::DataType()\&.
+.PP
+.nf
+278   {
+279 #ifdef LIBMESH_HAVE_MPI
+280     MPI_Type_commit (&_datatype);
+281 #endif
+282   }
+.fi
+.SS "void libMesh::Parallel::DataType::free ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 284 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+Referenced by libMesh::Parallel::StandardType< std::pair< T1, T2 > >::~StandardType(), libMesh::Parallel::StandardType< std::complex< T > >::~StandardType(), ~StandardType(), and libMesh::Parallel::StandardType< TensorValue< T > >::~StandardType()\&.
+.PP
+.nf
+285   {
+286 #ifdef LIBMESH_HAVE_MPI
+287     MPI_Type_free (&_datatype);
+288 #endif
+289   }
+.fi
+.SS "libMesh::Parallel::DataType::operator const \fBdata_type\fP & () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 265 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+.nf
+266   { return _datatype; }
+.fi
+.SS "libMesh::Parallel::DataType::operator \fBdata_type\fP & ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 268 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::DataType::_datatype\&.
+.PP
+.nf
+269   { return _datatype; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdata_type\fP libMesh::Parallel::DataType::_datatype\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 293 of file parallel\&.h\&.
+.PP
+Referenced by libMesh::Parallel::DataType::commit(), libMesh::Parallel::DataType::DataType(), libMesh::Parallel::DataType::free(), libMesh::Parallel::DataType::operator const data_type &(), libMesh::Parallel::DataType::operator data_type &(), libMesh::Parallel::DataType::operator=(), libMesh::Parallel::StandardType< Hilbert::HilbertIndices >::StandardType(), libMesh::Parallel::StandardType< TypeVector< T > >::StandardType(), libMesh::Parallel::StandardType< std::pair< T1, T2 > >::StandardType(), libMesh::Parallel::StandardType< VectorValue< T > >::StandardType(), and libMesh::Parallel::StandardType< Point >::StandardType()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

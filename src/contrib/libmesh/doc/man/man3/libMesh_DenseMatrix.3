@@ -1,0 +1,2755 @@
+.TH "libMesh::DenseMatrix< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DenseMatrix< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dense_matrix\&.h>\fP
+.PP
+Inherits \fBlibMesh::DenseMatrixBase< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDenseMatrix\fP (const unsigned int new_m=0, const unsigned int new_n=0)"
+.br
+.ti -1c
+.RI "virtual \fB~DenseMatrix\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBzero\fP ()"
+.br
+.ti -1c
+.RI "T \fBoperator()\fP (const unsigned int i, const unsigned int j) const "
+.br
+.ti -1c
+.RI "T & \fBoperator()\fP (const unsigned int i, const unsigned int j)"
+.br
+.ti -1c
+.RI "virtual T \fBel\fP (const unsigned int i, const unsigned int j) const "
+.br
+.ti -1c
+.RI "virtual T & \fBel\fP (const unsigned int i, const unsigned int j)"
+.br
+.ti -1c
+.RI "virtual void \fBleft_multiply\fP (const \fBDenseMatrixBase\fP< T > &M2)"
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBleft_multiply\fP (const \fBDenseMatrixBase\fP< T2 > &M2)"
+.br
+.ti -1c
+.RI "virtual void \fBright_multiply\fP (const \fBDenseMatrixBase\fP< T > &M2)"
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBright_multiply\fP (const \fBDenseMatrixBase\fP< T2 > &M2)"
+.br
+.ti -1c
+.RI "void \fBvector_mult\fP (\fBDenseVector\fP< T > &dest, const \fBDenseVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBvector_mult\fP (\fBDenseVector\fP< typename \fBCompareTypes\fP< T, T2 >::supertype > &dest, const \fBDenseVector\fP< T2 > &arg) const "
+.br
+.ti -1c
+.RI "void \fBvector_mult_transpose\fP (\fBDenseVector\fP< T > &dest, const \fBDenseVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBvector_mult_transpose\fP (\fBDenseVector\fP< typename \fBCompareTypes\fP< T, T2 >::supertype > &dest, const \fBDenseVector\fP< T2 > &arg) const "
+.br
+.ti -1c
+.RI "void \fBvector_mult_add\fP (\fBDenseVector\fP< T > &dest, const T factor, const \fBDenseVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "template<typename T2 , typename T3 > void \fBvector_mult_add\fP (\fBDenseVector\fP< typename \fBCompareTypes\fP< T, typename \fBCompareTypes\fP< T2, T3 >::supertype >::supertype > &dest, const T2 factor, const \fBDenseVector\fP< T3 > &arg) const "
+.br
+.ti -1c
+.RI "void \fBget_principal_submatrix\fP (unsigned int sub_m, unsigned int sub_n, \fBDenseMatrix\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "void \fBget_principal_submatrix\fP (unsigned int sub_m, \fBDenseMatrix\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< T > & \fBoperator=\fP (const \fBDenseMatrix\fP< T > &other_matrix)"
+.br
+.ti -1c
+.RI "template<typename T2 > \fBDenseMatrix\fP< T > & \fBoperator=\fP (const \fBDenseMatrix\fP< T2 > &other_matrix)"
+.br
+.ti -1c
+.RI "void \fBswap\fP (\fBDenseMatrix\fP< T > &other_matrix)"
+.br
+.ti -1c
+.RI "void \fBresize\fP (const unsigned int new_m, const unsigned int new_n)"
+.br
+.ti -1c
+.RI "void \fBscale\fP (const T factor)"
+.br
+.ti -1c
+.RI "void \fBscale_column\fP (const unsigned int col, const T factor)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< T > & \fBoperator*=\fP (const T factor)"
+.br
+.ti -1c
+.RI "template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP
+.br
+< \fBScalarTraits\fP< T2 >::value, 
+.br
+void >::type \fBadd\fP (const T2 factor, const \fBDenseMatrix\fP< T3 > &mat)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBDenseMatrix\fP< T > &mat) const "
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBDenseMatrix\fP< T > &mat) const "
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< T > & \fBoperator+=\fP (const \fBDenseMatrix\fP< T > &mat)"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< T > & \fBoperator-=\fP (const \fBDenseMatrix\fP< T > &mat)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmin\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBmax\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl1_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBlinfty_norm\fP () const "
+.br
+.ti -1c
+.RI "void \fBleft_multiply_transpose\fP (const \fBDenseMatrix\fP< T > &\fBA\fP)"
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBleft_multiply_transpose\fP (const \fBDenseMatrix\fP< T2 > &\fBA\fP)"
+.br
+.ti -1c
+.RI "void \fBright_multiply_transpose\fP (const \fBDenseMatrix\fP< T > &\fBA\fP)"
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBright_multiply_transpose\fP (const \fBDenseMatrix\fP< T2 > &\fBA\fP)"
+.br
+.ti -1c
+.RI "T \fBtranspose\fP (const unsigned int i, const unsigned int j) const "
+.br
+.ti -1c
+.RI "void \fBget_transpose\fP (\fBDenseMatrix\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "std::vector< T > & \fBget_values\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< T > & \fBget_values\fP () const "
+.br
+.ti -1c
+.RI "void \fBcondense\fP (const unsigned int i, const unsigned int j, const T val, \fBDenseVector\fP< T > &rhs)"
+.br
+.ti -1c
+.RI "void \fBlu_solve\fP (const \fBDenseVector\fP< T > &b, \fBDenseVector\fP< T > &\fBx\fP)"
+.br
+.ti -1c
+.RI "template<typename T2 > void \fBcholesky_solve\fP (const \fBDenseVector\fP< T2 > &b, \fBDenseVector\fP< T2 > &\fBx\fP)"
+.br
+.ti -1c
+.RI "void \fBsvd\fP (\fBDenseVector\fP< T > &sigma)"
+.br
+.ti -1c
+.RI "void \fBsvd\fP (\fBDenseVector\fP< T > &sigma, \fBDenseMatrix\fP< T > &U, \fBDenseMatrix\fP< T > &VT)"
+.br
+.ti -1c
+.RI "T \fBdet\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBm\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "void \fBprint_scientific\fP (std::ostream &os) const "
+.br
+.ti -1c
+.RI "template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP
+.br
+< \fBScalarTraits\fP< T2 >::value, 
+.br
+void >::type \fBadd\fP (const T2 factor, const \fBDenseMatrixBase\fP< T3 > &mat)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBuse_blas_lapack\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBmultiply\fP (\fBDenseMatrixBase\fP< T > &M1, const \fBDenseMatrixBase\fP< T > &M2, const \fBDenseMatrixBase\fP< T > &M3)"
+.br
+.ti -1c
+.RI "void \fBcondense\fP (const unsigned int i, const unsigned int j, const T val, \fBDenseVectorBase\fP< T > &rhs)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fB_m\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_n\fP"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBDecompositionType\fP { \fBLU\fP =0, \fBCHOLESKY\fP =1, \fBLU_BLAS_LAPACK\fP, \fBNONE\fP }"
+.br
+.ti -1c
+.RI "enum \fB_BLAS_Multiply_Flag\fP { \fBLEFT_MULTIPLY\fP = 0, \fBRIGHT_MULTIPLY\fP, \fBLEFT_MULTIPLY_TRANSPOSE\fP, \fBRIGHT_MULTIPLY_TRANSPOSE\fP }"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB_lu_decompose\fP ()"
+.br
+.ti -1c
+.RI "void \fB_lu_back_substitute\fP (const \fBDenseVector\fP< T > &b, \fBDenseVector\fP< T > &\fBx\fP) const "
+.br
+.ti -1c
+.RI "void \fB_cholesky_decompose\fP ()"
+.br
+.ti -1c
+.RI "template<typename T2 > void \fB_cholesky_back_substitute\fP (const \fBDenseVector\fP< T2 > &b, \fBDenseVector\fP< T2 > &\fBx\fP) const "
+.br
+.ti -1c
+.RI "void \fB_multiply_blas\fP (const \fBDenseMatrixBase\fP< T > &other, \fB_BLAS_Multiply_Flag\fP flag)"
+.br
+.ti -1c
+.RI "void \fB_lu_decompose_lapack\fP ()"
+.br
+.ti -1c
+.RI "void \fB_svd_lapack\fP (\fBDenseVector\fP< T > &sigma)"
+.br
+.ti -1c
+.RI "void \fB_svd_lapack\fP (\fBDenseVector\fP< T > &sigma, \fBDenseMatrix\fP< T > &U, \fBDenseMatrix\fP< T > &VT)"
+.br
+.ti -1c
+.RI "void \fB_svd_helper\fP (char JOBU, char JOBVT, std::vector< T > &sigma_val, std::vector< T > &U_val, std::vector< T > &VT_val)"
+.br
+.ti -1c
+.RI "void \fB_lu_back_substitute_lapack\fP (const \fBDenseVector\fP< T > &b, \fBDenseVector\fP< T > &\fBx\fP)"
+.br
+.ti -1c
+.RI "void \fB_matvec_blas\fP (T alpha, T beta, \fBDenseVector\fP< T > &dest, const \fBDenseVector\fP< T > &arg, bool trans=false) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< T > \fB_val\fP"
+.br
+.ti -1c
+.RI "\fBDecompositionType\fP \fB_decomposition_type\fP"
+.br
+.ti -1c
+.RI "std::vector< int > \fB_pivots\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::DenseMatrix< T >"
+Defines a dense matrix for use in Finite Element-type computations\&. Useful for storing element stiffness matrices before summation into a global matrix\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002 
+.RE
+.PP
+
+.PP
+Definition at line 51 of file dense_matrix\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<typename T> enum \fBlibMesh::DenseMatrix::_BLAS_Multiply_Flag\fP\fC [private]\fP"
+Enumeration used to determine the behavior of the _multiply_blas function\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fILEFT_MULTIPLY \fP\fP
+.TP
+\fB\fIRIGHT_MULTIPLY \fP\fP
+.TP
+\fB\fILEFT_MULTIPLY_TRANSPOSE \fP\fP
+.TP
+\fB\fIRIGHT_MULTIPLY_TRANSPOSE \fP\fP
+.PP
+Definition at line 491 of file dense_matrix\&.h\&.
+.PP
+.nf
+491                            {
+492     LEFT_MULTIPLY = 0,
+493     RIGHT_MULTIPLY,
+494     LEFT_MULTIPLY_TRANSPOSE,
+495     RIGHT_MULTIPLY_TRANSPOSE
+496   };
+.fi
+.SS "template<typename T> enum \fBlibMesh::DenseMatrix::DecompositionType\fP\fC [private]\fP"
+The decomposition schemes above change the entries of the matrix A\&. It is therefore an error to call A\&.lu_solve() and subsequently call A\&.cholesky_solve() since the result will probably not match any desired outcome\&. This typedef keeps track of which decomposition has been called for this matrix\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fILU \fP\fP
+.TP
+\fB\fICHOLESKY \fP\fP
+.TP
+\fB\fILU_BLAS_LAPACK \fP\fP
+.TP
+\fB\fINONE \fP\fP
+.PP
+Definition at line 479 of file dense_matrix\&.h\&.
+.PP
+.nf
+479 {LU=0, CHOLESKY=1, LU_BLAS_LAPACK, NONE};
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::DenseMatrix\fP< T >::\fBDenseMatrix\fP (const unsigned intnew_m = \fC0\fP, const unsigned intnew_n = \fC0\fP)\fC [inline]\fP"
+Constructor\&. Creates a dense matrix of dimension \fCm\fP by \fCn\fP\&. 
+.PP
+Definition at line 624 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::resize()\&.
+.PP
+.nf
+626   : DenseMatrixBase<T>(new_m,new_n),
+627 #if defined(LIBMESH_HAVE_PETSC) && defined(LIBMESH_USE_REAL_NUMBERS) && defined(LIBMESH_DEFAULT_DOUBLE_PRECISION)
+628     use_blas_lapack(true),
+629 #else
+630     use_blas_lapack(false),
+631 #endif
+632     _val(),
+633     _decomposition_type(NONE),
+634     _pivots()
+635 {
+636   this->resize(new_m,new_n);
+637 }
+.fi
+.SS "template<typename T> virtual \fBlibMesh::DenseMatrix\fP< T >::~\fBDenseMatrix\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Copy-constructor\&. Destructor\&. Empty\&. 
+.PP
+Definition at line 69 of file dense_matrix\&.h\&.
+.PP
+.nf
+69 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > template<typename T2 > template void \fBlibMesh::DenseMatrix\fP< T >::_cholesky_back_substitute (const \fBDenseVector\fP< T2 > &b, \fBDenseVector\fP< T2 > &x) const\fC [private]\fP"
+Solves the equation Ax=b for the unknown value x and rhs b based on the Cholesky factorization of A\&. Note that this method may be used when A is real-valued and b and x are complex-valued\&. 
+.PP
+Definition at line 962 of file dense_matrix\&.C\&.
+.PP
+References A, libMesh::DenseVector< T >::resize(), and libMesh::x\&.
+.PP
+.nf
+964 {
+965   // Shorthand notation for number of rows and columns\&.
+966   const unsigned int
+967     n_rows = this->m(),
+968     n_cols = this->n();
+969 
+970   // Just to be really sure\&.\&.\&.
+971   libmesh_assert_equal_to (n_rows, n_cols);
+972 
+973   // A convenient reference to *this
+974   const DenseMatrix<T>& A = *this;
+975 
+976   // Now compute the solution to Ax =b using the factorization\&.
+977   x\&.resize(n_rows);
+978 
+979   // Solve for Ly=b
+980   for (unsigned int i=0; i<n_cols; ++i)
+981     {
+982       T2 temp = b(i);
+983 
+984       for (unsigned int k=0; k<i; ++k)
+985         temp -= A(i,k)*x(k);
+986 
+987       x(i) = temp / A(i,i);
+988     }
+989 
+990   // Solve for L^T x = y
+991   for (unsigned int i=0; i<n_cols; ++i)
+992     {
+993       const unsigned int ib = (n_cols-1)-i;
+994 
+995       for (unsigned int k=(ib+1); k<n_cols; ++k)
+996         x(ib) -= A(k,ib) * x(k);
+997 
+998       x(ib) /= A(ib,ib);
+999     }
+1000 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrix\fP< T >::_cholesky_decompose ()\fC [private]\fP"
+Decomposes a symmetric positive definite matrix into a product of two lower triangular matrices according to A = LL^T\&. Note that this program generates an error if the matrix is not SPD\&. 
+.PP
+Definition at line 911 of file dense_matrix\&.C\&.
+.PP
+References A, and libMesh::err\&.
+.PP
+.nf
+912 {
+913   // If we called this function, there better not be any
+914   // previous decomposition of the matrix\&.
+915   libmesh_assert_equal_to (this->_decomposition_type, NONE);
+916 
+917   // Shorthand notation for number of rows and columns\&.
+918   const unsigned int
+919     n_rows = this->m(),
+920     n_cols = this->n();
+921 
+922   // Just to be really sure\&.\&.\&.
+923   libmesh_assert_equal_to (n_rows, n_cols);
+924 
+925   // A convenient reference to *this
+926   DenseMatrix<T>& A = *this;
+927 
+928   for (unsigned int i=0; i<n_rows; ++i)
+929     {
+930       for (unsigned int j=i; j<n_cols; ++j)
+931         {
+932           for (unsigned int k=0; k<i; ++k)
+933             A(i,j) -= A(i,k) * A(j,k);
+934 
+935           if (i == j)
+936             {
+937 #ifndef LIBMESH_USE_COMPLEX_NUMBERS
+938               if (A(i,j) <= 0\&.0)
+939                 {
+940                   libMesh::err << "Error! Can only use Cholesky decomposition "
+941                                << "with symmetric positive definite matrices\&."
+942                                << std::endl;
+943                   libmesh_error();
+944                 }
+945 #endif
+946 
+947               A(i,i) = std::sqrt(A(i,j));
+948             }
+949           else
+950             A(j,i) = A(i,j) / A(i,i);
+951         }
+952     }
+953 
+954   // Set the flag for CHOLESKY decomposition
+955   this->_decomposition_type = CHOLESKY;
+956 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::_lu_back_substitute (const \fBDenseVector\fP< T > &b, \fBDenseVector\fP< T > &x) const\fC [private]\fP"
+Solves the system Ax=b through back substitution\&. This function is private since it is only called as part of the implementation of the lu_solve(\&.\&.\&.) function\&. 
+.PP
+Definition at line 659 of file dense_matrix\&.C\&.
+.PP
+References A, libMesh::DenseVector< T >::resize(), libMesh::DenseVector< T >::size(), libMesh::swap(), and libMesh::x\&.
+.PP
+.nf
+661 {
+662   const unsigned int
+663     n_cols = this->n();
+664 
+665   libmesh_assert_equal_to (this->m(), n_cols);
+666   libmesh_assert_equal_to (this->m(), b\&.size());
+667 
+668   x\&.resize (n_cols);
+669 
+670   // A convenient reference to *this
+671   const DenseMatrix<T>& A = *this;
+672 
+673   // Temporary vector storage\&.  We use this instead of
+674   // modifying the RHS\&.
+675   DenseVector<T> z = b;
+676 
+677   // Lower-triangular "top to bottom" solve step, taking into account pivots
+678   for (unsigned int i=0; i<n_cols; ++i)
+679     {
+680       // Swap
+681       if (_pivots[i] != static_cast<int>(i))
+682         std::swap( z(i), z(_pivots[i]) );
+683 
+684       x(i) = z(i);
+685 
+686       for (unsigned int j=0; j<i; ++j)
+687         x(i) -= A(i,j)*x(j);
+688 
+689       x(i) /= A(i,i);
+690     }
+691 
+692   // Upper-triangular "bottom to top" solve step
+693   const unsigned int last_row = n_cols-1;
+694 
+695   for (int i=last_row; i>=0; --i)
+696     {
+697       for (int j=i+1; j<static_cast<int>(n_cols); ++j)
+698         x(i) -= A(i,j)*x(j);
+699     }
+700 }
+.fi
+.SS "template<typename T> template void \fBlibMesh::DenseMatrix\fP< T >::_lu_back_substitute_lapack (const \fBDenseVector\fP< T > &b, \fBDenseVector\fP< T > &x)\fC [private]\fP"
+Companion function to \fB_lu_decompose_lapack()\fP\&. Do not use directly, called through the public \fBlu_solve()\fP interface\&. This function is logically const in that it does not modify the matrix, but since we are just calling LAPACK routines, it's less const_cast hassle to just declare the function non-const\&. [ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 535 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References libMesh::DenseVector< T >::get_values(), and libMesh::out\&.
+.PP
+.nf
+537 {
+538   // The calling sequence for getrs is:
+539   // dgetrs(TRANS, N, NRHS, A, LDA, IPIV, B, LDB, INFO)
+540 
+541   //    trans   (input) char*
+542   //            'n' for no tranpose, 't' for transpose
+543   char TRANS[] = "t";
+544 
+545   //    N       (input) int*
+546   //            The order of the matrix A\&.  N >= 0\&.
+547   int N = this->m();
+548 
+549 
+550   //    NRHS    (input) int*
+551   //            The number of right hand sides, i\&.e\&., the number of columns
+552   //            of the matrix B\&.  NRHS >= 0\&.
+553   int NRHS = 1;
+554 
+555   //    A       (input) DOUBLE PRECISION array, dimension (LDA,N)
+556   //            The factors L and U from the factorization A = P*L*U
+557   //            as computed by dgetrf\&.
+558   // Here, we pass &(_val[0])
+559 
+560   //    LDA     (input) int*
+561   //            The leading dimension of the array A\&.  LDA >= max(1,N)\&.
+562   int LDA = N;
+563 
+564   //    ipiv    (input) int array, dimension (N)
+565   //            The pivot indices from DGETRF; for 1<=i<=N, row i of the
+566   //            matrix was interchanged with row IPIV(i)\&.
+567   // Here, we pass &(_pivots[0]) which was computed in _lu_decompose_lapack
+568 
+569   //    B       (input/output) DOUBLE PRECISION array, dimension (LDB,NRHS)
+570   //            On entry, the right hand side matrix B\&.
+571   //            On exit, the solution matrix X\&.
+572   // Here, we pass a copy of the rhs vector's data array in x, so that the
+573   // passed right-hand side b is unmodified\&.  I don't see a way around this
+574   // copy if we want to maintain an unmodified rhs in LibMesh\&.
+575   x = b;
+576   std::vector<T>& x_vec = x\&.get_values();
+577 
+578   // We can avoid the copy if we don't care about overwriting the RHS: just
+579   // pass b to the Lapack routine and then swap with x before exiting
+580   // std::vector<T>& x_vec = b\&.get_values();
+581 
+582   //    LDB     (input) int*
+583   //            The leading dimension of the array B\&.  LDB >= max(1,N)\&.
+584   int LDB = N;
+585 
+586   //    INFO    (output) int*
+587   //            = 0:  successful exit
+588   //            < 0:  if INFO = -i, the i-th argument had an illegal value
+589   int INFO = 0;
+590 
+591   // Finally, ready to call the Lapack getrs function
+592   LAPACKgetrs_(TRANS, &N, &NRHS, &(_val[0]), &LDA, &(_pivots[0]), &(x_vec[0]), &LDB, &INFO);
+593 
+594   // Check return value for errors
+595   if (INFO != 0)
+596     {
+597       libMesh::out << "INFO="
+598                    << INFO
+599                    << ", Error during Lapack LU solve!" << std::endl;
+600       libmesh_error();
+601     }
+602 
+603   // Don't do this if you already made a copy of b above
+604   // Swap b and x\&.  The solution will then be in x, and whatever was originally
+605   // in x, maybe garbage, maybe nothing, will be in b\&.
+606   // FIXME: Rewrite the LU and Cholesky solves to just take one input, and overwrite
+607   // the input\&.  This *should* make user code simpler, as they don't have to create
+608   // an extra vector just to pass it in to the solve function!
+609   // b\&.swap(x);
+610 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrix\fP< T >::_lu_decompose ()\fC [private]\fP"
+Form the LU decomposition of the matrix\&. This function is private since it is only called as part of the implementation of the lu_solve(\&.\&.\&.) function\&. 
+.PP
+Definition at line 710 of file dense_matrix\&.C\&.
+.PP
+References A, std::abs(), libMesh::out, libMesh::Real, libMesh::swap(), and libMesh::zero\&.
+.PP
+.nf
+711 {
+712   // If this function was called, there better not be any
+713   // previous decomposition of the matrix\&.
+714   libmesh_assert_equal_to (this->_decomposition_type, NONE);
+715 
+716   // Get the matrix size and make sure it is square
+717   const unsigned int
+718     n_rows = this->m();
+719 
+720   // A convenient reference to *this
+721   DenseMatrix<T>& A = *this;
+722 
+723   _pivots\&.resize(n_rows);
+724 
+725   for (unsigned int i=0; i<n_rows; ++i)
+726     {
+727       // Find the pivot row by searching down the i'th column
+728       _pivots[i] = i;
+729 
+730       // std::abs(complex) must return a Real!
+731       Real the_max = std::abs( A(i,i) );
+732       for (unsigned int j=i+1; j<n_rows; ++j)
+733         {
+734           Real candidate_max = std::abs( A(j,i) );
+735           if (the_max < candidate_max)
+736             {
+737               the_max = candidate_max;
+738               _pivots[i] = j;
+739             }
+740         }
+741 
+742       // libMesh::out << "the_max=" << the_max << " found at row " << _pivots[i] << std::endl;
+743 
+744       // If the max was found in a different row, interchange rows\&.
+745       // Here we interchange the *entire* row, in Gaussian elimination
+746       // you would only interchange the subrows A(i,j) and A(p(i),j), for j>i
+747       if (_pivots[i] != static_cast<int>(i))
+748         {
+749           for (unsigned int j=0; j<n_rows; ++j)
+750             std::swap( A(i,j), A(_pivots[i], j) );
+751         }
+752 
+753 
+754       // If the max abs entry found is zero, the matrix is singular
+755       if (A(i,i) == libMesh::zero)
+756         {
+757           libMesh::out << "Matrix A is singular!" << std::endl;
+758           libmesh_error();
+759         }
+760 
+761       // Scale upper triangle entries of row i by the diagonal entry
+762       // Note: don't scale the diagonal entry itself!
+763       const T diag_inv = 1\&. / A(i,i);
+764       for (unsigned int j=i+1; j<n_rows; ++j)
+765         A(i,j) *= diag_inv;
+766 
+767       // Update the remaining sub-matrix A[i+1:m][i+1:m]
+768       // by subtracting off (the diagonal-scaled)
+769       // upper-triangular part of row i, scaled by the
+770       // i'th column entry of each row\&.  In terms of
+771       // row operations, this is:
+772       // for each r > i
+773       //   SubRow(r) = SubRow(r) - A(r,i)*SubRow(i)
+774       //
+775       // If we were scaling the i'th column as well, like
+776       // in Gaussian elimination, this would 'zero' the
+777       // entry in the i'th column\&.
+778       for (unsigned int row=i+1; row<n_rows; ++row)
+779         for (unsigned int col=i+1; col<n_rows; ++col)
+780           A(row,col) -= A(row,i) * A(i,col);
+781 
+782     } // end i loop
+783 
+784   // Set the flag for LU decomposition
+785   this->_decomposition_type = LU;
+786 }
+.fi
+.SS "template<typename T > template void \fBlibMesh::DenseMatrix\fP< T >::_lu_decompose_lapack ()\fC [private]\fP"
+Computes an LU factorization of the matrix using the Lapack routine 'getrf'\&. This routine should only be used by the 'use_blas_lapack' branch of the \fBlu_solve()\fP function\&. After the call to this function, the matrix is replaced by its factorized version, and the DecompositionType is set to LU_BLAS_LAPACK\&. [ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 215 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References std::min(), and libMesh::out\&.
+.PP
+.nf
+216 {
+217   // If this function was called, there better not be any
+218   // previous decomposition of the matrix\&.
+219   libmesh_assert_equal_to (this->_decomposition_type, NONE);
+220 
+221   // The calling sequence for dgetrf is:
+222   // dgetrf(M, N, A, lda, ipiv, info)
+223 
+224   //    M       (input) int*
+225   //            The number of rows of the matrix A\&.  M >= 0\&.
+226   // In C/C++, pass the number of *cols* of A
+227   int M = this->n();
+228 
+229   //    N       (input) int*
+230   //            The number of columns of the matrix A\&.  N >= 0\&.
+231   // In C/C++, pass the number of *rows* of A
+232   int N = this->m();
+233 
+234   //    A (input/output) double precision array, dimension (LDA,N)
+235   //      On entry, the M-by-N matrix to be factored\&.
+236   //      On exit, the factors L and U from the factorization
+237   //      A = P*L*U; the unit diagonal elements of L are not stored\&.
+238   // Here, we pass &(_val[0])\&.
+239 
+240   //    LDA     (input) int*
+241   //            The leading dimension of the array A\&.  LDA >= max(1,M)\&.
+242   int LDA = M;
+243 
+244   //    ipiv    (output) integer array, dimension (min(m,n))
+245   //            The pivot indices; for 1 <= i <= min(m,n), row i of the
+246   //            matrix was interchanged with row IPIV(i)\&.
+247   // Here, we pass &(_pivots[0]), a private class member used to store pivots
+248   this->_pivots\&.resize( std::min(M,N) );
+249 
+250   //    info    (output) int*
+251   //            = 0:  successful exit
+252   //            < 0:  if INFO = -i, the i-th argument had an illegal value
+253   //            > 0:  if INFO = i, U(i,i) is exactly zero\&. The factorization
+254   //                  has been completed, but the factor U is exactly
+255   //                  singular, and division by zero will occur if it is used
+256   //                  to solve a system of equations\&.
+257   int INFO = 0;
+258 
+259   // Ready to call the actual factorization routine through PETSc's interface
+260   LAPACKgetrf_(&M, &N, &(this->_val[0]), &LDA, &(_pivots[0]), &INFO);
+261 
+262   // Check return value for errors
+263   if (INFO != 0)
+264     {
+265       libMesh::out << "INFO="
+266                    << INFO
+267                    << ", Error during Lapack LU factorization!" << std::endl;
+268       libmesh_error();
+269     }
+270 
+271   // Set the flag for LU decomposition
+272   this->_decomposition_type = LU_BLAS_LAPACK;
+273 }
+.fi
+.SS "template<typename T> template void \fBlibMesh::DenseMatrix\fP< T >::_matvec_blas (Talpha, Tbeta, \fBDenseVector\fP< T > &dest, const \fBDenseVector\fP< T > &arg, booltrans = \fCfalse\fP) const\fC [private]\fP"
+Uses the BLAS GEMV function (through PETSc) to compute
+.PP
+dest := alpha*A*arg + beta*dest
+.PP
+where alpha and beta are scalars, A is this matrix, and arg and dest are input vectors of appropriate size\&. If trans is true, the transpose matvec is computed instead\&. By default, trans==false\&.
+.PP
+[ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 631 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References libMesh::DenseVector< T >::get_values(), libMesh::DenseMatrix< T >::get_values(), libMesh::out, libMesh::DenseVector< T >::size(), and libMesh::x\&.
+.PP
+.nf
+635 {
+636   // Ensure that dest and arg sizes are compatible
+637   if (!trans)
+638     {
+639       // dest  ~ A     * arg
+640       // (mx1)   (mxn) * (nx1)
+641       if ((dest\&.size() != this->m()) || (arg\&.size() != this->n()))
+642         {
+643           libMesh::out << "Improper input argument sizes!" << std::endl;
+644           libmesh_error();
+645         }
+646     }
+647 
+648   else // trans == true
+649     {
+650       // Ensure that dest and arg are proper size
+651       // dest  ~ A^T   * arg
+652       // (nx1)   (nxm) * (mx1)
+653       if ((dest\&.size() != this->n()) || (arg\&.size() != this->m()))
+654         {
+655           libMesh::out << "Improper input argument sizes!" << std::endl;
+656           libmesh_error();
+657         }
+658     }
+659 
+660   // Calling sequence for dgemv:
+661   //
+662   // dgemv(TRANS,M,N,ALPHA,A,LDA,X,INCX,BETA,Y,INCY)
+663 
+664   //   TRANS  - CHARACTER*1, 't' for transpose, 'n' for non-transpose multiply
+665   // We store everything in row-major order, so pass the transpose flag for
+666   // non-transposed matvecs and the 'n' flag for transposed matvecs
+667   char TRANS[] = "t";
+668   if (trans)
+669     TRANS[0] = 'n';
+670 
+671   //   M      - INTEGER\&.
+672   //            On entry, M specifies the number of rows of the matrix A\&.
+673   // In C/C++, pass the number of *cols* of A
+674   int M = this->n();
+675 
+676   //   N      - INTEGER\&.
+677   //            On entry, N specifies the number of columns of the matrix A\&.
+678   // In C/C++, pass the number of *rows* of A
+679   int N = this->m();
+680 
+681   //   ALPHA  - DOUBLE PRECISION\&.
+682   // The scalar constant passed to this function
+683 
+684   //   A      - DOUBLE PRECISION array of DIMENSION ( LDA, n )\&.
+685   //            Before entry, the leading m by n part of the array A must
+686   //            contain the matrix of coefficients\&.
+687   // The matrix, *this\&.  Note that _matvec_blas is called from
+688   // a const function, vector_mult(), and so we have made this function const
+689   // as well\&.  Since BLAS knows nothing about const, we have to cast it away
+690   // now\&.
+691   DenseMatrix<T>& a_ref = const_cast< DenseMatrix<T>& > ( *this );
+692   std::vector<T>& a = a_ref\&.get_values();
+693 
+694   //   LDA    - INTEGER\&.
+695   //            On entry, LDA specifies the first dimension of A as declared
+696   //            in the calling (sub) program\&. LDA must be at least
+697   //            max( 1, m )\&.
+698   int LDA = M;
+699 
+700   //   X      - DOUBLE PRECISION array of DIMENSION at least
+701   //            ( 1 + ( n - 1 )*abs( INCX ) ) when TRANS = 'N' or 'n'
+702   //            and at least
+703   //            ( 1 + ( m - 1 )*abs( INCX ) ) otherwise\&.
+704   //            Before entry, the incremented array X must contain the
+705   //            vector x\&.
+706   // Here, we must cast away the const-ness of "arg" since BLAS knows
+707   // nothing about const
+708   DenseVector<T>& x_ref = const_cast< DenseVector<T>& > ( arg );
+709   std::vector<T>& x = x_ref\&.get_values();
+710 
+711   //   INCX   - INTEGER\&.
+712   //            On entry, INCX specifies the increment for the elements of
+713   //            X\&. INCX must not be zero\&.
+714   int INCX = 1;
+715 
+716   //   BETA   - DOUBLE PRECISION\&.
+717   //            On entry, BETA specifies the scalar beta\&. When BETA is
+718   //            supplied as zero then Y need not be set on input\&.
+719   // The second scalar constant passed to this function
+720 
+721   //   Y      - DOUBLE PRECISION array of DIMENSION at least
+722   //            ( 1 + ( m - 1 )*abs( INCY ) ) when TRANS = 'N' or 'n'
+723   //            and at least
+724   //            ( 1 + ( n - 1 )*abs( INCY ) ) otherwise\&.
+725   //            Before entry with BETA non-zero, the incremented array Y
+726   //            must contain the vector y\&. On exit, Y is overwritten by the
+727   //            updated vector y\&.
+728   // The input vector "dest"
+729   std::vector<T>& y = dest\&.get_values();
+730 
+731   //   INCY   - INTEGER\&.
+732   //            On entry, INCY specifies the increment for the elements of
+733   //            Y\&. INCY must not be zero\&.
+734   int INCY = 1;
+735 
+736   // Finally, ready to call the BLAS function
+737   BLASgemv_(TRANS, &M, &N, &alpha, &(a[0]), &LDA, &(x[0]), &INCX, &beta, &(y[0]), &INCY);
+738 }
+.fi
+.SS "template<typename T> template void \fBlibMesh::DenseMatrix\fP< T >::_multiply_blas (const \fBDenseMatrixBase\fP< T > &other, \fB_BLAS_Multiply_Flag\fPflag)\fC [private]\fP"
+The _multiply_blas function computes A <- op(A) * op(B) using BLAS gemm function\&. Used in the \fBright_multiply()\fP, \fBleft_multiply()\fP, \fBright_multiply_transpose()\fP, and left_multiply_tranpose() routines\&. [ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 40 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References libMesh::DenseMatrix< T >::_val, A, libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), libMesh::out, and libMesh::swap()\&.
+.PP
+.nf
+42 {
+43   int result_size = 0;
+44 
+45   // For each case, determine the size of the final result make sure
+46   // that the inner dimensions match
+47   switch (flag)
+48     {
+49     case LEFT_MULTIPLY:
+50       {
+51         result_size = other\&.m() * this->n();
+52         if (other\&.n() == this->m())
+53           break;
+54       }
+55     case RIGHT_MULTIPLY:
+56       {
+57         result_size = other\&.n() * this->m();
+58         if (other\&.m() == this->n())
+59           break;
+60       }
+61     case LEFT_MULTIPLY_TRANSPOSE:
+62       {
+63         result_size = other\&.n() * this->n();
+64         if (other\&.m() == this->m())
+65           break;
+66       }
+67     case RIGHT_MULTIPLY_TRANSPOSE:
+68       {
+69         result_size = other\&.m() * this->m();
+70         if (other\&.n() == this->n())
+71           break;
+72       }
+73     default:
+74       {
+75         libMesh::out << "Unknown flag selected or matrices are ";
+76         libMesh::out << "incompatible for multiplication\&." << std::endl;
+77         libmesh_error();
+78       }
+79     }
+80 
+81   // For this to work, the passed arg\&. must actually be a DenseMatrix<T>
+82   const DenseMatrix<T>* const_that = libmesh_cast_ptr< const DenseMatrix<T>* >(&other);
+83 
+84   // Also, although 'that' is logically const in this BLAS routine,
+85   // the PETSc BLAS interface does not specify that any of the inputs are
+86   // const\&.  To use it, I must cast away const-ness\&.
+87   DenseMatrix<T>* that = const_cast< DenseMatrix<T>* > (const_that);
+88 
+89   // Initialize A, B pointers for LEFT_MULTIPLY* cases
+90   DenseMatrix<T>
+91     *A = this,
+92     *B = that;
+93 
+94   // For RIGHT_MULTIPLY* cases, swap the meaning of A and B\&.
+95   // Here is a full table of combinations we can pass to BLASgemm, and what the answer is when finished:
+96   // pass A B   -> (Fortran) -> A^T B^T -> (C++) -> (A^T B^T)^T -> (identity) -> B A   "lt multiply"
+97   // pass B A   -> (Fortran) -> B^T A^T -> (C++) -> (B^T A^T)^T -> (identity) -> A B   "rt multiply"
+98   // pass A B^T -> (Fortran) -> A^T B   -> (C++) -> (A^T B)^T   -> (identity) -> B^T A "lt multiply t"
+99   // pass B^T A -> (Fortran) -> B A^T   -> (C++) -> (B A^T)^T   -> (identity) -> A B^T "rt multiply t"
+100   if (flag==RIGHT_MULTIPLY || flag==RIGHT_MULTIPLY_TRANSPOSE)
+101     std::swap(A,B);
+102 
+103   // transa, transb values to pass to blas
+104   char
+105     transa[] = "n",
+106     transb[] = "n";
+107 
+108   // Integer values to pass to BLAS:
+109   //
+110   // M
+111   // In Fortran, the number of rows of op(A),
+112   // In the BLAS documentation, typically known as 'M'\&.
+113   //
+114   // In C/C++, we set:
+115   // M = n_cols(A) if (transa='n')
+116   //     n_rows(A) if (transa='t')
+117   int M = static_cast<int>( A->n() );
+118 
+119   // N
+120   // In Fortran, the number of cols of op(B), and also the number of cols of C\&.
+121   // In the BLAS documentation, typically known as 'N'\&.
+122   //
+123   // In C/C++, we set:
+124   // N = n_rows(B) if (transb='n')
+125   //     n_cols(B) if (transb='t')
+126   int N = static_cast<int>( B->m() );
+127 
+128   // K
+129   // In Fortran, the number of cols of op(A), and also
+130   // the number of rows of op(B)\&. In the BLAS documentation,
+131   // typically known as 'K'\&.
+132   //
+133   // In C/C++, we set:
+134   // K = n_rows(A) if (transa='n')
+135   //     n_cols(A) if (transa='t')
+136   int K = static_cast<int>( A->m() );
+137 
+138   // LDA (leading dimension of A)\&. In our cases,
+139   // LDA is always the number of columns of A\&.
+140   int LDA = static_cast<int>( A->n() );
+141 
+142   // LDB (leading dimension of B)\&.  In our cases,
+143   // LDB is always the number of columns of B\&.
+144   int LDB = static_cast<int>( B->n() );
+145 
+146   if (flag == LEFT_MULTIPLY_TRANSPOSE)
+147     {
+148       transb[0] = 't';
+149       N = static_cast<int>( B->n() );
+150     }
+151 
+152   else if (flag == RIGHT_MULTIPLY_TRANSPOSE)
+153     {
+154       transa[0] = 't';
+155       std::swap(M,K);
+156     }
+157 
+158   // LDC (leading dimension of C)\&.  LDC is the
+159   // number of columns in the solution matrix\&.
+160   int LDC = M;
+161 
+162   // Scalar values to pass to BLAS
+163   //
+164   // scalar multiplying the whole product AB
+165   T alpha = 1\&.;
+166 
+167   // scalar multiplying C, which is the original matrix\&.
+168   T beta  = 0\&.;
+169 
+170   // Storage for the result
+171   std::vector<T> result (result_size);
+172 
+173   // Finally ready to call the BLAS
+174   BLASgemm_(transa, transb, &M, &N, &K, &alpha, &(A->_val[0]), &LDA, &(B->_val[0]), &LDB, &beta, &result[0], &LDC);
+175 
+176   // Update the relevant dimension for this matrix\&.
+177   switch (flag)
+178     {
+179     case LEFT_MULTIPLY:            { this->_m = other\&.m(); break; }
+180     case RIGHT_MULTIPLY:           { this->_n = other\&.n(); break; }
+181     case LEFT_MULTIPLY_TRANSPOSE:  { this->_m = other\&.n(); break; }
+182     case RIGHT_MULTIPLY_TRANSPOSE: { this->_n = other\&.m(); break; }
+183     default:
+184       {
+185         libMesh::out << "Unknown flag selected\&." << std::endl;
+186         libmesh_error();
+187       }
+188     }
+189 
+190   // Swap my data vector with the result
+191   this->_val\&.swap(result);
+192 }
+.fi
+.SS "template<typename T> template void \fBlibMesh::DenseMatrix\fP< T >::_svd_helper (charJOBU, charJOBVT, std::vector< T > &sigma_val, std::vector< T > &U_val, std::vector< T > &VT_val)\fC [private]\fP"
+Helper function that actually performs the SVD\&. [ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 400 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References libMesh::out\&.
+.PP
+.nf
+405 {
+406 
+407   //    M       (input) int*
+408   //            The number of rows of the matrix A\&.  M >= 0\&.
+409   // In C/C++, pass the number of *cols* of A
+410   int M = this->n();
+411 
+412   //    N       (input) int*
+413   //            The number of columns of the matrix A\&.  N >= 0\&.
+414   // In C/C++, pass the number of *rows* of A
+415   int N = this->m();
+416 
+417   int min_MN = (M < N) ? M : N;
+418   int max_MN = (M > N) ? M : N;
+419 
+420   //  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
+421   //          On entry, the M-by-N matrix A\&.
+422   //          On exit,
+423   //          if JOBU = 'O',  A is overwritten with the first min(m,n)
+424   //                          columns of U (the left singular vectors,
+425   //                          stored columnwise);
+426   //          if JOBVT = 'O', A is overwritten with the first min(m,n)
+427   //                          rows of V**T (the right singular vectors,
+428   //                          stored rowwise);
+429   //          if JOBU \&.ne\&. 'O' and JOBVT \&.ne\&. 'O', the contents of A
+430   //                          are destroyed\&.
+431   // Here, we pass &(_val[0])\&.
+432 
+433   //    LDA     (input) int*
+434   //            The leading dimension of the array A\&.  LDA >= max(1,M)\&.
+435   int LDA = M;
+436 
+437   //  S       (output) DOUBLE PRECISION array, dimension (min(M,N))
+438   //          The singular values of A, sorted so that S(i) >= S(i+1)\&.
+439   sigma_val\&.resize( min_MN );
+440 
+441   //  LDU     (input) INTEGER
+442   //          The leading dimension of the array U\&.  LDU >= 1; if
+443   //          JOBU = 'S' or 'A', LDU >= M\&.
+444   int LDU = M;
+445 
+446   //  U       (output) DOUBLE PRECISION array, dimension (LDU,UCOL)
+447   //          (LDU,M) if JOBU = 'A' or (LDU,min(M,N)) if JOBU = 'S'\&.
+448   //          If JOBU = 'A', U contains the M-by-M orthogonal matrix U;
+449   //          if JOBU = 'S', U contains the first min(m,n) columns of U
+450   //          (the left singular vectors, stored columnwise);
+451   //          if JOBU = 'N' or 'O', U is not referenced\&.
+452   U_val\&.resize( LDU*M );
+453 
+454   //  LDVT    (input) INTEGER
+455   //          The leading dimension of the array VT\&.  LDVT >= 1; if
+456   //          JOBVT = 'A', LDVT >= N; if JOBVT = 'S', LDVT >= min(M,N)\&.
+457   int LDVT = N;
+458 
+459   //  VT      (output) DOUBLE PRECISION array, dimension (LDVT,N)
+460   //          If JOBVT = 'A', VT contains the N-by-N orthogonal matrix
+461   //          V**T;
+462   //          if JOBVT = 'S', VT contains the first min(m,n) rows of
+463   //          V**T (the right singular vectors, stored rowwise);
+464   //          if JOBVT = 'N' or 'O', VT is not referenced\&.
+465   VT_val\&.resize( LDVT*N );
+466 
+467   //  LWORK   (input) INTEGER
+468   //          The dimension of the array WORK\&.
+469   //          LWORK >= MAX(1,3*MIN(M,N)+MAX(M,N),5*MIN(M,N))\&.
+470   //          For good performance, LWORK should generally be larger\&.
+471   //
+472   //          If LWORK = -1, then a workspace query is assumed; the routine
+473   //          only calculates the optimal size of the WORK array, returns
+474   //          this value as the first entry of the WORK array, and no error
+475   //          message related to LWORK is issued by XERBLA\&.
+476   int larger = (3*min_MN+max_MN > 5*min_MN) ? 3*min_MN+max_MN : 5*min_MN;
+477   int LWORK  = (larger > 1) ? larger : 1;
+478 
+479 
+480   //  WORK    (workspace/output) DOUBLE PRECISION array, dimension (MAX(1,LWORK))
+481   //          On exit, if INFO = 0, WORK(1) returns the optimal LWORK;
+482   //          if INFO > 0, WORK(2:MIN(M,N)) contains the unconverged
+483   //          superdiagonal elements of an upper bidiagonal matrix B
+484   //          whose diagonal is in S (not necessarily sorted)\&. B
+485   //          satisfies A = U * B * VT, so it has the same singular values
+486   //          as A, and singular vectors related by U and VT\&.
+487   std::vector<T> WORK( LWORK );
+488 
+489   //  INFO    (output) INTEGER
+490   //          = 0:  successful exit\&.
+491   //          < 0:  if INFO = -i, the i-th argument had an illegal value\&.
+492   //          > 0:  if DBDSQR did not converge, INFO specifies how many
+493   //                superdiagonals of an intermediate bidiagonal form B
+494   //                did not converge to zero\&. See the description of WORK
+495   //                above for details\&.
+496   int INFO = 0;
+497 
+498   // Ready to call the actual factorization routine through PETSc's interface
+499   LAPACKgesvd_(&JOBU, &JOBVT, &M, &N, &(_val[0]), &LDA, &(sigma_val[0]), &(U_val[0]),
+500                &LDU, &(VT_val[0]), &LDVT, &(WORK[0]), &LWORK, &INFO);
+501 
+502   // Check return value for errors
+503   if (INFO != 0)
+504     {
+505       libMesh::out << "INFO="
+506                    << INFO
+507                    << ", Error during Lapack SVD calculation!" << std::endl;
+508       libmesh_error();
+509     }
+510 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::_svd_lapack (\fBDenseVector\fP< T > &sigma)\fC [private]\fP"
+Computes an SVD of the matrix using the Lapack routine 'getsvd'\&. [ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 289 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References libMesh::DenseVector< T >::resize()\&.
+.PP
+.nf
+290 {
+291   // The calling sequence for dgetrf is:
+292   // DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT, WORK, LWORK, INFO )
+293 
+294 
+295   //  JOBU    (input) CHARACTER*1
+296   //          Specifies options for computing all or part of the matrix U:
+297   //          = 'A':  all M columns of U are returned in array U:
+298   //          = 'S':  the first min(m,n) columns of U (the left singular
+299   //                  vectors) are returned in the array U;
+300   //          = 'O':  the first min(m,n) columns of U (the left singular
+301   //                  vectors) are overwritten on the array A;
+302   //          = 'N':  no columns of U (no left singular vectors) are
+303   //                  computed\&.
+304   char JOBU = 'N';
+305 
+306   //  JOBVT   (input) CHARACTER*1
+307   //          Specifies options for computing all or part of the matrix
+308   //          V**T:
+309   //          = 'A':  all N rows of V**T are returned in the array VT;
+310   //          = 'S':  the first min(m,n) rows of V**T (the right singular
+311   //                  vectors) are returned in the array VT;
+312   //          = 'O':  the first min(m,n) rows of V**T (the right singular
+313   //                  vectors) are overwritten on the array A;
+314   //          = 'N':  no rows of V**T (no right singular vectors) are
+315   //                  computed\&.
+316   char JOBVT = 'N';
+317 
+318   std::vector<T> sigma_val;
+319   std::vector<T> U_val;
+320   std::vector<T> VT_val;
+321 
+322   _svd_helper(JOBU, JOBVT, sigma_val, U_val, VT_val);
+323 
+324   // Load the singular values into sigma, ignore U_val and VT_val
+325   const unsigned int n_sigma_vals =
+326     libmesh_cast_int<unsigned int>(sigma_val\&.size());
+327   sigma\&.resize(n_sigma_vals);
+328   for(unsigned int i=0; i<n_sigma_vals; i++)
+329     sigma(i) = sigma_val[i];
+330 
+331 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::_svd_lapack (\fBDenseVector\fP< T > &sigma, \fBDenseMatrix\fP< T > &U, \fBDenseMatrix\fP< T > &VT)\fC [private]\fP"
+Computes a 'reduced' SVD of the matrix using the Lapack routine 'getsvd'\&. [ Implementation in \fBdense_matrix_blas_lapack\&.C\fP ] 
+.PP
+Definition at line 334 of file dense_matrix_blas_lapack\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), libMesh::DenseVector< T >::resize(), and libMesh::DenseMatrix< T >::resize()\&.
+.PP
+.nf
+335 {
+336   // The calling sequence for dgetrf is:
+337   // DGESVD( JOBU, JOBVT, M, N, A, LDA, S, U, LDU, VT, LDVT, WORK, LWORK, INFO )
+338 
+339 
+340   //  JOBU    (input) CHARACTER*1
+341   //          Specifies options for computing all or part of the matrix U:
+342   //          = 'A':  all M columns of U are returned in array U:
+343   //          = 'S':  the first min(m,n) columns of U (the left singular
+344   //                  vectors) are returned in the array U;
+345   //          = 'O':  the first min(m,n) columns of U (the left singular
+346   //                  vectors) are overwritten on the array A;
+347   //          = 'N':  no columns of U (no left singular vectors) are
+348   //                  computed\&.
+349   char JOBU = 'S';
+350 
+351   //  JOBVT   (input) CHARACTER*1
+352   //          Specifies options for computing all or part of the matrix
+353   //          V**T:
+354   //          = 'A':  all N rows of V**T are returned in the array VT;
+355   //          = 'S':  the first min(m,n) rows of V**T (the right singular
+356   //                  vectors) are returned in the array VT;
+357   //          = 'O':  the first min(m,n) rows of V**T (the right singular
+358   //                  vectors) are overwritten on the array A;
+359   //          = 'N':  no rows of V**T (no right singular vectors) are
+360   //                  computed\&.
+361   char JOBVT = 'S';
+362 
+363   std::vector<T> sigma_val;
+364   std::vector<T> U_val;
+365   std::vector<T> VT_val;
+366 
+367   _svd_helper(JOBU, JOBVT, sigma_val, U_val, VT_val);
+368 
+369   // Load the singular values into sigma, ignore U_val and VT_val
+370   const unsigned int n_sigma_vals =
+371     libmesh_cast_int<unsigned int>(sigma_val\&.size());
+372   sigma\&.resize(n_sigma_vals);
+373   for(unsigned int i=0; i<n_sigma_vals; i++)
+374     sigma(i) = sigma_val[i];
+375 
+376   int M = this->n();
+377   int N = this->m();
+378   int min_MN = (M < N) ? M : N;
+379   U\&.resize(M,min_MN);
+380   for(unsigned int i=0; i<U\&.m(); i++)
+381     for(unsigned int j=0; j<U\&.n(); j++)
+382       {
+383         unsigned int index = i + j*U\&.n();  // Column major storage
+384         U(i,j) = U_val[index];
+385       }
+386 
+387   VT\&.resize(min_MN,N);
+388   for(unsigned int i=0; i<VT\&.m(); i++)
+389     for(unsigned int j=0; j<VT\&.n(); j++)
+390       {
+391         unsigned int index = i + j*U\&.n(); // Column major storage
+392         VT(i,j) = VT_val[index];
+393       }
+394 
+395 }
+.fi
+.SS "template<typename T > template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP< \fBScalarTraits\fP< T2 >::value, void >::type \fBlibMesh::DenseMatrixBase\fP< T >::add (const T2factor, const \fBDenseMatrixBase\fP< T3 > &mat)\fC [inline]\fP, \fC [inherited]\fP"
+Adds \fCfactor\fP to every element in the matrix\&. This should only work if T += T2 * T3 is valid C++ and if T2 is scalar\&. Return type is void 
+.PP
+Definition at line 184 of file dense_matrix_base\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::el(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+186 {
+187   libmesh_assert_equal_to (this->m(), mat\&.m());
+188   libmesh_assert_equal_to (this->n(), mat\&.n());
+189 
+190   for (unsigned int j=0; j<this->n(); j++)
+191     for (unsigned int i=0; i<this->m(); i++)
+192       this->el(i,j) += factor*mat\&.el(i,j);
+193 }
+.fi
+.SS "template<typename T > template<typename T2 , typename T3 > \fBboostcopy::enable_if_c\fP< \fBScalarTraits\fP< T2 >::value, void >::type \fBlibMesh::DenseMatrix\fP< T >::add (const T2factor, const \fBDenseMatrix\fP< T3 > &mat)\fC [inline]\fP"
+Adds \fCfactor\fP times \fCmat\fP to this matrix\&. 
+.PP
+Definition at line 799 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+801 {
+802   libmesh_assert_equal_to (this->m(), mat\&.m());
+803   libmesh_assert_equal_to (this->n(), mat\&.n());
+804 
+805   for (unsigned int i=0; i<this->m(); i++)
+806     for (unsigned int j=0; j<this->n(); j++)
+807       (*this)(i,j) += factor * mat(i,j);
+808 }
+.fi
+.SS "template<typename T > template<typename T2 > template void \fBlibMesh::DenseMatrix\fP< T >::cholesky_solve (const \fBDenseVector\fP< T2 > &b, \fBDenseVector\fP< T2 > &x)"
+For symmetric positive definite (SPD) matrices\&. A Cholesky factorization of A such that A = L L^T is about twice as fast as a standard LU factorization\&. Therefore you can use this method if you know a-priori that the matrix is SPD\&. If the matrix is not SPD, an error is generated\&. One nice property of cholesky decompositions is that they do not require pivoting for stability\&. Note that this method may also be used when A is real-valued and x and b are complex-valued\&. 
+.PP
+Definition at line 874 of file dense_matrix\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), and libMesh::HPCoarsenTest::select_refinement()\&.
+.PP
+.nf
+876 {
+877   // Check for a previous decomposition
+878   switch(this->_decomposition_type)
+879     {
+880     case NONE:
+881       {
+882         this->_cholesky_decompose ();
+883         break;
+884       }
+885 
+886     case CHOLESKY:
+887       {
+888         // Already factored, just need to call back_substitute\&.
+889         break;
+890       }
+891 
+892     default:
+893       {
+894         libMesh::err << "Error! This matrix already has a "
+895                      << "different decomposition\&.\&.\&."
+896                      << std::endl;
+897         libmesh_error();
+898       }
+899     }
+900 
+901   // Perform back substitution
+902   this->_cholesky_back_substitute (b, x);
+903 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::condense (const unsigned inti, const unsigned intj, const Tval, \fBDenseVectorBase\fP< T > &rhs)\fC [protected]\fP, \fC [inherited]\fP"
+Condense-out the \fC\fP(i,j) entry of the matrix, forcing it to take on the value \fCval\fP\&. This is useful in numerical simulations for applying boundary conditions\&. Preserves the symmetry of the matrix\&. 
+.PP
+Definition at line 58 of file dense_matrix_base\&.C\&.
+.PP
+References libMesh::DenseVectorBase< T >::el(), and libMesh::DenseVectorBase< T >::size()\&.
+.PP
+Referenced by libMesh::DenseMatrix< Number >::condense()\&.
+.PP
+.nf
+62 {
+63   libmesh_assert_equal_to (this->_m, rhs\&.size());
+64   libmesh_assert_equal_to (iv, jv);
+65 
+66 
+67   // move the known value into the RHS
+68   // and zero the column
+69   for (unsigned int i=0; i<this->m(); i++)
+70     {
+71       rhs\&.el(i) -= this->el(i,jv)*val;
+72       this->el(i,jv) = 0\&.;
+73     }
+74 
+75   // zero the row
+76   for (unsigned int j=0; j<this->n(); j++)
+77     this->el(iv,j) = 0\&.;
+78 
+79   this->el(iv,jv) = 1\&.;
+80   rhs\&.el(iv) = val;
+81 
+82 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::condense (const unsigned inti, const unsigned intj, const Tval, \fBDenseVector\fP< T > &rhs)\fC [inline]\fP"
+Condense-out the \fC\fP(i,j) entry of the matrix, forcing it to take on the value \fCval\fP\&. This is useful in numerical simulations for applying boundary conditions\&. Preserves the symmetry of the matrix\&. 
+.PP
+Definition at line 353 of file dense_matrix\&.h\&.
+.PP
+.nf
+357   { DenseMatrixBase<T>::condense (i, j, val, rhs); }
+.fi
+.SS "template<typename T > T \fBlibMesh::DenseMatrix\fP< T >::det ()"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the determinant of the matrix\&. Note that this means doing an LU decomposition and then computing the product of the diagonal terms\&. Therefore this is a non-const method\&. 
+.RE
+.PP
+
+.PP
+Definition at line 808 of file dense_matrix\&.C\&.
+.PP
+References libMesh::err, and libMesh::Real\&.
+.PP
+.nf
+809 {
+810   switch(this->_decomposition_type)
+811     {
+812     case NONE:
+813       {
+814         // First LU decompose the matrix\&.
+815         // Note that the lu_decompose routine will check to see if the
+816         // matrix is square so we don't worry about it\&.
+817         if (this->use_blas_lapack)
+818           this->_lu_decompose_lapack();
+819         else
+820           this->_lu_decompose ();
+821       }
+822     case LU:
+823     case LU_BLAS_LAPACK:
+824       {
+825         // Already decomposed, don't do anything
+826         break;
+827       }
+828     default:
+829       {
+830         libMesh::err << "Error! Can't compute the determinant under "
+831                      << "the current decomposition\&."
+832                      << std::endl;
+833         libmesh_error();
+834       }
+835     }
+836 
+837   // A variable to keep track of the running product of diagonal terms\&.
+838   T determinant = 1\&.;
+839 
+840   // Loop over diagonal terms, computing the product\&.  In practice,
+841   // be careful because this value could easily become too large to
+842   // fit in a double or float\&.  To be safe, one should keep track of
+843   // the power (of 10) of the determinant in a separate variable
+844   // and maintain an order 1 value for the determinant itself\&.
+845   unsigned int n_interchanges = 0;
+846   for (unsigned int i=0; i<this->m(); i++)
+847     {
+848       if (this->_decomposition_type==LU)
+849         if (_pivots[i] != static_cast<int>(i))
+850           n_interchanges++;
+851 
+852       // Lapack pivots are 1-based!
+853       if (this->_decomposition_type==LU_BLAS_LAPACK)
+854         if (_pivots[i] != static_cast<int>(i+1))
+855           n_interchanges++;
+856 
+857       determinant *= (*this)(i,i);
+858     }
+859 
+860   // Compute sign of determinant, depends on number of row interchanges!
+861   // The sign should be (-1)^{n}, where n is the number of interchanges\&.
+862   Real sign = n_interchanges % 2 == 0 ? 1\&. : -1\&.;
+863 
+864   return sign*determinant;
+865 }
+.fi
+.SS "template<typename T> virtual T \fBlibMesh::DenseMatrix\fP< T >::el (const unsigned inti, const unsigned intj) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the matrix as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::DenseMatrixBase< T >\fP\&.
+.PP
+Definition at line 92 of file dense_matrix\&.h\&.
+.PP
+.nf
+93                                            { return (*this)(i,j); }
+.fi
+.SS "template<typename T> virtual T& \fBlibMesh::DenseMatrix\fP< T >::el (const unsigned inti, const unsigned intj)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the matrix as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::DenseMatrixBase< T >\fP\&.
+.PP
+Definition at line 98 of file dense_matrix\&.h\&.
+.PP
+.nf
+99                                            { return (*this)(i,j); }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::get_principal_submatrix (unsigned intsub_m, unsigned intsub_n, \fBDenseMatrix\fP< T > &dest) const"
+Put the \fCsub_m\fP x \fCsub_n\fP principal submatrix into \fCdest\fP\&. 
+.PP
+Definition at line 561 of file dense_matrix\&.C\&.
+.PP
+References libMesh::libmesh_assert(), and libMesh::DenseMatrix< T >::resize()\&.
+.PP
+.nf
+564 {
+565   libmesh_assert( (sub_m <= this->m()) && (sub_n <= this->n()) );
+566 
+567   dest\&.resize(sub_m, sub_n);
+568   for(unsigned int i=0; i<sub_m; i++)
+569     for(unsigned int j=0; j<sub_n; j++)
+570       dest(i,j) = (*this)(i,j);
+571 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::get_principal_submatrix (unsigned intsub_m, \fBDenseMatrix\fP< T > &dest) const"
+Put the \fCsub_m\fP x \fCsub_m\fP principal submatrix into \fCdest\fP\&. 
+.PP
+Definition at line 576 of file dense_matrix\&.C\&.
+.PP
+.nf
+577 {
+578   get_principal_submatrix(sub_m, sub_m, dest);
+579 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::get_transpose (\fBDenseMatrix\fP< T > &dest) const"
+Put the tranposed matrix into \fCdest\fP\&. 
+.PP
+Definition at line 584 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), and libMesh::DenseMatrix< T >::resize()\&.
+.PP
+.nf
+585 {
+586   dest\&.resize(this->n(), this->m());
+587 
+588   for (unsigned int i=0; i<dest\&.m(); i++)
+589     for (unsigned int j=0; j<dest\&.n(); j++)
+590       dest(i,j) = (*this)(j,i);
+591 }
+.fi
+.SS "template<typename T> std::vector<T>& \fBlibMesh::DenseMatrix\fP< T >::get_values ()\fC [inline]\fP"
+Access to the values array\&. This should be used with caution but can be used to speed up code compilation significantly\&. 
+.PP
+Definition at line 340 of file dense_matrix\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_matvec_blas(), libMesh::PetscMatrix< T >::add_block_matrix(), libMesh::EpetraMatrix< T >::add_matrix(), and libMesh::PetscMatrix< T >::add_matrix()\&.
+.PP
+.nf
+340 { return _val; }
+.fi
+.SS "template<typename T> const std::vector<T>& \fBlibMesh::DenseMatrix\fP< T >::get_values () const\fC [inline]\fP"
+Return a constant reference to the matrix values\&. 
+.PP
+Definition at line 345 of file dense_matrix\&.h\&.
+.PP
+.nf
+345 { return _val; }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseMatrix\fP< T >::l1_norm () const\fC [inline]\fP"
+Return the l1-norm of the matrix, that is $|M|_1=max_{all columns j}\sum_{all rows i} |M_ij|$, (max\&. sum of columns)\&. This is the natural matrix norm that is compatible to the l1-norm for vectors, i\&.e\&. $|Mv|_1\leq |M|_1 |v|_1$\&. 
+.PP
+Definition at line 906 of file dense_matrix\&.h\&.
+.PP
+References std::abs(), libMesh::libmesh_assert(), and libMesh::Real\&.
+.PP
+.nf
+907 {
+908   libmesh_assert (this->_m);
+909   libmesh_assert (this->_n);
+910 
+911   Real columnsum = 0\&.;
+912   for (unsigned int i=0; i!=this->_m; i++)
+913     {
+914       columnsum += std::abs((*this)(i,0));
+915     }
+916   Real my_max = columnsum;
+917   for (unsigned int j=1; j!=this->_n; j++)
+918     {
+919       columnsum = 0\&.;
+920       for (unsigned int i=0; i!=this->_m; i++)
+921         {
+922           columnsum += std::abs((*this)(i,j));
+923         }
+924       my_max = (my_max > columnsum? my_max : columnsum);
+925     }
+926   return my_max;
+927 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::left_multiply (const \fBDenseMatrixBase\fP< T > &M2)\fC [virtual]\fP"
+Left multipliess by the matrix \fCM2\fP\&. 
+.PP
+Implements \fBlibMesh::DenseMatrixBase< T >\fP\&.
+.PP
+Definition at line 37 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), and libMesh::resize()\&.
+.PP
+.nf
+38 {
+39   if (this->use_blas_lapack)
+40     this->_multiply_blas(M2, LEFT_MULTIPLY);
+41   else
+42     {
+43       // (*this) <- M2 * (*this)
+44       // Where:
+45       // (*this) = (m x n),
+46       // M2      = (m x p),
+47       // M3      = (p x n)
+48 
+49       // M3 is a copy of *this before it gets resize()d
+50       DenseMatrix<T> M3(*this);
+51 
+52       // Resize *this so that the result can fit
+53       this->resize (M2\&.m(), M3\&.n());
+54 
+55       // Call the multiply function in the base class
+56       this->multiply(*this, M2, M3);
+57     }
+58 }
+.fi
+.SS "template<typename T > template<typename T2 > void \fBlibMesh::DenseMatrix\fP< T >::left_multiply (const \fBDenseMatrixBase\fP< T2 > &M2)"
+Left multipliess by the matrix \fCM2\fP of different type 
+.PP
+Definition at line 64 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), and libMesh::resize()\&.
+.PP
+.nf
+65 {
+66   // (*this) <- M2 * (*this)
+67   // Where:
+68   // (*this) = (m x n),
+69   // M2      = (m x p),
+70   // M3      = (p x n)
+71 
+72   // M3 is a copy of *this before it gets resize()d
+73   DenseMatrix<T> M3(*this);
+74 
+75   // Resize *this so that the result can fit
+76   this->resize (M2\&.m(), M3\&.n());
+77 
+78   // Call the multiply function in the base class
+79   this->multiply(*this, M2, M3);
+80 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::left_multiply_transpose (const \fBDenseMatrix\fP< T > &A)"
+Left multiplies by the transpose of the matrix \fCA\fP\&. 
+.PP
+Definition at line 85 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), libMesh::resize(), and libMesh::DenseMatrix< T >::transpose()\&.
+.PP
+Referenced by libMesh::DofMap::constrain_element_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), and libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector()\&.
+.PP
+.nf
+86 {
+87   if (this->use_blas_lapack)
+88     this->_multiply_blas(A, LEFT_MULTIPLY_TRANSPOSE);
+89   else
+90     {
+91       //Check to see if we are doing (A^T)*A
+92       if (this == &A)
+93         {
+94           //libmesh_here();
+95           DenseMatrix<T> B(*this);
+96 
+97           // Simple but inefficient way
+98           // return this->left_multiply_transpose(B);
+99 
+100           // More efficient, but more code way
+101           // If A is mxn, the result will be a square matrix of Size n x n\&.
+102           const unsigned int n_rows = A\&.m();
+103           const unsigned int n_cols = A\&.n();
+104 
+105           // resize() *this and also zero out all entries\&.
+106           this->resize(n_cols,n_cols);
+107 
+108           // Compute the lower-triangular part
+109           for (unsigned int i=0; i<n_cols; ++i)
+110             for (unsigned int j=0; j<=i; ++j)
+111               for (unsigned int k=0; k<n_rows; ++k) // inner products are over n_rows
+112                 (*this)(i,j) += B(k,i)*B(k,j);
+113 
+114           // Copy lower-triangular part into upper-triangular part
+115           for (unsigned int i=0; i<n_cols; ++i)
+116             for (unsigned int j=i+1; j<n_cols; ++j)
+117               (*this)(i,j) = (*this)(j,i);
+118         }
+119 
+120       else
+121         {
+122           DenseMatrix<T> B(*this);
+123 
+124           this->resize (A\&.n(), B\&.n());
+125 
+126           libmesh_assert_equal_to (A\&.m(), B\&.m());
+127           libmesh_assert_equal_to (this->m(), A\&.n());
+128           libmesh_assert_equal_to (this->n(), B\&.n());
+129 
+130           const unsigned int m_s = A\&.n();
+131           const unsigned int p_s = A\&.m();
+132           const unsigned int n_s = this->n();
+133 
+134           // Do it this way because there is a
+135           // decent chance (at least for constraint matrices)
+136           // that A\&.transpose(i,k) = 0\&.
+137           for (unsigned int i=0; i<m_s; i++)
+138             for (unsigned int k=0; k<p_s; k++)
+139               if (A\&.transpose(i,k) != 0\&.)
+140                 for (unsigned int j=0; j<n_s; j++)
+141                   (*this)(i,j) += A\&.transpose(i,k)*B(k,j);
+142         }
+143     }
+144 
+145 }
+.fi
+.SS "template<typename T > template<typename T2 > void \fBlibMesh::DenseMatrix\fP< T >::left_multiply_transpose (const \fBDenseMatrix\fP< T2 > &A)"
+Left multiplies by the transpose of the matrix \fCA\fP of different type 
+.PP
+Definition at line 151 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), libMesh::resize(), and libMesh::DenseMatrix< T >::transpose()\&.
+.PP
+.nf
+152 {
+153   //Check to see if we are doing (A^T)*A
+154   if (this == &A)
+155     {
+156       //libmesh_here();
+157       DenseMatrix<T> B(*this);
+158 
+159       // Simple but inefficient way
+160       // return this->left_multiply_transpose(B);
+161 
+162       // More efficient, but more code way
+163       // If A is mxn, the result will be a square matrix of Size n x n\&.
+164       const unsigned int n_rows = A\&.m();
+165       const unsigned int n_cols = A\&.n();
+166 
+167       // resize() *this and also zero out all entries\&.
+168       this->resize(n_cols,n_cols);
+169 
+170       // Compute the lower-triangular part
+171       for (unsigned int i=0; i<n_cols; ++i)
+172         for (unsigned int j=0; j<=i; ++j)
+173           for (unsigned int k=0; k<n_rows; ++k) // inner products are over n_rows
+174             (*this)(i,j) += B(k,i)*B(k,j);
+175 
+176       // Copy lower-triangular part into upper-triangular part
+177       for (unsigned int i=0; i<n_cols; ++i)
+178         for (unsigned int j=i+1; j<n_cols; ++j)
+179           (*this)(i,j) = (*this)(j,i);
+180     }
+181 
+182   else
+183     {
+184       DenseMatrix<T> B(*this);
+185 
+186       this->resize (A\&.n(), B\&.n());
+187 
+188       libmesh_assert_equal_to (A\&.m(), B\&.m());
+189       libmesh_assert_equal_to (this->m(), A\&.n());
+190       libmesh_assert_equal_to (this->n(), B\&.n());
+191 
+192       const unsigned int m_s = A\&.n();
+193       const unsigned int p_s = A\&.m();
+194       const unsigned int n_s = this->n();
+195 
+196       // Do it this way because there is a
+197       // decent chance (at least for constraint matrices)
+198       // that A\&.transpose(i,k) = 0\&.
+199       for (unsigned int i=0; i<m_s; i++)
+200         for (unsigned int k=0; k<p_s; k++)
+201           if (A\&.transpose(i,k) != 0\&.)
+202             for (unsigned int j=0; j<n_s; j++)
+203               (*this)(i,j) += A\&.transpose(i,k)*B(k,j);
+204     }
+205 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseMatrix\fP< T >::linfty_norm () const\fC [inline]\fP"
+Return the linfty-norm of the matrix, that is $|M|_\infty=max_{all rows i}\sum_{all columns j} |M_ij|$, (max\&. sum of rows)\&. This is the natural matrix norm that is compatible to the linfty-norm of vectors, i\&.e\&. $|Mv|_\infty \leq |M|_\infty |v|_\infty$\&. 
+.PP
+Definition at line 933 of file dense_matrix\&.h\&.
+.PP
+References std::abs(), libMesh::libmesh_assert(), and libMesh::Real\&.
+.PP
+.nf
+934 {
+935   libmesh_assert (this->_m);
+936   libmesh_assert (this->_n);
+937 
+938   Real rowsum = 0\&.;
+939   for (unsigned int j=0; j!=this->_n; j++)
+940     {
+941       rowsum += std::abs((*this)(0,j));
+942     }
+943   Real my_max = rowsum;
+944   for (unsigned int i=1; i!=this->_m; i++)
+945     {
+946       rowsum = 0\&.;
+947       for (unsigned int j=0; j!=this->_n; j++)
+948         {
+949           rowsum += std::abs((*this)(i,j));
+950         }
+951       my_max = (my_max > rowsum? my_max : rowsum);
+952     }
+953   return my_max;
+954 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::lu_solve (const \fBDenseVector\fP< T > &b, \fBDenseVector\fP< T > &x)"
+Solve the system Ax=b given the input vector b\&. Partial pivoting is performed by default in order to keep the algorithm stable to the effects of round-off error\&. 
+.PP
+Definition at line 597 of file dense_matrix\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.PP
+.nf
+599 {
+600   // Check to be sure that the matrix is square before attempting
+601   // an LU-solve\&.  In general, one can compute the LU factorization of
+602   // a non-square matrix, but:
+603   //
+604   // Overdetermined systems (m>n) have a solution only if enough of
+605   // the equations are linearly-dependent\&.
+606   //
+607   // Underdetermined systems (m<n) typically have infinitely many
+608   // solutions\&.
+609   //
+610   // We don't want to deal with either of these ambiguous cases here\&.\&.\&.
+611   libmesh_assert_equal_to (this->m(), this->n());
+612 
+613   switch(this->_decomposition_type)
+614     {
+615     case NONE:
+616       {
+617         if (this->use_blas_lapack)
+618           this->_lu_decompose_lapack();
+619         else
+620           this->_lu_decompose ();
+621         break;
+622       }
+623 
+624     case LU_BLAS_LAPACK:
+625       {
+626         // Already factored, just need to call back_substitute\&.
+627         if (this->use_blas_lapack)
+628           break;
+629       }
+630 
+631     case LU:
+632       {
+633         // Already factored, just need to call back_substitute\&.
+634         if ( !(this->use_blas_lapack) )
+635           break;
+636       }
+637 
+638     default:
+639       {
+640         libMesh::err << "Error! This matrix already has a "
+641                      << "different decomposition\&.\&.\&."
+642                      << std::endl;
+643         libmesh_error();
+644       }
+645     }
+646 
+647   if (this->use_blas_lapack)
+648     this->_lu_back_substitute_lapack (b, x);
+649   else
+650     this->_lu_back_substitute (b, x);
+651 }
+.fi
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::m () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the row-dimension of the matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 99 of file dense_matrix_base\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::_m\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_multiply_blas(), libMesh::DenseMatrix< T >::_svd_lapack(), libMesh::DenseMatrixBase< T >::add(), libMesh::DenseMatrix< T >::add(), libMesh::SparseMatrix< T >::add_block_matrix(), libMesh::PetscMatrix< T >::add_block_matrix(), libMesh::EigenSparseMatrix< T >::add_matrix(), libMesh::LaspackMatrix< T >::add_matrix(), libMesh::EpetraMatrix< T >::add_matrix(), libMesh::PetscMatrix< T >::add_matrix(), libMesh::DofMap::build_constraint_matrix(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::DofMap::constrain_element_dyad_matrix(), libMesh::DofMap::constrain_element_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::constrain_element_vector(), libMesh::DofMap::extract_local_vector(), libMesh::DenseMatrix< T >::get_transpose(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), libMesh::DofMap::heterogenously_constrain_element_vector(), libMesh::DenseMatrix< T >::left_multiply(), libMesh::DenseMatrix< T >::left_multiply_transpose(), libMesh::DofMap::max_constraint_error(), libMesh::DenseMatrixBase< T >::multiply(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::DenseMatrix< T >::operator=(), libMesh::DenseMatrix< T >::right_multiply(), and libMesh::DenseMatrix< T >::right_multiply_transpose()\&.
+.PP
+.nf
+99 { return _m; }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseMatrix\fP< T >::max () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the maximum element in the matrix\&. In case of complex numbers, this returns the maximum Real part\&. 
+.RE
+.PP
+
+.PP
+Definition at line 885 of file dense_matrix\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::libmesh_real(), and libMesh::Real\&.
+.PP
+.nf
+886 {
+887   libmesh_assert (this->_m);
+888   libmesh_assert (this->_n);
+889   Real my_max = libmesh_real((*this)(0,0));
+890 
+891   for (unsigned int i=0; i!=this->_m; i++)
+892     {
+893       for (unsigned int j=0; j!=this->_n; j++)
+894         {
+895           Real current = libmesh_real((*this)(i,j));
+896           my_max = (my_max > current? my_max : current);
+897         }
+898     }
+899   return my_max;
+900 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::DenseMatrix\fP< T >::min () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the minimum element in the matrix\&. In case of complex numbers, this returns the minimum Real part\&. 
+.RE
+.PP
+
+.PP
+Definition at line 864 of file dense_matrix\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::libmesh_real(), and libMesh::Real\&.
+.PP
+.nf
+865 {
+866   libmesh_assert (this->_m);
+867   libmesh_assert (this->_n);
+868   Real my_min = libmesh_real((*this)(0,0));
+869 
+870   for (unsigned int i=0; i!=this->_m; i++)
+871     {
+872       for (unsigned int j=0; j!=this->_n; j++)
+873         {
+874           Real current = libmesh_real((*this)(i,j));
+875           my_min = (my_min < current? my_min : current);
+876         }
+877     }
+878   return my_min;
+879 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::multiply (\fBDenseMatrixBase\fP< T > &M1, const \fBDenseMatrixBase\fP< T > &M2, const \fBDenseMatrixBase\fP< T > &M3)\fC [protected]\fP, \fC [inherited]\fP"
+Performs the computation M1 = M2 * M3 where: M1 = (m x n) M2 = (m x p) M3 = (p x n) 
+.PP
+Definition at line 31 of file dense_matrix_base\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::el(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+34 {
+35   // Assertions to make sure we have been
+36   // passed matrices of the correct dimension\&.
+37   libmesh_assert_equal_to (M1\&.m(), M2\&.m());
+38   libmesh_assert_equal_to (M1\&.n(), M3\&.n());
+39   libmesh_assert_equal_to (M2\&.n(), M3\&.m());
+40 
+41   const unsigned int m_s = M2\&.m();
+42   const unsigned int p_s = M2\&.n();
+43   const unsigned int n_s = M1\&.n();
+44 
+45   // Do it this way because there is a
+46   // decent chance (at least for constraint matrices)
+47   // that M3(k,j) = 0\&. when right-multiplying\&.
+48   for (unsigned int k=0; k<p_s; k++)
+49     for (unsigned int j=0; j<n_s; j++)
+50       if (M3\&.el(k,j) != 0\&.)
+51         for (unsigned int i=0; i<m_s; i++)
+52           M1\&.el(i,j) += M2\&.el(i,k) * M3\&.el(k,j);
+53 }
+.fi
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::n () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the column-dimension of the matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 104 of file dense_matrix_base\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::_n\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_multiply_blas(), libMesh::DenseMatrix< T >::_svd_lapack(), libMesh::DenseMatrixBase< T >::add(), libMesh::DenseMatrix< T >::add(), libMesh::SparseMatrix< T >::add_block_matrix(), libMesh::PetscMatrix< T >::add_block_matrix(), libMesh::EigenSparseMatrix< T >::add_matrix(), libMesh::LaspackMatrix< T >::add_matrix(), libMesh::EpetraMatrix< T >::add_matrix(), libMesh::PetscMatrix< T >::add_matrix(), libMesh::DofMap::build_constraint_matrix(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::DofMap::constrain_element_dyad_matrix(), libMesh::DofMap::constrain_element_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::constrain_element_vector(), libMesh::DofMap::extract_local_vector(), libMesh::DenseMatrix< T >::get_transpose(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), libMesh::DofMap::heterogenously_constrain_element_vector(), libMesh::DenseMatrix< T >::left_multiply(), libMesh::DenseMatrix< T >::left_multiply_transpose(), libMesh::DofMap::max_constraint_error(), libMesh::DenseMatrixBase< T >::multiply(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::DenseMatrix< T >::operator=(), libMesh::DenseMatrix< T >::right_multiply(), and libMesh::DenseMatrix< T >::right_multiply_transpose()\&.
+.PP
+.nf
+104 { return _n; }
+.fi
+.SS "template<typename T> bool \fBlibMesh::DenseMatrix\fP< T >::operator!= (const \fBDenseMatrix\fP< T > &mat) const\fC [inline]\fP"
+Tests if \fCmat\fP is not exactly equal to this matrix\&. 
+.PP
+Definition at line 827 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::_val\&.
+.PP
+.nf
+828 {
+829   for (unsigned int i=0; i<_val\&.size(); i++)
+830     if (_val[i] != mat\&._val[i])
+831       return true;
+832 
+833   return false;
+834 }
+.fi
+.SS "template<typename T > T \fBlibMesh::DenseMatrix\fP< T >::operator() (const unsigned inti, const unsigned intj) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 734 of file dense_matrix\&.h\&.
+.PP
+.nf
+736 {
+737   libmesh_assert_less (i*j, _val\&.size());
+738   libmesh_assert_less (i, this->_m);
+739   libmesh_assert_less (j, this->_n);
+740 
+741 
+742   //  return _val[(i) + (this->_m)*(j)]; // col-major
+743   return _val[(i)*(this->_n) + (j)]; // row-major
+744 }
+.fi
+.SS "template<typename T > T & \fBlibMesh::DenseMatrix\fP< T >::operator() (const unsigned inti, const unsigned intj)\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the matrix as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 750 of file dense_matrix\&.h\&.
+.PP
+.nf
+752 {
+753   libmesh_assert_less (i*j, _val\&.size());
+754   libmesh_assert_less (i, this->_m);
+755   libmesh_assert_less (j, this->_n);
+756 
+757   //return _val[(i) + (this->_m)*(j)]; // col-major
+758   return _val[(i)*(this->_n) + (j)]; // row-major
+759 }
+.fi
+.SS "template<typename T> \fBDenseMatrix\fP< T > & \fBlibMesh::DenseMatrix\fP< T >::operator*= (const Tfactor)\fC [inline]\fP"
+Multiplies every element in the matrix by \fCfactor\fP\&. 
+.PP
+Definition at line 786 of file dense_matrix\&.h\&.
+.PP
+References libMesh::MeshTools::Modification::scale()\&.
+.PP
+.nf
+787 {
+788   this->scale(factor);
+789   return *this;
+790 }
+.fi
+.SS "template<typename T> \fBDenseMatrix\fP< T > & \fBlibMesh::DenseMatrix\fP< T >::operator+= (const \fBDenseMatrix\fP< T > &mat)\fC [inline]\fP"
+Adds \fCmat\fP to this matrix\&. 
+.PP
+Definition at line 840 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::_val\&.
+.PP
+.nf
+841 {
+842   for (unsigned int i=0; i<_val\&.size(); i++)
+843     _val[i] += mat\&._val[i];
+844 
+845   return *this;
+846 }
+.fi
+.SS "template<typename T> \fBDenseMatrix\fP< T > & \fBlibMesh::DenseMatrix\fP< T >::operator-= (const \fBDenseMatrix\fP< T > &mat)\fC [inline]\fP"
+Subtracts \fCmat\fP from this matrix\&. 
+.PP
+Definition at line 852 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::_val\&.
+.PP
+.nf
+853 {
+854   for (unsigned int i=0; i<_val\&.size(); i++)
+855     _val[i] -= mat\&._val[i];
+856 
+857   return *this;
+858 }
+.fi
+.SS "template<typename T> \fBDenseMatrix\fP< T > & \fBlibMesh::DenseMatrix\fP< T >::operator= (const \fBDenseMatrix\fP< T > &other_matrix)\fC [inline]\fP"
+Assignment operator\&. 
+.PP
+Definition at line 719 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::_decomposition_type, libMesh::DenseMatrixBase< T >::_m, libMesh::DenseMatrixBase< T >::_n, and libMesh::DenseMatrix< T >::_val\&.
+.PP
+.nf
+720 {
+721   this->_m = other_matrix\&._m;
+722   this->_n = other_matrix\&._n;
+723 
+724   _val                = other_matrix\&._val;
+725   _decomposition_type = other_matrix\&._decomposition_type;
+726 
+727   return *this;
+728 }
+.fi
+.SS "template<typename T > template<typename T2 > \fBDenseMatrix\fP< T > & \fBlibMesh::DenseMatrix\fP< T >::operator= (const \fBDenseMatrix\fP< T2 > &other_matrix)\fC [inline]\fP"
+Assignment-from-other-matrix-type operator
+.PP
+Copies the dense matrix of type T2 into the present matrix\&. This is useful for copying real matrices into complex ones for further operations 
+.PP
+Definition at line 671 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), and libMesh::resize()\&.
+.PP
+.nf
+672 {
+673   unsigned int mat_m = mat\&.m(), mat_n = mat\&.n();
+674   this->resize(mat_m, mat_n);
+675   for (unsigned int i=0; i<mat_m; i++)
+676     for (unsigned int j=0; j<mat_n; j++)
+677       (*this)(i,j) = mat(i,j);
+678 
+679   return *this;
+680 }
+.fi
+.SS "template<typename T> bool \fBlibMesh::DenseMatrix\fP< T >::operator== (const \fBDenseMatrix\fP< T > &mat) const\fC [inline]\fP"
+Tests if \fCmat\fP is exactly equal to this matrix\&. 
+.PP
+Definition at line 814 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::_val\&.
+.PP
+.nf
+815 {
+816   for (unsigned int i=0; i<_val\&.size(); i++)
+817     if (_val[i] != mat\&._val[i])
+818       return false;
+819 
+820   return true;
+821 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::print (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [inherited]\fP"
+Pretty-print the matrix, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 128 of file dense_matrix_base\&.C\&.
+.PP
+.nf
+129 {
+130   for (unsigned int i=0; i<this->m(); i++)
+131     {
+132       for (unsigned int j=0; j<this->n(); j++)
+133         os << std::setw(8)
+134            << this->el(i,j) << " ";
+135 
+136       os << std::endl;
+137     }
+138 
+139   return;
+140 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrixBase\fP< T >::print_scientific (std::ostream &os) const\fC [inherited]\fP"
+Prints the matrix entries with more decimal places in scientific notation\&. 
+.PP
+Definition at line 86 of file dense_matrix_base\&.C\&.
+.PP
+.nf
+87 {
+88 #ifndef LIBMESH_BROKEN_IOSTREAM
+89 
+90   // save the initial format flags
+91   std::ios_base::fmtflags os_flags = os\&.flags();
+92 
+93   // Print the matrix entries\&.
+94   for (unsigned int i=0; i<this->m(); i++)
+95     {
+96       for (unsigned int j=0; j<this->n(); j++)
+97         os << std::setw(15)
+98            << std::scientific
+99            << std::setprecision(8)
+100            << this->el(i,j) << " ";
+101 
+102       os << std::endl;
+103     }
+104 
+105   // reset the original format flags
+106   os\&.flags(os_flags);
+107 
+108 #else
+109 
+110   // Print the matrix entries\&.
+111   for (unsigned int i=0; i<this->m(); i++)
+112     {
+113       for (unsigned int j=0; j<this->n(); j++)
+114         os << std::setprecision(8)
+115            << this->el(i,j)
+116            << " ";
+117 
+118       os << std::endl;
+119     }
+120 
+121 
+122 #endif
+123 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrix\fP< T >::resize (const unsigned intnew_m, const unsigned intnew_n)\fC [inline]\fP"
+Resize the matrix\&. Will never free memory, but may allocate more\&. Sets all elements to 0\&. 
+.PP
+Definition at line 686 of file dense_matrix\&.h\&.
+.PP
+References libMesh::zero\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_svd_lapack(), libMesh::HPCoarsenTest::add_projection(), libMesh::DofMap::build_constraint_matrix(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), libMesh::DenseMatrix< T >::DenseMatrix(), libMesh::DenseMatrix< T >::get_principal_submatrix(), libMesh::DenseMatrix< T >::get_transpose(), libMesh::FESubdivision::init_subdivision_matrix(), libMesh::DGFEMContext::neighbor_side_fe_reinit(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), libMesh::FEMContext::pre_fe_reinit(), and libMesh::HPCoarsenTest::select_refinement()\&.
+.PP
+.nf
+688 {
+689   _val\&.resize(new_m*new_n);
+690 
+691   this->_m = new_m;
+692   this->_n = new_n;
+693 
+694   _decomposition_type = NONE;
+695   this->zero();
+696 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::right_multiply (const \fBDenseMatrixBase\fP< T > &M2)\fC [virtual]\fP"
+Right multiplies by the matrix \fCM2\fP\&. 
+.PP
+Implements \fBlibMesh::DenseMatrixBase< T >\fP\&.
+.PP
+Definition at line 210 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), and libMesh::resize()\&.
+.PP
+Referenced by libMesh::DofMap::build_constraint_matrix(), libMesh::DofMap::build_constraint_matrix_and_vector(), libMesh::DofMap::constrain_element_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), and libMesh::FESubdivision::init_shape_functions()\&.
+.PP
+.nf
+211 {
+212   if (this->use_blas_lapack)
+213     this->_multiply_blas(M3, RIGHT_MULTIPLY);
+214   else
+215     {
+216       // (*this) <- M3 * (*this)
+217       // Where:
+218       // (*this) = (m x n),
+219       // M2      = (m x p),
+220       // M3      = (p x n)
+221 
+222       // M2 is a copy of *this before it gets resize()d
+223       DenseMatrix<T> M2(*this);
+224 
+225       // Resize *this so that the result can fit
+226       this->resize (M2\&.m(), M3\&.n());
+227 
+228       this->multiply(*this, M2, M3);
+229     }
+230 }
+.fi
+.SS "template<typename T > template<typename T2 > void \fBlibMesh::DenseMatrix\fP< T >::right_multiply (const \fBDenseMatrixBase\fP< T2 > &M2)"
+Right multiplies by the matrix \fCM2\fP of different type 
+.PP
+Definition at line 236 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), and libMesh::resize()\&.
+.PP
+.nf
+237 {
+238   // (*this) <- M3 * (*this)
+239   // Where:
+240   // (*this) = (m x n),
+241   // M2      = (m x p),
+242   // M3      = (p x n)
+243 
+244   // M2 is a copy of *this before it gets resize()d
+245   DenseMatrix<T> M2(*this);
+246 
+247   // Resize *this so that the result can fit
+248   this->resize (M2\&.m(), M3\&.n());
+249 
+250   this->multiply(*this, M2, M3);
+251 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::right_multiply_transpose (const \fBDenseMatrix\fP< T > &A)"
+Right multiplies by the transpose of the matrix \fCA\fP 
+.PP
+Definition at line 257 of file dense_matrix\&.C\&.
+.PP
+References A, libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), libMesh::resize(), and libMesh::DenseMatrix< T >::transpose()\&.
+.PP
+.nf
+258 {
+259   if (this->use_blas_lapack)
+260     this->_multiply_blas(B, RIGHT_MULTIPLY_TRANSPOSE);
+261   else
+262     {
+263       //Check to see if we are doing B*(B^T)
+264       if (this == &B)
+265         {
+266           //libmesh_here();
+267           DenseMatrix<T> A(*this);
+268 
+269           // Simple but inefficient way
+270           // return this->right_multiply_transpose(A);
+271 
+272           // More efficient, more code
+273           // If B is mxn, the result will be a square matrix of Size m x m\&.
+274           const unsigned int n_rows = B\&.m();
+275           const unsigned int n_cols = B\&.n();
+276 
+277           // resize() *this and also zero out all entries\&.
+278           this->resize(n_rows,n_rows);
+279 
+280           // Compute the lower-triangular part
+281           for (unsigned int i=0; i<n_rows; ++i)
+282             for (unsigned int j=0; j<=i; ++j)
+283               for (unsigned int k=0; k<n_cols; ++k) // inner products are over n_cols
+284                 (*this)(i,j) += A(i,k)*A(j,k);
+285 
+286           // Copy lower-triangular part into upper-triangular part
+287           for (unsigned int i=0; i<n_rows; ++i)
+288             for (unsigned int j=i+1; j<n_rows; ++j)
+289               (*this)(i,j) = (*this)(j,i);
+290         }
+291 
+292       else
+293         {
+294           DenseMatrix<T> A(*this);
+295 
+296           this->resize (A\&.m(), B\&.m());
+297 
+298           libmesh_assert_equal_to (A\&.n(), B\&.n());
+299           libmesh_assert_equal_to (this->m(), A\&.m());
+300           libmesh_assert_equal_to (this->n(), B\&.m());
+301 
+302           const unsigned int m_s = A\&.m();
+303           const unsigned int p_s = A\&.n();
+304           const unsigned int n_s = this->n();
+305 
+306           // Do it this way because there is a
+307           // decent chance (at least for constraint matrices)
+308           // that B\&.transpose(k,j) = 0\&.
+309           for (unsigned int j=0; j<n_s; j++)
+310             for (unsigned int k=0; k<p_s; k++)
+311               if (B\&.transpose(k,j) != 0\&.)
+312                 for (unsigned int i=0; i<m_s; i++)
+313                   (*this)(i,j) += A(i,k)*B\&.transpose(k,j);
+314         }
+315     }
+316 }
+.fi
+.SS "template<typename T > template<typename T2 > void \fBlibMesh::DenseMatrix\fP< T >::right_multiply_transpose (const \fBDenseMatrix\fP< T2 > &A)"
+Right multiplies by the transpose of the matrix \fCA\fP of different type\&. 
+.PP
+Definition at line 322 of file dense_matrix\&.C\&.
+.PP
+References A, libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrixBase< T >::n(), libMesh::resize(), and libMesh::DenseMatrix< T >::transpose()\&.
+.PP
+.nf
+323 {
+324   //Check to see if we are doing B*(B^T)
+325   if (this == &B)
+326     {
+327       //libmesh_here();
+328       DenseMatrix<T> A(*this);
+329 
+330       // Simple but inefficient way
+331       // return this->right_multiply_transpose(A);
+332 
+333       // More efficient, more code
+334       // If B is mxn, the result will be a square matrix of Size m x m\&.
+335       const unsigned int n_rows = B\&.m();
+336       const unsigned int n_cols = B\&.n();
+337 
+338       // resize() *this and also zero out all entries\&.
+339       this->resize(n_rows,n_rows);
+340 
+341       // Compute the lower-triangular part
+342       for (unsigned int i=0; i<n_rows; ++i)
+343         for (unsigned int j=0; j<=i; ++j)
+344           for (unsigned int k=0; k<n_cols; ++k) // inner products are over n_cols
+345             (*this)(i,j) += A(i,k)*A(j,k);
+346 
+347       // Copy lower-triangular part into upper-triangular part
+348       for (unsigned int i=0; i<n_rows; ++i)
+349         for (unsigned int j=i+1; j<n_rows; ++j)
+350           (*this)(i,j) = (*this)(j,i);
+351     }
+352 
+353   else
+354     {
+355       DenseMatrix<T> A(*this);
+356 
+357       this->resize (A\&.m(), B\&.m());
+358 
+359       libmesh_assert_equal_to (A\&.n(), B\&.n());
+360       libmesh_assert_equal_to (this->m(), A\&.m());
+361       libmesh_assert_equal_to (this->n(), B\&.m());
+362 
+363       const unsigned int m_s = A\&.m();
+364       const unsigned int p_s = A\&.n();
+365       const unsigned int n_s = this->n();
+366 
+367       // Do it this way because there is a
+368       // decent chance (at least for constraint matrices)
+369       // that B\&.transpose(k,j) = 0\&.
+370       for (unsigned int j=0; j<n_s; j++)
+371         for (unsigned int k=0; k<p_s; k++)
+372           if (B\&.transpose(k,j) != 0\&.)
+373             for (unsigned int i=0; i<m_s; i++)
+374               (*this)(i,j) += A(i,k)*B\&.transpose(k,j);
+375     }
+376 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::scale (const Tfactor)\fC [inline]\fP"
+Multiplies every element in the matrix by \fCfactor\fP\&. 
+.PP
+Definition at line 767 of file dense_matrix\&.h\&.
+.PP
+.nf
+768 {
+769   for (unsigned int i=0; i<_val\&.size(); i++)
+770     _val[i] *= factor;
+771 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::scale_column (const unsigned intcol, const Tfactor)\fC [inline]\fP"
+Multiplies every element in the column \fCcol\fP matrix by \fCfactor\fP\&. 
+.PP
+Definition at line 776 of file dense_matrix\&.h\&.
+.PP
+.nf
+777 {
+778   for (unsigned int i=0; i<this->m(); i++)
+779     (*this)(i, col) *= factor;
+780 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::svd (\fBDenseVector\fP< T > &sigma)"
+Compute the Singular Value Decomposition of the matrix\&. On exit, sigma holds all of the singular values (in descending order)\&.
+.PP
+The implementation uses PETSc's interface to blas/lapack\&. If this is not available, this function throws an error\&. 
+.PP
+Definition at line 791 of file dense_matrix\&.C\&.
+.PP
+.nf
+792 {
+793   // We use the LAPACK svd implementation
+794   _svd_lapack(sigma);
+795 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::svd (\fBDenseVector\fP< T > &sigma, \fBDenseMatrix\fP< T > &U, \fBDenseMatrix\fP< T > &VT)"
+Compute the 'reduced' Singular Value Decomposition of the matrix\&. On exit, sigma holds all of the singular values (in descending order), U holds the left singular vectors, and VT holds the transpose of the right singular vectors\&. In the reduced SVD, U has min(m,n) columns and VT has min(m,n) rows\&. (In the 'full' SVD, U and VT would be square\&.)
+.PP
+The implementation uses PETSc's interface to blas/lapack\&. If this is not available, this function throws an error\&. 
+.PP
+Definition at line 799 of file dense_matrix\&.C\&.
+.PP
+.nf
+800 {
+801   // We use the LAPACK svd implementation
+802   _svd_lapack(sigma, U, VT);
+803 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::swap (\fBDenseMatrix\fP< T > &other_matrix)\fC [inline]\fP"
+STL-like swap method 
+.PP
+Definition at line 656 of file dense_matrix\&.h\&.
+.PP
+References libMesh::DenseMatrix< T >::_decomposition_type, libMesh::DenseMatrixBase< T >::_m, libMesh::DenseMatrixBase< T >::_n, libMesh::DenseMatrix< T >::_val, and libMesh::swap()\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+657 {
+658   std::swap(this->_m, other_matrix\&._m);
+659   std::swap(this->_n, other_matrix\&._n);
+660   _val\&.swap(other_matrix\&._val);
+661   DecompositionType _temp = _decomposition_type;
+662   _decomposition_type = other_matrix\&._decomposition_type;
+663   other_matrix\&._decomposition_type = _temp;
+664 }
+.fi
+.SS "template<typename T > T \fBlibMesh::DenseMatrix\fP< T >::transpose (const unsigned inti, const unsigned intj) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i,j) element of the transposed matrix\&. 
+.RE
+.PP
+
+.PP
+Definition at line 960 of file dense_matrix\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::left_multiply_transpose(), and libMesh::DenseMatrix< T >::right_multiply_transpose()\&.
+.PP
+.nf
+962 {
+963   // Implement in terms of operator()
+964   return (*this)(j,i);
+965 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::vector_mult (\fBDenseVector\fP< T > &dest, const \fBDenseVector\fP< T > &arg) const"
+Performs the matrix-vector multiplication, \fCdest\fP := (*this) * \fCarg\fP\&. 
+.PP
+Definition at line 383 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseVector< T >::resize(), and libMesh::DenseVector< T >::size()\&.
+.PP
+Referenced by libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), and libMesh::DofMap::heterogenously_constrain_element_vector()\&.
+.PP
+.nf
+385 {
+386   // Make sure the input sizes are compatible
+387   libmesh_assert_equal_to (this->n(), arg\&.size());
+388 
+389   // Resize and clear dest\&.
+390   // Note: DenseVector::resize() also zeros the vector\&.
+391   dest\&.resize(this->m());
+392 
+393   // Short-circuit if the matrix is empty
+394   if(this->m() == 0 || this->n() == 0)
+395     return;
+396 
+397   if (this->use_blas_lapack)
+398     this->_matvec_blas(1\&., 0\&., dest, arg);
+399   else
+400     {
+401       const unsigned int n_rows = this->m();
+402       const unsigned int n_cols = this->n();
+403 
+404       for(unsigned int i=0; i<n_rows; i++)
+405         for(unsigned int j=0; j<n_cols; j++)
+406           dest(i) += (*this)(i,j)*arg(j);
+407     }
+408 }
+.fi
+.SS "template<typename T> template<typename T2 > void \fBlibMesh::DenseMatrix\fP< T >::vector_mult (\fBDenseVector\fP< typename \fBCompareTypes\fP< T, T2 >::supertype > &dest, const \fBDenseVector\fP< T2 > &arg) const"
+Performs the matrix-vector multiplication, \fCdest\fP := (*this) * \fCarg\fP on mixed types 
+.PP
+Definition at line 415 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseVector< T >::resize(), and libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+417 {
+418   // Make sure the input sizes are compatible
+419   libmesh_assert_equal_to (this->n(), arg\&.size());
+420 
+421   // Resize and clear dest\&.
+422   // Note: DenseVector::resize() also zeros the vector\&.
+423   dest\&.resize(this->m());
+424 
+425   // Short-circuit if the matrix is empty
+426   if(this->m() == 0 || this->n() == 0)
+427     return;
+428 
+429   const unsigned int n_rows = this->m();
+430   const unsigned int n_cols = this->n();
+431 
+432   for(unsigned int i=0; i<n_rows; i++)
+433     for(unsigned int j=0; j<n_cols; j++)
+434       dest(i) += (*this)(i,j)*arg(j);
+435 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::vector_mult_add (\fBDenseVector\fP< T > &dest, const Tfactor, const \fBDenseVector\fP< T > &arg) const"
+Performs the scaled matrix-vector multiplication, \fCdest\fP += \fCfactor\fP * (*this) * \fCarg\fP\&. 
+.PP
+Definition at line 513 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseVector< T >::add(), libMesh::DenseVector< T >::resize(), and libMesh::DenseVector< T >::size()\&.
+.PP
+Referenced by libMesh::DofMap::build_constraint_matrix_and_vector()\&.
+.PP
+.nf
+516 {
+517   // Short-circuit if the matrix is empty
+518   if(this->m() == 0)
+519     {
+520       dest\&.resize(0);
+521       return;
+522     }
+523 
+524   if (this->use_blas_lapack)
+525     this->_matvec_blas(factor, 1\&., dest, arg);
+526   else
+527     {
+528       DenseVector<T> temp(arg\&.size());
+529       this->vector_mult(temp, arg);
+530       dest\&.add(factor, temp);
+531     }
+532 }
+.fi
+.SS "template<typename T> template<typename T2 , typename T3 > void \fBlibMesh::DenseMatrix\fP< T >::vector_mult_add (\fBDenseVector\fP< typename \fBCompareTypes\fP< T, typename \fBCompareTypes\fP< T2, T3 >::supertype >::supertype > &dest, const T2factor, const \fBDenseVector\fP< T3 > &arg) const"
+Performs the scaled matrix-vector multiplication, \fCdest\fP += \fCfactor\fP * (*this) * \fCarg\fP\&. on mixed types 
+.PP
+Definition at line 539 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseVector< T >::add(), libMesh::DenseVector< T >::resize(), and libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+544 {
+545   // Short-circuit if the matrix is empty
+546   if(this->m() == 0)
+547   {
+548     dest\&.resize(0);
+549     return;
+550   }
+551 
+552   DenseVector<typename CompareTypes<T,T3>::supertype>
+553     temp(arg\&.size());
+554   this->vector_mult(temp, arg);
+555   dest\&.add(factor, temp);
+556 }
+.fi
+.SS "template<typename T> void \fBlibMesh::DenseMatrix\fP< T >::vector_mult_transpose (\fBDenseVector\fP< T > &dest, const \fBDenseVector\fP< T > &arg) const"
+Performs the matrix-vector multiplication, \fCdest\fP := (*this)^T * \fCarg\fP\&. 
+.PP
+Definition at line 441 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseVector< T >::resize(), and libMesh::DenseVector< T >::size()\&.
+.PP
+Referenced by libMesh::DofMap::constrain_element_dyad_matrix(), libMesh::DofMap::constrain_element_matrix_and_vector(), libMesh::DofMap::constrain_element_vector(), libMesh::DofMap::heterogenously_constrain_element_matrix_and_vector(), and libMesh::DofMap::heterogenously_constrain_element_vector()\&.
+.PP
+.nf
+443 {
+444   // Make sure the input sizes are compatible
+445   libmesh_assert_equal_to (this->m(), arg\&.size());
+446 
+447   // Resize and clear dest\&.
+448   // Note: DenseVector::resize() also zeros the vector\&.
+449   dest\&.resize(this->n());
+450 
+451   // Short-circuit if the matrix is empty
+452   if(this->m() == 0)
+453     return;
+454 
+455   if (this->use_blas_lapack)
+456     {
+457       this->_matvec_blas(1\&., 0\&., dest, arg, /*trans=*/true);
+458     }
+459   else
+460     {
+461       const unsigned int n_rows = this->m();
+462       const unsigned int n_cols = this->n();
+463 
+464       // WORKS
+465       // for(unsigned int j=0; j<n_cols; j++)
+466       //   for(unsigned int i=0; i<n_rows; i++)
+467       //     dest(j) += (*this)(i,j)*arg(i);
+468 
+469       // ALSO WORKS, (i,j) just swapped
+470       for(unsigned int i=0; i<n_cols; i++)
+471         for(unsigned int j=0; j<n_rows; j++)
+472           dest(i) += (*this)(j,i)*arg(j);
+473     }
+474 }
+.fi
+.SS "template<typename T> template<typename T2 > void \fBlibMesh::DenseMatrix\fP< T >::vector_mult_transpose (\fBDenseVector\fP< typename \fBCompareTypes\fP< T, T2 >::supertype > &dest, const \fBDenseVector\fP< T2 > &arg) const"
+Performs the matrix-vector multiplication, \fCdest\fP := (*this)^T * \fCarg\fP\&. on mixed types 
+.PP
+Definition at line 481 of file dense_matrix\&.C\&.
+.PP
+References libMesh::DenseVector< T >::resize(), and libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+483 {
+484   // Make sure the input sizes are compatible
+485   libmesh_assert_equal_to (this->m(), arg\&.size());
+486 
+487   // Resize and clear dest\&.
+488   // Note: DenseVector::resize() also zeros the vector\&.
+489   dest\&.resize(this->n());
+490 
+491   // Short-circuit if the matrix is empty
+492   if(this->m() == 0)
+493     return;
+494 
+495   const unsigned int n_rows = this->m();
+496   const unsigned int n_cols = this->n();
+497 
+498   // WORKS
+499   // for(unsigned int j=0; j<n_cols; j++)
+500   //   for(unsigned int i=0; i<n_rows; i++)
+501   //     dest(j) += (*this)(i,j)*arg(i);
+502 
+503   // ALSO WORKS, (i,j) just swapped
+504   for(unsigned int i=0; i<n_cols; i++)
+505     for(unsigned int j=0; j<n_rows; j++)
+506       dest(i) += (*this)(j,i)*arg(j);
+507 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseMatrix\fP< T >::zero ()\fC [inline]\fP, \fC [virtual]\fP"
+Set every element in the matrix to 0\&. 
+.PP
+Implements \fBlibMesh::DenseMatrixBase< T >\fP\&.
+.PP
+Definition at line 702 of file dense_matrix\&.h\&.
+.PP
+Referenced by libMesh::HPCoarsenTest::add_projection(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), libMesh::HPCoarsenTest::select_refinement(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+703 {
+704   _decomposition_type = NONE;
+705 
+706   // Just doing this ifdef to be completely safe
+707 #ifndef LIBMESH_USE_COMPLEX_NUMBERS
+708   if(_val\&.size())
+709     std::memset(&_val[0], 0, sizeof(T) * _val\&.size());
+710 #else
+711   std::fill (_val\&.begin(), _val\&.end(), 0\&.);
+712 #endif
+713 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> \fBDecompositionType\fP \fBlibMesh::DenseMatrix\fP< T >::_decomposition_type\fC [private]\fP"
+This flag keeps track of which type of decomposition has been performed on the matrix\&. 
+.PP
+Definition at line 485 of file dense_matrix\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::operator=(), and libMesh::DenseMatrix< T >::swap()\&.
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::_m\fC [protected]\fP, \fC [inherited]\fP"
+The row dimension\&. 
+.PP
+Definition at line 165 of file dense_matrix_base\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::m(), libMesh::DenseMatrix< T >::operator=(), and libMesh::DenseMatrix< T >::swap()\&.
+.SS "template<typename T> unsigned int \fBlibMesh::DenseMatrixBase\fP< T >::_n\fC [protected]\fP, \fC [inherited]\fP"
+The column dimension\&. 
+.PP
+Definition at line 170 of file dense_matrix_base\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::n(), libMesh::DenseMatrix< T >::operator=(), and libMesh::DenseMatrix< T >::swap()\&.
+.SS "template<typename T> std::vector<int> \fBlibMesh::DenseMatrix\fP< T >::_pivots\fC [private]\fP"
+This array is used to store pivot indices\&. May be used by whatever factorization is currently active, clients of the class should not rely on it for any reason\&. 
+.PP
+Definition at line 550 of file dense_matrix\&.h\&.
+.SS "template<typename T> std::vector<T> \fBlibMesh::DenseMatrix\fP< T >::_val\fC [private]\fP"
+The actual data values, stored as a 1D array\&. 
+.PP
+Definition at line 437 of file dense_matrix\&.h\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_multiply_blas(), libMesh::DenseMatrix< Number >::get_values(), libMesh::DenseMatrix< T >::operator!=(), libMesh::DenseMatrix< T >::operator+=(), libMesh::DenseMatrix< T >::operator-=(), libMesh::DenseMatrix< T >::operator=(), libMesh::DenseMatrix< T >::operator==(), and libMesh::DenseMatrix< T >::swap()\&.
+.SS "template<typename T> bool \fBlibMesh::DenseMatrix\fP< T >::use_blas_lapack"
+Computes the inverse of the dense matrix (assuming it is invertible) by first computing the LU decomposition and then performing multiple back substitution steps\&. Follows the algorithm from Numerical Recipes in C available on the web\&. This is not the most memory efficient routine since the inverse is not computed 'in place' but is instead placed into a the matrix inv passed in by the user\&. Run-time selectable option to turn on/off blas support\&. This was primarily used for testing purposes, and could be removed\&.\&.\&. 
+.PP
+Definition at line 430 of file dense_matrix\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

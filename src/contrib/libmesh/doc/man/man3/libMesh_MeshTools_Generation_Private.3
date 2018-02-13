@@ -1,0 +1,101 @@
+.TH "libMesh::MeshTools::Generation::Private" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshTools::Generation::Private \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fBidx\fP (const \fBElemType\fP type, const unsigned int nx, const unsigned int i, const unsigned int j)"
+.br
+.ti -1c
+.RI "unsigned int \fBidx\fP (const \fBElemType\fP type, const unsigned int nx, const unsigned int ny, const unsigned int i, const unsigned int j, const unsigned int k)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "unsigned int libMesh::MeshTools::Generation::Private::idx (const ElemTypetype, const unsigned intnx, const unsigned inti, const unsigned intj)\fC [inline]\fP"
+A useful inline function which replaces the #defines used previously\&. Not private since this is a namespace, but would be if this were a class\&. The first one returns the proper node number for 2D elements while the second one returns the node number for 3D elements\&. 
+.PP
+Definition at line 68 of file mesh_generation\&.C\&.
+.PP
+References libMesh::err, libMesh::INVALID_ELEM, libMesh::invalid_uint, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by libMesh::MeshCommunication::assign_global_indices(), libMesh::MeshTools::Generation::build_cube(), libMesh::PetscVector< T >::create_subvector(), libMesh::MeshCommunication::find_global_indices(), EXTERN_C_FOR_PETSC_END::indices_to_fieldsplit(), libMesh::PetscVector< T >::localize(), GETPOT_NAMESPACE::GetPot::operator[](), libMesh::Nemesis_IO::read(), libMesh::LegacyXdrIO::read_mesh(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::MEDITIO::write_ascii(), libMesh::LegacyXdrIO::write_mesh(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::UCDIO::write_soln()\&.
+.PP
+.nf
+72 {
+73   switch(type)
+74     {
+75     case INVALID_ELEM:
+76     case QUAD4:
+77     case TRI3:
+78       {
+79         return i + j*(nx+1);
+80       }
+81 
+82     case QUAD8:
+83     case QUAD9:
+84     case TRI6:
+85       {
+86         return i + j*(2*nx+1);
+87       }
+88 
+89     default:
+90       {
+91         libMesh::err << "ERROR: Unrecognized 2D element type\&." << std::endl;
+92         libmesh_error();
+93       }
+94     }
+95 
+96   return libMesh::invalid_uint;
+97 }
+.fi
+.SS "unsigned int libMesh::MeshTools::Generation::Private::idx (const ElemTypetype, const unsigned intnx, const unsigned intny, const unsigned inti, const unsigned intj, const unsigned intk)\fC [inline]\fP"
+
+.PP
+Definition at line 103 of file mesh_generation\&.C\&.
+.PP
+References libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::INVALID_ELEM, libMesh::invalid_uint, libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::TET10, and libMesh::TET4\&.
+.PP
+.nf
+109 {
+110   switch(type)
+111     {
+112     case INVALID_ELEM:
+113     case HEX8:
+114     case PRISM6:
+115       {
+116         return i + (nx+1)*(j + k*(ny+1));
+117       }
+118 
+119     case HEX20:
+120     case HEX27:
+121     case TET4:  // TET4's are created from an initial HEX27 discretization
+122     case TET10: // TET10's are created from an initial HEX27 discretization
+123     case PYRAMID5: // PYRAMID5's are created from an initial HEX27 discretization
+124     case PYRAMID13:
+125     case PYRAMID14:
+126     case PRISM15:
+127     case PRISM18:
+128       {
+129         return i + (2*nx+1)*(j + k*(2*ny+1));
+130       }
+131 
+132     default:
+133       {
+134         libMesh::err << "ERROR: Unrecognized element type\&." << std::endl;
+135         libmesh_error();
+136       }
+137     }
+138 
+139   return libMesh::invalid_uint;
+140 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,145 @@
+.TH "libMesh::PoolAllocator< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PoolAllocator< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <pool_allocator\&.h>\fP
+.PP
+Inherits allocator< T >, and pool_allocator< T >\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBrebind\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPoolAllocator\fP ()"
+.br
+.ti -1c
+.RI "\fBPoolAllocator\fP (const \fBPoolAllocator\fP &o)"
+.br
+.ti -1c
+.RI "\fBPoolAllocator\fP ()"
+.br
+.ti -1c
+.RI "\fBPoolAllocator\fP (const \fBPoolAllocator\fP &o)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBrelease_memory\fP ()"
+.br
+.ti -1c
+.RI "static bool \fBpurge_memory\fP ()"
+.br
+.ti -1c
+.RI "static bool \fBrelease_memory\fP ()"
+.br
+.ti -1c
+.RI "static bool \fBpurge_memory\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::PoolAllocator< T >"
+An allocator which can be used in standard containers\&. Uses pool-based memory allocation to efficiently allocate many small objects\&. Note that object destruction returns memory to the pool rather than deallocate it\&. It must be explicitly deallocated prior to program termination\&.
+.PP
+An allocator which can be used in standard containers\&. A wrapper for \fCstd::allocator<>\fP when Boost is not available\&. 
+.PP
+Definition at line 47 of file pool_allocator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::PoolAllocator\fP< T >::\fBPoolAllocator\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 60 of file pool_allocator\&.h\&.
+.PP
+.nf
+60                   :
+61     boost::pool_allocator<T>()
+62   {}
+.fi
+.SS "template<typename T > \fBlibMesh::PoolAllocator\fP< T >::\fBPoolAllocator\fP (const \fBPoolAllocator\fP< T > &o)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 64 of file pool_allocator\&.h\&.
+.PP
+.nf
+64                                                  :
+65     boost::pool_allocator<T>(o)
+66   {}
+.fi
+.SS "template<typename T > \fBlibMesh::PoolAllocator\fP< T >::\fBPoolAllocator\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 158 of file pool_allocator\&.h\&.
+.PP
+.nf
+158                   :
+159     std::allocator<T>()
+160   {}
+.fi
+.SS "template<typename T > \fBlibMesh::PoolAllocator\fP< T >::\fBPoolAllocator\fP (const \fBPoolAllocator\fP< T > &o)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 162 of file pool_allocator\&.h\&.
+.PP
+.nf
+162                                                  :
+163     std::allocator<T>(o)
+164   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > static bool \fBlibMesh::PoolAllocator\fP< T >::purge_memory ()\fC [inline]\fP, \fC [static]\fP"
+Frees every memory block\&. This function invalidates any pointers previously returned by allocation functions\&. Returns true if at least one memory block was freed\&. 
+.PP
+Definition at line 81 of file pool_allocator\&.h\&.
+.PP
+.nf
+82   {
+83     return boost::singleton_pool<boost::pool_allocator_tag, sizeof(T)>::purge_memory();
+84   }
+.fi
+.SS "template<typename T > static bool \fBlibMesh::PoolAllocator\fP< T >::purge_memory ()\fC [inline]\fP, \fC [static]\fP"
+Frees every memory block\&. This function invalidates any pointers previously returned by allocation functions\&. Returns true if at least one memory block was freed\&. 
+.PP
+Definition at line 176 of file pool_allocator\&.h\&.
+.PP
+.nf
+176 { /* no-op for std::allocator<> - already freed\&. */ return false; }
+.fi
+.SS "template<typename T > static bool \fBlibMesh::PoolAllocator\fP< T >::release_memory ()\fC [inline]\fP, \fC [static]\fP"
+Frees every memory block that doesn't have any allocated chunks\&. Returns true if at least one memory block was freed\&. 
+.PP
+Definition at line 72 of file pool_allocator\&.h\&.
+.PP
+.nf
+73   {
+74     return boost::singleton_pool<boost::pool_allocator_tag, sizeof(T)>::release_memory();
+75   }
+.fi
+.SS "template<typename T > static bool \fBlibMesh::PoolAllocator\fP< T >::release_memory ()\fC [inline]\fP, \fC [static]\fP"
+Frees every memory block that doesn't have any allocated chunks\&. Returns true if at least one memory block was freed\&. 
+.PP
+Definition at line 170 of file pool_allocator\&.h\&.
+.PP
+.nf
+170 { /* no-op for std::allocator<> - already freed\&. */ return false; }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,278 @@
+.TH "libMesh::DTKAdapter" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DTKAdapter \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dtk_adapter\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef 
+.br
+DataTransferKit::MeshContainer
+.br
+< int > \fBMeshContainerType\fP"
+.br
+.ti -1c
+.RI "typedef 
+.br
+DataTransferKit::FieldContainer
+.br
+< double > \fBFieldContainerType\fP"
+.br
+.ti -1c
+.RI "typedef 
+.br
+DataTransferKit::MeshTraits
+.br
+< \fBMeshContainerType\fP >
+.br
+::global_ordinal_type \fBGlobalOrdinal\fP"
+.br
+.ti -1c
+.RI "typedef 
+.br
+DataTransferKit::FieldEvaluator
+.br
+< \fBGlobalOrdinal\fP, 
+.br
+\fBFieldContainerType\fP > \fBEvaluatorType\fP"
+.br
+.ti -1c
+.RI "typedef Teuchos::RCP
+.br
+< \fBEvaluatorType\fP > \fBRCP_Evaluator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDTKAdapter\fP (Teuchos::RCP< const Teuchos::Comm< int > > in_comm, \fBEquationSystems\fP &in_es)"
+.br
+.ti -1c
+.RI "Teuchos::RCP
+.br
+< DataTransferKit::MeshManager
+.br
+< \fBMeshContainerType\fP > > \fBget_mesh_manager\fP ()"
+.br
+.ti -1c
+.RI "\fBRCP_Evaluator\fP \fBget_variable_evaluator\fP (std::string var_name)"
+.br
+.ti -1c
+.RI "Teuchos::RCP
+.br
+< DataTransferKit::FieldManager
+.br
+< \fBMeshContainerType\fP > > \fBget_target_coords\fP ()"
+.br
+.ti -1c
+.RI "Teuchos::RCP
+.br
+< DataTransferKit::FieldManager
+.br
+< \fBFieldContainerType\fP > > \fBget_values_to_fill\fP (std::string var_name)"
+.br
+.ti -1c
+.RI "void \fBupdate_variable_values\fP (std::string var_name)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSystem\fP * \fBfind_sys\fP (std::string var_name)"
+.br
+.ti -1c
+.RI "DataTransferKit::DTK_ElementTopology \fBget_element_topology\fP (const \fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "void \fBget_semi_local_nodes\fP (std::set< unsigned int > &semi_local_nodes)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "Teuchos::RCP< const 
+.br
+Teuchos::Comm< int > > \fBcomm\fP"
+.br
+.ti -1c
+.RI "\fBEquationSystems\fP & \fBes\fP"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBdim\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBnum_local_nodes\fP"
+.br
+.ti -1c
+.RI "Teuchos::ArrayRCP< int > \fBvertices\fP"
+.br
+.ti -1c
+.RI "Teuchos::RCP
+.br
+< DataTransferKit::MeshManager
+.br
+< \fBMeshContainerType\fP > > \fBmesh_manager\fP"
+.br
+.ti -1c
+.RI "\fBRCP_Evaluator\fP \fBfield_evaluator\fP"
+.br
+.ti -1c
+.RI "Teuchos::RCP
+.br
+< DataTransferKit::FieldManager
+.br
+< \fBMeshContainerType\fP > > \fBtarget_coords\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, 
+.br
+Teuchos::RCP
+.br
+< DataTransferKit::FieldManager
+.br
+< \fBFieldContainerType\fP > > > \fBvalues_to_fill\fP"
+.br
+.RI "\fIMap of variable names to arrays to be filled by a transfer\&. \fP"
+.ti -1c
+.RI "std::map< std::string, 
+.br
+\fBRCP_Evaluator\fP > \fBevaluators\fP"
+.br
+.RI "\fIMap of variable names to RCP_Evaluator objects\&. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 42 of file dtk_adapter\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef DataTransferKit::FieldEvaluator<\fBGlobalOrdinal\fP,\fBFieldContainerType\fP> \fBlibMesh::DTKAdapter::EvaluatorType\fP"
+
+.PP
+Definition at line 50 of file dtk_adapter\&.h\&.
+.SS "typedef DataTransferKit::FieldContainer<double> \fBlibMesh::DTKAdapter::FieldContainerType\fP"
+
+.PP
+Definition at line 48 of file dtk_adapter\&.h\&.
+.SS "typedef DataTransferKit::MeshTraits<\fBMeshContainerType\fP>::global_ordinal_type \fBlibMesh::DTKAdapter::GlobalOrdinal\fP"
+
+.PP
+Definition at line 49 of file dtk_adapter\&.h\&.
+.SS "typedef DataTransferKit::MeshContainer<int> \fBlibMesh::DTKAdapter::MeshContainerType\fP"
+
+.PP
+Definition at line 47 of file dtk_adapter\&.h\&.
+.SS "typedef Teuchos::RCP<\fBEvaluatorType\fP> \fBlibMesh::DTKAdapter::RCP_Evaluator\fP"
+
+.PP
+Definition at line 51 of file dtk_adapter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::DTKAdapter::DTKAdapter (Teuchos::RCP< const Teuchos::Comm< int > >in_comm, \fBEquationSystems\fP &in_es)"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBSystem\fP* libMesh::DTKAdapter::find_sys (std::stringvar_name)\fC [protected]\fP"
+Small helper function for finding the system containing the variable\&.
+.PP
+Note that this implies that variable names are unique across all systems! 
+.SS "DataTransferKit::DTK_ElementTopology libMesh::DTKAdapter::get_element_topology (const \fBElem\fP *elem)\fC [protected]\fP"
+Helper that returns the DTK ElementTopology for a given \fBElem\fP 
+.SS "Teuchos::RCP<DataTransferKit::MeshManager<\fBMeshContainerType\fP> > libMesh::DTKAdapter::get_mesh_manager ()\fC [inline]\fP"
+
+.PP
+Definition at line 54 of file dtk_adapter\&.h\&.
+.PP
+References mesh_manager\&.
+.PP
+.nf
+54 { return mesh_manager; }
+.fi
+.SS "void libMesh::DTKAdapter::get_semi_local_nodes (std::set< unsigned int > &semi_local_nodes)\fC [protected]\fP"
+Helper function that fills the std::set with all of the node numbers of nodes connected to local elements\&. 
+.SS "Teuchos::RCP<DataTransferKit::FieldManager<\fBMeshContainerType\fP> > libMesh::DTKAdapter::get_target_coords ()\fC [inline]\fP"
+
+.PP
+Definition at line 56 of file dtk_adapter\&.h\&.
+.PP
+References target_coords\&.
+.PP
+.nf
+56 { return target_coords; }
+.fi
+.SS "Teuchos::RCP<DataTransferKit::FieldManager<\fBFieldContainerType\fP> > libMesh::DTKAdapter::get_values_to_fill (std::stringvar_name)"
+
+.SS "\fBRCP_Evaluator\fP libMesh::DTKAdapter::get_variable_evaluator (std::stringvar_name)"
+
+.SS "void libMesh::DTKAdapter::update_variable_values (std::stringvar_name)"
+After computing values for a variable in this \fBEquationSystems\fP we need to take those values and put them in the actual solution vector\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "Teuchos::RCP<const Teuchos::Comm<int> > libMesh::DTKAdapter::comm\fC [protected]\fP"
+
+.PP
+Definition at line 84 of file dtk_adapter\&.h\&.
+.SS "unsigned int libMesh::DTKAdapter::dim\fC [protected]\fP"
+
+.PP
+Definition at line 87 of file dtk_adapter\&.h\&.
+.SS "\fBEquationSystems\fP& libMesh::DTKAdapter::es\fC [protected]\fP"
+
+.PP
+Definition at line 85 of file dtk_adapter\&.h\&.
+.SS "std::map<std::string, \fBRCP_Evaluator\fP> libMesh::DTKAdapter::evaluators\fC [protected]\fP"
+
+.PP
+Map of variable names to RCP_Evaluator objects\&. 
+.PP
+Definition at line 100 of file dtk_adapter\&.h\&.
+.SS "\fBRCP_Evaluator\fP libMesh::DTKAdapter::field_evaluator\fC [protected]\fP"
+
+.PP
+Definition at line 93 of file dtk_adapter\&.h\&.
+.SS "const \fBMeshBase\fP& libMesh::DTKAdapter::mesh\fC [protected]\fP"
+
+.PP
+Definition at line 86 of file dtk_adapter\&.h\&.
+.SS "Teuchos::RCP<DataTransferKit::MeshManager<\fBMeshContainerType\fP> > libMesh::DTKAdapter::mesh_manager\fC [protected]\fP"
+
+.PP
+Definition at line 92 of file dtk_adapter\&.h\&.
+.PP
+Referenced by get_mesh_manager()\&.
+.SS "unsigned int libMesh::DTKAdapter::num_local_nodes\fC [protected]\fP"
+
+.PP
+Definition at line 89 of file dtk_adapter\&.h\&.
+.SS "Teuchos::RCP<DataTransferKit::FieldManager<\fBMeshContainerType\fP> > libMesh::DTKAdapter::target_coords\fC [protected]\fP"
+
+.PP
+Definition at line 94 of file dtk_adapter\&.h\&.
+.PP
+Referenced by get_target_coords()\&.
+.SS "std::map<std::string, Teuchos::RCP<DataTransferKit::FieldManager<\fBFieldContainerType\fP> > > libMesh::DTKAdapter::values_to_fill\fC [protected]\fP"
+
+.PP
+Map of variable names to arrays to be filled by a transfer\&. 
+.PP
+Definition at line 97 of file dtk_adapter\&.h\&.
+.SS "Teuchos::ArrayRCP<int> libMesh::DTKAdapter::vertices\fC [protected]\fP"
+
+.PP
+Definition at line 90 of file dtk_adapter\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

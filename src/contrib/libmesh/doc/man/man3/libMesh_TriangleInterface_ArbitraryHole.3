@@ -1,0 +1,108 @@
+.TH "libMesh::TriangleInterface::ArbitraryHole" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TriangleInterface::ArbitraryHole \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_triangle_holes\&.h>\fP
+.PP
+Inherits \fBlibMesh::TriangleInterface::Hole\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBArbitraryHole\fP (const \fBPoint\fP &center, const std::vector< \fBPoint\fP > &points)"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBn_points\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBpoint\fP (const unsigned int n) const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBinside\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP \fB_center\fP"
+.br
+.ti -1c
+.RI "const std::vector< \fBPoint\fP > & \fB_points\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Another concrete instantiation of the hole, this one should be sufficiently general for most non-polygonal purposes\&. The user supplies, at the time of construction, a reference to a vector of Points which defines the hole (in order of connectivity) and an arbitrary \fBPoint\fP which lies inside the hole\&. 
+.PP
+Definition at line 122 of file mesh_triangle_holes\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TriangleInterface::ArbitraryHole::ArbitraryHole (const \fBPoint\fP &center, const std::vector< \fBPoint\fP > &points)"
+The constructor requires a point which lies in the interior of the hole and a reference to a vector of Points defining the hole\&. 
+.PP
+Definition at line 68 of file mesh_triangle_holes\&.C\&.
+.PP
+.nf
+70   : _center(center),
+71     _points(points)
+72 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBPoint\fP libMesh::TriangleInterface::ArbitraryHole::inside () const\fC [virtual]\fP"
+Return an (arbitrary) point which lies inside the hole\&. 
+.PP
+Implements \fBlibMesh::TriangleInterface::Hole\fP\&.
+.PP
+Definition at line 88 of file mesh_triangle_holes\&.C\&.
+.PP
+.nf
+89 {
+90   return _center;
+91 }
+.fi
+.SS "unsigned int libMesh::TriangleInterface::ArbitraryHole::n_points () const\fC [virtual]\fP"
+The number of geometric points which define the hole\&. 
+.PP
+Implements \fBlibMesh::TriangleInterface::Hole\fP\&.
+.PP
+Definition at line 75 of file mesh_triangle_holes\&.C\&.
+.PP
+.nf
+76 {
+77   return _points\&.size();
+78 }
+.fi
+.SS "\fBPoint\fP libMesh::TriangleInterface::ArbitraryHole::point (const unsigned intn) const\fC [virtual]\fP"
+Return the nth point defining the hole\&. 
+.PP
+Implements \fBlibMesh::TriangleInterface::Hole\fP\&.
+.PP
+Definition at line 81 of file mesh_triangle_holes\&.C\&.
+.PP
+.nf
+82 {
+83   libmesh_assert_less (n, _points\&.size());
+84   return _points[n];
+85 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBPoint\fP libMesh::TriangleInterface::ArbitraryHole::_center\fC [private]\fP"
+arbitrary (x,y) location inside the hole 
+.PP
+Definition at line 142 of file mesh_triangle_holes\&.h\&.
+.SS "const std::vector<\fBPoint\fP>& libMesh::TriangleInterface::ArbitraryHole::_points\fC [private]\fP"
+Reference to the vector of points which makes up the hole\&. 
+.PP
+Definition at line 148 of file mesh_triangle_holes\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

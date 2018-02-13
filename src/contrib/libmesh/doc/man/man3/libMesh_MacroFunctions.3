@@ -1,0 +1,85 @@
+.TH "libMesh::MacroFunctions" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MacroFunctions \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBhere\fP (const char *file, int line, const char *date, const char *time)"
+.br
+.ti -1c
+.RI "void \fBstop\fP (const char *file, int line, const char *date, const char *time)"
+.br
+.ti -1c
+.RI "void \fBreport_error\fP (const char *file, int line, const char *date, const char *time)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void libMesh::MacroFunctions::here (const char *file, intline, const char *date, const char *time)"
+
+.PP
+Definition at line 35 of file libmesh_common\&.C\&.
+.PP
+References libMesh::err, and libMesh::global_processor_id()\&.
+.PP
+Referenced by report_error(), and stop()\&.
+.PP
+.nf
+36 {
+37   libMesh::err << "[" << static_cast<std::size_t>(libMesh::global_processor_id()) << "] "
+38                << file
+39                << ", line " << line
+40                << ", compiled " << date
+41                << " at " << time
+42                << std::endl;
+43 }
+.fi
+.SS "void libMesh::MacroFunctions::report_error (const char *file, intline, const char *date, const char *time)"
+
+.PP
+Definition at line 63 of file libmesh_common\&.C\&.
+.PP
+References libMesh::global_n_processors(), here(), libMesh::print_trace(), and libMesh::write_traceout()\&.
+.PP
+.nf
+64 {
+65   if (libMesh::global_n_processors() == 1)
+66     libMesh::print_trace();
+67   else
+68     libMesh::write_traceout();
+69   libMesh::MacroFunctions::here(file, line, date, time);
+70 }
+.fi
+.SS "void libMesh::MacroFunctions::stop (const char *file, intline, const char *date, const char *time)"
+
+.PP
+Definition at line 47 of file libmesh_common\&.C\&.
+.PP
+References libMesh::global_n_processors(), here(), and libMesh::out\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::row_start(), and libMesh::PetscMatrix< T >::row_stop()\&.
+.PP
+.nf
+48 {
+49   if (libMesh::global_n_processors() == 1)
+50     {
+51       libMesh::MacroFunctions::here(file, line, date, time);
+52 #ifdef LIBMESH_HAVE_CSIGNAL
+53       libMesh::out << "Stopping process " << getpid() << "\&.\&.\&." << std::endl;
+54       std::raise(SIGSTOP);
+55       libMesh::out << "Continuing process " << getpid() << "\&.\&.\&." << std::endl;
+56 #else
+57       libMesh::out << "WARNING:  libmesh_stop() does not work without the <csignal> header file!" << std::endl;
+58 #endif
+59     }
+60 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

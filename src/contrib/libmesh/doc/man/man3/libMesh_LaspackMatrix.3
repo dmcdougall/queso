@@ -1,0 +1,1524 @@
+.TH "libMesh::LaspackMatrix< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LaspackMatrix< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <laspack_matrix\&.h>\fP
+.PP
+Inherits \fBlibMesh::SparseMatrix< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLaspackMatrix\fP (const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "\fB~LaspackMatrix\fP ()"
+.br
+.ti -1c
+.RI "bool \fBneed_full_sparsity_pattern\fP () const "
+.br
+.ti -1c
+.RI "void \fBupdate_sparsity_pattern\fP (const \fBSparsityPattern::Graph\fP &)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const \fBnumeric_index_type\fP \fBm\fP, const \fBnumeric_index_type\fP \fBn\fP, const \fBnumeric_index_type\fP m_l, const \fBnumeric_index_type\fP n_l, const \fBnumeric_index_type\fP nnz=30, const \fBnumeric_index_type\fP noz=10, const \fBnumeric_index_type\fP blocksize=1)"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBzero\fP ()"
+.br
+.ti -1c
+.RI "void \fBclose\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBm\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBn\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBrow_start\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBrow_stop\fP () const "
+.br
+.ti -1c
+.RI "void \fBset\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j, const T value)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j, const T value)"
+.br
+.ti -1c
+.RI "void \fBadd_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols)"
+.br
+.ti -1c
+.RI "void \fBadd_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBadd\fP (const T a, \fBSparseMatrix\fP< T > &X)"
+.br
+.ti -1c
+.RI "T \fBoperator()\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBl1_norm\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBlinfty_norm\fP () const "
+.br
+.ti -1c
+.RI "bool \fBclosed\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_personal\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "virtual void \fBget_diagonal\fP (\fBNumericVector\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "virtual void \fBget_transpose\fP (\fBSparseMatrix\fP< T > &dest) const "
+.br
+.ti -1c
+.RI "virtual bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "void \fBattach_dof_map\fP (const \fBDofMap\fP &\fBdof_map\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBzero_rows\fP (std::vector< \fBnumeric_index_type\fP > &rows, T diag_value=0\&.0)"
+.br
+.ti -1c
+.RI "virtual void \fBadd_block_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &brows, const std::vector< \fBnumeric_index_type\fP > &bcols)"
+.br
+.ti -1c
+.RI "virtual void \fBadd_block_matrix\fP (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)"
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os=\fBlibMesh::out\fP, const bool sparse=false) const "
+.br
+.ti -1c
+.RI "template<> void \fBprint\fP (std::ostream &os, const bool sparse) const"
+.br
+.ti -1c
+.RI "virtual void \fBprint_matlab\fP (const std::string &='') const "
+.br
+.ti -1c
+.RI "virtual void \fBcreate_submatrix\fP (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const "
+.br
+.ti -1c
+.RI "virtual void \fBreinit_submatrix\fP (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const "
+.br
+.ti -1c
+.RI "void \fBvector_mult\fP (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "void \fBvector_mult_add\fP (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const "
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBSparseMatrix\fP< T > > \fBbuild\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fB_get_submatrix\fP (\fBSparseMatrix\fP< T > &, const std::vector< \fBnumeric_index_type\fP > &, const std::vector< \fBnumeric_index_type\fP > &, const bool) const "
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBDofMap\fP const * \fB_dof_map\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBpos\fP (const \fBnumeric_index_type\fP i, const \fBnumeric_index_type\fP j) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "QMatrix \fB_QMat\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBnumeric_index_type\fP > \fB_csr\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< \fBnumeric_index_type\fP >
+.br
+::const_iterator > \fB_row_start\fP"
+.br
+.ti -1c
+.RI "bool \fB_closed\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBLaspackVector< T >\fP"
+.br
+.ti -1c
+.RI "class \fBLaspackLinearSolver< T >\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::LaspackMatrix< T >"
+The \fBLaspackMatrix\fP class wraps a QMatrix object from the Laspack library\&. Currently Laspack only supports real datatypes, so this class is a full specialization of \fCSparseMatrix<T>\fP with \fCT\fP = \fCReal\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 59 of file laspack_matrix\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::LaspackMatrix\fP< T >::\fBLaspackMatrix\fP (const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+Constructor; initializes the matrix to be empty, without any structure, i\&.e\&. the matrix is not usable at all\&. This constructor is therefore only useful for matrices which are members of a class\&. All other matrices should be created at a point in the data flow where all necessary information is available\&.
+.PP
+You have to initialize the matrix before usage with \fCinit\fP(\&.\&.\&.)\&. 
+.PP
+Definition at line 239 of file laspack_matrix\&.C\&.
+.PP
+.nf
+239                                                                  :
+240   SparseMatrix<T>(comm),
+241   _closed (false)
+242 {
+243 }
+.fi
+.SS "template<typename T > \fBlibMesh::LaspackMatrix\fP< T >::~\fBLaspackMatrix\fP ()"
+Destructor\&. Free all memory, but do not release the memory of the sparsity structure\&. 
+.PP
+Definition at line 248 of file laspack_matrix\&.C\&.
+.PP
+.nf
+249 {
+250   this->clear ();
+251 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::_get_submatrix (\fBSparseMatrix\fP< T > &, const std::vector< \fBnumeric_index_type\fP > &, const std::vector< \fBnumeric_index_type\fP > &, const bool) const\fC [inline]\fP, \fC [protected]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Protected implementation of the create_submatrix and reinit_submatrix routines\&. Note that this function must be redefined in derived classes for it to work properly! 
+.PP
+Reimplemented in \fBlibMesh::PetscMatrix< T >\fP\&.
+.PP
+Definition at line 423 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::SparseMatrix< Number >::create_submatrix(), and libMesh::SparseMatrix< Number >::reinit_submatrix()\&.
+.PP
+.nf
+427   {
+428     libMesh::err << "Error! This function is not yet implemented in the base class!"
+429                  << std::endl;
+430     libmesh_error();
+431   }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::add (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj, const Tvalue)\fC [virtual]\fP"
+Add \fCvalue\fP to the element \fC\fP(i,j)\&. Throws an error if the entry does not exist\&. Still, it is allowed to store zero values in non-existent fields\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 357 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+360 {
+361   libmesh_assert (this->initialized());
+362   libmesh_assert_less (i, this->m());
+363   libmesh_assert_less (j, this->n());
+364 
+365   const numeric_index_type position = this->pos(i,j);
+366 
+367   // Sanity check
+368   libmesh_assert_equal_to (*(_row_start[i]+position), j);
+369 
+370   Q_AddVal (&_QMat, i+1, position, value);
+371 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::add (const Ta, \fBSparseMatrix\fP< T > &X)\fC [virtual]\fP"
+Add a Sparse matrix \fCX\fP, scaled with \fCa\fP, to \fCthis\fP, stores the result in \fCthis:\fP $\texttt{this} += a*X $\&. \fCLASPACK\fP does not provide a true \fCaxpy\fP for matrices, so a hand-coded version with hopefully acceptable performance is provided\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 385 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), libMesh::libmesh_assert(), libMesh::SparseMatrix< T >::m(), and libMesh::SparseMatrix< T >::n()\&.
+.PP
+.nf
+386 {
+387   libmesh_assert (this->initialized());
+388   libmesh_assert_equal_to (this->m(), X_in\&.m());
+389   libmesh_assert_equal_to (this->n(), X_in\&.n());
+390 
+391   LaspackMatrix<T>* X = libmesh_cast_ptr<LaspackMatrix<T>*> (&X_in);
+392   _LPNumber         a = static_cast<_LPNumber>          (a_in);
+393 
+394   libmesh_assert(X);
+395 
+396   // loops taken from LaspackMatrix<T>::zero ()
+397 
+398   const numeric_index_type n_rows = this->m();
+399 
+400   for (numeric_index_type row=0; row<n_rows; row++)
+401     {
+402       const std::vector<numeric_index_type>::const_iterator
+403         r_start = _row_start[row];
+404 
+405       const numeric_index_type len = (_row_start[row+1] - _row_start[row]);
+406 
+407       // Make sure we agree on the row length
+408       libmesh_assert_equal_to (len, Q_GetLen(&_QMat, row+1));
+409       // compare matrix sparsity structures
+410       libmesh_assert_equal_to (len, Q_GetLen(&(X->_QMat), row+1));
+411 
+412 
+413       for (numeric_index_type l=0; l<len; l++)
+414         {
+415           const numeric_index_type j = *(r_start + l);
+416 
+417           // Make sure the data structures are working
+418           libmesh_assert_equal_to ((j+1), Q_GetPos (&_QMat, row+1, l));
+419 
+420           const _LPNumber value = a * Q_GetEl(const_cast<QMatrix*>(&(X->_QMat)), row+1, j+1);
+421           Q_AddVal   (&_QMat, row+1, l, value);
+422         }
+423     }
+424 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::add_block_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &brows, const std::vector< \fBnumeric_index_type\fP > &bcols)\fC [virtual]\fP, \fC [inherited]\fP"
+Add the full matrix \fCdm\fP to the Sparse matrix\&. This is useful for adding an element matrix at assembly time\&. The matrix is assumed blocked, and \fCbrow\fP, \fCbcol\fP correspond to the \fIblock\fP row, columm indices\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscMatrix< T >\fP\&.
+.PP
+Definition at line 61 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+Referenced by libMesh::SparseMatrix< Number >::add_block_matrix()\&.
+.PP
+.nf
+64 {
+65   libmesh_assert_equal_to (dm\&.m() / brows\&.size(), dm\&.n() / bcols\&.size());
+66 
+67   const numeric_index_type blocksize = dm\&.m() / brows\&.size();
+68 
+69   libmesh_assert_equal_to (dm\&.m()%blocksize, 0);
+70   libmesh_assert_equal_to (dm\&.n()%blocksize, 0);
+71 
+72   std::vector<numeric_index_type> rows, cols;
+73 
+74   rows\&.reserve(blocksize*brows\&.size());
+75   cols\&.reserve(blocksize*bcols\&.size());
+76 
+77   for (unsigned int ib=0; ib<brows\&.size(); ib++)
+78     {
+79       numeric_index_type i=brows[ib]*blocksize;
+80 
+81       for (unsigned int v=0; v<blocksize; v++)
+82         rows\&.push_back(i++);
+83     }
+84 
+85   for (unsigned int jb=0; jb<bcols\&.size(); jb++)
+86     {
+87       numeric_index_type j=bcols[jb]*blocksize;
+88 
+89       for (unsigned int v=0; v<blocksize; v++)
+90         cols\&.push_back(j++);
+91     }
+92 
+93   this->add_matrix (dm, rows, cols);
+94 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::add_block_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Same as \fCadd_block_matrix\fP , but assumes the row and column maps are the same\&. Thus the matrix \fCdm\fP must be square\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscMatrix< T >\fP\&.
+.PP
+Definition at line 258 of file sparse_matrix\&.h\&.
+.PP
+.nf
+260   { this->add_block_matrix (dm, dof_indices, dof_indices); }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::add_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols)\fC [virtual]\fP"
+Add the full matrix to the Laspack matrix\&. This is useful for adding an element matrix at assembly time 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 203 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), libMesh::libmesh_assert(), libMesh::DenseMatrixBase< T >::m(), and libMesh::DenseMatrixBase< T >::n()\&.
+.PP
+.nf
+207 {
+208   libmesh_assert (this->initialized());
+209   unsigned int n_rows = libmesh_cast_int<unsigned int>(rows\&.size());
+210   unsigned int n_cols = libmesh_cast_int<unsigned int>(cols\&.size());
+211   libmesh_assert_equal_to (dm\&.m(), n_rows);
+212   libmesh_assert_equal_to (dm\&.n(), n_cols);
+213 
+214 
+215   for (unsigned int i=0; i<n_rows; i++)
+216     for (unsigned int j=0; j<n_cols; j++)
+217       this->add(rows[i],cols[j],dm(i,j));
+218 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::add_matrix (const \fBDenseMatrix\fP< T > &dm, const std::vector< \fBnumeric_index_type\fP > &dof_indices)\fC [virtual]\fP"
+Same, but assumes the row and column maps are the same\&. Thus the matrix \fCdm\fP must be square\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 376 of file laspack_matrix\&.C\&.
+.PP
+.nf
+378 {
+379   this->add_matrix (dm, dof_indices, dof_indices);
+380 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::attach_dof_map (const \fBDofMap\fP &dof_map)\fC [inline]\fP, \fC [inherited]\fP"
+Get a pointer to the \fC\fBDofMap\fP\fP to use\&. 
+.PP
+Definition at line 112 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::DofMap::attach_matrix()\&.
+.PP
+.nf
+113   { _dof_map = &dof_map; }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBSparseMatrix\fP< T > > \fBlibMesh::SparseMatrix\fP< T >::build (const \fBParallel::Communicator\fP &comm, const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fCSparseMatrix<T>\fP using the linear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 134 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::EIGEN_SOLVERS, libMesh::err, libMesh::LASPACK_SOLVERS, libMesh::PETSC_SOLVERS, and libMesh::TRILINOS_SOLVERS\&.
+.PP
+Referenced by libMesh::ImplicitSystem::add_matrix(), libMesh::EigenSystem::init_data(), and libMesh::EigenSystem::init_matrices()\&.
+.PP
+.nf
+136 {
+137   // Build the appropriate vector
+138   switch (solver_package)
+139     {
+140 
+141 
+142 #ifdef LIBMESH_HAVE_LASPACK
+143     case LASPACK_SOLVERS:
+144       {
+145         AutoPtr<SparseMatrix<T> > ap(new LaspackMatrix<T>(comm));
+146         return ap;
+147       }
+148 #endif
+149 
+150 
+151 #ifdef LIBMESH_HAVE_PETSC
+152     case PETSC_SOLVERS:
+153       {
+154         AutoPtr<SparseMatrix<T> > ap(new PetscMatrix<T>(comm));
+155         return ap;
+156       }
+157 #endif
+158 
+159 
+160 #ifdef LIBMESH_HAVE_TRILINOS
+161     case TRILINOS_SOLVERS:
+162       {
+163         AutoPtr<SparseMatrix<T> > ap(new EpetraMatrix<T>(comm));
+164         return ap;
+165       }
+166 #endif
+167 
+168 
+169 #ifdef LIBMESH_HAVE_EIGEN
+170     case EIGEN_SOLVERS:
+171       {
+172         AutoPtr<SparseMatrix<T> > ap(new EigenSparseMatrix<T>(comm));
+173         return ap;
+174       }
+175 #endif
+176 
+177 
+178     default:
+179       libMesh::err << "ERROR:  Unrecognized solver package: "
+180                    << solver_package
+181                    << std::endl;
+182       libmesh_error();
+183     }
+184 
+185   AutoPtr<SparseMatrix<T> > ap(NULL);
+186   return ap;
+187 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::clear ()\fC [virtual]\fP"
+Release all memory and return to a state just like after having called the default constructor\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 256 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, and libMesh::initialized()\&.
+.PP
+.nf
+257 {
+258   if (this->initialized())
+259     {
+260       Q_Destr(&_QMat);
+261     }
+262 
+263   _csr\&.clear();
+264   _row_start\&.clear();
+265   _closed = false;
+266   this->_is_initialized = false;
+267 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LaspackMatrix\fP< T >::close () const\fC [inline]\fP, \fC [virtual]\fP"
+Close the matrix\&. Dummy routine\&. After calling this method \fC\fBclosed()\fP\fP is true and the matrix can be used in computations\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 142 of file laspack_matrix\&.h\&.
+.PP
+References libMesh::LaspackMatrix< T >::_closed\&.
+.PP
+Referenced by libMesh::LaspackLinearSolver< T >::adjoint_solve(), and libMesh::LaspackLinearSolver< T >::solve()\&.
+.PP
+.nf
+142 { const_cast<LaspackMatrix<T>*>(this)->_closed = true; }
+.fi
+.SS "template<typename T> bool \fBlibMesh::LaspackMatrix\fP< T >::closed () const\fC [inline]\fP, \fC [virtual]\fP"
+see if Laspack matrix has been closed and fully assembled yet 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 256 of file laspack_matrix\&.h\&.
+.PP
+References libMesh::LaspackMatrix< T >::_closed\&.
+.PP
+.nf
+256 { return _closed; }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::create_submatrix (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This function creates a matrix called 'submatrix' which is defined by the row and column indices given in the 'rows' and 'cols' entries\&. Currently this operation is only defined for the \fBPetscMatrix\fP type\&. 
+.PP
+Definition at line 366 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::CondensedEigenSystem::solve()\&.
+.PP
+.nf
+369   {
+370     this->_get_submatrix(submatrix,
+371                          rows,
+372                          cols,
+373                          false); // false means DO NOT REUSE submatrix
+374   }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::get_diagonal (\fBNumericVector\fP< T > &dest) const\fC [virtual]\fP"
+Copies the diagonal part of the matrix into \fCdest\fP\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 223 of file laspack_matrix\&.C\&.
+.PP
+.nf
+224 {
+225   libmesh_not_implemented();
+226 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::get_transpose (\fBSparseMatrix\fP< T > &dest) const\fC [virtual]\fP"
+Copies the transpose of the matrix into \fCdest\fP, which may be *this\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 231 of file laspack_matrix\&.C\&.
+.PP
+.nf
+232 {
+233   libmesh_not_implemented();
+234 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LaspackMatrix\fP< T >::init (const \fBnumeric_index_type\fPm, const \fBnumeric_index_type\fPn, const \fBnumeric_index_type\fPm_l, const \fBnumeric_index_type\fPn_l, const \fBnumeric_index_type\fPnnz = \fC30\fP, const \fBnumeric_index_type\fPnoz = \fC10\fP, const \fBnumeric_index_type\fPblocksize = \fC1\fP)\fC [virtual]\fP"
+Initialize a Laspack matrix that is of global dimension $ m \times n $ with local dimensions $ m_l \times n_l $\&. \fCnnz\fP is the number of on-processor nonzeros per row (defaults to 30)\&. \fCnoz\fP is the number of on-processor nonzeros per row (defaults to 30)\&. Optionally supports a block size, which indicates dense coupled blocks for systems with multiple variables all of the same type\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::init ()\fC [virtual]\fP"
+Initialize using sparsity structure computed by \fCdof_map\fP\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 152 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+153 {
+154   // Ignore calls on initialized objects
+155   if (this->initialized())
+156     return;
+157 
+158   // We need the DofMap for this!
+159   libmesh_assert(this->_dof_map);
+160 
+161   // Clear intialized matrices
+162   if (this->initialized())
+163     this->clear();
+164 
+165   const numeric_index_type n_rows   = this->_dof_map->n_dofs();
+166 #ifndef NDEBUG
+167   // The following variables are only used for assertions,
+168   // so avoid declaring them when asserts are inactive\&.
+169   const numeric_index_type n_cols   = n_rows;
+170   const numeric_index_type n_l = this->_dof_map->n_dofs_on_processor(0);
+171   const numeric_index_type m_l = n_l;
+172 #endif
+173 
+174   // Laspack Matrices only work for uniprocessor cases
+175   libmesh_assert_equal_to (n_rows, n_cols);
+176   libmesh_assert_equal_to (m_l, n_rows);
+177   libmesh_assert_equal_to (n_l, n_cols);
+178 
+179 #ifndef NDEBUG
+180   // The following variables are only used for assertions,
+181   // so avoid declaring them when asserts are inactive\&.
+182   const std::vector<numeric_index_type>& n_nz = this->_dof_map->get_n_nz();
+183   const std::vector<numeric_index_type>& n_oz = this->_dof_map->get_n_oz();
+184 #endif
+185 
+186   // Make sure the sparsity pattern isn't empty
+187   libmesh_assert_equal_to (n_nz\&.size(), n_l);
+188   libmesh_assert_equal_to (n_oz\&.size(), n_l);
+189 
+190   if (n_rows==0)
+191     return;
+192 
+193   Q_Constr(&_QMat, const_cast<char*>("Mat"), n_rows, _LPFalse, Rowws, Normal, _LPTrue);
+194 
+195   this->_is_initialized = true;
+196 
+197   libmesh_assert_equal_to (n_rows, this->m());
+198 }
+.fi
+.SS "template<typename T> virtual bool \fBlibMesh::SparseMatrix\fP< T >::initialized () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the matrix has been initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 107 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::ImplicitSystem::assemble(), and libMesh::ImplicitSystem::init_matrices()\&.
+.PP
+.nf
+107 { return _is_initialized; }
+.fi
+.SS "template<typename T> \fBReal\fP \fBlibMesh::LaspackMatrix\fP< T >::l1_norm () const\fC [inline]\fP, \fC [virtual]\fP"
+Return the l1-norm of the matrix, that is $|M|_1=max_{all columns j}\sum_{all rows i} |M_ij|$, (max\&. sum of columns)\&. This is the natural matrix norm that is compatible to the l1-norm for vectors, i\&.e\&. $|Mv|_1\leq |M|_1 |v|_1$\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 237 of file laspack_matrix\&.h\&.
+.PP
+.nf
+237 { libmesh_error(); return 0\&.; }
+.fi
+.SS "template<typename T> \fBReal\fP \fBlibMesh::LaspackMatrix\fP< T >::linfty_norm () const\fC [inline]\fP, \fC [virtual]\fP"
+Return the linfty-norm of the matrix, that is $|M|_\infty=max_{all rows i}\sum_{all columns j} |M_ij|$, (max\&. sum of rows)\&. This is the natural matrix norm that is compatible to the linfty-norm of vectors, i\&.e\&. $|Mv|_\infty \leq |M|_\infty |v|_\infty$\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 250 of file laspack_matrix\&.h\&.
+.PP
+.nf
+250 { libmesh_error(); return 0\&.; }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::LaspackMatrix\fP< T >::m () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCm\fP, the row-dimension of the matrix where the marix is $ M \times N $\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 301 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+302 {
+303   libmesh_assert (this->initialized());
+304 
+305   return static_cast<numeric_index_type>(Q_GetDim(const_cast<QMatrix*>(&_QMat)));
+306 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::LaspackMatrix\fP< T >::n () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCn\fP, the column-dimension of the matrix where the marix is $ M \times N $\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 311 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+312 {
+313   libmesh_assert (this->initialized());
+314 
+315   return static_cast<numeric_index_type>(Q_GetDim(const_cast<QMatrix*>(&_QMat)));
+316 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T> bool \fBlibMesh::LaspackMatrix\fP< T >::need_full_sparsity_pattern () const\fC [inline]\fP, \fC [virtual]\fP"
+The \fC\fBLaspackMatrix\fP\fP needs the full sparsity pattern\&. 
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 91 of file laspack_matrix\&.h\&.
+.PP
+.nf
+92   { return true; }
+.fi
+.SS "template<typename T > T \fBlibMesh::LaspackMatrix\fP< T >::operator() (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj) const\fC [virtual]\fP"
+Return the value of the entry \fC\fP(i,j)\&. This may be an expensive operation, and you should always be careful where you call this function\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 430 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+432 {
+433   libmesh_assert (this->initialized());
+434   libmesh_assert_less (i, this->m());
+435   libmesh_assert_less (j, this->n());
+436 
+437   return Q_GetEl (const_cast<QMatrix*>(&_QMat), i+1, j+1);
+438 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::LaspackMatrix\fP< T >::pos (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj) const\fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the position in the compressed row storage scheme of the $ (i,j) $ element\&. 
+.RE
+.PP
+
+.PP
+Definition at line 443 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+445 {
+446   libmesh_assert_less (i, this->m());
+447   libmesh_assert_less (j, this->n());
+448   libmesh_assert_less (i+1, _row_start\&.size());
+449   libmesh_assert (_row_start\&.back() == _csr\&.end());
+450 
+451   // note this requires the _csr to be
+452   std::pair<std::vector<numeric_index_type>::const_iterator,
+453     std::vector<numeric_index_type>::const_iterator> p =
+454     std::equal_range (_row_start[i],
+455                       _row_start[i+1],
+456                       j);
+457 
+458   // Make sure the row contains the element j
+459   libmesh_assert (p\&.first != p\&.second);
+460 
+461   // Make sure the values match
+462   libmesh_assert (*p\&.first == j);
+463 
+464   // Return the position in the compressed row
+465   return std::distance (_row_start[i], p\&.first);
+466 }
+.fi
+.SS "template<> void \fBlibMesh::SparseMatrix\fP< \fBComplex\fP >::print (std::ostream &os, const boolsparse) const\fC [inherited]\fP"
+
+.PP
+Definition at line 100 of file sparse_matrix\&.C\&.
+.PP
+.nf
+101 {
+102   // std::complex<>::operator<<() is defined, but use this form
+103 
+104   if(sparse)
+105     {
+106       libmesh_not_implemented();
+107     }
+108 
+109   os << "Real part:" << std::endl;
+110   for (numeric_index_type i=0; i<this->m(); i++)
+111     {
+112       for (numeric_index_type j=0; j<this->n(); j++)
+113         os << std::setw(8) << (*this)(i,j)\&.real() << " ";
+114       os << std::endl;
+115     }
+116 
+117   os << std::endl << "Imaginary part:" << std::endl;
+118   for (numeric_index_type i=0; i<this->m(); i++)
+119     {
+120       for (numeric_index_type j=0; j<this->n(); j++)
+121         os << std::setw(8) << (*this)(i,j)\&.imag() << " ";
+122       os << std::endl;
+123     }
+124 }
+.fi
+.SS "template<typename T > void \fBlibMesh::SparseMatrix\fP< T >::print (std::ostream &os = \fC\fBlibMesh::out\fP\fP, const boolsparse = \fCfalse\fP) const\fC [inherited]\fP"
+Print the contents of the matrix to the screen in a uniform style, regardless of matrix/solver package being used\&. 
+.PP
+Definition at line 221 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::comm, libMesh::initialized(), libMesh::libmesh_assert(), libMesh::n_processors(), and libMesh::processor_id()\&.
+.PP
+Referenced by libMesh::EigenSparseMatrix< T >::print_personal(), and libMesh::LaspackMatrix< T >::print_personal()\&.
+.PP
+.nf
+222 {
+223   parallel_object_only();
+224 
+225   libmesh_assert (this->initialized());
+226 
+227   if(!this->_dof_map)
+228     {
+229       os << std::endl << "Error!  Trying to print a matrix with no dof_map set!" << std::endl << std::endl;
+230       libmesh_error();
+231     }
+232 
+233   // We'll print the matrix from processor 0 to make sure
+234   // it's serialized properly
+235   if (this->processor_id() == 0)
+236     {
+237       libmesh_assert_equal_to (this->_dof_map->first_dof(), 0);
+238       for (numeric_index_type i=this->_dof_map->first_dof();
+239            i!=this->_dof_map->end_dof(); ++i)
+240         {
+241           if(sparse)
+242             {
+243               for (numeric_index_type j=0; j<this->n(); j++)
+244                 {
+245                   T c = (*this)(i,j);
+246                   if (c != static_cast<T>(0\&.0))
+247                     {
+248                       os << i << " " << j << " " << c << std::endl;
+249                     }
+250                 }
+251             }
+252           else
+253             {
+254               for (numeric_index_type j=0; j<this->n(); j++)
+255                 os << (*this)(i,j) << " ";
+256               os << std::endl;
+257             }
+258         }
+259 
+260       std::vector<numeric_index_type> ibuf, jbuf;
+261       std::vector<T> cbuf;
+262       numeric_index_type currenti = this->_dof_map->end_dof();
+263       for (processor_id_type p=1; p < this->n_processors(); ++p)
+264         {
+265           this->comm()\&.receive(p, ibuf);
+266           this->comm()\&.receive(p, jbuf);
+267           this->comm()\&.receive(p, cbuf);
+268           libmesh_assert_equal_to (ibuf\&.size(), jbuf\&.size());
+269           libmesh_assert_equal_to (ibuf\&.size(), cbuf\&.size());
+270 
+271           if (ibuf\&.empty())
+272             continue;
+273           libmesh_assert_greater_equal (ibuf\&.front(), currenti);
+274           libmesh_assert_greater_equal (ibuf\&.back(), ibuf\&.front());
+275 
+276           std::size_t currentb = 0;
+277           for (;currenti <= ibuf\&.back(); ++currenti)
+278             {
+279               if(sparse)
+280                 {
+281                   for (numeric_index_type j=0; j<this->n(); j++)
+282                     {
+283                       if (currentb < ibuf\&.size() &&
+284                           ibuf[currentb] == currenti &&
+285                           jbuf[currentb] == j)
+286                         {
+287                           os << currenti << " " << j << " " << cbuf[currentb] << std::endl;
+288                           currentb++;
+289                         }
+290                     }
+291                 }
+292               else
+293                 {
+294                   for (numeric_index_type j=0; j<this->n(); j++)
+295                     {
+296                       if (currentb < ibuf\&.size() &&
+297                           ibuf[currentb] == currenti &&
+298                           jbuf[currentb] == j)
+299                         {
+300                           os << cbuf[currentb] << " ";
+301                           currentb++;
+302                         }
+303                       else
+304                         os << static_cast<T>(0\&.0) << " ";
+305                     }
+306                   os << std::endl;
+307                 }
+308             }
+309         }
+310       if(!sparse)
+311         {
+312           for (; currenti != this->m(); ++currenti)
+313             {
+314               for (numeric_index_type j=0; j<this->n(); j++)
+315                 os << static_cast<T>(0\&.0) << " ";
+316               os << std::endl;
+317             }
+318         }
+319     }
+320   else
+321     {
+322       std::vector<numeric_index_type> ibuf, jbuf;
+323       std::vector<T> cbuf;
+324 
+325       // We'll assume each processor has access to entire
+326       // matrix rows, so (*this)(i,j) is valid if i is a local index\&.
+327       for (numeric_index_type i=this->_dof_map->first_dof();
+328            i!=this->_dof_map->end_dof(); ++i)
+329         {
+330           for (numeric_index_type j=0; j<this->n(); j++)
+331             {
+332               T c = (*this)(i,j);
+333               if (c != static_cast<T>(0\&.0))
+334                 {
+335                   ibuf\&.push_back(i);
+336                   jbuf\&.push_back(j);
+337                   cbuf\&.push_back(c);
+338                 }
+339             }
+340         }
+341       this->comm()\&.send(0,ibuf);
+342       this->comm()\&.send(0,jbuf);
+343       this->comm()\&.send(0,cbuf);
+344     }
+345 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::print_matlab (const std::string & = \fC''\fP) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Print the contents of the matrix in Matlab's sparse matrix format\&. Optionally prints the matrix to the file named \fCname\fP\&. If \fCname\fP is not specified it is dumped to the screen\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscMatrix< T >\fP\&.
+.PP
+Definition at line 356 of file sparse_matrix\&.h\&.
+.PP
+.nf
+357   {
+358     libmesh_not_implemented();
+359   }
+.fi
+.SS "template<typename T> void \fBlibMesh::LaspackMatrix\fP< T >::print_personal (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const\fC [inline]\fP, \fC [virtual]\fP"
+Print the contents of the matrix, by default to \fBlibMesh::out\fP\&. Currently identical to \fC\fBprint()\fP\fP\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 262 of file laspack_matrix\&.h\&.
+.PP
+References libMesh::SparseMatrix< T >::print()\&.
+.PP
+.nf
+262 { this->print(os); }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::SparseMatrix\fP< T >::reinit_submatrix (\fBSparseMatrix\fP< T > &submatrix, const std::vector< \fBnumeric_index_type\fP > &rows, const std::vector< \fBnumeric_index_type\fP > &cols) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This function is similar to the one above, but it allows you to reuse the existing sparsity pattern of 'submatrix' instead of reallocating it again\&. This should hopefully be more efficient if you are frequently extracting submatrices of the same size\&. 
+.PP
+Definition at line 382 of file sparse_matrix\&.h\&.
+.PP
+.nf
+385   {
+386     this->_get_submatrix(submatrix,
+387                          rows,
+388                          cols,
+389                          true); // true means REUSE submatrix
+390   }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::LaspackMatrix\fP< T >::row_start () const\fC [virtual]\fP"
+return row_start, the index of the first matrix row stored on this processor 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 321 of file laspack_matrix\&.C\&.
+.PP
+.nf
+322 {
+323   return 0;
+324 }
+.fi
+.SS "template<typename T > \fBnumeric_index_type\fP \fBlibMesh::LaspackMatrix\fP< T >::row_stop () const\fC [virtual]\fP"
+return row_stop, the index of the last matrix row (+1) stored on this processor 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 329 of file laspack_matrix\&.C\&.
+.PP
+.nf
+330 {
+331   return this->m();
+332 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::set (const \fBnumeric_index_type\fPi, const \fBnumeric_index_type\fPj, const Tvalue)\fC [virtual]\fP"
+Set the element \fC\fP(i,j) to \fCvalue\fP\&. Throws an error if the entry does not exist\&. Still, it is allowed to store zero values in non-existent fields\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 337 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+340 {
+341   libmesh_assert (this->initialized());
+342   libmesh_assert_less (i, this->m());
+343   libmesh_assert_less (j, this->n());
+344 
+345   const numeric_index_type position = this->pos(i,j);
+346 
+347   // Sanity check
+348   libmesh_assert_equal_to (*(_row_start[i]+position), j);
+349   libmesh_assert_equal_to ((j+1), Q_GetPos (&_QMat, i+1, position));
+350 
+351   Q_SetEntry (&_QMat, i+1, position, j+1, value);
+352 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::update_sparsity_pattern (const \fBSparsityPattern::Graph\fP &sparsity_pattern)\fC [virtual]\fP"
+Updates the matrix sparsity pattern\&. This will tell the underlying matrix storage scheme how to map the $ (i,j) $ elements\&. 
+.PP
+Reimplemented from \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 39 of file laspack_matrix\&.C\&.
+.PP
+References libMesh::TriangleWrapper::init(), libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+40 {
+41   // clear data, start over
+42   this->clear ();
+43 
+44   // big trouble if this fails!
+45   libmesh_assert(this->_dof_map);
+46 
+47   const numeric_index_type n_rows = sparsity_pattern\&.size();
+48 
+49   // Initialize the _row_start data structure,
+50   // allocate storage for the _csr array
+51   {
+52     std::size_t size = 0;
+53 
+54     for (numeric_index_type row=0; row<n_rows; row++)
+55       size += sparsity_pattern[row]\&.size();
+56 
+57     _csr\&.resize       (size);
+58     _row_start\&.reserve(n_rows + 1);
+59   }
+60 
+61 
+62   // Initize the _csr data structure\&.
+63   {
+64     std::vector<numeric_index_type>::iterator position = _csr\&.begin();
+65 
+66     _row_start\&.push_back (position);
+67 
+68     for (numeric_index_type row=0; row<n_rows; row++)
+69       {
+70         // insert the row indices
+71         for (SparsityPattern::Row::const_iterator col = sparsity_pattern[row]\&.begin();
+72              col != sparsity_pattern[row]\&.end(); ++col)
+73           {
+74             libmesh_assert (position != _csr\&.end());
+75             *position = *col;
+76             ++position;
+77           }
+78 
+79         _row_start\&.push_back (position);
+80       }
+81   }
+82 
+83 
+84   // Initialize the matrix
+85   libmesh_assert (!this->initialized());
+86   this->init ();
+87   libmesh_assert (this->initialized());
+88   //libMesh::out << "n_rows=" << n_rows << std::endl;
+89   //libMesh::out << "m()=" << m() << std::endl;
+90   libmesh_assert_equal_to (n_rows, this->m());
+91 
+92   // Tell the matrix about its structure\&.  Initialize it
+93   // to zero\&.
+94   for (numeric_index_type i=0; i<n_rows; i++)
+95     {
+96       const std::vector<numeric_index_type>::const_iterator
+97         rs = _row_start[i];
+98 
+99       const numeric_index_type length = _row_start[i+1] - rs;
+100 
+101       Q_SetLen (&_QMat, i+1, length);
+102 
+103       for (numeric_index_type l=0; l<length; l++)
+104         {
+105           const numeric_index_type j = *(rs+l);
+106 
+107           // sanity check
+108           //libMesh::out << "m()=" << m() << std::endl;
+109           //libMesh::out << "(i,j,l) = (" << i
+110           //          << "," << j
+111           //          << "," << l
+112           //           << ")" << std::endl;
+113           //libMesh::out << "pos(i,j)=" << pos(i,j)
+114           //              << std::endl;
+115           libmesh_assert_equal_to (this->pos(i,j), l);
+116           Q_SetEntry (&_QMat, i+1, l, j+1, 0\&.);
+117         }
+118     }
+119 
+120   // That's it!
+121   //libmesh_here();
+122 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::vector_mult (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const\fC [inherited]\fP"
+Multiplies the matrix with \fCarg\fP and stores the result in \fCdest\fP\&. 
+.PP
+Definition at line 191 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::NumericVector< T >::zero()\&.
+.PP
+.nf
+193 {
+194   dest\&.zero();
+195   this->vector_mult_add(dest,arg);
+196 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::vector_mult_add (\fBNumericVector\fP< T > &dest, const \fBNumericVector\fP< T > &arg) const\fC [inherited]\fP"
+Multiplies the matrix with \fCarg\fP and adds the result to \fCdest\fP\&. 
+.PP
+Definition at line 201 of file sparse_matrix\&.C\&.
+.PP
+References libMesh::NumericVector< T >::add_vector()\&.
+.PP
+Referenced by libMesh::ImplicitSystem::weighted_sensitivity_adjoint_solve()\&.
+.PP
+.nf
+203 {
+204   /* This functionality is actually implemented in the \p
+205      NumericVector class\&.  */
+206   dest\&.add_vector(arg,*this);
+207 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackMatrix\fP< T >::zero ()\fC [virtual]\fP"
+Set all entries to 0\&. 
+.PP
+Implements \fBlibMesh::SparseMatrix< T >\fP\&.
+.PP
+Definition at line 272 of file laspack_matrix\&.C\&.
+.PP
+.nf
+273 {
+274   const numeric_index_type n_rows = this->m();
+275 
+276   for (numeric_index_type row=0; row<n_rows; row++)
+277     {
+278       const std::vector<numeric_index_type>::const_iterator
+279         r_start = _row_start[row];
+280 
+281       const numeric_index_type len = (_row_start[row+1] - _row_start[row]);
+282 
+283       // Make sure we agree on the row length
+284       libmesh_assert_equal_to (len, Q_GetLen(&_QMat, row+1));
+285 
+286       for (numeric_index_type l=0; l<len; l++)
+287         {
+288           const numeric_index_type j = *(r_start + l);
+289 
+290           // Make sure the data structures are working
+291           libmesh_assert_equal_to ((j+1), Q_GetPos (&_QMat, row+1, l));
+292 
+293           Q_SetEntry (&_QMat, row+1, l, j+1, 0\&.);
+294         }
+295     }
+296 }
+.fi
+.SS "template<typename T> void \fBlibMesh::SparseMatrix\fP< T >::zero_rows (std::vector< \fBnumeric_index_type\fP > &rows, Tdiag_value = \fC0\&.0\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+Set all row entries to 0 then puts diag_value in the diagonal entry 
+.PP
+Reimplemented in \fBlibMesh::PetscMatrix< T >\fP\&.
+.PP
+Definition at line 212 of file sparse_matrix\&.C\&.
+.PP
+.nf
+213 {
+214   /* This functionality isn't implemented or stubbed in every subclass yet */
+215   libmesh_not_implemented();
+216 }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "template<typename T> friend class \fBLaspackLinearSolver\fP< T >\fC [friend]\fP"
+
+.PP
+Definition at line 309 of file laspack_matrix\&.h\&.
+.SS "template<typename T> friend class \fBLaspackVector\fP< T >\fC [friend]\fP"
+Make other Laspack datatypes friends 
+.PP
+Definition at line 308 of file laspack_matrix\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> bool \fBlibMesh::LaspackMatrix\fP< T >::_closed\fC [private]\fP"
+Flag indicating if the matrix has been closed yet\&. 
+.PP
+Definition at line 303 of file laspack_matrix\&.h\&.
+.PP
+Referenced by libMesh::LaspackMatrix< T >::close(), and libMesh::LaspackMatrix< T >::closed()\&.
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "template<typename T> std::vector<\fBnumeric_index_type\fP> \fBlibMesh::LaspackMatrix\fP< T >::_csr\fC [private]\fP"
+The compressed row indices\&. 
+.PP
+Definition at line 292 of file laspack_matrix\&.h\&.
+.SS "template<typename T> \fBDofMap\fP const* \fBlibMesh::SparseMatrix\fP< T >::_dof_map\fC [protected]\fP, \fC [inherited]\fP"
+The \fC\fBDofMap\fP\fP object associated with this object\&. 
+.PP
+Definition at line 436 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::SparseMatrix< Number >::attach_dof_map()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T> bool \fBlibMesh::SparseMatrix\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating whether or not the matrix has been initialized\&. 
+.PP
+Definition at line 442 of file sparse_matrix\&.h\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::PetscMatrix< T >::get_transpose(), and libMesh::SparseMatrix< Number >::initialized()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T> QMatrix \fBlibMesh::LaspackMatrix\fP< T >::_QMat\fC [private]\fP"
+The Laspack sparse matrix pointer\&. 
+.PP
+Definition at line 287 of file laspack_matrix\&.h\&.
+.PP
+Referenced by libMesh::LaspackLinearSolver< T >::adjoint_solve(), and libMesh::LaspackLinearSolver< T >::solve()\&.
+.SS "template<typename T> std::vector<std::vector<\fBnumeric_index_type\fP>::const_iterator> \fBlibMesh::LaspackMatrix\fP< T >::_row_start\fC [private]\fP"
+The start of each row in the compressed row index data structure\&. 
+.PP
+Definition at line 298 of file laspack_matrix\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

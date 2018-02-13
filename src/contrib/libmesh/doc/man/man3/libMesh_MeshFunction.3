@@ -1,0 +1,943 @@
+.TH "libMesh::MeshFunction" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshFunction \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_function\&.h>\fP
+.PP
+Inherits \fBlibMesh::FunctionBase< Number >\fP, and \fBlibMesh::ParallelObject\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshFunction\fP (const \fBEquationSystems\fP &eqn_systems, const \fBNumericVector\fP< \fBNumber\fP > &vec, const \fBDofMap\fP &\fBdof_map\fP, const std::vector< unsigned int > &vars, const \fBFunctionBase\fP< \fBNumber\fP > *master=NULL)"
+.br
+.ti -1c
+.RI "\fBMeshFunction\fP (const \fBEquationSystems\fP &eqn_systems, const \fBNumericVector\fP< \fBNumber\fP > &vec, const \fBDofMap\fP &\fBdof_map\fP, const unsigned int var, const \fBFunctionBase\fP< \fBNumber\fP > *master=NULL)"
+.br
+.ti -1c
+.RI "\fB~MeshFunction\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP (const \fBTrees::BuildType\fP point_locator_build_type)"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBFunctionBase\fP
+.br
+< \fBNumber\fP > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "\fBGradient\fP \fBgradient\fP (const \fBPoint\fP &p, const \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "\fBTensor\fP \fBhessian\fP (const \fBPoint\fP &p, const \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time, \fBDenseVector\fP< \fBNumber\fP > &output)"
+.br
+.ti -1c
+.RI "void \fBgradient\fP (const \fBPoint\fP &p, const \fBReal\fP time, std::vector< \fBGradient\fP > &output)"
+.br
+.ti -1c
+.RI "void \fBhessian\fP (const \fBPoint\fP &p, const \fBReal\fP time, std::vector< \fBTensor\fP > &output)"
+.br
+.ti -1c
+.RI "const \fBPointLocatorBase\fP & \fBget_point_locator\fP (void) const "
+.br
+.ti -1c
+.RI "void \fBenable_out_of_mesh_mode\fP (const \fBDenseVector\fP< \fBNumber\fP > &value)"
+.br
+.ti -1c
+.RI "void \fBenable_out_of_mesh_mode\fP (const \fBNumber\fP &value)"
+.br
+.ti -1c
+.RI "void \fBdisable_out_of_mesh_mode\fP (void)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, \fBDenseVector\fP< \fBNumber\fP > &output)"
+.br
+.ti -1c
+.RI "virtual \fBNumber\fP \fBcomponent\fP (unsigned int i, const \fBPoint\fP &p, \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBEquationSystems\fP & \fB_eqn_systems\fP"
+.br
+.ti -1c
+.RI "const \fBNumericVector\fP< \fBNumber\fP > & \fB_vector\fP"
+.br
+.ti -1c
+.RI "const \fBDofMap\fP & \fB_dof_map\fP"
+.br
+.ti -1c
+.RI "const std::vector< unsigned int > \fB_system_vars\fP"
+.br
+.ti -1c
+.RI "\fBPointLocatorBase\fP * \fB_point_locator\fP"
+.br
+.ti -1c
+.RI "bool \fB_out_of_mesh_mode\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fB_out_of_mesh_value\fP"
+.br
+.ti -1c
+.RI "const \fBFunctionBase\fP * \fB_master\fP"
+.br
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides function-like objects for data distributed over a mesh\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 57 of file mesh_function\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshFunction::MeshFunction (const \fBEquationSystems\fP &eqn_systems, const \fBNumericVector\fP< \fBNumber\fP > &vec, const \fBDofMap\fP &dof_map, const std::vector< unsigned int > &vars, const \fBFunctionBase\fP< \fBNumber\fP > *master = \fCNULL\fP)"
+Constructor for mesh based functions with vectors as return value\&. Optionally takes a master function\&. If the \fBMeshFunction\fP is to be evaluated outside of the local partition of the mesh, then both the mesh in \fCeqn_systems\fP and the coefficient vector \fCvec\fP should be serialized\&. 
+.PP
+Definition at line 42 of file mesh_function\&.C\&.
+.PP
+Referenced by clone()\&.
+.PP
+.nf
+46                                                                 :
+47   FunctionBase<Number> (master),
+48   ParallelObject       (eqn_systems),
+49   _eqn_systems         (eqn_systems),
+50   _vector              (vec),
+51   _dof_map             (dof_map),
+52   _system_vars         (vars),
+53   _point_locator       (NULL),
+54   _out_of_mesh_mode    (false),
+55   _out_of_mesh_value   ()
+56 {
+57 }
+.fi
+.SS "libMesh::MeshFunction::MeshFunction (const \fBEquationSystems\fP &eqn_systems, const \fBNumericVector\fP< \fBNumber\fP > &vec, const \fBDofMap\fP &dof_map, const unsigned intvar, const \fBFunctionBase\fP< \fBNumber\fP > *master = \fCNULL\fP)"
+Constructor for mesh based functions with a number as return value\&. Optionally takes a master function\&. If the \fBMeshFunction\fP is to be evaluated outside of the local partition of the mesh, then both the mesh in \fCeqn_systems\fP and the coefficient vector \fCvec\fP should be serialized\&. 
+.PP
+Definition at line 61 of file mesh_function\&.C\&.
+.PP
+.nf
+65                                                                 :
+66   FunctionBase<Number> (master),
+67   ParallelObject       (eqn_systems),
+68   _eqn_systems         (eqn_systems),
+69   _vector              (vec),
+70   _dof_map             (dof_map),
+71   _system_vars         (1,var),
+72   _point_locator       (NULL),
+73   _out_of_mesh_mode    (false),
+74   _out_of_mesh_value   ()
+75 {
+76   //   std::vector<unsigned int> buf (1);
+77   //   buf[0] = var;
+78   //   _system_vars (buf);
+79 }
+.fi
+.SS "libMesh::MeshFunction::~MeshFunction ()"
+Destructor\&. 
+.PP
+Definition at line 87 of file mesh_function\&.C\&.
+.PP
+References libMesh::FunctionBase< Number >::_master, and _point_locator\&.
+.PP
+.nf
+88 {
+89   // only delete the point locator when we are the master
+90   if (this->_master == NULL)
+91     delete this->_point_locator;
+92 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::MeshFunction::clear ()\fC [virtual]\fP"
+Clears the function\&. 
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Number >\fP\&.
+.PP
+Definition at line 158 of file mesh_function\&.C\&.
+.PP
+References libMesh::FunctionBase< Number >::_initialized, libMesh::FunctionBase< Number >::_master, and _point_locator\&.
+.PP
+.nf
+159 {
+160   // only delete the point locator when we are the master
+161   if ((this->_point_locator != NULL) && (this->_master == NULL))
+162     {
+163       delete this->_point_locator;
+164       this->_point_locator = NULL;
+165     }
+166   this->_initialized = false;
+167 }
+.fi
+.SS "\fBAutoPtr\fP< \fBFunctionBase\fP< \fBNumber\fP > > libMesh::MeshFunction::clone () const\fC [virtual]\fP"
+Returns a new copy of the function\&. The new copy uses the original as a master function to enable simultaneous evaluations of the copies in different threads\&. Note that this implies the copy should not be used after the original is destroyed\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Number >\fP\&.
+.PP
+Definition at line 171 of file mesh_function\&.C\&.
+.PP
+References _dof_map, _eqn_systems, _system_vars, _vector, and MeshFunction()\&.
+.PP
+.nf
+172 {
+173   return AutoPtr<FunctionBase<Number> >
+174     (new MeshFunction
+175      (_eqn_systems, _vector, _dof_map, _system_vars, this));
+176 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "virtual \fBNumber\fP  \fBlibMesh::FunctionBase\fP< \fBNumber\fP  >::component (unsigned inti, const \fBPoint\fP &p, Realtime = \fC0\&.\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the vector component \fCi\fP at coordinate \fCp\fP and time \fCtime\fP\&. Subclasses aren't required to overload this, since the default implementation is based on the full vector evaluation, which is often correct\&. Subclasses are recommended to overload this, since the default implementation is based on a vector evaluation, which is usually unnecessarily inefficient\&. 
+.RE
+.PP
+
+.SS "void libMesh::MeshFunction::disable_out_of_mesh_mode (void)"
+Disables out-of-mesh mode\&. This is also the default\&. 
+.PP
+Definition at line 589 of file mesh_function\&.C\&.
+.PP
+References _out_of_mesh_mode, _point_locator, libMesh::PointLocatorBase::disable_out_of_mesh_mode(), libMesh::FunctionBase< Number >::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+590 {
+591   libmesh_assert (this->initialized());
+592   _point_locator->disable_out_of_mesh_mode();
+593   _out_of_mesh_mode = false;
+594 }
+.fi
+.SS "void libMesh::MeshFunction::enable_out_of_mesh_mode (const \fBDenseVector\fP< \fBNumber\fP > &value)"
+Enables out-of-mesh mode\&. In this mode, if asked for a point that is not contained in any element, the \fC\fBMeshFunction\fP\fP will return the given \fCvalue\fP instead of crashing\&. This mode is off per default\&. If you use a master mesh function and you want to enable this mode, you will have to enable it for the master mesh function as well and for all mesh functions that have the same master mesh function\&. You may, however, specify different values\&. 
+.PP
+Definition at line 574 of file mesh_function\&.C\&.
+.PP
+References _out_of_mesh_mode, _out_of_mesh_value, _point_locator, libMesh::PointLocatorBase::enable_out_of_mesh_mode(), libMesh::FunctionBase< Number >::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by enable_out_of_mesh_mode()\&.
+.PP
+.nf
+575 {
+576   libmesh_assert (this->initialized());
+577   _point_locator->enable_out_of_mesh_mode();
+578   _out_of_mesh_mode = true;
+579   _out_of_mesh_value = value;
+580 }
+.fi
+.SS "void libMesh::MeshFunction::enable_out_of_mesh_mode (const \fBNumber\fP &value)"
+Enables out-of-mesh mode\&. In this mode, if asked for a point that is not contained in any element, the \fC\fBMeshFunction\fP\fP will return the given \fCvalue\fP instead of crashing\&. This mode is off per default\&. If you use a master mesh function and you want to enable this mode, you will have to enable it for the master mesh function as well and for all mesh functions that have the same master mesh function\&. You may, however, specify different values\&. 
+.PP
+Definition at line 582 of file mesh_function\&.C\&.
+.PP
+References enable_out_of_mesh_mode()\&.
+.PP
+.nf
+583 {
+584   DenseVector<Number> v(1);
+585   v(0) = value;
+586   this->enable_out_of_mesh_mode(v);
+587 }
+.fi
+.SS "const \fBPointLocatorBase\fP & libMesh::MeshFunction::get_point_locator (void) const"
+Returns the current \fCPointLocator\fP object, for you might want to use it elsewhere\&. The \fC\fBMeshFunction\fP\fP object must be initialized before\&. 
+.PP
+Definition at line 568 of file mesh_function\&.C\&.
+.PP
+References _point_locator, libMesh::FunctionBase< Number >::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+569 {
+570   libmesh_assert (this->initialized());
+571   return *_point_locator;
+572 }
+.fi
+.SS "\fBGradient\fP libMesh::MeshFunction::gradient (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\&.\fP)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the first derivatives of variable 0 at point \fCp\fP and for \fCtime\fP, which defaults to zero\&. 
+.RE
+.PP
+
+.PP
+Definition at line 192 of file mesh_function\&.C\&.
+.PP
+References libMesh::FunctionBase< Number >::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::ExactErrorEstimator::find_squared_element_error()\&.
+.PP
+.nf
+194 {
+195   libmesh_assert (this->initialized());
+196 
+197   std::vector<Gradient> buf (1);
+198   this->gradient(p, time, buf);
+199   return buf[0];
+200 }
+.fi
+.SS "void libMesh::MeshFunction::gradient (const \fBPoint\fP &p, const \fBReal\fPtime, std::vector< \fBGradient\fP > &output)"
+Computes gradients at coordinate \fCp\fP and for time \fCtime\fP, which defaults to zero\&. 
+.PP
+Definition at line 341 of file mesh_function\&.C\&.
+.PP
+References _dof_map, _eqn_systems, libMesh::FunctionBase< Number >::_master, _out_of_mesh_mode, _point_locator, _system_vars, _vector, libMesh::TypeVector< T >::add_scaled(), libMesh::FEGenericBase< T >::build(), libMesh::dim, libMesh::DofMap::dof_indices(), end, libMesh::err, libMesh::Elem::find_point_neighbors(), libMesh::EquationSystems::get_mesh(), libMesh::FunctionBase< Number >::initialized(), libMesh::FEInterface::inverse_map(), libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::SERIAL, libMesh::NumericVector< T >::type(), and libMesh::DofMap::variable_type()\&.
+.PP
+.nf
+344 {
+345   libmesh_assert (this->initialized());
+346 
+347   /* Ensure that in the case of a master mesh function, the
+348      out-of-mesh mode is enabled either for both or for none\&.  This is
+349      important because the out-of-mesh mode is also communicated to
+350      the point locator\&.  Since this is time consuming, enable it only
+351      in debug mode\&.  */
+352 #ifdef DEBUG
+353   if (this->_master != NULL)
+354     {
+355       const MeshFunction* master =
+356         libmesh_cast_ptr<const MeshFunction*>(this->_master);
+357       if(_out_of_mesh_mode!=master->_out_of_mesh_mode)
+358         {
+359           libMesh::err << "ERROR: If you use out-of-mesh-mode in connection with master mesh functions, you must enable out-of-mesh mode for both the master and the slave mesh function\&." << std::endl;
+360           libmesh_error();
+361         }
+362     }
+363 #endif
+364 
+365   // locate the point in the other mesh
+366   const Elem* element = this->_point_locator->operator()(p);
+367 
+368   // If we have an element, but it's not a local element, then we
+369   // either need to have a serialized vector or we need to find a
+370   // local element sharing the same point\&.
+371   if (element &&
+372       (element->processor_id() != this->processor_id()) &&
+373       _vector\&.type() != SERIAL)
+374     {
+375       // look for a local element containing the point
+376       std::set<const Elem*> point_neighbors;
+377       element->find_point_neighbors(p, point_neighbors);
+378       element = NULL;
+379       std::set<const Elem*>::const_iterator       it  = point_neighbors\&.begin();
+380       const std::set<const Elem*>::const_iterator end = point_neighbors\&.end();
+381       for (; it != end; ++it)
+382         {
+383           const Elem* elem = *it;
+384           if (elem->processor_id() == this->processor_id())
+385             {
+386               element = elem;
+387               break;
+388             }
+389         }
+390     }
+391 
+392   if (!element)
+393     {
+394       output\&.resize(0);
+395     }
+396   else
+397     {
+398       // resize the output vector to the number of output values
+399       // that the user told us
+400       output\&.resize (this->_system_vars\&.size());
+401 
+402 
+403       {
+404         const unsigned int dim = this->_eqn_systems\&.get_mesh()\&.mesh_dimension();
+405 
+406 
+407         /*
+408          * Get local coordinates to feed these into compute_data()\&.
+409          * Note that the fe_type can safely be used from the 0-variable,
+410          * since the inverse mapping is the same for all FEFamilies
+411          */
+412         const Point mapped_point (FEInterface::inverse_map (dim,
+413                                                             this->_dof_map\&.variable_type(0),
+414                                                             element,
+415                                                             p));
+416 
+417         std::vector<Point> point_list (1, mapped_point);
+418 
+419         // loop over all vars
+420         for (unsigned int index=0; index < this->_system_vars\&.size(); index++)
+421           {
+422             /*
+423              * the data for this variable
+424              */
+425             const unsigned int var = _system_vars[index];
+426             const FEType& fe_type = this->_dof_map\&.variable_type(var);
+427 
+428             AutoPtr<FEBase> point_fe (FEBase::build(dim, fe_type));
+429             const std::vector<std::vector<RealGradient> >& dphi = point_fe->get_dphi();
+430             point_fe->reinit(element, &point_list);
+431 
+432             // where the solution values for the var-th variable are stored
+433             std::vector<dof_id_type> dof_indices;
+434             this->_dof_map\&.dof_indices (element, dof_indices, var);
+435 
+436             // interpolate the solution
+437             Gradient grad(0\&.);
+438 
+439             for (unsigned int i=0; i<dof_indices\&.size(); i++)
+440               grad\&.add_scaled(dphi[i][0], this->_vector(dof_indices[i]));
+441 
+442             output[index] = grad;
+443           }
+444       }
+445     }
+446 
+447   // all done
+448   return;
+449 }
+.fi
+.SS "\fBTensor\fP libMesh::MeshFunction::hessian (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\&.\fP)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the second derivatives of variable 0 at point \fCp\fP and for \fCtime\fP, which defaults to zero\&. 
+.RE
+.PP
+
+.PP
+Definition at line 205 of file mesh_function\&.C\&.
+.PP
+References libMesh::FunctionBase< Number >::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::ExactErrorEstimator::find_squared_element_error()\&.
+.PP
+.nf
+207 {
+208   libmesh_assert (this->initialized());
+209 
+210   std::vector<Tensor> buf (1);
+211   this->hessian(p, time, buf);
+212   return buf[0];
+213 }
+.fi
+.SS "void libMesh::MeshFunction::hessian (const \fBPoint\fP &p, const \fBReal\fPtime, std::vector< \fBTensor\fP > &output)"
+Computes gradients at coordinate \fCp\fP and for time \fCtime\fP, which defaults to zero\&. 
+.PP
+Definition at line 454 of file mesh_function\&.C\&.
+.PP
+References _dof_map, _eqn_systems, libMesh::FunctionBase< Number >::_master, _out_of_mesh_mode, _point_locator, _system_vars, _vector, libMesh::TypeTensor< T >::add_scaled(), libMesh::FEGenericBase< T >::build(), libMesh::dim, libMesh::DofMap::dof_indices(), end, libMesh::err, libMesh::Elem::find_point_neighbors(), libMesh::EquationSystems::get_mesh(), libMesh::FunctionBase< Number >::initialized(), libMesh::FEInterface::inverse_map(), libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::SERIAL, libMesh::NumericVector< T >::type(), and libMesh::DofMap::variable_type()\&.
+.PP
+.nf
+457 {
+458   libmesh_assert (this->initialized());
+459 
+460   /* Ensure that in the case of a master mesh function, the
+461      out-of-mesh mode is enabled either for both or for none\&.  This is
+462      important because the out-of-mesh mode is also communicated to
+463      the point locator\&.  Since this is time consuming, enable it only
+464      in debug mode\&.  */
+465 #ifdef DEBUG
+466   if (this->_master != NULL)
+467     {
+468       const MeshFunction* master =
+469         libmesh_cast_ptr<const MeshFunction*>(this->_master);
+470       if(_out_of_mesh_mode!=master->_out_of_mesh_mode)
+471         {
+472           libMesh::err << "ERROR: If you use out-of-mesh-mode in connection with master mesh functions, you must enable out-of-mesh mode for both the master and the slave mesh function\&." << std::endl;
+473           libmesh_error();
+474         }
+475     }
+476 #endif
+477 
+478   // locate the point in the other mesh
+479   const Elem* element = this->_point_locator->operator()(p);
+480 
+481   // If we have an element, but it's not a local element, then we
+482   // either need to have a serialized vector or we need to find a
+483   // local element sharing the same point\&.
+484   if (element &&
+485       (element->processor_id() != this->processor_id()) &&
+486       _vector\&.type() != SERIAL)
+487     {
+488       // look for a local element containing the point
+489       std::set<const Elem*> point_neighbors;
+490       element->find_point_neighbors(p, point_neighbors);
+491       element = NULL;
+492       std::set<const Elem*>::const_iterator       it  = point_neighbors\&.begin();
+493       const std::set<const Elem*>::const_iterator end = point_neighbors\&.end();
+494       for (; it != end; ++it)
+495         {
+496           const Elem* elem = *it;
+497           if (elem->processor_id() == this->processor_id())
+498             {
+499               element = elem;
+500               break;
+501             }
+502         }
+503     }
+504 
+505   if (!element)
+506     {
+507       output\&.resize(0);
+508     }
+509   else
+510     {
+511       // resize the output vector to the number of output values
+512       // that the user told us
+513       output\&.resize (this->_system_vars\&.size());
+514 
+515 
+516       {
+517         const unsigned int dim = this->_eqn_systems\&.get_mesh()\&.mesh_dimension();
+518 
+519 
+520         /*
+521          * Get local coordinates to feed these into compute_data()\&.
+522          * Note that the fe_type can safely be used from the 0-variable,
+523          * since the inverse mapping is the same for all FEFamilies
+524          */
+525         const Point mapped_point (FEInterface::inverse_map (dim,
+526                                                             this->_dof_map\&.variable_type(0),
+527                                                             element,
+528                                                             p));
+529 
+530         std::vector<Point> point_list (1, mapped_point);
+531 
+532         // loop over all vars
+533         for (unsigned int index=0; index < this->_system_vars\&.size(); index++)
+534           {
+535             /*
+536              * the data for this variable
+537              */
+538             const unsigned int var = _system_vars[index];
+539             const FEType& fe_type = this->_dof_map\&.variable_type(var);
+540 
+541             AutoPtr<FEBase> point_fe (FEBase::build(dim, fe_type));
+542             const std::vector<std::vector<RealTensor> >& d2phi =
+543               point_fe->get_d2phi();
+544             point_fe->reinit(element, &point_list);
+545 
+546             // where the solution values for the var-th variable are stored
+547             std::vector<dof_id_type> dof_indices;
+548             this->_dof_map\&.dof_indices (element, dof_indices, var);
+549 
+550             // interpolate the solution
+551             Tensor hess;
+552 
+553             for (unsigned int i=0; i<dof_indices\&.size(); i++)
+554               hess\&.add_scaled(d2phi[i][0], this->_vector(dof_indices[i]));
+555 
+556             output[index] = hess;
+557           }
+558       }
+559     }
+560 
+561   // all done
+562   return;
+563 }
+.fi
+.SS "void libMesh::MeshFunction::init ()\fC [inline]\fP, \fC [virtual]\fP"
+The actual initialization process\&. specifies the method to use when building a \fCPointLocator\fP 
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Number >\fP\&.
+.PP
+Definition at line 101 of file mesh_function\&.h\&.
+.PP
+References init(), and libMesh::Trees::NODES\&.
+.PP
+Referenced by init()\&.
+.PP
+.nf
+101 { this->init(Trees::NODES); }
+.fi
+.SS "void libMesh::MeshFunction::init (const \fBTrees::BuildType\fPpoint_locator_build_type)\fC [virtual]\fP"
+The actual initialization process\&. Takes an optional argument which specifies the method to use when building a \fCPointLocator\fP 
+.PP
+Definition at line 97 of file mesh_function\&.C\&.
+.PP
+References _eqn_systems, libMesh::FunctionBase< Number >::_initialized, libMesh::FunctionBase< Number >::_master, _point_locator, _system_vars, libMesh::err, libMesh::EquationSystems::get_mesh(), libMesh::libmesh_assert(), libMesh::libmesh_assert_greater(), mesh, and libMesh::MeshBase::sub_point_locator()\&.
+.PP
+.nf
+98 {
+99   // are indices of the desired variable(s) provided?
+100   libmesh_assert_greater (this->_system_vars\&.size(), 0);
+101 
+102   // Don't do twice\&.\&.\&.
+103   if (this->_initialized)
+104     {
+105       libmesh_assert(this->_point_locator);
+106       return;
+107     }
+108 
+109   /*
+110    * set up the PointLocator: either someone else
+111    * is the master (go and get the address of his
+112    * point locator) or this object is the master
+113    * (build the point locator  on our own)\&.
+114    */
+115   if (this->_master != NULL)
+116     {
+117       // we aren't the master
+118       const MeshFunction* master =
+119         libmesh_cast_ptr<const MeshFunction*>(this->_master);
+120 
+121       if (master->_point_locator == NULL)
+122         {
+123           libMesh::err << "ERROR: When the master-servant concept is used,"
+124                        << std::endl
+125                        << " the master has to be initialized first!"
+126                        << std::endl;
+127           libmesh_error();
+128         }
+129       else
+130         {
+131           this->_point_locator = master->_point_locator;
+132         }
+133     }
+134   else
+135     {
+136       // we are the master: build the point locator
+137 
+138       // constant reference to the other mesh
+139       const MeshBase& mesh = this->_eqn_systems\&.get_mesh();
+140 
+141       // build the point locator\&.  Only \p TREE version available
+142       //AutoPtr<PointLocatorBase> ap (PointLocatorBase::build (TREE, mesh));
+143       //this->_point_locator = ap\&.release();
+144       // this->_point_locator = new PointLocatorTree (mesh, point_locator_build_type);
+145       this->_point_locator = mesh\&.sub_point_locator()\&.release();
+146 
+147       // Point locator no longer needs to be initialized\&.
+148       //      this->_point_locator->init();
+149     }
+150 
+151 
+152   // ready for use
+153   this->_initialized = true;
+154 }
+.fi
+.SS "bool \fBlibMesh::FunctionBase\fP< \fBNumber\fP  >::initialized () const\fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Referenced by disable_out_of_mesh_mode(), enable_out_of_mesh_mode(), get_point_locator(), gradient(), hessian(), and operator()()\&.
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "void \fBlibMesh::FunctionBase\fP< \fBNumber\fP  >::operator() (const \fBPoint\fP &p, \fBDenseVector\fP< \fBNumber\fP  > &output)\fC [inherited]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP\&. 
+.SS "\fBNumber\fP libMesh::MeshFunction::operator() (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\&.\fP)\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value of variable 0 at point \fCp\fP and for \fCtime\fP, which defaults to zero\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::FunctionBase< Number >\fP\&.
+.PP
+Definition at line 180 of file mesh_function\&.C\&.
+.PP
+References libMesh::FunctionBase< Number >::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+182 {
+183   libmesh_assert (this->initialized());
+184 
+185   DenseVector<Number> buf (1);
+186   this->operator() (p, time, buf);
+187   return buf(0);
+188 }
+.fi
+.SS "void libMesh::MeshFunction::operator() (const \fBPoint\fP &p, const \fBReal\fPtime, \fBDenseVector\fP< \fBNumber\fP > &output)\fC [virtual]\fP"
+Computes values at coordinate \fCp\fP and for time \fCtime\fP, which defaults to zero\&. Build an \fBFEComputeData\fP that contains both input and output data for the specific compute_data method\&.
+.PP
+Implements \fBlibMesh::FunctionBase< Number >\fP\&.
+.PP
+Definition at line 218 of file mesh_function\&.C\&.
+.PP
+References _dof_map, _eqn_systems, libMesh::FunctionBase< Number >::_master, _out_of_mesh_mode, _out_of_mesh_value, _point_locator, _system_vars, _vector, libMesh::FEInterface::compute_data(), data, libMesh::dim, libMesh::DofMap::dof_indices(), end, libMesh::err, libMesh::Elem::find_point_neighbors(), libMesh::EquationSystems::get_mesh(), libMesh::FunctionBase< Number >::initialized(), libMesh::FEInterface::inverse_map(), libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::ParallelObject::processor_id(), libMesh::DofObject::processor_id(), libMesh::DenseVector< T >::resize(), libMesh::SERIAL, libMesh::FEComputeData::shape, libMesh::NumericVector< T >::type(), and libMesh::DofMap::variable_type()\&.
+.PP
+.nf
+221 {
+222   libmesh_assert (this->initialized());
+223 
+224   /* Ensure that in the case of a master mesh function, the
+225      out-of-mesh mode is enabled either for both or for none\&.  This is
+226      important because the out-of-mesh mode is also communicated to
+227      the point locator\&.  Since this is time consuming, enable it only
+228      in debug mode\&.  */
+229 #ifdef DEBUG
+230   if (this->_master != NULL)
+231     {
+232       const MeshFunction* master =
+233         libmesh_cast_ptr<const MeshFunction*>(this->_master);
+234       if(_out_of_mesh_mode!=master->_out_of_mesh_mode)
+235         {
+236           libMesh::err << "ERROR: If you use out-of-mesh-mode in connection with master mesh functions, you must enable out-of-mesh mode for both the master and the slave mesh function\&." << std::endl;
+237           libmesh_error();
+238         }
+239     }
+240 #endif
+241 
+242   // locate the point in the other mesh
+243   const Elem* element = this->_point_locator->operator()(p);
+244 
+245   // If we have an element, but it's not a local element, then we
+246   // either need to have a serialized vector or we need to find a
+247   // local element sharing the same point\&.
+248   if (element &&
+249       (element->processor_id() != this->processor_id()) &&
+250       _vector\&.type() != SERIAL)
+251     {
+252       // look for a local element containing the point
+253       std::set<const Elem*> point_neighbors;
+254       element->find_point_neighbors(p, point_neighbors);
+255       element = NULL;
+256       std::set<const Elem*>::const_iterator       it  = point_neighbors\&.begin();
+257       const std::set<const Elem*>::const_iterator end = point_neighbors\&.end();
+258       for (; it != end; ++it)
+259         {
+260           const Elem* elem = *it;
+261           if (elem->processor_id() == this->processor_id())
+262             {
+263               element = elem;
+264               break;
+265             }
+266         }
+267     }
+268 
+269   if (!element)
+270     {
+271       output = _out_of_mesh_value;
+272     }
+273   else
+274     {
+275       // resize the output vector to the number of output values
+276       // that the user told us
+277       output\&.resize (libmesh_cast_int<unsigned int>
+278                      (this->_system_vars\&.size()));
+279 
+280 
+281       {
+282         const unsigned int dim = this->_eqn_systems\&.get_mesh()\&.mesh_dimension();
+283 
+284 
+285         /*
+286          * Get local coordinates to feed these into compute_data()\&.
+287          * Note that the fe_type can safely be used from the 0-variable,
+288          * since the inverse mapping is the same for all FEFamilies
+289          */
+290         const Point mapped_point (FEInterface::inverse_map (dim,
+291                                                             this->_dof_map\&.variable_type(0),
+292                                                             element,
+293                                                             p));
+294 
+295 
+296         // loop over all vars
+297         for (unsigned int index=0; index < this->_system_vars\&.size(); index++)
+298           {
+299             /*
+300              * the data for this variable
+301              */
+302             const unsigned int var = _system_vars[index];
+303             const FEType& fe_type = this->_dof_map\&.variable_type(var);
+304 
+309             {
+310               FEComputeData data (this->_eqn_systems, mapped_point);
+311 
+312               FEInterface::compute_data (dim, fe_type, element, data);
+313 
+314               // where the solution values for the var-th variable are stored
+315               std::vector<dof_id_type> dof_indices;
+316               this->_dof_map\&.dof_indices (element, dof_indices, var);
+317 
+318               // interpolate the solution
+319               {
+320                 Number value = 0\&.;
+321 
+322                 for (unsigned int i=0; i<dof_indices\&.size(); i++)
+323                   value += this->_vector(dof_indices[i]) * data\&.shape[i];
+324 
+325                 output(index) = value;
+326               }
+327 
+328             }
+329 
+330             // next variable
+331           }
+332       }
+333     }
+334 
+335   // all done
+336   return;
+337 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), gradient(), hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "const \fBDofMap\fP& libMesh::MeshFunction::_dof_map\fC [protected]\fP"
+Need access to the \fC\fBDofMap\fP\fP of the other system\&. 
+.PP
+Definition at line 225 of file mesh_function\&.h\&.
+.PP
+Referenced by clone(), gradient(), hessian(), and operator()()\&.
+.SS "const \fBEquationSystems\fP& libMesh::MeshFunction::_eqn_systems\fC [protected]\fP"
+The equation systems handler, from which the data are gathered\&. 
+.PP
+Definition at line 214 of file mesh_function\&.h\&.
+.PP
+Referenced by clone(), gradient(), hessian(), init(), and operator()()\&.
+.SS "bool \fBlibMesh::FunctionBase\fP< \fBNumber\fP  >::_initialized\fC [protected]\fP, \fC [inherited]\fP"
+When \fC\fBinit()\fP\fP was called so that everything is ready for calls to \fCoperator()\fP (\&.\&.\&.), then this \fCbool\fP is true\&. 
+.PP
+Definition at line 166 of file function_base\&.h\&.
+.PP
+Referenced by clear(), and init()\&.
+.SS "const \fBFunctionBase\fP* \fBlibMesh::FunctionBase\fP< \fBNumber\fP  >::_master\fC [protected]\fP, \fC [inherited]\fP"
+Const pointer to our master, initialized to \fCNULL\fP\&. There may be cases where multiple functions are required, but to save memory, one master handles some centralized data\&. 
+.PP
+Definition at line 160 of file function_base\&.h\&.
+.PP
+Referenced by clear(), gradient(), hessian(), init(), operator()(), and ~MeshFunction()\&.
+.SS "bool libMesh::MeshFunction::_out_of_mesh_mode\fC [protected]\fP"
+\fCtrue\fP if out-of-mesh mode is enabled\&. See \fC\fBenable_out_of_mesh_mode()\fP\fP for more details\&. Default is \fCfalse\fP\&. 
+.PP
+Definition at line 243 of file mesh_function\&.h\&.
+.PP
+Referenced by disable_out_of_mesh_mode(), enable_out_of_mesh_mode(), gradient(), hessian(), and operator()()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::MeshFunction::_out_of_mesh_value\fC [protected]\fP"
+Value to return outside the mesh if out-of-mesh mode is enabled\&. See \fC\fBenable_out_of_mesh_mode()\fP\fP for more details\&. 
+.PP
+Definition at line 249 of file mesh_function\&.h\&.
+.PP
+Referenced by enable_out_of_mesh_mode(), and operator()()\&.
+.SS "\fBPointLocatorBase\fP* libMesh::MeshFunction::_point_locator\fC [protected]\fP"
+A point locator is needed to locate the points in the mesh\&. 
+.PP
+Definition at line 237 of file mesh_function\&.h\&.
+.PP
+Referenced by clear(), disable_out_of_mesh_mode(), enable_out_of_mesh_mode(), get_point_locator(), gradient(), hessian(), init(), operator()(), and ~MeshFunction()\&.
+.SS "const std::vector<unsigned int> libMesh::MeshFunction::_system_vars\fC [protected]\fP"
+The indices of the variables within the other system for which data are to be gathered\&. 
+.PP
+Definition at line 231 of file mesh_function\&.h\&.
+.PP
+Referenced by clone(), gradient(), hessian(), init(), and operator()()\&.
+.SS "const \fBNumericVector\fP<\fBNumber\fP>& libMesh::MeshFunction::_vector\fC [protected]\fP"
+A reference to the vector that holds the data that is to be interpolated\&. 
+.PP
+Definition at line 220 of file mesh_function\&.h\&.
+.PP
+Referenced by clone(), gradient(), hessian(), and operator()()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

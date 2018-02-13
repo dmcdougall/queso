@@ -1,0 +1,742 @@
+.TH "libMesh::ProjectFEMSolution" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ProjectFEMSolution \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBProjectFEMSolution\fP (const \fBSystem\fP &system_in, \fBFEMFunctionBase\fP< \fBNumber\fP > *f_in, \fBFEMFunctionBase\fP< \fBGradient\fP > *g_in, \fBNumericVector\fP< \fBNumber\fP > &new_v_in)"
+.br
+.ti -1c
+.RI "\fBProjectFEMSolution\fP (const \fBProjectFEMSolution\fP &in)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBConstElemRange\fP &range) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBSystem\fP & \fBsystem\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFEMFunctionBase\fP
+.br
+< \fBNumber\fP > > \fBf\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFEMFunctionBase\fP
+.br
+< \fBGradient\fP > > \fBg\fP"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< \fBNumber\fP > & \fBnew_vector\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements projecting an arbitrary function to the current mesh\&. This may be exectued in parallel on multiple threads\&. 
+.PP
+Definition at line 160 of file system_projection\&.C\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ProjectFEMSolution::ProjectFEMSolution (const \fBSystem\fP &system_in, \fBFEMFunctionBase\fP< \fBNumber\fP > *f_in, \fBFEMFunctionBase\fP< \fBGradient\fP > *g_in, \fBNumericVector\fP< \fBNumber\fP > &new_v_in)\fC [inline]\fP"
+
+.PP
+Definition at line 170 of file system_projection\&.C\&.
+.PP
+References f, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+173                                                        :
+174     system(system_in),
+175     f(f_in ? f_in->clone() : AutoPtr<FEMFunctionBase<Number> >(NULL)),
+176     g(g_in ? g_in->clone() : AutoPtr<FEMFunctionBase<Gradient> >(NULL)),
+177     new_vector(new_v_in)
+178   {
+179     libmesh_assert(f\&.get());
+180   }
+.fi
+.SS "libMesh::ProjectFEMSolution::ProjectFEMSolution (const \fBProjectFEMSolution\fP &in)\fC [inline]\fP"
+
+.PP
+Definition at line 182 of file system_projection\&.C\&.
+.PP
+References f, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+182                                                     :
+183     system(in\&.system),
+184     f(in\&.f\&.get() ? in\&.f->clone() : AutoPtr<FEMFunctionBase<Number> >(NULL)),
+185     g(in\&.g\&.get() ? in\&.g->clone() : AutoPtr<FEMFunctionBase<Gradient> >(NULL)),
+186     new_vector(in\&.new_vector)
+187   {
+188     libmesh_assert(f\&.get());
+189   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::ProjectFEMSolution::operator() (const \fBConstElemRange\fP &range) const"
+This method projects an arbitrary solution to the current mesh\&. The input function \fCf\fP gives the arbitrary solution, while the \fCnew_vector\fP (which should already be correctly sized) gives the solution (to be computed) on the current mesh\&.
+.PP
+Definition at line 1831 of file system_projection\&.C\&.
+.PP
+References std::abs(), libMesh::Variable::active_on_subdomain(), libMesh::StoredRange< iterator_type, object_type >::begin(), libMesh::C_ONE, libMesh::C_ZERO, libMesh::DenseMatrix< T >::cholesky_solve(), libMesh::FunctionBase< Output >::component(), libMesh::dim, libMesh::DISCONTINUOUS, libMesh::FEInterface::dofs_on_edge(), libMesh::FEInterface::dofs_on_side(), libMesh::StoredRange< iterator_type, object_type >::end(), libMesh::FEType::family, libMesh::NumericVector< T >::first_local_index(), libMesh::FEAbstract::get_continuity(), libMesh::System::get_dof_map(), libMesh::FEGenericBase< T >::get_dphi(), libMesh::FEAbstract::get_fe_type(), libMesh::FEAbstract::get_JxW(), libMesh::FEGenericBase< T >::get_phi(), libMesh::FEAbstract::get_xyz(), libMesh::HERMITE, libMesh::Elem::is_vertex(), libMesh::NumericVector< T >::last_local_index(), libMesh::libmesh_assert(), libMesh::FEInterface::n_dofs_at_node(), libMesh::Elem::n_edges(), n_nodes, libMesh::Elem::n_nodes(), libMesh::QBase::n_points(), libMesh::Elem::n_sides(), libMesh::Elem::point(), libMesh::DenseVector< T >::resize(), libMesh::DenseMatrix< T >::resize(), libMesh::SCALAR, libMesh::NumericVector< T >::set(), libMesh::Threads::spin_mtx, libMesh::Elem::subdomain_id(), system, libMesh::System::time, libMesh::TOLERANCE, libMesh::Variable::type(), libMesh::Elem::type(), libMesh::DofMap::variable(), libMesh::System::variable_scalar_number(), libMesh::DenseMatrix< T >::zero(), and libMesh::DenseVector< T >::zero()\&.
+.PP
+.nf
+1832 {
+1833   // We need data to project
+1834   libmesh_assert(f\&.get());
+1835 
+1843   FEMContext context( system );
+1844 
+1845   // The number of variables in this system
+1846   const unsigned int n_variables = context\&.n_vars();
+1847 
+1848   // The dimensionality of the current mesh
+1849   const unsigned int dim = context\&.get_dim();
+1850 
+1851   // The DofMap for this system
+1852   const DofMap& dof_map = system\&.get_dof_map();
+1853 
+1854   // The element matrix and RHS for projections\&.
+1855   // Note that Ke is always real-valued, whereas
+1856   // Fe may be complex valued if complex number
+1857   // support is enabled
+1858   DenseMatrix<Real> Ke;
+1859   DenseVector<Number> Fe;
+1860   // The new element coefficients
+1861   DenseVector<Number> Ue;
+1862 
+1863   // FIXME: Need to generalize this to vector-valued elements\&. [PB]
+1864   FEBase* fe = NULL;
+1865   FEBase* side_fe = NULL;
+1866   FEBase* edge_fe = NULL;
+1867 
+1868   // First, loop over all variables and make sure the shape functions phi will
+1869   // get built as well as the shape function gradients if the gradient functor
+1870   // is supplied\&.
+1871   for (unsigned int var=0; var<n_variables; var++)
+1872     {
+1873       context\&.get_element_fe( var, fe );
+1874       if (fe->get_fe_type()\&.family == SCALAR)
+1875         continue;
+1876       if( dim > 1 )
+1877         context\&.get_side_fe( var, side_fe );
+1878       if( dim > 2 )
+1879         context\&.get_edge_fe( var, edge_fe );
+1880 
+1881       fe->get_phi();
+1882       if( dim > 1 )
+1883         side_fe->get_phi();
+1884       if( dim > 2 )
+1885         edge_fe->get_phi();
+1886 
+1887       const FEContinuity cont = fe->get_continuity();
+1888       if(cont == C_ONE)
+1889         {
+1890           libmesh_assert(g\&.get());
+1891           fe->get_dphi();
+1892           side_fe->get_dphi();
+1893           if( dim > 2 )
+1894             edge_fe->get_dphi();
+1895         }
+1896     }
+1897 
+1898   // Now initialize any user requested shape functions
+1899   f->init_context(context);
+1900   if(g\&.get())
+1901     g->init_context(context);
+1902 
+1903   std::vector<unsigned int> side_dofs;
+1904 
+1905   // Iterate over all the elements in the range
+1906   for (ConstElemRange::const_iterator elem_it=range\&.begin(); elem_it != range\&.end(); ++elem_it)
+1907     {
+1908       const Elem* elem = *elem_it;
+1909 
+1910       context\&.pre_fe_reinit(system, elem);
+1911 
+1912       // Loop over all the variables in the system
+1913       for (unsigned int var=0; var<n_variables; var++)
+1914         {
+1915           const Variable& variable = dof_map\&.variable(var);
+1916 
+1917           const FEType& fe_type = variable\&.type();
+1918 
+1919           if (fe_type\&.family == SCALAR)
+1920             continue;
+1921 
+1922           // Per-subdomain variables don't need to be projected on
+1923           // elements where they're not active
+1924           if (!variable\&.active_on_subdomain(elem->subdomain_id()))
+1925             continue;
+1926 
+1927           const FEContinuity cont = fe->get_continuity();
+1928 
+1929           const unsigned int var_component =
+1930             system\&.variable_scalar_number(var, 0);
+1931 
+1932           const std::vector<dof_id_type>& dof_indices =
+1933             context\&.get_dof_indices(var);
+1934 
+1935           // The number of DOFs on the element
+1936           const unsigned int n_dofs =
+1937             libmesh_cast_int<unsigned int>(dof_indices\&.size());
+1938 
+1939           // Fixed vs\&. free DoFs on edge/face projections
+1940           std::vector<char> dof_is_fixed(n_dofs, false); // bools
+1941           std::vector<int> free_dof(n_dofs, 0);
+1942 
+1943           // The element type
+1944           const ElemType elem_type = elem->type();
+1945 
+1946           // The number of nodes on the new element
+1947           const unsigned int n_nodes = elem->n_nodes();
+1948 
+1949           // Zero the interpolated values
+1950           Ue\&.resize (n_dofs); Ue\&.zero();
+1951 
+1952           // In general, we need a series of
+1953           // projections to ensure a unique and continuous
+1954           // solution\&.  We start by interpolating nodes, then
+1955           // hold those fixed and project edges, then
+1956           // hold those fixed and project faces, then
+1957           // hold those fixed and project interiors
+1958 
+1959           // Interpolate node values first
+1960           unsigned int current_dof = 0;
+1961           for (unsigned int n=0; n!= n_nodes; ++n)
+1962             {
+1963               // FIXME: this should go through the DofMap,
+1964               // not duplicate dof_indices code badly!
+1965               const unsigned int nc =
+1966                 FEInterface::n_dofs_at_node (dim, fe_type, elem_type,
+1967                                              n);
+1968               if (!elem->is_vertex(n))
+1969                 {
+1970                   current_dof += nc;
+1971                   continue;
+1972                 }
+1973               if (cont == DISCONTINUOUS)
+1974                 {
+1975                   libmesh_assert_equal_to (nc, 0);
+1976                 }
+1977               // Assume that C_ZERO elements have a single nodal
+1978               // value shape function
+1979               else if (cont == C_ZERO)
+1980                 {
+1981                   libmesh_assert_equal_to (nc, 1);
+1982                   Ue(current_dof) = f->component(context,
+1983                                                  var_component,
+1984                                                  elem->point(n),
+1985                                                  system\&.time);
+1986                   dof_is_fixed[current_dof] = true;
+1987                   current_dof++;
+1988                 }
+1989               // The hermite element vertex shape functions are weird
+1990               else if (fe_type\&.family == HERMITE)
+1991                 {
+1992                   Ue(current_dof) = f->component(context,
+1993                                                  var_component,
+1994                                                  elem->point(n),
+1995                                                  system\&.time);
+1996                   dof_is_fixed[current_dof] = true;
+1997                   current_dof++;
+1998                   Gradient grad = g->component(context,
+1999                                                var_component,
+2000                                                elem->point(n),
+2001                                                system\&.time);
+2002                   // x derivative
+2003                   Ue(current_dof) = grad(0);
+2004                   dof_is_fixed[current_dof] = true;
+2005                   current_dof++;
+2006                   if (dim > 1)
+2007                     {
+2008                       // We'll finite difference mixed derivatives
+2009                       Point nxminus = elem->point(n),
+2010                         nxplus = elem->point(n);
+2011                       nxminus(0) -= TOLERANCE;
+2012                       nxplus(0) += TOLERANCE;
+2013                       Gradient gxminus = g->component(context,
+2014                                                       var_component,
+2015                                                       nxminus,
+2016                                                       system\&.time);
+2017                       Gradient gxplus = g->component(context,
+2018                                                      var_component,
+2019                                                      nxplus,
+2020                                                      system\&.time);
+2021                       // y derivative
+2022                       Ue(current_dof) = grad(1);
+2023                       dof_is_fixed[current_dof] = true;
+2024                       current_dof++;
+2025                       // xy derivative
+2026                       Ue(current_dof) = (gxplus(1) - gxminus(1))
+2027                         / 2\&. / TOLERANCE;
+2028                       dof_is_fixed[current_dof] = true;
+2029                       current_dof++;
+2030 
+2031                       if (dim > 2)
+2032                         {
+2033                           // z derivative
+2034                           Ue(current_dof) = grad(2);
+2035                           dof_is_fixed[current_dof] = true;
+2036                           current_dof++;
+2037                           // xz derivative
+2038                           Ue(current_dof) = (gxplus(2) - gxminus(2))
+2039                             / 2\&. / TOLERANCE;
+2040                           dof_is_fixed[current_dof] = true;
+2041                           current_dof++;
+2042                           // We need new points for yz
+2043                           Point nyminus = elem->point(n),
+2044                             nyplus = elem->point(n);
+2045                           nyminus(1) -= TOLERANCE;
+2046                           nyplus(1) += TOLERANCE;
+2047                           Gradient gyminus = g->component(context,
+2048                                                           var_component,
+2049                                                           nyminus,
+2050                                                           system\&.time);
+2051                           Gradient gyplus = g->component(context,
+2052                                                          var_component,
+2053                                                          nyplus,
+2054                                                          system\&.time);
+2055                           // xz derivative
+2056                           Ue(current_dof) = (gyplus(2) - gyminus(2))
+2057                             / 2\&. / TOLERANCE;
+2058                           dof_is_fixed[current_dof] = true;
+2059                           current_dof++;
+2060                           // Getting a 2nd order xyz is more tedious
+2061                           Point nxmym = elem->point(n),
+2062                             nxmyp = elem->point(n),
+2063                             nxpym = elem->point(n),
+2064                             nxpyp = elem->point(n);
+2065                           nxmym(0) -= TOLERANCE;
+2066                           nxmym(1) -= TOLERANCE;
+2067                           nxmyp(0) -= TOLERANCE;
+2068                           nxmyp(1) += TOLERANCE;
+2069                           nxpym(0) += TOLERANCE;
+2070                           nxpym(1) -= TOLERANCE;
+2071                           nxpyp(0) += TOLERANCE;
+2072                           nxpyp(1) += TOLERANCE;
+2073                           Gradient gxmym = g->component(context,
+2074                                                         var_component,
+2075                                                         nxmym,
+2076                                                         system\&.time);
+2077                           Gradient gxmyp = g->component(context,
+2078                                                         var_component,
+2079                                                         nxmyp,
+2080                                                         system\&.time);
+2081                           Gradient gxpym = g->component(context,
+2082                                                         var_component,
+2083                                                         nxpym,
+2084                                                         system\&.time);
+2085                           Gradient gxpyp = g->component(context,
+2086                                                         var_component,
+2087                                                         nxpyp,
+2088                                                         system\&.time);
+2089                           Number gxzplus = (gxpyp(2) - gxmyp(2))
+2090                             / 2\&. / TOLERANCE;
+2091                           Number gxzminus = (gxpym(2) - gxmym(2))
+2092                             / 2\&. / TOLERANCE;
+2093                           // xyz derivative
+2094                           Ue(current_dof) = (gxzplus - gxzminus)
+2095                             / 2\&. / TOLERANCE;
+2096                           dof_is_fixed[current_dof] = true;
+2097                           current_dof++;
+2098                         }
+2099                     }
+2100                 }
+2101               // Assume that other C_ONE elements have a single nodal
+2102               // value shape function and nodal gradient component
+2103               // shape functions
+2104               else if (cont == C_ONE)
+2105                 {
+2106                   libmesh_assert_equal_to (nc, 1 + dim);
+2107                   Ue(current_dof) = f->component(context,
+2108                                                  var_component,
+2109                                                  elem->point(n),
+2110                                                  system\&.time);
+2111                   dof_is_fixed[current_dof] = true;
+2112                   current_dof++;
+2113                   Gradient grad = g->component(context,
+2114                                                var_component,
+2115                                                elem->point(n),
+2116                                                system\&.time);
+2117                   for (unsigned int i=0; i!= dim; ++i)
+2118                     {
+2119                       Ue(current_dof) = grad(i);
+2120                       dof_is_fixed[current_dof] = true;
+2121                       current_dof++;
+2122                     }
+2123                 }
+2124               else
+2125                 libmesh_error();
+2126             }
+2127 
+2128           // In 3D, project any edge values next
+2129           if (dim > 2 && cont != DISCONTINUOUS)
+2130             {
+2131               const std::vector<Point>& xyz_values = edge_fe->get_xyz();
+2132               const std::vector<Real>& JxW = edge_fe->get_JxW();
+2133 
+2134               const std::vector<std::vector<Real> >& phi = edge_fe->get_phi();
+2135               const std::vector<std::vector<RealGradient> >* dphi = NULL;
+2136               if (cont == C_ONE)
+2137                 dphi = &(edge_fe->get_dphi());
+2138 
+2139               for (unsigned int e=0; e != elem->n_edges(); ++e)
+2140                 {
+2141                   context\&.edge = e;
+2142                   context\&.edge_fe_reinit();
+2143 
+2144                   const QBase& qedgerule = context\&.get_edge_qrule();
+2145                   const unsigned int n_qp = qedgerule\&.n_points();
+2146 
+2147                   FEInterface::dofs_on_edge(elem, dim, fe_type, e,
+2148                                             side_dofs);
+2149 
+2150                   // Some edge dofs are on nodes and already
+2151                   // fixed, others are free to calculate
+2152                   unsigned int free_dofs = 0;
+2153                   for (unsigned int i=0; i != side_dofs\&.size(); ++i)
+2154                     if (!dof_is_fixed[side_dofs[i]])
+2155                       free_dof[free_dofs++] = i;
+2156 
+2157                   // There may be nothing to project
+2158                   if (!free_dofs)
+2159                     continue;
+2160 
+2161                   Ke\&.resize (free_dofs, free_dofs); Ke\&.zero();
+2162                   Fe\&.resize (free_dofs); Fe\&.zero();
+2163                   // The new edge coefficients
+2164                   DenseVector<Number> Uedge(free_dofs);
+2165 
+2166                   // Loop over the quadrature points
+2167                   for (unsigned int qp=0; qp<n_qp; qp++)
+2168                     {
+2169                       // solution at the quadrature point
+2170                       Number fineval = f->component(context,
+2171                                                     var_component,
+2172                                                     xyz_values[qp],
+2173                                                     system\&.time);
+2174                       // solution grad at the quadrature point
+2175                       Gradient finegrad;
+2176                       if (cont == C_ONE)
+2177                         finegrad = g->component(context,
+2178                                                 var_component,
+2179                                                 xyz_values[qp],
+2180                                                 system\&.time);
+2181 
+2182                       // Form edge projection matrix
+2183                       for (unsigned int sidei=0, freei=0;
+2184                            sidei != side_dofs\&.size(); ++sidei)
+2185                         {
+2186                           unsigned int i = side_dofs[sidei];
+2187                           // fixed DoFs aren't test functions
+2188                           if (dof_is_fixed[i])
+2189                             continue;
+2190                           for (unsigned int sidej=0, freej=0;
+2191                                sidej != side_dofs\&.size(); ++sidej)
+2192                             {
+2193                               unsigned int j = side_dofs[sidej];
+2194                               if (dof_is_fixed[j])
+2195                                 Fe(freei) -= phi[i][qp] * phi[j][qp] *
+2196                                   JxW[qp] * Ue(j);
+2197                               else
+2198                                 Ke(freei,freej) += phi[i][qp] *
+2199                                   phi[j][qp] * JxW[qp];
+2200                               if (cont == C_ONE)
+2201                                 {
+2202                                   if (dof_is_fixed[j])
+2203                                     Fe(freei) -= ( (*dphi)[i][qp] *
+2204                                                    (*dphi)[j][qp] ) *
+2205                                       JxW[qp] * Ue(j);
+2206                                   else
+2207                                     Ke(freei,freej) += ( (*dphi)[i][qp] *
+2208                                                          (*dphi)[j][qp] )
+2209                                       * JxW[qp];
+2210                                 }
+2211                               if (!dof_is_fixed[j])
+2212                                 freej++;
+2213                             }
+2214                           Fe(freei) += phi[i][qp] * fineval * JxW[qp];
+2215                           if (cont == C_ONE)
+2216                             Fe(freei) += (finegrad * (*dphi)[i][qp] ) *
+2217                               JxW[qp];
+2218                           freei++;
+2219                         }
+2220                     }
+2221 
+2222                   Ke\&.cholesky_solve(Fe, Uedge);
+2223 
+2224                   // Transfer new edge solutions to element
+2225                   for (unsigned int i=0; i != free_dofs; ++i)
+2226                     {
+2227                       Number &ui = Ue(side_dofs[free_dof[i]]);
+2228                       libmesh_assert(std::abs(ui) < TOLERANCE ||
+2229                                      std::abs(ui - Uedge(i)) < TOLERANCE);
+2230                       ui = Uedge(i);
+2231                       dof_is_fixed[side_dofs[free_dof[i]]] = true;
+2232                     }
+2233                 }
+2234             } // end if (dim > 2 && cont != DISCONTINUOUS)
+2235 
+2236           // Project any side values (edges in 2D, faces in 3D)
+2237           if (dim > 1 && cont != DISCONTINUOUS)
+2238             {
+2239               const std::vector<Point>& xyz_values = side_fe->get_xyz();
+2240               const std::vector<Real>& JxW = side_fe->get_JxW();
+2241 
+2242               const std::vector<std::vector<Real> >& phi = side_fe->get_phi();
+2243               const std::vector<std::vector<RealGradient> >* dphi = NULL;
+2244               if (cont == C_ONE)
+2245                 dphi = &(side_fe->get_dphi());
+2246 
+2247               for (unsigned int s=0; s != elem->n_sides(); ++s)
+2248                 {
+2249                   FEInterface::dofs_on_side(elem, dim, fe_type, s,
+2250                                             side_dofs);
+2251 
+2252                   // Some side dofs are on nodes/edges and already
+2253                   // fixed, others are free to calculate
+2254                   unsigned int free_dofs = 0;
+2255                   for (unsigned int i=0; i != side_dofs\&.size(); ++i)
+2256                     if (!dof_is_fixed[side_dofs[i]])
+2257                       free_dof[free_dofs++] = i;
+2258 
+2259                   // There may be nothing to project
+2260                   if (!free_dofs)
+2261                     continue;
+2262 
+2263                   Ke\&.resize (free_dofs, free_dofs); Ke\&.zero();
+2264                   Fe\&.resize (free_dofs); Fe\&.zero();
+2265                   // The new side coefficients
+2266                   DenseVector<Number> Uside(free_dofs);
+2267 
+2268                   context\&.side = s;
+2269                   context\&.side_fe_reinit();
+2270 
+2271                   const QBase& qsiderule = context\&.get_side_qrule();
+2272                   const unsigned int n_qp = qsiderule\&.n_points();
+2273 
+2274                   // Loop over the quadrature points
+2275                   for (unsigned int qp=0; qp<n_qp; qp++)
+2276                     {
+2277                       // solution at the quadrature point
+2278                       Number fineval = f->component(context,
+2279                                                     var_component,
+2280                                                     xyz_values[qp],
+2281                                                     system\&.time);
+2282                       // solution grad at the quadrature point
+2283                       Gradient finegrad;
+2284                       if (cont == C_ONE)
+2285                         finegrad = g->component(context,
+2286                                                 var_component,
+2287                                                 xyz_values[qp],
+2288                                                 system\&.time);
+2289 
+2290                       // Form side projection matrix
+2291                       for (unsigned int sidei=0, freei=0;
+2292                            sidei != side_dofs\&.size(); ++sidei)
+2293                         {
+2294                           unsigned int i = side_dofs[sidei];
+2295                           // fixed DoFs aren't test functions
+2296                           if (dof_is_fixed[i])
+2297                             continue;
+2298                           for (unsigned int sidej=0, freej=0;
+2299                                sidej != side_dofs\&.size(); ++sidej)
+2300                             {
+2301                               unsigned int j = side_dofs[sidej];
+2302                               if (dof_is_fixed[j])
+2303                                 Fe(freei) -= phi[i][qp] * phi[j][qp] *
+2304                                   JxW[qp] * Ue(j);
+2305                               else
+2306                                 Ke(freei,freej) += phi[i][qp] *
+2307                                   phi[j][qp] * JxW[qp];
+2308                               if (cont == C_ONE)
+2309                                 {
+2310                                   if (dof_is_fixed[j])
+2311                                     Fe(freei) -= ( (*dphi)[i][qp] *
+2312                                                    (*dphi)[j][qp] ) *
+2313                                       JxW[qp] * Ue(j);
+2314                                   else
+2315                                     Ke(freei,freej) += ( (*dphi)[i][qp] *
+2316                                                          (*dphi)[j][qp] )
+2317                                       * JxW[qp];
+2318                                 }
+2319                               if (!dof_is_fixed[j])
+2320                                 freej++;
+2321                             }
+2322                           Fe(freei) += (fineval * phi[i][qp]) * JxW[qp];
+2323                           if (cont == C_ONE)
+2324                             Fe(freei) += (finegrad * (*dphi)[i][qp] ) *
+2325                               JxW[qp];
+2326                           freei++;
+2327                         }
+2328                     }
+2329 
+2330                   Ke\&.cholesky_solve(Fe, Uside);
+2331 
+2332                   // Transfer new side solutions to element
+2333                   for (unsigned int i=0; i != free_dofs; ++i)
+2334                     {
+2335                       Number &ui = Ue(side_dofs[free_dof[i]]);
+2336                       libmesh_assert(std::abs(ui) < TOLERANCE ||
+2337                                      std::abs(ui - Uside(i)) < TOLERANCE);
+2338                       ui = Uside(i);
+2339                       dof_is_fixed[side_dofs[free_dof[i]]] = true;
+2340                     }
+2341                 }
+2342             }// end if (dim > 1 && cont != DISCONTINUOUS)
+2343 
+2344           // Project the interior values, finally
+2345 
+2346           // Some interior dofs are on nodes/edges/sides and
+2347           // already fixed, others are free to calculate
+2348           unsigned int free_dofs = 0;
+2349           for (unsigned int i=0; i != n_dofs; ++i)
+2350             if (!dof_is_fixed[i])
+2351               free_dof[free_dofs++] = i;
+2352 
+2353           // There may be nothing to project
+2354           if (free_dofs)
+2355             {
+2356               context\&.elem_fe_reinit();
+2357 
+2358               const QBase& qrule = context\&.get_element_qrule();
+2359               const unsigned int n_qp = qrule\&.n_points();
+2360               const std::vector<Point>& xyz_values = fe->get_xyz();
+2361               const std::vector<Real>& JxW = fe->get_JxW();
+2362 
+2363               const std::vector<std::vector<Real> >& phi = fe->get_phi();
+2364               const std::vector<std::vector<RealGradient> >* dphi = NULL;
+2365               if (cont == C_ONE)
+2366                 dphi = &(side_fe->get_dphi());
+2367 
+2368               Ke\&.resize (free_dofs, free_dofs); Ke\&.zero();
+2369               Fe\&.resize (free_dofs); Fe\&.zero();
+2370               // The new interior coefficients
+2371               DenseVector<Number> Uint(free_dofs);
+2372 
+2373               // Loop over the quadrature points
+2374               for (unsigned int qp=0; qp<n_qp; qp++)
+2375                 {
+2376                   // solution at the quadrature point
+2377                   Number fineval = f->component(context,
+2378                                                 var_component,
+2379                                                 xyz_values[qp],
+2380                                                 system\&.time);
+2381                   // solution grad at the quadrature point
+2382                   Gradient finegrad;
+2383                   if (cont == C_ONE)
+2384                     finegrad = g->component(context,
+2385                                             var_component,
+2386                                             xyz_values[qp],
+2387                                             system\&.time);
+2388 
+2389                   // Form interior projection matrix
+2390                   for (unsigned int i=0, freei=0; i != n_dofs; ++i)
+2391                     {
+2392                       // fixed DoFs aren't test functions
+2393                       if (dof_is_fixed[i])
+2394                         continue;
+2395                       for (unsigned int j=0, freej=0; j != n_dofs; ++j)
+2396                         {
+2397                           if (dof_is_fixed[j])
+2398                             Fe(freei) -= phi[i][qp] * phi[j][qp] * JxW[qp]
+2399                               * Ue(j);
+2400                           else
+2401                             Ke(freei,freej) += phi[i][qp] * phi[j][qp] *
+2402                               JxW[qp];
+2403                           if (cont == C_ONE)
+2404                             {
+2405                               if (dof_is_fixed[j])
+2406                                 Fe(freei) -= ( (*dphi)[i][qp] *
+2407                                                (*dphi)[j][qp] ) * JxW[qp] *
+2408                                   Ue(j);
+2409                               else
+2410                                 Ke(freei,freej) += ( (*dphi)[i][qp] *
+2411                                                      (*dphi)[j][qp] ) *
+2412                                   JxW[qp];
+2413                             }
+2414                           if (!dof_is_fixed[j])
+2415                             freej++;
+2416                         }
+2417                       Fe(freei) += phi[i][qp] * fineval * JxW[qp];
+2418                       if (cont == C_ONE)
+2419                         Fe(freei) += (finegrad * (*dphi)[i][qp] ) * JxW[qp];
+2420                       freei++;
+2421                     }
+2422                 }
+2423               Ke\&.cholesky_solve(Fe, Uint);
+2424 
+2425               // Transfer new interior solutions to element
+2426               for (unsigned int i=0; i != free_dofs; ++i)
+2427                 {
+2428                   Number &ui = Ue(free_dof[i]);
+2429                   libmesh_assert(std::abs(ui) < TOLERANCE ||
+2430                                  std::abs(ui - Uint(i)) < TOLERANCE);
+2431                   ui = Uint(i);
+2432                   dof_is_fixed[free_dof[i]] = true;
+2433                 }
+2434 
+2435             } // if there are free interior dofs
+2436 
+2437           // Make sure every DoF got reached!
+2438           for (unsigned int i=0; i != n_dofs; ++i)
+2439             libmesh_assert(dof_is_fixed[i]);
+2440 
+2441           const numeric_index_type
+2442             first = new_vector\&.first_local_index(),
+2443             last  = new_vector\&.last_local_index();
+2444 
+2445           // Lock the new_vector since it is shared among threads\&.
+2446           {
+2447             Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+2448 
+2449             for (unsigned int i = 0; i < n_dofs; i++)
+2450               // We may be projecting a new zero value onto
+2451               // an old nonzero approximation - RHS
+2452               // if (Ue(i) != 0\&.)
+2453               if ((dof_indices[i] >= first) &&
+2454                   (dof_indices[i] <  last))
+2455                 {
+2456                   new_vector\&.set(dof_indices[i], Ue(i));
+2457                 }
+2458           }
+2459         }  // end variables loop
+2460     } // end elem loop
+2461 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBAutoPtr\fP<\fBFEMFunctionBase\fP<\fBNumber\fP> > libMesh::ProjectFEMSolution::f\fC [private]\fP"
+
+.PP
+Definition at line 165 of file system_projection\&.C\&.
+.PP
+Referenced by ProjectFEMSolution()\&.
+.SS "\fBAutoPtr\fP<\fBFEMFunctionBase\fP<\fBGradient\fP> > libMesh::ProjectFEMSolution::g\fC [private]\fP"
+
+.PP
+Definition at line 166 of file system_projection\&.C\&.
+.SS "\fBNumericVector\fP<\fBNumber\fP>& libMesh::ProjectFEMSolution::new_vector\fC [private]\fP"
+
+.PP
+Definition at line 167 of file system_projection\&.C\&.
+.SS "const \fBSystem\fP& libMesh::ProjectFEMSolution::system\fC [private]\fP"
+
+.PP
+Definition at line 163 of file system_projection\&.C\&.
+.PP
+Referenced by operator()()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

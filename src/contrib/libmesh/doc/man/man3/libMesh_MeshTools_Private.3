@@ -1,0 +1,36 @@
+.TH "libMesh::MeshTools::Private" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshTools::Private \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBglobally_renumber_nodes_and_elements\fP (\fBMeshBase\fP &)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void libMesh::MeshTools::Private::globally_renumber_nodes_and_elements (\fBMeshBase\fP &mesh)"
+There is no reason for a user to ever call this function\&.
+.PP
+This function determines partition-agnostic global indices for all nodes and elements in the mesh\&. Note that after this function is called the mesh will likely be in an inconsistent state, i\&.e\&. \fCmesh\&.nodes(i)->id()\fP != i in the nodes container\&. Direct node/element access via the \fCmesh\&.node(n)\fP or \fCmesh\&.elem(e)\fP functions will likely fail\&. The original numbering can (and should) be restored with a subsequent call to \fCfix_node_and_element_numbering()\fP\&. 
+.PP
+Definition at line 1448 of file mesh_tools\&.C\&.
+.PP
+References libMesh::MeshCommunication::assign_global_indices()\&.
+.PP
+Referenced by libMesh::EquationSystems::_read_impl(), and libMesh::EquationSystems::write()\&.
+.PP
+.nf
+1449 {
+1450   MeshCommunication()\&.assign_global_indices(mesh);
+1451 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

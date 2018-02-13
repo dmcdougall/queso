@@ -1,0 +1,166 @@
+.TH "libMesh::FEComputeData" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::FEComputeData \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fe_compute_data\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFEComputeData\fP (const \fBEquationSystems\fP &es, const \fBPoint\fP &pin)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBEquationSystems\fP & \fBequation_systems\fP"
+.br
+.ti -1c
+.RI "const \fBPoint\fP & \fBp\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBNumber\fP > \fBshape\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBphase\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBspeed\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBfrequency\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+class \fC\fBFEComputeData\fP\fP hides arbitrary data to be passed to and from children of \fCFEBase\fP through the \fC\fBFEInterface::compute_data()\fP\fP method\&. This enables the efficient computation of data on the finite element level, while maintaining library integrity\&. -- With special finite elements \fIdisabled\fP (like infinite elements), this class wraps the return values of \fIall\fP shape functions from \fC\fBFEInterface::shape()\fP\fP in a \fCstd::vector<Number>\fP\&. -- With enabled infinite elements, this class returns a vector of physically correct shape functions, both for finite and infinite elements\&. 
+.PP
+Definition at line 46 of file fe_compute_data\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::FEComputeData::FEComputeData (const \fBEquationSystems\fP &es, const \fBPoint\fP &pin)\fC [inline]\fP"
+Constructor\&. Takes the required input data and clears the output data using \fC\fBclear()\fP\fP\&. 
+.PP
+Definition at line 57 of file fe_compute_data\&.h\&.
+.PP
+References clear()\&.
+.PP
+.nf
+58                                    :
+59     equation_systems(es),
+60     p(pin)
+61   {
+62     this->clear();
+63   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::FEComputeData::clear ()"
+Clears the \fIoutput\fP data completely\&. 
+.PP
+Definition at line 26 of file fe_compute_data\&.C\&.
+.PP
+References frequency, phase, shape, and speed\&.
+.PP
+Referenced by FEComputeData()\&.
+.PP
+.nf
+27 {
+28   this->shape\&.clear();
+29 #if defined(LIBMESH_ENABLE_INFINITE_ELEMENTS) && !defined(LIBMESH_USE_COMPLEX_NUMBERS)
+30   this->phase = 0\&.;
+31   this->speed = 0\&.;
+32 #endif
+33 
+34 #if defined (LIBMESH_ENABLE_INFINITE_ELEMENTS) && defined(LIBMESH_USE_COMPLEX_NUMBERS)
+35   this->speed = 0\&.;
+36   this->frequency = 0\&.;
+37 
+38 #endif
+39 }
+.fi
+.SS "void libMesh::FEComputeData::init ()"
+Inits the \fIoutput\fP data to default values, provided the fields are correctly resized\&. 
+.PP
+Definition at line 43 of file fe_compute_data\&.C\&.
+.PP
+References equation_systems, frequency, libMesh::Parameters::get(), libMesh::Parameters::have_parameter(), libMesh::EquationSystems::parameters, phase, libMesh::Real, shape, and speed\&.
+.PP
+Referenced by libMesh::FEInterface::compute_data()\&.
+.PP
+.nf
+44 {
+45   if (!(this->shape\&.empty()))
+46     std::fill (this->shape\&.begin(),   this->shape\&.end(),   0\&.);
+47 
+48 #if defined(LIBMESH_ENABLE_INFINITE_ELEMENTS) && !defined(LIBMESH_USE_COMPLEX_NUMBERS)
+49   this->phase = 0\&.;
+50 
+51   if (equation_systems\&.parameters\&.have_parameter<Real>("speed"))
+52     this->speed = this->equation_systems\&.parameters\&.get<Real>("speed");
+53 #endif
+54 
+55 #if defined (LIBMESH_ENABLE_INFINITE_ELEMENTS) && defined(LIBMESH_USE_COMPLEX_NUMBERS)
+56   if (equation_systems\&.parameters\&.have_parameter<Real>("speed"))
+57     this->speed = this->equation_systems\&.parameters\&.get<Real>("speed");
+58 
+59   if (equation_systems\&.parameters\&.have_parameter<Real>("current frequency"))
+60     this->frequency = this->equation_systems\&.parameters\&.get<Real>("current frequency");
+61 
+62 #endif
+63 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBEquationSystems\fP& libMesh::FEComputeData::equation_systems"
+Const reference to the \fC\fBEquationSystems\fP\fP object that contains simulation-specific data\&. 
+.PP
+Definition at line 72 of file fe_compute_data\&.h\&.
+.PP
+Referenced by init()\&.
+.SS "\fBReal\fP libMesh::FEComputeData::frequency"
+The frequency to evaluate shape functions including the wave number depending terms 
+.PP
+Definition at line 109 of file fe_compute_data\&.h\&.
+.PP
+Referenced by clear(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), and init()\&.
+.SS "const \fBPoint\fP& libMesh::FEComputeData::p"
+Holds the point where the data are to be computed 
+.PP
+Definition at line 76 of file fe_compute_data\&.h\&.
+.PP
+Referenced by libMesh::FEInterface::compute_data(), and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data()\&.
+.SS "\fBReal\fP libMesh::FEComputeData::phase"
+Storage for the computed phase lag 
+.PP
+Definition at line 92 of file fe_compute_data\&.h\&.
+.PP
+Referenced by clear(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), and init()\&.
+.SS "std::vector<\fBNumber\fP> libMesh::FEComputeData::shape"
+Storage for the computed shape function values\&. 
+.PP
+Definition at line 85 of file fe_compute_data\&.h\&.
+.PP
+Referenced by clear(), libMesh::FEInterface::compute_data(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), init(), and libMesh::MeshFunction::operator()()\&.
+.SS "\fBReal\fP libMesh::FEComputeData::speed"
+The wave speed\&. 
+.PP
+Definition at line 100 of file fe_compute_data\&.h\&.
+.PP
+Referenced by clear(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), and init()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

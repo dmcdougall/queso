@@ -1,0 +1,197 @@
+.TH "libMesh::DifferentiableQoI" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DifferentiableQoI \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <diff_qoi\&.h>\fP
+.PP
+Inherited by \fBlibMesh::DifferentiableSystem\fP\fC [virtual]\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDifferentiableQoI\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~DifferentiableQoI\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit_qoi\fP (std::vector< \fBNumber\fP > &)"
+.br
+.ti -1c
+.RI "virtual void \fBclear_qoi\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBelement_qoi\fP (\fBDiffContext\fP &, const \fBQoISet\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBelement_qoi_derivative\fP (\fBDiffContext\fP &, const \fBQoISet\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBside_qoi\fP (\fBDiffContext\fP &, const \fBQoISet\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBside_qoi_derivative\fP (\fBDiffContext\fP &, const \fBQoISet\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBinit_context\fP (\fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP
+.br
+< \fBDifferentiableQoI\fP > \fBclone\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBthread_join\fP (std::vector< \fBNumber\fP > &qoi, const std::vector< \fBNumber\fP > &other_qoi, const \fBQoISet\fP &qoi_indices)"
+.br
+.ti -1c
+.RI "virtual void \fBparallel_op\fP (const \fBParallel::Communicator\fP &\fBcommunicator\fP, std::vector< \fBNumber\fP > &sys_qoi, std::vector< \fBNumber\fP > &local_qoi, const \fBQoISet\fP &qoi_indices)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBassemble_qoi_sides\fP"
+.br
+.ti -1c
+.RI "bool \fBassemble_qoi_internal_sides\fP"
+.br
+.ti -1c
+.RI "bool \fBassemble_qoi_elements\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides a specific system class\&. It aims to generalize any system, linear or nonlinear, which provides both a residual and a Jacobian\&.
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2006 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file diff_qoi\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::DifferentiableQoI::DifferentiableQoI ()"
+Constructor\&. Optionally initializes required data structures\&. 
+.SS "virtual libMesh::DifferentiableQoI::~DifferentiableQoI ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 63 of file diff_qoi\&.h\&.
+.PP
+.nf
+63 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void libMesh::DifferentiableQoI::clear_qoi ()\fC [inline]\fP, \fC [virtual]\fP"
+Clear all the data structures associated with the QoI\&. 
+.PP
+Definition at line 75 of file diff_qoi\&.h\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::clear()\&.
+.PP
+.nf
+75 {}
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBDifferentiableQoI\fP> libMesh::DifferentiableQoI::clone ()\fC [pure virtual]\fP"
+Copy of this object\&. User should override to copy any needed state\&. 
+.PP
+Implemented in \fBlibMesh::DifferentiableSystem\fP\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::attach_qoi()\&.
+.SS "virtual void libMesh::DifferentiableQoI::element_qoi (\fBDiffContext\fP &, const \fBQoISet\fP &)\fC [inline]\fP, \fC [virtual]\fP"
+Does any work that needs to be done on \fCelem\fP in a quantity of interest assembly loop, outputting to elem_qoi\&.
+.PP
+Only qois included in the supplied \fC\fBQoISet\fP\fP need to be assembled\&. 
+.PP
+Definition at line 108 of file diff_qoi\&.h\&.
+.PP
+.nf
+110   {}
+.fi
+.SS "virtual void libMesh::DifferentiableQoI::element_qoi_derivative (\fBDiffContext\fP &, const \fBQoISet\fP &)\fC [inline]\fP, \fC [virtual]\fP"
+Does any work that needs to be done on \fCelem\fP in a quantity of interest derivative assembly loop, outputting to elem_qoi_derivative
+.PP
+Only qois included in the supplied \fC\fBQoISet\fP\fP need their derivatives assembled\&. 
+.PP
+Definition at line 120 of file diff_qoi\&.h\&.
+.PP
+.nf
+122   {}
+.fi
+.SS "virtual void libMesh::DifferentiableQoI::init_context (\fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP"
+Prepares the result of a build_context() call for use\&.
+.PP
+Most FEMSystem-based problems will need to reimplement this in order to call FE::get_*() as their particular QoI requires\&. 
+.PP
+Reimplemented in \fBlibMesh::FEMSystem\fP\&.
+.PP
+Definition at line 153 of file diff_qoi\&.h\&.
+.PP
+.nf
+153 {}
+.fi
+.SS "virtual void libMesh::DifferentiableQoI::init_qoi (std::vector< \fBNumber\fP > &)\fC [inline]\fP, \fC [virtual]\fP"
+Initialize system qoi\&. By default, does nothing in order to maintain backward compatibility for \fBFEMSystem\fP applications that control qoi\&. 
+.PP
+Definition at line 69 of file diff_qoi\&.h\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::attach_qoi()\&.
+.PP
+.nf
+69 {}
+.fi
+.SS "virtual void libMesh::DifferentiableQoI::parallel_op (const \fBParallel::Communicator\fP &communicator, std::vector< \fBNumber\fP > &sys_qoi, std::vector< \fBNumber\fP > &local_qoi, const \fBQoISet\fP &qoi_indices)\fC [virtual]\fP"
+Method to populate system qoi data structure with process-local qoi\&. By default, simply sums process qois into system qoi\&. 
+.PP
+Referenced by libMesh::FEMSystem::assemble_qoi()\&.
+.SS "virtual void libMesh::DifferentiableQoI::side_qoi (\fBDiffContext\fP &, const \fBQoISet\fP &)\fC [inline]\fP, \fC [virtual]\fP"
+Does any work that needs to be done on \fCside\fP of \fCelem\fP in a quantity of interest assembly loop, outputting to elem_qoi\&.
+.PP
+Only qois included in the supplied \fC\fBQoISet\fP\fP need to be assembled\&. 
+.PP
+Definition at line 131 of file diff_qoi\&.h\&.
+.PP
+.nf
+133   {}
+.fi
+.SS "virtual void libMesh::DifferentiableQoI::side_qoi_derivative (\fBDiffContext\fP &, const \fBQoISet\fP &)\fC [inline]\fP, \fC [virtual]\fP"
+Does any work that needs to be done on \fCside\fP of \fCelem\fP in a quantity of interest derivative assembly loop, outputting to elem_qoi_derivative\&.
+.PP
+Only qois included in the supplied \fC\fBQoISet\fP\fP need their derivatives assembled\&. 
+.PP
+Definition at line 143 of file diff_qoi\&.h\&.
+.PP
+.nf
+145   {}
+.fi
+.SS "virtual void libMesh::DifferentiableQoI::thread_join (std::vector< \fBNumber\fP > &qoi, const std::vector< \fBNumber\fP > &other_qoi, const \fBQoISet\fP &qoi_indices)\fC [virtual]\fP"
+Method to combine thread-local qois\&. By default, simply sums thread qois\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::DifferentiableQoI::assemble_qoi_elements"
+If \fCassemble_qoi_elements\fP is false (it is true by default), the assembly loop for a quantity of interest or its derivatives will skip computing on mesh elements, and will only compute on mesh sides\&. 
+.PP
+Definition at line 99 of file diff_qoi\&.h\&.
+.SS "bool libMesh::DifferentiableQoI::assemble_qoi_internal_sides"
+If \fCassemble_qoi_internal_sides\fP is true (it is false by default), the assembly loop for a quantity of interest or its derivatives will loop over element sides which do not fall on domain boundaries\&. 
+.PP
+Definition at line 91 of file diff_qoi\&.h\&.
+.SS "bool libMesh::DifferentiableQoI::assemble_qoi_sides"
+If \fCassemble_qoi_sides\fP is true (it is false by default), the assembly loop for a quantity of interest or its derivatives will loop over domain boundary sides\&. To add domain interior sides, also set assemble_qoi_internal_sides to true\&. 
+.PP
+Definition at line 83 of file diff_qoi\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

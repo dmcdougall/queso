@@ -1,0 +1,1478 @@
+.TH "petscdmlibmesh.C" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+petscdmlibmesh.C \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBDM_libMesh\fP"
+.br
+.ti -1c
+.RI "struct \fBtoken\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshGetBlocks\fP (DM dm, \fBPetscInt\fP *n, char ***blocknames)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshGetVariables\fP (DM dm, \fBPetscInt\fP *n, char ***varnames)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshSetUpName_Private\fP (DM dm)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshSetSystem\fP (DM dm, \fBNonlinearImplicitSystem\fP &\fBsys\fP)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshGetSystem\fP (DM dm, \fBNonlinearImplicitSystem\fP *&\fBsys\fP)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMCreateFieldDecomposition_libMesh\fP (DM dm, \fBPetscInt\fP *len, char ***namelist, IS **islist, DM **dmlist)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMCreateDomainDecomposition_libMesh\fP (DM dm, \fBPetscInt\fP *len, char ***namelist, IS **innerislist, IS **outerislist, DM **dmlist)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshCreateFieldDecompositionDM\fP (DM dm, \fBPetscInt\fP dnumber, \fBPetscInt\fP *dsizes, char ***dvarlists, DM *ddm)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMLibMeshCreateDomainDecompositionDM\fP (DM dm, \fBPetscInt\fP dnumber, \fBPetscInt\fP *dsizes, char ***dblocklists, DM *ddm)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMLibMeshParseDecompositionDescriptor_Private\fP (DM dm, const char *ddesc, \fBPetscInt\fP *dtype, \fBPetscInt\fP *dcount, \fBPetscInt\fP **dsizes, char ****dlists)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMCreateFieldDecompositionDM_libMesh\fP (DM dm, const char *ddesc, DM *ddm)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMCreateDomainDecompositionDM_libMesh\fP (DM dm, const char *ddesc, DM *ddm)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMlibMeshFunction\fP (DM dm, Vec \fBx\fP, Vec r)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBSNESFunction_DMlibMesh\fP (SNES, Vec \fBx\fP, Vec r, void *ctx)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMlibMeshJacobian\fP (DM dm, Vec \fBx\fP, Mat \fBjac\fP, Mat \fBpc\fP, MatStructure *msflag) static \fBPetscErrorCode\fP DMlibMeshJacobian(DM dm"
+.br
+.ti -1c
+.RI "\fBCHKERRQ\fP (\fBierr\fP)"
+.br
+.ti -1c
+.RI "\fBPetscMatrix\fP< Number > \fBthe_pc\fP (\fBpc\fP, sys\&.comm())"
+.br
+.ti -1c
+.RI "\fBPetscMatrix\fP< Number > \fBJac\fP (\fBjac\fP, sys\&.comm())"
+.br
+.ti -1c
+.RI "\fBPetscVector\fP< Number > \fBX_global\fP (\fBx\fP, sys\&.comm())"
+.br
+.ti -1c
+.RI "\fBthe_pc\fP \fBattach_dof_map\fP (\fBsys\&.get_dof_map\fP())"
+.br
+.ti -1c
+.RI "\fBX_global\fP \fBswap\fP (\fBX_sys\fP)"
+.br
+.ti -1c
+.RI "\fBJac\fP \fBswap\fP (\fBJac_sys\fP)"
+.br
+.ti -1c
+.RI "\fBsys\fP \fBget_dof_map\fP ()"
+.br
+.ti -1c
+.RI "\fBif\fP (sys\&.nonlinear_solver->matvec &&sys\&.nonlinear_solver->residual_and_jacobian_object)"
+.br
+.ti -1c
+.RI "\fBif\fP (sys\&.nonlinear_solver->jacobian!=NULL)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMVariableBounds_libMesh\fP (DM dm, Vec xl, Vec xu)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMCreateGlobalVector_libMesh\fP (DM dm, Vec *\fBx\fP)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMCreateMatrix_libMesh\fP (DM dm, const MatType, Mat *\fBA\fP) static \fBPetscErrorCode\fP DMCreateMatrix_libMesh(DM dm"
+.br
+.ti -1c
+.RI "\fBif\fP (!\fBeq\fP) SETERRQ2(((PetscObject) dm) -> comm, PETSC_ERR_ARG_WRONG,'DM of type %s, not of type %s',((PetscObject) dm) ->type, DMLIBMESH)"
+.br
+.ti -1c
+.RI "\fBif\fP (!\fBdlm\fP->\fBsys\fP) SETERRQ(PETSC_COMM_WORLD"
+.br
+.ti -1c
+.RI "\fBPetscFunctionReturn\fP (0)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMView_libMesh\fP (DM dm, PetscViewer viewer)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMSetUp_libMesh\fP (DM dm)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fBDMDestroy_libMesh\fP (DM dm)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMCreateLibMesh\fP (MPI_Comm comm, \fBNonlinearImplicitSystem\fP &\fBsys\fP, DM *dm)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fBDMCreate_libMesh\fP (DM dm)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static \fBPetscErrorCode\fP Vec \fBx\fP"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP Vec Mat \fBjac\fP"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP Vec Mat Mat \fBpc\fP"
+.br
+.ti -1c
+.RI "\fBPetscFunctionBegin\fP"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem\fP * \fB_sys\fP"
+.br
+.ti -1c
+.RI "\fBierr\fP = \fBDMLibMeshGetSystem\fP(dm, \fB_sys\fP)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem\fP & \fBsys\fP = *\fB_sys\fP"
+.br
+.ti -1c
+.RI "\fBPetscVector\fP< Number > & \fBX_sys\fP = *libmesh_cast_ptr<\fBPetscVector\fP<Number>*>(sys\&.solution\&.get())"
+.br
+.ti -1c
+.RI "\fBPetscMatrix\fP< Number > & \fBJac_sys\fP = *libmesh_cast_ptr<\fBPetscMatrix\fP<Number>*>(sys\&.matrix)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP Mat * \fBA\fP"
+.br
+.ti -1c
+.RI "\fBDM_libMesh\fP * \fBdlm\fP = (\fBDM_libMesh\fP *)(dm->\fBdata\fP)"
+.br
+.ti -1c
+.RI "\fBPetscBool\fP \fBeq\fP"
+.br
+.ti -1c
+.RI "\fBPETSC_ERR_ARG_WRONGSTATE\fP"
+.br
+.ti -1c
+.RI "No libMesh system set for \fBDM_libMesh\fP"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "\fBthe_pc\fP attach_dof_map (sys\&.get_dof_map())"
+
+.SS "CHKERRQ (\fBierr\fP)"
+
+.PP
+Referenced by __libmesh_petsc_preconditioner_apply(), __libmesh_petsc_preconditioner_setup(), DMCreate_libMesh(), DMCreateDomainDecomposition_libMesh(), DMCreateDomainDecompositionDM_libMesh(), DMCreateFieldDecomposition_libMesh(), DMCreateFieldDecompositionDM_libMesh(), DMCreateGlobalVector_libMesh(), DMCreateLibMesh(), DMDestroy_libMesh(), DMLibMeshCreateDomainDecompositionDM(), DMLibMeshCreateFieldDecompositionDM(), DMlibMeshFunction(), DMLibMeshGetBlocks(), DMLibMeshGetSystem(), DMLibMeshGetVariables(), DMLibMeshParseDecompositionDescriptor_Private(), DMLibMeshSetSystem(), DMLibMeshSetUpName_Private(), DMSetUp_libMesh(), DMVariableBounds_libMesh(), DMView_libMesh(), and SNESFunction_DMlibMesh()\&.
+.SS "\fBPetscErrorCode\fP DMCreate_libMesh (DMdm)"
+
+.PP
+Definition at line 1124 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DMCreateDomainDecomposition_libMesh(), DMCreateDomainDecompositionDM_libMesh(), DMCreateFieldDecomposition_libMesh(), DMCreateFieldDecompositionDM_libMesh(), DMCreateGlobalVector_libMesh(), DMCreateMatrix_libMesh(), DMDestroy_libMesh(), DMSetUp_libMesh(), DMView_libMesh(), libMesh::ierr, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by libMesh::PetscDMRegister()\&.
+.PP
+.nf
+1125 {
+1126   PetscErrorCode ierr;
+1127   DM_libMesh     *dlm;
+1128 
+1129   PetscFunctionBegin;
+1130   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+1131 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1132   ierr = PetscNewLog(dm,DM_libMesh,&dlm);CHKERRQ(ierr);
+1133 #else
+1134   ierr = PetscNewLog(dm,&dlm);CHKERRQ(ierr);
+1135 #endif
+1136   dm->data = dlm;
+1137 
+1138   dlm->varids     = new(std::map<std::string, unsigned int>);
+1139   dlm->blockids   = new(std::map<std::string, unsigned int>);
+1140   dlm->varnames   = new(std::map<unsigned int, std::string>);
+1141   dlm->blocknames = new(std::map<unsigned int, std::string>);
+1142   dlm->decomposition   = PETSC_NULL;
+1143   dlm->decomposition_type  = DMLIBMESH_NO_DECOMPOSITION;
+1144 
+1145   dm->ops->createglobalvector = DMCreateGlobalVector_libMesh;
+1146   dm->ops->createlocalvector  = 0; // DMCreateLocalVector_libMesh;
+1147   dm->ops->getcoloring        = 0; // DMGetColoring_libMesh;
+1148   dm->ops->creatematrix       = DMCreateMatrix_libMesh;
+1149   dm->ops->createinterpolation= 0; // DMCreateInterpolation_libMesh;
+1150 
+1151   dm->ops->refine             = 0; // DMRefine_libMesh;
+1152   dm->ops->coarsen            = 0; // DMCoarsen_libMesh;
+1153   dm->ops->getinjection       = 0; // DMGetInjection_libMesh;
+1154   dm->ops->getaggregates      = 0; // DMGetAggregates_libMesh;
+1155 
+1156 #if PETSC_RELEASE_LESS_THAN(3,3,1)
+1157   dm->ops->createfielddecompositiondm  = DMCreateFieldDecompositionDM_libMesh;
+1158   dm->ops->createdomaindecompositiondm = DMCreateDomainDecompositionDM_libMesh;
+1159 #endif
+1160   dm->ops->createfielddecomposition    = DMCreateFieldDecomposition_libMesh;
+1161   dm->ops->createdomaindecomposition   = DMCreateDomainDecomposition_libMesh;
+1162 
+1163   dm->ops->destroy            = DMDestroy_libMesh;
+1164   dm->ops->view               = DMView_libMesh;
+1165   dm->ops->setfromoptions     = 0; // DMSetFromOptions_libMesh;
+1166   dm->ops->setup              = DMSetUp_libMesh;
+1167 
+1168   PetscFunctionReturn(0);
+1169 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMCreateDomainDecomposition_libMesh (DMdm, \fBPetscInt\fP *len, char ***namelist, IS **innerislist, IS **outerislist, DM **dmlist)\fC [static]\fP"
+
+.PP
+Definition at line 327 of file petscdmlibmesh\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_subdomain_elements_begin(), libMesh::MeshBase::active_local_subdomain_elements_end(), DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), libMesh::comm, DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DMLibMeshSetUpName_Private(), libMesh::DofMap::dof_indices(), DM_libMesh::embedding, DM_libMesh::embedding_type, end, libMesh::DofMap::end_dof(), libMesh::DofMap::first_dof(), libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::ierr, PETSC_OWN_POINTER, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::sys, libMesh::sys, DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+328 {
+329   PetscFunctionBegin;
+330   PetscErrorCode ierr;
+331   DM_libMesh     *dlm = (DM_libMesh *)(dm->data);
+332   NonlinearImplicitSystem *sys = dlm->sys;
+333   IS emb;
+334   if(dlm->decomposition_type != DMLIBMESH_DOMAIN_DECOMPOSITION) PetscFunctionReturn(0);
+335   *len = dlm->decomposition->size();
+336   if(namelist)      {ierr = PetscMalloc(*len*sizeof(char*), namelist);  CHKERRQ(ierr);}
+337   if(innerislist)   {ierr = PetscMalloc(*len*sizeof(IS),    innerislist);    CHKERRQ(ierr);}
+338   if(outerislist)   *outerislist = PETSC_NULL; /* FIX: allow mesh-based overlap\&. */
+339   if(dmlist)        {ierr = PetscMalloc(*len*sizeof(DM),    dmlist);    CHKERRQ(ierr);}
+340   for(unsigned int d = 0; d < dlm->decomposition->size(); ++d) {
+341     std::set<numeric_index_type>               dindices;
+342     std::string                          dname;
+343     std::map<std::string, unsigned int>  dblockids;
+344     std::map<unsigned int,std::string>   dblocknames;
+345     unsigned int                         dbcount = 0;
+346     for(std::set<unsigned int>::const_iterator bit = (*dlm->decomposition)[d]\&.begin(); bit != (*dlm->decomposition)[d]\&.end(); ++bit){
+347       unsigned int b = *bit;
+348       std::string bname = (*dlm->blocknames)[b];
+349       dblockids\&.insert(std::pair<std::string, unsigned int>(bname,b));
+350       dblocknames\&.insert(std::pair<unsigned int,std::string>(b,bname));
+351       if(!dbcount) dname = bname;
+352       else   dname += "_" + bname;
+353       ++dbcount;
+354       if(!innerislist) continue;
+355       MeshBase::const_element_iterator       el     = sys->get_mesh()\&.active_local_subdomain_elements_begin(b);
+356       const MeshBase::const_element_iterator end_el = sys->get_mesh()\&.active_local_subdomain_elements_end(b);
+357       for ( ; el != end_el; ++el) {
+358         const Elem* elem = *el;
+359         std::vector<numeric_index_type> evindices;
+360         /* Iterate only over this DM's variables\&. */
+361         for(std::map<std::string, unsigned int>::const_iterator vit = dlm->varids->begin(); vit != dlm->varids->end(); ++vit) {
+362           unsigned int v = vit->second;
+363           // Get the degree of freedom indices for the given variable off the current element\&.
+364           sys->get_dof_map()\&.dof_indices(elem, evindices, v);
+365           for(unsigned int i = 0; i < evindices\&.size(); ++i) {
+366             numeric_index_type dof = evindices[i];
+367             if(dof >= sys->get_dof_map()\&.first_dof() && dof < sys->get_dof_map()\&.end_dof()) /* might want to use variable_first/last_local_dof instead */
+368               dindices\&.insert(dof);
+369           }
+370         }
+371       }
+372     }
+373     if(namelist) {
+374       ierr = PetscStrallocpy(dname\&.c_str(),(*namelist)+d);            CHKERRQ(ierr);
+375     }
+376     if(innerislist) {
+377       PetscInt *darray;
+378       IS dis;
+379       ierr = PetscMalloc(sizeof(PetscInt)*dindices\&.size(), &darray); CHKERRQ(ierr);
+380       numeric_index_type i = 0;
+381       for(std::set<numeric_index_type>::const_iterator it = dindices\&.begin(); it != dindices\&.end(); ++it) {
+382         darray[i] = *it;
+383         ++i;
+384       }
+385       ierr = ISCreateGeneral(((PetscObject)dm)->comm, dindices\&.size(),darray, PETSC_OWN_POINTER, &dis); CHKERRQ(ierr);
+386       if(dlm->embedding) {
+387         /* Create a relative embedding into the parent's index space\&. */
+388 #if PETSC_RELEASE_LESS_THAN(3,3,1)
+389         ierr = ISMapFactorRight(dis,dlm->embedding, PETSC_TRUE, &emb); CHKERRQ(ierr);
+390 #else
+391         ierr = ISEmbed(dis,dlm->embedding, PETSC_TRUE, &emb); CHKERRQ(ierr);
+392 #endif
+393         PetscInt elen, dlen;
+394         ierr = ISGetLocalSize(emb, &elen); CHKERRQ(ierr);
+395         ierr = ISGetLocalSize(dis, &dlen);  CHKERRQ(ierr);
+396         if(elen != dlen) SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_PLIB, "Failed to embed field %D", d);
+397         ierr = ISDestroy(&dis); CHKERRQ(ierr);
+398         dis = emb;
+399       }
+400       else {
+401         emb = dis;
+402       }
+403       if(innerislist) {
+404         ierr = PetscObjectReference((PetscObject)dis); CHKERRQ(ierr);
+405         (*innerislist)[d] = dis;
+406       }
+407       ierr = ISDestroy(&dis); CHKERRQ(ierr);
+408     }
+409     if(dmlist) {
+410       DM ddm;
+411       ierr = DMCreate(((PetscObject)dm)->comm, &ddm); CHKERRQ(ierr);
+412       ierr = DMSetType(ddm, DMLIBMESH);               CHKERRQ(ierr);
+413       DM_libMesh *ddlm = (DM_libMesh*)(ddm->data);
+414       ddlm->sys = dlm->sys;
+415       /* copy over the varids and varnames */
+416       *ddlm->varids    = *dlm->varids;
+417       *ddlm->varnames  = *dlm->varnames;
+418       /* set the blocks from the d-th part of the decomposition\&. */
+419       *ddlm->blockids    = dblockids;
+420       *ddlm->blocknames  = dblocknames;
+421       ierr = PetscObjectReference((PetscObject)emb); CHKERRQ(ierr);
+422       ddlm->embedding = emb;
+423       ddlm->embedding_type = DMLIBMESH_DOMAIN_EMBEDDING;
+424 
+425       ierr = DMLibMeshSetUpName_Private(ddm); CHKERRQ(ierr);
+426       ierr = DMSetFromOptions(ddm);           CHKERRQ(ierr);
+427       (*dmlist)[d] = ddm;
+428     }
+429   }
+430   PetscFunctionReturn(0);
+431 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMCreateDomainDecompositionDM_libMesh (DMdm, const char *ddesc, DM *ddm)\fC [static]\fP"
+
+.PP
+Definition at line 703 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, DMLibMeshCreateDomainDecompositionDM(), DMLibMeshParseDecompositionDescriptor_Private(), libMesh::ierr, PetscFunctionBegin, and PetscFunctionReturn()\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+704 {
+705   PetscFunctionBegin;
+706   PetscErrorCode ierr;
+707   PetscInt dtype, dcount, *dsizes;
+708   char ***dlists;
+709   PetscFunctionBegin;
+710   *ddm = PETSC_NULL;
+711   ierr = DMLibMeshParseDecompositionDescriptor_Private(dm,ddesc,&dtype,&dcount,&dsizes,&dlists); CHKERRQ(ierr);
+712   if(dtype == DMLIBMESH_DOMAIN_DECOMPOSITION) {
+713     ierr = DMLibMeshCreateDomainDecompositionDM(dm,dcount,dsizes,dlists,ddm); CHKERRQ(ierr);
+714   }
+715   else SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_PLIB, "Uexpected unknown decomposition type for domain decomposition descriptor %s", ddesc);
+716   PetscFunctionReturn(0);
+717 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMCreateFieldDecomposition_libMesh (DMdm, \fBPetscInt\fP *len, char ***namelist, IS **islist, DM **dmlist)\fC [static]\fP"
+
+.PP
+Definition at line 221 of file petscdmlibmesh\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_subdomain_elements_begin(), libMesh::MeshBase::active_local_subdomain_elements_end(), DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), libMesh::comm, DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DMLibMeshSetUpName_Private(), libMesh::DofMap::dof_indices(), DM_libMesh::embedding, DM_libMesh::embedding_type, end, libMesh::DofMap::end_dof(), libMesh::DofMap::first_dof(), libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::ierr, PETSC_OWN_POINTER, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::sys, libMesh::sys, DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+222 {
+223   PetscFunctionBegin;
+224   PetscErrorCode ierr;
+225   DM_libMesh     *dlm = (DM_libMesh *)(dm->data);
+226   NonlinearImplicitSystem *sys = dlm->sys;
+227   IS emb;
+228   if(dlm->decomposition_type != DMLIBMESH_FIELD_DECOMPOSITION) PetscFunctionReturn(0);
+229 
+230   *len = dlm->decomposition->size();
+231   if(namelist) {ierr = PetscMalloc(*len*sizeof(char*), namelist);  CHKERRQ(ierr);}
+232   if(islist)   {ierr = PetscMalloc(*len*sizeof(IS),    islist);    CHKERRQ(ierr);}
+233   if(dmlist)   {ierr = PetscMalloc(*len*sizeof(DM),    dmlist);    CHKERRQ(ierr);}
+234   DofMap& dofmap = dlm->sys->get_dof_map();
+235   for(unsigned int d = 0; d < dlm->decomposition->size(); ++d) {
+236     std::set<numeric_index_type>         dindices;
+237     std::string                          dname;
+238     std::map<std::string, unsigned int>  dvarids;
+239     std::map<unsigned int, std::string>  dvarnames;
+240     unsigned int                         dvcount = 0;
+241     for(std::set<unsigned int>::const_iterator dvit = (*dlm->decomposition)[d]\&.begin(); dvit != (*dlm->decomposition)[d]\&.end(); ++dvit){
+242       unsigned int v = *dvit;
+243       std::string vname = (*dlm->varnames)[v];
+244       dvarids\&.insert(std::pair<std::string, unsigned int>(vname,v));
+245       dvarnames\&.insert(std::pair<unsigned int,std::string>(v,vname));
+246       if(!dvcount) dname = vname;
+247       else   dname += "_" + vname;
+248       ++dvcount;
+249       if(!islist) continue;
+250       /* Iterate only over this DM's blocks\&. */
+251       for(std::map<std::string, unsigned int>::const_iterator bit = dlm->blockids->begin(); bit != dlm->blockids->end(); ++bit) {
+252         unsigned int b = bit->second;
+253         MeshBase::const_element_iterator el     = sys->get_mesh()\&.active_local_subdomain_elements_begin(b);
+254         MeshBase::const_element_iterator end_el = sys->get_mesh()\&.active_local_subdomain_elements_end(b);
+255         for ( ; el != end_el; ++el) {
+256           const Elem* elem = *el;
+257           //unsigned int e_subdomain = elem->subdomain_id();
+258           std::vector<numeric_index_type> evindices;
+259           // Get the degree of freedom indices for the given variable off the current element\&.
+260           dofmap\&.dof_indices(elem, evindices, v);
+261           for(unsigned int i = 0; i < evindices\&.size(); ++i) {
+262             numeric_index_type dof = evindices[i];
+263             if(dof >= dofmap\&.first_dof() && dof < dofmap\&.end_dof()) /* might want to use variable_first/last_local_dof instead */
+264               dindices\&.insert(dof);
+265           }
+266         }
+267       }
+268     }
+269     if(namelist) {
+270       ierr = PetscStrallocpy(dname\&.c_str(),(*namelist)+d);            CHKERRQ(ierr);
+271     }
+272     if(islist) {
+273       IS dis;
+274       PetscInt *darray;
+275       ierr = PetscMalloc(sizeof(PetscInt)*dindices\&.size(), &darray); CHKERRQ(ierr);
+276       numeric_index_type i = 0;
+277       for(std::set<numeric_index_type>::const_iterator it = dindices\&.begin(); it != dindices\&.end(); ++it) {
+278         darray[i] = *it;
+279         ++i;
+280       }
+281       ierr = ISCreateGeneral(((PetscObject)dm)->comm, dindices\&.size(),darray, PETSC_OWN_POINTER, &dis); CHKERRQ(ierr);
+282       if(dlm->embedding) {
+283         /* Create a relative embedding into the parent's index space\&. */
+284 #if PETSC_RELEASE_LESS_THAN(3,3,1)
+285         ierr = ISMapFactorRight(dis,dlm->embedding, PETSC_TRUE, &emb); CHKERRQ(ierr);
+286 #else
+287         ierr = ISEmbed(dis,dlm->embedding, PETSC_TRUE, &emb); CHKERRQ(ierr);
+288 #endif
+289         PetscInt elen, dlen;
+290         ierr = ISGetLocalSize(emb, &elen); CHKERRQ(ierr);
+291         ierr = ISGetLocalSize(dis, &dlen); CHKERRQ(ierr);
+292         if(elen != dlen) SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_PLIB, "Failed to embed subdomain %D", d);
+293         ierr = ISDestroy(&dis); CHKERRQ(ierr);
+294         dis = emb;
+295       }
+296       else {
+297         emb = dis;
+298       }
+299       (*islist)[d] = dis;
+300     }
+301     if(dmlist) {
+302       DM ddm;
+303       ierr = DMCreate(((PetscObject)dm)->comm, &ddm); CHKERRQ(ierr);
+304       ierr = DMSetType(ddm, DMLIBMESH);               CHKERRQ(ierr);
+305       DM_libMesh *ddlm = (DM_libMesh*)(ddm->data);
+306       ddlm->sys = dlm->sys;
+307       /* copy over the block ids and names */
+308       *ddlm->blockids = *dlm->blockids;
+309       *ddlm->blocknames = *dlm->blocknames;
+310       /* set the vars from the d-th part of the decomposition\&. */
+311       *ddlm->varids     = dvarids;
+312       *ddlm->varnames   = dvarnames;
+313       ierr = PetscObjectReference((PetscObject)emb); CHKERRQ(ierr);
+314       ddlm->embedding = emb;
+315       ddlm->embedding_type = DMLIBMESH_FIELD_EMBEDDING;
+316 
+317       ierr = DMLibMeshSetUpName_Private(ddm); CHKERRQ(ierr);
+318       ierr = DMSetFromOptions(ddm);           CHKERRQ(ierr);
+319       (*dmlist)[d] = ddm;
+320     }
+321   }
+322   PetscFunctionReturn(0);
+323 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMCreateFieldDecompositionDM_libMesh (DMdm, const char *ddesc, DM *ddm)\fC [static]\fP"
+
+.PP
+Definition at line 685 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, DMLibMeshCreateFieldDecompositionDM(), DMLibMeshParseDecompositionDescriptor_Private(), libMesh::ierr, PetscFunctionBegin, and PetscFunctionReturn()\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+686 {
+687   PetscFunctionBegin;
+688   PetscErrorCode ierr;
+689   PetscInt dtype, dcount, *dsizes;
+690   char ***dlists;
+691   PetscFunctionBegin;
+692   *ddm = PETSC_NULL;
+693   ierr = DMLibMeshParseDecompositionDescriptor_Private(dm,ddesc,&dtype,&dcount,&dsizes,&dlists); CHKERRQ(ierr);
+694   if(dtype == DMLIBMESH_FIELD_DECOMPOSITION){
+695     ierr = DMLibMeshCreateFieldDecompositionDM(dm,dcount,dsizes,dlists,ddm); CHKERRQ(ierr);
+696   }
+697   else SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_PLIB, "Uexpected unknown decomposition type for field decomposition descriptor %s", ddesc);
+698   PetscFunctionReturn(0);
+699 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMCreateGlobalVector_libMesh (DMdm, Vec *x)\fC [static]\fP"
+
+.PP
+Definition at line 921 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, dlm, DM_libMesh::embedding, eq, libMesh::ierr, PETSC_ERR_ARG_WRONGSTATE, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), libMesh::System::solution, DM_libMesh::sys, and libMesh::PetscVector< T >::vec()\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+922 {
+923   PetscFunctionBegin;
+924   PetscErrorCode ierr;
+925   DM_libMesh     *dlm = (DM_libMesh *)(dm->data);
+926   PetscBool eq;
+927 
+928   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH, &eq); CHKERRQ(ierr);
+929 
+930   if (!eq)
+931     SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "DM of type %s, not of type %s", ((PetscObject)dm)->type, DMLIBMESH);
+932 
+933   if (!dlm->sys)
+934     SETERRQ(PETSC_COMM_WORLD, PETSC_ERR_ARG_WRONGSTATE, "No libMesh system set for DM_libMesh");
+935 
+936   NumericVector<Number>* nv = (dlm->sys->solution)\&.get();
+937   PetscVector<Number>*   pv = dynamic_cast<PetscVector<Number>*>(nv);
+938   Vec                    v  = pv->vec();
+939   /* Unfortunately, currently this does not produce a ghosted vector, so nonlinear subproblem solves aren't going to be easily available\&.
+940      Should work fine for getting vectors out for linear subproblem solvers\&. */
+941   if(dlm->embedding) {
+942     PetscInt n;
+943     ierr = VecCreate(((PetscObject)v)->comm, x);       CHKERRQ(ierr);
+944     ierr = ISGetLocalSize(dlm->embedding, &n);         CHKERRQ(ierr);
+945     ierr = VecSetSizes(*x,n,PETSC_DETERMINE);           CHKERRQ(ierr);
+946     ierr = VecSetType(*x,((PetscObject)v)->type_name); CHKERRQ(ierr);
+947     ierr = VecSetFromOptions(*x);                      CHKERRQ(ierr);
+948     ierr = VecSetUp(*x);                               CHKERRQ(ierr);
+949   }
+950   else {
+951     ierr = VecDuplicate(v,x); CHKERRQ(ierr);
+952   }
+953   ierr = PetscObjectCompose((PetscObject)*x,"DM",(PetscObject)dm); CHKERRQ(ierr);
+954   PetscFunctionReturn(0);
+955 }
+.fi
+.SS "\fBPetscErrorCode\fP DMCreateLibMesh (MPI_Commcomm, \fBNonlinearImplicitSystem\fP &sys, DM *dm)"
+
+.PP
+Definition at line 1111 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), DMLibMeshSetSystem(), libMesh::ierr, PetscFunctionBegin, and PetscFunctionReturn()\&.
+.PP
+Referenced by libMesh::PetscDMNonlinearSolver< T >::init()\&.
+.PP
+.nf
+1112 {
+1113   PetscErrorCode ierr;
+1114   PetscFunctionBegin;
+1115   ierr = DMCreate(comm, dm);           CHKERRQ(ierr);
+1116   ierr = DMSetType(*dm, DMLIBMESH);    CHKERRQ(ierr);
+1117   ierr = DMLibMeshSetSystem(*dm, sys); CHKERRQ(ierr);
+1118   PetscFunctionReturn(0);
+1119 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMCreateMatrix_libMesh (DMdm, const MatType, Mat *A)\fC [static]\fP"
+
+.PP
+Referenced by DMCreate_libMesh()\&.
+.SS "static \fBPetscErrorCode\fP DMDestroy_libMesh (DMdm)\fC [static]\fP"
+
+.PP
+Definition at line 1092 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), DM_libMesh::decomposition, DM_libMesh::embedding, libMesh::ierr, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+1093 {
+1094   DM_libMesh *dlm = (DM_libMesh*)(dm->data);
+1095   PetscErrorCode ierr;
+1096   PetscFunctionBegin;
+1097   delete dlm->varids;
+1098   delete dlm->varnames;
+1099   delete dlm->blockids;
+1100   delete dlm->blocknames;
+1101   delete dlm->decomposition;
+1102   ierr = ISDestroy(&dlm->embedding); CHKERRQ(ierr);
+1103   ierr = PetscFree(dm->data); CHKERRQ(ierr);
+1104 
+1105   PetscFunctionReturn(0);
+1106 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshCreateDomainDecompositionDM (DMdm, \fBPetscInt\fPdnumber, \fBPetscInt\fP *dsizes, char ***dblocklists, DM *ddm)"
+
+.PP
+Definition at line 489 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), libMesh::comm, DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DMLibMeshSetUpName_Private(), libMesh::ierr, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::sys, DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreateDomainDecompositionDM_libMesh()\&.
+.PP
+.nf
+490 {
+491   PetscErrorCode ierr;
+492   PetscBool islibmesh;
+493   PetscFunctionBegin;
+494   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+495   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH,&islibmesh);
+496   if(!islibmesh) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Got DM oftype %s, not of type %s", ((PetscObject)dm)->type_name, DMLIBMESH);
+497   if(dnumber < 0) SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Negative number %D of decomposition parts", dnumber);
+498   PetscValidPointer(ddm,5);
+499   DM_libMesh *dlm = (DM_libMesh *)(dm->data);
+500   ierr = DMCreate(((PetscObject)dm)->comm, ddm); CHKERRQ(ierr);
+501   ierr = DMSetType(*ddm, DMLIBMESH);             CHKERRQ(ierr);
+502   DM_libMesh *ddlm = (DM_libMesh *)((*ddm)->data);
+503   ddlm->sys = dlm->sys;
+504   ddlm->varids   = dlm->varids;
+505   ddlm->varnames = dlm->varnames;
+506   ddlm->blockids   = dlm->blockids;
+507   ddlm->blocknames = dlm->blocknames;
+508   ddlm->decomposition = new(std::vector<std::set<unsigned int> >);
+509   ddlm->decomposition_type = DMLIBMESH_DOMAIN_DECOMPOSITION;
+510   if(dnumber) {
+511     for(PetscInt d = 0; d < dnumber; ++d) {
+512       if(dsizes[d] < 0) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Negative size %D of decomposition part %D", dsizes[d],d);
+513       ddlm->decomposition->push_back(std::set<unsigned int>());
+514       for(PetscInt b = 0; b < dsizes[d]; ++b) {
+515         std::string bname(dblocklists[d][b]);
+516         std::map<std::string, unsigned int>::const_iterator bit = dlm->blockids->find(bname);
+517         if(bit == dlm->blockids->end())
+518           SETERRQ3(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Block %D on the %D-th list with name %s is not owned by this DM", b, d, dblocklists[d][b]);
+519         unsigned int bid = bit->second;
+520         (*ddlm->decomposition)[d]\&.insert(bid);
+521       }
+522     }
+523   }
+524   else { /* Empty splits indicate default: split all blocks with one per split\&. */
+525     PetscInt d = 0;
+526     for(std::map<std::string, unsigned int>::const_iterator bit = ddlm->blockids->begin(); bit != ddlm->blockids->end(); ++bit) {
+527       ddlm->decomposition->push_back(std::set<unsigned int>());
+528       unsigned int bid = bit->second;
+529       std::string bname = bit->first;
+530       (*ddlm->decomposition)[d]\&.insert(bid);
+531       ++d;
+532     }
+533   }
+534   ierr = DMLibMeshSetUpName_Private(*ddm); CHKERRQ(ierr);
+535   ierr = DMSetFromOptions(*ddm);           CHKERRQ(ierr);
+536   ierr = DMSetUp(*ddm);                    CHKERRQ(ierr);
+537   PetscFunctionReturn(0);
+538 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshCreateFieldDecompositionDM (DMdm, \fBPetscInt\fPdnumber, \fBPetscInt\fP *dsizes, char ***dvarlists, DM *ddm)"
+
+.PP
+Definition at line 436 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), libMesh::comm, DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DMLibMeshSetUpName_Private(), libMesh::ierr, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::sys, DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreateFieldDecompositionDM_libMesh()\&.
+.PP
+.nf
+437 {
+438   PetscErrorCode ierr;
+439   PetscBool islibmesh;
+440   PetscFunctionBegin;
+441   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+442   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH,&islibmesh);
+443   if(!islibmesh) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Got DM oftype %s, not of type %s", ((PetscObject)dm)->type_name, DMLIBMESH);
+444   if(dnumber < 0) SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Negative number %D of decomposition parts", dnumber);
+445   PetscValidPointer(ddm,5);
+446   DM_libMesh *dlm = (DM_libMesh *)(dm->data);
+447   ierr = DMCreate(((PetscObject)dm)->comm, ddm); CHKERRQ(ierr);
+448   ierr = DMSetType(*ddm, DMLIBMESH);             CHKERRQ(ierr);
+449   DM_libMesh *ddlm = (DM_libMesh *)((*ddm)->data);
+450   ddlm->sys = dlm->sys;
+451   ddlm->varids = dlm->varids;
+452   ddlm->varnames = dlm->varnames;
+453   ddlm->blockids = dlm->blockids;
+454   ddlm->blocknames = dlm->blocknames;
+455   ddlm->decomposition = new(std::vector<std::set<unsigned int> >);
+456   ddlm->decomposition_type = DMLIBMESH_FIELD_DECOMPOSITION;
+457   if(dnumber) {
+458     for(PetscInt d = 0; d < dnumber; ++d) {
+459       if(dsizes[d] < 0) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Negative size %D of decomposition part %D", dsizes[d],d);
+460       ddlm->decomposition->push_back(std::set<unsigned int>());
+461       for(PetscInt v = 0; v < dsizes[d]; ++v) {
+462         std::string vname(dvarlists[d][v]);
+463         std::map<std::string, unsigned int>::const_iterator vit = dlm->varids->find(vname);
+464         if(vit == dlm->varids->end())
+465           SETERRQ3(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Variable %D on the %D-th list with name %s is not owned by this DM", v, d, dvarlists[d][v]);
+466         unsigned int vid = vit->second;
+467         (*ddlm->decomposition)[d]\&.insert(vid);
+468       }
+469     }
+470   }
+471   else { /* Empty splits indicate default: split all variables with one per split\&. */
+472     PetscInt d = 0;
+473     for(std::map<std::string, unsigned int>::const_iterator vit = ddlm->varids->begin(); vit != ddlm->varids->end(); ++vit) {
+474       ddlm->decomposition->push_back(std::set<unsigned int>());
+475       unsigned int vid = vit->second;
+476       std::string vname = vit->first;
+477       (*ddlm->decomposition)[d]\&.insert(vid);
+478       ++d;
+479     }
+480   }
+481   ierr = DMLibMeshSetUpName_Private(*ddm); CHKERRQ(ierr);
+482   ierr = DMSetFromOptions(*ddm);           CHKERRQ(ierr);
+483   ierr = DMSetUp(*ddm);                    CHKERRQ(ierr);
+484   PetscFunctionReturn(0);
+485 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMlibMeshFunction (DMdm, Vecx, Vecr)\fC [static]\fP"
+
+.PP
+Definition at line 721 of file petscdmlibmesh\&.C\&.
+.PP
+References _sys, CHKERRQ(), libMesh::ParallelObject::comm(), libMesh::System::current_local_solution, DMLibMeshGetSystem(), libMesh::DofMap::enforce_constraints_exactly(), libMesh::err, libMesh::System::get_dof_map(), libMesh::ierr, libMesh::libmesh_assert(), libMesh::NonlinearImplicitSystem::nonlinear_solver, PetscFunctionBegin, PetscFunctionReturn(), libMesh::ExplicitSystem::rhs, libMesh::System::solution, libMesh::sys, libMesh::System::update(), libMesh::X_global(), and libMesh::X_sys\&.
+.PP
+Referenced by DMSetUp_libMesh(), and SNESFunction_DMlibMesh()\&.
+.PP
+.nf
+722 {
+723   PetscErrorCode ierr;
+724   PetscFunctionBegin;
+725   libmesh_assert(x);
+726   libmesh_assert(r);
+727 
+728   NonlinearImplicitSystem* _sys;
+729   ierr = DMLibMeshGetSystem(dm, _sys); CHKERRQ(ierr);
+730   NonlinearImplicitSystem& sys = *_sys;
+731   PetscVector<Number>& X_sys = *libmesh_cast_ptr<PetscVector<Number>* >(sys\&.solution\&.get());
+732   PetscVector<Number>& R_sys = *libmesh_cast_ptr<PetscVector<Number>* >(sys\&.rhs);
+733   PetscVector<Number> X_global(x, _sys->comm()), R(r, _sys->comm());
+734 
+735   // Use the systems update() to get a good local version of the parallel solution
+736   X_global\&.swap(X_sys);
+737   R\&.swap(R_sys);
+738 
+739   _sys->get_dof_map()\&.enforce_constraints_exactly(*_sys);
+740   _sys->update();
+741 
+742   // Swap back
+743   X_global\&.swap(X_sys);
+744   R\&.swap(R_sys);
+745   R\&.zero();
+746 
+747   // if the user has provided both function pointers and objects only the pointer
+748   // will be used, so catch that as an error
+749   if (_sys->nonlinear_solver->residual && _sys->nonlinear_solver->residual_object)
+750     {
+751       libMesh::err << "ERROR: cannot specifiy both a function and object to compute the Residual!" << std::endl;
+752       libmesh_error();
+753     }
+754 
+755   if (_sys->nonlinear_solver->matvec && _sys->nonlinear_solver->residual_and_jacobian_object)
+756     {
+757       libMesh::err << "ERROR: cannot specifiy both a function and object to compute the combined Residual & Jacobian!" << std::endl;
+758       libmesh_error();
+759     }
+760 
+761   if (_sys->nonlinear_solver->residual != NULL)
+762     _sys->nonlinear_solver->residual(*(_sys->current_local_solution\&.get()), R, *_sys);
+763 
+764   else if (_sys->nonlinear_solver->residual_object != NULL)
+765     _sys->nonlinear_solver->residual_object->residual(*(_sys->current_local_solution\&.get()), R, *_sys);
+766 
+767   else if (_sys->nonlinear_solver->matvec   != NULL)
+768     _sys->nonlinear_solver->matvec(*(_sys->current_local_solution\&.get()), &R, NULL, *_sys);
+769 
+770   else if (_sys->nonlinear_solver->residual_and_jacobian_object != NULL)
+771     _sys->nonlinear_solver->residual_and_jacobian_object->residual_and_jacobian(*(_sys->current_local_solution\&.get()), &R, NULL, *_sys);
+772 
+773   else
+774     libmesh_error();
+775 
+776   R\&.close();
+777   X_global\&.close();
+778   PetscFunctionReturn(0);
+779 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshGetBlocks (DMdm, \fBPetscInt\fP *n, char ***blocknames)"
+
+.PP
+Definition at line 45 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, CHKERRQ(), libMesh::comm, dlm, libMesh::ierr, PetscBool, PetscFunctionBegin, and PetscFunctionReturn()\&.
+.PP
+.nf
+46 {
+47   PetscErrorCode ierr;
+48   PetscInt i;
+49   PetscFunctionBegin;
+50   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+51   PetscBool islibmesh;
+52   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH,&islibmesh);
+53   if(!islibmesh) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Got DM oftype %s, not of type %s", ((PetscObject)dm)->type_name, DMLIBMESH);
+54   DM_libMesh *dlm = (DM_libMesh *)(dm->data);
+55   PetscValidPointer(n,2);
+56   *n = dlm->blockids->size();
+57   if(!blocknames) PetscFunctionReturn(0);
+58   ierr = PetscMalloc(*n*sizeof(char*), blocknames); CHKERRQ(ierr);
+59   i = 0;
+60   for(std::map<std::string, unsigned int>::const_iterator it = dlm->blockids->begin(); it != dlm->blockids->end(); ++it){
+61     ierr = PetscStrallocpy(it->first\&.c_str(), *blocknames+i); CHKERRQ(ierr);
+62     ++i;
+63   }
+64   PetscFunctionReturn(0);
+65 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshGetSystem (DMdm, \fBNonlinearImplicitSystem\fP *&sys)"
+
+.PP
+Definition at line 205 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, dlm, libMesh::ierr, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), and DM_libMesh::sys\&.
+.PP
+Referenced by DMlibMeshFunction(), and DMVariableBounds_libMesh()\&.
+.PP
+.nf
+206 {
+207   PetscErrorCode ierr;
+208   PetscFunctionBegin;
+209   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+210   PetscBool islibmesh;
+211   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH,&islibmesh); CHKERRQ(ierr);
+212   if(!islibmesh) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Got DM oftype %s, not of type %s", ((PetscObject)dm)->type_name, DMLIBMESH);
+213   DM_libMesh *dlm = (DM_libMesh *)(dm->data);
+214   sys = dlm->sys;
+215   PetscFunctionReturn(0);
+216 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshGetVariables (DMdm, \fBPetscInt\fP *n, char ***varnames)"
+
+.PP
+Definition at line 69 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, dlm, libMesh::ierr, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), and DM_libMesh::varids\&.
+.PP
+.nf
+70 {
+71   PetscErrorCode ierr;
+72   PetscFunctionBegin;
+73   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+74   PetscBool islibmesh;
+75   PetscInt i;
+76   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH,&islibmesh);
+77   if(!islibmesh) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Got DM oftype %s, not of type %s", ((PetscObject)dm)->type_name, DMLIBMESH);
+78   DM_libMesh *dlm = (DM_libMesh *)(dm->data);
+79   PetscValidPointer(n,2);
+80   *n = dlm->varids->size();
+81   if(!varnames) PetscFunctionReturn(0);
+82   ierr = PetscMalloc(*n*sizeof(char*), varnames); CHKERRQ(ierr);
+83   i = 0;
+84   for(std::map<std::string, unsigned int>::const_iterator it = dlm->varids->begin(); it != dlm->varids->end(); ++it){
+85     ierr = PetscStrallocpy(it->first\&.c_str(), *varnames+i); CHKERRQ(ierr);
+86     ++i;
+87   }
+88   PetscFunctionReturn(0);
+89 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMlibMeshJacobian (DMdm, Vecx, Matjac, Matpc, MatStructure *msflag)\fC [static]\fP"
+
+.PP
+Referenced by DMSetUp_libMesh()\&.
+.SS "static \fBPetscErrorCode\fP DMLibMeshParseDecompositionDescriptor_Private (DMdm, const char *ddesc, \fBPetscInt\fP *dtype, \fBPetscInt\fP *dcount, \fBPetscInt\fP **dsizes, char ****dlists)\fC [static]\fP"
+
+.PP
+Definition at line 546 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, eq, libMesh::ierr, token::next, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), and token::s\&.
+.PP
+Referenced by DMCreateDomainDecompositionDM_libMesh(), and DMCreateFieldDecompositionDM_libMesh()\&.
+.PP
+.nf
+547 {
+548   PetscFunctionBegin;
+549   PetscErrorCode ierr;
+550   PetscBool eq;
+551   char *s0, *s, *ss;
+552   struct token *llfirst = PETSC_NULL, *lllast = PETSC_NULL, *tok;
+553   PetscInt stcount = 0, brcount = 0, d, i;
+554   size_t len0, count;
+555 
+556   /*
+557     Parse the decomposition descriptor\&.
+558     Decomposition names could be of one of two forms:
+559     var:v1,v2;v3,v4;v4,v5;
+560     block:b1,b2;b3,b4;b4,b5;
+561     resulting in an overlapping decomposition that groups
+562     variables (v1,v2), (v3,v4), (v4,v5) or
+563     blocks    (b1,b2), (b3,b4), (b4,b5)\&.
+564   */
+565   /* Copy the descriptor so that we can manipulate it in place\&. */
+566   ierr = PetscStrallocpy(ddesc,&s0);   CHKERRQ(ierr);
+567   ierr = PetscStrlen(s0, &len0)  ;     CHKERRQ(ierr);
+568   ierr = PetscStrstr(s0,":",&ss);      CHKERRQ(ierr);
+569   if(!ss) {
+570     ss = s0+len0;
+571   }
+572   else {
+573     *ss = 0;
+574   }
+575   ierr = PetscStrcmp(s0,"var",&eq);    CHKERRQ(ierr);
+576   if(eq) {
+577     *dtype=DMLIBMESH_FIELD_DECOMPOSITION;
+578   }
+579   else {
+580     ierr = PetscStrcmp(s0,"block",&eq);CHKERRQ(ierr);
+581     if(!eq)
+582       SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Could not determine decomposition type from descriptor: %s\n", ddesc); CHKERRQ(ierr);
+583     *dtype=DMLIBMESH_DOMAIN_DECOMPOSITION;
+584   }
+585   ierr = PetscStrlen(s0,&count);       CHKERRQ(ierr);
+586   while(count < len0) {
+587     struct token *st, *br;
+588     ++ss; ++count;
+589     s=ss;
+590     while(*ss && *ss != ',' && *ss != ';') {
+591       ++ss; ++count;
+592     }
+593     st = PETSC_NULL; br = PETSC_NULL;
+594     if(*ss) {
+595       /*
+596         Found a separator, or a break\&.
+597         Add an appropriate token to the list\&.
+598         A token separator ',' produces no token\&.
+599       */
+600       if(*ss == ';') {
+601         /* Create a break token: a token with a null string\&. */
+602 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+603         ierr = PetscNew(struct token,&br);CHKERRQ(ierr);
+604 #else
+605         ierr = PetscNew(&br);CHKERRQ(ierr);
+606 #endif
+607       }
+608       *ss = 0;
+609       if(s != ss) {
+610         /* A nonempty string\&. */
+611 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+612         ierr = PetscNew(struct token, &st);CHKERRQ(ierr);
+613 #else
+614         ierr = PetscNew(&st);CHKERRQ(ierr);
+615 #endif
+616         st->s = s; /* The string will be properly copied below\&. */
+617       }
+618       /* Add the new tokens to the list\&. */
+619       if(st) {
+620         if(!lllast) {
+621           llfirst = lllast = st;
+622         }
+623         else {
+624           lllast->next = st; lllast = st;
+625         }
+626       }
+627       if(br) {
+628         if(!lllast) {
+629           llfirst = lllast = br;
+630         }
+631         else {
+632           lllast->next = br; lllast = br;
+633         }
+634       }
+635     }
+636   }
+637   /* The result of parsing is in the linked list ll\&. */
+638   /* Count up the strings and the breaks\&. */
+639   tok = llfirst;
+640   while(tok) {
+641     if(tok->s)
+642       ++stcount;
+643     else
+644       ++brcount;
+645     tok = tok->next;
+646   }
+647   /* Allocate the space for the output\&. */
+648   *dcount = brcount;
+649   ierr = PetscMalloc(*dcount*sizeof(PetscInt), dsizes); CHKERRQ(ierr);
+650   ierr = PetscMalloc(*dcount*sizeof(char**),   dlists); CHKERRQ(ierr);
+651   for(d = 0; d < *dcount; ++d) (*dsizes)[d] = 0;
+652   tok = llfirst; d = 0;
+653   while(tok) {
+654     if(tok->s)
+655       ++(*dsizes)[d];
+656     else
+657       ++d;
+658     tok = tok->next;
+659   }
+660   for(d = 0; d < *dcount; ++d) {
+661     ierr = PetscMalloc(sizeof(char**)*(*dsizes)[d], (*dlists)+d); CHKERRQ(ierr);
+662   }
+663   /* Now copy strings and destroy tokens\&. */
+664   tok = llfirst; d = 0; i = 0;
+665   while(tok) {
+666     if(tok->s) {
+667       ierr = PetscStrallocpy(tok->s, (*dlists)[d]+i); CHKERRQ(ierr);
+668       ++i;
+669     }
+670     else {
+671       ++d;
+672       i = 0;
+673     }
+674     llfirst = tok;
+675     tok = tok->next;
+676     ierr = PetscFree(llfirst); CHKERRQ(ierr);
+677   }
+678   /* Deallocate workspace\&. */
+679   ierr = PetscFree(s0); CHKERRQ(ierr);
+680   PetscFunctionReturn(0);
+681 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshSetSystem (DMdm, \fBNonlinearImplicitSystem\fP &sys)"
+
+.PP
+Definition at line 142 of file petscdmlibmesh\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), libMesh::ParallelObject::comm(), libMesh::comm, dlm, DMLibMeshSetUpName_Private(), end, libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::ierr, libMesh::libmesh_parallel_only(), mesh, libMesh::DofMap::n_variables(), libMesh::Variable::name(), PETSC_ERR_ARG_WRONGSTATE, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), libMesh::MeshBase::subdomain_name(), DM_libMesh::sys, libMesh::sys, libMesh::DofMap::variable(), DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreateLibMesh()\&.
+.PP
+.nf
+143 {
+144   const Parallel::Communicator &comm(sys\&.comm());
+145 
+146   PetscErrorCode ierr;
+147   PetscFunctionBegin;
+148   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+149   PetscBool islibmesh;
+150   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH,&islibmesh);
+151   if(!islibmesh) SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "Got DM oftype %s, not of type %s", ((PetscObject)dm)->type_name, DMLIBMESH);
+152 
+153   if(dm->setupcalled) SETERRQ(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONGSTATE, "Cannot reset the libMesh system after DM has been set up\&.");
+154   DM_libMesh *dlm = (DM_libMesh *)(dm->data);
+155   dlm->sys =&sys;
+156   /* Initially populate the sets of active blockids and varids using all of the
+157      existing blocks/variables (only variables are supported at the moment)\&. */
+158   DofMap& dofmap = dlm->sys->get_dof_map();
+159   dlm->varids->clear();
+160   dlm->varnames->clear();
+161   for(unsigned int v = 0; v < dofmap\&.n_variables(); ++v) {
+162     std::string vname = dofmap\&.variable(v)\&.name();
+163     dlm->varids->insert(std::pair<std::string,unsigned int>(vname,v));
+164     dlm->varnames->insert(std::pair<unsigned int,std::string>(v,vname));
+165   }
+166   const MeshBase& mesh = dlm->sys->get_mesh();
+167   dlm->blockids->clear();
+168   dlm->blocknames->clear();
+169   std::set<subdomain_id_type> blocks;
+170   /* The following effectively is a verbatim copy of MeshBase::n_subdomains()\&. */
+171   // This requires an inspection on every processor
+172   libmesh_parallel_only(mesh\&.comm());
+173   MeshBase::const_element_iterator       el  = mesh\&.active_elements_begin();
+174   const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+175   for (; el!=end; ++el)
+176     blocks\&.insert((*el)->subdomain_id());
+177   // Some subdomains may only live on other processors
+178   comm\&.set_union(blocks);
+179 
+180   std::set<subdomain_id_type>::iterator bit = blocks\&.begin();
+181   std::set<subdomain_id_type>::iterator bend = blocks\&.end();
+182   if(bit == bend) SETERRQ(((PetscObject)dm)->comm, PETSC_ERR_PLIB, "No mesh blocks found\&.");
+183 
+184   for(; bit != bend; ++bit) {
+185     subdomain_id_type bid = *bit;
+186     std::string bname = mesh\&.subdomain_name(bid);
+187     if(!bname\&.length()) {
+188       /* Block names are currently implemented for Exodus II meshes
+189          only, so we might have to make up our own block names and
+190          maintain our own mapping of block ids to names\&.
+191       */
+192       std::ostringstream ss;
+193       ss << "dm" << bid;
+194       bname = ss\&.str();
+195     }
+196     dlm->blockids->insert(std::pair<std::string,unsigned int>(bname,bid));
+197     dlm->blocknames->insert(std::pair<unsigned int,std::string>(bid,bname));
+198   }
+199   ierr = DMLibMeshSetUpName_Private(dm); CHKERRQ(ierr);
+200   PetscFunctionReturn(0);
+201 }
+.fi
+.SS "\fBPetscErrorCode\fP DMLibMeshSetUpName_Private (DMdm)"
+
+.PP
+Definition at line 93 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blocknames, CHKERRQ(), DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DM_libMesh::embedding_type, end, libMesh::ierr, libMesh::Quality::name(), libMesh::System::name(), PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::sys, and DM_libMesh::varnames\&.
+.PP
+Referenced by DMCreateDomainDecomposition_libMesh(), DMCreateFieldDecomposition_libMesh(), DMLibMeshCreateDomainDecompositionDM(), DMLibMeshCreateFieldDecompositionDM(), and DMLibMeshSetSystem()\&.
+.PP
+.nf
+94 {
+95   DM_libMesh* dlm = (DM_libMesh*)dm->data;
+96   PetscErrorCode ierr;
+97   PetscFunctionBegin;
+98   std::string name = dlm->sys->name();
+99   std::map<unsigned int, std::string> *dnames = PETSC_NULL, *enames = PETSC_NULL;
+100   if(dlm->decomposition_type == DMLIBMESH_FIELD_DECOMPOSITION) {
+101     name += ":dec:var:";
+102     dnames = dlm->varnames;
+103   }
+104   if(dlm->decomposition_type == DMLIBMESH_DOMAIN_DECOMPOSITION) {
+105     name += ":dec:block:";
+106     dnames = dlm->blocknames;
+107   }
+108   if(dnames) {
+109     for(unsigned int d = 0; d < dlm->decomposition->size(); ++d) {
+110       for(std::set<unsigned int>::iterator dit = (*dlm->decomposition)[d]\&.begin(); dit != (*dlm->decomposition)[d]\&.end(); ++dit) {
+111         unsigned int id = *dit;
+112         if(dit != (*dlm->decomposition)[d]\&.begin())
+113           name += ",";
+114         name += (*dnames)[id];
+115       }
+116       name += ";";
+117     }
+118   }
+119   if(dlm->embedding_type == DMLIBMESH_FIELD_EMBEDDING) {
+120     name += ":emb:var:";
+121     enames = dlm->varnames;
+122   }
+123   if(dlm->embedding_type == DMLIBMESH_DOMAIN_EMBEDDING) {
+124     name += ":emb:block:";
+125     enames = dlm->blocknames;
+126   }
+127   if(enames) {
+128     for(std::map<unsigned int, std::string>::iterator eit = enames->begin(); eit != enames->end(); ++eit) {
+129       std::string ename = eit->second;
+130       if(eit != enames->begin())
+131         name += ",";
+132       name += ename;
+133     }
+134     name += ";";
+135   }
+136   ierr = PetscObjectSetName((PetscObject)dm, name\&.c_str()); CHKERRQ(ierr);
+137   PetscFunctionReturn(0);
+138 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMSetUp_libMesh (DMdm)\fC [static]\fP"
+
+.PP
+Definition at line 1048 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), libMesh::comm, DMlibMeshFunction(), DMlibMeshJacobian(), DMVariableBounds_libMesh(), DM_libMesh::embedding, eq, libMesh::ierr, libMesh::NonlinearImplicitSystem::nonlinear_solver, PETSC_ERR_ARG_WRONGSTATE, PetscBool, PetscFunctionBegin, PetscFunctionReturn(), SNESFunction_DMlibMesh(), and DM_libMesh::sys\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+1049 {
+1050   PetscFunctionBegin;
+1051   PetscErrorCode ierr;
+1052   DM_libMesh     *dlm = (DM_libMesh *)(dm->data);
+1053   PetscBool eq;
+1054 
+1055   ierr = PetscObjectTypeCompare((PetscObject)dm, DMLIBMESH, &eq); CHKERRQ(ierr);
+1056 
+1057   if (!eq)
+1058     SETERRQ2(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "DM of type %s, not of type %s", ((PetscObject)dm)->type, DMLIBMESH);
+1059 
+1060   if (!dlm->sys)
+1061     SETERRQ(PETSC_COMM_WORLD, PETSC_ERR_ARG_WRONGSTATE, "No libMesh system set for DM_libMesh");
+1062   /*
+1063     Do not evaluate function, Jacobian or bounds for an embedded DM -- the subproblem might not have enough information for that\&.
+1064   */
+1065   if(!dlm->embedding) {
+1066 #if PETSC_RELEASE_LESS_THAN(3,3,1)
+1067     ierr = DMSetFunction(dm, DMlibMeshFunction); CHKERRQ(ierr);
+1068     ierr = DMSetJacobian(dm, DMlibMeshJacobian); CHKERRQ(ierr);
+1069 #else
+1070     ierr = DMSNESSetFunction(dm, SNESFunction_DMlibMesh, (void*)dm); CHKERRQ(ierr);
+1071     ierr = DMSNESSetJacobian(dm, SNESJacobian_DMlibMesh, (void*)dm); CHKERRQ(ierr);
+1072 #endif
+1073     if (dlm->sys->nonlinear_solver->bounds || dlm->sys->nonlinear_solver->bounds_object)
+1074       ierr = DMSetVariableBounds(dm, DMVariableBounds_libMesh); CHKERRQ(ierr);
+1075   }
+1076   else {
+1077     /*
+1078       Fow now we don't implement even these, although a linear "Dirichlet" subproblem is well-defined\&.
+1079       Creating the submatrix, however, might require extracting the submatrix preallocation from an unassembled matrix\&.
+1080     */
+1081     dm->ops->createglobalvector = 0;
+1082     dm->ops->creatematrix = 0;
+1083   }
+1084   PetscFunctionReturn(0);
+1085 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMVariableBounds_libMesh (DMdm, Vecxl, Vecxu)\fC [static]\fP"
+
+.PP
+Definition at line 892 of file petscdmlibmesh\&.C\&.
+.PP
+References _sys, CHKERRQ(), libMesh::ParallelObject::comm(), libMesh::comm, DMLibMeshGetSystem(), libMesh::ierr, libMesh::NonlinearImplicitSystem::nonlinear_solver, PetscFunctionBegin, and PetscFunctionReturn()\&.
+.PP
+Referenced by DMSetUp_libMesh()\&.
+.PP
+.nf
+893 {
+894   PetscErrorCode ierr;
+895   NonlinearImplicitSystem* _sys;
+896   ierr = DMLibMeshGetSystem(dm, _sys); CHKERRQ(ierr);
+897   NonlinearImplicitSystem& sys = *_sys;
+898   PetscVector<Number> XL(xl, sys\&.comm());
+899   PetscVector<Number> XU(xu, sys\&.comm());
+900   PetscFunctionBegin;
+901 #if PETSC_VERSION_LESS_THAN(3,5,0) && PETSC_VERSION_RELEASE
+902   ierr = VecSet(xl, SNES_VI_NINF);CHKERRQ(ierr);
+903   ierr = VecSet(xu, SNES_VI_INF);CHKERRQ(ierr);
+904 #else
+905   ierr = VecSet(xl, PETSC_NINFINITY);CHKERRQ(ierr);
+906   ierr = VecSet(xu, PETSC_INFINITY);CHKERRQ(ierr);
+907 #endif
+908   if (sys\&.nonlinear_solver->bounds != NULL)
+909     sys\&.nonlinear_solver->bounds(XL,XU,sys);
+910   else if (sys\&.nonlinear_solver->bounds_object != NULL)
+911     sys\&.nonlinear_solver->bounds_object->bounds(XL,XU, sys);
+912   else
+913     SETERRQ(((PetscObject)dm)->comm, PETSC_ERR_ARG_WRONG, "No bounds calculation in this libMesh object");
+914 
+915   PetscFunctionReturn(0);
+916 }
+.fi
+.SS "static \fBPetscErrorCode\fP DMView_libMesh (DMdm, PetscViewerviewer)\fC [static]\fP"
+
+.PP
+Definition at line 989 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, CHKERRQ(), libMesh::comm, DM_libMesh::decomposition, DM_libMesh::decomposition_type, end, libMesh::ierr, libMesh::Quality::name(), PetscBool, PetscFunctionBegin, PetscFunctionReturn(), and DM_libMesh::varids\&.
+.PP
+Referenced by DMCreate_libMesh()\&.
+.PP
+.nf
+990 {
+991   PetscErrorCode ierr;
+992   PetscBool isascii;
+993   const char *name, *prefix;
+994   DM_libMesh *dlm = (DM_libMesh*)dm->data;
+995   PetscFunctionBegin;
+996   ierr = PetscObjectTypeCompare((PetscObject)viewer,PETSCVIEWERASCII,&isascii); CHKERRQ(ierr);
+997   if(isascii) {
+998     ierr = PetscObjectGetName((PetscObject)dm, &name);     CHKERRQ(ierr);
+999     ierr = PetscObjectGetOptionsPrefix((PetscObject)dm, &prefix); CHKERRQ(ierr);
+1000     ierr = PetscViewerASCIIPrintf(viewer, "DM libMesh with name %s and prefix %s\n", name, prefix); CHKERRQ(ierr);
+1001     ierr = PetscViewerASCIIPrintf(viewer, "blocks:", name, prefix); CHKERRQ(ierr);
+1002     std::map<std::string,unsigned int>::iterator bit = dlm->blockids->begin();
+1003     std::map<std::string,unsigned int>::const_iterator bend = dlm->blockids->end();
+1004     for(; bit != bend; ++bit) {
+1005       ierr = PetscViewerASCIIPrintf(viewer, "(%s,%D) ", bit->first\&.c_str(), bit->second); CHKERRQ(ierr);
+1006     }
+1007     ierr = PetscViewerASCIIPrintf(viewer, "\n"); CHKERRQ(ierr);
+1008     ierr = PetscViewerASCIIPrintf(viewer, "variables:", name, prefix); CHKERRQ(ierr);
+1009     std::map<std::string,unsigned int>::iterator vit = dlm->varids->begin();
+1010     std::map<std::string,unsigned int>::const_iterator vend = dlm->varids->end();
+1011     for(; vit != vend; ++vit) {
+1012       ierr = PetscViewerASCIIPrintf(viewer, "(%s,%D) ", vit->first\&.c_str(), vit->second); CHKERRQ(ierr);
+1013     }
+1014     ierr = PetscViewerASCIIPrintf(viewer, "\n"); CHKERRQ(ierr);
+1015     if(dlm->decomposition_type == DMLIBMESH_NO_DECOMPOSITION) {
+1016       ierr = PetscViewerASCIIPrintf(viewer, "No decomposition\n"); CHKERRQ(ierr);
+1017     }
+1018     else {
+1019       if(dlm->decomposition_type == DMLIBMESH_FIELD_DECOMPOSITION) {
+1020         ierr = PetscViewerASCIIPrintf(viewer, "Field decomposition by variable: "); CHKERRQ(ierr);
+1021       }
+1022       else if(dlm->decomposition_type == DMLIBMESH_DOMAIN_DECOMPOSITION) {
+1023         ierr = PetscViewerASCIIPrintf(viewer, "Domain decomposition by block: "); CHKERRQ(ierr);
+1024       }
+1025       else SETERRQ1(((PetscObject)dm)->comm, PETSC_ERR_PLIB, "Unexpected decomposition type: %D", dlm->decomposition_type);
+1026       /* FIX: decompositions might have different sizes and components on different ranks\&. */
+1027       for(unsigned int d = 0; d < dlm->decomposition->size(); ++d) {
+1028         std::set<unsigned int>::iterator dbegin  = (*dlm->decomposition)[d]\&.begin();
+1029         std::set<unsigned int>::iterator dit     = (*dlm->decomposition)[d]\&.begin();
+1030         std::set<unsigned int>::iterator dend    = (*dlm->decomposition)[d]\&.end();
+1031         for(; dit != dend; ++dit) {
+1032           if(dit != dbegin) {
+1033             ierr = PetscViewerASCIIPrintf(viewer, ","); CHKERRQ(ierr);
+1034           }
+1035           ierr = PetscViewerASCIIPrintf(viewer, "%D", *dit); CHKERRQ(ierr);
+1036         }
+1037         ierr = PetscViewerASCIIPrintf(viewer, ";"); CHKERRQ(ierr);
+1038       }
+1039       ierr = PetscViewerASCIIPrintf(viewer, "\n"); CHKERRQ(ierr);
+1040     }
+1041   }
+1042 
+1043   PetscFunctionReturn(0);
+1044 }
+.fi
+.SS "\fBsys\fP get_dof_map ()"
+
+.PP
+Definition at line 823 of file petscdmlibmesh\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+Referenced by libMesh::TransientSystem< Base >::re_update()\&.
+.PP
+.nf
+834     {
+835       libMesh::err << "ERROR: cannot specifiy both a function and object to compute the Jacobian!" << std::endl;
+836       libmesh_error();
+837     }
+.fi
+.SS "if (sys\&.nonlinear_solver->matvec &&sys\&.nonlinear_solver->residual_and_jacobian_object)"
+
+.PP
+Definition at line 839 of file petscdmlibmesh\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+840     {
+841       libMesh::err << "ERROR: cannot specifiy both a function and object to compute the combined Residual & Jacobian!" << std::endl;
+842       libmesh_error();
+843     }
+.fi
+.SS "if (sys\&.nonlinear_solver->jacobian! = \fCNULL\fP)"
+
+.PP
+Definition at line 845 of file petscdmlibmesh\&.C\&.
+.PP
+.nf
+877 {
+878   DM dm = (DM)ctx;
+879   PetscErrorCode ierr;
+880   PetscFunctionBegin;
+881 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+882   ierr = DMlibMeshJacobian(dm,x,*jac,*pc,flag); CHKERRQ(ierr);
+883 #else
+884   ierr = DMlibMeshJacobian(dm,x,jac,pc); CHKERRQ(ierr);
+885 #endif
+886   PetscFunctionReturn(0);
+887 }
+.fi
+.SS "if (!eq) ->  comm, PETSC_ERR_ARG_WRONG,'DM of type %s, not of type %s',((PetscObject) dm) ->type, DMLIBMESH)"
+
+.SS "if (!\fBdlm\fP->sys)"
+
+.SS "\fBPetscMatrix\fP<Number> Jac (\fBjac\fP, sys\&.comm())"
+
+.SS "PetscFunctionReturn (0)"
+
+.PP
+Referenced by DMCreate_libMesh(), DMCreateDomainDecomposition_libMesh(), DMCreateDomainDecompositionDM_libMesh(), DMCreateFieldDecomposition_libMesh(), DMCreateFieldDecompositionDM_libMesh(), DMCreateGlobalVector_libMesh(), DMCreateLibMesh(), DMDestroy_libMesh(), DMLibMeshCreateDomainDecompositionDM(), DMLibMeshCreateFieldDecompositionDM(), DMlibMeshFunction(), DMLibMeshGetBlocks(), DMLibMeshGetSystem(), DMLibMeshGetVariables(), DMLibMeshParseDecompositionDescriptor_Private(), DMLibMeshSetSystem(), DMLibMeshSetUpName_Private(), DMSetUp_libMesh(), DMVariableBounds_libMesh(), DMView_libMesh(), and SNESFunction_DMlibMesh()\&.
+.SS "static \fBPetscErrorCode\fP SNESFunction_DMlibMesh (SNES, Vecx, Vecr, void *ctx)\fC [static]\fP"
+
+.PP
+Definition at line 784 of file petscdmlibmesh\&.C\&.
+.PP
+References CHKERRQ(), DMlibMeshFunction(), libMesh::ierr, PetscFunctionBegin, and PetscFunctionReturn()\&.
+.PP
+Referenced by DMSetUp_libMesh()\&.
+.PP
+.nf
+785 {
+786   DM dm = (DM)ctx;
+787   PetscErrorCode ierr;
+788   PetscFunctionBegin;
+789   ierr = DMlibMeshFunction(dm,x,r);CHKERRQ(ierr);
+790   PetscFunctionReturn(0);
+791 }
+.fi
+.SS "\fBX_global\fP swap (\fBX_sys\fP)"
+
+.SS "\fBJac\fP swap (\fBJac_sys\fP)"
+
+.SS "\fBPetscMatrix\fP<Number> the_pc (\fBpc\fP, sys\&.comm())"
+
+.SS "\fBPetscVector\fP<Number> X_global (\fBx\fP, sys\&.comm())"
+
+.SH "Variable Documentation"
+.PP 
+.SS "\fBNonlinearImplicitSystem\fP* _sys"
+
+.PP
+Definition at line 805 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by libMesh::WrappedFunction< Output >::clone(), libMesh::WrappedFunction< Output >::component(), DMlibMeshFunction(), DMVariableBounds_libMesh(), and libMesh::WrappedFunction< Output >::operator()()\&.
+.SS "* A"
+\fBInitial value:\fP
+.PP
+.nf
+{
+  PetscFunctionBegin
+.fi
+.PP
+Definition at line 967 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by libMesh::DenseMatrix< T >::_cholesky_back_substitute(), libMesh::DenseMatrix< T >::_cholesky_decompose(), GETPOT_NAMESPACE::GetPot::_DBE_expand(), libMesh::DenseMatrix< T >::_lu_back_substitute(), libMesh::DenseMatrix< T >::_lu_decompose(), libMesh::DenseMatrix< T >::_multiply_blas(), libMesh::EpetraVector< T >::add_vector(), libMesh::PetscVector< T >::add_vector(), libMesh::PetscVector< T >::add_vector_transpose(), libMesh::QMonomial::init_3D(), libMesh::FESubdivision::init_shape_functions(), libMesh::FESubdivision::init_subdivision_matrix(), libMesh::VariationalMeshSmoother::minJ(), libMesh::DenseMatrix< T >::right_multiply_transpose(), and libMesh::Edge3::volume()\&.
+.SS "\fBDM_libMesh\fP* dlm = (\fBDM_libMesh\fP *)(dm->\fBdata\fP)"
+
+.PP
+Definition at line 970 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by DMCreate_libMesh(), DMCreateDomainDecomposition_libMesh(), DMCreateFieldDecomposition_libMesh(), DMCreateGlobalVector_libMesh(), DMLibMeshCreateDomainDecompositionDM(), DMLibMeshCreateFieldDecompositionDM(), DMLibMeshGetBlocks(), DMLibMeshGetSystem(), DMLibMeshGetVariables(), DMLibMeshSetSystem(), and DMLibMeshSetUpName_Private()\&.
+.SS "No libMesh system set for \fBDM_libMesh\fP"
+
+.PP
+Definition at line 979 of file petscdmlibmesh\&.C\&.
+.SS "\fBPetscBool\fP eq"
+
+.PP
+Definition at line 971 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by DMCreateGlobalVector_libMesh(), DMLibMeshParseDecompositionDescriptor_Private(), and DMSetUp_libMesh()\&.
+.SS "ierr = \fBDMLibMeshGetSystem\fP(dm, \fB_sys\fP)"
+
+.PP
+Definition at line 806 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by libMesh::PetscMatrix< T >::_get_submatrix(), libMesh::PetscMatrix< T >::add(), libMesh::PetscMatrix< T >::add_block_matrix(), libMesh::PetscMatrix< T >::add_matrix(), libMesh::PetscNonlinearSolver< T >::build_mat_null_space(), libMesh::PetscDiffSolver::clear(), libMesh::PetscMatrix< T >::clear(), libMesh::PetscMatrix< T >::close(), libMesh::PetscMatrix< T >::closed(), libMesh::PetscMatrix< T >::get_diagonal(), libMesh::PetscMatrix< T >::get_transpose(), EXTERN_C_FOR_PETSC_END::indices_to_fieldsplit(), libMesh::PetscDiffSolver::init(), libMesh::PetscMatrix< T >::init(), libMesh::PetscMatrix< T >::l1_norm(), libMesh::PetscMatrix< T >::linfty_norm(), libMesh::PetscMatrix< T >::m(), libMesh::PetscMatrix< T >::n(), libMesh::PetscMatrix< T >::operator()(), libMesh::PetscMatrix< T >::print_matlab(), libMesh::PetscMatrix< T >::print_personal(), libMesh::PetscDiffSolver::reinit(), libMesh::PetscMatrix< T >::row_start(), libMesh::PetscMatrix< T >::row_stop(), libMesh::PetscMatrix< T >::set(), libMesh::PetscDiffSolver::solve(), libMesh::PetscMatrix< T >::zero(), and libMesh::PetscMatrix< T >::zero_rows()\&.
+.SS "\fBPetscErrorCode\fP Vec Mat jac"
+
+.PP
+Definition at line 800 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by libMesh::PetscDiffSolver::solve()\&.
+.SS "\fBPetscMatrix\fP<Number>& Jac_sys = *libmesh_cast_ptr<\fBPetscMatrix\fP<Number>*>(sys\&.matrix)"
+
+.PP
+Definition at line 812 of file petscdmlibmesh\&.C\&.
+.SS "\fBPetscErrorCode\fP Vec Mat Mat pc"
+\fBInitial value:\fP
+.PP
+.nf
+{
+  PetscErrorCode ierr
+.fi
+.PP
+Definition at line 802 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by libMesh::PetscNonlinearSolver< T >::init()\&.
+.SS "PETSC_ERR_ARG_WRONGSTATE"
+
+.PP
+Definition at line 979 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by DMCreateGlobalVector_libMesh(), DMLibMeshSetSystem(), and DMSetUp_libMesh()\&.
+.SS "PetscFunctionBegin"
+
+.PP
+Definition at line 804 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by DMCreate_libMesh(), DMCreateDomainDecomposition_libMesh(), DMCreateDomainDecompositionDM_libMesh(), DMCreateFieldDecomposition_libMesh(), DMCreateFieldDecompositionDM_libMesh(), DMCreateGlobalVector_libMesh(), DMCreateLibMesh(), DMDestroy_libMesh(), DMLibMeshCreateDomainDecompositionDM(), DMLibMeshCreateFieldDecompositionDM(), DMlibMeshFunction(), DMLibMeshGetBlocks(), DMLibMeshGetSystem(), DMLibMeshGetVariables(), DMLibMeshParseDecompositionDescriptor_Private(), DMLibMeshSetSystem(), DMLibMeshSetUpName_Private(), DMSetUp_libMesh(), DMVariableBounds_libMesh(), DMView_libMesh(), and SNESFunction_DMlibMesh()\&.
+.SS "\fBNonlinearImplicitSystem\fP& sys = *\fB_sys\fP"
+
+.PP
+Definition at line 807 of file petscdmlibmesh\&.C\&.
+.SS "\fBPetscErrorCode\fP Vec x"
+
+.PP
+Definition at line 800 of file petscdmlibmesh\&.C\&.
+.PP
+Referenced by GETPOT_NAMESPACE::GetPot::_DBE_expand()\&.
+.SS "\fBPetscVector\fP<Number>& X_sys = *libmesh_cast_ptr<\fBPetscVector\fP<Number>*>(sys\&.solution\&.get())"
+
+.PP
+Definition at line 811 of file petscdmlibmesh\&.C\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

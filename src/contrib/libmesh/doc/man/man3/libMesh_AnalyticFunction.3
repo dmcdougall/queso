@@ -1,0 +1,295 @@
+.TH "libMesh::AnalyticFunction< Output >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::AnalyticFunction< Output > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <analytic_function\&.h>\fP
+.PP
+Inherits \fBlibMesh::FunctionBase< Output >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAnalyticFunction\fP (Output fptr(const \fBPoint\fP &p, const \fBReal\fP time))"
+.br
+.ti -1c
+.RI "\fBAnalyticFunction\fP (void fptr(\fBDenseVector\fP< Output > &output, const \fBPoint\fP &p, const \fBReal\fP time))"
+.br
+.ti -1c
+.RI "\fB~AnalyticFunction\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBFunctionBase\fP
+.br
+< Output > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "Output \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, const \fBReal\fP time, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "virtual Output \fBcomponent\fP (unsigned int i, const \fBPoint\fP &p, \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "Output(* \fB_number_fptr\fP )(const \fBPoint\fP &p, const \fBReal\fP time)"
+.br
+.ti -1c
+.RI "void(* \fB_vector_fptr\fP )(\fBDenseVector\fP< Output > &output, const \fBPoint\fP &p, const \fBReal\fP time)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBFunctionBase\fP * \fB_master\fP"
+.br
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Output = Number>class libMesh::AnalyticFunction< Output >"
+This class provides function-like objects for which an analytical expression can be provided\&. The user may either provide vector-return or number-return functions\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file analytic_function\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Output > \fBlibMesh::AnalyticFunction\fP< Output >::\fBAnalyticFunction\fP (Output fptrconst Point &p,const Real time)"
+Constructor\&. Takes a function pointer for scalar return values\&. 
+.PP
+Definition at line 150 of file analytic_function\&.h\&.
+.PP
+References libMesh::FunctionBase< Output >::_initialized, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+151                                                                           :
+152   FunctionBase<Output> (),
+153   _number_fptr (fptr),
+154   _vector_fptr (NULL)
+155 {
+156   libmesh_assert(fptr);
+157   this->_initialized = true;
+158 }
+.fi
+.SS "template<typename Output > \fBlibMesh::AnalyticFunction\fP< Output >::\fBAnalyticFunction\fP (void fptrDenseVector< Output > &output,const Point &p,const Real time)\fC [inline]\fP"
+Constructor\&. Takes a function pointer for vector valued functions\&. 
+.PP
+Definition at line 164 of file analytic_function\&.h\&.
+.PP
+References libMesh::FunctionBase< Output >::_initialized, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+166                                                                         :
+167   FunctionBase<Output> (),
+168   _number_fptr (NULL),
+169   _vector_fptr (fptr)
+170 {
+171   libmesh_assert(fptr);
+172   this->_initialized = true;
+173 }
+.fi
+.SS "template<typename Output > \fBlibMesh::AnalyticFunction\fP< Output >::~\fBAnalyticFunction\fP ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 179 of file analytic_function\&.h\&.
+.PP
+.nf
+180 {
+181 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Output > void \fBlibMesh::AnalyticFunction\fP< Output >::clear ()\fC [inline]\fP, \fC [virtual]\fP"
+Clears the function\&. 
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 199 of file analytic_function\&.h\&.
+.PP
+.nf
+200 {
+201   // We probably need a method to reset these later\&.\&.\&.
+202   _number_fptr = NULL;
+203   _vector_fptr = NULL;
+204 
+205   // definitely not ready
+206   this->_initialized = false;
+207 }
+.fi
+.SS "template<typename Output > \fBAutoPtr\fP< \fBFunctionBase\fP< Output > > \fBlibMesh::AnalyticFunction\fP< Output >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Returns a new deep copy of the function\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 214 of file analytic_function\&.h\&.
+.PP
+.nf
+215 {
+216   return AutoPtr<FunctionBase<Output> >
+217     ( _number_fptr ?
+218       new AnalyticFunction<Output>(_number_fptr) :
+219       new AnalyticFunction<Output>(_vector_fptr) );
+220 }
+.fi
+.SS "template<typename Output > Output \fBlibMesh::FunctionBase\fP< Output >::component (unsigned inti, const \fBPoint\fP &p, \fBReal\fPtime = \fC0\&.\fP)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the vector component \fCi\fP at coordinate \fCp\fP and time \fCtime\fP\&. Subclasses aren't required to overload this, since the default implementation is based on the full vector evaluation, which is often correct\&. Subclasses are recommended to overload this, since the default implementation is based on a vector evaluation, which is usually unnecessarily inefficient\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::ParsedFunction< Output >\fP, and \fBlibMesh::WrappedFunction< Output >\fP\&.
+.PP
+Definition at line 203 of file function_base\&.h\&.
+.PP
+Referenced by libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.PP
+.nf
+206 {
+207   DenseVector<Output> outvec(i+1);
+208   (*this)(p, time, outvec);
+209   return outvec(i);
+210 }
+.fi
+.SS "template<typename Output > void \fBlibMesh::AnalyticFunction\fP< Output >::init ()\fC [virtual]\fP"
+The actual initialization process\&. 
+.PP
+Reimplemented from \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 186 of file analytic_function\&.h\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+187 {
+188   // dumb double-test
+189   libmesh_assert ((_number_fptr != NULL) || (_vector_fptr != NULL));
+190 
+191   // definitely ready
+192   this->_initialized = true;
+193 }
+.fi
+.SS "template<typename Output > bool \fBlibMesh::FunctionBase\fP< Output >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 194 of file function_base\&.h\&.
+.PP
+.nf
+195 {
+196   return (this->_initialized);
+197 }
+.fi
+.SS "template<typename Output > Output \fBlibMesh::AnalyticFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\&.\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value at point \fCp\fP and time \fCtime\fP, which defaults to zero\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 127 of file analytic_function\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+129 {
+130   libmesh_assert (this->initialized());
+131   return (this->_number_fptr(p, time));
+132 }
+.fi
+.SS "template<typename Output > void \fBlibMesh::AnalyticFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [virtual]\fP"
+Like before, but returns the values in a writable reference\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 138 of file analytic_function\&.h\&.
+.PP
+References libMesh::initialized(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+141 {
+142   libmesh_assert (this->initialized());
+143   this->_vector_fptr(output, p, time);
+144   return;
+145 }
+.fi
+.SS "template<typename Output> void \fBlibMesh::FunctionBase\fP< Output >::operator() (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [inherited]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP\&. 
+.PP
+Definition at line 216 of file function_base\&.h\&.
+.PP
+.nf
+218 {
+219   // Call the time-dependent function with t=0\&.
+220   this->operator()(p, 0\&., output);
+221 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Output> bool \fBlibMesh::FunctionBase\fP< Output >::_initialized\fC [protected]\fP, \fC [inherited]\fP"
+When \fC\fBinit()\fP\fP was called so that everything is ready for calls to \fCoperator()\fP (\&.\&.\&.), then this \fCbool\fP is true\&. 
+.PP
+Definition at line 166 of file function_base\&.h\&.
+.PP
+Referenced by libMesh::AnalyticFunction< Output >::AnalyticFunction(), libMesh::ConstFunction< Output >::ConstFunction(), libMesh::ParsedFunction< Output >::ParsedFunction(), and libMesh::WrappedFunction< Output >::WrappedFunction()\&.
+.SS "template<typename Output> const \fBFunctionBase\fP* \fBlibMesh::FunctionBase\fP< Output >::_master\fC [protected]\fP, \fC [inherited]\fP"
+Const pointer to our master, initialized to \fCNULL\fP\&. There may be cases where multiple functions are required, but to save memory, one master handles some centralized data\&. 
+.PP
+Definition at line 160 of file function_base\&.h\&.
+.SS "template<typename Output  = Number> Output(*  \fBlibMesh::AnalyticFunction\fP< Output >::_number_fptr)(const \fBPoint\fP &p, const \fBReal\fP time)"
+Pointer to user-provided function that computes the boundary values when an analytical expression is available\&. 
+.PP
+Definition at line 79 of file analytic_function\&.h\&.
+.SS "template<typename Output  = Number> void(*  \fBlibMesh::AnalyticFunction\fP< Output >::_vector_fptr)(\fBDenseVector\fP< Output > &output, const \fBPoint\fP &p, const \fBReal\fP time)"
+Pointer to user-provided vector valued function\&. 
+.PP
+Definition at line 85 of file analytic_function\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

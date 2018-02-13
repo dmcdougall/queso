@@ -1,0 +1,144 @@
+.TH "libMesh::DenseSubVector< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DenseSubVector< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <dense_subvector\&.h>\fP
+.PP
+Inherits \fBlibMesh::DenseVectorBase< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBzero\fP ()=0"
+.br
+.ti -1c
+.RI "virtual T \fBel\fP (const unsigned int i) const =0"
+.br
+.ti -1c
+.RI "virtual T & \fBel\fP (const unsigned int i)=0"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBsize\fP () const =0"
+.br
+.ti -1c
+.RI "void \fBprint\fP (std::ostream &os) const "
+.br
+.ti -1c
+.RI "void \fBprint_scientific\fP (std::ostream &os) const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::DenseSubVector< T >"
+Defines a dense subvector for use in Finite Element-type computations\&. Useful for storing element load vectors before summation into a global vector, particularly when you have systems of equations\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 45 of file dense_subvector\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> virtual T \fBlibMesh::DenseVectorBase\fP< T >::el (const unsigned inti) const\fC [pure virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i) element of the vector\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::DenseVector< T >\fP, and \fBlibMesh::DenseVector< Number >\fP\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::condense(), and libMesh::DofMap::extract_local_vector()\&.
+.SS "template<typename T> virtual T& \fBlibMesh::DenseVectorBase\fP< T >::el (const unsigned inti)\fC [pure virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fP(i) element of the vector as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::DenseVector< T >\fP, and \fBlibMesh::DenseVector< Number >\fP\&.
+.SS "template<typename T > void \fBlibMesh::DenseVectorBase\fP< T >::print (std::ostream &os) const\fC [inherited]\fP"
+Pretty-print the vector to \fCstdout\fP\&. 
+.PP
+Definition at line 62 of file dense_vector_base\&.C\&.
+.PP
+.nf
+63 {
+64   for (unsigned int i=0; i<this->size(); i++)
+65     os << std::setw(8)
+66        << this->el(i)
+67        << std::endl;
+68 }
+.fi
+.SS "template<typename T > void \fBlibMesh::DenseVectorBase\fP< T >::print_scientific (std::ostream &os) const\fC [inherited]\fP"
+Prints the entries of the vector with additional decimal places in scientific notation\&. 
+.PP
+Definition at line 30 of file dense_vector_base\&.C\&.
+.PP
+.nf
+31 {
+32 #ifndef LIBMESH_BROKEN_IOSTREAM
+33 
+34   // save the initial format flags
+35   std::ios_base::fmtflags os_flags = os\&.flags();
+36 
+37   // Print the vector entries\&.
+38   for (unsigned int i=0; i<this->size(); i++)
+39     os << std::setw(10)
+40        << std::scientific
+41        << std::setprecision(8)
+42        << this->el(i)
+43        << std::endl;
+44 
+45   // reset the original format flags
+46   os\&.flags(os_flags);
+47 
+48 #else
+49 
+50   // Print the matrix entries\&.
+51   for (unsigned int i=0; i<this->size(); i++)
+52     os << std::setprecision(8)
+53        << this->el(i)
+54        << std::endl;
+55 
+56 #endif
+57 }
+.fi
+.SS "template<typename T> virtual unsigned int \fBlibMesh::DenseVectorBase\fP< T >::size () const\fC [pure virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the size of the vector\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::DenseVector< T >\fP, and \fBlibMesh::DenseVector< Number >\fP\&.
+.PP
+Referenced by libMesh::DenseMatrixBase< T >::condense(), libMesh::DofMap::extract_local_vector(), libMesh::LaspackVector< T >::insert(), libMesh::DistributedVector< T >::insert(), libMesh::EigenSparseVector< T >::insert(), libMesh::EpetraVector< T >::insert(), and libMesh::PetscVector< T >::insert()\&.
+.SS "template<typename T> virtual void \fBlibMesh::DenseVectorBase\fP< T >::zero ()\fC [pure virtual]\fP, \fC [inherited]\fP"
+Set every element in the vector to 0\&. Needs to be pure virtual since the storage method may be different in derived classes\&. 
+.PP
+Implemented in \fBlibMesh::DenseVector< T >\fP, and \fBlibMesh::DenseVector< Number >\fP\&.
+.PP
+Referenced by libMesh::DofMap::extract_local_vector()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

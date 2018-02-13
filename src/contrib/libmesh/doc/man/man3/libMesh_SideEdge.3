@@ -1,0 +1,206 @@
+.TH "libMesh::SideEdge< EdgeType, ParentType >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SideEdge< EdgeType, ParentType > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <side\&.h>\fP
+.PP
+Inherits EdgeType\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSideEdge\fP (const \fBElem\fP *my_parent, const unsigned int my_edge)"
+.br
+.ti -1c
+.RI "virtual const \fBPoint\fP & \fBpoint\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP & \fBpoint\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBnode\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBget_node\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual \fBNode\fP *& \fBset_node\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBn_sides\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const unsigned int \fB_edge_number\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class EdgeType, class ParentType>class libMesh::SideEdge< EdgeType, ParentType >"
+This defines the \fC\fBSideEdge\fP\fP class\&. Like \fC\fBSide\fP\fP, \fC\fBSideEdge\fP\fP is basically a proxy (or stand-in replacement) class, this time for an element's edge\&. It acts like a standard \fC\fBElem\fP\fP, but allocates no additional memory for storing connectivity\&. Instead, its nodes are mapped directly from the parent element (the element for which the side is created)\&. Similarly, you cannot access the neighbors of a side since it does not store any\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 
+.RE
+.PP
+
+.PP
+Definition at line 153 of file side\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class EdgeType , class ParentType > \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::\fBSideEdge\fP (const \fBElem\fP *my_parent, const unsigned intmy_edge)\fC [inline]\fP"
+Constructor\&. Creates a side from an element\&. 
+.PP
+Definition at line 160 of file side\&.h\&.
+.PP
+References libMesh::SideEdge< EdgeType, ParentType >::_edge_number, libMesh::dim, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+161                                         :
+162     EdgeType(const_cast<Elem*>(my_parent)),
+163     _edge_number(my_edge)
+164   {
+165     libmesh_assert(my_parent);
+166     libmesh_assert_less (_edge_number, this->parent()->n_edges());
+167     libmesh_assert_equal_to (this->dim(), 1);
+168   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class EdgeType , class ParentType > virtual \fBNode\fP* \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::get_node (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the pointer to local \fC\fBNode\fP\fP \fCi\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 201 of file side\&.h\&.
+.PP
+References libMesh::SideEdge< EdgeType, ParentType >::_edge_number, and n_nodes\&.
+.PP
+.nf
+202   {
+203     libmesh_assert_less (i, this->n_nodes());
+204     return this->parent()->get_node (ParentType::edge_nodes_map[_edge_number][i]);
+205   }
+.fi
+.SS "template<class EdgeType , class ParentType > virtual unsigned int \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::n_sides () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+0\&. Sides effectively do not have sides, so don't even ask! 
+.RE
+.PP
+
+.PP
+Definition at line 220 of file side\&.h\&.
+.PP
+.nf
+220 { return 0; }
+.fi
+.SS "template<class EdgeType , class ParentType > virtual \fBdof_id_type\fP \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::node (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the global id number of local \fC\fBNode\fP\fP \fCi\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 192 of file side\&.h\&.
+.PP
+References libMesh::SideEdge< EdgeType, ParentType >::_edge_number, and n_nodes\&.
+.PP
+.nf
+193   {
+194     libmesh_assert_less (i, this->n_nodes());
+195     return this->parent()->node (ParentType::edge_nodes_map[_edge_number][i]);
+196   }
+.fi
+.SS "template<class EdgeType , class ParentType > virtual const \fBPoint\fP& \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::point (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBPoint\fP\fP associated with local \fC\fBNode\fP\fP \fCi\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 173 of file side\&.h\&.
+.PP
+References libMesh::SideEdge< EdgeType, ParentType >::_edge_number, and n_nodes\&.
+.PP
+.nf
+174   {
+175     libmesh_assert_less (i, this->n_nodes());
+176     return this->parent()->point (ParentType::edge_nodes_map[_edge_number][i]);
+177   }
+.fi
+.SS "template<class EdgeType , class ParentType > virtual \fBPoint\fP& \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::point (const unsigned inti)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBPoint\fP\fP associated with local \fC\fBNode\fP\fP \fCi\fP as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 183 of file side\&.h\&.
+.PP
+References libMesh::SideEdge< EdgeType, ParentType >::_edge_number, and n_nodes\&.
+.PP
+.nf
+184   {
+185     libmesh_assert_less (i, this->n_nodes());
+186     return this->parent()->point (ParentType::edge_nodes_map[_edge_number][i]);
+187   }
+.fi
+.SS "template<class EdgeType , class ParentType > virtual \fBNode\fP* & \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::set_node (const unsigned inti)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the pointer to local \fC\fBNode\fP\fP \fCi\fP as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 210 of file side\&.h\&.
+.PP
+References libMesh::SideEdge< EdgeType, ParentType >::_edge_number, and n_nodes\&.
+.PP
+.nf
+211   {
+212     libmesh_assert_less (i, this->n_nodes());
+213     return this->parent()->set_node (ParentType::edge_nodes_map[_edge_number][i]);
+214   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class EdgeType , class ParentType > const unsigned int \fBlibMesh::SideEdge\fP< EdgeType, ParentType >::_edge_number\fC [private]\fP"
+The side on the parent element 
+.PP
+Definition at line 229 of file side\&.h\&.
+.PP
+Referenced by libMesh::SideEdge< EdgeType, ParentType >::get_node(), libMesh::SideEdge< EdgeType, ParentType >::node(), libMesh::SideEdge< EdgeType, ParentType >::point(), libMesh::SideEdge< EdgeType, ParentType >::set_node(), and libMesh::SideEdge< EdgeType, ParentType >::SideEdge()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

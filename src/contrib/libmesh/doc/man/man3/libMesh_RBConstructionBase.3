@@ -1,0 +1,574 @@
+.TH "libMesh::RBConstructionBase< Base >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::RBConstructionBase< Base > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <rb_construction_base\&.h>\fP
+.PP
+Inherits Base, and \fBlibMesh::RBParametrized\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBRBConstructionBase\fP< Base > \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRBConstructionBase\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned int number)"
+.br
+.ti -1c
+.RI "virtual \fB~RBConstructionBase\fP ()"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBget_n_training_samples\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBget_local_n_training_samples\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBget_first_local_training_index\fP () const "
+.br
+.ti -1c
+.RI "\fBnumeric_index_type\fP \fBget_last_local_training_index\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBinitialize_training_parameters\fP (const \fBRBParameters\fP &mu_min, const \fBRBParameters\fP &mu_max, unsigned int n_training_parameters, std::map< std::string, bool > log_param_scale, bool deterministic=true)"
+.br
+.ti -1c
+.RI "virtual void \fBload_training_set\fP (std::map< std::string, std::vector< \fBNumber\fP > > &new_training_set)"
+.br
+.ti -1c
+.RI "std::pair< std::string, 
+.br
+std::string > \fBset_alternative_solver\fP (\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > &ls)"
+.br
+.ti -1c
+.RI "void \fBreset_alternative_solver\fP (\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > &ls, const std::pair< std::string, std::string > &orig)"
+.br
+.ti -1c
+.RI "void \fBbroadcast_parameters\fP (unsigned int proc_id)"
+.br
+.ti -1c
+.RI "void \fBset_training_random_seed\fP (unsigned int seed)"
+.br
+.ti -1c
+.RI "void \fBset_deterministic_training_parameter_name\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "const std::string & \fBget_deterministic_training_parameter_name\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_deterministic_training_parameter_repeats\fP (unsigned int repeats)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_deterministic_training_parameter_repeats\fP () const "
+.br
+.ti -1c
+.RI "void \fBinitialize_parameters\fP (const \fBRBParameters\fP &mu_min_in, const \fBRBParameters\fP &mu_max_in, const std::map< std::string, std::vector< \fBReal\fP > > &discrete_parameter_values)"
+.br
+.ti -1c
+.RI "void \fBinitialize_parameters\fP (const \fBRBParametrized\fP &rb_parametrized)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_n_params\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBget_n_continuous_params\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBget_n_discrete_params\fP () const "
+.br
+.ti -1c
+.RI "std::set< std::string > \fBget_parameter_names\fP () const "
+.br
+.ti -1c
+.RI "const \fBRBParameters\fP & \fBget_parameters\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_parameters\fP (const \fBRBParameters\fP &params)"
+.br
+.ti -1c
+.RI "const \fBRBParameters\fP & \fBget_parameters_min\fP () const "
+.br
+.ti -1c
+.RI "const \fBRBParameters\fP & \fBget_parameters_max\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_parameter_min\fP (const std::string &param_name) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_parameter_max\fP (const std::string &param_name) const "
+.br
+.ti -1c
+.RI "void \fBprint_parameters\fP () const "
+.br
+.ti -1c
+.RI "void \fBwrite_parameter_data_to_files\fP (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const bool write_binary_data)"
+.br
+.ti -1c
+.RI "void \fBread_parameter_data_from_files\fP (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const bool read_binary_data)"
+.br
+.ti -1c
+.RI "bool \fBis_discrete_parameter\fP (const std::string &mu_name) const "
+.br
+.ti -1c
+.RI "const std::map< std::string, 
+.br
+std::vector< \fBReal\fP > > & \fBget_discrete_parameter_values\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_discrete_parameter_values\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBReal\fP \fBget_closest_value\fP (\fBReal\fP value, const std::vector< \fBReal\fP > &list_of_values)"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBverbose_mode\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBinit_data\fP ()"
+.br
+.ti -1c
+.RI "\fBRBParameters\fP \fBget_params_from_training_set\fP (unsigned int index)"
+.br
+.ti -1c
+.RI "void \fBset_params_from_training_set\fP (unsigned int index)"
+.br
+.ti -1c
+.RI "virtual void \fBset_params_from_training_set_and_broadcast\fP (unsigned int index)"
+.br
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBget_global_max_error_pair\fP (const \fBParallel::Communicator\fP &\fBcommunicator\fP, std::pair< unsigned int, \fBReal\fP > &error_pair)"
+.br
+.ti -1c
+.RI "static void \fBgenerate_training_parameters_random\fP (const \fBParallel::Communicator\fP &\fBcommunicator\fP, std::map< std::string, bool > log_param_scale, std::map< std::string, \fBNumericVector\fP< \fBNumber\fP > * > &training_parameters_in, unsigned int n_training_samples_in, const \fBRBParameters\fP &min_parameters, const \fBRBParameters\fP &max_parameters, int \fBtraining_parameters_random_seed\fP=-1, bool \fBserial_training_set\fP=false)"
+.br
+.ti -1c
+.RI "static void \fBgenerate_training_parameters_deterministic\fP (const \fBParallel::Communicator\fP &\fBcommunicator\fP, std::map< std::string, bool > log_param_scale, std::map< std::string, \fBNumericVector\fP< \fBNumber\fP > * > &training_parameters_in, unsigned int n_training_samples_in, const \fBRBParameters\fP &min_parameters, const \fBRBParameters\fP &max_parameters, bool \fBserial_training_set\fP=false)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBserial_training_set\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fBinner_product_storage_vector\fP"
+.br
+.ti -1c
+.RI "std::string \fBalternative_solver\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBtraining_parameters_initialized\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, 
+.br
+\fBNumericVector\fP< \fBNumber\fP > * > \fBtraining_parameters\fP"
+.br
+.ti -1c
+.RI "int \fBtraining_parameters_random_seed\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Base>class libMesh::RBConstructionBase< Base >"
+This class is part of the rbOOmit framework\&.
+.PP
+This is the base class for the Construction stage of the certified reduced basis (RB) method\&. We template the Base class so that we can derive from the appropriate \fBlibMesh\fP \fBSystem\fP type (e\&.g\&. \fBLinearImplicitSystem\fP for standard reduced basis, \fBEigenSystem\fP for SCM) at compile time\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David J\&. Knezevic, 2009 
+.RE
+.PP
+
+.PP
+Definition at line 57 of file rb_construction_base\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "template<class Base> typedef \fBRBConstructionBase\fP<Base> \fBlibMesh::RBConstructionBase\fP< Base >::\fBsys_type\fP"
+The type of system\&. 
+.PP
+Definition at line 77 of file rb_construction_base\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Base> \fBlibMesh::RBConstructionBase\fP< Base >::\fBRBConstructionBase\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned intnumber)"
+Constructor\&. Initializes required data structures\&. 
+.SS "template<class Base> virtual \fBlibMesh::RBConstructionBase\fP< Base >::~\fBRBConstructionBase\fP ()\fC [virtual]\fP"
+Destructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Base> void \fBlibMesh::RBConstructionBase\fP< Base >::broadcast_parameters (unsigned intproc_id)"
+Broadcasts parameters on processor proc_id to all processors\&. 
+.SS "template<class Base> virtual void \fBlibMesh::RBConstructionBase\fP< Base >::clear ()\fC [virtual]\fP"
+Clear all the data structures associated with the system\&. 
+.PP
+Reimplemented from \fBlibMesh::RBParametrized\fP\&.
+.PP
+Reimplemented in \fBlibMesh::RBConstruction\fP, \fBlibMesh::RBSCMConstruction\fP, \fBlibMesh::RBEIMConstruction\fP, \fBlibMesh::TransientRBConstruction\fP, and \fBlibMesh::TransientSystem< RBConstruction >\fP\&.
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<class Base> static void \fBlibMesh::RBConstructionBase\fP< Base >::generate_training_parameters_deterministic (const \fBParallel::Communicator\fP &communicator, std::map< std::string, bool >log_param_scale, std::map< std::string, \fBNumericVector\fP< \fBNumber\fP > * > &training_parameters_in, unsigned intn_training_samples_in, const \fBRBParameters\fP &min_parameters, const \fBRBParameters\fP &max_parameters, boolserial_training_set = \fCfalse\fP)\fC [static]\fP, \fC [protected]\fP"
+Static helper function for generating a deterministic set of parameters\&. Only works with 1 or 2 parameters (as defined by the lengths of min/max parameters vectors), otherwise throws an error\&. 
+.SS "template<class Base> static void \fBlibMesh::RBConstructionBase\fP< Base >::generate_training_parameters_random (const \fBParallel::Communicator\fP &communicator, std::map< std::string, bool >log_param_scale, std::map< std::string, \fBNumericVector\fP< \fBNumber\fP > * > &training_parameters_in, unsigned intn_training_samples_in, const \fBRBParameters\fP &min_parameters, const \fBRBParameters\fP &max_parameters, inttraining_parameters_random_seed = \fC-1\fP, boolserial_training_set = \fCfalse\fP)\fC [static]\fP, \fC [protected]\fP"
+Static helper function for generating a randomized set of parameters\&. 
+.SS "static \fBReal\fP libMesh::RBParametrized::get_closest_value (\fBReal\fPvalue, const std::vector< \fBReal\fP > &list_of_values)\fC [static]\fP, \fC [inherited]\fP"
+Helper function that returns the closest entry to \fCvalue\fP from \fClist_of_values\fP\&. 
+.SS "template<class Base> const std::string& \fBlibMesh::RBConstructionBase\fP< Base >::get_deterministic_training_parameter_name () const"
+Get the name of the parameter that we will generate deterministic training parameters for\&. 
+.SS "template<class Base> unsigned int \fBlibMesh::RBConstructionBase\fP< Base >::get_deterministic_training_parameter_repeats () const"
+Get the number of times each sample of the deterministic training parameter is repeated\&. 
+.SS "const std::map< std::string, std::vector<\fBReal\fP> >& libMesh::RBParametrized::get_discrete_parameter_values () const\fC [inherited]\fP"
+Get a const reference to the discrete parameter values\&. 
+.SS "template<class Base> \fBnumeric_index_type\fP \fBlibMesh::RBConstructionBase\fP< Base >::get_first_local_training_index () const"
+Get the first local index of the training parameters\&. 
+.SS "template<class Base> static void \fBlibMesh::RBConstructionBase\fP< Base >::get_global_max_error_pair (const \fBParallel::Communicator\fP &communicator, std::pair< unsigned int, \fBReal\fP > &error_pair)\fC [static]\fP, \fC [protected]\fP"
+Static function to return the error pair (index,error) that is corresponds to the largest error on all processors\&. 
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<class Base> \fBnumeric_index_type\fP \fBlibMesh::RBConstructionBase\fP< Base >::get_last_local_training_index () const"
+Get the last local index of the training parameters\&. 
+.SS "template<class Base> \fBnumeric_index_type\fP \fBlibMesh::RBConstructionBase\fP< Base >::get_local_n_training_samples () const"
+Get the total number of training samples local to this processor\&. 
+.SS "unsigned int libMesh::RBParametrized::get_n_continuous_params () const\fC [inherited]\fP"
+Get the number of continuous parameters\&. 
+.SS "unsigned int libMesh::RBParametrized::get_n_discrete_params () const\fC [inherited]\fP"
+Get the number of discrete parameters\&. 
+.SS "unsigned int libMesh::RBParametrized::get_n_params () const\fC [inherited]\fP"
+Get the number of parameters\&. 
+.SS "template<class Base> \fBnumeric_index_type\fP \fBlibMesh::RBConstructionBase\fP< Base >::get_n_training_samples () const"
+Get the total number of training samples\&. 
+.SS "\fBReal\fP libMesh::RBParametrized::get_parameter_max (const std::string &param_name) const\fC [inherited]\fP"
+Get maximum allowable value of parameter \fCparam_name\fP\&. 
+.SS "\fBReal\fP libMesh::RBParametrized::get_parameter_min (const std::string &param_name) const\fC [inherited]\fP"
+Get minimum allowable value of parameter \fCparam_name\fP\&. 
+.SS "std::set<std::string> libMesh::RBParametrized::get_parameter_names () const\fC [inherited]\fP"
+Get a set that stores the parameter names\&. 
+.SS "const \fBRBParameters\fP& libMesh::RBParametrized::get_parameters () const\fC [inherited]\fP"
+Get the current parameters\&. 
+.SS "const \fBRBParameters\fP& libMesh::RBParametrized::get_parameters_max () const\fC [inherited]\fP"
+Get an \fBRBParameters\fP object that specifies the maximum allowable value for each parameter\&. 
+.SS "const \fBRBParameters\fP& libMesh::RBParametrized::get_parameters_min () const\fC [inherited]\fP"
+Get an \fBRBParameters\fP object that specifies the minimum allowable value for each parameter\&. 
+.SS "template<class Base> \fBRBParameters\fP \fBlibMesh::RBConstructionBase\fP< Base >::get_params_from_training_set (unsigned intindex)\fC [protected]\fP"
+Return the \fBRBParameters\fP in index \fCindex\fP of training set\&. 
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<class Base> virtual void \fBlibMesh::RBConstructionBase\fP< Base >::init_data ()\fC [protected]\fP, \fC [virtual]\fP"
+Initializes the member data fields associated with the system, so that, e\&.g\&., \fCassemble()\fP may be used\&. 
+.PP
+Reimplemented in \fBlibMesh::RBEIMConstruction\fP, and \fBlibMesh::TransientSystem< RBConstruction >\fP\&.
+.SS "void libMesh::RBParametrized::initialize_parameters (const \fBRBParameters\fP &mu_min_in, const \fBRBParameters\fP &mu_max_in, const std::map< std::string, std::vector< \fBReal\fP > > &discrete_parameter_values)\fC [inherited]\fP"
+Initialize the parameter ranges and set current_parameters\&. 
+.SS "void libMesh::RBParametrized::initialize_parameters (const \fBRBParametrized\fP &rb_parametrized)\fC [inherited]\fP"
+Initialize the parameter ranges and set current_parameters\&. 
+.SS "template<class Base> virtual void \fBlibMesh::RBConstructionBase\fP< Base >::initialize_training_parameters (const \fBRBParameters\fP &mu_min, const \fBRBParameters\fP &mu_max, unsigned intn_training_parameters, std::map< std::string, bool >log_param_scale, booldeterministic = \fCtrue\fP)\fC [virtual]\fP"
+Initialize the parameter ranges and indicate whether deterministic or random training parameters should be used and whether or not we want the parameters to be scaled logarithmically\&. 
+.SS "bool libMesh::RBParametrized::is_discrete_parameter (const std::string &mu_name) const\fC [inherited]\fP"
+Is parameter \fCmu_name\fP discrete? 
+.SS "template<class Base> virtual void \fBlibMesh::RBConstructionBase\fP< Base >::load_training_set (std::map< std::string, std::vector< \fBNumber\fP > > &new_training_set)\fC [virtual]\fP"
+Overwrite the training parameters with new_training_set\&. 
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "void libMesh::RBParametrized::print_discrete_parameter_values () const\fC [inherited]\fP"
+Print out all the discrete parameter values\&. 
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::RBParametrized::print_parameters () const\fC [inherited]\fP"
+Print the current parameters\&. 
+.SS "void libMesh::RBParametrized::read_parameter_data_from_files (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const boolread_binary_data)\fC [inherited]\fP"
+Read in the parameter ranges from files\&. 
+.SS "template<class Base> void \fBlibMesh::RBConstructionBase\fP< Base >::reset_alternative_solver (\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > &ls, const std::pair< std::string, std::string > &orig)"
+Resets the PC (and iterative solver, if desired) in the passed-in \fBLinearSolver\fP object to the values specified in the pair of strings passed as the second argument\&. If the 'alternative_solver' string, defined below, is 'unchanged', this function does nothing\&. 
+.SS "template<class Base> std::pair<std::string,std::string> \fBlibMesh::RBConstructionBase\fP< Base >::set_alternative_solver (\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > &ls)"
+Changes the current PC (and iterative solver, if desired) in the passed-in \fBLinearSolver\fP object to an alternative solver specified by the alternative_solver string stored in this class\&. You might use this to e\&.g\&. switch to a sparse direct solver for the multiple RHS solves executed during the update_residual_terms function\&. The return strings are names of the original PC and KSP objects, you can reset these using the \fBreset_alternative_solver()\fP function below\&. 
+.SS "template<class Base> void \fBlibMesh::RBConstructionBase\fP< Base >::set_deterministic_training_parameter_name (const std::string &name)"
+In some cases we only want to allow discrete parameter values, instead of parameters that may take any value in a specified interval\&. Here we provide a method to set the d Set the discrete values for parameter \fCmu\fP that are allowed in the training set\&. This must be called before the training set is generated\&. Set the name of the parameter that we will generate deterministic training parameters for\&. Defaults to 'NONE'\&. 
+.SS "template<class Base> void \fBlibMesh::RBConstructionBase\fP< Base >::set_deterministic_training_parameter_repeats (unsigned intrepeats)"
+Set the number of times each sample of the deterministic training parameter is repeated\&. 
+.SS "void libMesh::RBParametrized::set_parameters (const \fBRBParameters\fP &params)\fC [inherited]\fP"
+Set the current parameters to \fCparams\fP 
+.SS "template<class Base> void \fBlibMesh::RBConstructionBase\fP< Base >::set_params_from_training_set (unsigned intindex)\fC [protected]\fP"
+Set parameters to the \fBRBParameters\fP stored in index \fCindex\fP of the training set\&. 
+.SS "template<class Base> virtual void \fBlibMesh::RBConstructionBase\fP< Base >::set_params_from_training_set_and_broadcast (unsigned intindex)\fC [protected]\fP, \fC [virtual]\fP"
+Load the specified training parameter and then broadcast to all processors\&. 
+.SS "template<class Base> void \fBlibMesh::RBConstructionBase\fP< Base >::set_training_random_seed (unsigned intseed)"
+Set the seed that is used to randomly generate training parameters\&. 
+.SS "template<class Base> \fBsys_type\fP& \fBlibMesh::RBConstructionBase\fP< Base >::system ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a clever pointer to the system\&. 
+.RE
+.PP
+
+.PP
+Definition at line 82 of file rb_construction_base\&.h\&.
+.PP
+.nf
+82 { return *this; }
+.fi
+.SS "void libMesh::RBParametrized::write_parameter_data_to_files (const std::string &continuous_param_file_name, const std::string &discrete_param_file_name, const boolwrite_binary_data)\fC [inherited]\fP"
+Write out the parameter ranges to files\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<class Base> std::string \fBlibMesh::RBConstructionBase\fP< Base >::alternative_solver\fC [protected]\fP"
+Set this string to specify an alternative solver used in the \fBset_alternative_solver()\fP function above\&. Currently-supported values are: \&.) unchanged, to continue using the default truth solve solver \&.) amg, to use the BoomerAMG from Hypre (NOT for indefinite problems!) \&.) mumps, to use a sparse direct solver Note1: mumps and amg will only be available if PETSc has been compiled with them\&. Note2: \fBRBConstruction::process_parameters_file()\fP is responsible for reading in this value ('rb_alternative_solver') from file for RBConstruction-derived subclasses Note3: RBSCMSystem::process_parameters_file() reads this value ('scm_alternative_solver') for RBSCMSystem-derived subclasses 
+.PP
+Definition at line 271 of file rb_construction_base\&.h\&.
+.SS "template<class Base> \fBAutoPtr\fP< \fBNumericVector\fP<\fBNumber\fP> > \fBlibMesh::RBConstructionBase\fP< Base >::inner_product_storage_vector\fC [protected]\fP"
+We keep an extra temporary vector that is useful for performing inner products (avoids unnecessary memory allocation/deallocation)\&. 
+.PP
+Definition at line 257 of file rb_construction_base\&.h\&.
+.SS "template<class Base> bool \fBlibMesh::RBConstructionBase\fP< Base >::serial_training_set\fC [protected]\fP"
+This boolean flag indicates whether or not the training set should be the same on all processors\&. By default it is false, but in the case of the Empirical Interpolation Method (\fBRBEIMConstruction\fP), for example, we need the training set to be identical on all processors\&. 
+.PP
+Definition at line 250 of file rb_construction_base\&.h\&.
+.SS "template<class Base> std::map< std::string, \fBNumericVector\fP<\fBNumber\fP>* > \fBlibMesh::RBConstructionBase\fP< Base >::training_parameters\fC [private]\fP"
+The training samples\&. 
+.PP
+Definition at line 285 of file rb_construction_base\&.h\&.
+.SS "template<class Base> bool \fBlibMesh::RBConstructionBase\fP< Base >::training_parameters_initialized\fC [private]\fP"
+Boolean flag to indicate whether or not the parameter ranges have been initialized\&. 
+.PP
+Definition at line 280 of file rb_construction_base\&.h\&.
+.SS "template<class Base> int \fBlibMesh::RBConstructionBase\fP< Base >::training_parameters_random_seed\fC [private]\fP"
+If < 0, use std::time() * \fBprocessor_id()\fP to seed the random number generator for the training parameters (default)\&. If >= 0, use the provided value * \fBprocessor_id()\fP as the random number generator seed\&. 
+.PP
+Definition at line 293 of file rb_construction_base\&.h\&.
+.SS "bool libMesh::RBParametrized::verbose_mode\fC [inherited]\fP"
+Public boolean to toggle verbose mode\&. 
+.PP
+Definition at line 172 of file rb_parametrized\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

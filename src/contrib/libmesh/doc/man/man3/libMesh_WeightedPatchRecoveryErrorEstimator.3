@@ -1,0 +1,465 @@
+.TH "libMesh::WeightedPatchRecoveryErrorEstimator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::WeightedPatchRecoveryErrorEstimator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <weighted_patch_recovery_error_estimator\&.h>\fP
+.PP
+Inherits \fBlibMesh::PatchRecoveryErrorEstimator\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBEstimateError\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::pair
+.br
+< const \fBSystem\fP *, unsigned int >
+.br
+, \fBErrorVector\fP * > \fBErrorMap\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBWeightedPatchRecoveryErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fB~WeightedPatchRecoveryErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_error\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "void \fBset_patch_reuse\fP (bool)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBFEMFunctionBase\fP
+.br
+< \fBNumber\fP > * > \fBweight_functions\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBtarget_patch_size\fP"
+.br
+.ti -1c
+.RI "\fBPatch::PMF\fP \fBpatch_growth_strategy\fP"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP \fBerror_norm\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBreduce_error\fP (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD) const "
+.br
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::vector< \fBReal\fP > \fBspecpoly\fP (const unsigned int \fBdim\fP, const \fBOrder\fP order, const \fBPoint\fP p, const unsigned int matsize)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBpatch_reuse\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBEstimateError\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements the \fBPatch\fP Recovery error indicator\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Vikram Garg 2012\&. 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file weighted_patch_recovery_error_estimator\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::pair<const \fBSystem\fP*, unsigned int>, \fBErrorVector\fP*> \fBlibMesh::ErrorEstimator::ErrorMap\fP\fC [inherited]\fP"
+When calculating many error vectors at once, we need a data structure to hold them all 
+.PP
+Definition at line 110 of file error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::WeightedPatchRecoveryErrorEstimator::WeightedPatchRecoveryErrorEstimator ()\fC [inline]\fP"
+Constructor\&. Defaults to H1 seminorm\&. All Hilbert norms and seminorms should be supported now\&. W1,p and W2,p norms would be natural to support if any contributors make the effort\&. 
+.PP
+Definition at line 58 of file weighted_patch_recovery_error_estimator\&.h\&.
+.PP
+.nf
+58                                         :
+59     PatchRecoveryErrorEstimator()
+60   {}
+.fi
+.SS "libMesh::WeightedPatchRecoveryErrorEstimator::~WeightedPatchRecoveryErrorEstimator ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 65 of file weighted_patch_recovery_error_estimator\&.h\&.
+.PP
+.nf
+65 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+This function uses the \fBPatch\fP Recovery error estimate to estimate the error on each cell\&. The estimated error is output in the vector \fCerror_per_cell\fP 
+.PP
+Reimplemented from \fBlibMesh::PatchRecoveryErrorEstimator\fP\&.
+.PP
+Definition at line 44 of file weighted_patch_recovery_estimator\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::ParallelObject::comm(), EstimateError, libMesh::System::get_mesh(), libMesh::MeshBase::max_elem_id(), mesh, libMesh::Threads::parallel_for(), libMesh::ErrorEstimator::reduce_error(), libMesh::System::solution, libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::NumericVector< T >::swap(), and libMesh::sys\&.
+.PP
+.nf
+48 {
+49   START_LOG("estimate_error()", "WeightedPatchRecoveryErrorEstimator");
+50 
+51   // The current mesh
+52   const MeshBase& mesh = system\&.get_mesh();
+53 
+54   // Resize the error_per_cell vector to be
+55   // the number of elements, initialize it to 0\&.
+56   error_per_cell\&.resize (mesh\&.max_elem_id());
+57   std::fill (error_per_cell\&.begin(), error_per_cell\&.end(), 0\&.);
+58 
+59   // Prepare current_local_solution to localize a non-standard
+60   // solution vector if necessary
+61   if (solution_vector && solution_vector != system\&.solution\&.get())
+62     {
+63       NumericVector<Number>* newsol =
+64         const_cast<NumericVector<Number>*>(solution_vector);
+65       System &sys = const_cast<System&>(system);
+66       newsol->swap(*sys\&.solution);
+67       sys\&.update();
+68     }
+69 
+70   //------------------------------------------------------------
+71   // Iterate over all the active elements in the mesh
+72   // that live on this processor\&.
+73   Threads::parallel_for (ConstElemRange(mesh\&.active_local_elements_begin(),
+74                                         mesh\&.active_local_elements_end(),
+75                                         200),
+76                          EstimateError(system,
+77                                        *this,
+78                                        error_per_cell)
+79                          );
+80 
+81   // Each processor has now computed the error contributions
+82   // for its local elements, and error_per_cell contains 0 for all the
+83   // non-local elements\&.  Summing the vector will provide the true
+84   // value for each element, local or remote
+85   this->reduce_error(error_per_cell, system\&.comm());
+86 
+87   // If we used a non-standard solution before, now is the time to fix
+88   // the current_local_solution
+89   if (solution_vector && solution_vector != system\&.solution\&.get())
+90     {
+91       NumericVector<Number>* newsol =
+92         const_cast<NumericVector<Number>*>(solution_vector);
+93       System &sys = const_cast<System&>(system);
+94       newsol->swap(*sys\&.solution);
+95       sys\&.update();
+96     }
+97 
+98   STOP_LOG("estimate_error()", "WeightedPatchRecoveryErrorEstimator");
+99 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default computes the sum of the error_per_cell for each system in the equation_systems\&.
+.PP
+Currently this function ignores the error_norm member variable, and uses the function argument error_norms instead\&.
+.PP
+This function is named estimate_errors instead of estimate_error because otherwise C++ can get confused\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 48 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), and libMesh::sys\&.
+.PP
+.nf
+53 {
+54   SystemNorm old_error_norm = this->error_norm;
+55 
+56   // Sum the error values from each system
+57   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+58     {
+59       ErrorVector system_error_per_cell;
+60       const System &sys = equation_systems\&.get_system(s);
+61       if (error_norms\&.find(&sys) == error_norms\&.end())
+62         this->error_norm = old_error_norm;
+63       else
+64         this->error_norm = error_norms\&.find(&sys)->second;
+65 
+66       const NumericVector<Number>* solution_vector = NULL;
+67       if (solution_vectors &&
+68           solution_vectors->find(&sys) != solution_vectors->end())
+69         solution_vector = solution_vectors->find(&sys)->second;
+70 
+71       this->estimate_error(sys, system_error_per_cell,
+72                            solution_vector, estimate_parent_error);
+73 
+74       if (s)
+75         {
+76           libmesh_assert_equal_to (error_per_cell\&.size(), system_error_per_cell\&.size());
+77           for (unsigned int i=0; i != error_per_cell\&.size(); ++i)
+78             error_per_cell[i] += system_error_per_cell[i];
+79         }
+80       else
+81         error_per_cell = system_error_per_cell;
+82     }
+83 
+84   // Restore our old state before returning
+85   this->error_norm = old_error_norm;
+86 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default it calls estimate_error repeatedly to calculate the requested error vectors\&.
+.PP
+Currently this function ignores the \fBerror_norm\&.weight()\fP values because it calculates each variable's error individually, unscaled\&.
+.PP
+The user selects which errors get computed by filling a map with error vectors: If errors_per_cell[&system][v] exists, it will be filled with the error values in variable \fCv\fP of \fCsystem\fP 
+.PP
+FIXME: This is a default implementation - derived classes should reimplement it for efficiency\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 94 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::sys, and libMesh::SystemNorm::type()\&.
+.PP
+.nf
+98 {
+99   SystemNorm old_error_norm = this->error_norm;
+100 
+101   // Find the requested error values from each system
+102   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+103     {
+104       const System &sys = equation_systems\&.get_system(s);
+105 
+106       unsigned int n_vars = sys\&.n_vars();
+107 
+108       for (unsigned int v = 0; v != n_vars; ++v)
+109         {
+110           // Only fill in ErrorVectors the user asks for
+111           if (errors_per_cell\&.find(std::make_pair(&sys, v)) ==
+112               errors_per_cell\&.end())
+113             continue;
+114 
+115           // Calculate error in only one variable
+116           std::vector<Real> weights(n_vars, 0\&.0);
+117           weights[v] = 1\&.0;
+118           this->error_norm =
+119             SystemNorm(std::vector<FEMNormType>(n_vars, old_error_norm\&.type(v)),
+120                        weights);
+121 
+122           const NumericVector<Number>* solution_vector = NULL;
+123           if (solution_vectors &&
+124               solution_vectors->find(&sys) != solution_vectors->end())
+125             solution_vector = solution_vectors->find(&sys)->second;
+126 
+127           this->estimate_error
+128             (sys, *errors_per_cell[std::make_pair(&sys, v)],
+129              solution_vector, estimate_parent_error);
+130         }
+131     }
+132 
+133   // Restore our old state before returning
+134   this->error_norm = old_error_norm;
+135 }
+.fi
+.SS "void libMesh::ErrorEstimator::reduce_error (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD) const\fC [protected]\fP, \fC [inherited]\fP"
+This method takes the local error contributions in \fCerror_per_cell\fP from each processor and combines them to get the global error vector\&. 
+.PP
+Definition at line 33 of file error_estimator\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+35 {
+36   // This function must be run on all processors at once
+37   // parallel_object_only();
+38 
+39   // Each processor has now computed the error contribuions
+40   // for its local elements\&.  We may need to sum the vector to
+41   // recover the error for each element\&.
+42 
+43   comm\&.sum(error_per_cell);
+44 }
+.fi
+.SS "void libMesh::PatchRecoveryErrorEstimator::set_patch_reuse (boolpatch_reuse_flag)\fC [inherited]\fP"
+
+.PP
+Definition at line 47 of file patch_recovery_error_estimator\&.C\&.
+.PP
+References libMesh::PatchRecoveryErrorEstimator::patch_reuse\&.
+.PP
+.nf
+48 {
+49   patch_reuse = patch_reuse_flag;
+50 }
+.fi
+.SS "std::vector< \fBReal\fP > libMesh::PatchRecoveryErrorEstimator::specpoly (const unsigned intdim, const \fBOrder\fPorder, const \fBPoint\fPp, const unsigned intmatsize)\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Returns the spectral polynomial basis function values at a point x,y,z 
+.PP
+Definition at line 54 of file patch_recovery_error_estimator\&.C\&.
+.PP
+References libMesh::Real, and libMesh::x\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.PP
+.nf
+58 {
+59   std::vector<Real> psi;
+60   psi\&.reserve(matsize);
+61   unsigned int npows = order+1;
+62   std::vector<Real> xpow(npows,1\&.), ypow, zpow;
+63   {
+64     Real x = p(0);
+65     for (unsigned int i=1; i != npows; ++i)
+66       xpow[i] = xpow[i-1] * x;
+67   }
+68   if (dim > 1)
+69     {
+70       Real y = p(1);
+71       ypow\&.resize(npows,1\&.);
+72       for (unsigned int i=1; i != npows; ++i)
+73         ypow[i] = ypow[i-1] * y;
+74     }
+75   if (dim > 2)
+76     {
+77       Real z = p(2);
+78       zpow\&.resize(npows,1\&.);
+79       for (unsigned int i=1; i != npows; ++i)
+80         zpow[i] = zpow[i-1] * z;
+81     }
+82 
+83   // builds psi vector of form 1 x y z x^2 xy xz y^2 yz z^2 etc\&.\&.
+84   // I haven't added 1D support here
+85   for (unsigned int poly_deg=0; poly_deg <= static_cast<unsigned int>(order) ; poly_deg++)
+86     { // loop over all polynomials of total degreee = poly_deg
+87 
+88       switch (dim)
+89         {
+90           // 3D spectral polynomial basis functions
+91         case 3:
+92           {
+93             for (int xexp=poly_deg; xexp >= 0; xexp--) // use an int for xexp since we -- it
+94               for (int yexp=poly_deg-xexp; yexp >= 0; yexp--)
+95                 {
+96                   int zexp = poly_deg - xexp - yexp;
+97                   psi\&.push_back(xpow[xexp]*ypow[yexp]*zpow[zexp]);
+98                 }
+99             break;
+100           }
+101 
+102           // 2D spectral polynomial basis functions
+103         case 2:
+104           {
+105             for (int xexp=poly_deg; xexp >= 0; xexp--) // use an int for xexp since we -- it
+106               {
+107                 int yexp = poly_deg - xexp;
+108                 psi\&.push_back(xpow[xexp]*ypow[yexp]);
+109               }
+110             break;
+111           }
+112 
+113           // 1D spectral polynomial basis functions
+114         case 1:
+115           {
+116             int xexp = poly_deg;
+117             psi\&.push_back(xpow[xexp]);
+118             break;
+119           }
+120 
+121         default:
+122           libmesh_error();
+123         }
+124     }
+125 
+126   return psi;
+127 }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBEstimateError\fP\fC [friend]\fP"
+
+.PP
+Definition at line 115 of file weighted_patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by estimate_error()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBSystemNorm\fP libMesh::ErrorEstimator::error_norm\fC [inherited]\fP"
+When estimating the error in a single system, the \fCerror_norm\fP is used to control the scaling and norm choice for each variable\&. Not all estimators will support all norm choices\&. The default scaling is for all variables to be weighted equally\&. The default norm choice depends on the error estimator\&.
+.PP
+Part of this functionality was supported via component_scale and sobolev_order in older \fBlibMesh\fP versions, and a small part was supported via component_mask in even older versions\&. Hopefully the encapsulation here will allow us to avoid changing this API again\&. 
+.PP
+Definition at line 142 of file error_estimator\&.h\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::AdjointRefinementEstimator::AdjointRefinementEstimator(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DiscontinuityMeasure::DiscontinuityMeasure(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactErrorEstimator::ExactErrorEstimator(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::KellyErrorEstimator::KellyErrorEstimator(), libMesh::LaplacianErrorEstimator::LaplacianErrorEstimator(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::PatchRecoveryErrorEstimator(), and libMesh::UniformRefinementEstimator::UniformRefinementEstimator()\&.
+.SS "\fBPatch::PMF\fP libMesh::PatchRecoveryErrorEstimator::patch_growth_strategy\fC [inherited]\fP"
+The PatchErrorEstimator will use this pointer to a \fBPatch\fP member function when growing patches\&. The default strategy used is \fBPatch::add_local_face_neighbors\fP\&. \fBPatch::add_local_point_neighbors\fP may be more reliable but slower\&. 
+.PP
+Definition at line 92 of file patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.SS "bool libMesh::PatchRecoveryErrorEstimator::patch_reuse\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 107 of file patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::set_patch_reuse()\&.
+.SS "unsigned int libMesh::PatchRecoveryErrorEstimator::target_patch_size\fC [inherited]\fP"
+The PatchErrorEstimator will build patches of at least this many elements to perform estimates 
+.PP
+Definition at line 84 of file patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.SS "std::vector<\fBFEMFunctionBase\fP<\fBNumber\fP>*> libMesh::WeightedPatchRecoveryErrorEstimator::weight_functions"
+Vector of fem function base pointers, the user will fill this in with pointers to the appropriate weight functions 
+.PP
+Definition at line 82 of file weighted_patch_recovery_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

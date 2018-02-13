@@ -1,0 +1,152 @@
+.TH "EXTERN_C_FOR_PETSC_END" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+EXTERN_C_FOR_PETSC_END \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::streambuf * \fBout_buf\fP (NULL)"
+.br
+.ti -1c
+.RI "std::streambuf * \fBerr_buf\fP (NULL)"
+.br
+.ti -1c
+.RI "void \fBlibmesh_handleFPE\fP (int, siginfo_t *info, void *)"
+.br
+.ti -1c
+.RI "void \fBindices_to_fieldsplit\fP (const \fBlibMesh::Parallel::Communicator\fP &comm, const std::vector< dof_id_type > &indices, PC my_pc, const std::string &field_name)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< GetPot > \fBcommand_line\fP (NULL)"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< std::ofstream > \fB_ofstream\fP (NULL)"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP
+.br
+< \fBlibMesh::Threads::task_scheduler_init\fP > \fBtask_scheduler\fP (NULL)"
+.br
+.ti -1c
+.RI "bool \fBlibmesh_initialized_mpi\fP = false"
+.br
+.ti -1c
+.RI "bool \fBlibmesh_initialized_petsc\fP = false"
+.br
+.ti -1c
+.RI "bool \fBlibmesh_initialized_slepc\fP = false"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "std::streambuf* EXTERN_C_FOR_PETSC_END::err_buf (NULL)"
+
+.PP
+Referenced by libMesh::if()\&.
+.SS "void EXTERN_C_FOR_PETSC_END::indices_to_fieldsplit (const \fBlibMesh::Parallel::Communicator\fP &comm, const std::vector< dof_id_type > &indices, PCmy_pc, const std::string &field_name)"
+
+.PP
+Definition at line 36 of file petsc_auto_fieldsplit\&.C\&.
+.PP
+References libMesh::CHKERRABORT(), libMesh::Parallel::Communicator::get(), libMesh::MeshTools::Generation::Private::idx(), ierr, and PETSC_COPY_VALUES\&.
+.PP
+Referenced by libMesh::petsc_auto_fieldsplit()\&.
+.PP
+.nf
+40 {
+41   const PetscInt *idx = PETSC_NULL;
+42   if (!indices\&.empty())
+43     idx = reinterpret_cast<const PetscInt*>(&indices[0]);
+44 
+45   IS is;
+46   int ierr = ISCreateLibMesh(comm\&.get(), indices\&.size(),
+47                              idx, PETSC_COPY_VALUES, &is);
+48   CHKERRABORT(comm\&.get(), ierr);
+49 
+50   ierr = PCFieldSplitSetIS(my_pc, field_name\&.c_str(), is);
+51   CHKERRABORT(comm\&.get(), ierr);
+52 }
+.fi
+.SS "void EXTERN_C_FOR_PETSC_END::libmesh_handleFPE (int, siginfo_t *info, void *)"
+Floating point exception handler -- courtesy of Cody Permann & MOOSE team 
+.PP
+Definition at line 106 of file libmesh\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+Referenced by libMesh::enableFPE()\&.
+.PP
+.nf
+107 {
+108   libMesh::err << std::endl;
+109   libMesh::err << "Floating point exception signaled (";
+110   switch (info->si_code)
+111     {
+112     case FPE_INTDIV: libMesh::err << "integer divide by zero"; break;
+113     case FPE_INTOVF: libMesh::err << "integer overflow"; break;
+114     case FPE_FLTDIV: libMesh::err << "floating point divide by zero"; break;
+115     case FPE_FLTOVF: libMesh::err << "floating point overflow"; break;
+116     case FPE_FLTUND: libMesh::err << "floating point underflow"; break;
+117     case FPE_FLTRES: libMesh::err << "floating point inexact result"; break;
+118     case FPE_FLTINV: libMesh::err << "invalid floating point operation"; break;
+119     case FPE_FLTSUB: libMesh::err << "subscript out of range"; break;
+120     default:         libMesh::err << "unrecognized"; break;
+121     }
+122   libMesh::err << ")!" << std::endl;
+123 
+124   libMesh::err << std::endl;
+125   libMesh::err << "To track this down, compile debug version, start debugger, set breakpoint for 'libmesh_handleFPE' and run" << std::endl;
+126   libMesh::err << "In gdb do:" << std::endl;
+127   libMesh::err << "  break libmesh_handleFPE" << std::endl;
+128   libMesh::err << "  run \&.\&.\&." << std::endl;
+129   libMesh::err << "  bt" << std::endl;
+130 
+131   libmesh_error();
+132 }
+.fi
+.SS "std::streambuf* EXTERN_C_FOR_PETSC_END::out_buf (NULL)"
+
+.PP
+Referenced by libMesh::if()\&.
+.SH "Variable Documentation"
+.PP 
+.SS "\fBAutoPtr\fP<std::ofstream> EXTERN_C_FOR_PETSC_END::_ofstream(NULL)"
+
+.PP
+Referenced by libMesh::if()\&.
+.SS "\fBAutoPtr\fP<GetPot> EXTERN_C_FOR_PETSC_END::command_line(NULL)"
+
+.PP
+Referenced by libMesh::command_line_next(), libMesh::command_line_value(), libMesh::command_line_vector(), and libMesh::on_command_line()\&.
+.SS "bool EXTERN_C_FOR_PETSC_END::libmesh_initialized_mpi = false"
+
+.PP
+Definition at line 92 of file libmesh\&.C\&.
+.PP
+Referenced by libMesh::if()\&.
+.SS "bool EXTERN_C_FOR_PETSC_END::libmesh_initialized_petsc = false"
+
+.PP
+Definition at line 95 of file libmesh\&.C\&.
+.PP
+Referenced by libMesh::if()\&.
+.SS "bool EXTERN_C_FOR_PETSC_END::libmesh_initialized_slepc = false"
+
+.PP
+Definition at line 98 of file libmesh\&.C\&.
+.PP
+Referenced by libMesh::if()\&.
+.SS "\fBAutoPtr\fP<\fBlibMesh::Threads::task_scheduler_init\fP> EXTERN_C_FOR_PETSC_END::task_scheduler(NULL)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

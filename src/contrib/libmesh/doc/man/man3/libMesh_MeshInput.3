@@ -1,0 +1,176 @@
+.TH "libMesh::MeshInput< MT >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshInput< MT > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_input\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~MeshInput\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &)=0"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshInput\fP (bool is_parallel_format=false)"
+.br
+.ti -1c
+.RI "\fBMeshInput\fP (MT &, const bool is_parallel_format=false)"
+.br
+.ti -1c
+.RI "MT & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "MT * \fB_obj\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class MT>class libMesh::MeshInput< MT >"
+This class defines an abstract interface for \fC\fBMesh\fP\fP input\&. Specific classes derived from this class actually implement reading various mesh formats\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2004 
+.RE
+.PP
+
+.PP
+Definition at line 51 of file mesh_input\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class MT > \fBlibMesh::MeshInput\fP< MT >::\fBMeshInput\fP (boolis_parallel_format = \fCfalse\fP)\fC [inline]\fP, \fC [explicit]\fP, \fC [protected]\fP"
+Default constructor\&. Will set the _obj to NULL, effectively rendering this object useless\&. 
+.PP
+Definition at line 126 of file mesh_input\&.h\&.
+.PP
+.nf
+126                                                        :
+127   elems_of_dimension(),
+128   _obj (NULL),
+129   _is_parallel_format(is_parallel_format)
+130 {
+131 }
+.fi
+.SS "template<class MT> \fBlibMesh::MeshInput\fP< MT >::\fBMeshInput\fP (MT &obj, const boolis_parallel_format = \fCfalse\fP)\fC [inline]\fP, \fC [explicit]\fP, \fC [protected]\fP"
+Constructor\&. Takes a writeable reference to an object\&. This is the constructor required to read an object\&. 
+.PP
+Definition at line 137 of file mesh_input\&.h\&.
+.PP
+References libMesh::MeshInput< MT >::_is_parallel_format, libMesh::MeshInput< MT >::mesh(), libMesh::out, and libMesh::processor_id()\&.
+.PP
+.nf
+137                                                                 :
+138   elems_of_dimension(),
+139   _obj (&obj),
+140   _is_parallel_format(is_parallel_format)
+141 {
+142   if (!_is_parallel_format && !this->mesh()\&.is_serial())
+143     {
+144       if (this->mesh()\&.processor_id() == 0)
+145         {
+146           libmesh_do_once(libMesh::out <<
+147                           "Warning:  This MeshOutput subclass only supports meshes which have been serialized!"
+148                           << std::endl;);
+149         }
+150     }
+151 }
+.fi
+.SS "template<class MT > \fBlibMesh::MeshInput\fP< MT >::~\fBMeshInput\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 157 of file mesh_input\&.h\&.
+.PP
+.nf
+158 {
+159 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class MT > MT & \fBlibMesh::MeshInput\fP< MT >::mesh ()\fC [inline]\fP, \fC [protected]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Definition at line 165 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_materials(), libMesh::GMVIO::_read_nodes(), libMesh::GMVIO::_read_one_cell(), libMesh::AbaqusIO::assign_boundary_node_ids(), libMesh::AbaqusIO::assign_sideset_ids(), libMesh::AbaqusIO::assign_subdomain_ids(), libMesh::ExodusII_IO::copy_elemental_solution(), libMesh::ExodusII_IO::copy_nodal_solution(), libMesh::GMVIO::copy_nodal_solution(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::MeshInput< MT >::MeshInput(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::AbaqusIO::read(), libMesh::TetGenIO::read(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::AbaqusIO::read_elements(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::LegacyXdrIO::read_mesh(), libMesh::AbaqusIO::read_nodes(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), and libMesh::UNVIO::write_implementation()\&.
+.PP
+.nf
+166 {
+167   if (_obj == NULL) libmesh_error();
+168   return *_obj;
+169 }
+.fi
+.SS "template<class MT> virtual void \fBlibMesh::MeshInput\fP< MT >::read (const std::string &)\fC [pure virtual]\fP"
+This method implements reading a mesh from a specified file\&. 
+.PP
+Implemented in \fBlibMesh::MatlabIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::XdrIO\fP, \fBlibMesh::CheckpointIO\fP, \fBlibMesh::LegacyXdrIO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::UNVIO\fP, \fBlibMesh::TetGenIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::OFFIO\fP, and \fBlibMesh::AbaqusIO\fP\&.
+.SS "template<class MT > void \fBlibMesh::MeshInput\fP< MT >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Definition at line 174 of file mesh_input\&.h\&.
+.PP
+.nf
+176 {
+177   char c, line[256];
+178 
+179   while (in\&.get(c), c==comment_start)
+180     in\&.getline (line, 255);
+181 
+182   // put back first character of
+183   // first non-comment line
+184   in\&.putback (c);
+185 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class MT> const bool \fBlibMesh::MeshInput\fP< MT >::_is_parallel_format\fC [private]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 117 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::MeshInput< MT >::MeshInput()\&.
+.SS "template<class MT> MT* \fBlibMesh::MeshInput\fP< MT >::_obj\fC [private]\fP"
+A pointer to a non-const object object\&. This allows us to read the object from file\&. 
+.PP
+Definition at line 110 of file mesh_input\&.h\&.
+.SS "template<class MT> std::vector<bool> \fBlibMesh::MeshInput\fP< MT >::elems_of_dimension\fC [protected]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

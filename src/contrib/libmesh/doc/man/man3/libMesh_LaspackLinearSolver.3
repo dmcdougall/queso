@@ -1,0 +1,1197 @@
+.TH "libMesh::LaspackLinearSolver< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LaspackLinearSolver< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <laspack_linear_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::LinearSolver< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLaspackLinearSolver\fP (const \fBlibMesh::Parallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "\fB~LaspackLinearSolver\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const char *name=NULL)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &matrix, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBadjoint_solve\fP (\fBSparseMatrix\fP< T > &matrix, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > &\fBpc\fP, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (const \fBShellMatrix\fP< T > &shell_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "virtual std::pair< unsigned 
+.br
+int, \fBReal\fP > \fBsolve\fP (const \fBShellMatrix\fP< T > &shell_matrix, const \fBSparseMatrix\fP< T > &precond_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "virtual void \fBprint_converged_reason\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBLinearConvergenceReason\fP \fBget_converged_reason\fP () const "
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBinit_names\fP (const \fBSystem\fP &)"
+.br
+.ti -1c
+.RI "\fBSolverType\fP \fBsolver_type\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_solver_type\fP (const \fBSolverType\fP st)"
+.br
+.ti -1c
+.RI "\fBPreconditionerType\fP \fBpreconditioner_type\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_preconditioner_type\fP (const \fBPreconditionerType\fP pct)"
+.br
+.ti -1c
+.RI "void \fBattach_preconditioner\fP (\fBPreconditioner\fP< T > *preconditioner)"
+.br
+.ti -1c
+.RI "virtual void \fBreuse_preconditioner\fP (bool)"
+.br
+.ti -1c
+.RI "bool \fBget_same_preconditioner\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBrestrict_solve_to\fP (const std::vector< unsigned int > *const dofs, const \fBSubsetSolveMode\fP subset_solve_mode=\fBSUBSET_ZERO\fP)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &, \fBNumericVector\fP< T > &, const double, const unsigned int)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (const \fBShellMatrix\fP< T > &matrix, const \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &, \fBNumericVector\fP< T > &, const double, const unsigned int)"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBLinearSolver\fP< T > > \fBbuild\fP (const \fBlibMesh::Parallel::Communicator\fP &comm_in, const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSolverType\fP \fB_solver_type\fP"
+.br
+.ti -1c
+.RI "\fBPreconditionerType\fP \fB_preconditioner_type\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "\fBPreconditioner\fP< T > * \fB_preconditioner\fP"
+.br
+.ti -1c
+.RI "bool \fBsame_preconditioner\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBset_laspack_preconditioner_type\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "PrecondProcType \fB_precond_type\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::LaspackLinearSolver< T >"
+This class provides an interface to Laspack iterative solvers that is compatible with the \fC\fBlibMesh\fP\fP \fCLinearSolver<>\fP 
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin Kirk, 2002-2007 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file laspack_linear_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::LaspackLinearSolver\fP< T >::\fBLaspackLinearSolver\fP (const \fBlibMesh::Parallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)\fC [inline]\fP"
+Constructor\&. Initializes Laspack data structures 
+.PP
+Definition at line 160 of file laspack_linear_solver\&.h\&.
+.PP
+.nf
+160                                                                                     :
+161   LinearSolver<T>(comm),
+162   _precond_type (ILUPrecond)
+163 {
+164 }
+.fi
+.SS "template<typename T > \fBlibMesh::LaspackLinearSolver\fP< T >::~\fBLaspackLinearSolver\fP ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 170 of file laspack_linear_solver\&.h\&.
+.PP
+.nf
+171 {
+172   this->clear ();
+173 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LaspackLinearSolver\fP< T >::adjoint_solve (\fBSparseMatrix\fP< T > &matrix, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Call the Laspack solver to solve A^T x = b 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 285 of file laspack_linear_solver\&.C\&.
+.PP
+References libMesh::LaspackMatrix< T >::_QMat, libMesh::BICG, libMesh::BICGSTAB, libMesh::CG, libMesh::CGN, libMesh::CGS, libMesh::LaspackMatrix< T >::close(), libMesh::Utility::enum_to_string(), libMesh::err, libMesh::GMRES, libMesh::TriangleWrapper::init(), libMesh::JACOBI, libMesh::QMR, libMesh::SSOR, libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::LaspackVector< T >::zero()\&.
+.PP
+.nf
+290 {
+291   START_LOG("adjoint_solve()", "LaspackLinearSolver");
+292   this->init ();
+293 
+294   // Make sure the data passed in are really in Laspack types
+295   LaspackMatrix<T>* matrix   = libmesh_cast_ptr<LaspackMatrix<T>*>(&matrix_in);
+296   LaspackVector<T>* solution = libmesh_cast_ptr<LaspackVector<T>*>(&solution_in);
+297   LaspackVector<T>* rhs      = libmesh_cast_ptr<LaspackVector<T>*>(&rhs_in);
+298 
+299   // Zero-out the solution to prevent the solver from exiting in 0
+300   // iterations (?)
+301   //TODO:[BSK] Why does Laspack do this?  Comment out this and try ex13\&.\&.\&.
+302   solution->zero();
+303 
+304   // Close the matrix and vectors in case this wasn't already done\&.
+305   matrix->close ();
+306   solution->close ();
+307   rhs->close ();
+308 
+309   // Set the preconditioner type
+310   this->set_laspack_preconditioner_type ();
+311 
+312   // Set the solver tolerance
+313   SetRTCAccuracy (tol);
+314 
+315   // Solve the linear system
+316   switch (this->_solver_type)
+317     {
+318       // Conjugate-Gradient
+319     case CG:
+320       {
+321         CGIter (Transp_Q(&matrix->_QMat),
+322                 &solution->_vec,
+323                 &rhs->_vec,
+324                 m_its,
+325                 _precond_type,
+326                 1\&.);
+327         break;
+328       }
+329 
+330       // Conjugate-Gradient Normalized
+331     case CGN:
+332       {
+333         CGNIter (Transp_Q(&matrix->_QMat),
+334                  &solution->_vec,
+335                  &rhs->_vec,
+336                  m_its,
+337                  _precond_type,
+338                  1\&.);
+339         break;
+340       }
+341 
+342       // Conjugate-Gradient Squared
+343     case CGS:
+344       {
+345         CGSIter (Transp_Q(&matrix->_QMat),
+346                  &solution->_vec,
+347                  &rhs->_vec,
+348                  m_its,
+349                  _precond_type,
+350                  1\&.);
+351         break;
+352       }
+353 
+354       // Bi-Conjugate Gradient
+355     case BICG:
+356       {
+357         BiCGIter (Transp_Q(&matrix->_QMat),
+358                   &solution->_vec,
+359                   &rhs->_vec,
+360                   m_its,
+361                   _precond_type,
+362                   1\&.);
+363         break;
+364       }
+365 
+366       // Bi-Conjugate Gradient Stabilized
+367     case BICGSTAB:
+368       {
+369         BiCGSTABIter (Transp_Q(&matrix->_QMat),
+370                       &solution->_vec,
+371                       &rhs->_vec,
+372                       m_its,
+373                       _precond_type,
+374                       1\&.);
+375         break;
+376       }
+377 
+378       // Quasi-Minimum Residual
+379     case QMR:
+380       {
+381         QMRIter (Transp_Q(&matrix->_QMat),
+382                  &solution->_vec,
+383                  &rhs->_vec,
+384                  m_its,
+385                  _precond_type,
+386                  1\&.);
+387         break;
+388       }
+389 
+390       // Symmetric over-relaxation
+391     case SSOR:
+392       {
+393         SSORIter (Transp_Q(&matrix->_QMat),
+394                   &solution->_vec,
+395                   &rhs->_vec,
+396                   m_its,
+397                   _precond_type,
+398                   1\&.);
+399         break;
+400       }
+401 
+402       // Jacobi Relaxation
+403     case JACOBI:
+404       {
+405         JacobiIter (Transp_Q(&matrix->_QMat),
+406                     &solution->_vec,
+407                     &rhs->_vec,
+408                     m_its,
+409                     _precond_type,
+410                     1\&.);
+411         break;
+412       }
+413 
+414       // Generalized Minimum Residual
+415     case GMRES:
+416       {
+417         SetGMRESRestart (30);
+418         GMRESIter (Transp_Q(&matrix->_QMat),
+419                    &solution->_vec,
+420                    &rhs->_vec,
+421                    m_its,
+422                    _precond_type,
+423                    1\&.);
+424         break;
+425       }
+426 
+427       // Unknown solver, use GMRES
+428     default:
+429       {
+430         libMesh::err << "ERROR:  Unsupported LASPACK Solver: "
+431                      << Utility::enum_to_string(this->_solver_type) << std::endl
+432                      << "Continuing with GMRES" << std::endl;
+433 
+434         this->_solver_type = GMRES;
+435 
+436         return this->solve (*matrix,
+437                             *solution,
+438                             *rhs,
+439                             tol,
+440                             m_its);
+441       }
+442     }
+443 
+444   // Check for an error
+445   if (LASResult() != LASOK)
+446     {
+447       libMesh::err << "ERROR:  LASPACK Error: " << std::endl;
+448       WriteLASErrDescr(stdout);
+449       libmesh_error();
+450     }
+451 
+452   STOP_LOG("adjoint_solve()", "LaspackLinearSolver");
+453   // Get the convergence step # and residual
+454   return std::make_pair(GetLastNoIter(), GetLastAccuracy());
+455 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LinearSolver\fP< T >::attach_preconditioner (\fBPreconditioner\fP< T > *preconditioner)\fC [inherited]\fP"
+Attaches a \fBPreconditioner\fP object to be used 
+.PP
+Definition at line 117 of file linear_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::err, and libMesh::SHELL_PRECOND\&.
+.PP
+.nf
+118 {
+119   if(this->_is_initialized)
+120     {
+121       libMesh::err<<"Preconditioner must be attached before the solver is initialized!"<<std::endl;
+122       libmesh_error();
+123     }
+124 
+125   _preconditioner_type = SHELL_PRECOND;
+126   _preconditioner = preconditioner;
+127 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBLinearSolver\fP< T > > \fBlibMesh::LinearSolver\fP< T >::build (const \fBlibMesh::Parallel::Communicator\fP &comm_in, const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fC\fBLinearSolver\fP\fP using the linear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 41 of file linear_solver\&.C\&.
+.PP
+References libMesh::EIGEN_SOLVERS, libMesh::err, libMesh::LASPACK_SOLVERS, libMesh::PETSC_SOLVERS, and libMesh::TRILINOS_SOLVERS\&.
+.PP
+Referenced by libMesh::ImplicitSystem::get_linear_solver()\&.
+.PP
+.nf
+43 {
+44   // Build the appropriate solver
+45   switch (solver_package)
+46     {
+47 
+48 
+49 #ifdef LIBMESH_HAVE_LASPACK
+50     case LASPACK_SOLVERS:
+51       {
+52         AutoPtr<LinearSolver<T> > ap(new LaspackLinearSolver<T>(comm));
+53         return ap;
+54       }
+55 #endif
+56 
+57 
+58 #ifdef LIBMESH_HAVE_PETSC
+59     case PETSC_SOLVERS:
+60       {
+61         AutoPtr<LinearSolver<T> > ap(new PetscLinearSolver<T>(comm));
+62         return ap;
+63       }
+64 #endif
+65 
+66 
+67 #ifdef LIBMESH_HAVE_TRILINOS
+68     case TRILINOS_SOLVERS:
+69       {
+70         AutoPtr<LinearSolver<T> > ap(new AztecLinearSolver<T>(comm));
+71         return ap;
+72       }
+73 #endif
+74 
+75 
+76 #ifdef LIBMESH_HAVE_EIGEN
+77     case EIGEN_SOLVERS:
+78       {
+79         AutoPtr<LinearSolver<T> > ap(new EigenSparseLinearSolver<T>(comm));
+80         return ap;
+81       }
+82 #endif
+83 
+84     default:
+85       libMesh::err << "ERROR:  Unrecognized solver package: "
+86                    << solver_package
+87                    << std::endl;
+88       libmesh_error();
+89     }
+90 
+91   AutoPtr<LinearSolver<T> > ap(NULL);
+92   return ap;
+93 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackLinearSolver\fP< T >::clear ()\fC [virtual]\fP"
+Release all memory and clear data structures\&. 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 80 of file laspack_linear_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::GMRES, libMesh::ILU_PRECOND, and libMesh::initialized()\&.
+.PP
+.nf
+81 {
+82   if (this->initialized())
+83     {
+84       this->_is_initialized = false;
+85 
+86       this->_solver_type         = GMRES;
+87       this->_preconditioner_type = ILU_PRECOND;
+88     }
+89 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T > \fBLinearConvergenceReason\fP \fBlibMesh::LaspackLinearSolver\fP< T >::get_converged_reason () const\fC [virtual]\fP"
+Returns the solver's convergence flag 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 528 of file laspack_linear_solver\&.C\&.
+.PP
+.nf
+529 {
+530   libmesh_not_implemented();
+531 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T > bool \fBlibMesh::LinearSolver\fP< T >::get_same_preconditioner ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 306 of file linear_solver\&.h\&.
+.PP
+.nf
+307 {
+308   return same_preconditioner;
+309 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackLinearSolver\fP< T >::init (const char *name = \fCNULL\fP)\fC [virtual]\fP"
+Initialize data structures if not done so already\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 94 of file laspack_linear_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, and libMesh::initialized()\&.
+.PP
+.nf
+95 {
+96   // Initialize the data structures if not done so already\&.
+97   if (!this->initialized())
+98     {
+99       this->_is_initialized = true;
+100     }
+101 
+102   // SetRTCAuxProc (print_iter_accuracy);
+103 }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::LinearSolver\fP< T >::init_names (const \fBSystem\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Apply names to the system to be solved\&. For most packages this is a no-op; for PETSc this sets an option prefix from the system name and sets field names from the system's variable names\&.
+.PP
+Since field names are applied to DoF numberings, this method must be called again after any \fBSystem\fP reinit\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscLinearSolver< T >\fP\&.
+.PP
+Definition at line 107 of file linear_solver\&.h\&.
+.PP
+.nf
+107 {}
+.fi
+.SS "template<typename T> bool \fBlibMesh::LinearSolver\fP< T >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the data structures are initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file linear_solver\&.h\&.
+.PP
+.nf
+86 { return _is_initialized; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T > \fBPreconditionerType\fP \fBlibMesh::LinearSolver\fP< T >::preconditioner_type () const\fC [inherited]\fP"
+Returns the type of preconditioner to use\&. 
+.PP
+Definition at line 97 of file linear_solver\&.C\&.
+.PP
+.nf
+98 {
+99   if(_preconditioner)
+100     return _preconditioner->type();
+101 
+102   return _preconditioner_type;
+103 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackLinearSolver\fP< T >::print_converged_reason () const\fC [virtual]\fP"
+Prints a useful message about why the latest linear solve con(di)verged\&. 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 519 of file laspack_linear_solver\&.C\&.
+.PP
+References libMesh::out\&.
+.PP
+.nf
+520 {
+521   libMesh::out << "print_converged_reason() is currently only supported"
+522                << "with Petsc 2\&.3\&.1 and later\&." << std::endl;
+523 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T > void \fBlibMesh::LinearSolver\fP< T >::restrict_solve_to (const std::vector< unsigned int > *constdofs, const \fBSubsetSolveMode\fPsubset_solve_mode = \fC\fBSUBSET_ZERO\fP\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+After calling this method, all successive solves will be restricted to the given set of dofs, which must contain local dofs on each processor only and not contain any duplicates\&. This mode can be disabled by calling this method with \fCdofs\fP being a \fCNULL\fP pointer\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscLinearSolver< T >\fP\&.
+.PP
+Definition at line 138 of file linear_solver\&.C\&.
+.PP
+.nf
+140 {
+141   if(dofs!=NULL)
+142     {
+143       libmesh_not_implemented();
+144     }
+145 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LinearSolver\fP< T >::reuse_preconditioner (boolreuse_flag)\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 131 of file linear_solver\&.C\&.
+.PP
+Referenced by libMesh::ImplicitSystem::disable_cache()\&.
+.PP
+.nf
+132 {
+133   same_preconditioner = reuse_flag;
+134 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LaspackLinearSolver\fP< T >::set_laspack_preconditioner_type ()\fC [private]\fP"
+Tells LASPACK to use the user-specified preconditioner stored in \fC_preconditioner_type\fP 
+.PP
+Definition at line 490 of file laspack_linear_solver\&.C\&.
+.PP
+References libMesh::err, libMesh::IDENTITY_PRECOND, libMesh::ILU_PRECOND, libMesh::JACOBI_PRECOND, and libMesh::SSOR_PRECOND\&.
+.PP
+.nf
+491 {
+492   switch (this->_preconditioner_type)
+493     {
+494     case IDENTITY_PRECOND:
+495       _precond_type = NULL; return;
+496 
+497     case ILU_PRECOND:
+498       _precond_type = ILUPrecond; return;
+499 
+500     case JACOBI_PRECOND:
+501       _precond_type = JacobiPrecond; return;
+502 
+503     case SSOR_PRECOND:
+504       _precond_type = SSORPrecond; return;
+505 
+506 
+507     default:
+508       libMesh::err << "ERROR:  Unsupported LASPACK Preconditioner: "
+509                    << this->_preconditioner_type << std::endl
+510                    << "Continuing with ILU"      << std::endl;
+511       this->_preconditioner_type = ILU_PRECOND;
+512       this->set_laspack_preconditioner_type();
+513     }
+514 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LinearSolver\fP< T >::set_preconditioner_type (const \fBPreconditionerType\fPpct)\fC [inherited]\fP"
+Sets the type of preconditioner to use\&. 
+.PP
+Definition at line 107 of file linear_solver\&.C\&.
+.PP
+.nf
+108 {
+109   if(_preconditioner)
+110     _preconditioner->set_type(pct);
+111   else
+112     _preconditioner_type = pct;
+113 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LinearSolver\fP< T >::set_solver_type (const \fBSolverType\fPst)\fC [inline]\fP, \fC [inherited]\fP"
+Sets the type of solver to use\&. 
+.PP
+Definition at line 117 of file linear_solver\&.h\&.
+.PP
+.nf
+118   { _solver_type = st; }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LaspackLinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &matrix, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Call the Laspack solver 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 109 of file laspack_linear_solver\&.C\&.
+.PP
+References libMesh::LaspackMatrix< T >::_QMat, libMesh::BICG, libMesh::BICGSTAB, libMesh::CG, libMesh::CGN, libMesh::CGS, libMesh::LaspackMatrix< T >::close(), libMesh::Utility::enum_to_string(), libMesh::err, libMesh::GMRES, libMesh::TriangleWrapper::init(), libMesh::JACOBI, libMesh::QMR, libMesh::SSOR, libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::LaspackVector< T >::zero()\&.
+.PP
+.nf
+114 {
+115   START_LOG("solve()", "LaspackLinearSolver");
+116   this->init ();
+117 
+118   // Make sure the data passed in are really in Laspack types
+119   LaspackMatrix<T>* matrix   = libmesh_cast_ptr<LaspackMatrix<T>*>(&matrix_in);
+120   LaspackVector<T>* solution = libmesh_cast_ptr<LaspackVector<T>*>(&solution_in);
+121   LaspackVector<T>* rhs      = libmesh_cast_ptr<LaspackVector<T>*>(&rhs_in);
+122 
+123   // Zero-out the solution to prevent the solver from exiting in 0
+124   // iterations (?)
+125   //TODO:[BSK] Why does Laspack do this?  Comment out this and try ex13\&.\&.\&.
+126   solution->zero();
+127 
+128   // Close the matrix and vectors in case this wasn't already done\&.
+129   matrix->close ();
+130   solution->close ();
+131   rhs->close ();
+132 
+133   // Set the preconditioner type
+134   this->set_laspack_preconditioner_type ();
+135 
+136   // Set the solver tolerance
+137   SetRTCAccuracy (tol);
+138 
+139   // Solve the linear system
+140   switch (this->_solver_type)
+141     {
+142       // Conjugate-Gradient
+143     case CG:
+144       {
+145         CGIter (&matrix->_QMat,
+146                 &solution->_vec,
+147                 &rhs->_vec,
+148                 m_its,
+149                 _precond_type,
+150                 1\&.);
+151         break;
+152       }
+153 
+154       // Conjugate-Gradient Normalized
+155     case CGN:
+156       {
+157         CGNIter (&matrix->_QMat,
+158                  &solution->_vec,
+159                  &rhs->_vec,
+160                  m_its,
+161                  _precond_type,
+162                  1\&.);
+163         break;
+164       }
+165 
+166       // Conjugate-Gradient Squared
+167     case CGS:
+168       {
+169         CGSIter (&matrix->_QMat,
+170                  &solution->_vec,
+171                  &rhs->_vec,
+172                  m_its,
+173                  _precond_type,
+174                  1\&.);
+175         break;
+176       }
+177 
+178       // Bi-Conjugate Gradient
+179     case BICG:
+180       {
+181         BiCGIter (&matrix->_QMat,
+182                   &solution->_vec,
+183                   &rhs->_vec,
+184                   m_its,
+185                   _precond_type,
+186                   1\&.);
+187         break;
+188       }
+189 
+190       // Bi-Conjugate Gradient Stabilized
+191     case BICGSTAB:
+192       {
+193         BiCGSTABIter (&matrix->_QMat,
+194                       &solution->_vec,
+195                       &rhs->_vec,
+196                       m_its,
+197                       _precond_type,
+198                       1\&.);
+199         break;
+200       }
+201 
+202       // Quasi-Minimum Residual
+203     case QMR:
+204       {
+205         QMRIter (&matrix->_QMat,
+206                  &solution->_vec,
+207                  &rhs->_vec,
+208                  m_its,
+209                  _precond_type,
+210                  1\&.);
+211         break;
+212       }
+213 
+214       // Symmetric over-relaxation
+215     case SSOR:
+216       {
+217         SSORIter (&matrix->_QMat,
+218                   &solution->_vec,
+219                   &rhs->_vec,
+220                   m_its,
+221                   _precond_type,
+222                   1\&.);
+223         break;
+224       }
+225 
+226       // Jacobi Relaxation
+227     case JACOBI:
+228       {
+229         JacobiIter (&matrix->_QMat,
+230                     &solution->_vec,
+231                     &rhs->_vec,
+232                     m_its,
+233                     _precond_type,
+234                     1\&.);
+235         break;
+236       }
+237 
+238       // Generalized Minimum Residual
+239     case GMRES:
+240       {
+241         SetGMRESRestart (30);
+242         GMRESIter (&matrix->_QMat,
+243                    &solution->_vec,
+244                    &rhs->_vec,
+245                    m_its,
+246                    _precond_type,
+247                    1\&.);
+248         break;
+249       }
+250 
+251       // Unknown solver, use GMRES
+252     default:
+253       {
+254         libMesh::err << "ERROR:  Unsupported LASPACK Solver: "
+255                      << Utility::enum_to_string(this->_solver_type) << std::endl
+256                      << "Continuing with GMRES" << std::endl;
+257 
+258         this->_solver_type = GMRES;
+259 
+260         return this->solve (*matrix,
+261                             *solution,
+262                             *rhs,
+263                             tol,
+264                             m_its);
+265       }
+266     }
+267 
+268   // Check for an error
+269   if (LASResult() != LASOK)
+270     {
+271       libMesh::err << "ERROR:  LASPACK Error: " << std::endl;
+272       WriteLASErrDescr(stdout);
+273       libmesh_error();
+274     }
+275 
+276   STOP_LOG("solve()", "LaspackLinearSolver");
+277   // Get the convergence step # and residual
+278   return std::make_pair(GetLastNoIter(), GetLastAccuracy());
+279 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LaspackLinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > &pc, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intm_its)\fC [inline]\fP, \fC [virtual]\fP"
+Call the Laspack solver 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 180 of file laspack_linear_solver\&.h\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+186 {
+187   libMesh::err << "ERROR: LASPACK does not support a user-supplied preconditioner!"
+188                << std::endl;
+189   libmesh_error();
+190 
+191   std::pair<unsigned int, Real> p;
+192   return p;
+193 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LaspackLinearSolver\fP< T >::solve (const \fBShellMatrix\fP< T > &shell_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This function solves a system whose matrix is a shell matrix\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 462 of file laspack_linear_solver\&.C\&.
+.PP
+.nf
+467 {
+468   libmesh_not_implemented();
+469   return std::make_pair(0,0\&.0);
+470 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LaspackLinearSolver\fP< T >::solve (const \fBShellMatrix\fP< T > &shell_matrix, const \fBSparseMatrix\fP< T > &precond_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This function solves a system whose matrix is a shell matrix, but a sparse matrix is used as preconditioning matrix, this allowing other preconditioners than JACOBI\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 476 of file laspack_linear_solver\&.C\&.
+.PP
+.nf
+482 {
+483   libmesh_not_implemented();
+484   return std::make_pair(0,0\&.0);
+485 }
+.fi
+.SS "template<typename T> std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &sol, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intn_iter)\fC [inline]\fP, \fC [inherited]\fP"
+This function calls the solver '_solver_type' preconditioned with the '_preconditioner_type' preconditioner\&. The preconditioning matrix is used if it is provided, or the system matrix is used if \fCprecond_matrix\fP is null 
+.PP
+Definition at line 314 of file linear_solver\&.h\&.
+.PP
+.nf
+320 {
+321   if (pc_mat)
+322     return this->solve(mat, *pc_mat, sol, rhs, tol, n_iter);
+323   else
+324     return this->solve(mat, sol, rhs, tol, n_iter);
+325 }
+.fi
+.SS "template<typename T> std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LinearSolver\fP< T >::solve (const \fBShellMatrix\fP< T > &matrix, const \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &sol, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intn_iter)\fC [inline]\fP, \fC [inherited]\fP"
+This function solves a system whose matrix is a shell matrix, but an optional sparse matrix may be used as preconditioning matrix\&. 
+.PP
+Definition at line 331 of file linear_solver\&.h\&.
+.PP
+.nf
+337 {
+338   if (pc_mat)
+339     return this->solve(mat, *pc_mat, sol, rhs, tol, n_iter);
+340   else
+341     return this->solve(mat, sol, rhs, tol, n_iter);
+342 }
+.fi
+.SS "template<typename T> \fBSolverType\fP \fBlibMesh::LinearSolver\fP< T >::solver_type () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the type of solver to use\&. 
+.PP
+Definition at line 112 of file linear_solver\&.h\&.
+.PP
+.nf
+112 { return _solver_type; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T> bool \fBlibMesh::LinearSolver\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating if the data structures have been initialized\&. 
+.PP
+Definition at line 262 of file linear_solver\&.h\&.
+.PP
+Referenced by libMesh::LinearSolver< Number >::initialized()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T > PrecondProcType \fBlibMesh::LaspackLinearSolver\fP< T >::_precond_type\fC [private]\fP"
+\fBPreconditioner\fP type 
+.PP
+Definition at line 153 of file laspack_linear_solver\&.h\&.
+.SS "template<typename T> \fBPreconditioner\fP<T>* \fBlibMesh::LinearSolver\fP< T >::_preconditioner\fC [protected]\fP, \fC [inherited]\fP"
+Holds the \fBPreconditioner\fP object to be used for the linear solves\&. 
+.PP
+Definition at line 267 of file linear_solver\&.h\&.
+.SS "template<typename T> \fBPreconditionerType\fP \fBlibMesh::LinearSolver\fP< T >::_preconditioner_type\fC [protected]\fP, \fC [inherited]\fP"
+Enum statitng with type of preconditioner to use\&. 
+.PP
+Definition at line 257 of file linear_solver\&.h\&.
+.PP
+Referenced by libMesh::AztecLinearSolver< T >::AztecLinearSolver(), and libMesh::PetscLinearSolver< T >::PetscLinearSolver()\&.
+.SS "template<typename T> \fBSolverType\fP \fBlibMesh::LinearSolver\fP< T >::_solver_type\fC [protected]\fP, \fC [inherited]\fP"
+Enum stating which type of iterative solver to use\&. 
+.PP
+Definition at line 252 of file linear_solver\&.h\&.
+.PP
+Referenced by libMesh::EigenSparseLinearSolver< T >::EigenSparseLinearSolver(), libMesh::LinearSolver< Number >::set_solver_type(), and libMesh::LinearSolver< Number >::solver_type()\&.
+.SS "template<typename T> bool \fBlibMesh::LinearSolver\fP< T >::same_preconditioner\fC [protected]\fP, \fC [inherited]\fP"
+Boolean flag to indicate whether we want to use an identical preconditioner to the previous solve\&. This can save substantial work in the cases where the system matrix is the same for successive solves\&. 
+.PP
+Definition at line 275 of file linear_solver\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,230 @@
+.TH "libMesh::Threads::atomic< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Threads::atomic< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <threads\&.h>\fP
+.PP
+Inherits atomic< T >\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBatomic\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator T\fP ()"
+.br
+.ti -1c
+.RI "T \fBoperator=\fP (T value)"
+.br
+.ti -1c
+.RI "\fBatomic\fP< T > & \fBoperator=\fP (const \fBatomic\fP< T > &value)"
+.br
+.ti -1c
+.RI "T \fBoperator+=\fP (T value)"
+.br
+.ti -1c
+.RI "T \fBoperator-=\fP (T value)"
+.br
+.ti -1c
+.RI "T \fBoperator++\fP ()"
+.br
+.ti -1c
+.RI "T \fBoperator++\fP (int)"
+.br
+.ti -1c
+.RI "T \fBoperator--\fP ()"
+.br
+.ti -1c
+.RI "T \fBoperator--\fP (int)"
+.br
+.ti -1c
+.RI "\fBatomic\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator T &\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "T \fBval\fP"
+.br
+.ti -1c
+.RI "\fBspin_mutex\fP \fBsmutex\fP"
+.br
+.ti -1c
+.RI "T \fB_val\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::Threads::atomic< T >"
+Defines atomic operations which can only be executed on a single thread at a time\&. This is used in reference counting, for example, to allow count++/count-- to work\&.
+.PP
+Defines atomic operations which can only be executed on a single thread at a time\&. 
+.PP
+Definition at line 323 of file threads\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::Threads::atomic\fP< T >::\fBatomic\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 702 of file threads\&.h\&.
+.PP
+.nf
+702 : val(0) {}
+.fi
+.SS "template<typename T> \fBlibMesh::Threads::atomic\fP< T >::\fBatomic\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 892 of file threads\&.h\&.
+.PP
+.nf
+892 : _val(0) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::Threads::atomic\fP< T >::operator T ()\fC [inline]\fP"
+
+.PP
+Definition at line 703 of file threads\&.h\&.
+.PP
+.nf
+703 { return val; }
+.fi
+.SS "template<typename T> \fBlibMesh::Threads::atomic\fP< T >::operator T & ()\fC [inline]\fP"
+
+.PP
+Definition at line 893 of file threads\&.h\&.
+.PP
+.nf
+893 { return _val; }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator++ ()\fC [inline]\fP"
+
+.PP
+Definition at line 734 of file threads\&.h\&.
+.PP
+.nf
+735   {
+736     spin_mutex::scoped_lock lock(smutex);
+737     val++;
+738     return val;
+739   }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator++ (int)\fC [inline]\fP"
+
+.PP
+Definition at line 741 of file threads\&.h\&.
+.PP
+.nf
+742   {
+743     spin_mutex::scoped_lock lock(smutex);
+744     val++;
+745     return val;
+746   }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator+= (Tvalue)\fC [inline]\fP"
+
+.PP
+Definition at line 720 of file threads\&.h\&.
+.PP
+.nf
+721   {
+722     spin_mutex::scoped_lock lock(smutex);
+723     val += value;
+724     return val;
+725   }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator-- ()\fC [inline]\fP"
+
+.PP
+Definition at line 748 of file threads\&.h\&.
+.PP
+.nf
+749   {
+750     spin_mutex::scoped_lock lock(smutex);
+751     val--;
+752     return val;
+753   }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator-- (int)\fC [inline]\fP"
+
+.PP
+Definition at line 755 of file threads\&.h\&.
+.PP
+.nf
+756   {
+757     spin_mutex::scoped_lock lock(smutex);
+758     val--;
+759     return val;
+760   }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator-= (Tvalue)\fC [inline]\fP"
+
+.PP
+Definition at line 727 of file threads\&.h\&.
+.PP
+.nf
+728   {
+729     spin_mutex::scoped_lock lock(smutex);
+730     val -= value;
+731     return val;
+732   }
+.fi
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::operator= (Tvalue)\fC [inline]\fP"
+
+.PP
+Definition at line 705 of file threads\&.h\&.
+.PP
+.nf
+706   {
+707     spin_mutex::scoped_lock lock(smutex);
+708     val = value;
+709     return val;
+710   }
+.fi
+.SS "template<typename T> \fBatomic\fP<T>& \fBlibMesh::Threads::atomic\fP< T >::operator= (const \fBatomic\fP< T > &value)\fC [inline]\fP"
+
+.PP
+Definition at line 712 of file threads\&.h\&.
+.PP
+.nf
+713   {
+714     spin_mutex::scoped_lock lock(smutex);
+715     val = value;
+716     return *this;
+717   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::_val\fC [private]\fP"
+
+.PP
+Definition at line 895 of file threads\&.h\&.
+.PP
+Referenced by libMesh::Threads::atomic< unsigned int >::operator unsigned int &()\&.
+.SS "template<typename T> \fBspin_mutex\fP \fBlibMesh::Threads::atomic\fP< T >::smutex\fC [private]\fP"
+
+.PP
+Definition at line 764 of file threads\&.h\&.
+.PP
+Referenced by libMesh::Threads::atomic< unsigned int >::operator++(), libMesh::Threads::atomic< unsigned int >::operator+=(), libMesh::Threads::atomic< unsigned int >::operator--(), libMesh::Threads::atomic< unsigned int >::operator-=(), and libMesh::Threads::atomic< unsigned int >::operator=()\&.
+.SS "template<typename T> T \fBlibMesh::Threads::atomic\fP< T >::val\fC [private]\fP"
+
+.PP
+Definition at line 763 of file threads\&.h\&.
+.PP
+Referenced by libMesh::Threads::atomic< unsigned int >::operator unsigned int(), libMesh::Threads::atomic< unsigned int >::operator++(), libMesh::Threads::atomic< unsigned int >::operator+=(), libMesh::Threads::atomic< unsigned int >::operator--(), libMesh::Threads::atomic< unsigned int >::operator-=(), and libMesh::Threads::atomic< unsigned int >::operator=()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

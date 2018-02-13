@@ -1,0 +1,2252 @@
+.TH "libMesh::Parallel" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBUtils\fP"
+.br
+.in -1c
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBDataPlusInt\fP"
+.br
+.ti -1c
+.RI "struct \fBdata_type\fP"
+.br
+.ti -1c
+.RI "struct \fBrequest\fP"
+.br
+.ti -1c
+.RI "struct \fBstatus\fP"
+.br
+.ti -1c
+.RI "class \fBMessageTag\fP"
+.br
+.ti -1c
+.RI "class \fBDataType\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType\fP"
+.br
+.ti -1c
+.RI "struct \fBAttributes\fP"
+.br
+.ti -1c
+.RI "class \fBStatus\fP"
+.br
+.ti -1c
+.RI "struct \fBPostWaitWork\fP"
+.br
+.ti -1c
+.RI "class \fBRequest\fP"
+.br
+.ti -1c
+.RI "struct \fBBufferType\fP"
+.br
+.ti -1c
+.RI "struct \fBBufferType< T * >\fP"
+.br
+.ti -1c
+.RI "class \fBCommunicator\fP"
+.br
+.ti -1c
+.RI "class \fBFakeCommunicator\fP"
+.br
+.ti -1c
+.RI "struct \fBPostWaitCopyBuffer\fP"
+.br
+.ti -1c
+.RI "struct \fBPostWaitUnpackBuffer\fP"
+.br
+.ti -1c
+.RI "struct \fBPostWaitDeleteBuffer\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< TypeVector< T > >\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< VectorValue< T > >\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< Point >\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< TypeTensor< T > >\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< TensorValue< T > >\fP"
+.br
+.ti -1c
+.RI "class \fBBinSorter\fP"
+.br
+.ti -1c
+.RI "struct \fBBufferType< const Elem * >\fP"
+.br
+.ti -1c
+.RI "struct \fBBufferType< Elem >\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< Hilbert::HilbertIndices >\fP"
+.br
+.ti -1c
+.RI "class \fBHistogram\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< std::pair< T1, T2 > >\fP"
+.br
+.ti -1c
+.RI "class \fBStandardType< std::complex< T > >\fP"
+.br
+.ti -1c
+.RI "struct \fBBufferType< const Node * >\fP"
+.br
+.ti -1c
+.RI "struct \fBBufferType< Node >\fP"
+.br
+.ti -1c
+.RI "class \fBSort\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef MPI_Datatype \fBdata_type\fP"
+.br
+.ti -1c
+.RI "typedef MPI_Request \fBrequest\fP"
+.br
+.ti -1c
+.RI "typedef MPI_Status \fBstatus\fP"
+.br
+.ti -1c
+.RI "typedef MPI_Comm \fBcommunicator\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<> unsigned int \fBpacked_size\fP (const \fBElem\fP *, std::vector< \fBlargest_id_type\fP >::const_iterator in)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpacked_size\fP (const \fBElem\fP *e, std::vector< \fBlargest_id_type\fP >::iterator in)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpackable_size\fP (const \fBElem\fP *elem, const \fBMeshBase\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpackable_size\fP (const \fBElem\fP *elem, const \fBParallelMesh\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBpack\fP (const \fBElem\fP *elem, std::vector< \fBlargest_id_type\fP > &\fBdata\fP, const \fBMeshBase\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBpack\fP (const \fBElem\fP *elem, std::vector< \fBlargest_id_type\fP > &\fBdata\fP, const \fBParallelMesh\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBunpack\fP (std::vector< \fBlargest_id_type\fP >::const_iterator in, \fBElem\fP **\fBout\fP, \fBMeshBase\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBunpack\fP (std::vector< \fBlargest_id_type\fP >::const_iterator in, \fBElem\fP **\fBout\fP, \fBParallelMesh\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpackable_size\fP (const \fBNode\fP *node, const \fBMeshBase\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpacked_size\fP (const \fBNode\fP *, const std::vector< \fBlargest_id_type\fP >::const_iterator in)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpacked_size\fP (const \fBNode\fP *n, const std::vector< \fBlargest_id_type\fP >::iterator in)"
+.br
+.ti -1c
+.RI "template<> unsigned int \fBpackable_size\fP (const \fBNode\fP *node, const \fBParallelMesh\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBpack\fP (const \fBNode\fP *node, std::vector< \fBlargest_id_type\fP > &\fBdata\fP, const \fBMeshBase\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBpack\fP (const \fBNode\fP *node, std::vector< \fBlargest_id_type\fP > &\fBdata\fP, const \fBParallelMesh\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBunpack\fP (std::vector< \fBlargest_id_type\fP >::const_iterator in, \fBNode\fP **\fBout\fP, \fBMeshBase\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBunpack\fP (std::vector< \fBlargest_id_type\fP >::const_iterator in, \fBNode\fP **\fBout\fP, \fBParallelMesh\fP *\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<typename T > \fBdata_type\fP \fBdataplusint_type\fP ()"
+.br
+.ti -1c
+.RI "\fBStatus\fP \fBwait\fP (\fBRequest\fP &r)"
+.br
+.ti -1c
+.RI "void \fBwait\fP (std::vector< \fBRequest\fP > &r)"
+.br
+.ti -1c
+.RI "template<typename T , typename buffertype , typename Context > void \fBpack\fP (const T *object, typename std::vector< buffertype > &\fBdata\fP, const Context *context)"
+.br
+.ti -1c
+.RI "template<typename T , typename Context > unsigned int \fBpackable_size\fP (const T *, const Context *)"
+.br
+.ti -1c
+.RI "template<typename T , typename BufferIter > unsigned int \fBpacked_size\fP (const T *, BufferIter)"
+.br
+.ti -1c
+.RI "template<typename T , typename BufferIter , typename Context > void \fBunpack\fP (BufferIter in, T **\fBout\fP, Context *ctx)"
+.br
+.ti -1c
+.RI "template<typename Context , typename buffertype , typename OutputIter > void \fBunpack_range\fP (const typename std::vector< buffertype > &buffer, Context *context, OutputIter \fBout\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename buffertype , typename Iter > void \fBpack_range\fP (const Context *context, Iter range_begin, const Iter range_end, typename std::vector< buffertype > &buffer)"
+.br
+.ti -1c
+.RI "template<typename Iterator , typename DofObjType , typename SyncFunctor > void \fBsync_dofobject_data_by_xyz\fP (const \fBCommunicator\fP &\fBcommunicator\fP, const Iterator &range_begin, const Iterator &range_end, \fBLocationMap\fP< DofObjType > *location_map, SyncFunctor &sync)"
+.br
+.ti -1c
+.RI "template<typename Iterator , typename SyncFunctor > void \fBsync_dofobject_data_by_id\fP (const \fBCommunicator\fP &\fBcommunicator\fP, const Iterator &range_begin, const Iterator &range_end, SyncFunctor &sync)"
+.br
+.ti -1c
+.RI "template<typename Iterator , typename SyncFunctor > void \fBsync_element_data_by_parent_id\fP (\fBMeshBase\fP &\fBmesh\fP, const Iterator &range_begin, const Iterator &range_end, SyncFunctor &sync)"
+.br
+.ti -1c
+.RI "template<typename Iterator , typename DofObjType , typename SyncFunctor > void \fBsync_dofobject_data_by_xyz\fP (const \fBCommunicator\fP &\fBcommunicator\fP, const Iterator &range_begin, const Iterator &range_end, \fBLocationMap\fP< DofObjType > &location_map, SyncFunctor &sync)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (char, MPI_CHAR)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (signed char, MPI_SIGNED_CHAR)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (unsigned char, MPI_UNSIGNED_CHAR)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (short int, MPI_SHORT)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (unsigned short int, MPI_UNSIGNED_SHORT)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (int, MPI_INT)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (unsigned int, MPI_UNSIGNED)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (long, MPI_LONG)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (unsigned long, MPI_UNSIGNED_LONG)"
+.br
+.ti -1c
+.RI "\fBINT_TYPE\fP (unsigned long long, MPI_LONG_LONG_INT)"
+.br
+.ti -1c
+.RI "\fBFLOAT_TYPE\fP (float, MPI_FLOAT)"
+.br
+.ti -1c
+.RI "\fBFLOAT_TYPE\fP (double, MPI_DOUBLE)"
+.br
+.ti -1c
+.RI "\fBFLOAT_TYPE\fP (long double, MPI_LONG_DOUBLE)"
+.br
+.ti -1c
+.RI "\fBCONTAINER_TYPE\fP (std::set)"
+.br
+.ti -1c
+.RI "\fBCONTAINER_TYPE\fP (std::vector)"
+.br
+.ti -1c
+.RI "template<typename Context , typename buffertype , typename OutputIter > void \fBunpack_range\fP (const std::vector< buffertype > &buffer, Context *context, OutputIter \fBout\fP)"
+.br
+.ti -1c
+.RI "void \fBbarrier\fP (const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBverify\fP (const T &r, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBmin\fP (T &r, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T , typename U > void \fBminloc\fP (T &r, U &min_id, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBmax\fP (T &r, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T , typename U > void \fBmaxloc\fP (T &r, U &max_id, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBsum\fP (T &r, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBset_union\fP (T &\fBdata\fP, const unsigned int root_id, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBset_union\fP (T &\fBdata\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "\fBstatus\fP \fBprobe\fP (const unsigned int src_processor_id, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &\fBdata\fP, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &\fBdata\fP, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &\fBdata\fP, const \fBDataType\fP &type, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBsend\fP (const unsigned int dest_processor_id, T &\fBdata\fP, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter > void \fBsend_packed_range\fP (const unsigned int dest_processor_id, const Context *context, Iter range_begin, const Iter range_end, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter > void \fBsend_packed_range\fP (const unsigned int dest_processor_id, const Context *context, Iter range_begin, const Iter range_end, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBnonblocking_send\fP (const unsigned int dest_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &r, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBnonblocking_send\fP (const unsigned int dest_processor_id, T &buf, \fBRequest\fP &r, const \fBMessageTag\fP &tag=\fBno_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, T &buf, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, T &buf, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > \fBStatus\fP \fBreceive\fP (const unsigned int src_processor_id, T &buf, const \fBDataType\fP &type, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBreceive\fP (const unsigned int src_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputIter > void \fBreceive_packed_range\fP (const unsigned int src_processor_id, Context *context, OutputIter \fBout\fP, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputIter > void \fBreceive_packed_range\fP (const unsigned int src_processor_id, Context *context, OutputIter \fBout\fP, \fBRequest\fP &req, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBnonblocking_receive\fP (const unsigned int src_processor_id, T &buf, const \fBDataType\fP &type, \fBRequest\fP &r, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBnonblocking_receive\fP (const unsigned int src_processor_id, T &buf, \fBRequest\fP &r, const \fBMessageTag\fP &tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, T1 &\fBsend\fP, const unsigned int source_processor_id, T2 &recv, const \fBMessageTag\fP &send_tag=\fBno_tag\fP, const \fBMessageTag\fP &recv_tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context1 , typename RangeIter , typename Context2 , typename OutputIter > void \fBsend_receive_packed_range\fP (const unsigned int dest_processor_id, const Context1 *context1, RangeIter send_begin, const RangeIter send_end, const unsigned int source_processor_id, Context2 *context2, OutputIter \fBout\fP, const \fBMessageTag\fP &send_tag=\fBno_tag\fP, const \fBMessageTag\fP &recv_tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBsend_receive\fP (const unsigned int dest_processor_id, T1 &\fBsend\fP, const \fBDataType\fP &type1, const unsigned int source_processor_id, T2 &recv, const \fBDataType\fP &type2, const \fBMessageTag\fP &send_tag=\fBno_tag\fP, const \fBMessageTag\fP &recv_tag=\fBany_tag\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBgather\fP (const unsigned int root_id, T \fBsend\fP, std::vector< T > &recv, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBgather\fP (const unsigned int root_id, std::vector< T > &r, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBallgather\fP (T \fBsend\fP, std::vector< T > &recv, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBallgather\fP (std::vector< T > &r, const bool identical_buffer_sizes=false, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter , typename OutputIter > void \fBgather_packed_range\fP (const unsigned int root_id, Context *context, Iter range_begin, const Iter range_end, OutputIter \fBout\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter , typename OutputIter > void \fBallgather_packed_range\fP (Context *context, Iter range_begin, const Iter range_end, OutputIter \fBout\fP, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBalltoall\fP (std::vector< T > &r, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBbroadcast\fP (T &\fBdata\fP, const unsigned int root_id=0, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputContext , typename Iter , typename OutputIter > void \fBbroadcast_packed_range\fP (const Context *context1, Iter range_begin, const Iter range_end, OutputContext *context2, OutputIter \fBout\fP, const unsigned int root_id=0, const \fBCommunicator\fP &\fBcomm\fP=\fBCommunicator_World\fP)"
+.br
+.ti -1c
+.RI "template<> \fBdata_type\fP \fBdataplusint_type< short int >\fP ()"
+.br
+.ti -1c
+.RI "template<> \fBdata_type\fP \fBdataplusint_type< int >\fP ()"
+.br
+.ti -1c
+.RI "template<> \fBdata_type\fP \fBdataplusint_type< long >\fP ()"
+.br
+.ti -1c
+.RI "template<> \fBdata_type\fP \fBdataplusint_type< float >\fP ()"
+.br
+.ti -1c
+.RI "template<> \fBdata_type\fP \fBdataplusint_type< double >\fP ()"
+.br
+.ti -1c
+.RI "template<> \fBdata_type\fP \fBdataplusint_type< long double >\fP ()"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const unsigned int \fBany_source\fP"
+.br
+.ti -1c
+.RI "const \fBMessageTag\fP \fBany_tag\fP = \fBMessageTag\fP(MPI_ANY_TAG)"
+.br
+.ti -1c
+.RI "const \fBMessageTag\fP \fBno_tag\fP = \fBMessageTag\fP(0)"
+.br
+.ti -1c
+.RI "\fBFakeCommunicator\fP & \fBCommunicator_World\fP = \fBCommWorld\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fBParallel\fP namespace is for wrapper functions for common general parallel synchronization tasks\&.
+.PP
+For MPI 1\&.1 compatibility, temporary buffers are used instead of MPI 2's MPI_IN_PLACE 
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef int \fBlibMesh::Parallel::communicator\fP"
+\fBCommunicator\fP object for talking with subsets of processors 
+.PP
+Definition at line 126 of file parallel\&.h\&.
+.SS "typedef MPI_Datatype \fBlibMesh::Parallel::data_type\fP"
+Data types for communication 
+.PP
+Definition at line 104 of file parallel\&.h\&.
+.SS "typedef MPI_Request \fBlibMesh::Parallel::request\fP"
+\fBRequest\fP object for non-blocking I/O 
+.PP
+Definition at line 116 of file parallel\&.h\&.
+.SS "typedef MPI_Status \fBlibMesh::Parallel::status\fP"
+\fBStatus\fP object for querying messages 
+.PP
+Definition at line 121 of file parallel\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "template<typename T > void libMesh::Parallel::allgather (Tsend, std::vector< T > &recv, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1035 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::allgather()\&.
+.PP
+Referenced by libMesh::MeshOutput< MT >::_build_variable_names_and_solution_vector(), libMesh::Parallel::Communicator::allgather(), and libMesh::Parallel::Communicator::allgather_packed_range()\&.
+.PP
+.nf
+1038 { comm\&.allgather(send, recv); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::allgather (std::vector< T > &r, const boolidentical_buffer_sizes = \fCfalse\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1041 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::allgather()\&.
+.PP
+.nf
+1044 { comm\&.allgather(r, identical_buffer_sizes); }
+.fi
+.SS "template<typename Context , typename Iter , typename OutputIter > void libMesh::Parallel::allgather_packed_range (Context *context, Iterrange_begin, const Iterrange_end, OutputIterout, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1056 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::allgather_packed_range()\&.
+.PP
+.nf
+1061 { comm\&.allgather_packed_range(context, range_begin, range_end, out); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::alltoall (std::vector< T > &r, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1064 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::alltoall()\&.
+.PP
+.nf
+1066 { comm\&.alltoall(r); }
+.fi
+.SS "void libMesh::Parallel::barrier (const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 794 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::barrier()\&.
+.PP
+.nf
+795 {
+796   comm\&.barrier();
+797 }
+.fi
+.SS "template<typename T > void libMesh::Parallel::broadcast (T &data, const unsigned introot_id = \fC0\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1069 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::broadcast()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::broadcast_packed_range()\&.
+.PP
+.nf
+1071 { comm\&.broadcast(data, root_id); }
+.fi
+.SS "template<typename Context , typename OutputContext , typename Iter , typename OutputIter > void libMesh::Parallel::broadcast_packed_range (const Context *context1, Iterrange_begin, const Iterrange_end, OutputContext *context2, OutputIterout, const unsigned introot_id = \fC0\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1074 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::broadcast_packed_range()\&.
+.PP
+.nf
+1081 { comm\&.broadcast_packed_range(context1, range_begin, range_end, context2, out, root_id); }
+.fi
+.SS "libMesh::Parallel::CONTAINER_TYPE (std::set)"
+
+.SS "libMesh::Parallel::CONTAINER_TYPE (std::vector)"
+
+.SS "template<typename T > \fBdata_type\fP libMesh::Parallel::dataplusint_type ()\fC [inline]\fP"
+Templated function to return the appropriate MPI datatype for use with built-in C types when combined with an int 
+.SS "template<> \fBdata_type\fP \fBlibMesh::Parallel::dataplusint_type\fP< double > ()\fC [inline]\fP"
+
+.PP
+Definition at line 1167 of file parallel_implementation\&.h\&.
+.PP
+.nf
+1167 { return MPI_DOUBLE_INT; }
+.fi
+.SS "template<> \fBdata_type\fP \fBlibMesh::Parallel::dataplusint_type\fP< float > ()\fC [inline]\fP"
+
+.PP
+Definition at line 1164 of file parallel_implementation\&.h\&.
+.PP
+.nf
+1164 { return MPI_FLOAT_INT; }
+.fi
+.SS "template<> \fBdata_type\fP \fBlibMesh::Parallel::dataplusint_type\fP< int > ()\fC [inline]\fP"
+
+.PP
+Definition at line 1158 of file parallel_implementation\&.h\&.
+.PP
+.nf
+1158 { return MPI_2INT; }
+.fi
+.SS "template<> \fBdata_type\fP \fBlibMesh::Parallel::dataplusint_type\fP< long > ()\fC [inline]\fP"
+
+.PP
+Definition at line 1161 of file parallel_implementation\&.h\&.
+.PP
+.nf
+1161 { return MPI_LONG_INT; }
+.fi
+.SS "template<> \fBdata_type\fP \fBlibMesh::Parallel::dataplusint_type\fP< long double > ()\fC [inline]\fP"
+
+.PP
+Definition at line 1170 of file parallel_implementation\&.h\&.
+.PP
+.nf
+1170 { return MPI_LONG_DOUBLE_INT; }
+.fi
+.SS "template<> \fBdata_type\fP \fBlibMesh::Parallel::dataplusint_type\fP< short int > ()\fC [inline]\fP"
+
+.PP
+Definition at line 1155 of file parallel_implementation\&.h\&.
+.PP
+.nf
+1155 { return MPI_SHORT_INT; }
+.fi
+.SS "libMesh::Parallel::FLOAT_TYPE (float, MPI_FLOAT)"
+
+.SS "libMesh::Parallel::FLOAT_TYPE (double, MPI_DOUBLE)"
+
+.SS "libMesh::Parallel::FLOAT_TYPE (longdouble, MPI_LONG_DOUBLE)"
+
+.SS "template<typename T > void libMesh::Parallel::gather (const unsigned introot_id, Tsend, std::vector< T > &recv, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1022 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::gather()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::gather_packed_range()\&.
+.PP
+.nf
+1026 { comm\&.gather(root_id, send, recv); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::gather (const unsigned introot_id, std::vector< T > &r, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1029 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::gather()\&.
+.PP
+.nf
+1032 { comm\&.gather(root_id, r); }
+.fi
+.SS "template<typename Context , typename Iter , typename OutputIter > void libMesh::Parallel::gather_packed_range (const unsigned introot_id, Context *context, Iterrange_begin, const Iterrange_end, OutputIterout, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1047 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::gather_packed_range()\&.
+.PP
+.nf
+1053 { comm\&.gather_packed_range(root_id, context, range_begin, range_end, out); }
+.fi
+.SS "libMesh::Parallel::INT_TYPE (char, MPI_CHAR)"
+
+.SS "libMesh::Parallel::INT_TYPE (signedchar, MPI_SIGNED_CHAR)"
+
+.SS "libMesh::Parallel::INT_TYPE (unsignedchar, MPI_UNSIGNED_CHAR)"
+
+.SS "libMesh::Parallel::INT_TYPE (shortint, MPI_SHORT)"
+
+.SS "libMesh::Parallel::INT_TYPE (unsigned shortint, MPI_UNSIGNED_SHORT)"
+
+.SS "libMesh::Parallel::INT_TYPE (int, MPI_INT)"
+
+.SS "libMesh::Parallel::INT_TYPE (unsignedint, MPI_UNSIGNED)"
+
+.SS "libMesh::Parallel::INT_TYPE (long, MPI_LONG)"
+
+.SS "libMesh::Parallel::INT_TYPE (unsignedlong, MPI_UNSIGNED_LONG)"
+
+.SS "libMesh::Parallel::INT_TYPE (unsigned longlong, MPI_LONG_LONG_INT)"
+
+.SS "template<typename T > void libMesh::Parallel::max (T &r, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 816 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::max()\&.
+.PP
+.nf
+818 { comm\&.max(r); }
+.fi
+.SS "template<typename T , typename U > void libMesh::Parallel::maxloc (T &r, U &max_id, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 821 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::maxloc()\&.
+.PP
+.nf
+824 { comm\&.maxloc(r, max_id); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::min (T &r, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 805 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::min()\&.
+.PP
+.nf
+807 { comm\&.min(r); }
+.fi
+.SS "template<typename T , typename U > void libMesh::Parallel::minloc (T &r, U &min_id, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 810 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::minloc()\&.
+.PP
+.nf
+813 { comm\&.minloc(r, min_id); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::nonblocking_receive (const unsigned intsrc_processor_id, T &buf, const DataType &type, Request &r, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 967 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+973 { comm\&.receive (src_processor_id, buf, type, r, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::nonblocking_receive (const unsigned intsrc_processor_id, T &buf, Request &r, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 976 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+981 { comm\&.receive (src_processor_id, buf, r, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::nonblocking_send (const unsigned intdest_processor_id, T &buf, const DataType &type, Request &r, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 901 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+907 { comm\&.send (dest_processor_id, buf, type, r, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::nonblocking_send (const unsigned intdest_processor_id, T &buf, Request &r, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 910 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+915 { comm\&.send (dest_processor_id, buf, r, tag); }
+.fi
+.SS "template<> void libMesh::Parallel::pack (const \fBNode\fP *node, std::vector< \fBlargest_id_type\fP > &data, const \fBMeshBase\fP *mesh)"
+
+.PP
+Definition at line 111 of file parallel_node\&.C\&.
+.PP
+References libMesh::MeshBase::boundary_info, libMesh::DofObject::id(), libMesh::DofObject::invalid_unique_id, libMesh::libmesh_assert(), std::max(), libMesh::DofObject::pack_indexing(), libMesh::DofObject::packed_indexing_size(), libMesh::DofObject::processor_id(), libMesh::Real, libMesh::DofObject::unique_id(), libMesh::DofObject::unpackable_indexing_size(), and libMesh::DofObject::valid_unique_id()\&.
+.PP
+.nf
+114 {
+115   libmesh_assert(node);
+116 
+117   // This should be redundant when used with Parallel::pack_range()
+118   // data\&.reserve (data\&.size() + Parallel::packable_size(node, mesh));
+119 
+120 #ifndef NDEBUG
+121   data\&.push_back (node_magic_header);
+122 #endif
+123 
+124   data\&.push_back (static_cast<largest_id_type>(node->processor_id()));
+125   data\&.push_back (static_cast<largest_id_type>(node->id()));
+126 
+127 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+128   if (node->valid_unique_id())
+129     data\&.push_back (static_cast<largest_id_type>(node->unique_id()));
+130   else
+131     // OK to send invalid unique id, we must not own this DOF
+132     data\&.push_back (static_cast<largest_id_type>(DofObject::invalid_unique_id));
+133 #endif
+134 
+135   // use "(a+b-1)/b" trick to get a/b to round up
+136   static const unsigned int idtypes_per_Real =
+137     (sizeof(Real) + sizeof(largest_id_type) - 1) / sizeof(largest_id_type);
+138 
+139   for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+140     {
+141       const largest_id_type* Real_as_idtypes =
+142         reinterpret_cast<const largest_id_type*>(&((*node)(i)));
+143       for (unsigned int j=0; j != idtypes_per_Real; ++j)
+144         {
+145           data\&.push_back(Real_as_idtypes[j]);
+146         }
+147     }
+148 
+149 #ifndef NDEBUG
+150   const std::size_t start_indices = data\&.size();
+151 #endif
+152   // Add any DofObject indices
+153   node->pack_indexing(std::back_inserter(data));
+154 
+155   libmesh_assert(node->packed_indexing_size() ==
+156                  DofObject::unpackable_indexing_size(data\&.begin() +
+157                                                      start_indices));
+158 
+159   libmesh_assert_equal_to (node->packed_indexing_size(),
+160                            data\&.size() - start_indices);
+161 
+162   // Add any nodal boundary condition ids
+163   std::vector<boundary_id_type> bcs =
+164     mesh->boundary_info->boundary_ids(node);
+165 
+166   libmesh_assert(bcs\&.size() < std::numeric_limits<largest_id_type>::max());
+167 
+168   data\&.push_back(bcs\&.size());
+169 
+170   for (std::size_t bc_it=0; bc_it < bcs\&.size(); bc_it++)
+171     data\&.push_back(bcs[bc_it]);
+172 }
+.fi
+.SS "template<> void libMesh::Parallel::pack (const Elem *elem, std::vector< largest_id_type > &data, const MeshBase *mesh)"
+
+.PP
+Definition at line 162 of file parallel_elem\&.C\&.
+.PP
+References libMesh::MeshBase::boundary_info, libMesh::DofObject::id(), libMesh::DofObject::invalid_unique_id, libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::Elem::n_edges(), libMesh::Elem::n_neighbors(), libMesh::Elem::n_nodes(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::DofObject::pack_indexing(), libMesh::DofObject::packed_indexing_size(), libMesh::Elem::parent(), libMesh::DofObject::processor_id(), libMesh::Elem::refinement_flag(), libMesh::Elem::subdomain_id(), libMesh::Elem::type(), libMesh::DofObject::unique_id(), libMesh::DofObject::unpackable_indexing_size(), libMesh::DofObject::valid_unique_id(), and libMesh::Elem::which_child_am_i()\&.
+.PP
+Referenced by pack(), and pack_range()\&.
+.PP
+.nf
+165 {
+166   libmesh_assert(elem);
+167 
+168   // This should be redundant when used with Parallel::pack_range()
+169   // data\&.reserve (data\&.size() + Parallel::packable_size(elem, mesh));
+170 
+171 #ifndef NDEBUG
+172   data\&.push_back (elem_magic_header);
+173 #endif
+174 
+175 #ifdef LIBMESH_ENABLE_AMR
+176   data\&.push_back (static_cast<largest_id_type>(elem->level()));
+177   data\&.push_back (static_cast<largest_id_type>(elem->p_level()));
+178   data\&.push_back (static_cast<largest_id_type>(elem->refinement_flag()));
+179   data\&.push_back (static_cast<largest_id_type>(elem->p_refinement_flag()));
+180 #else
+181   data\&.push_back (0);
+182   data\&.push_back (0);
+183   data\&.push_back (0);
+184   data\&.push_back (0);
+185 #endif
+186   data\&.push_back (static_cast<largest_id_type>(elem->type()));
+187   data\&.push_back (elem->processor_id());
+188   data\&.push_back (elem->subdomain_id());
+189   data\&.push_back (elem->id());
+190 
+191 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+192   if (elem->valid_unique_id())
+193     data\&.push_back (static_cast<largest_id_type>(elem->unique_id()));
+194   else
+195     // OK to send invalid unique id, we must not own this DOF
+196     data\&.push_back (static_cast<largest_id_type>(DofObject::invalid_unique_id));
+197 #endif
+198 
+199 #ifdef LIBMESH_ENABLE_AMR
+200   // use parent_ID of -1 to indicate a level 0 element
+201   if (elem->level() == 0)
+202     {
+203       data\&.push_back(-1);
+204       data\&.push_back(-1);
+205     }
+206   else
+207     {
+208       data\&.push_back(elem->parent()->id());
+209       data\&.push_back(elem->parent()->which_child_am_i(elem));
+210     }
+211 #else
+212   data\&.push_back (-1);
+213   data\&.push_back (-1);
+214 #endif
+215 
+216   for (unsigned int n=0; n<elem->n_nodes(); n++)
+217     data\&.push_back (elem->node(n));
+218 
+219   for (unsigned int n=0; n<elem->n_neighbors(); n++)
+220     {
+221       const Elem *neigh = elem->neighbor(n);
+222       if (neigh)
+223         data\&.push_back (neigh->id());
+224       else
+225         data\&.push_back (-1);
+226     }
+227 
+228 #ifndef NDEBUG
+229   const std::size_t start_indices = data\&.size();
+230 #endif
+231   // Add any DofObject indices
+232   elem->pack_indexing(std::back_inserter(data));
+233 
+234   libmesh_assert(elem->packed_indexing_size() ==
+235                  DofObject::unpackable_indexing_size(data\&.begin() +
+236                                                      start_indices));
+237 
+238   libmesh_assert_equal_to (elem->packed_indexing_size(),
+239                            data\&.size() - start_indices);
+240 
+241 
+242   // If this is a coarse element,
+243   // Add any element side boundary condition ids
+244   if (elem->level() == 0)
+245     {
+246       for (unsigned int s = 0; s != elem->n_sides(); ++s)
+247         {
+248           std::vector<boundary_id_type> bcs =
+249             mesh->boundary_info->boundary_ids(elem, s);
+250 
+251           data\&.push_back(bcs\&.size());
+252 
+253           for(unsigned int bc_it=0; bc_it < bcs\&.size(); bc_it++)
+254             data\&.push_back(bcs[bc_it]);
+255         }
+256 
+257       for (unsigned int e = 0; e != elem->n_edges(); ++e)
+258         {
+259           std::vector<boundary_id_type> bcs =
+260             mesh->boundary_info->edge_boundary_ids(elem, e);
+261 
+262           data\&.push_back(bcs\&.size());
+263 
+264           for(unsigned int bc_it=0; bc_it < bcs\&.size(); bc_it++)
+265             data\&.push_back(bcs[bc_it]);
+266         }
+267     }
+268 }
+.fi
+.SS "template<> void libMesh::Parallel::pack (const \fBNode\fP *node, std::vector< \fBlargest_id_type\fP > &data, const \fBParallelMesh\fP *mesh)"
+
+.PP
+Definition at line 177 of file parallel_node\&.C\&.
+.PP
+References pack()\&.
+.PP
+.nf
+180 {
+181   pack(node, data, static_cast<const MeshBase*>(mesh));
+182 }
+.fi
+.SS "template<> void libMesh::Parallel::pack (const Elem *elem, std::vector< largest_id_type > &data, const ParallelMesh *mesh)"
+
+.PP
+Definition at line 273 of file parallel_elem\&.C\&.
+.PP
+References pack()\&.
+.PP
+.nf
+276 {
+277   pack(elem, data, static_cast<const MeshBase*>(mesh));
+278 }
+.fi
+.SS "template<typename T , typename buffertype , typename Context > void libMesh::Parallel::pack (const T *object, typename std::vector< buffertype > &data, const Context *context)"
+Encode a potentially-variable-size object at the end of a data array\&.
+.PP
+\fBParallel::pack()\fP has no default implementation, and must be specialized for each class which is to be communicated via packed ranges\&. 
+.SS "template<typename Context , typename buffertype , typename Iter > void libMesh::Parallel::pack_range (const Context *context, Iterrange_begin, const Iterrange_end, typename std::vector< buffertype > &buffer)\fC [inline]\fP"
+Encode a range of potentially-variable-size objects to a data array\&.
+.PP
+Helper function for range packing 
+.PP
+Definition at line 371 of file parallel_implementation\&.h\&.
+.PP
+References pack(), packable_size(), and packed_size()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::allgather_packed_range(), libMesh::Parallel::Communicator::broadcast_packed_range(), libMesh::Parallel::Communicator::gather_packed_range(), and libMesh::Parallel::Communicator::send_packed_range()\&.
+.PP
+.nf
+375 {
+376   // Count the total size of and preallocate buffer for efficiency
+377   std::size_t buffer_size = 0;
+378   for (Iter range_count = range_begin;
+379        range_count != range_end;
+380        ++range_count)
+381     {
+382       buffer_size += Parallel::packable_size(*range_count, context);
+383     }
+384   buffer\&.reserve(buffer\&.size() + buffer_size);
+385 
+386   // Pack the objects into the buffer
+387   for (; range_begin != range_end; ++range_begin)
+388     {
+389 #ifndef NDEBUG
+390       std::size_t old_size = buffer\&.size();
+391 #endif
+392 
+393       Parallel::pack(*range_begin, buffer, context);
+394 
+395 #ifndef NDEBUG
+396       unsigned int my_packable_size =
+397         Parallel::packable_size(*range_begin, context);
+398       unsigned int my_packed_size =
+399         Parallel::packed_size (*range_begin, buffer\&.begin() +
+400                                old_size);
+401       libmesh_assert_equal_to (my_packable_size, my_packed_size);
+402       libmesh_assert_equal_to (buffer\&.size(), old_size + my_packable_size);
+403 #endif
+404     }
+405 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packable_size (const \fBNode\fP *node, const \fBMeshBase\fP *mesh)"
+
+.PP
+Definition at line 58 of file parallel_node\&.C\&.
+.PP
+References libMesh::MeshBase::boundary_info, and libMesh::DofObject::packed_indexing_size()\&.
+.PP
+.nf
+59 {
+60   return
+61 #ifndef NDEBUG
+62     1 + // add an int for the magic header when testing
+63 #endif
+64     header_size + LIBMESH_DIM*idtypes_per_Real +
+65     node->packed_indexing_size() +
+66     1 + mesh->boundary_info->n_boundary_ids(node);
+67 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packable_size (const \fBNode\fP *node, const \fBParallelMesh\fP *mesh)"
+
+.PP
+Definition at line 103 of file parallel_node\&.C\&.
+.PP
+References packable_size()\&.
+.PP
+.nf
+104 {
+105   return packable_size(node, static_cast<const MeshBase*>(mesh));
+106 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packable_size (const Elem *elem, const MeshBase *mesh)"
+
+.PP
+Definition at line 128 of file parallel_elem\&.C\&.
+.PP
+References libMesh::MeshBase::boundary_info, libMesh::Elem::level(), libMesh::Elem::n_edges(), libMesh::Elem::n_neighbors(), libMesh::Elem::n_nodes(), libMesh::Elem::n_sides(), and libMesh::DofObject::packed_indexing_size()\&.
+.PP
+Referenced by pack_range(), and packable_size()\&.
+.PP
+.nf
+129 {
+130   unsigned int total_packed_bcs = 0;
+131   if (elem->level() == 0)
+132     {
+133       total_packed_bcs += elem->n_sides();
+134       for (unsigned int s = 0; s != elem->n_sides(); ++s)
+135         total_packed_bcs += mesh->boundary_info->n_boundary_ids(elem,s);
+136 
+137       total_packed_bcs += elem->n_edges();
+138       for (unsigned int e = 0; e != elem->n_edges(); ++e)
+139         total_packed_bcs += mesh->boundary_info->n_edge_boundary_ids(elem,e);
+140     }
+141 
+142   return
+143 #ifndef NDEBUG
+144     1 + // add an int for the magic header when testing
+145 #endif
+146     header_size + elem->n_nodes() +
+147     elem->n_neighbors() +
+148     elem->packed_indexing_size() + total_packed_bcs;
+149 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packable_size (const Elem *elem, const ParallelMesh *mesh)"
+
+.PP
+Definition at line 154 of file parallel_elem\&.C\&.
+.PP
+References packable_size()\&.
+.PP
+.nf
+155 {
+156   return packable_size(elem, static_cast<const MeshBase*>(mesh));
+157 }
+.fi
+.SS "template<typename T , typename Context > unsigned int libMesh::Parallel::packable_size (const T *, const Context *)"
+Output the number of integers required to encode a potentially-variable-size object into a data array\&.
+.PP
+\fBParallel::packable_size()\fP has no default implementation, and must be specialized for each class which is to be communicated via packed ranges\&. 
+.SS "template<> unsigned int libMesh::Parallel::packed_size (const Elem *, std::vector< largest_id_type >::const_iteratorin)"
+
+.PP
+Definition at line 53 of file parallel_elem\&.C\&.
+.PP
+References libMesh::INVALID_ELEM, n_nodes, libMesh::Elem::type_to_n_edges_map, libMesh::Elem::type_to_n_nodes_map, libMesh::Elem::type_to_n_sides_map, and libMesh::DofObject::unpackable_indexing_size()\&.
+.PP
+Referenced by pack_range(), packed_size(), unpack(), and unpack_range()\&.
+.PP
+.nf
+55 {
+56 #ifndef NDEBUG
+57   const largest_id_type packed_header = *in++;
+58   libmesh_assert_equal_to (packed_header, elem_magic_header);
+59 #endif
+60 
+61   // int 0: level
+62   const unsigned int level =
+63     static_cast<unsigned int>(*in);
+64 
+65   // int 4: element type
+66   const int typeint = *(in+4);
+67   libmesh_assert_greater_equal (typeint, 0);
+68   libmesh_assert_less (typeint, INVALID_ELEM);
+69   const ElemType type =
+70     static_cast<ElemType>(typeint);
+71 
+72   const unsigned int n_nodes =
+73     Elem::type_to_n_nodes_map[type];
+74 
+75   const unsigned int n_sides =
+76     Elem::type_to_n_sides_map[type];
+77 
+78   const unsigned int n_edges =
+79     Elem::type_to_n_edges_map[type];
+80 
+81   const unsigned int pre_indexing_size =
+82     header_size + n_nodes + n_sides;
+83 
+84   const unsigned int indexing_size =
+85     DofObject::unpackable_indexing_size(in+pre_indexing_size);
+86 
+87   unsigned int total_packed_bc_data = 0;
+88   if (level == 0)
+89     {
+90       for (unsigned int s = 0; s != n_sides; ++s)
+91         {
+92           const int n_bcs =
+93             *(in + pre_indexing_size + indexing_size +
+94               total_packed_bc_data++);
+95           libmesh_assert_greater_equal (n_bcs, 0);
+96           total_packed_bc_data += n_bcs;
+97         }
+98 
+99       for (unsigned int e = 0; e != n_edges; ++e)
+100         {
+101           const int n_bcs =
+102             *(in + pre_indexing_size + indexing_size +
+103               total_packed_bc_data++);
+104           libmesh_assert_greater_equal (n_bcs, 0);
+105           total_packed_bc_data += n_bcs;
+106         }
+107     }
+108 
+109   return
+110 #ifndef NDEBUG
+111     1 + // Account for magic header
+112 #endif
+113     pre_indexing_size + indexing_size + total_packed_bc_data;
+114 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packed_size (const \fBNode\fP *, const std::vector< \fBlargest_id_type\fP >::const_iteratorin)"
+
+.PP
+Definition at line 72 of file parallel_node\&.C\&.
+.PP
+References libMesh::DofObject::unpackable_indexing_size()\&.
+.PP
+.nf
+74 {
+75   const unsigned int pre_indexing_size =
+76 #ifndef NDEBUG
+77     1 + // add an int for the magic header when testing
+78 #endif
+79     header_size + LIBMESH_DIM*idtypes_per_Real;
+80 
+81   const unsigned int indexing_size =
+82     DofObject::unpackable_indexing_size(in+pre_indexing_size);
+83 
+84   const int n_bcs =
+85     *(in + pre_indexing_size + indexing_size);
+86   libmesh_assert_greater_equal (n_bcs, 0);
+87 
+88   return pre_indexing_size + indexing_size + 1 + n_bcs;
+89 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packed_size (const \fBNode\fP *n, const std::vector< \fBlargest_id_type\fP >::iteratorin)"
+
+.PP
+Definition at line 94 of file parallel_node\&.C\&.
+.PP
+References packed_size()\&.
+.PP
+.nf
+96 {
+97   return packed_size(n, std::vector<largest_id_type>::const_iterator(in));
+98 }
+.fi
+.SS "template<> unsigned int libMesh::Parallel::packed_size (const Elem *e, std::vector< largest_id_type >::iteratorin)"
+
+.PP
+Definition at line 119 of file parallel_elem\&.C\&.
+.PP
+References packed_size()\&.
+.PP
+.nf
+121 {
+122   return packed_size(e, std::vector<largest_id_type>::const_iterator(in));
+123 }
+.fi
+.SS "template<typename T , typename BufferIter > unsigned int libMesh::Parallel::packed_size (const T *, BufferIter)"
+Output the number of integers that were used to encode the next variable-size object in the data array\&.
+.PP
+\fBParallel::packed_size()\fP has no default implementation, and must be specialized for each class which is to be communicated via packed ranges\&.
+.PP
+The output of this method should be based \fIonly\fP on the data array; the T* argument is solely for function specialization\&. 
+.SS "\fBstatus\fP libMesh::Parallel::probe (const unsigned intsrc_processor_id, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 841 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::probe()\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_blocked_dof_objects(), and libMesh::System::write_serialized_blocked_dof_objects()\&.
+.PP
+.nf
+844 { return comm\&.probe(src_processor_id, tag); }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::receive (const unsigned intsrc_processor_id, T &buf, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 918 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+922 { return comm\&.receive (src_processor_id, buf, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::receive (const unsigned intsrc_processor_id, T &buf, Request &req, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 925 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+930 { comm\&.receive (src_processor_id, buf, req, tag); }
+.fi
+.SS "template<typename T > \fBStatus\fP libMesh::Parallel::receive (const unsigned intsrc_processor_id, T &buf, const DataType &type, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 933 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+938 { return comm\&.receive (src_processor_id, buf, type, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::receive (const unsigned intsrc_processor_id, T &buf, const DataType &type, Request &req, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 941 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+947 { comm\&.receive (src_processor_id, buf, type, req, tag); }
+.fi
+.SS "template<typename Context , typename OutputIter > void libMesh::Parallel::receive_packed_range (const unsigned intsrc_processor_id, Context *context, OutputIterout, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 950 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive_packed_range()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::send_receive_packed_range()\&.
+.PP
+.nf
+955 { comm\&.receive_packed_range (src_processor_id, context, out, tag); }
+.fi
+.SS "template<typename Context , typename OutputIter > void libMesh::Parallel::receive_packed_range (const unsigned intsrc_processor_id, Context *context, OutputIterout, Request &req, const MessageTag &tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 958 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::receive_packed_range()\&.
+.PP
+.nf
+964 { comm\&.receive_packed_range (src_processor_id, context, out, req, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::send (const unsigned intdest_processor_id, T &data, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 847 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+851 { comm\&.send(dest_processor_id, data, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::send (const unsigned intdest_processor_id, T &data, Request &req, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 854 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+859 { comm\&.send(dest_processor_id, data, req, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::send (const unsigned intdest_processor_id, T &data, const DataType &type, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 862 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+867 { comm\&.send(dest_processor_id, data, type, tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::send (const unsigned intdest_processor_id, T &data, const DataType &type, Request &req, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 870 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send()\&.
+.PP
+.nf
+876 { comm\&.send(dest_processor_id, data, type, req, tag); }
+.fi
+.SS "template<typename Context , typename Iter > void libMesh::Parallel::send_packed_range (const unsigned intdest_processor_id, const Context *context, Iterrange_begin, const Iterrange_end, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 880 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send_packed_range()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::send_receive_packed_range()\&.
+.PP
+.nf
+886 { comm\&.send_packed_range(dest_processor_id, context, range_begin, range_end, tag); }
+.fi
+.SS "template<typename Context , typename Iter > void libMesh::Parallel::send_packed_range (const unsigned intdest_processor_id, const Context *context, Iterrange_begin, const Iterrange_end, Request &req, const MessageTag &tag = \fCno_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 890 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send_packed_range()\&.
+.PP
+.nf
+897 { comm\&.send_packed_range(dest_processor_id, context, range_begin, range_end, req, tag); }
+.fi
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::send_receive (const unsigned intdest_processor_id, T1 &send, const unsigned intsource_processor_id, T2 &recv, const MessageTag &send_tag = \fCno_tag\fP, const MessageTag &recv_tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 984 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send_receive()\&.
+.PP
+.nf
+991 { comm\&.send_receive(dest_processor_id, send, source_processor_id, recv,
+992                     send_tag, recv_tag); }
+.fi
+.SS "template<typename T1 , typename T2 > void libMesh::Parallel::send_receive (const unsigned intdest_processor_id, T1 &send, const DataType &type1, const unsigned intsource_processor_id, T2 &recv, const DataType &type2, const MessageTag &send_tag = \fCno_tag\fP, const MessageTag &recv_tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 1009 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send_receive()\&.
+.PP
+.nf
+1018 { comm\&.send_receive(dest_processor_id, send, type1, source_processor_id,
+1019                     recv, type2, send_tag, recv_tag); }
+.fi
+.SS "template<typename Context1 , typename RangeIter , typename Context2 , typename OutputIter > void libMesh::Parallel::send_receive_packed_range (const unsigned intdest_processor_id, const Context1 *context1, RangeItersend_begin, const RangeItersend_end, const unsigned intsource_processor_id, Context2 *context2, OutputIterout, const MessageTag &send_tag = \fCno_tag\fP, const MessageTag &recv_tag = \fCany_tag\fP, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 995 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::send_receive_packed_range()\&.
+.PP
+.nf
+1005 { comm\&.send_receive_packed_range(dest_processor_id, context1, send_begin, send_end,
+1006                                  source_processor_id, context2, out, send_tag, recv_tag); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::set_union (T &data, const unsigned introot_id, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 832 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::set_union()\&.
+.PP
+Referenced by libMesh::Nemesis_IO_Helper::compute_border_node_ids()\&.
+.PP
+.nf
+834 { comm\&.set_union(data, root_id); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::set_union (T &data, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 837 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::set_union()\&.
+.PP
+.nf
+839 { comm\&.set_union(data); }
+.fi
+.SS "template<typename T > void libMesh::Parallel::sum (T &r, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 827 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by libMesh::TypeTensor< T >::contract(), libMesh::TreeNode< N >::n_active_bins(), libMesh::TypeTensor< T >::size_sq(), and libMesh::EpetraVector< T >::sum()\&.
+.PP
+.nf
+829 { comm\&.sum(r); }
+.fi
+.SS "template<typename Iterator , typename SyncFunctor > void libMesh::Parallel::sync_dofobject_data_by_id (const Communicator &communicator, const Iterator &range_begin, const Iterator &range_end, SyncFunctor &sync)"
+\fBRequest\fP data about a range of ghost dofobjects uniquely identified by their id\&. Fulfill requests with sync\&.gather_data(const std::vector<unsigned int>& ids, std::vector<sync::datum>& data), by resizing and setting the values of the data vector\&. Respond to fulfillment with sync\&.act_on_data(const std::vector<unsigned int>& ids, std::vector<sync::datum>& data) The user must define Parallel::StandardType<sync::datum> if sync::datum isn't a built-in type\&. 
+.PP
+Definition at line 236 of file parallel_ghost_sync\&.h\&.
+.PP
+References data, libMesh::DofObject::id(), libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::DofObject::processor_id(), libMesh::Parallel::Communicator::rank(), libMesh::Parallel::Communicator::send_receive(), and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::FEMSystem::mesh_position_set(), and libMesh::LaplaceMeshSmoother::smooth()\&.
+.PP
+.nf
+240 {
+241   // This function must be run on all processors at once
+242   libmesh_parallel_only(communicator);
+243 
+244   // Count the objects to ask each processor about
+245   std::vector<dof_id_type>
+246     ghost_objects_from_proc(communicator\&.size(), 0);
+247 
+248   for (Iterator it = range_begin; it != range_end; ++it)
+249     {
+250       DofObject *obj = *it;
+251       libmesh_assert (obj);
+252       processor_id_type obj_procid = obj->processor_id();
+253       if (obj_procid != DofObject::invalid_processor_id)
+254         ghost_objects_from_proc[obj_procid]++;
+255     }
+256 
+257   // Request sets to send to each processor
+258   std::vector<std::vector<dof_id_type> >
+259     requested_objs_id(communicator\&.size());
+260 
+261   // We know how many objects live on each processor, so reserve()
+262   // space for each\&.
+263   for (processor_id_type p=0; p != communicator\&.size(); ++p)
+264     if (p != communicator\&.rank())
+265       {
+266         requested_objs_id[p]\&.reserve(ghost_objects_from_proc[p]);
+267       }
+268   for (Iterator it = range_begin; it != range_end; ++it)
+269     {
+270       DofObject *obj = *it;
+271       processor_id_type obj_procid = obj->processor_id();
+272       if (obj_procid == communicator\&.rank() ||
+273           obj_procid == DofObject::invalid_processor_id)
+274         continue;
+275 
+276       requested_objs_id[obj_procid]\&.push_back(obj->id());
+277     }
+278 
+279   // Trade requests with other processors
+280   for (processor_id_type p=1; p != communicator\&.size(); ++p)
+281     {
+282       // Trade my requests with processor procup and procdown
+283       const processor_id_type procup =
+284         libmesh_cast_int<processor_id_type>
+285         (communicator\&.rank() + p) % communicator\&.size();
+286       const processor_id_type procdown =
+287         libmesh_cast_int<processor_id_type>
+288         ((communicator\&.size() + communicator\&.rank() - p) %
+289          communicator\&.size());
+290       std::vector<dof_id_type> request_to_fill_id;
+291       communicator\&.send_receive(procup, requested_objs_id[procup],
+292                                 procdown, request_to_fill_id);
+293 
+294       // Gather whatever data the user wants
+295       std::vector<typename SyncFunctor::datum> data;
+296       sync\&.gather_data(request_to_fill_id, data);
+297 
+298       // Trade back the results
+299       std::vector<typename SyncFunctor::datum> received_data;
+300       communicator\&.send_receive(procdown, data,
+301                                 procup, received_data);
+302       libmesh_assert_equal_to (requested_objs_id[procup]\&.size(),
+303                                received_data\&.size());
+304 
+305       // Let the user process the results
+306       sync\&.act_on_data(requested_objs_id[procup], received_data);
+307     }
+308 }
+.fi
+.SS "template<typename Iterator , typename DofObjType , typename SyncFunctor > void libMesh::Parallel::sync_dofobject_data_by_xyz (const Communicator &communicator, const Iterator &range_begin, const Iterator &range_end, LocationMap< DofObjType > *location_map, SyncFunctor &sync)"
+\fBRequest\fP data about a range of ghost nodes uniquely identified by their xyz location or a range of active ghost elements uniquely identified by their centroids' xyz location\&. Fulfill requests with sync\&.gather_data(const std::vector<unsigned int>& ids, std::vector<sync::datum>& data), by resizing and setting the values of the data vector\&. Respond to fulfillment with sync\&.act_on_data(const std::vector<unsigned int>& ids, std::vector<sync::datum>& data) The user must define Parallel::StandardType<sync::datum> if sync::datum isn't a built-in type\&. The user-provided location_map will be used and left unchanged if it is provided, or filled and cleared if it is empty\&. 
+.PP
+Referenced by libMesh::MeshCommunication::make_node_ids_parallel_consistent(), and libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent()\&.
+.SS "template<typename Iterator , typename DofObjType , typename SyncFunctor > void libMesh::Parallel::sync_dofobject_data_by_xyz (const Communicator &communicator, const Iterator &range_begin, const Iterator &range_end, LocationMap< DofObjType > &location_map, SyncFunctor &sync)"
+
+.PP
+Definition at line 113 of file parallel_ghost_sync\&.h\&.
+.PP
+References data, libMesh::LocationMap< T >::empty(), libMesh::LocationMap< T >::find(), libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::Parallel::Communicator::max(), libMesh::LocationMap< T >::point_of(), libMesh::Parallel::Communicator::rank(), libMesh::Parallel::Communicator::send_receive(), and libMesh::Parallel::Communicator::size()\&.
+.PP
+.nf
+118 {
+119   // This function must be run on all processors at once
+120   libmesh_parallel_only(communicator);
+121 
+122   // We need a valid location_map
+123 #ifdef DEBUG
+124   bool need_map_update = (range_begin != range_end && location_map\&.empty());
+125   communicator\&.max(need_map_update);
+126   libmesh_assert(!need_map_update);
+127 #endif
+128 
+129   // Count the objectss to ask each processor about
+130   std::vector<dof_id_type>
+131     ghost_objects_from_proc(communicator\&.size(), 0);
+132 
+133   for (Iterator it = range_begin; it != range_end; ++it)
+134     {
+135       DofObjType *obj = *it;
+136       libmesh_assert (obj);
+137       processor_id_type obj_procid = obj->processor_id();
+138       if (obj_procid != DofObject::invalid_processor_id)
+139         ghost_objects_from_proc[obj_procid]++;
+140     }
+141 
+142   // Request sets to send to each processor
+143   std::vector<std::vector<Real> >
+144     requested_objs_x(communicator\&.size()),
+145     requested_objs_y(communicator\&.size()),
+146     requested_objs_z(communicator\&.size());
+147   // Corresponding ids to keep track of
+148   std::vector<std::vector<dof_id_type> >
+149     requested_objs_id(communicator\&.size());
+150 
+151   // We know how many objects live on each processor, so reserve()
+152   // space for each\&.
+153   for (processor_id_type p=0; p != communicator\&.size(); ++p)
+154     if (p != communicator\&.rank())
+155       {
+156         requested_objs_x[p]\&.reserve(ghost_objects_from_proc[p]);
+157         requested_objs_y[p]\&.reserve(ghost_objects_from_proc[p]);
+158         requested_objs_z[p]\&.reserve(ghost_objects_from_proc[p]);
+159         requested_objs_id[p]\&.reserve(ghost_objects_from_proc[p]);
+160       }
+161   for (Iterator it = range_begin; it != range_end; ++it)
+162     {
+163       DofObjType *obj = *it;
+164       processor_id_type obj_procid = obj->processor_id();
+165       if (obj_procid == communicator\&.rank() ||
+166           obj_procid == DofObject::invalid_processor_id)
+167         continue;
+168 
+169       Point p = location_map\&.point_of(*obj);
+170       requested_objs_x[obj_procid]\&.push_back(p(0));
+171       requested_objs_y[obj_procid]\&.push_back(p(1));
+172       requested_objs_z[obj_procid]\&.push_back(p(2));
+173       requested_objs_id[obj_procid]\&.push_back(obj->id());
+174     }
+175 
+176   // Trade requests with other processors
+177   for (processor_id_type p=1; p != communicator\&.size(); ++p)
+178     {
+179       // Trade my requests with processor procup and procdown
+180       const processor_id_type procup =
+181         libmesh_cast_int<processor_id_type>
+182         ((communicator\&.rank() + p) % communicator\&.size());
+183       const processor_id_type procdown =
+184         libmesh_cast_int<processor_id_type>
+185         ((communicator\&.size() + communicator\&.rank() - p) %
+186          communicator\&.size());
+187       std::vector<Real> request_to_fill_x,
+188         request_to_fill_y,
+189         request_to_fill_z;
+190       communicator\&.send_receive(procup, requested_objs_x[procup],
+191                                 procdown, request_to_fill_x);
+192       communicator\&.send_receive(procup, requested_objs_y[procup],
+193                                 procdown, request_to_fill_y);
+194       communicator\&.send_receive(procup, requested_objs_z[procup],
+195                                 procdown, request_to_fill_z);
+196 
+197       // Find the local id of each requested object
+198       std::vector<dof_id_type> request_to_fill_id(request_to_fill_x\&.size());
+199       for (std::size_t i=0; i != request_to_fill_x\&.size(); ++i)
+200         {
+201           Point pt(request_to_fill_x[i],
+202                    request_to_fill_y[i],
+203                    request_to_fill_z[i]);
+204 
+205           // Look for this object in the multimap
+206           DofObjType *obj = location_map\&.find(pt);
+207 
+208           // We'd better find every object we're asked for
+209           libmesh_assert (obj);
+210 
+211           // Return the object's correct processor id,
+212           // and our (correct if it's local) id for it\&.
+213           request_to_fill_id[i] = obj->id();
+214         }
+215 
+216       // Gather whatever data the user wants
+217       std::vector<typename SyncFunctor::datum> data;
+218       sync\&.gather_data(request_to_fill_id, data);
+219 
+220       // Trade back the results
+221       std::vector<typename SyncFunctor::datum> received_data;
+222       communicator\&.send_receive(procdown, data,
+223                                 procup, received_data);
+224       libmesh_assert_equal_to (requested_objs_x[procup]\&.size(),
+225                                received_data\&.size());
+226 
+227       // Let the user process the results
+228       sync\&.act_on_data(requested_objs_id[procup], received_data);
+229     }
+230 }
+.fi
+.SS "template<typename Iterator , typename SyncFunctor > void libMesh::Parallel::sync_element_data_by_parent_id (MeshBase &mesh, const Iterator &range_begin, const Iterator &range_end, SyncFunctor &sync)"
+\fBRequest\fP data about a range of ghost elements uniquely identified by their parent id and which child they are\&. Fulfill requests with sync\&.gather_data(const std::vector<unsigned int>& ids, std::vector<sync::datum>& data), by resizing and setting the values of the data vector\&. Respond to fulfillment with sync\&.act_on_data(const std::vector<unsigned int>& ids, std::vector<sync::datum>& data) The user must define Parallel::StandardType<sync::datum> if sync::datum isn't a built-in type\&. 
+.PP
+Definition at line 316 of file parallel_ghost_sync\&.h\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::child(), libMesh::ParallelObject::comm(), data, libMesh::MeshBase::elem(), libMesh::Elem::has_children(), libMesh::DofObject::id(), libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::libmesh_parallel_only(), libMesh::Elem::parent(), libMesh::DofObject::processor_id(), and libMesh::Elem::which_child_am_i()\&.
+.PP
+Referenced by libMesh::MeshCommunication::make_elems_parallel_consistent()\&.
+.PP
+.nf
+320 {
+321   const Communicator &communicator (mesh\&.comm());
+322 
+323   // This function must be run on all processors at once
+324   libmesh_parallel_only(communicator);
+325 
+326   // Count the objects to ask each processor about
+327   std::vector<dof_id_type>
+328     ghost_objects_from_proc(communicator\&.size(), 0);
+329 
+330   for (Iterator it = range_begin; it != range_end; ++it)
+331     {
+332       DofObject *obj = *it;
+333       libmesh_assert (obj);
+334       processor_id_type obj_procid = obj->processor_id();
+335       if (obj_procid != DofObject::invalid_processor_id)
+336         ghost_objects_from_proc[obj_procid]++;
+337     }
+338 
+339   // Request sets to send to each processor
+340   std::vector<std::vector<dof_id_type> >
+341     requested_objs_id(communicator\&.size()),
+342     requested_objs_parent_id(communicator\&.size());
+343   std::vector<std::vector<unsigned char> >
+344     requested_objs_child_num(communicator\&.size());
+345 
+346   // We know how many objects live on each processor, so reserve()
+347   // space for each\&.
+348   for (processor_id_type p=0; p != communicator\&.size(); ++p)
+349     if (p != communicator\&.rank())
+350       {
+351         requested_objs_id[p]\&.reserve(ghost_objects_from_proc[p]);
+352         requested_objs_parent_id[p]\&.reserve(ghost_objects_from_proc[p]);
+353         requested_objs_child_num[p]\&.reserve(ghost_objects_from_proc[p]);
+354       }
+355 
+356   for (Iterator it = range_begin; it != range_end; ++it)
+357     {
+358       Elem *elem = *it;
+359       processor_id_type obj_procid = elem->processor_id();
+360       if (obj_procid == communicator\&.rank() ||
+361           obj_procid == DofObject::invalid_processor_id)
+362         continue;
+363       const Elem *parent = elem->parent();
+364       if (!parent || !elem->active())
+365         continue;
+366 
+367       requested_objs_id[obj_procid]\&.push_back(elem->id());
+368       requested_objs_parent_id[obj_procid]\&.push_back(parent->id());
+369       requested_objs_child_num[obj_procid]\&.push_back
+370         (libmesh_cast_int<unsigned char>
+371          (parent->which_child_am_i(elem)));
+372     }
+373 
+374   // Trade requests with other processors
+375   for (processor_id_type p=1; p != communicator\&.size(); ++p)
+376     {
+377       // Trade my requests with processor procup and procdown
+378       const processor_id_type procup =
+379         libmesh_cast_int<processor_id_type>
+380         (communicator\&.rank() + p) % communicator\&.size();
+381       const processor_id_type procdown =
+382         libmesh_cast_int<processor_id_type>
+383         ((communicator\&.size() + communicator\&.rank() - p) %
+384          communicator\&.size());
+385       std::vector<dof_id_type>   request_to_fill_parent_id;
+386       std::vector<unsigned char> request_to_fill_child_num;
+387       communicator\&.send_receive(procup, requested_objs_parent_id[procup],
+388                                 procdown, request_to_fill_parent_id);
+389       communicator\&.send_receive(procup, requested_objs_child_num[procup],
+390                                 procdown, request_to_fill_child_num);
+391 
+392       // Find the id of each requested element
+393       std::size_t request_size = request_to_fill_parent_id\&.size();
+394       std::vector<dof_id_type> request_to_fill_id(request_size);
+395       for (std::size_t i=0; i != request_size; ++i)
+396         {
+397           Elem *parent = mesh\&.elem(request_to_fill_parent_id[i]);
+398           libmesh_assert(parent);
+399           libmesh_assert(parent->has_children());
+400           Elem *child = parent->child(request_to_fill_child_num[i]);
+401           libmesh_assert(child);
+402           libmesh_assert(child->active());
+403           request_to_fill_id[i] = child->id();
+404         }
+405 
+406       // Gather whatever data the user wants
+407       std::vector<typename SyncFunctor::datum> data;
+408       sync\&.gather_data(request_to_fill_id, data);
+409 
+410       // Trade back the results
+411       std::vector<typename SyncFunctor::datum> received_data;
+412       communicator\&.send_receive(procdown, data,
+413                                 procup, received_data);
+414       libmesh_assert_equal_to (requested_objs_id[procup]\&.size(),
+415                                received_data\&.size());
+416 
+417       // Let the user process the results
+418       sync\&.act_on_data(requested_objs_id[procup], received_data);
+419     }
+420 }
+.fi
+.SS "template<> void libMesh::Parallel::unpack (std::vector< \fBlargest_id_type\fP >::const_iteratorin, \fBNode\fP **out, \fBMeshBase\fP *mesh)"
+
+.PP
+Definition at line 187 of file parallel_node\&.C\&.
+.PP
+References libMesh::MeshBase::boundary_info, libMesh::DofObject::has_dofs(), libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::n_processors(), libMesh::DofObject::packed_indexing_size(), packed_size(), libMesh::processor_id(), libMesh::DofObject::processor_id(), libMesh::MeshBase::query_node_ptr(), libMesh::Real, libMesh::DofObject::set_id(), libMesh::DofObject::set_unique_id(), libMesh::DofObject::unpack_indexing(), and libMesh::DofObject::unpackable_indexing_size()\&.
+.PP
+.nf
+190 {
+191 #ifndef NDEBUG
+192   const std::vector<largest_id_type>::const_iterator original_in = in;
+193   const largest_id_type incoming_header = *in++;
+194   libmesh_assert_equal_to (incoming_header, node_magic_header);
+195 #endif
+196 
+197   const processor_id_type processor_id = static_cast<processor_id_type>(*in++);
+198   libmesh_assert(processor_id == DofObject::invalid_processor_id ||
+199                  processor_id < mesh->n_processors());
+200 
+201   const dof_id_type id = static_cast<dof_id_type>(*in++);
+202 
+203 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+204   const unique_id_type unique_id = static_cast<unique_id_type>(*in++);
+205 #endif
+206 
+207   Node *node = mesh->query_node_ptr(id);
+208 
+209   if (node)
+210     {
+211       libmesh_assert_equal_to (node->processor_id(), processor_id);
+212 
+213       // We currently don't communicate mesh motion via packed Nodes,
+214       // so it should be safe to assume (and assert) that Node
+215       // locations are consistent between processors
+216 #ifndef NDEBUG
+217       for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+218         {
+219           const Real* idtypes_as_Real = reinterpret_cast<const Real*>(&(*in));
+220           libmesh_assert_equal_to ((*node)(i), *idtypes_as_Real);
+221           in += idtypes_per_Real;
+222         }
+223 #else
+224       in += LIBMESH_DIM * idtypes_per_Real;
+225 #endif // !NDEBUG
+226 
+227       if (!node->has_dofs())
+228         {
+229           node->unpack_indexing(in);
+230           libmesh_assert_equal_to (DofObject::unpackable_indexing_size(in),
+231                                    node->packed_indexing_size());
+232           in += node->packed_indexing_size();
+233         }
+234       else
+235         {
+236           // FIXME: We should add some debug mode tests to ensure that
+237           // the encoded indexing is consistent
+238           in += DofObject::unpackable_indexing_size(in);
+239         }
+240 
+241       *out = node;
+242     }
+243   else
+244     {
+245       // If we don't already have it, we need to allocate it
+246       node = new Node();
+247 
+248       for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+249         {
+250           const Real* idtypes_as_Real = reinterpret_cast<const Real*>(&(*in));
+251           (*node)(i) = *idtypes_as_Real;
+252           in += idtypes_per_Real;
+253         }
+254 
+255       node->set_id() = id;
+256 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+257       node->set_unique_id() = unique_id;
+258 #endif
+259       node->processor_id() = processor_id;
+260 
+261       node->unpack_indexing(in);
+262       libmesh_assert_equal_to (DofObject::unpackable_indexing_size(in),
+263                                node->packed_indexing_size());
+264       in += node->packed_indexing_size();
+265     }
+266 
+267   // FIXME: We should add some debug mode tests to ensure that the
+268   // encoded boundary conditions are consistent
+269 
+270   // Add any nodal boundary condition ids
+271   const largest_id_type num_bcs = *in++;
+272   // libmesh_assert_greater_equal (num_bcs, 0);
+273 
+274   for(largest_id_type bc_it=0; bc_it < num_bcs; bc_it++)
+275     mesh->boundary_info->add_node (node, *in++);
+276 
+277   *out = node;
+278 
+279 #ifndef NDEBUG
+280   libmesh_assert (in - original_in ==
+281                   static_cast<int>
+282                   (Parallel::packed_size(node, original_in)));
+283 #endif
+284 }
+.fi
+.SS "template<> void libMesh::Parallel::unpack (std::vector< largest_id_type >::const_iteratorin, Elem **out, MeshBase *mesh)"
+
+.PP
+Definition at line 284 of file parallel_elem\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::add_child(), libMesh::MeshBase::boundary_info, libMesh::Elem::build(), libMesh::Elem::child(), libMesh::MeshBase::elem(), libMesh::DofObject::id(), libMesh::INVALID_ELEM, libMesh::DofObject::invalid_id, libMesh::DofObject::invalid_processor_id, libMesh::Elem::INVALID_REFINEMENTSTATE, libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::Elem::make_links_to_me_local(), libMesh::Elem::n_children(), libMesh::Elem::n_edges(), libMesh::Elem::n_neighbors(), n_nodes, libMesh::Elem::n_nodes(), libMesh::n_processors(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::MeshBase::node_ptr(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::DofObject::packed_indexing_size(), libMesh::Elem::parent(), libMesh::processor_id(), libMesh::DofObject::processor_id(), libMesh::MeshBase::query_elem(), libMesh::Elem::refinement_flag(), libMesh::remote_elem, libMesh::DofObject::set_id(), libMesh::Elem::set_neighbor(), libMesh::Elem::set_node(), libMesh::Elem::set_p_level(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), libMesh::DofObject::set_unique_id(), libMesh::Elem::subdomain_id(), libMesh::Elem::type(), libMesh::Elem::type_to_n_nodes_map, and libMesh::DofObject::unpack_indexing()\&.
+.PP
+Referenced by unpack(), and unpack_range()\&.
+.PP
+.nf
+287 {
+288 #ifndef NDEBUG
+289   const std::vector<largest_id_type>::const_iterator original_in = in;
+290 
+291   const largest_id_type incoming_header = *in++;
+292   libmesh_assert_equal_to (incoming_header, elem_magic_header);
+293 #endif
+294 
+295   // int 0: level
+296   const unsigned int level =
+297     static_cast<unsigned int>(*in++);
+298 
+299 #ifdef LIBMESH_ENABLE_AMR
+300   // int 1: p level
+301   const unsigned int p_level =
+302     static_cast<unsigned int>(*in++);
+303 
+304   // int 2: refinement flag
+305   const int rflag = *in++;
+306   libmesh_assert_greater_equal (rflag, 0);
+307   libmesh_assert_less (rflag, Elem::INVALID_REFINEMENTSTATE);
+308   const Elem::RefinementState refinement_flag =
+309     static_cast<Elem::RefinementState>(rflag);
+310 
+311   // int 3: p refinement flag
+312   const int pflag = *in++;
+313   libmesh_assert_greater_equal (pflag, 0);
+314   libmesh_assert_less (pflag, Elem::INVALID_REFINEMENTSTATE);
+315   const Elem::RefinementState p_refinement_flag =
+316     static_cast<Elem::RefinementState>(pflag);
+317 #else
+318   in += 3;
+319 #endif // LIBMESH_ENABLE_AMR
+320 
+321   // int 4: element type
+322   const int typeint = *in++;
+323   libmesh_assert_greater_equal (typeint, 0);
+324   libmesh_assert_less (typeint, INVALID_ELEM);
+325   const ElemType type =
+326     static_cast<ElemType>(typeint);
+327 
+328   const unsigned int n_nodes =
+329     Elem::type_to_n_nodes_map[type];
+330 
+331   // int 5: processor id
+332   const processor_id_type processor_id =
+333     static_cast<processor_id_type>(*in++);
+334   libmesh_assert (processor_id < mesh->n_processors() ||
+335                   processor_id == DofObject::invalid_processor_id);
+336 
+337   // int 6: subdomain id
+338   const subdomain_id_type subdomain_id =
+339     static_cast<subdomain_id_type>(*in++);
+340 
+341   // int 7: dof object id
+342   const dof_id_type id =
+343     static_cast<dof_id_type>(*in++);
+344   libmesh_assert_not_equal_to (id, DofObject::invalid_id);
+345 
+346 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+347   // int 8: dof object unique id
+348   const unique_id_type unique_id =
+349     static_cast<unique_id_type>(*in++);
+350 #endif
+351 
+352 #ifdef LIBMESH_ENABLE_AMR
+353   // int 9: parent dof object id
+354   const dof_id_type parent_id =
+355     static_cast<dof_id_type>(*in++);
+356   libmesh_assert (level == 0 || parent_id != DofObject::invalid_id);
+357   libmesh_assert (level != 0 || parent_id == DofObject::invalid_id);
+358 
+359   // int 10: local child id
+360   const unsigned int which_child_am_i =
+361     static_cast<unsigned int>(*in++);
+362 #else
+363   in += 2;
+364 #endif // LIBMESH_ENABLE_AMR
+365 
+366   // Make sure we don't miscount above when adding the "magic" header
+367   // plus the real data header
+368   libmesh_assert_equal_to (in - original_in, header_size + 1);
+369 
+370   Elem *elem = mesh->query_elem(id);
+371 
+372   // if we already have this element, make sure its
+373   // properties match, and update any missing neighbor
+374   // links, but then go on
+375   if (elem)
+376     {
+377       libmesh_assert_equal_to (elem->level(), level);
+378       libmesh_assert_equal_to (elem->id(), id);
+379       //#ifdef LIBMESH_ENABLE_UNIQUE_ID
+380       // No check for unqiue id sanity
+381       //#endif
+382       libmesh_assert_equal_to (elem->processor_id(), processor_id);
+383       libmesh_assert_equal_to (elem->subdomain_id(), subdomain_id);
+384       libmesh_assert_equal_to (elem->type(), type);
+385       libmesh_assert_equal_to (elem->n_nodes(), n_nodes);
+386 
+387 #ifndef NDEBUG
+388       // All our nodes should be correct
+389       for (unsigned int i=0; i != n_nodes; ++i)
+390         libmesh_assert(elem->node(i) ==
+391                        static_cast<dof_id_type>(*in++));
+392 #else
+393       in += n_nodes;
+394 #endif
+395 
+396 #ifdef LIBMESH_ENABLE_AMR
+397       libmesh_assert_equal_to (elem->p_level(), p_level);
+398       libmesh_assert_equal_to (elem->refinement_flag(), refinement_flag);
+399       libmesh_assert_equal_to (elem->p_refinement_flag(), p_refinement_flag);
+400 
+401       libmesh_assert (!level || elem->parent() != NULL);
+402       libmesh_assert (!level || elem->parent()->id() == parent_id);
+403       libmesh_assert (!level || elem->parent()->child(which_child_am_i) == elem);
+404 #endif
+405 
+406       // Our neighbor links should be "close to" correct - we may have
+407       // to update them, but we can check for some inconsistencies\&.
+408       for (unsigned int n=0; n != elem->n_neighbors(); ++n)
+409         {
+410           const dof_id_type neighbor_id =
+411             static_cast<dof_id_type>(*in++);
+412 
+413           // If the sending processor sees a domain boundary here,
+414           // we'd better agree\&.
+415           if (neighbor_id == DofObject::invalid_id)
+416             {
+417               libmesh_assert (!(elem->neighbor(n)));
+418               continue;
+419             }
+420 
+421           // If the sending processor has a remote_elem neighbor here,
+422           // then all we know is that we'd better *not* have a domain
+423           // boundary\&.
+424           if (neighbor_id == remote_elem->id())
+425             {
+426               libmesh_assert(elem->neighbor(n));
+427               continue;
+428             }
+429 
+430           Elem *neigh = mesh->query_elem(neighbor_id);
+431 
+432           // The sending processor sees a neighbor here, so if we
+433           // don't have that neighboring element, then we'd better
+434           // have a remote_elem signifying that fact\&.
+435           if (!neigh)
+436             {
+437               libmesh_assert_equal_to (elem->neighbor(n), remote_elem);
+438               continue;
+439             }
+440 
+441           // The sending processor has a neighbor here, and we have
+442           // that element, but that does *NOT* mean we're already
+443           // linking to it\&.  Perhaps we initially received both elem
+444           // and neigh from processors on which their mutual link was
+445           // remote?
+446           libmesh_assert(elem->neighbor(n) == neigh ||
+447                          elem->neighbor(n) == remote_elem);
+448 
+449           // If the link was originally remote, we should update it,
+450           // and make sure the appropriate parts of its family link
+451           // back to us\&.
+452           if (elem->neighbor(n) == remote_elem)
+453             {
+454               elem->set_neighbor(n, neigh);
+455 
+456               elem->make_links_to_me_local(n);
+457             }
+458         }
+459 
+460       // FIXME: We should add some debug mode tests to ensure that the
+461       // encoded indexing and boundary conditions are consistent\&.
+462     }
+463   else
+464     {
+465       // We don't already have the element, so we need to create it\&.
+466 
+467       // Find the parent if necessary
+468       Elem *parent = NULL;
+469 #ifdef LIBMESH_ENABLE_AMR
+470       // Find a child element's parent
+471       if (level > 0)
+472         {
+473           // Note that we must be very careful to construct the send
+474           // connectivity so that parents are encountered before
+475           // children\&.  If we get here and can't find the parent that
+476           // is a fatal error\&.
+477           parent = mesh->elem(parent_id);
+478         }
+479       // Or assert that the sending processor sees no parent
+480       else
+481         libmesh_assert_equal_to (parent_id, static_cast<dof_id_type>(-1));
+482 #else
+483       // No non-level-0 elements without AMR
+484       libmesh_assert_equal_to (level, 0);
+485 #endif
+486 
+487       elem = Elem::build(type,parent)\&.release();
+488       libmesh_assert (elem);
+489 
+490 #ifdef LIBMESH_ENABLE_AMR
+491       if (level != 0)
+492         {
+493           // Since this is a newly created element, the parent must
+494           // have previously thought of this child as a remote element\&.
+495           libmesh_assert_equal_to (parent->child(which_child_am_i), remote_elem);
+496 
+497           parent->add_child(elem, which_child_am_i);
+498         }
+499 
+500       // Assign the refinement flags and levels
+501       elem->set_p_level(p_level);
+502       elem->set_refinement_flag(refinement_flag);
+503       elem->set_p_refinement_flag(p_refinement_flag);
+504       libmesh_assert_equal_to (elem->level(), level);
+505 
+506       // If this element definitely should have children, assign
+507       // remote_elem to all of them for now, for consistency\&.  Later
+508       // unpacked elements may overwrite that\&.
+509       if (!elem->active())
+510         for (unsigned int c=0; c != elem->n_children(); ++c)
+511           elem->add_child(const_cast<RemoteElem*>(remote_elem), c);
+512 
+513 #endif // LIBMESH_ENABLE_AMR
+514 
+515       // Assign the IDs
+516       elem->subdomain_id()  = subdomain_id;
+517       elem->processor_id()  = processor_id;
+518       elem->set_id()        = id;
+519 #ifdef LIBMESH_ENABLE_UNIQUE_ID
+520       elem->set_unique_id() = unique_id;
+521 #endif
+522 
+523       // Assign the connectivity
+524       libmesh_assert_equal_to (elem->n_nodes(), n_nodes);
+525 
+526       for (unsigned int n=0; n != n_nodes; n++)
+527         elem->set_node(n) =
+528           mesh->node_ptr
+529           (static_cast<dof_id_type>(*in++));
+530 
+531       for (unsigned int n=0; n<elem->n_neighbors(); n++)
+532         {
+533           const dof_id_type neighbor_id =
+534             static_cast<dof_id_type>(*in++);
+535 
+536           if (neighbor_id == DofObject::invalid_id)
+537             continue;
+538 
+539           // We may be unpacking an element that was a ghost element on the
+540           // sender, in which case the element's neighbors may not all be
+541           // known by the packed element\&.  We'll have to set such
+542           // neighbors to remote_elem ourselves and wait for a later
+543           // packed element to give us better information\&.
+544           if (neighbor_id == remote_elem->id())
+545             {
+546               elem->set_neighbor(n, const_cast<RemoteElem*>(remote_elem));
+547               continue;
+548             }
+549 
+550           // If we don't have the neighbor element, then it's a
+551           // remote_elem until we get it\&.
+552           Elem *neigh = mesh->query_elem(neighbor_id);
+553           if (!neigh)
+554             {
+555               elem->set_neighbor(n, const_cast<RemoteElem*>(remote_elem));
+556               continue;
+557             }
+558 
+559           // If we have the neighbor element, then link to it, and
+560           // make sure the appropriate parts of its family link back
+561           // to us\&.
+562           elem->set_neighbor(n, neigh);
+563 
+564           elem->make_links_to_me_local(n);
+565         }
+566 
+567       elem->unpack_indexing(in);
+568     }
+569 
+570   in += elem->packed_indexing_size();
+571 
+572   // If this is a coarse element,
+573   // add any element side or edge boundary condition ids
+574   if (level == 0)
+575     {
+576       for (unsigned int s = 0; s != elem->n_sides(); ++s)
+577         {
+578           const int num_bcs = *in++;
+579           libmesh_assert_greater_equal (num_bcs, 0);
+580 
+581           for(int bc_it=0; bc_it < num_bcs; bc_it++)
+582             mesh->boundary_info->add_side (elem, s, *in++);
+583         }
+584 
+585       for (unsigned int e = 0; e != elem->n_edges(); ++e)
+586         {
+587           const int num_bcs = *in++;
+588           libmesh_assert_greater_equal (num_bcs, 0);
+589 
+590           for(int bc_it=0; bc_it < num_bcs; bc_it++)
+591             mesh->boundary_info->add_edge (elem, e, *in++);
+592         }
+593     }
+594 
+595   // Return the new element
+596   *out = elem;
+597 }
+.fi
+.SS "template<> void libMesh::Parallel::unpack (std::vector< \fBlargest_id_type\fP >::const_iteratorin, \fBNode\fP **out, \fBParallelMesh\fP *mesh)"
+
+.PP
+Definition at line 289 of file parallel_node\&.C\&.
+.PP
+References unpack()\&.
+.PP
+.nf
+292 {
+293   unpack(in, out, static_cast<MeshBase*>(mesh));
+294 }
+.fi
+.SS "template<typename T , typename BufferIter , typename Context > void libMesh::Parallel::unpack (BufferIterin, T **out, Context *ctx)"
+Decode a potentially-variable-size object from a subsequence of a data array\&.
+.PP
+\fBParallel::unpack()\fP has no default implementation, and must be specialized for each class which is to be communicated via packed ranges\&. 
+.SS "template<> void libMesh::Parallel::unpack (std::vector< largest_id_type >::const_iteratorin, Elem **out, ParallelMesh *mesh)"
+
+.PP
+Definition at line 602 of file parallel_elem\&.C\&.
+.PP
+References unpack()\&.
+.PP
+.nf
+605 {
+606   unpack(in, out, static_cast<MeshBase*>(mesh));
+607 }
+.fi
+.SS "template<typename Context , typename buffertype , typename OutputIter > void libMesh::Parallel::unpack_range (const std::vector< buffertype > &buffer, Context *context, OutputIterout)\fC [inline]\fP"
+Helper function for range unpacking 
+.PP
+Definition at line 413 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::libmesh_assert(), packed_size(), and unpack()\&.
+.PP
+.nf
+416 {
+417   // Our objects should be of the correct type to be assigned to the
+418   // output iterator
+419   typedef typename std::iterator_traits<OutputIter>::value_type T;
+420 
+421   // Loop through the buffer and unpack each object, returning the
+422   // object pointer via the output iterator
+423   typename std::vector<buffertype>::const_iterator
+424     next_object_start = buffer\&.begin();
+425 
+426   while (next_object_start < buffer\&.end())
+427     {
+428       T* obj;
+429       Parallel::unpack(next_object_start, &obj, context);
+430       libmesh_assert(obj);
+431       next_object_start += Parallel::packed_size(obj, next_object_start);
+432       *out++ = obj;
+433     }
+434 
+435   // We should have used up the exact amount of data in the buffer
+436   libmesh_assert (next_object_start == buffer\&.end());
+437 }
+.fi
+.SS "template<typename Context , typename buffertype , typename OutputIter > void libMesh::Parallel::unpack_range (const typename std::vector< buffertype > &buffer, Context *context, OutputIterout)\fC [inline]\fP"
+Decode a range of potentially-variable-size objects from a data array\&. 
+.PP
+Referenced by libMesh::Parallel::Communicator::allgather_packed_range(), libMesh::Parallel::Communicator::broadcast_packed_range(), libMesh::Parallel::Communicator::gather_packed_range(), libMesh::Parallel::Communicator::receive_packed_range(), and libMesh::Parallel::PostWaitUnpackBuffer< Container, Context, OutputIter >::run()\&.
+.SS "template<typename T > bool libMesh::Parallel::verify (const T &r, const Communicator &comm = \fCCommunicator_World\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 800 of file parallel_implementation\&.h\&.
+.PP
+References libMesh::Parallel::Communicator::verify()\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::allgather(), libMesh::DofMap::create_dof_constraints(), libMesh::MeshRefinement::create_parent_error_vector(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::MeshBase::prepare_for_use(), libMesh::ParallelMesh::renumber_dof_objects(), and libMesh::MeshRefinement::test_level_one()\&.
+.PP
+.nf
+802 { return comm\&.verify(r); }
+.fi
+.SS "\fBStatus\fP libMesh::Parallel::wait (Request &r)\fC [inline]\fP"
+Wait for a non-blocking send or receive to finish 
+.PP
+Definition at line 437 of file parallel\&.h\&.
+.PP
+References libMesh::Parallel::Request::wait()\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_blocked_dof_objects(), wait(), libMesh::System::write_serialized_blocked_dof_objects(), and libMesh::XdrIO::write_serialized_nodes()\&.
+.PP
+.nf
+437 { return r\&.wait(); }
+.fi
+.SS "void libMesh::Parallel::wait (std::vector< Request > &r)\fC [inline]\fP"
+Wait for a non-blocking send or receive to finish 
+.PP
+Definition at line 442 of file parallel\&.h\&.
+.PP
+References wait()\&.
+.PP
+.nf
+443 { for (unsigned int i=0; i<r\&.size(); i++) r[i]\&.wait(); }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "const unsigned int libMesh::Parallel::any_source"
+\fBInitial value:\fP
+.PP
+.nf
+=
+  static_cast<unsigned int>(MPI_ANY_SOURCE)
+.fi
+Accept from any source 
+.PP
+Definition at line 149 of file parallel\&.h\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_blocked_dof_objects(), and libMesh::System::write_serialized_blocked_dof_objects()\&.
+.SS "const \fBMessageTag\fP libMesh::Parallel::any_tag = \fBMessageTag\fP(MPI_ANY_TAG)"
+Default message tag ids 
+.PP
+Definition at line 222 of file parallel\&.h\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::send_receive()\&.
+.SS "\fBCommunicator\fP & libMesh::Parallel::Communicator_World = \fBCommWorld\fP"
+
+.PP
+Definition at line 363 of file parallel_implementation\&.h\&.
+.PP
+Referenced by libMesh::if()\&.
+.SS "const \fBMessageTag\fP libMesh::Parallel::no_tag = \fBMessageTag\fP(0)"
+
+.PP
+Definition at line 227 of file parallel\&.h\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::send_receive()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

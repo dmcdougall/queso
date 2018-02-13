@@ -1,0 +1,1096 @@
+.TH "libMesh::MeshCommunication" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshCommunication \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_communication\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshCommunication\fP ()"
+.br
+.ti -1c
+.RI "\fB~MeshCommunication\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBbroadcast\fP (\fBMeshBase\fP &) const "
+.br
+.ti -1c
+.RI "void \fBredistribute\fP (\fBParallelMesh\fP &) const "
+.br
+.ti -1c
+.RI "void \fBgather_neighboring_elements\fP (\fBParallelMesh\fP &) const "
+.br
+.ti -1c
+.RI "void \fBgather\fP (const \fBprocessor_id_type\fP root_id, \fBParallelMesh\fP &) const "
+.br
+.ti -1c
+.RI "void \fBallgather\fP (\fBParallelMesh\fP &\fBmesh\fP) const "
+.br
+.ti -1c
+.RI "void \fBdelete_remote_elements\fP (\fBParallelMesh\fP &, const std::set< \fBElem\fP * > &) const "
+.br
+.ti -1c
+.RI "void \fBassign_global_indices\fP (\fBMeshBase\fP &) const "
+.br
+.ti -1c
+.RI "template<typename ForwardIterator > void \fBfind_global_indices\fP (const \fBParallel::Communicator\fP &\fBcommunicator\fP, const \fBMeshTools::BoundingBox\fP &, const ForwardIterator &, const ForwardIterator &, std::vector< \fBdof_id_type\fP > &) const "
+.br
+.ti -1c
+.RI "void \fBmake_elems_parallel_consistent\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "void \fBmake_node_ids_parallel_consistent\fP (\fBMeshBase\fP &, \fBLocationMap\fP< \fBNode\fP > &)"
+.br
+.ti -1c
+.RI "void \fBmake_node_proc_ids_parallel_consistent\fP (\fBMeshBase\fP &, \fBLocationMap\fP< \fBNode\fP > &)"
+.br
+.ti -1c
+.RI "void \fBmake_nodes_parallel_consistent\fP (\fBMeshBase\fP &, \fBLocationMap\fP< \fBNode\fP > &)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is the \fC\fBMeshCommunication\fP\fP class\&. It handles all the details of communicating mesh information from one processor to another\&. All parallelization of the \fC\fBMesh\fP\fP data structures is done via this class\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file mesh_communication\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshCommunication::MeshCommunication ()\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 60 of file mesh_communication\&.h\&.
+.PP
+.nf
+60 {}
+.fi
+.SS "libMesh::MeshCommunication::~MeshCommunication ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 65 of file mesh_communication\&.h\&.
+.PP
+.nf
+65 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::MeshCommunication::allgather (\fBParallelMesh\fP &mesh) const\fC [inline]\fP"
+This method takes an input \fC\fBParallelMesh\fP\fP which may be distributed among all the processors\&. Each processor then sends its local nodes and elements to the other processors\&. The end result is that a previously distributed \fC\fBParallelMesh\fP\fP will be serialized on each processor\&. Since this method is collective it must be called by all processors\&. 
+.PP
+Definition at line 128 of file mesh_communication\&.h\&.
+.PP
+References gather(), and libMesh::DofObject::invalid_processor_id\&.
+.PP
+Referenced by libMesh::ParallelMesh::allgather()\&.
+.PP
+.nf
+129   { MeshCommunication::gather(DofObject::invalid_processor_id, mesh); }
+.fi
+.SS "void libMesh::MeshCommunication::assign_global_indices (\fBMeshBase\fP &mesh) const"
+This method assigns globally unique, partition-agnostic indices to the nodes and elements in the mesh\&. The approach is to compute the Hilbert space-filling curve key and use its value to assign an index in [0,N_global)\&. Since the Hilbert key is unique for each spatial location, two objects occupying the same location will be assigned the same global id\&. Thus, this method can also be useful for identifying duplicate nodes which may occur during parallel refinement\&. 
+.PP
+Definition at line 183 of file mesh_communication_global_indices\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::allgather(), libMesh::Parallel::Sort< KeyType, IdxType >::bin(), libMesh::MeshTools::bounding_box(), libMesh::Elem::centroid(), libMesh::ParallelObject::comm(), libMesh::communicator, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::err, libMesh::MeshTools::Generation::Private::idx(), libMesh::libmesh_assert(), libMesh::MeshBase::local_elements_begin(), libMesh::MeshBase::local_elements_end(), libMesh::MeshBase::local_nodes_begin(), libMesh::MeshBase::local_nodes_end(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::Threads::parallel_for(), libMesh::Parallel::Communicator::rank(), libMesh::Parallel::Communicator::send_receive(), libMesh::DofObject::set_id(), libMesh::Parallel::Communicator::size(), libMesh::Parallel::Sort< KeyType, IdxType >::sort(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MeshTools::Private::globally_renumber_nodes_and_elements()\&.
+.PP
+.nf
+184 {
+185   START_LOG ("assign_global_indices()", "MeshCommunication");
+186 
+187   // This method determines partition-agnostic global indices
+188   // for nodes and elements\&.
+189 
+190   // Algorithm:
+191   // (1) compute the Hilbert key for each local node/element
+192   // (2) perform a parallel sort of the Hilbert key
+193   // (3) get the min/max value on each processor
+194   // (4) determine the position in the global ranking for
+195   //     each local object
+196 
+197   const Parallel::Communicator &communicator (mesh\&.comm());
+198 
+199   // Global bounding box
+200   MeshTools::BoundingBox bbox =
+201     MeshTools::bounding_box (mesh);
+202 
+203   //-------------------------------------------------------------
+204   // (1) compute Hilbert keys
+205   std::vector<Hilbert::HilbertIndices>
+206     node_keys, elem_keys;
+207 
+208   {
+209     // Nodes first
+210     {
+211       ConstNodeRange nr (mesh\&.local_nodes_begin(),
+212                          mesh\&.local_nodes_end());
+213       node_keys\&.resize (nr\&.size());
+214       Threads::parallel_for (nr, ComputeHilbertKeys (bbox, node_keys));
+215 
+216 #if 0
+217       // It's O(N^2) to check that these keys don't duplicate before the
+218       // sort\&.\&.\&.
+219       MeshBase::const_node_iterator nodei = mesh\&.local_nodes_begin();
+220       for (std::size_t i = 0; i != node_keys\&.size(); ++i, ++nodei)
+221         {
+222           MeshBase::const_node_iterator nodej = mesh\&.local_nodes_begin();
+223           for (std::size_t j = 0; j != i; ++j, ++nodej)
+224             {
+225               if (node_keys[i] == node_keys[j])
+226                 {
+227                   libMesh::err << "Error: nodes with duplicate Hilbert keys!" <<
+228                     std::endl;
+229                   CFixBitVec icoords[3], jcoords[3];
+230                   get_hilbert_coords(**nodej, bbox, jcoords);
+231                   libMesh::err <<
+232                     "node " << (*nodej)->id() << ", " <<
+233                     *(Point*)(*nodej) << " has HilbertIndices " <<
+234                     node_keys[j] << std::endl;
+235                   get_hilbert_coords(**nodei, bbox, icoords);
+236                   libMesh::err <<
+237                     "node " << (*nodei)->id() << ", " <<
+238                     *(Point*)(*nodei) << " has HilbertIndices " <<
+239                     node_keys[i] << std::endl;
+240                   libmesh_error();
+241                 }
+242             }
+243         }
+244 #endif
+245     }
+246 
+247     // Elements next
+248     {
+249       ConstElemRange er (mesh\&.local_elements_begin(),
+250                          mesh\&.local_elements_end());
+251       elem_keys\&.resize (er\&.size());
+252       Threads::parallel_for (er, ComputeHilbertKeys (bbox, elem_keys));
+253 
+254 #if 0
+255       // For elements, the keys can be (and in the case of TRI, are
+256       // expected to be) duplicates, but only if the elements are at
+257       // different levels
+258       MeshBase::const_element_iterator elemi = mesh\&.local_elements_begin();
+259       for (std::size_t i = 0; i != elem_keys\&.size(); ++i, ++elemi)
+260         {
+261           MeshBase::const_element_iterator elemj = mesh\&.local_elements_begin();
+262           for (std::size_t j = 0; j != i; ++j, ++elemj)
+263             {
+264               if ((elem_keys[i] == elem_keys[j]) &&
+265                   ((*elemi)->level() == (*elemj)->level()))
+266                 {
+267                   libMesh::err <<
+268                     "Error: level " << (*elemi)->level() <<
+269                     " elements with duplicate Hilbert keys!" <<
+270                     std::endl;
+271                   libMesh::err <<
+272                     "level " << (*elemj)->level() << " elem\n" <<
+273                     (**elemj) << " centroid " <<
+274                     (*elemj)->centroid() << " has HilbertIndices " <<
+275                     elem_keys[j] << " or " <<
+276                     get_hilbert_index((*elemj)->centroid(), bbox) <<
+277                     std::endl;
+278                   libMesh::err <<
+279                     "level " << (*elemi)->level() << " elem\n" <<
+280                     (**elemi) << " centroid " <<
+281                     (*elemi)->centroid() << " has HilbertIndices " <<
+282                     elem_keys[i] << " or " <<
+283                     get_hilbert_index((*elemi)->centroid(), bbox) <<
+284                     std::endl;
+285                   libmesh_error();
+286                 }
+287             }
+288         }
+289 #endif
+290     }
+291   } // done computing Hilbert keys
+292 
+293 
+294 
+295   //-------------------------------------------------------------
+296   // (2) parallel sort the Hilbert keys
+297   Parallel::Sort<Hilbert::HilbertIndices> node_sorter (communicator,
+298                                                        node_keys);
+299   node_sorter\&.sort(); /* done with node_keys */ //node_keys\&.clear();
+300 
+301   const std::vector<Hilbert::HilbertIndices> &my_node_bin =
+302     node_sorter\&.bin();
+303 
+304   Parallel::Sort<Hilbert::HilbertIndices> elem_sorter (communicator,
+305                                                        elem_keys);
+306   elem_sorter\&.sort(); /* done with elem_keys */ //elem_keys\&.clear();
+307 
+308   const std::vector<Hilbert::HilbertIndices> &my_elem_bin =
+309     elem_sorter\&.bin();
+310 
+311 
+312 
+313   //-------------------------------------------------------------
+314   // (3) get the max value on each processor
+315   std::vector<Hilbert::HilbertIndices>
+316     node_upper_bounds(communicator\&.size()),
+317     elem_upper_bounds(communicator\&.size());
+318 
+319   { // limit scope of temporaries
+320     std::vector<Hilbert::HilbertIndices> recvbuf(2*communicator\&.size());
+321     std::vector<unsigned short int> /* do not use a vector of bools here since it is not always so! */
+322       empty_nodes (communicator\&.size()),
+323       empty_elem  (communicator\&.size());
+324     std::vector<Hilbert::HilbertIndices> my_max(2);
+325 
+326     communicator\&.allgather (static_cast<unsigned short int>(my_node_bin\&.empty()), empty_nodes);
+327     communicator\&.allgather (static_cast<unsigned short int>(my_elem_bin\&.empty()),  empty_elem);
+328 
+329     if (!my_node_bin\&.empty()) my_max[0] = my_node_bin\&.back();
+330     if (!my_elem_bin\&.empty()) my_max[1] = my_elem_bin\&.back();
+331 
+332     communicator\&.allgather (my_max, /* identical_buffer_sizes = */ true);
+333 
+334     // Be cereful here\&.  The *_upper_bounds will be used to find the processor
+335     // a given object belongs to\&.  So, if a processor contains no objects (possible!)
+336     // then copy the bound from the lower processor id\&.
+337     for (processor_id_type p=0; p<communicator\&.size(); p++)
+338       {
+339         node_upper_bounds[p] = my_max[2*p+0];
+340         elem_upper_bounds[p] = my_max[2*p+1];
+341 
+342         if (p > 0) // default hilbert index value is the OK upper bound for processor 0\&.
+343           {
+344             if (empty_nodes[p]) node_upper_bounds[p] = node_upper_bounds[p-1];
+345             if (empty_elem[p])  elem_upper_bounds[p] = elem_upper_bounds[p-1];
+346           }
+347       }
+348   }
+349 
+350 
+351 
+352   //-------------------------------------------------------------
+353   // (4) determine the position in the global ranking for
+354   //     each local object
+355   {
+356     //----------------------------------------------
+357     // Nodes first -- all nodes, not just local ones
+358     {
+359       // Request sets to send to each processor
+360       std::vector<std::vector<Hilbert::HilbertIndices> >
+361         requested_ids (communicator\&.size());
+362       // Results to gather from each processor
+363       std::vector<std::vector<dof_id_type> >
+364         filled_request (communicator\&.size());
+365 
+366       {
+367         MeshBase::const_node_iterator       it  = mesh\&.nodes_begin();
+368         const MeshBase::const_node_iterator end = mesh\&.nodes_end();
+369 
+370         // build up list of requests
+371         for (; it != end; ++it)
+372           {
+373             const Node* node = (*it);
+374             libmesh_assert(node);
+375             const Hilbert::HilbertIndices hi =
+376               get_hilbert_index (*node, bbox);
+377             const processor_id_type pid =
+378               libmesh_cast_int<processor_id_type>
+379               (std::distance (node_upper_bounds\&.begin(),
+380                               std::lower_bound(node_upper_bounds\&.begin(),
+381                                                node_upper_bounds\&.end(),
+382                                                hi)));
+383 
+384             libmesh_assert_less (pid, communicator\&.size());
+385 
+386             requested_ids[pid]\&.push_back(hi);
+387           }
+388       }
+389 
+390       // The number of objects in my_node_bin on each processor
+391       std::vector<dof_id_type> node_bin_sizes(communicator\&.size());
+392       communicator\&.allgather (static_cast<dof_id_type>(my_node_bin\&.size()), node_bin_sizes);
+393 
+394       // The offset of my first global index
+395       dof_id_type my_offset = 0;
+396       for (processor_id_type pid=0; pid<communicator\&.rank(); pid++)
+397         my_offset += node_bin_sizes[pid];
+398 
+399       // start with pid=0, so that we will trade with ourself
+400       for (processor_id_type pid=0; pid<communicator\&.size(); pid++)
+401         {
+402           // Trade my requests with processor procup and procdown
+403           const processor_id_type procup = (communicator\&.rank() + pid) %
+404             communicator\&.size();
+405           const processor_id_type procdown = (communicator\&.size() +
+406                                               communicator\&.rank() - pid) %
+407             communicator\&.size();
+408 
+409           std::vector<Hilbert::HilbertIndices> request_to_fill;
+410           communicator\&.send_receive(procup, requested_ids[procup],
+411                                     procdown, request_to_fill);
+412 
+413           // Fill the requests
+414           std::vector<dof_id_type> global_ids;  global_ids\&.reserve(request_to_fill\&.size());
+415           for (std::size_t idx=0; idx<request_to_fill\&.size(); idx++)
+416             {
+417               const Hilbert::HilbertIndices &hi = request_to_fill[idx];
+418               libmesh_assert_less_equal (hi, node_upper_bounds[communicator\&.rank()]);
+419 
+420               // find the requested index in my node bin
+421               std::vector<Hilbert::HilbertIndices>::const_iterator pos =
+422                 std::lower_bound (my_node_bin\&.begin(), my_node_bin\&.end(), hi);
+423               libmesh_assert (pos != my_node_bin\&.end());
+424               libmesh_assert_equal_to (*pos, hi);
+425 
+426               // Finally, assign the global index based off the position of the index
+427               // in my array, properly offset\&.
+428               global_ids\&.push_back (std::distance(my_node_bin\&.begin(), pos) + my_offset);
+429             }
+430 
+431           // and trade back
+432           communicator\&.send_receive (procdown, global_ids,
+433                                      procup,   filled_request[procup]);
+434         }
+435 
+436       // We now have all the filled requests, so we can loop through our
+437       // nodes once and assign the global index to each one\&.
+438       {
+439         std::vector<std::vector<dof_id_type>::const_iterator>
+440           next_obj_on_proc; next_obj_on_proc\&.reserve(communicator\&.size());
+441         for (processor_id_type pid=0; pid<communicator\&.size(); pid++)
+442           next_obj_on_proc\&.push_back(filled_request[pid]\&.begin());
+443 
+444         {
+445           MeshBase::node_iterator       it  = mesh\&.nodes_begin();
+446           const MeshBase::node_iterator end = mesh\&.nodes_end();
+447 
+448           for (; it != end; ++it)
+449             {
+450               Node* node = (*it);
+451               libmesh_assert(node);
+452               const Hilbert::HilbertIndices hi =
+453                 get_hilbert_index (*node, bbox);
+454               const processor_id_type pid =
+455                 libmesh_cast_int<processor_id_type>
+456                 (std::distance (node_upper_bounds\&.begin(),
+457                                 std::lower_bound(node_upper_bounds\&.begin(),
+458                                                  node_upper_bounds\&.end(),
+459                                                  hi)));
+460 
+461               libmesh_assert_less (pid, communicator\&.size());
+462               libmesh_assert (next_obj_on_proc[pid] != filled_request[pid]\&.end());
+463 
+464               const dof_id_type global_index = *next_obj_on_proc[pid];
+465               libmesh_assert_less (global_index, mesh\&.n_nodes());
+466               node->set_id() = global_index;
+467 
+468               ++next_obj_on_proc[pid];
+469             }
+470         }
+471       }
+472     }
+473 
+474     //---------------------------------------------------
+475     // elements next -- all elements, not just local ones
+476     {
+477       // Request sets to send to each processor
+478       std::vector<std::vector<Hilbert::HilbertIndices> >
+479         requested_ids (communicator\&.size());
+480       // Results to gather from each processor
+481       std::vector<std::vector<dof_id_type> >
+482         filled_request (communicator\&.size());
+483 
+484       {
+485         MeshBase::const_element_iterator       it  = mesh\&.elements_begin();
+486         const MeshBase::const_element_iterator end = mesh\&.elements_end();
+487 
+488         for (; it != end; ++it)
+489           {
+490             const Elem* elem = (*it);
+491             libmesh_assert(elem);
+492             const Hilbert::HilbertIndices hi =
+493               get_hilbert_index (elem->centroid(), bbox);
+494             const processor_id_type pid =
+495               libmesh_cast_int<processor_id_type>
+496               (std::distance (elem_upper_bounds\&.begin(),
+497                               std::lower_bound(elem_upper_bounds\&.begin(),
+498                                                elem_upper_bounds\&.end(),
+499                                                hi)));
+500 
+501             libmesh_assert_less (pid, communicator\&.size());
+502 
+503             requested_ids[pid]\&.push_back(hi);
+504           }
+505       }
+506 
+507       // The number of objects in my_elem_bin on each processor
+508       std::vector<dof_id_type> elem_bin_sizes(communicator\&.size());
+509       communicator\&.allgather (static_cast<dof_id_type>(my_elem_bin\&.size()), elem_bin_sizes);
+510 
+511       // The offset of my first global index
+512       dof_id_type my_offset = 0;
+513       for (processor_id_type pid=0; pid<communicator\&.rank(); pid++)
+514         my_offset += elem_bin_sizes[pid];
+515 
+516       // start with pid=0, so that we will trade with ourself
+517       for (processor_id_type pid=0; pid<communicator\&.size(); pid++)
+518         {
+519           // Trade my requests with processor procup and procdown
+520           const processor_id_type procup = (communicator\&.rank() + pid) %
+521             communicator\&.size();
+522           const processor_id_type procdown = (communicator\&.size() +
+523                                               communicator\&.rank() - pid) %
+524             communicator\&.size();
+525 
+526           std::vector<Hilbert::HilbertIndices> request_to_fill;
+527           communicator\&.send_receive(procup, requested_ids[procup],
+528                                     procdown, request_to_fill);
+529 
+530           // Fill the requests
+531           std::vector<dof_id_type> global_ids;  global_ids\&.reserve(request_to_fill\&.size());
+532           for (std::size_t idx=0; idx<request_to_fill\&.size(); idx++)
+533             {
+534               const Hilbert::HilbertIndices &hi = request_to_fill[idx];
+535               libmesh_assert_less_equal (hi, elem_upper_bounds[communicator\&.rank()]);
+536 
+537               // find the requested index in my elem bin
+538               std::vector<Hilbert::HilbertIndices>::const_iterator pos =
+539                 std::lower_bound (my_elem_bin\&.begin(), my_elem_bin\&.end(), hi);
+540               libmesh_assert (pos != my_elem_bin\&.end());
+541               libmesh_assert_equal_to (*pos, hi);
+542 
+543               // Finally, assign the global index based off the position of the index
+544               // in my array, properly offset\&.
+545               global_ids\&.push_back (std::distance(my_elem_bin\&.begin(), pos) + my_offset);
+546             }
+547 
+548           // and trade back
+549           communicator\&.send_receive (procdown, global_ids,
+550                                      procup,   filled_request[procup]);
+551         }
+552 
+553       // We now have all the filled requests, so we can loop through our
+554       // elements once and assign the global index to each one\&.
+555       {
+556         std::vector<std::vector<dof_id_type>::const_iterator>
+557           next_obj_on_proc; next_obj_on_proc\&.reserve(communicator\&.size());
+558         for (processor_id_type pid=0; pid<communicator\&.size(); pid++)
+559           next_obj_on_proc\&.push_back(filled_request[pid]\&.begin());
+560 
+561         {
+562           MeshBase::element_iterator       it  = mesh\&.elements_begin();
+563           const MeshBase::element_iterator end = mesh\&.elements_end();
+564 
+565           for (; it != end; ++it)
+566             {
+567               Elem* elem = (*it);
+568               libmesh_assert(elem);
+569               const Hilbert::HilbertIndices hi =
+570                 get_hilbert_index (elem->centroid(), bbox);
+571               const processor_id_type pid =
+572                 libmesh_cast_int<processor_id_type>
+573                 (std::distance (elem_upper_bounds\&.begin(),
+574                                 std::lower_bound(elem_upper_bounds\&.begin(),
+575                                                  elem_upper_bounds\&.end(),
+576                                                  hi)));
+577 
+578               libmesh_assert_less (pid, communicator\&.size());
+579               libmesh_assert (next_obj_on_proc[pid] != filled_request[pid]\&.end());
+580 
+581               const dof_id_type global_index = *next_obj_on_proc[pid];
+582               libmesh_assert_less (global_index, mesh\&.n_elem());
+583               elem->set_id() = global_index;
+584 
+585               ++next_obj_on_proc[pid];
+586             }
+587         }
+588       }
+589     }
+590   }
+591 
+592   STOP_LOG ("assign_global_indices()", "MeshCommunication");
+593 }
+.fi
+.SS "void libMesh::MeshCommunication::broadcast (\fBMeshBase\fP &mesh) const"
+Finds all the processors that may contain elements that neighbor my elements\&. This list is guaranteed to include all processors that border any of my elements, but may include additional ones as well\&. This method computes bounding boxes for the elements on each processor and checks for overlaps\&. This method takes a mesh (which is assumed to reside on processor 0) and broadcasts it to all the other processors\&. It also broadcasts any boundary information the mesh has associated with it\&. 
+.PP
+Definition at line 664 of file mesh_communication\&.C\&.
+.PP
+Referenced by libMesh::CheckpointIO::read(), and libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+665 {
+666   // no MPI == one processor, no need for this method\&.\&.\&.
+667   return;
+668 }
+.fi
+.SS "void libMesh::MeshCommunication::clear ()"
+Clears all data structures and returns to a pristine state\&. 
+.PP
+Definition at line 80 of file mesh_communication\&.C\&.
+.PP
+.nf
+81 {
+82   //  _neighboring_processors\&.clear();
+83 }
+.fi
+.SS "void libMesh::MeshCommunication::delete_remote_elements (\fBParallelMesh\fP &mesh, const std::set< \fBElem\fP * > &extra_ghost_elem_ids) const"
+This method takes an input \fC\fBParallelMesh\fP\fP which may be distributed among all the processors\&. Each processor deletes all elements which are neither local elements nor 'ghost' elements which touch local elements, and deletes all nodes which are not contained in local or ghost elements\&. The end result is that a previously serial \fC\fBParallelMesh\fP\fP will be distributed between processors\&. Since this method is collective it must be called by all processors\&.
+.PP
+The std::set is a list of extra elements that you \fIdon't\fP want to delete\&. These will be left on the current processor along with local elements and ghosted neighbors\&. 
+.PP
+Definition at line 1012 of file mesh_communication\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::ParallelMesh::delete_elem(), libMesh::ParallelMesh::delete_node(), libMesh::Elem::dim(), libMesh::DofObject::id(), libMesh::ParallelMesh::is_serial(), libMesh::ParallelMesh::level_elements_begin(), libMesh::ParallelMesh::level_elements_end(), libMesh::libmesh_assert(), libMesh::MeshTools::libmesh_assert_valid_refinement_tree(), libMesh::ParallelMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_end(), libMesh::Elem::make_links_to_me_remote(), libMesh::ParallelMesh::max_elem_id(), libMesh::ParallelMesh::max_node_id(), libMesh::MeshTools::n_levels(), libMesh::Elem::n_nodes(), libMesh::Elem::n_sides(), libMesh::Elem::node(), libMesh::ParallelMesh::nodes_begin(), libMesh::ParallelMesh::nodes_end(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::Elem::parent(), libMesh::Elem::set_neighbor(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::Elem::subactive(), libMesh::ParallelMesh::unpartitioned_elements_begin(), libMesh::ParallelMesh::unpartitioned_elements_end(), and libMesh::Parallel::Communicator::verify()\&.
+.PP
+Referenced by libMesh::ParallelMesh::delete_remote_elements()\&.
+.PP
+.nf
+1013 {
+1014   // The mesh should know it's about to be parallelized
+1015   libmesh_assert (!mesh\&.is_serial());
+1016 
+1017   START_LOG("delete_remote_elements()", "MeshCommunication");
+1018 
+1019 #ifdef DEBUG
+1020   // We expect maximum ids to be in sync so we can use them to size
+1021   // vectors
+1022   mesh\&.comm()\&.verify(mesh\&.max_node_id());
+1023   mesh\&.comm()\&.verify(mesh\&.max_elem_id());
+1024   const dof_id_type par_max_node_id = mesh\&.parallel_max_node_id();
+1025   const dof_id_type par_max_elem_id = mesh\&.parallel_max_elem_id();
+1026   libmesh_assert_equal_to (par_max_node_id, mesh\&.max_node_id());
+1027   libmesh_assert_equal_to (par_max_elem_id, mesh\&.max_elem_id());
+1028 #endif
+1029 
+1030   // FIXME - should these be "unsorted_set"s?  O(N) is O(N)\&.\&.\&.
+1031   std::vector<bool> local_nodes(mesh\&.max_node_id(), false);
+1032   std::vector<bool> semilocal_nodes(mesh\&.max_node_id(), false);
+1033   std::vector<bool> semilocal_elems(mesh\&.max_elem_id(), false);
+1034 
+1035   // We don't want to delete any element that shares a node
+1036   // with or is an ancestor of a local element\&.
+1037   MeshBase::const_element_iterator l_elem_it = mesh\&.local_elements_begin(),
+1038     l_end     = mesh\&.local_elements_end();
+1039   for (; l_elem_it != l_end; ++l_elem_it)
+1040     {
+1041       const Elem *elem = *l_elem_it;
+1042       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1043         {
+1044           dof_id_type nodeid = elem->node(n);
+1045           libmesh_assert_less (nodeid, local_nodes\&.size());
+1046           local_nodes[nodeid] = true;
+1047         }
+1048       while (elem)
+1049         {
+1050           dof_id_type elemid = elem->id();
+1051           libmesh_assert_less (elemid, semilocal_elems\&.size());
+1052           semilocal_elems[elemid] = true;
+1053 
+1054           for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1055             semilocal_nodes[elem->node(n)] = true;
+1056 
+1057           const Elem *parent = elem->parent();
+1058           // Don't proceed from a boundary mesh to an interior mesh
+1059           if (parent && parent->dim() != elem->dim())
+1060             break;
+1061 
+1062           elem = parent;
+1063         }
+1064     }
+1065 
+1066   // We don't want to delete any element that shares a node
+1067   // with or is an ancestor of an unpartitioned element either\&.
+1068   MeshBase::const_element_iterator
+1069     u_elem_it = mesh\&.unpartitioned_elements_begin(),
+1070     u_end     = mesh\&.unpartitioned_elements_end();
+1071 
+1072   for (; u_elem_it != u_end; ++u_elem_it)
+1073     {
+1074       const Elem *elem = *u_elem_it;
+1075       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1076         local_nodes[elem->node(n)] = true;
+1077       while (elem)
+1078         {
+1079           semilocal_elems[elem->id()] = true;
+1080 
+1081           for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1082             semilocal_nodes[elem->node(n)] = true;
+1083 
+1084           const Elem *parent = elem->parent();
+1085           // Don't proceed from a boundary mesh to an interior mesh
+1086           if (parent && parent->dim() != elem->dim())
+1087             break;
+1088 
+1089           elem = parent;
+1090         }
+1091     }
+1092 
+1093   // Flag all the elements that share nodes with
+1094   // local and unpartitioned elements, along with their ancestors
+1095   MeshBase::element_iterator nl_elem_it = mesh\&.not_local_elements_begin(),
+1096     nl_end     = mesh\&.not_local_elements_end();
+1097   for (; nl_elem_it != nl_end; ++nl_elem_it)
+1098     {
+1099       const Elem *elem = *nl_elem_it;
+1100       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1101         if (local_nodes[elem->node(n)])
+1102           {
+1103             while (elem)
+1104               {
+1105                 semilocal_elems[elem->id()] = true;
+1106 
+1107                 for (unsigned int nn=0; nn != elem->n_nodes(); ++nn)
+1108                   semilocal_nodes[elem->node(nn)] = true;
+1109 
+1110                 const Elem *parent = elem->parent();
+1111                 // Don't proceed from a boundary mesh to an interior mesh
+1112                 if (parent && parent->dim() != elem->dim())
+1113                   break;
+1114 
+1115                 elem = parent;
+1116               }
+1117             break;
+1118           }
+1119     }
+1120 
+1121   // Don't delete elements that we were explicitly told not to
+1122   for(std::set<Elem *>::iterator it = extra_ghost_elem_ids\&.begin();
+1123       it != extra_ghost_elem_ids\&.end();
+1124       ++it)
+1125     {
+1126       const Elem *elem = *it;
+1127       semilocal_elems[elem->id()] = true;
+1128       for (unsigned int n=0; n != elem->n_nodes(); ++n)
+1129         semilocal_nodes[elem->node(n)] = true;
+1130     }
+1131 
+1132   // Delete all the elements we have no reason to save,
+1133   // starting with the most refined so that the mesh
+1134   // is valid at all intermediate steps
+1135   unsigned int n_levels = MeshTools::n_levels(mesh);
+1136 
+1137   for (int l = n_levels - 1; l >= 0; --l)
+1138     {
+1139       MeshBase::element_iterator lev_elem_it = mesh\&.level_elements_begin(l),
+1140         lev_end     = mesh\&.level_elements_end(l);
+1141       for (; lev_elem_it != lev_end; ++lev_elem_it)
+1142         {
+1143           Elem *elem = *lev_elem_it;
+1144           libmesh_assert (elem);
+1145           // Make sure we don't leave any invalid pointers
+1146           if (!semilocal_elems[elem->id()])
+1147             elem->make_links_to_me_remote();
+1148 
+1149           // Subactive neighbor pointers aren't preservable here
+1150           if (elem->subactive())
+1151             for (unsigned int s=0; s != elem->n_sides(); ++s)
+1152               elem->set_neighbor(s, NULL);
+1153 
+1154           // delete_elem doesn't currently invalidate element
+1155           // iterators\&.\&.\&. that had better not change
+1156           if (!semilocal_elems[elem->id()])
+1157             mesh\&.delete_elem(elem);
+1158         }
+1159     }
+1160 
+1161   // Delete all the nodes we have no reason to save
+1162   MeshBase::node_iterator node_it  = mesh\&.nodes_begin(),
+1163     node_end = mesh\&.nodes_end();
+1164   for (node_it = mesh\&.nodes_begin(); node_it != node_end; ++node_it)
+1165     {
+1166       Node *node = *node_it;
+1167       libmesh_assert(node);
+1168       if (!semilocal_nodes[node->id()])
+1169         mesh\&.delete_node(node);
+1170     }
+1171 
+1172 #ifdef DEBUG
+1173   MeshTools::libmesh_assert_valid_refinement_tree(mesh);
+1174 #endif
+1175 
+1176   STOP_LOG("delete_remote_elements()", "MeshCommunication");
+1177 }
+.fi
+.SS "template<typename ForwardIterator > void libMesh::MeshCommunication::find_global_indices (const \fBParallel::Communicator\fP &communicator, const \fBMeshTools::BoundingBox\fP &bbox, const ForwardIterator &begin, const ForwardIterator &end, std::vector< \fBdof_id_type\fP > &index_map) const"
+This method determines a globally unique, partition-agnostic index for each object in the input range\&. 
+.PP
+Definition at line 604 of file mesh_communication_global_indices\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::allgather(), libMesh::Parallel::Sort< KeyType, IdxType >::bin(), end, libMesh::MeshTools::Generation::Private::idx(), libMesh::DofObject::invalid_processor_id, libMesh::libmesh_assert(), libMesh::Parallel::Communicator::rank(), libMesh::Parallel::Communicator::send_receive(), libMesh::Parallel::Communicator::size(), libMesh::Parallel::Sort< KeyType, IdxType >::sort(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::initialize(), and libMesh::Partitioner::partition_unpartitioned_elements()\&.
+.PP
+.nf
+609 {
+610   START_LOG ("find_global_indices()", "MeshCommunication");
+611 
+612   // This method determines partition-agnostic global indices
+613   // for nodes and elements\&.
+614 
+615   // Algorithm:
+616   // (1) compute the Hilbert key for each local node/element
+617   // (2) perform a parallel sort of the Hilbert key
+618   // (3) get the min/max value on each processor
+619   // (4) determine the position in the global ranking for
+620   //     each local object
+621   index_map\&.clear();
+622   index_map\&.reserve(std::distance (begin, end));
+623 
+624   //-------------------------------------------------------------
+625   // (1) compute Hilbert keys
+626   // These aren't trivial to compute, and we will need them again\&.
+627   // But the binsort will sort the input vector, trashing the order
+628   // that we'd like to rely on\&.  So, two vectors\&.\&.\&.
+629   std::vector<Hilbert::HilbertIndices>
+630     sorted_hilbert_keys,
+631     hilbert_keys;
+632   sorted_hilbert_keys\&.reserve(index_map\&.capacity());
+633   hilbert_keys\&.reserve(index_map\&.capacity());
+634   {
+635     START_LOG("compute_hilbert_indices()", "MeshCommunication");
+636     for (ForwardIterator it=begin; it!=end; ++it)
+637       {
+638         const Hilbert::HilbertIndices hi(get_hilbert_index (*it, bbox));
+639         hilbert_keys\&.push_back(hi);
+640 
+641         if ((*it)->processor_id() == communicator\&.rank())
+642           sorted_hilbert_keys\&.push_back(hi);
+643 
+644         // someone needs to take care of unpartitioned objects!
+645         if ((communicator\&.rank() == 0) &&
+646             ((*it)->processor_id() == DofObject::invalid_processor_id))
+647           sorted_hilbert_keys\&.push_back(hi);
+648       }
+649     STOP_LOG("compute_hilbert_indices()", "MeshCommunication");
+650   }
+651 
+652   //-------------------------------------------------------------
+653   // (2) parallel sort the Hilbert keys
+654   START_LOG ("parallel_sort()", "MeshCommunication");
+655   Parallel::Sort<Hilbert::HilbertIndices> sorter (communicator,
+656                                                   sorted_hilbert_keys);
+657   sorter\&.sort();
+658   STOP_LOG ("parallel_sort()", "MeshCommunication");
+659   const std::vector<Hilbert::HilbertIndices> &my_bin = sorter\&.bin();
+660 
+661   // The number of objects in my_bin on each processor
+662   std::vector<unsigned int> bin_sizes(communicator\&.size());
+663   communicator\&.allgather (static_cast<unsigned int>(my_bin\&.size()), bin_sizes);
+664 
+665   // The offset of my first global index
+666   unsigned int my_offset = 0;
+667   for (unsigned int pid=0; pid<communicator\&.rank(); pid++)
+668     my_offset += bin_sizes[pid];
+669 
+670   //-------------------------------------------------------------
+671   // (3) get the max value on each processor
+672   std::vector<Hilbert::HilbertIndices>
+673     upper_bounds(1);
+674 
+675   if (!my_bin\&.empty())
+676     upper_bounds[0] = my_bin\&.back();
+677 
+678   communicator\&.allgather (upper_bounds, /* identical_buffer_sizes = */ true);
+679 
+680   // Be cereful here\&.  The *_upper_bounds will be used to find the processor
+681   // a given object belongs to\&.  So, if a processor contains no objects (possible!)
+682   // then copy the bound from the lower processor id\&.
+683   for (unsigned int p=1; p<communicator\&.size(); p++)
+684     if (!bin_sizes[p]) upper_bounds[p] = upper_bounds[p-1];
+685 
+686 
+687   //-------------------------------------------------------------
+688   // (4) determine the position in the global ranking for
+689   //     each local object
+690   {
+691     //----------------------------------------------
+692     // all objects, not just local ones
+693 
+694     // Request sets to send to each processor
+695     std::vector<std::vector<Hilbert::HilbertIndices> >
+696       requested_ids (communicator\&.size());
+697     // Results to gather from each processor
+698     std::vector<std::vector<unsigned int> >
+699       filled_request (communicator\&.size());
+700 
+701     // build up list of requests
+702     std::vector<Hilbert::HilbertIndices>::const_iterator hi =
+703       hilbert_keys\&.begin();
+704 
+705     for (ForwardIterator it = begin; it != end; ++it)
+706       {
+707         libmesh_assert (hi != hilbert_keys\&.end());
+708         const processor_id_type pid =
+709           libmesh_cast_int<processor_id_type>
+710           (std::distance (upper_bounds\&.begin(),
+711                           std::lower_bound(upper_bounds\&.begin(),
+712                                            upper_bounds\&.end(),
+713                                            *hi)));
+714 
+715         libmesh_assert_less (pid, communicator\&.size());
+716 
+717         requested_ids[pid]\&.push_back(*hi);
+718 
+719         ++hi;
+720         // go ahead and put pid in index_map, that way we
+721         // don't have to repeat the std::lower_bound()
+722         index_map\&.push_back(pid);
+723       }
+724 
+725     // start with pid=0, so that we will trade with ourself
+726     std::vector<Hilbert::HilbertIndices> request_to_fill;
+727     std::vector<unsigned int> global_ids;
+728     for (unsigned int pid=0; pid<communicator\&.size(); pid++)
+729       {
+730         // Trade my requests with processor procup and procdown
+731         const unsigned int procup = (communicator\&.rank() + pid) %
+732           communicator\&.size();
+733         const unsigned int procdown = (communicator\&.size() +
+734                                        communicator\&.rank() - pid) %
+735           communicator\&.size();
+736 
+737         communicator\&.send_receive(procup, requested_ids[procup],
+738                                   procdown, request_to_fill);
+739 
+740         // Fill the requests
+741         global_ids\&.clear();  global_ids\&.reserve(request_to_fill\&.size());
+742         for (unsigned int idx=0; idx<request_to_fill\&.size(); idx++)
+743           {
+744             const Hilbert::HilbertIndices &hilbert_indices = request_to_fill[idx];
+745             libmesh_assert_less_equal (hilbert_indices, upper_bounds[communicator\&.rank()]);
+746 
+747             // find the requested index in my node bin
+748             std::vector<Hilbert::HilbertIndices>::const_iterator pos =
+749               std::lower_bound (my_bin\&.begin(), my_bin\&.end(), hilbert_indices);
+750             libmesh_assert (pos != my_bin\&.end());
+751             libmesh_assert_equal_to (*pos, hilbert_indices);
+752 
+753             // Finally, assign the global index based off the position of the index
+754             // in my array, properly offset\&.
+755             global_ids\&.push_back (std::distance(my_bin\&.begin(), pos) + my_offset);
+756           }
+757 
+758         // and trade back
+759         communicator\&.send_receive (procdown, global_ids,
+760                                    procup,   filled_request[procup]);
+761       }
+762 
+763     // We now have all the filled requests, so we can loop through our
+764     // nodes once and assign the global index to each one\&.
+765     {
+766       std::vector<std::vector<unsigned int>::const_iterator>
+767         next_obj_on_proc; next_obj_on_proc\&.reserve(communicator\&.size());
+768       for (unsigned int pid=0; pid<communicator\&.size(); pid++)
+769         next_obj_on_proc\&.push_back(filled_request[pid]\&.begin());
+770 
+771       unsigned int cnt=0;
+772       for (ForwardIterator it = begin; it != end; ++it, cnt++)
+773         {
+774           const unsigned int pid = index_map[cnt];
+775 
+776           libmesh_assert_less (pid, communicator\&.size());
+777           libmesh_assert (next_obj_on_proc[pid] != filled_request[pid]\&.end());
+778 
+779           const unsigned int global_index = *next_obj_on_proc[pid];
+780           index_map[cnt] = global_index;
+781 
+782           ++next_obj_on_proc[pid];
+783         }
+784     }
+785   }
+786 
+787   STOP_LOG ("find_global_indices()", "MeshCommunication");
+788 }
+.fi
+.SS "void libMesh::MeshCommunication::gather (const \fBprocessor_id_type\fProot_id, \fBParallelMesh\fP &mesh) const"
+This method takes an input \fC\fBParallelMesh\fP\fP which may be distributed among all the processors\&. Each processor then sends its local nodes and elements to processor \fCroot_id\fP\&. The end result is that a previously distributed \fC\fBParallelMesh\fP\fP will be serialized on processor \fCroot_id\fP\&. Since this method is collective it must be called by all processors\&. For the special case of \fCroot_id\fP equal to \fC\fBDofObject::invalid_processor_id\fP\fP this function performs an allgather\&. 
+.PP
+Definition at line 732 of file mesh_communication\&.C\&.
+.PP
+Referenced by allgather()\&.
+.PP
+.nf
+733 {
+734   // no MPI == one processor, no need for this method\&.\&.\&.
+735   return;
+736 }
+.fi
+.SS "void libMesh::MeshCommunication::gather_neighboring_elements (\fBParallelMesh\fP &mesh) const"
+
+.PP
+Definition at line 305 of file mesh_communication\&.C\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read()\&.
+.PP
+.nf
+306 {
+307   // no MPI == one processor, no need for this method\&.\&.\&.
+308   return;
+309 }
+.fi
+.SS "void libMesh::MeshCommunication::make_elems_parallel_consistent (\fBMeshBase\fP &mesh)"
+Copy ids of ghost elements from their local processors\&. 
+.PP
+Definition at line 868 of file mesh_communication\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), libMesh::MeshBase::renumber_elem(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::sync_element_data_by_parent_id()\&.
+.PP
+Referenced by libMesh::MeshRefinement::_refine_elements()\&.
+.PP
+.nf
+869 {
+870   // This function must be run on all processors at once
+871   libmesh_parallel_only(mesh\&.comm());
+872 
+873   START_LOG ("make_elems_parallel_consistent()", "MeshCommunication");
+874 
+875   SyncIds syncids(mesh, &MeshBase::renumber_elem);
+876   Parallel::sync_element_data_by_parent_id
+877     (mesh, mesh\&.active_elements_begin(),
+878      mesh\&.active_elements_end(), syncids);
+879 
+880   STOP_LOG ("make_elems_parallel_consistent()", "MeshCommunication");
+881 }
+.fi
+.SS "void libMesh::MeshCommunication::make_node_ids_parallel_consistent (\fBMeshBase\fP &mesh, \fBLocationMap\fP< \fBNode\fP > &loc_map)"
+Assuming all ids on local nodes are globally unique, and assuming all processor ids are parallel consistent, this function makes all other ids parallel consistent\&. 
+.PP
+Definition at line 848 of file mesh_communication\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::MeshBase::renumber_node(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::sync_dofobject_data_by_xyz()\&.
+.PP
+.nf
+850 {
+851   // This function must be run on all processors at once
+852   libmesh_parallel_only(mesh\&.comm());
+853 
+854   START_LOG ("make_node_ids_parallel_consistent()", "MeshCommunication");
+855 
+856   SyncIds syncids(mesh, &MeshBase::renumber_node);
+857   Parallel::sync_dofobject_data_by_xyz
+858     (mesh\&.comm(),
+859      mesh\&.nodes_begin(), mesh\&.nodes_end(),
+860      loc_map, syncids);
+861 
+862   STOP_LOG ("make_node_ids_parallel_consistent()", "MeshCommunication");
+863 }
+.fi
+.SS "void libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent (\fBMeshBase\fP &mesh, \fBLocationMap\fP< \fBNode\fP > &loc_map)"
+Assuming all processor ids on nodes touching local elements are parallel consistent, this function makes all other processor ids parallel consistent as well\&. 
+.PP
+Definition at line 932 of file mesh_communication\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::libmesh_parallel_only(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::Parallel::sync_dofobject_data_by_xyz()\&.
+.PP
+Referenced by libMesh::MeshTools::correct_node_proc_ids()\&.
+.PP
+.nf
+934 {
+935   START_LOG ("make_node_proc_ids_parallel_consistent()", "MeshCommunication");
+936 
+937   // This function must be run on all processors at once
+938   libmesh_parallel_only(mesh\&.comm());
+939 
+940   // When this function is called, each section of a parallelized mesh
+941   // should be in the following state:
+942   //
+943   // All nodes should have the exact same physical location on every
+944   // processor where they exist\&.
+945   //
+946   // Local nodes should have unique authoritative ids,
+947   // and processor ids consistent with all processors which own
+948   // an element touching them\&.
+949   //
+950   // Ghost nodes touching local elements should have processor ids
+951   // consistent with all processors which own an element touching
+952   // them\&.
+953 
+954   SyncProcIds sync(mesh);
+955   Parallel::sync_dofobject_data_by_xyz
+956     (mesh\&.comm(), mesh\&.nodes_begin(), mesh\&.nodes_end(), loc_map, sync);
+957 
+958   STOP_LOG ("make_node_proc_ids_parallel_consistent()", "MeshCommunication");
+959 }
+.fi
+.SS "void libMesh::MeshCommunication::make_nodes_parallel_consistent (\fBMeshBase\fP &mesh, \fBLocationMap\fP< \fBNode\fP > &loc_map)"
+Copy processor_ids and ids on ghost nodes from their local processors\&. This is an internal function of \fBMeshRefinement\fP which turns out to be useful for other code which wants to add nodes to a distributed mesh\&. 
+.PP
+Definition at line 965 of file mesh_communication\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::LocationMap< T >::empty(), libMesh::LocationMap< T >::init(), libMesh::libmesh_parallel_only(), libMesh::Parallel::Communicator::max(), libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), libMesh::MeshRefinement::_refine_elements(), and libMesh::UnstructuredMesh::all_second_order()\&.
+.PP
+.nf
+967 {
+968   // This function must be run on all processors at once
+969   libmesh_parallel_only(mesh\&.comm());
+970 
+971   // Create the loc_map if it hasn't been done already
+972   bool need_map_update = (mesh\&.nodes_begin() != mesh\&.nodes_end() &&
+973                           loc_map\&.empty());
+974   mesh\&.comm()\&.max(need_map_update);
+975 
+976   if (need_map_update)
+977     loc_map\&.init(mesh);
+978 
+979   // When this function is called, each section of a parallelized mesh
+980   // should be in the following state:
+981   //
+982   // All nodes should have the exact same physical location on every
+983   // processor where they exist\&.
+984   //
+985   // Local nodes should have unique authoritative ids,
+986   // and processor ids consistent with all processors which own
+987   // an element touching them\&.
+988   //
+989   // Ghost nodes touching local elements should have processor ids
+990   // consistent with all processors which own an element touching
+991   // them\&.
+992   //
+993   // Ghost nodes should have ids which are either already correct
+994   // or which are in the "unpartitioned" id space\&.
+995 
+996   // First, let's sync up processor ids\&.  Some of these processor ids
+997   // may be "wrong" from coarsening, but they're right in the sense
+998   // that they'll tell us who has the authoritative dofobject ids for
+999   // each node\&.
+1000   this->make_node_proc_ids_parallel_consistent(mesh, loc_map);
+1001 
+1002   // Second, sync up dofobject ids\&.
+1003   this->make_node_ids_parallel_consistent(mesh, loc_map);
+1004 
+1005   // Finally, correct the processor ids to make DofMap happy
+1006   MeshTools::correct_node_proc_ids(mesh, loc_map);
+1007 }
+.fi
+.SS "void libMesh::MeshCommunication::redistribute (\fBParallelMesh\fP &mesh) const"
+This method takes a parallel distributed mesh and redistributes the elements\&. Specifically, any elements stored on a given processor are sent to the processor which 'owns' them\&. Similarly, any elements assigned to the current processor but stored on another are received\&. Once this step is completed any required ghost elements are updated\&. The final result is that each processor stores only the elements it actually owns and any ghost elements required to satisfy data dependencies\&. This method can be invoked after a partitioning step to affect the new partitioning\&. 
+.PP
+Definition at line 89 of file mesh_communication\&.C\&.
+.PP
+Referenced by libMesh::ParallelMesh::redistribute()\&.
+.PP
+.nf
+90 {
+91   // no MPI == one processor, no redistribution
+92   return;
+93 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

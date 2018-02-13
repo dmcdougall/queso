@@ -1,0 +1,149 @@
+.TH "libMesh::Threads::recursive_mutex::scoped_lock" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Threads::recursive_mutex::scoped_lock \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <threads\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBscoped_lock\fP ()"
+.br
+.ti -1c
+.RI "\fBscoped_lock\fP (\fBrecursive_mutex\fP &in_rmutex)"
+.br
+.ti -1c
+.RI "\fB~scoped_lock\fP ()"
+.br
+.ti -1c
+.RI "void \fBacquire\fP (\fBrecursive_mutex\fP &in_rmutex)"
+.br
+.ti -1c
+.RI "void \fBrelease\fP ()"
+.br
+.ti -1c
+.RI "\fBscoped_lock\fP ()"
+.br
+.ti -1c
+.RI "\fBscoped_lock\fP (\fBrecursive_mutex\fP &)"
+.br
+.ti -1c
+.RI "void \fBacquire\fP (\fBrecursive_mutex\fP &)"
+.br
+.ti -1c
+.RI "void \fBrelease\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBrecursive_mutex\fP * \fBrmutex\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 412 of file threads\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Threads::recursive_mutex::scoped_lock::scoped_lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 415 of file threads\&.h\&.
+.PP
+.nf
+415 : rmutex(NULL) {}
+.fi
+.SS "libMesh::Threads::recursive_mutex::scoped_lock::scoped_lock (\fBrecursive_mutex\fP &in_rmutex)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 416 of file threads\&.h\&.
+.PP
+References libMesh::Threads::recursive_mutex::lock(), and rmutex\&.
+.PP
+.nf
+416 : rmutex(&in_rmutex) { rmutex->lock(); }
+.fi
+.SS "libMesh::Threads::recursive_mutex::scoped_lock::~scoped_lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 418 of file threads\&.h\&.
+.PP
+References release()\&.
+.PP
+.nf
+418 { release(); }
+.fi
+.SS "libMesh::Threads::recursive_mutex::scoped_lock::scoped_lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 876 of file threads\&.h\&.
+.PP
+.nf
+876 {}
+.fi
+.SS "libMesh::Threads::recursive_mutex::scoped_lock::scoped_lock (\fBrecursive_mutex\fP &)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 877 of file threads\&.h\&.
+.PP
+.nf
+877 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Threads::recursive_mutex::scoped_lock::acquire (\fBrecursive_mutex\fP &in_rmutex)\fC [inline]\fP"
+
+.PP
+Definition at line 420 of file threads\&.h\&.
+.PP
+References libMesh::Threads::recursive_mutex::lock(), and rmutex\&.
+.PP
+.nf
+420 { rmutex = &in_rmutex; rmutex->lock(); }
+.fi
+.SS "void libMesh::Threads::recursive_mutex::scoped_lock::acquire (\fBrecursive_mutex\fP &)\fC [inline]\fP"
+
+.PP
+Definition at line 878 of file threads\&.h\&.
+.PP
+.nf
+878 {}
+.fi
+.SS "void libMesh::Threads::recursive_mutex::scoped_lock::release ()\fC [inline]\fP"
+
+.PP
+Definition at line 421 of file threads\&.h\&.
+.PP
+References rmutex, and libMesh::Threads::recursive_mutex::unlock()\&.
+.PP
+Referenced by ~scoped_lock()\&.
+.PP
+.nf
+421 { if(rmutex) rmutex->unlock(); rmutex = NULL; }
+.fi
+.SS "void libMesh::Threads::recursive_mutex::scoped_lock::release ()\fC [inline]\fP"
+
+.PP
+Definition at line 879 of file threads\&.h\&.
+.PP
+.nf
+879 {}
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBrecursive_mutex\fP* libMesh::Threads::recursive_mutex::scoped_lock::rmutex\fC [private]\fP"
+
+.PP
+Definition at line 424 of file threads\&.h\&.
+.PP
+Referenced by acquire(), release(), and scoped_lock()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,885 @@
+.TH "libMesh::LaplacianErrorEstimator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LaplacianErrorEstimator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fourth_error_estimators\&.h>\fP
+.PP
+Inherits \fBlibMesh::JumpErrorEstimator\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::pair
+.br
+< const \fBSystem\fP *, unsigned int >
+.br
+, \fBErrorVector\fP * > \fBErrorMap\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLaplacianErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fB~LaplacianErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_error\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBscale_by_n_flux_faces\fP"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP \fBerror_norm\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBinitialize\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, bool estimate_parent_error)"
+.br
+.ti -1c
+.RI "virtual void \fBinternal_side_integration\fP ()"
+.br
+.ti -1c
+.RI "void \fBreinit_sides\fP ()"
+.br
+.ti -1c
+.RI "float \fBcoarse_n_flux_faces_increment\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBboundary_side_integration\fP ()"
+.br
+.ti -1c
+.RI "void \fBreduce_error\fP (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD) const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBintegrate_boundary_sides\fP"
+.br
+.ti -1c
+.RI "const \fBElem\fP * \fBfine_elem\fP"
+.br
+.ti -1c
+.RI "const \fBElem\fP * \fBcoarse_elem\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBfine_error\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBcoarse_error\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBfine_side\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBvar\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBUfine\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBUcoarse\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFEBase\fP > \fBfe_fine\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFEBase\fP > \fBfe_coarse\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class is an error indicator based on laplacian jumps between elements\&. See the \fBJumpErrorEstimator\fP class for most user APIs
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner, 2005 
+.RE
+.PP
+
+.PP
+Definition at line 46 of file fourth_error_estimators\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::pair<const \fBSystem\fP*, unsigned int>, \fBErrorVector\fP*> \fBlibMesh::ErrorEstimator::ErrorMap\fP\fC [inherited]\fP"
+When calculating many error vectors at once, we need a data structure to hold them all 
+.PP
+Definition at line 110 of file error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::LaplacianErrorEstimator::LaplacianErrorEstimator ()\fC [inline]\fP"
+Constructor\&. Defaults to H2 seminorm; changes to error_norm are ignored\&. 
+.PP
+Definition at line 54 of file fourth_error_estimators\&.h\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, and libMesh::H2_SEMINORM\&.
+.PP
+.nf
+54                             :
+55     JumpErrorEstimator()
+56   { error_norm = H2_SEMINORM; }
+.fi
+.SS "libMesh::LaplacianErrorEstimator::~LaplacianErrorEstimator ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 61 of file fourth_error_estimators\&.h\&.
+.PP
+.nf
+61 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual bool libMesh::JumpErrorEstimator::boundary_side_integration ()\fC [inline]\fP, \fC [protected]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+The function, to be implemented by derived classes, which calculates an error term on a boundary side Returns true if the flux bc function is in fact defined on the current side 
+.PP
+Reimplemented in \fBlibMesh::KellyErrorEstimator\fP, and \fBlibMesh::DiscontinuityMeasure\fP\&.
+.PP
+Definition at line 122 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error()\&.
+.PP
+.nf
+122 { return false; }
+.fi
+.SS "float libMesh::JumpErrorEstimator::coarse_n_flux_faces_increment ()\fC [protected]\fP, \fC [inherited]\fP"
+A utility function to correctly increase n_flux_faces for the coarse element 
+.PP
+Definition at line 445 of file jump_error_estimator\&.C\&.
+.PP
+References libMesh::JumpErrorEstimator::coarse_elem, libMesh::dim, libMesh::Elem::dim(), libMesh::JumpErrorEstimator::fine_elem, and libMesh::Elem::level()\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error()\&.
+.PP
+.nf
+446 {
+447   // Keep track of the number of internal flux sides found on each
+448   // element
+449   unsigned int dim = coarse_elem->dim();
+450 
+451   const unsigned int divisor =
+452     1 << (dim-1)*(fine_elem->level() - coarse_elem->level());
+453 
+454   // With a difference of n levels between fine and coarse elements,
+455   // we compute a fractional flux face for the coarse element by adding:
+456   // 1/2^n in 2D
+457   // 1/4^n in 3D
+458   // each time\&.  This code will get hit 2^n times in 2D and 4^n
+459   // times in 3D so that the final flux face count for the coarse
+460   // element will be an integer value\&.
+461 
+462   return 1\&.0f / static_cast<float>(divisor);
+463 }
+.fi
+.SS "void libMesh::JumpErrorEstimator::estimate_error (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This function uses the derived class's jump error estimate formula to estimate the error on each cell\&. The estimated error is output in the vector \fCerror_per_cell\fP 
+.PP
+Implements \fBlibMesh::ErrorEstimator\fP\&.
+.PP
+Definition at line 54 of file jump_error_estimator\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::JumpErrorEstimator::boundary_side_integration(), libMesh::FEGenericBase< T >::build(), libMesh::Elem::child(), libMesh::JumpErrorEstimator::coarse_elem, libMesh::JumpErrorEstimator::coarse_error, libMesh::JumpErrorEstimator::coarse_n_flux_faces_increment(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::ParallelObject::comm(), libMesh::System::current_solution(), libMesh::FEType::default_quadrature_order(), libMesh::dim, libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::ErrorEstimator::error_norm, libMesh::ErrorVectorReal, libMesh::JumpErrorEstimator::fe_coarse, libMesh::JumpErrorEstimator::fe_fine, libMesh::JumpErrorEstimator::fine_elem, libMesh::JumpErrorEstimator::fine_error, libMesh::JumpErrorEstimator::fine_side, libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::DofObject::id(), libMesh::JumpErrorEstimator::initialize(), libMesh::JumpErrorEstimator::integrate_boundary_sides, libMesh::JumpErrorEstimator::internal_side_integration(), libMesh::Elem::level(), libMesh::MeshBase::max_elem_id(), mesh, libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_children(), libMesh::Elem::n_neighbors(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::Elem::neighbor(), libMesh::Elem::parent(), libMesh::ErrorEstimator::reduce_error(), libMesh::JumpErrorEstimator::reinit_sides(), libMesh::DenseVector< T >::resize(), libMesh::JumpErrorEstimator::scale_by_n_flux_faces, libMesh::System::solution, libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::NumericVector< T >::swap(), libMesh::sys, libMesh::JumpErrorEstimator::Ucoarse, libMesh::JumpErrorEstimator::Ufine, libMesh::JumpErrorEstimator::var, libMesh::DofMap::variable_type(), and libMesh::SystemNorm::weight()\&.
+.PP
+.nf
+58 {
+59   START_LOG("estimate_error()", "JumpErrorEstimator");
+60   /*
+61 
+62     Conventions for assigning the direction of the normal:
+63 
+64     - e & f are global element ids
+65 
+66     Case (1\&.) Elements are at the same level, e<f
+67     Compute the flux jump on the face and
+68     add it as a contribution to error_per_cell[e]
+69     and error_per_cell[f]
+70 
+71     ----------------------
+72     |           |          |
+73     |           |    f     |
+74     |           |          |
+75     |    e      |---> n    |
+76     |           |          |
+77     |           |          |
+78     ----------------------
+79 
+80 
+81     Case (2\&.) The neighbor is at a higher level\&.
+82     Compute the flux jump on e's face and
+83     add it as a contribution to error_per_cell[e]
+84     and error_per_cell[f]
+85 
+86     ----------------------
+87     |     |     |          |
+88     |     |  e  |---> n    |
+89     |     |     |          |
+90     |-----------|    f     |
+91     |     |     |          |
+92     |     |     |          |
+93     |     |     |          |
+94     ----------------------
+95   */
+96 
+97   // The current mesh
+98   const MeshBase& mesh = system\&.get_mesh();
+99 
+100   // The dimensionality of the mesh
+101   const unsigned int dim = mesh\&.mesh_dimension();
+102 
+103   // The number of variables in the system
+104   const unsigned int n_vars = system\&.n_vars();
+105 
+106   // The DofMap for this system
+107   const DofMap& dof_map = system\&.get_dof_map();
+108 
+109   // Resize the error_per_cell vector to be
+110   // the number of elements, initialize it to 0\&.
+111   error_per_cell\&.resize (mesh\&.max_elem_id());
+112   std::fill (error_per_cell\&.begin(), error_per_cell\&.end(), 0\&.);
+113 
+114   // Declare a vector of floats which is as long as
+115   // error_per_cell above, and fill with zeros\&.  This vector will be
+116   // used to keep track of the number of edges (faces) on each active
+117   // element which are either:
+118   // 1) an internal edge
+119   // 2) an edge on a Neumann boundary for which a boundary condition
+120   //    function has been specified\&.
+121   // The error estimator can be scaled by the number of flux edges (faces)
+122   // which the element actually has to obtain a more uniform measure
+123   // of the error\&.  Use floats instead of ints since in case 2 (above)
+124   // f gets 1/2 of a flux face contribution from each of his
+125   // neighbors
+126   std::vector<float> n_flux_faces (error_per_cell\&.size());
+127 
+128   // Prepare current_local_solution to localize a non-standard
+129   // solution vector if necessary
+130   if (solution_vector && solution_vector != system\&.solution\&.get())
+131     {
+132       NumericVector<Number>* newsol =
+133         const_cast<NumericVector<Number>*>(solution_vector);
+134       System &sys = const_cast<System&>(system);
+135       newsol->swap(*sys\&.solution);
+136       sys\&.update();
+137     }
+138 
+139   // Loop over all the variables in the system
+140   for (var=0; var<n_vars; var++)
+141     {
+142       // Possibly skip this variable
+143       if (error_norm\&.weight(var) == 0\&.0) continue;
+144 
+145       // The type of finite element to use for this variable
+146       const FEType& fe_type = dof_map\&.variable_type (var);
+147 
+148       // Finite element objects for the same face from
+149       // different sides
+150       fe_fine = FEBase::build (dim, fe_type);
+151       fe_coarse = FEBase::build (dim, fe_type);
+152 
+153       // Build an appropriate Gaussian quadrature rule
+154       QGauss qrule (dim-1, fe_type\&.default_quadrature_order());
+155 
+156       // Tell the finite element for the fine element about the quadrature
+157       // rule\&.  The finite element for the coarse element need not know about it
+158       fe_fine->attach_quadrature_rule (&qrule);
+159 
+160       // By convention we will always do the integration
+161       // on the face of element e\&.  We'll need its Jacobian values and
+162       // physical point locations, at least
+163       fe_fine->get_JxW();
+164       fe_fine->get_xyz();
+165 
+166       // Our derived classes may want to do some initialization here
+167       this->initialize(system, error_per_cell, estimate_parent_error);
+168 
+169       // The global DOF indices for elements e & f
+170       std::vector<dof_id_type> dof_indices_fine;
+171       std::vector<dof_id_type> dof_indices_coarse;
+172 
+173 
+174 
+175       // Iterate over all the active elements in the mesh
+176       // that live on this processor\&.
+177       MeshBase::const_element_iterator       elem_it  = mesh\&.active_local_elements_begin();
+178       const MeshBase::const_element_iterator elem_end = mesh\&.active_local_elements_end();
+179 
+180       for (; elem_it != elem_end; ++elem_it)
+181         {
+182           // e is necessarily an active element on the local processor
+183           const Elem* e = *elem_it;
+184           const dof_id_type e_id = e->id();
+185 
+186 #ifdef LIBMESH_ENABLE_AMR
+187           // See if the parent of element e has been examined yet;
+188           // if not, we may want to compute the estimator on it
+189           const Elem* parent = e->parent();
+190 
+191           // We only can compute and only need to compute on
+192           // parents with all active children
+193           bool compute_on_parent = true;
+194           if (!parent || !estimate_parent_error)
+195             compute_on_parent = false;
+196           else
+197             for (unsigned int c=0; c != parent->n_children(); ++c)
+198               if (!parent->child(c)->active())
+199                 compute_on_parent = false;
+200 
+201           if (compute_on_parent &&
+202               !error_per_cell[parent->id()])
+203             {
+204               // Compute a projection onto the parent
+205               DenseVector<Number> Uparent;
+206               FEBase::coarsened_dof_values(*(system\&.solution),
+207                                            dof_map, parent, Uparent,
+208                                            var, false);
+209 
+210               // Loop over the neighbors of the parent
+211               for (unsigned int n_p=0; n_p<parent->n_neighbors(); n_p++)
+212                 {
+213                   if (parent->neighbor(n_p) != NULL) // parent has a neighbor here
+214                     {
+215                       // Find the active neighbors in this direction
+216                       std::vector<const Elem*> active_neighbors;
+217                       parent->neighbor(n_p)->
+218                         active_family_tree_by_neighbor(active_neighbors,
+219                                                        parent);
+220                       // Compute the flux to each active neighbor
+221                       for (unsigned int a=0;
+222                            a != active_neighbors\&.size(); ++a)
+223                         {
+224                           const Elem *f = active_neighbors[a];
+225                           // FIXME - what about when f->level <
+226                           // parent->level()??
+227                           if (f->level() >= parent->level())
+228                             {
+229                               fine_elem = f;
+230                               coarse_elem = parent;
+231                               Ucoarse = Uparent;
+232 
+233                               dof_map\&.dof_indices (fine_elem, dof_indices_fine, var);
+234                               const unsigned int n_dofs_fine =
+235                                 libmesh_cast_int<unsigned int>(dof_indices_fine\&.size());
+236                               Ufine\&.resize(n_dofs_fine);
+237 
+238                               for (unsigned int i=0; i<n_dofs_fine; i++)
+239                                 Ufine(i) = system\&.current_solution(dof_indices_fine[i]);
+240                               this->reinit_sides();
+241                               this->internal_side_integration();
+242 
+243                               error_per_cell[fine_elem->id()] +=
+244                                 static_cast<ErrorVectorReal>(fine_error);
+245                               error_per_cell[coarse_elem->id()] +=
+246                                 static_cast<ErrorVectorReal>(coarse_error);
+247 
+248                               // Keep track of the number of internal flux
+249                               // sides found on each element
+250                               n_flux_faces[fine_elem->id()]++;
+251                               n_flux_faces[coarse_elem->id()] += this->coarse_n_flux_faces_increment();
+252                             }
+253                         }
+254                     }
+255                   else if (integrate_boundary_sides)
+256                     {
+257                       fine_elem = parent;
+258                       Ufine = Uparent;
+259 
+260                       // Reinitialize shape functions on the fine element side
+261                       fe_fine->reinit (fine_elem, fine_side);
+262 
+263                       if (this->boundary_side_integration())
+264                         {
+265                           error_per_cell[fine_elem->id()] +=
+266                             static_cast<ErrorVectorReal>(fine_error);
+267                           n_flux_faces[fine_elem->id()]++;
+268                         }
+269                     }
+270                 }
+271             }
+272 #endif // #ifdef LIBMESH_ENABLE_AMR
+273 
+274           // If we do any more flux integration, e will be the fine element
+275           fine_elem = e;
+276 
+277           // Loop over the neighbors of element e
+278           for (unsigned int n_e=0; n_e<e->n_neighbors(); n_e++)
+279             {
+280               fine_side = n_e;
+281 
+282               if (e->neighbor(n_e) != NULL) // e is not on the boundary
+283                 {
+284                   const Elem* f           = e->neighbor(n_e);
+285                   const dof_id_type f_id = f->id();
+286 
+287                   // Compute flux jumps if we are in case 1 or case 2\&.
+288                   if ((f->active() && (f->level() == e->level()) && (e_id < f_id))
+289                       || (f->level() < e->level()))
+290                     {
+291                       // f is now the coarse element
+292                       coarse_elem = f;
+293 
+294                       // Get the DOF indices for the two elements
+295                       dof_map\&.dof_indices (fine_elem, dof_indices_fine, var);
+296                       dof_map\&.dof_indices (coarse_elem, dof_indices_coarse, var);
+297 
+298                       // The number of DOFS on each element
+299                       const unsigned int n_dofs_fine =
+300                         libmesh_cast_int<unsigned int>(dof_indices_fine\&.size());
+301                       const unsigned int n_dofs_coarse =
+302                         libmesh_cast_int<unsigned int>(dof_indices_coarse\&.size());
+303                       Ufine\&.resize(n_dofs_fine);
+304                       Ucoarse\&.resize(n_dofs_coarse);
+305 
+306                       // The local solutions on each element
+307                       for (unsigned int i=0; i<n_dofs_fine; i++)
+308                         Ufine(i) = system\&.current_solution(dof_indices_fine[i]);
+309                       for (unsigned int i=0; i<n_dofs_coarse; i++)
+310                         Ucoarse(i) = system\&.current_solution(dof_indices_coarse[i]);
+311 
+312                       this->reinit_sides();
+313                       this->internal_side_integration();
+314 
+315                       error_per_cell[fine_elem->id()] +=
+316                         static_cast<ErrorVectorReal>(fine_error);
+317                       error_per_cell[coarse_elem->id()] +=
+318                         static_cast<ErrorVectorReal>(coarse_error);
+319 
+320                       // Keep track of the number of internal flux
+321                       // sides found on each element
+322                       n_flux_faces[fine_elem->id()]++;
+323                       n_flux_faces[coarse_elem->id()] += this->coarse_n_flux_faces_increment();
+324                     } // end if (case1 || case2)
+325                 } // if (e->neigbor(n_e) != NULL)
+326 
+327               // Otherwise, e is on the boundary\&.  If it happens to
+328               // be on a Dirichlet boundary, we need not do anything\&.
+329               // On the other hand, if e is on a Neumann (flux) boundary
+330               // with grad(u)\&.n = g, we need to compute the additional residual
+331               // (h * \int |g - grad(u_h)\&.n|^2 dS)^(1/2)\&.
+332               // We can only do this with some knowledge of the boundary
+333               // conditions, i\&.e\&. the user must have attached an appropriate
+334               // BC function\&.
+335               else
+336                 {
+337                   if (integrate_boundary_sides)
+338                     {
+339                       // Reinitialize shape functions on the fine element side
+340                       fe_fine->reinit (fine_elem, fine_side);
+341 
+342                       // Get the DOF indices
+343                       dof_map\&.dof_indices (fine_elem, dof_indices_fine, var);
+344 
+345                       // The number of DOFS on each element
+346                       const unsigned int n_dofs_fine =
+347                         libmesh_cast_int<unsigned int>(dof_indices_fine\&.size());
+348                       Ufine\&.resize(n_dofs_fine);
+349 
+350                       for (unsigned int i=0; i<n_dofs_fine; i++)
+351                         Ufine(i) = system\&.current_solution(dof_indices_fine[i]);
+352 
+353                       if (this->boundary_side_integration())
+354                         {
+355                           error_per_cell[fine_elem->id()] +=
+356                             static_cast<ErrorVectorReal>(fine_error);
+357                           n_flux_faces[fine_elem->id()]++;
+358                         }
+359                     } // end if _bc_function != NULL
+360                 } // end if (e->neighbor(n_e) == NULL)
+361             } // end loop over neighbors
+362         } // End loop over active local elements
+363     } // End loop over variables
+364 
+365 
+366 
+367   // Each processor has now computed the error contribuions
+368   // for its local elements\&.  We need to sum the vector
+369   // and then take the square-root of each component\&.  Note
+370   // that we only need to sum if we are running on multiple
+371   // processors, and we only need to take the square-root
+372   // if the value is nonzero\&.  There will in general be many
+373   // zeros for the inactive elements\&.
+374 
+375   // First sum the vector of estimated error values
+376   this->reduce_error(error_per_cell, system\&.comm());
+377 
+378   // Compute the square-root of each component\&.
+379   for (std::size_t i=0; i<error_per_cell\&.size(); i++)
+380     if (error_per_cell[i] != 0\&.)
+381       error_per_cell[i] = std::sqrt(error_per_cell[i]);
+382 
+383 
+384   if (this->scale_by_n_flux_faces)
+385     {
+386       // Sum the vector of flux face counts
+387       this->reduce_error(n_flux_faces, system\&.comm());
+388 
+389       // Sanity check: Make sure the number of flux faces is
+390       // always an integer value
+391 #ifdef DEBUG
+392       for (unsigned int i=0; i<n_flux_faces\&.size(); ++i)
+393         libmesh_assert_equal_to (n_flux_faces[i], static_cast<float>(static_cast<unsigned int>(n_flux_faces[i])) );
+394 #endif
+395 
+396       // Scale the error by the number of flux faces for each element
+397       for (unsigned int i=0; i<n_flux_faces\&.size(); ++i)
+398         {
+399           if (n_flux_faces[i] == 0\&.0) // inactive or non-local element
+400             continue;
+401 
+402           //libMesh::out << "Element " << i << " has " << n_flux_faces[i] << " flux faces\&." << std::endl;
+403           error_per_cell[i] /= static_cast<ErrorVectorReal>(n_flux_faces[i]);
+404         }
+405     }
+406 
+407   // If we used a non-standard solution before, now is the time to fix
+408   // the current_local_solution
+409   if (solution_vector && solution_vector != system\&.solution\&.get())
+410     {
+411       NumericVector<Number>* newsol =
+412         const_cast<NumericVector<Number>*>(solution_vector);
+413       System &sys = const_cast<System&>(system);
+414       newsol->swap(*sys\&.solution);
+415       sys\&.update();
+416     }
+417 
+418   STOP_LOG("estimate_error()", "JumpErrorEstimator");
+419 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default computes the sum of the error_per_cell for each system in the equation_systems\&.
+.PP
+Currently this function ignores the error_norm member variable, and uses the function argument error_norms instead\&.
+.PP
+This function is named estimate_errors instead of estimate_error because otherwise C++ can get confused\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 48 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), and libMesh::sys\&.
+.PP
+.nf
+53 {
+54   SystemNorm old_error_norm = this->error_norm;
+55 
+56   // Sum the error values from each system
+57   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+58     {
+59       ErrorVector system_error_per_cell;
+60       const System &sys = equation_systems\&.get_system(s);
+61       if (error_norms\&.find(&sys) == error_norms\&.end())
+62         this->error_norm = old_error_norm;
+63       else
+64         this->error_norm = error_norms\&.find(&sys)->second;
+65 
+66       const NumericVector<Number>* solution_vector = NULL;
+67       if (solution_vectors &&
+68           solution_vectors->find(&sys) != solution_vectors->end())
+69         solution_vector = solution_vectors->find(&sys)->second;
+70 
+71       this->estimate_error(sys, system_error_per_cell,
+72                            solution_vector, estimate_parent_error);
+73 
+74       if (s)
+75         {
+76           libmesh_assert_equal_to (error_per_cell\&.size(), system_error_per_cell\&.size());
+77           for (unsigned int i=0; i != error_per_cell\&.size(); ++i)
+78             error_per_cell[i] += system_error_per_cell[i];
+79         }
+80       else
+81         error_per_cell = system_error_per_cell;
+82     }
+83 
+84   // Restore our old state before returning
+85   this->error_norm = old_error_norm;
+86 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default it calls estimate_error repeatedly to calculate the requested error vectors\&.
+.PP
+Currently this function ignores the \fBerror_norm\&.weight()\fP values because it calculates each variable's error individually, unscaled\&.
+.PP
+The user selects which errors get computed by filling a map with error vectors: If errors_per_cell[&system][v] exists, it will be filled with the error values in variable \fCv\fP of \fCsystem\fP 
+.PP
+FIXME: This is a default implementation - derived classes should reimplement it for efficiency\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 94 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::sys, and libMesh::SystemNorm::type()\&.
+.PP
+.nf
+98 {
+99   SystemNorm old_error_norm = this->error_norm;
+100 
+101   // Find the requested error values from each system
+102   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+103     {
+104       const System &sys = equation_systems\&.get_system(s);
+105 
+106       unsigned int n_vars = sys\&.n_vars();
+107 
+108       for (unsigned int v = 0; v != n_vars; ++v)
+109         {
+110           // Only fill in ErrorVectors the user asks for
+111           if (errors_per_cell\&.find(std::make_pair(&sys, v)) ==
+112               errors_per_cell\&.end())
+113             continue;
+114 
+115           // Calculate error in only one variable
+116           std::vector<Real> weights(n_vars, 0\&.0);
+117           weights[v] = 1\&.0;
+118           this->error_norm =
+119             SystemNorm(std::vector<FEMNormType>(n_vars, old_error_norm\&.type(v)),
+120                        weights);
+121 
+122           const NumericVector<Number>* solution_vector = NULL;
+123           if (solution_vectors &&
+124               solution_vectors->find(&sys) != solution_vectors->end())
+125             solution_vector = solution_vectors->find(&sys)->second;
+126 
+127           this->estimate_error
+128             (sys, *errors_per_cell[std::make_pair(&sys, v)],
+129              solution_vector, estimate_parent_error);
+130         }
+131     }
+132 
+133   // Restore our old state before returning
+134   this->error_norm = old_error_norm;
+135 }
+.fi
+.SS "void libMesh::LaplacianErrorEstimator::initialize (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, boolestimate_parent_error)\fC [protected]\fP, \fC [virtual]\fP"
+An initialization function, for requesting specific data from the \fBFE\fP objects 
+.PP
+Reimplemented from \fBlibMesh::JumpErrorEstimator\fP\&.
+.PP
+Definition at line 47 of file fourth_error_estimators\&.C\&.
+.PP
+References libMesh::JumpErrorEstimator::fe_coarse, and libMesh::JumpErrorEstimator::fe_fine\&.
+.PP
+.nf
+50 {
+51   // We'll need second derivatives for Laplacian jump computation
+52   fe_fine->get_d2phi();
+53   fe_coarse->get_d2phi();
+54 }
+.fi
+.SS "void libMesh::LaplacianErrorEstimator::internal_side_integration ()\fC [protected]\fP, \fC [virtual]\fP"
+The function which calculates a laplacian jump based error term on an internal side 
+.PP
+Implements \fBlibMesh::JumpErrorEstimator\fP\&.
+.PP
+Definition at line 59 of file fourth_error_estimators\&.C\&.
+.PP
+References libMesh::JumpErrorEstimator::coarse_elem, libMesh::JumpErrorEstimator::coarse_error, libMesh::dim, libMesh::Elem::dim(), libMesh::ErrorEstimator::error_norm, libMesh::JumpErrorEstimator::fe_coarse, libMesh::JumpErrorEstimator::fe_fine, libMesh::JumpErrorEstimator::fine_elem, libMesh::JumpErrorEstimator::fine_error, libMesh::Elem::hmax(), libMesh::TensorTools::norm_sq(), libMesh::Real, libMesh::DenseVector< T >::size(), libMesh::JumpErrorEstimator::Ucoarse, libMesh::JumpErrorEstimator::Ufine, libMesh::JumpErrorEstimator::var, and libMesh::SystemNorm::weight()\&.
+.PP
+.nf
+60 {
+61   Real error = 1\&.e-30;
+62   unsigned int n_qp = fe_fine->n_quadrature_points();
+63   unsigned int n_fine_dofs = Ufine\&.size();
+64   unsigned int n_coarse_dofs = Ucoarse\&.size();
+65 
+66   unsigned int dim = fine_elem->dim();
+67 
+68   std::vector<std::vector<RealTensor> > d2phi_coarse = fe_coarse->get_d2phi();
+69   std::vector<std::vector<RealTensor> > d2phi_fine = fe_fine->get_d2phi();
+70   std::vector<Real> JxW_face = fe_fine->get_JxW();
+71 
+72   for (unsigned int qp=0; qp != n_qp; ++qp)
+73     {
+74       // Calculate solution gradients on fine and coarse elements
+75       // at this quadrature point
+76       Number laplacian_fine = 0\&., laplacian_coarse = 0\&.;
+77 
+78       for (unsigned int i=0; i != n_coarse_dofs; ++i)
+79         {
+80           laplacian_coarse += d2phi_coarse[i][qp](0,0) * Ucoarse(i);
+81           if (dim > 1)
+82             laplacian_coarse += d2phi_coarse[i][qp](1,1) * Ucoarse(i);
+83           if (dim > 2)
+84             laplacian_coarse += d2phi_coarse[i][qp](2,2) * Ucoarse(i);
+85         }
+86 
+87       for (unsigned int i=0; i != n_fine_dofs; ++i)
+88         {
+89           laplacian_fine += d2phi_fine[i][qp](0,0) * Ufine(i);
+90           if (dim > 1)
+91             laplacian_fine += d2phi_fine[i][qp](1,1) * Ufine(i);
+92           if (dim > 2)
+93             laplacian_fine += d2phi_fine[i][qp](2,2) * Ufine(i);
+94         }
+95 
+96 
+97       // Find the jump in the Laplacian
+98       // at this quadrature point
+99       const Number jump = laplacian_fine - laplacian_coarse;
+100       const Real jump2 = TensorTools::norm_sq(jump);
+101 
+102       // Accumulate the jump integral
+103       error += JxW_face[qp] * jump2;
+104     }
+105 
+106   // Add the h-weighted jump integral to each error term
+107   fine_error =
+108     error * fine_elem->hmax() * error_norm\&.weight(var);
+109   coarse_error =
+110     error * coarse_elem->hmax() * error_norm\&.weight(var);
+111 }
+.fi
+.SS "void libMesh::ErrorEstimator::reduce_error (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD) const\fC [protected]\fP, \fC [inherited]\fP"
+This method takes the local error contributions in \fCerror_per_cell\fP from each processor and combines them to get the global error vector\&. 
+.PP
+Definition at line 33 of file error_estimator\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+35 {
+36   // This function must be run on all processors at once
+37   // parallel_object_only();
+38 
+39   // Each processor has now computed the error contribuions
+40   // for its local elements\&.  We may need to sum the vector to
+41   // recover the error for each element\&.
+42 
+43   comm\&.sum(error_per_cell);
+44 }
+.fi
+.SS "void libMesh::JumpErrorEstimator::reinit_sides ()\fC [protected]\fP, \fC [inherited]\fP"
+A utility function to reinit the finite element data on elements sharing a side 
+.PP
+Definition at line 424 of file jump_error_estimator\&.C\&.
+.PP
+References libMesh::JumpErrorEstimator::coarse_elem, libMesh::Elem::dim(), libMesh::JumpErrorEstimator::fe_coarse, libMesh::JumpErrorEstimator::fe_fine, libMesh::JumpErrorEstimator::fine_elem, libMesh::JumpErrorEstimator::fine_side, and libMesh::FEInterface::inverse_map()\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error()\&.
+.PP
+.nf
+425 {
+426   // The master quadrature point locations on the coarse element
+427   std::vector<Point> qp_coarse;
+428 
+429   // Reinitialize shape functions on the fine element side
+430   fe_fine->reinit (fine_elem, fine_side);
+431 
+432   // Get the physical locations of the fine element quadrature points
+433   std::vector<Point> qface_point = fe_fine->get_xyz();
+434 
+435   // Find their locations on the coarse element
+436   FEInterface::inverse_map (coarse_elem->dim(), fe_coarse->get_fe_type(),
+437                             coarse_elem, qface_point, qp_coarse);
+438 
+439   // Calculate the coarse element shape functions at those locations
+440   fe_coarse->reinit (coarse_elem, &qp_coarse);
+441 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBElem\fP * libMesh::JumpErrorEstimator::coarse_elem\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 133 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::coarse_n_flux_faces_increment(), libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), and libMesh::JumpErrorEstimator::reinit_sides()\&.
+.SS "\fBReal\fP libMesh::JumpErrorEstimator::coarse_error\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 138 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), and libMesh::KellyErrorEstimator::internal_side_integration()\&.
+.SS "\fBSystemNorm\fP libMesh::ErrorEstimator::error_norm\fC [inherited]\fP"
+When estimating the error in a single system, the \fCerror_norm\fP is used to control the scaling and norm choice for each variable\&. Not all estimators will support all norm choices\&. The default scaling is for all variables to be weighted equally\&. The default norm choice depends on the error estimator\&.
+.PP
+Part of this functionality was supported via component_scale and sobolev_order in older \fBlibMesh\fP versions, and a small part was supported via component_mask in even older versions\&. Hopefully the encapsulation here will allow us to avoid changing this API again\&. 
+.PP
+Definition at line 142 of file error_estimator\&.h\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::AdjointRefinementEstimator::AdjointRefinementEstimator(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DiscontinuityMeasure::DiscontinuityMeasure(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactErrorEstimator::ExactErrorEstimator(), libMesh::ExactErrorEstimator::find_squared_element_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::KellyErrorEstimator::KellyErrorEstimator(), LaplacianErrorEstimator(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::PatchRecoveryErrorEstimator(), and libMesh::UniformRefinementEstimator::UniformRefinementEstimator()\&.
+.SS "\fBAutoPtr\fP<\fBFEBase\fP> libMesh::JumpErrorEstimator::fe_coarse\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 158 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error(), initialize(), libMesh::DiscontinuityMeasure::initialize(), libMesh::KellyErrorEstimator::initialize(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), and libMesh::JumpErrorEstimator::reinit_sides()\&.
+.SS "\fBAutoPtr\fP<\fBFEBase\fP> libMesh::JumpErrorEstimator::fe_fine\fC [protected]\fP, \fC [inherited]\fP"
+The finite element objects for fine and coarse elements 
+.PP
+Definition at line 158 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::JumpErrorEstimator::estimate_error(), initialize(), libMesh::DiscontinuityMeasure::initialize(), libMesh::KellyErrorEstimator::initialize(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), and libMesh::JumpErrorEstimator::reinit_sides()\&.
+.SS "const \fBElem\fP* libMesh::JumpErrorEstimator::fine_elem\fC [protected]\fP, \fC [inherited]\fP"
+The fine and coarse elements sharing a face 
+.PP
+Definition at line 133 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::JumpErrorEstimator::coarse_n_flux_faces_increment(), libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), and libMesh::JumpErrorEstimator::reinit_sides()\&.
+.SS "\fBReal\fP libMesh::JumpErrorEstimator::fine_error\fC [protected]\fP, \fC [inherited]\fP"
+The fine and coarse error values to be set by each side_integration(); 
+.PP
+Definition at line 138 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), and libMesh::KellyErrorEstimator::internal_side_integration()\&.
+.SS "unsigned int libMesh::JumpErrorEstimator::fine_side\fC [protected]\fP, \fC [inherited]\fP"
+Which side of the fine element is this? 
+.PP
+Definition at line 143 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error(), and libMesh::JumpErrorEstimator::reinit_sides()\&.
+.SS "bool libMesh::JumpErrorEstimator::integrate_boundary_sides\fC [protected]\fP, \fC [inherited]\fP"
+A boolean flag, by default false, to be set to true if integrations with \fBboundary_side_integration()\fP should be performed 
+.PP
+Definition at line 128 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::KellyErrorEstimator::attach_flux_bc_function(), and libMesh::JumpErrorEstimator::estimate_error()\&.
+.SS "bool libMesh::JumpErrorEstimator::scale_by_n_flux_faces\fC [inherited]\fP"
+This boolean flag allows you to scale the error indicator result for each element by the number of 'flux faces' the element actually has\&. This tends to weight more evenly cells which are on the boundaries and thus have fewer contributions to their flux\&. The value is initialized to false, simply set it to true if you want to use the feature\&. 
+.PP
+Definition at line 89 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::JumpErrorEstimator::Ucoarse\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 153 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), and libMesh::KellyErrorEstimator::internal_side_integration()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::JumpErrorEstimator::Ufine\fC [protected]\fP, \fC [inherited]\fP"
+The local degree of freedom values on fine and coarse elements 
+.PP
+Definition at line 153 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), and libMesh::KellyErrorEstimator::internal_side_integration()\&.
+.SS "unsigned int libMesh::JumpErrorEstimator::var\fC [protected]\fP, \fC [inherited]\fP"
+The variable number currently being evaluated 
+.PP
+Definition at line 148 of file jump_error_estimator\&.h\&.
+.PP
+Referenced by libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::JumpErrorEstimator::estimate_error(), internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), and libMesh::KellyErrorEstimator::internal_side_integration()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,285 @@
+.TH "libMesh::MeshOutput< MT >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshOutput< MT > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_output\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~MeshOutput\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)=0"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshOutput\fP (const bool is_parallel_format=false)"
+.br
+.ti -1c
+.RI "\fBMeshOutput\fP (const MT &, const bool is_parallel_format=false)"
+.br
+.ti -1c
+.RI "const MT & \fBmesh\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB_build_variable_names_and_solution_vector\fP (const \fBEquationSystems\fP &es, std::vector< \fBNumber\fP > &soln, std::vector< std::string > &names, const std::set< std::string > *system_names=NULL)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const MT *const \fB_obj\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_ascii_precision\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class MT>class libMesh::MeshOutput< MT >"
+This class defines an abstract interface for \fC\fBMesh\fP\fP output\&. Specific classes derived from this class actually implement writing various mesh formats\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2004 
+.RE
+.PP
+
+.PP
+Definition at line 55 of file mesh_output\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class MT > \fBlibMesh::MeshOutput\fP< MT >::\fBMeshOutput\fP (const boolis_parallel_format = \fCfalse\fP)\fC [inline]\fP, \fC [explicit]\fP, \fC [protected]\fP"
+Default constructor\&. Will set the _obj to NULL, effectively rendering this object useless\&. 
+.PP
+Definition at line 164 of file mesh_output\&.h\&.
+.PP
+.nf
+164                                                          :
+165   _is_parallel_format(is_parallel_format),
+166   _obj(NULL),
+167   _ascii_precision (std::numeric_limits<Real>::digits10 + 2)
+168 {}
+.fi
+.SS "template<class MT> \fBlibMesh::MeshOutput\fP< MT >::\fBMeshOutput\fP (const MT &obj, const boolis_parallel_format = \fCfalse\fP)\fC [inline]\fP, \fC [explicit]\fP, \fC [protected]\fP"
+Constructor\&. Takes a reference to a constant object\&. This constructor will only allow us to write the object\&. 
+.PP
+Definition at line 174 of file mesh_output\&.h\&.
+.PP
+References libMesh::MeshOutput< MT >::_is_parallel_format, libMesh::MeshOutput< MT >::mesh(), libMesh::out, and libMesh::processor_id()\&.
+.PP
+.nf
+174                                                                         :
+175   _is_parallel_format(is_parallel_format),
+176   _obj (&obj),
+177   _ascii_precision (std::numeric_limits<Real>::digits10 + 2)
+178 {
+179   if (!_is_parallel_format && !this->mesh()\&.is_serial())
+180     {
+181       if (this->mesh()\&.processor_id() == 0)
+182         {
+183           libmesh_do_once(libMesh::out <<
+184                           "Warning:  This MeshOutput subclass only supports meshes which have been serialized!"
+185                           << std::endl;);
+186         }
+187       //      libmesh_error();
+188     }
+189 }
+.fi
+.SS "template<class MT > \fBlibMesh::MeshOutput\fP< MT >::~\fBMeshOutput\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 195 of file mesh_output\&.h\&.
+.PP
+.nf
+196 {
+197 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class MT > void \fBlibMesh::MeshOutput\fP< MT >::_build_variable_names_and_solution_vector (const \fBEquationSystems\fP &es, std::vector< \fBNumber\fP > &soln, std::vector< std::string > &names, const std::set< std::string > *system_names = \fCNULL\fP)\fC [private]\fP"
+A helper function which allows us to fill temporary name and solution vectors with an \fBEquationSystems\fP object\&. Only generate names and solution data corresponding to systems specified in system_names\&. 
+.PP
+Definition at line 31 of file mesh_output\&.C\&.
+.PP
+References libMesh::Parallel::allgather(), libMesh::EquationSystems::build_solution_vector(), and libMesh::EquationSystems::build_variable_names()\&.
+.PP
+.nf
+35 {
+36   if(!_is_parallel_format)
+37     {
+38       // We need a serial mesh for MeshOutput for now
+39       const_cast<EquationSystems&>(es)\&.allgather();
+40     }
+41 
+42   es\&.build_variable_names  (names, NULL, system_names);
+43   es\&.build_solution_vector (soln, system_names);
+44 
+45   // For now, if we're doing a parallel format we're going to broadcast the vector from processor 0
+46   // to all of the processors to mimic what build_solution_vector used to do\&.
+47   // this is TERRIBLE and WASTEFUL but it's only temporary until we redesign the output of build_solution_vector
+48   // and the inputs to the I/O\&.\&.\&. both of which should actually be NumericVectors\&.\&.\&.\&.
+49   if(_is_parallel_format)
+50     {
+51       size_t size = soln\&.size();
+52       _obj->comm()\&.broadcast(size);
+53 
+54       if(_obj->comm()\&.rank())
+55         soln\&.resize(size);
+56 
+57       _obj->comm()\&.broadcast(soln);
+58     }
+59 }
+.fi
+.SS "template<class MT > unsigned int & \fBlibMesh::MeshOutput\fP< MT >::ascii_precision ()\fC [inline]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Definition at line 265 of file mesh_output\&.h\&.
+.PP
+.nf
+266 {
+267   return _ascii_precision;
+268 }
+.fi
+.SS "template<class MT > const MT & \fBlibMesh::MeshOutput\fP< MT >::mesh () const\fC [inline]\fP, \fC [protected]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Definition at line 255 of file mesh_output\&.h\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::VTKIO::cells_to_vtk(), libMesh::TecplotIO::elem_dimension(), libMesh::UNVIO::element_out(), libMesh::MeshOutput< MT >::MeshOutput(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::FroIO::write(), libMesh::PostscriptIO::write(), libMesh::TetGenIO::write(), libMesh::Nemesis_IO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::MEDITIO::write_ascii(), libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::EnsightIO::write_geometry_ascii(), libMesh::UCDIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::LegacyXdrIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::Nemesis_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::EnsightIO::write_scalar_ascii(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::LegacyXdrIO::write_soln(), libMesh::GnuPlotIO::write_solution(), libMesh::DivaIO::write_stream(), libMesh::CheckpointIO::write_subdomain_names(), and libMesh::EnsightIO::write_vector_ascii()\&.
+.PP
+.nf
+256 {
+257   libmesh_assert(_obj);
+258   return *_obj;
+259 }
+.fi
+.SS "template<class MT> virtual void \fBlibMesh::MeshOutput\fP< MT >::write (const std::string &)\fC [pure virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implemented in \fBlibMesh::VTKIO\fP, \fBlibMesh::LegacyXdrIO\fP, \fBlibMesh::XdrIO\fP, \fBlibMesh::CheckpointIO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::UNVIO\fP, \fBlibMesh::TetGenIO\fP, \fBlibMesh::EnsightIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, \fBlibMesh::PostscriptIO\fP, \fBlibMesh::TecplotIO\fP, \fBlibMesh::DivaIO\fP, and \fBlibMesh::FroIO\fP\&.
+.SS "template<class MT > void \fBlibMesh::MeshOutput\fP< MT >::write_equation_systems (const std::string &fname, const \fBEquationSystems\fP &es, const std::set< std::string > *system_names = \fCNULL\fP)\fC [inline]\fP, \fC [virtual]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fC\fBEquationSystems\fP\fP object\&. 
+.PP
+Definition at line 203 of file mesh_output\&.h\&.
+.PP
+References libMesh::libmesh_assert(), libMesh::out, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::ErrorVector::plot_error()\&.
+.PP
+.nf
+206 {
+207   START_LOG("write_equation_systems()", "MeshOutput");
+208 
+209   // We may need to gather and/or renumber a ParallelMesh to output
+210   // it, making that const qualifier in our constructor a dirty lie
+211   MT& my_mesh = const_cast<MT&>(*_obj);
+212 
+213   // A non-renumbered mesh may not have a contiguous numbering, and
+214   // that needs to be fixed before we can build a solution vector\&.
+215   if (my_mesh\&.max_elem_id() != my_mesh\&.n_elem() ||
+216       my_mesh\&.max_node_id() != my_mesh\&.n_nodes())
+217     {
+218       // If we were allowed to renumber then we should have already
+219       // been properly renumbered\&.\&.\&.
+220       libmesh_assert(!my_mesh\&.allow_renumbering());
+221 
+222       libmesh_do_once(libMesh::out <<
+223                       "Warning:  This MeshOutput subclass only supports meshes which are contiguously renumbered!"
+224                       << std::endl;);
+225 
+226       my_mesh\&.allow_renumbering(true);
+227 
+228       my_mesh\&.renumber_nodes_and_elements();
+229 
+230       // Not sure what good going back to false will do here, the
+231       // renumbering horses have already left the barn\&.\&.\&.
+232       my_mesh\&.allow_renumbering(false);
+233     }
+234 
+235   MeshSerializer serialize(const_cast<MT&>(*_obj), !_is_parallel_format);
+236 
+237   // Build the nodal solution values & get the variable
+238   // names from the EquationSystems object
+239   std::vector<Number>      soln;
+240   std::vector<std::string> names;
+241 
+242   this->_build_variable_names_and_solution_vector(es, soln, names, system_names);
+243   //es\&.build_variable_names  (names);
+244   //es\&.build_solution_vector (soln);
+245 
+246   this->write_nodal_data (fname, soln, names);
+247 
+248   STOP_LOG("write_equation_systems()", "MeshOutput");
+249 }
+.fi
+.SS "template<class MT> virtual void \fBlibMesh::MeshOutput\fP< MT >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class MT> unsigned int \fBlibMesh::MeshOutput\fP< MT >::_ascii_precision\fC [private]\fP"
+Precision to use when writing ASCII files\&. 
+.PP
+Definition at line 141 of file mesh_output\&.h\&.
+.SS "template<class MT> const bool \fBlibMesh::MeshOutput\fP< MT >::_is_parallel_format\fC [protected]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::MeshOutput< MT >::MeshOutput()\&.
+.SS "template<class MT> const MT* const \fBlibMesh::MeshOutput\fP< MT >::_obj\fC [private]\fP"
+A pointer to a constant object\&. This allows us to write the object to file\&. 
+.PP
+Definition at line 136 of file mesh_output\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

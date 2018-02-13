@@ -1,0 +1,140 @@
+.TH "libMesh::BuildProjectionList" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::BuildProjectionList \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBuildProjectionList\fP (const \fBSystem\fP &system_in)"
+.br
+.ti -1c
+.RI "\fBBuildProjectionList\fP (\fBBuildProjectionList\fP &other, \fBThreads::split\fP)"
+.br
+.ti -1c
+.RI "void \fBunique\fP ()"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBConstElemRange\fP &range)"
+.br
+.ti -1c
+.RI "void \fBjoin\fP (const \fBBuildProjectionList\fP &other)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > \fBsend_list\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBSystem\fP & \fBsystem\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class builds the send_list of old dof indices whose coefficients are needed to perform a projection\&. This may be executed in parallel on multiple threads\&. The end result is a \fCsend_list\fP vector which is unsorted and may contain duplicate elements\&. The \fC\fBunique()\fP\fP method can be used to sort and create a unique list\&. 
+.PP
+Definition at line 81 of file system_projection\&.C\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::BuildProjectionList::BuildProjectionList (const \fBSystem\fP &system_in)\fC [inline]\fP"
+
+.PP
+Definition at line 87 of file system_projection\&.C\&.
+.PP
+.nf
+87                                                 :
+88     system(system_in),
+89     send_list()
+90   {}
+.fi
+.SS "libMesh::BuildProjectionList::BuildProjectionList (\fBBuildProjectionList\fP &other, \fBThreads::split\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 92 of file system_projection\&.C\&.
+.PP
+.nf
+92                                                                  :
+93     system(other\&.system),
+94     send_list()
+95   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::BuildProjectionList::join (const \fBBuildProjectionList\fP &other)"
+
+.PP
+Definition at line 1241 of file system_projection\&.C\&.
+.PP
+References send_list\&.
+.PP
+.nf
+1242 {
+1243   // Joining simply requires I add the dof indices from the other object
+1244   this->send_list\&.insert(this->send_list\&.end(),
+1245                          other\&.send_list\&.begin(),
+1246                          other\&.send_list\&.end());
+1247 }
+.fi
+.SS "void libMesh::BuildProjectionList::operator() (const \fBConstElemRange\fP &range)"
+
+.PP
+Definition at line 1164 of file system_projection\&.C\&.
+.PP
+.nf
+1165 {
+1166   libmesh_error();
+1167 }
+.fi
+.SS "void libMesh::BuildProjectionList::unique ()"
+
+.PP
+Definition at line 1143 of file system_projection\&.C\&.
+.PP
+References send_list, and libMesh::swap()\&.
+.PP
+Referenced by libMesh::System::project_vector()\&.
+.PP
+.nf
+1144 {
+1145   // Sort the send list\&.  After this duplicated
+1146   // elements will be adjacent in the vector
+1147   std::sort(this->send_list\&.begin(),
+1148             this->send_list\&.end());
+1149 
+1150   // Now use std::unique to remove duplicate entries
+1151   std::vector<dof_id_type>::iterator new_end =
+1152     std::unique (this->send_list\&.begin(),
+1153                  this->send_list\&.end());
+1154 
+1155   // Remove the end of the send_list\&.  Use the "swap trick"
+1156   // from Effective STL
+1157   std::vector<dof_id_type>
+1158     (this->send_list\&.begin(), new_end)\&.swap (this->send_list);
+1159 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<\fBdof_id_type\fP> libMesh::BuildProjectionList::send_list"
+
+.PP
+Definition at line 100 of file system_projection\&.C\&.
+.PP
+Referenced by join(), libMesh::System::project_vector(), and unique()\&.
+.SS "const \fBSystem\fP& libMesh::BuildProjectionList::system\fC [private]\fP"
+
+.PP
+Definition at line 84 of file system_projection\&.C\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

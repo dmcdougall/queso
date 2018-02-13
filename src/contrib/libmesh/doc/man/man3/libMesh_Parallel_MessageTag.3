@@ -1,0 +1,151 @@
+.TH "libMesh::Parallel::MessageTag" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::MessageTag \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMessageTag\fP (int tagvalue=\fBinvalid_tag\fP)"
+.br
+.ti -1c
+.RI "\fBMessageTag\fP (const \fBMessageTag\fP &other)"
+.br
+.ti -1c
+.RI "\fB~MessageTag\fP ()"
+.br
+.ti -1c
+.RI "int \fBvalue\fP () const "
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const int \fBinvalid_tag\fP = INT_MIN"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMessageTag\fP (int tagvalue, const \fBCommunicator\fP *\fBcomm\fP)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fB_tagvalue\fP"
+.br
+.ti -1c
+.RI "const \fBCommunicator\fP * \fB_comm\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBCommunicator\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Encapsulates the MPI tag integers\&. 
+.PP
+Definition at line 172 of file parallel\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Parallel::MessageTag::MessageTag (inttagvalue = \fC\fBinvalid_tag\fP\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Explicit constructor, to discourage using 'magic numbers' as tags\&. \fBCommunicator::get_unique_tag\fP is recommended instead\&. 
+.PP
+Definition at line 185 of file parallel\&.h\&.
+.PP
+.nf
+186     : _tagvalue(tagvalue), _comm(NULL) {}
+.fi
+.SS "libMesh::Parallel::MessageTag::MessageTag (const \fBMessageTag\fP &other)\fC [inline]\fP"
+Copy constructor\&. Helps \fBCommunicator\fP do reference counting on unique tags 
+.PP
+Definition at line 1097 of file parallel_implementation\&.h\&.
+.PP
+References _comm, _tagvalue, and libMesh::Parallel::Communicator::reference_unique_tag()\&.
+.PP
+.nf
+1098   : _tagvalue(other\&._tagvalue), _comm(other\&._comm)
+1099 {
+1100   if (_comm)
+1101     _comm->reference_unique_tag(_tagvalue);
+1102 }
+.fi
+.SS "libMesh::Parallel::MessageTag::~MessageTag ()\fC [inline]\fP"
+Destructor\&. Helps \fBCommunicator\fP do reference counting on unique tags 
+.PP
+Definition at line 1089 of file parallel_implementation\&.h\&.
+.PP
+References _comm, _tagvalue, and libMesh::Parallel::Communicator::dereference_unique_tag()\&.
+.PP
+.nf
+1090 {
+1091   if (_comm)
+1092     _comm->dereference_unique_tag(_tagvalue);
+1093 }
+.fi
+.SS "libMesh::Parallel::MessageTag::MessageTag (inttagvalue, const \fBCommunicator\fP *comm)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 209 of file parallel\&.h\&.
+.PP
+.nf
+210     : _tagvalue(tagvalue), _comm(comm) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "int libMesh::Parallel::MessageTag::value () const\fC [inline]\fP"
+
+.PP
+Definition at line 200 of file parallel\&.h\&.
+.PP
+References _tagvalue\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::probe(), libMesh::Parallel::Communicator::receive(), libMesh::Parallel::Communicator::send(), and libMesh::Parallel::Communicator::send_receive()\&.
+.PP
+.nf
+200                     {
+201     return _tagvalue;
+202   }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBCommunicator\fP\fC [friend]\fP"
+
+.PP
+Definition at line 213 of file parallel\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBCommunicator\fP* libMesh::Parallel::MessageTag::_comm\fC [private]\fP"
+
+.PP
+Definition at line 206 of file parallel\&.h\&.
+.PP
+Referenced by MessageTag(), and ~MessageTag()\&.
+.SS "int libMesh::Parallel::MessageTag::_tagvalue\fC [private]\fP"
+
+.PP
+Definition at line 205 of file parallel\&.h\&.
+.PP
+Referenced by MessageTag(), value(), and ~MessageTag()\&.
+.SS "const int libMesh::Parallel::MessageTag::invalid_tag = INT_MIN\fC [static]\fP"
+Invalid tag, to allow for default construction\&. 
+.PP
+Definition at line 179 of file parallel\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

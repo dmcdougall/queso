@@ -1,0 +1,721 @@
+.TH "libMesh::ExactErrorEstimator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ExactErrorEstimator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <exact_error_estimator\&.h>\fP
+.PP
+Inherits \fBlibMesh::ErrorEstimator\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::pair
+.br
+< const \fBSystem\fP *, unsigned int >
+.br
+, \fBErrorVector\fP * > \fBErrorMap\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBExactErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fB~ExactErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "void \fBattach_exact_values\fP (std::vector< \fBFunctionBase\fP< \fBNumber\fP > * > f)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_value\fP (unsigned int sys_num, \fBFunctionBase\fP< \fBNumber\fP > *f)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_value\fP (\fBNumber\fP fptr(const \fBPoint\fP &p, const \fBParameters\fP &\fBParameters\fP, const std::string &sys_name, const std::string &unknown_name))"
+.br
+.ti -1c
+.RI "void \fBattach_exact_derivs\fP (std::vector< \fBFunctionBase\fP< \fBGradient\fP > * > g)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_deriv\fP (unsigned int sys_num, \fBFunctionBase\fP< \fBGradient\fP > *g)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_deriv\fP (\fBGradient\fP gptr(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name))"
+.br
+.ti -1c
+.RI "void \fBattach_exact_hessians\fP (std::vector< \fBFunctionBase\fP< \fBTensor\fP > * > h)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_hessian\fP (unsigned int sys_num, \fBFunctionBase\fP< \fBTensor\fP > *h)"
+.br
+.ti -1c
+.RI "void \fBattach_exact_hessian\fP (\fBTensor\fP hptr(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name))"
+.br
+.ti -1c
+.RI "void \fBattach_reference_solution\fP (\fBEquationSystems\fP *es_fine)"
+.br
+.ti -1c
+.RI "void \fBextra_quadrature_order\fP (const int extraorder)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_error\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSystemNorm\fP \fBerror_norm\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBreduce_error\fP (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD) const "
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBfind_squared_element_error\fP (const \fBSystem\fP &system, const std::string &var_name, const \fBElem\fP *elem, const \fBDenseVector\fP< \fBNumber\fP > &Uelem, \fBFEBase\fP *fe, \fBMeshFunction\fP *fine_values) const "
+.br
+.ti -1c
+.RI "void \fBclear_functors\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBNumber\fP(* \fB_exact_value\fP )(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBGradient\fP(* \fB_exact_deriv\fP )(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "\fBTensor\fP(* \fB_exact_hessian\fP )(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)"
+.br
+.ti -1c
+.RI "std::vector< \fBFunctionBase\fP
+.br
+< \fBNumber\fP > * > \fB_exact_values\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBFunctionBase\fP
+.br
+< \fBGradient\fP > * > \fB_exact_derivs\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBFunctionBase\fP
+.br
+< \fBTensor\fP > * > \fB_exact_hessians\fP"
+.br
+.ti -1c
+.RI "\fBEquationSystems\fP * \fB_equation_systems_fine\fP"
+.br
+.ti -1c
+.RI "int \fB_extra_order\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements an 'error estimator' based on the difference between the approximate and exact solution\&. In theory the quadrature error in this estimate should be much lower than the approximation error in other estimates, so this estimator can be used to calculate effectivity\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy Stogner, 2006\&. 
+.RE
+.PP
+
+.PP
+Definition at line 66 of file exact_error_estimator\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::pair<const \fBSystem\fP*, unsigned int>, \fBErrorVector\fP*> \fBlibMesh::ErrorEstimator::ErrorMap\fP\fC [inherited]\fP"
+When calculating many error vectors at once, we need a data structure to hold them all 
+.PP
+Definition at line 110 of file error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ExactErrorEstimator::ExactErrorEstimator ()\fC [inline]\fP"
+Constructor\&. Responsible for initializing the _bc_function function pointer to NULL, and defaulting the norm type to H1\&. 
+.PP
+Definition at line 74 of file exact_error_estimator\&.h\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, and libMesh::H1\&.
+.PP
+.nf
+74                         :
+75     ErrorEstimator(),
+76     _exact_value(NULL),
+77     _exact_deriv(NULL),
+78     _exact_hessian(NULL),
+79     _extra_order(0)
+80   { error_norm = H1; }
+.fi
+.SS "libMesh::ExactErrorEstimator::~ExactErrorEstimator ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 85 of file exact_error_estimator\&.h\&.
+.PP
+.nf
+85 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::ExactErrorEstimator::attach_exact_deriv (unsigned intsys_num, \fBFunctionBase\fP< \fBGradient\fP > *g)"
+Clone and attach an arbitrary functor which computes the exact gradient of the system \fCsys_num\fP solution at any point\&. 
+.PP
+Definition at line 127 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_derivs, and libMesh::FunctionBase< Output >::clone()\&.
+.PP
+.nf
+129 {
+130   if (_exact_derivs\&.size() <= sys_num)
+131     _exact_derivs\&.resize(sys_num+1, NULL);
+132 
+133   if (g)
+134     _exact_derivs[sys_num] = g->clone()\&.release();
+135 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_deriv (\fBGradient\fP gptrconst Point &p,const Parameters &parameters,const std::string &sys_name,const std::string &unknown_name)"
+Attach an arbitrary function which computes the exact gradient of the solution at any point\&. 
+.PP
+Definition at line 92 of file exact_error_estimator\&.C\&.
+.PP
+References _equation_systems_fine, _exact_deriv, clear_functors(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+96 {
+97   libmesh_assert(gptr);
+98   _exact_deriv = gptr;
+99 
+100   // We're not using a fine grid solution
+101   _equation_systems_fine = NULL;
+102 
+103   // We're not using user-provided functors
+104   this->clear_functors();
+105 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_derivs (std::vector< \fBFunctionBase\fP< \fBGradient\fP > * >g)"
+Clone and attach arbitrary functors which compute the exact gradients of the \fBEquationSystems\fP' solutions at any point\&. 
+.PP
+Definition at line 108 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_derivs\&.
+.PP
+.nf
+109 {
+110   // Clear out any previous _exact_derivs entries, then add a new
+111   // entry for each system\&.
+112   for (unsigned int i=0; i != _exact_derivs\&.size(); ++i)
+113     delete (_exact_derivs[i]);
+114 
+115   _exact_derivs\&.clear();
+116   _exact_derivs\&.resize(g\&.size(), NULL);
+117 
+118   // We use clone() to get non-sliced copies of FunctionBase
+119   // subclasses, but we can't put the resulting AutoPtrs into an STL
+120   // container\&.
+121   for (unsigned int i=0; i != g\&.size(); ++i)
+122     if (g[i])
+123       _exact_derivs[i] = g[i]->clone()\&.release();
+124 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_hessian (unsigned intsys_num, \fBFunctionBase\fP< \fBTensor\fP > *h)"
+Clone and attach an arbitrary functor which computes the exact second derivatives of the system \fCsys_num\fP solution at any point\&. 
+.PP
+Definition at line 175 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_hessians, and libMesh::FunctionBase< Output >::clone()\&.
+.PP
+.nf
+177 {
+178   if (_exact_hessians\&.size() <= sys_num)
+179     _exact_hessians\&.resize(sys_num+1, NULL);
+180 
+181   if (h)
+182     _exact_hessians[sys_num] = h->clone()\&.release();
+183 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_hessian (\fBTensor\fP hptrconst Point &p,const Parameters &parameters,const std::string &sys_name,const std::string &unknown_name)"
+Attach an arbitrary function which computes the exact second derivatives of the solution at any point\&. 
+.PP
+Definition at line 140 of file exact_error_estimator\&.C\&.
+.PP
+References _equation_systems_fine, _exact_hessian, clear_functors(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+144 {
+145   libmesh_assert(hptr);
+146   _exact_hessian = hptr;
+147 
+148   // We're not using a fine grid solution
+149   _equation_systems_fine = NULL;
+150 
+151   // We're not using user-provided functors
+152   this->clear_functors();
+153 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_hessians (std::vector< \fBFunctionBase\fP< \fBTensor\fP > * >h)"
+Clone and attach arbitrary functors which compute the exact second derivatives of the \fBEquationSystems\fP' solutions at any point\&. 
+.PP
+Definition at line 156 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_hessians\&.
+.PP
+.nf
+157 {
+158   // Clear out any previous _exact_hessians entries, then add a new
+159   // entry for each system\&.
+160   for (unsigned int i=0; i != _exact_hessians\&.size(); ++i)
+161     delete (_exact_hessians[i]);
+162 
+163   _exact_hessians\&.clear();
+164   _exact_hessians\&.resize(h\&.size(), NULL);
+165 
+166   // We use clone() to get non-sliced copies of FunctionBase
+167   // subclasses, but we can't put the resulting AutoPtrs into an STL
+168   // container\&.
+169   for (unsigned int i=0; i != h\&.size(); ++i)
+170     if (h[i])
+171       _exact_hessians[i] = h[i]->clone()\&.release();
+172 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_value (unsigned intsys_num, \fBFunctionBase\fP< \fBNumber\fP > *f)"
+Clone and attach an arbitrary functor which computes the exact value of the system \fCsys_num\fP solution at any point\&. 
+.PP
+Definition at line 81 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_values, and libMesh::FunctionBase< Output >::clone()\&.
+.PP
+.nf
+83 {
+84   if (_exact_values\&.size() <= sys_num)
+85     _exact_values\&.resize(sys_num+1, NULL);
+86 
+87   if (f)
+88     _exact_values[sys_num] = f->clone()\&.release();
+89 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_exact_value (\fBNumber\fP fptrconst Point &p, const Parameters &Parameters, const std::string &sys_name, const std::string &unknown_name)"
+Attach an arbitrary function which computes the exact value of the solution at any point\&. 
+.SS "void libMesh::ExactErrorEstimator::attach_exact_values (std::vector< \fBFunctionBase\fP< \fBNumber\fP > * >f)"
+Clone and attach arbitrary functors which compute the exact values of the \fBEquationSystems\fP' solutions at any point\&. 
+.PP
+Definition at line 62 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_values\&.
+.PP
+.nf
+63 {
+64   // Clear out any previous _exact_values entries, then add a new
+65   // entry for each system\&.
+66   for (unsigned int i=0; i != _exact_values\&.size(); ++i)
+67     delete (_exact_values[i]);
+68 
+69   _exact_values\&.clear();
+70   _exact_values\&.resize(f\&.size(), NULL);
+71 
+72   // We use clone() to get non-sliced copies of FunctionBase
+73   // subclasses, but we can't put the resulting AutoPtrs into an STL
+74   // container\&.
+75   for (unsigned int i=0; i != f\&.size(); ++i)
+76     if (f[i])
+77       _exact_values[i] = f[i]->clone()\&.release();
+78 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::attach_reference_solution (\fBEquationSystems\fP *es_fine)"
+Attach function similar to \fBsystem\&.h\fP which allows the user to attach a second \fBEquationSystems\fP object with a reference fine grid solution\&. 
+.PP
+Definition at line 186 of file exact_error_estimator\&.C\&.
+.PP
+References _equation_systems_fine, _exact_deriv, _exact_hessian, _exact_value, clear_functors(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+187 {
+188   libmesh_assert(es_fine);
+189   _equation_systems_fine = es_fine;
+190 
+191   // If we're using a fine grid solution, we're not using exact value
+192   // function pointers or functors\&.
+193   _exact_value = NULL;
+194   _exact_deriv = NULL;
+195   _exact_hessian = NULL;
+196 
+197   this->clear_functors();
+198 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::clear_functors ()\fC [private]\fP"
+Helper method for cleanup 
+.PP
+Definition at line 560 of file exact_error_estimator\&.C\&.
+.PP
+References _exact_derivs, _exact_hessians, and _exact_values\&.
+.PP
+Referenced by attach_exact_deriv(), attach_exact_hessian(), and attach_reference_solution()\&.
+.PP
+.nf
+561 {
+562   // delete will clean up any cloned functors and no-op on any NULL
+563   // pointers
+564 
+565   for (unsigned int i=0; i != _exact_values\&.size(); ++i)
+566     delete (_exact_values[i]);
+567 
+568   for (unsigned int i=0; i != _exact_derivs\&.size(); ++i)
+569     delete (_exact_derivs[i]);
+570 
+571   for (unsigned int i=0; i != _exact_hessians\&.size(); ++i)
+572     delete (_exact_hessians[i]);
+573 }
+.fi
+.SS "virtual void libMesh::ExactErrorEstimator::estimate_error (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+This function uses the exact solution function to estimate the error on each cell\&. The estimated error is output in the vector \fCerror_per_cell\fP 
+.PP
+Implements \fBlibMesh::ErrorEstimator\fP\&.
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default computes the sum of the error_per_cell for each system in the equation_systems\&.
+.PP
+Currently this function ignores the error_norm member variable, and uses the function argument error_norms instead\&.
+.PP
+This function is named estimate_errors instead of estimate_error because otherwise C++ can get confused\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 48 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), and libMesh::sys\&.
+.PP
+.nf
+53 {
+54   SystemNorm old_error_norm = this->error_norm;
+55 
+56   // Sum the error values from each system
+57   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+58     {
+59       ErrorVector system_error_per_cell;
+60       const System &sys = equation_systems\&.get_system(s);
+61       if (error_norms\&.find(&sys) == error_norms\&.end())
+62         this->error_norm = old_error_norm;
+63       else
+64         this->error_norm = error_norms\&.find(&sys)->second;
+65 
+66       const NumericVector<Number>* solution_vector = NULL;
+67       if (solution_vectors &&
+68           solution_vectors->find(&sys) != solution_vectors->end())
+69         solution_vector = solution_vectors->find(&sys)->second;
+70 
+71       this->estimate_error(sys, system_error_per_cell,
+72                            solution_vector, estimate_parent_error);
+73 
+74       if (s)
+75         {
+76           libmesh_assert_equal_to (error_per_cell\&.size(), system_error_per_cell\&.size());
+77           for (unsigned int i=0; i != error_per_cell\&.size(); ++i)
+78             error_per_cell[i] += system_error_per_cell[i];
+79         }
+80       else
+81         error_per_cell = system_error_per_cell;
+82     }
+83 
+84   // Restore our old state before returning
+85   this->error_norm = old_error_norm;
+86 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default it calls estimate_error repeatedly to calculate the requested error vectors\&.
+.PP
+Currently this function ignores the \fBerror_norm\&.weight()\fP values because it calculates each variable's error individually, unscaled\&.
+.PP
+The user selects which errors get computed by filling a map with error vectors: If errors_per_cell[&system][v] exists, it will be filled with the error values in variable \fCv\fP of \fCsystem\fP 
+.PP
+FIXME: This is a default implementation - derived classes should reimplement it for efficiency\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 94 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::sys, and libMesh::SystemNorm::type()\&.
+.PP
+.nf
+98 {
+99   SystemNorm old_error_norm = this->error_norm;
+100 
+101   // Find the requested error values from each system
+102   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+103     {
+104       const System &sys = equation_systems\&.get_system(s);
+105 
+106       unsigned int n_vars = sys\&.n_vars();
+107 
+108       for (unsigned int v = 0; v != n_vars; ++v)
+109         {
+110           // Only fill in ErrorVectors the user asks for
+111           if (errors_per_cell\&.find(std::make_pair(&sys, v)) ==
+112               errors_per_cell\&.end())
+113             continue;
+114 
+115           // Calculate error in only one variable
+116           std::vector<Real> weights(n_vars, 0\&.0);
+117           weights[v] = 1\&.0;
+118           this->error_norm =
+119             SystemNorm(std::vector<FEMNormType>(n_vars, old_error_norm\&.type(v)),
+120                        weights);
+121 
+122           const NumericVector<Number>* solution_vector = NULL;
+123           if (solution_vectors &&
+124               solution_vectors->find(&sys) != solution_vectors->end())
+125             solution_vector = solution_vectors->find(&sys)->second;
+126 
+127           this->estimate_error
+128             (sys, *errors_per_cell[std::make_pair(&sys, v)],
+129              solution_vector, estimate_parent_error);
+130         }
+131     }
+132 
+133   // Restore our old state before returning
+134   this->error_norm = old_error_norm;
+135 }
+.fi
+.SS "void libMesh::ExactErrorEstimator::extra_quadrature_order (const intextraorder)\fC [inline]\fP"
+Increases or decreases the order of the quadrature rule used for numerical integration\&. 
+.PP
+Definition at line 165 of file exact_error_estimator\&.h\&.
+.PP
+References _extra_order\&.
+.PP
+.nf
+166   { _extra_order = extraorder; }
+.fi
+.SS "\fBReal\fP libMesh::ExactErrorEstimator::find_squared_element_error (const \fBSystem\fP &system, const std::string &var_name, const \fBElem\fP *elem, const \fBDenseVector\fP< \fBNumber\fP > &Uelem, \fBFEBase\fP *fe, \fBMeshFunction\fP *fine_values) const\fC [private]\fP"
+Helper method for calculating on each element 
+.PP
+Definition at line 427 of file exact_error_estimator\&.C\&.
+.PP
+References _equation_systems_fine, _exact_deriv, _exact_derivs, _exact_hessian, _exact_hessians, _exact_value, _exact_values, libMesh::ErrorEstimator::error_norm, libMesh::FEGenericBase< T >::get_d2phi(), libMesh::FEGenericBase< T >::get_dphi(), libMesh::System::get_equation_systems(), libMesh::FEAbstract::get_JxW(), libMesh::FEGenericBase< T >::get_phi(), libMesh::FEAbstract::get_xyz(), libMesh::MeshFunction::gradient(), libMesh::H1, libMesh::H1_SEMINORM, libMesh::H2, libMesh::H2_SEMINORM, libMesh::MeshFunction::hessian(), libMesh::L2, libMesh::System::name(), libMesh::TensorTools::norm_sq(), libMesh::System::number(), libMesh::EquationSystems::parameters, libMesh::Real, libMesh::FEAbstract::reinit(), libMesh::DenseVector< T >::size(), libMesh::TypeVector< T >::size_sq(), libMesh::TypeTensor< T >::size_sq(), libMesh::System::time, libMesh::SystemNorm::type(), libMesh::System::variable_number(), and libMesh::System::variable_scalar_number()\&.
+.PP
+.nf
+433 {
+434   // The (string) name of this system
+435   const std::string& sys_name = system\&.name();
+436   const unsigned int sys_num = system\&.number();
+437 
+438   const unsigned int var = system\&.variable_number(var_name);
+439   const unsigned int var_component =
+440     system\&.variable_scalar_number(var, 0);
+441 
+442   const Parameters& parameters = system\&.get_equation_systems()\&.parameters;
+443 
+444   // reinitialize the element-specific data
+445   // for the current element
+446   fe->reinit (elem);
+447 
+448   // Get the data we need to compute with
+449   const std::vector<Real> &                      JxW          = fe->get_JxW();
+450   const std::vector<std::vector<Real> >&         phi_values   = fe->get_phi();
+451   const std::vector<std::vector<RealGradient> >& dphi_values  = fe->get_dphi();
+452   const std::vector<Point>&                      q_point      = fe->get_xyz();
+453 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+454   const std::vector<std::vector<RealTensor> >&   d2phi_values = fe->get_d2phi();
+455 #endif
+456 
+457   // The number of shape functions
+458   const unsigned int n_sf =
+459     libmesh_cast_int<unsigned int>(Uelem\&.size());
+460 
+461   // The number of quadrature points
+462   const unsigned int n_qp =
+463     libmesh_cast_int<unsigned int>(JxW\&.size());
+464 
+465   Real error_val = 0;
+466 
+467   // Begin the loop over the Quadrature points\&.
+468   //
+469   for (unsigned int qp=0; qp<n_qp; qp++)
+470     {
+471       // Real u_h = 0\&.;
+472       // RealGradient grad_u_h;
+473 
+474       Number u_h = 0\&.;
+475 
+476       Gradient grad_u_h;
+477 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+478       Tensor grad2_u_h;
+479 #endif
+480 
+481       // Compute solution values at the current
+482       // quadrature point\&.  This reqiures a sum
+483       // over all the shape functions evaluated
+484       // at the quadrature point\&.
+485       for (unsigned int i=0; i<n_sf; i++)
+486         {
+487           // Values from current solution\&.
+488           u_h      += phi_values[i][qp]*Uelem(i);
+489           grad_u_h += dphi_values[i][qp]*Uelem(i);
+490 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+491           grad2_u_h += d2phi_values[i][qp]*Uelem(i);
+492 #endif
+493         }
+494 
+495       // Compute the value of the error at this quadrature point
+496       if (error_norm\&.type(var) == L2 ||
+497           error_norm\&.type(var) == H1 ||
+498           error_norm\&.type(var) == H2)
+499         {
+500           Number val_error = u_h;
+501           if (_exact_value)
+502             val_error -= _exact_value(q_point[qp],parameters,sys_name,var_name);
+503           else if (_exact_values\&.size() > sys_num && _exact_values[sys_num])
+504             val_error -= _exact_values[sys_num]->
+505               component(var_component, q_point[qp], system\&.time);
+506           else if (_equation_systems_fine)
+507             val_error -= (*fine_values)(q_point[qp]);
+508 
+509           // Add the squares of the error to each contribution
+510           error_val += JxW[qp]*TensorTools::norm_sq(val_error);
+511         }
+512 
+513       // Compute the value of the error in the gradient at this
+514       // quadrature point
+515       if (error_norm\&.type(var) == H1 ||
+516           error_norm\&.type(var) == H1_SEMINORM ||
+517           error_norm\&.type(var) == H2)
+518         {
+519           Gradient grad_error = grad_u_h;
+520           if(_exact_deriv)
+521             grad_error -= _exact_deriv(q_point[qp],parameters,sys_name,var_name);
+522           else if (_exact_derivs\&.size() > sys_num && _exact_derivs[sys_num])
+523             grad_error -= _exact_derivs[sys_num]->
+524               component(var_component, q_point[qp], system\&.time);
+525           else if(_equation_systems_fine)
+526             grad_error -= fine_values->gradient(q_point[qp]);
+527 
+528           error_val += JxW[qp]*grad_error\&.size_sq();
+529         }
+530 
+531 
+532 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+533       // Compute the value of the error in the hessian at this
+534       // quadrature point
+535       if ((error_norm\&.type(var) == H2_SEMINORM ||
+536            error_norm\&.type(var) == H2))
+537         {
+538           Tensor grad2_error = grad2_u_h;
+539           if(_exact_hessian)
+540             grad2_error -= _exact_hessian(q_point[qp],parameters,sys_name,var_name);
+541           else if (_exact_hessians\&.size() > sys_num && _exact_hessians[sys_num])
+542             grad2_error -= _exact_hessians[sys_num]->
+543               component(var_component, q_point[qp], system\&.time);
+544           else if (_equation_systems_fine)
+545             grad2_error -= fine_values->hessian(q_point[qp]);
+546 
+547           error_val += JxW[qp]*grad2_error\&.size_sq();
+548         }
+549 #endif
+550 
+551     } // end qp loop
+552 
+553   libmesh_assert_greater_equal (error_val, 0\&.);
+554 
+555   return error_val;
+556 }
+.fi
+.SS "void libMesh::ErrorEstimator::reduce_error (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD) const\fC [protected]\fP, \fC [inherited]\fP"
+This method takes the local error contributions in \fCerror_per_cell\fP from each processor and combines them to get the global error vector\&. 
+.PP
+Definition at line 33 of file error_estimator\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+35 {
+36   // This function must be run on all processors at once
+37   // parallel_object_only();
+38 
+39   // Each processor has now computed the error contribuions
+40   // for its local elements\&.  We may need to sum the vector to
+41   // recover the error for each element\&.
+42 
+43   comm\&.sum(error_per_cell);
+44 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBEquationSystems\fP* libMesh::ExactErrorEstimator::_equation_systems_fine\fC [private]\fP"
+Constant pointer to the \fC\fBEquationSystems\fP\fP object containing a fine grid solution\&. 
+.PP
+Definition at line 238 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_exact_deriv(), attach_exact_hessian(), attach_reference_solution(), and find_squared_element_error()\&.
+.SS "\fBGradient\fP(*  libMesh::ExactErrorEstimator::_exact_deriv)(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)\fC [private]\fP"
+Function pointer to user-provided function which computes the exact derivative of the solution\&. 
+.PP
+Definition at line 202 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_exact_deriv(), attach_reference_solution(), and find_squared_element_error()\&.
+.SS "std::vector<\fBFunctionBase\fP<\fBGradient\fP> *> libMesh::ExactErrorEstimator::_exact_derivs\fC [private]\fP"
+User-provided functors which compute the exact derivative of the solution for each system\&. 
+.PP
+Definition at line 226 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_exact_deriv(), attach_exact_derivs(), clear_functors(), and find_squared_element_error()\&.
+.SS "\fBTensor\fP(*  libMesh::ExactErrorEstimator::_exact_hessian)(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)\fC [private]\fP"
+Function pointer to user-provided function which computes the exact hessian of the solution\&. 
+.PP
+Definition at line 211 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_exact_hessian(), attach_reference_solution(), and find_squared_element_error()\&.
+.SS "std::vector<\fBFunctionBase\fP<\fBTensor\fP> *> libMesh::ExactErrorEstimator::_exact_hessians\fC [private]\fP"
+User-provided functors which compute the exact hessians of the solution for each system\&. 
+.PP
+Definition at line 232 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_exact_hessian(), attach_exact_hessians(), clear_functors(), and find_squared_element_error()\&.
+.SS "\fBNumber\fP(*  libMesh::ExactErrorEstimator::_exact_value)(const \fBPoint\fP &p, const \fBParameters\fP &parameters, const std::string &sys_name, const std::string &unknown_name)\fC [private]\fP"
+Function pointer to user-provided function which computes the exact value of the solution\&. 
+.PP
+Definition at line 193 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_reference_solution(), and find_squared_element_error()\&.
+.SS "std::vector<\fBFunctionBase\fP<\fBNumber\fP> *> libMesh::ExactErrorEstimator::_exact_values\fC [private]\fP"
+User-provided functors which compute the exact value of the solution for each system\&. 
+.PP
+Definition at line 220 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by attach_exact_value(), attach_exact_values(), clear_functors(), and find_squared_element_error()\&.
+.SS "int libMesh::ExactErrorEstimator::_extra_order\fC [private]\fP"
+Extra order to use for quadrature rule 
+.PP
+Definition at line 258 of file exact_error_estimator\&.h\&.
+.PP
+Referenced by extra_quadrature_order()\&.
+.SS "\fBSystemNorm\fP libMesh::ErrorEstimator::error_norm\fC [inherited]\fP"
+When estimating the error in a single system, the \fCerror_norm\fP is used to control the scaling and norm choice for each variable\&. Not all estimators will support all norm choices\&. The default scaling is for all variables to be weighted equally\&. The default norm choice depends on the error estimator\&.
+.PP
+Part of this functionality was supported via component_scale and sobolev_order in older \fBlibMesh\fP versions, and a small part was supported via component_mask in even older versions\&. Hopefully the encapsulation here will allow us to avoid changing this API again\&. 
+.PP
+Definition at line 142 of file error_estimator\&.h\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::AdjointRefinementEstimator::AdjointRefinementEstimator(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DiscontinuityMeasure::DiscontinuityMeasure(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::ErrorEstimator::estimate_errors(), ExactErrorEstimator(), find_squared_element_error(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::KellyErrorEstimator::KellyErrorEstimator(), libMesh::LaplacianErrorEstimator::LaplacianErrorEstimator(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::PatchRecoveryErrorEstimator(), and libMesh::UniformRefinementEstimator::UniformRefinementEstimator()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

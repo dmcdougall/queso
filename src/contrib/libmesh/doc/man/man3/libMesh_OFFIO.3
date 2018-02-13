@@ -1,0 +1,198 @@
+.TH "libMesh::OFFIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::OFFIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <off_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBOFFIO\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBread_stream\fP (std::istream &in)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class is repsonsible for reading an unstructured, triangulated surface in the standard OFF OOGL format\&. 
+.PP
+Definition at line 43 of file off_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::OFFIO::OFFIO (\fBMeshBase\fP &mesh_in)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a non-const \fBMesh\fP reference which it will fill up with elements\&. 
+.PP
+Definition at line 72 of file off_io\&.h\&.
+.PP
+.nf
+72                                :
+73   MeshInput<MeshBase> (mesh_in)
+74 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "void libMesh::OFFIO::read (const std::string &name)\fC [virtual]\fP"
+Reads in an OFF OOGL data file based on the string you pass it\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 35 of file off_io\&.C\&.
+.PP
+References read_stream()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+36 {
+37   std::ifstream in (name\&.c_str());
+38 
+39   read_stream(in);
+40 }
+.fi
+.SS "void libMesh::OFFIO::read_stream (std::istream &in)\fC [private]\fP, \fC [virtual]\fP"
+Implementation of the \fBread()\fP function\&. This function is called by the public interface function and implements reading the file\&. 
+.PP
+Definition at line 44 of file off_io\&.C\&.
+.PP
+References libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::MeshBase::clear(), libMesh::err, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshBase::node_ptr(), libMesh::processor_id(), libMesh::Real, libMesh::DofObject::set_id(), libMesh::MeshBase::set_mesh_dimension(), libMesh::Elem::set_node(), and libMesh::x\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+45 {
+46   // This is a serial-only process for now;
+47   // the Mesh should be read on processor 0 and
+48   // broadcast later
+49   libmesh_assert_equal_to (this->mesh()\&.processor_id(), 0);
+50 
+51   // Get a reference to the mesh
+52   MeshBase& the_mesh = MeshInput<MeshBase>::mesh();
+53 
+54   // Clear any existing mesh data
+55   the_mesh\&.clear();
+56 
+57   // Check the input buffer
+58   libmesh_assert (in\&.good());
+59 
+60   unsigned int nn, ne, nf;
+61 
+62   std::string label;
+63 
+64   // Read the first string\&.  It should say "OFF"
+65   in >> label;
+66 
+67   libmesh_assert_equal_to (label, "OFF");
+68 
+69   // read the number of nodes, faces, and edges
+70   in >> nn >> nf >> ne;
+71 
+72 
+73   Real x=0\&., y=0\&., z=0\&.;
+74 
+75   // Read the nodes
+76   for (unsigned int n=0; n<nn; n++)
+77     {
+78       libmesh_assert (in\&.good());
+79 
+80       in >> x
+81          >> y
+82          >> z;
+83 
+84       the_mesh\&.add_point ( Point(x,y,z), n );
+85     }
+86 
+87   unsigned int nv, nid;
+88 
+89   // Read the elements
+90   for (unsigned int e=0; e<nf; e++)
+91     {
+92       libmesh_assert (in\&.good());
+93 
+94       // The number of vertices in the element
+95       in >> nv;
+96 
+97       libmesh_assert(nv == 2 || nv == 3);
+98       if (e == 0)
+99         {
+100           the_mesh\&.set_mesh_dimension(nv-1);
+101           if (nv == 3)
+102             {
+103 #if LIBMESH_DIM < 2
+104               libMesh::err << "Cannot open dimension 2 mesh file when configured without 2D support\&." <<
+105                 std::endl;
+106               libmesh_error();
+107 #endif
+108             }
+109         }
+110 
+111       Elem* elem;
+112       switch (nv)
+113         {
+114         case 2: elem = new Edge2; break;
+115         case 3: elem = new Tri3 ; break;
+116         default: libmesh_error();
+117         }
+118 
+119       elem->set_id(e);
+120       the_mesh\&.add_elem (elem);
+121 
+122       for (unsigned int i=0; i<nv; i++)
+123         {
+124           in >> nid;
+125           elem->set_node(i) = the_mesh\&.node_ptr(nid);
+126         }
+127     }
+128 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and libMesh::UCDIO::read_implementation()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

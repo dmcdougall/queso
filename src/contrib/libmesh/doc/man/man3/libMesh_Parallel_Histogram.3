@@ -1,0 +1,355 @@
+.TH "libMesh::Parallel::Histogram< KeyType, IdxType >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::Histogram< KeyType, IdxType > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel_histogram\&.h>\fP
+.PP
+Inherits \fBlibMesh::ParallelObject\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBHistogram\fP (const \fBParallel::Communicator\fP &\fBcomm\fP, const std::vector< KeyType > &d)"
+.br
+.ti -1c
+.RI "void \fBmake_histogram\fP (const IdxType nbins, KeyType \fBmax\fP, KeyType \fBmin\fP)"
+.br
+.ti -1c
+.RI "void \fBbuild_histogram\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< IdxType > & \fBget_histogram\fP () const "
+.br
+.ti -1c
+.RI "IdxType \fBn_bins\fP () const "
+.br
+.ti -1c
+.RI "IdxType \fBlocal_bin_size\fP (const IdxType bin) const "
+.br
+.ti -1c
+.RI "IdxType \fBglobal_bin_size\fP (const IdxType bin) const "
+.br
+.ti -1c
+.RI "double \fBlower_bound\fP (const IdxType bin) const "
+.br
+.ti -1c
+.RI "double \fBupper_bound\fP (const IdxType bin) const "
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector< KeyType >
+.br
+::const_iterator \fBIterType\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const std::vector< KeyType > & \fBdata\fP"
+.br
+.ti -1c
+.RI "std::vector< IdxType > \fBhist\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fBbin_bounds\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBIterType\fP > \fBbin_iters\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename KeyType, typename IdxType = unsigned int>class libMesh::Parallel::Histogram< KeyType, IdxType >"
+Defines a histogram to be used in parallel in conjuction with a \fC\fBBinSorter\fP\fP\&. 
+.PP
+Definition at line 45 of file parallel_histogram\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename KeyType, typename IdxType = unsigned int> typedef std::vector<KeyType>::const_iterator \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::\fBIterType\fP\fC [private]\fP"
+
+.PP
+Definition at line 48 of file parallel_histogram\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename KeyType , typename IdxType > \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::\fBHistogram\fP (const \fBParallel::Communicator\fP &comm, const std::vector< KeyType > &d)\fC [explicit]\fP"
+
+.PP
+Definition at line 37 of file parallel_histogram\&.C\&.
+.PP
+References libMesh::Parallel::Histogram< KeyType, IdxType >::data, libMesh::Parallel::Utils::is_sorted(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+38                                                                     :
+39   ParallelObject(comm_in),
+40   data(d)
+41 {
+42   libmesh_assert (Parallel::Utils::is_sorted (data));
+43 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename KeyType , typename IdxType > void \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::build_histogram ()"
+
+.PP
+Definition at line 92 of file parallel_histogram\&.C\&.
+.PP
+References libMesh::comm\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort()\&.
+.PP
+.nf
+93 {
+94   // Build a local histogram
+95   std::vector<IdxType> local_hist (this->n_bins());
+96 
+97   for (IdxType b=0; b<this->n_bins(); b++)
+98     local_hist[b] = this->local_bin_size(b);
+99 
+100   // Add all the local histograms to get the global histogram
+101   hist = local_hist;
+102   this->comm()\&.sum(hist);
+103 
+104   // All done!
+105 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "template<typename KeyType , typename IdxType > const std::vector< IdxType > & \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::get_histogram () const\fC [inline]\fP"
+
+.PP
+Definition at line 104 of file parallel_histogram\&.h\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort()\&.
+.PP
+.nf
+105 {
+106   return hist;
+107 }
+.fi
+.SS "template<typename KeyType , typename IdxType > IdxType \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::global_bin_size (const IdxTypebin) const\fC [inline]\fP"
+
+.PP
+Definition at line 138 of file parallel_histogram\&.h\&.
+.PP
+.nf
+139 {
+140   libmesh_assert_less (bin, hist\&.size());
+141 
+142   // The number of entries in the bin (globally)
+143   return hist[bin];
+144 }
+.fi
+.SS "template<typename KeyType , typename IdxType > IdxType \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::local_bin_size (const IdxTypebin) const\fC [inline]\fP"
+
+.PP
+Definition at line 125 of file parallel_histogram\&.h\&.
+.PP
+.nf
+126 {
+127   libmesh_assert_less ((bin+1), bin_iters\&.size());
+128 
+129   // The number of entries in the bin (locally)
+130   return libmesh_cast_int<IdxType>
+131     (std::distance (bin_iters[bin], bin_iters[bin+1]));
+132 }
+.fi
+.SS "template<typename KeyType , typename IdxType > double \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::lower_bound (const IdxTypebin) const\fC [inline]\fP"
+
+.PP
+Definition at line 150 of file parallel_histogram\&.h\&.
+.PP
+.nf
+151 {
+152   libmesh_assert_less ((bin+1), bin_bounds\&.size());
+153 
+154   return bin_bounds[bin];
+155 }
+.fi
+.SS "template<typename KeyType , typename IdxType > void \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::make_histogram (const IdxTypenbins, KeyTypemax, KeyTypemin)"
+
+.PP
+Definition at line 48 of file parallel_histogram\&.C\&.
+.PP
+References data, and libMesh::Parallel::Utils::to_double()\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort()\&.
+.PP
+.nf
+51 {
+52   libmesh_assert_less (min, max);
+53 
+54   // The width of each bin\&.  Store this as a floating point value
+55   double bin_width = (Parallel::Utils::to_double(max)-
+56                       Parallel::Utils::to_double(min))/static_cast<double>(nbins);
+57 
+58 
+59   // The idea for 4 bins of size d is this:
+60   //
+61   //  0          1          2           3          4
+62   //  |----------|----------|-----------|----------|
+63   // min   0   min+d  1   min+2d  2  min+3d   3   max
+64 
+65 
+66 
+67   // Set the iterators corresponding to the boundaries
+68   // as defined above\&.  This takes nbins * O(log N) time\&.
+69   bin_bounds\&.resize (nbins+1);
+70   bin_iters\&.resize  (nbins+1, data\&.begin());
+71 
+72   // Set the minimum bin boundary iterator
+73   bin_iters[0]  = data\&.begin();
+74   bin_bounds[0] = Parallel::Utils::to_double(min);
+75 
+76   // Set the internal bin boundary iterators
+77   for (IdxType b=1; b<nbins; ++b)
+78     {
+79       bin_bounds[b] = Parallel::Utils::to_double(min) + bin_width * b;
+80 
+81       bin_iters[b]  = std::lower_bound (bin_iters[b-1], data\&.end(),
+82                                         Parallel::Utils::to_key_type<KeyType>(bin_bounds[b]));
+83     }
+84 
+85   bin_iters[nbins]  = data\&.end();
+86   bin_bounds[nbins] = Parallel::Utils::to_double(max);
+87 }
+.fi
+.SS "template<typename KeyType , typename IdxType > IdxType \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::n_bins () const\fC [inline]\fP"
+
+.PP
+Definition at line 113 of file parallel_histogram\&.h\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort()\&.
+.PP
+.nf
+114 {
+115   if (bin_iters\&.empty())
+116     return 0;
+117 
+118   return libmesh_cast_int<IdxType>(bin_iters\&.size()-1);
+119 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename KeyType , typename IdxType > double \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::upper_bound (const IdxTypebin) const\fC [inline]\fP"
+
+.PP
+Definition at line 161 of file parallel_histogram\&.h\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort()\&.
+.PP
+.nf
+162 {
+163   libmesh_assert_less ((bin+1), bin_bounds\&.size());
+164 
+165   return bin_bounds[bin+1];
+166 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> std::vector<double> \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::bin_bounds\fC [private]\fP"
+
+.PP
+Definition at line 93 of file parallel_histogram\&.h\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> std::vector<\fBIterType\fP> \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::bin_iters\fC [private]\fP"
+
+.PP
+Definition at line 94 of file parallel_histogram\&.h\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> const std::vector<KeyType>& \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::data\fC [private]\fP"
+
+.PP
+Definition at line 91 of file parallel_histogram\&.h\&.
+.PP
+Referenced by libMesh::Parallel::Histogram< KeyType, IdxType >::Histogram()\&.
+.SS "template<typename KeyType, typename IdxType = unsigned int> std::vector<IdxType> \fBlibMesh::Parallel::Histogram\fP< KeyType, IdxType >::hist\fC [private]\fP"
+
+.PP
+Definition at line 92 of file parallel_histogram\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,745 @@
+.TH "libMesh::SteadySolver" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SteadySolver \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <steady_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::TimeSolver\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBDifferentiableSystem\fP \fBsys_type\fP"
+.br
+.ti -1c
+.RI "typedef \fBTimeSolver\fP \fBParent\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSteadySolver\fP (\fBsys_type\fP &s)"
+.br
+.ti -1c
+.RI "virtual \fB~SteadySolver\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBerror_order\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBelement_residual\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual bool \fBside_residual\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBdu\fP (const \fBSystemNorm\fP &) const "
+.br
+.ti -1c
+.RI "virtual bool \fBis_steady\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit_data\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBreinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBsolve\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadvance_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadjoint_advance_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBretrieve_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBbefore_timestep\fP ()"
+.br
+.ti -1c
+.RI "const \fBsys_type\fP & \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBDiffSolver\fP > & \fBdiff_solver\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBLinearSolver\fP
+.br
+< \fBNumber\fP > > & \fBlinear_solver\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_solution_history\fP (const \fBSolutionHistory\fP &_solution_history)"
+.br
+.ti -1c
+.RI "bool \fBis_adjoint\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_is_adjoint\fP (bool _is_adjoint_value)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBquiet\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBreduce_deltat_on_diffsolver_failure\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBDiffSolver\fP > \fB_diff_solver\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > \fB_linear_solver\fP"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "bool \fBfirst_solve\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fBold_local_nonlinear_solution\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBSolutionHistory\fP > \fBsolution_history\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements a \fBTimeSolver\fP which does a single solve of the steady state problem\&.
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2006 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file steady_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "typedef \fBTimeSolver\fP \fBlibMesh::SteadySolver::Parent\fP"
+The parent class 
+.PP
+Definition at line 60 of file steady_solver\&.h\&.
+.SS "typedef \fBDifferentiableSystem\fP \fBlibMesh::SteadySolver::sys_type\fP"
+The type of system 
+.PP
+Definition at line 55 of file steady_solver\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::SteadySolver::SteadySolver (\fBsys_type\fP &s)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Requires a reference to the system to be solved\&. 
+.PP
+Definition at line 67 of file steady_solver\&.h\&.
+.PP
+.nf
+67 : Parent(s) {}
+.fi
+.SS "libMesh::SteadySolver::~SteadySolver ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 28 of file steady_solver\&.C\&.
+.PP
+.nf
+29 {
+30 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::TimeSolver::adjoint_advance_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method advances the adjoint solution to the previous timestep, after an adjoint_solve() has been performed\&. This will be done before every UnsteadySolver::adjoint_solve()\&. 
+.PP
+Reimplemented in \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 106 of file time_solver\&.C\&.
+.PP
+.nf
+107 {
+108 }
+.fi
+.SS "void libMesh::TimeSolver::advance_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method advances the solution to the next timestep, after a \fBsolve()\fP has been performed\&. Often this will be done after every \fBUnsteadySolver::solve()\fP, but adaptive mesh refinement and/or adaptive time step selection may require some \fBsolve()\fP steps to be repeated\&. 
+.PP
+Reimplemented in \fBlibMesh::EigenTimeSolver\fP, \fBlibMesh::UnsteadySolver\fP, and \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 102 of file time_solver\&.C\&.
+.PP
+.nf
+103 {
+104 }
+.fi
+.SS "virtual void libMesh::TimeSolver::before_timestep ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method is for subclasses or users to override to do arbitrary processing between timesteps 
+.PP
+Definition at line 152 of file time_solver\&.h\&.
+.PP
+.nf
+152 {}
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBDiffSolver\fP>& libMesh::TimeSolver::diff_solver ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+An implicit linear or nonlinear solver to use at each timestep\&. 
+.PP
+Reimplemented in \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 167 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_diff_solver\&.
+.PP
+.nf
+167 { return _diff_solver; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "virtual \fBReal\fP libMesh::SteadySolver::du (const \fBSystemNorm\fP &) const\fC [inline]\fP, \fC [virtual]\fP"
+Nominally computes the size of the difference between successive solution iterates ||u^{n+1} - u^{n}|| in some norm, but for this class just returns 0\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 101 of file steady_solver\&.h\&.
+.PP
+.nf
+101 { return 0; }
+.fi
+.SS "bool libMesh::SteadySolver::element_residual (boolrequest_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP"
+This method uses the \fBDifferentiableSystem\fP's element_time_derivative() and element_constraint() to build a full residual/jacobian on an element\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 34 of file steady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DifferentiablePhysics::element_constraint(), libMesh::DifferentiablePhysics::element_time_derivative(), libMesh::DiffContext::fixed_solution_derivative, libMesh::DiffContext::get_elem_fixed_solution(), libMesh::DiffContext::get_elem_solution(), libMesh::libmesh_assert(), and libMesh::System::use_fixed_solution\&.
+.PP
+.nf
+36 {
+37   // If a fixed solution is requested, it will just be the current
+38   // solution
+39   if (_system\&.use_fixed_solution)
+40     {
+41       context\&.get_elem_fixed_solution() = context\&.get_elem_solution();
+42       context\&.fixed_solution_derivative = 1\&.0;
+43     }
+44 
+45   bool jacobian_computed =
+46     _system\&.element_time_derivative(request_jacobian, context);
+47 
+48   // The user shouldn't compute a jacobian unless requested
+49   libmesh_assert(request_jacobian || !jacobian_computed);
+50 
+51   bool jacobian_computed2 =
+52     _system\&.element_constraint(jacobian_computed, context);
+53 
+54   // The user shouldn't compute a jacobian unless requested
+55   libmesh_assert (jacobian_computed || !jacobian_computed2);
+56 
+57   return jacobian_computed2;
+58 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "virtual \fBReal\fP libMesh::SteadySolver::error_order () const\fC [inline]\fP, \fC [virtual]\fP"
+error convergence order against deltat is not applicable to a steady problem\&. 
+.PP
+Definition at line 78 of file steady_solver\&.h\&.
+.PP
+.nf
+78 { return 0\&.; }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::TimeSolver::init ()\fC [virtual]\fP, \fC [inherited]\fP"
+The initialization function\&. This method is used to initialize internal data structures before a simulation begins\&. 
+.PP
+Reimplemented in \fBlibMesh::EigenTimeSolver\fP, \fBlibMesh::UnsteadySolver\fP, and \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 64 of file time_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_diff_solver, libMesh::TimeSolver::_linear_solver, libMesh::TimeSolver::_system, libMesh::DiffSolver::build(), and libMesh::ParallelObject::comm()\&.
+.PP
+Referenced by libMesh::UnsteadySolver::init()\&.
+.PP
+.nf
+65 {
+66   // If the user hasn't given us a solver to use,
+67   // just build a default solver
+68   if (_diff_solver\&.get() == NULL)
+69     _diff_solver = DiffSolver::build(_system);
+70 
+71   if (_linear_solver\&.get() == NULL)
+72     _linear_solver = LinearSolver<Number>::build(_system\&.comm());
+73 }
+.fi
+.SS "void libMesh::TimeSolver::init_data ()\fC [virtual]\fP, \fC [inherited]\fP"
+The data initialization function\&. This method is used to initialize internal data structures after the underlying \fBSystem\fP has been initialized 
+.PP
+Reimplemented in \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 77 of file time_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_diff_solver, libMesh::TimeSolver::_linear_solver, libMesh::TimeSolver::_system, libMesh::System::name(), and libMesh::on_command_line()\&.
+.PP
+Referenced by libMesh::UnsteadySolver::init_data()\&.
+.PP
+.nf
+78 {
+79   _diff_solver->init();
+80 
+81   if (libMesh::on_command_line("--solver_system_names"))
+82     _linear_solver->init((_system\&.name()+"_")\&.c_str());
+83   else
+84   _linear_solver->init();
+85 }
+.fi
+.SS "bool libMesh::TimeSolver::is_adjoint () const\fC [inline]\fP, \fC [inherited]\fP"
+Accessor for querying whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 217 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_is_adjoint\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+218   { return _is_adjoint; }
+.fi
+.SS "virtual bool libMesh::SteadySolver::is_steady () const\fC [inline]\fP, \fC [virtual]\fP"
+This is a steady-state solver\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 106 of file steady_solver\&.h\&.
+.PP
+.nf
+106 { return true; }
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> >& libMesh::TimeSolver::linear_solver ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+An implicit linear solver to use for adjoint and sensitivity problems\&. 
+.PP
+Definition at line 172 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_linear_solver\&.
+.PP
+.nf
+172 { return _linear_solver; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::TimeSolver::reinit ()\fC [virtual]\fP, \fC [inherited]\fP"
+The reinitialization function\&. This method is used after changes in the mesh 
+.PP
+Reimplemented in \fBlibMesh::EigenTimeSolver\fP, \fBlibMesh::UnsteadySolver\fP, and \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 48 of file time_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_diff_solver, libMesh::TimeSolver::_linear_solver, libMesh::TimeSolver::_system, libMesh::libmesh_assert(), libMesh::System::name(), libMesh::on_command_line(), and libMesh::TimeSolver::system()\&.
+.PP
+Referenced by libMesh::UnsteadySolver::reinit()\&.
+.PP
+.nf
+49 {
+50   libmesh_assert(_diff_solver\&.get());
+51   libmesh_assert_equal_to (&(_diff_solver->system()), &(this->system()));
+52   _diff_solver->reinit();
+53 
+54   libmesh_assert(_linear_solver\&.get());
+55   _linear_solver->clear();
+56   if (libMesh::on_command_line("--solver_system_names"))
+57     _linear_solver->init((_system\&.name()+"_")\&.c_str());
+58   else
+59   _linear_solver->init();
+60 }
+.fi
+.SS "void libMesh::TimeSolver::retrieve_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method retrieves all the stored solutions at the current system\&.time 
+.PP
+Reimplemented in \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 110 of file time_solver\&.C\&.
+.PP
+.nf
+111 {
+112 }
+.fi
+.SS "void libMesh::TimeSolver::set_is_adjoint (bool_is_adjoint_value)\fC [inline]\fP, \fC [inherited]\fP"
+Accessor for setting whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 224 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_is_adjoint\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::adjoint_solve(), libMesh::FEMSystem::postprocess(), and libMesh::DifferentiableSystem::solve()\&.
+.PP
+.nf
+225   { _is_adjoint = _is_adjoint_value; }
+.fi
+.SS "void libMesh::TimeSolver::set_solution_history (const \fBSolutionHistory\fP &_solution_history)\fC [inherited]\fP"
+A setter function users will employ if they need to do something other than save no solution history 
+.PP
+Definition at line 97 of file time_solver\&.C\&.
+.PP
+References libMesh::SolutionHistory::clone(), and libMesh::TimeSolver::solution_history\&.
+.PP
+.nf
+98 {
+99   solution_history = _solution_history\&.clone();
+100 }
+.fi
+.SS "bool libMesh::SteadySolver::side_residual (boolrequest_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP"
+This method uses the \fBDifferentiableSystem\fP's side_time_derivative() and side_constraint() to build a full residual/jacobian on an element's side\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 62 of file steady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DiffContext::fixed_solution_derivative, libMesh::DiffContext::get_elem_fixed_solution(), libMesh::DiffContext::get_elem_solution(), libMesh::libmesh_assert(), libMesh::DifferentiablePhysics::side_constraint(), libMesh::DifferentiablePhysics::side_time_derivative(), and libMesh::System::use_fixed_solution\&.
+.PP
+.nf
+64 {
+65   // If a fixed solution is requested, it will just be the current
+66   // solution
+67   if (_system\&.use_fixed_solution)
+68     {
+69       context\&.get_elem_fixed_solution() = context\&.get_elem_solution();
+70       context\&.fixed_solution_derivative = 1\&.0;
+71     }
+72 
+73   bool jacobian_computed =
+74     _system\&.side_time_derivative(request_jacobian, context);
+75 
+76   // The user shouldn't compute a jacobian unless requested
+77   libmesh_assert (request_jacobian || !jacobian_computed);
+78 
+79   bool jacobian_computed2 =
+80     _system\&.side_constraint(jacobian_computed, context);
+81 
+82   // The user shouldn't compute a jacobian unless requested
+83   libmesh_assert (jacobian_computed || !jacobian_computed2);
+84 
+85   return jacobian_computed2;
+86 }
+.fi
+.SS "void libMesh::TimeSolver::solve ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method solves for the solution at the next timestep (or solves for a steady-state solution)\&. Usually we will only need to solve one (non)linear system per timestep, but more complex subclasses may override this\&. 
+.PP
+Reimplemented in \fBlibMesh::EigenTimeSolver\fP, \fBlibMesh::UnsteadySolver\fP, \fBlibMesh::AdaptiveTimeSolver\fP, and \fBlibMesh::TwostepTimeSolver\fP\&.
+.PP
+Definition at line 89 of file time_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_diff_solver, libMesh::libmesh_assert(), and libMesh::TimeSolver::system()\&.
+.PP
+.nf
+90 {
+91   libmesh_assert(_diff_solver\&.get());
+92   libmesh_assert_equal_to (&(_diff_solver->system()), &(this->system()));
+93   _diff_solver->solve();
+94 }
+.fi
+.SS "const \fBsys_type\fP& libMesh::TimeSolver::system () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 157 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_system\&.
+.PP
+Referenced by libMesh::TimeSolver::reinit(), and libMesh::TimeSolver::solve()\&.
+.PP
+.nf
+157 { return _system; }
+.fi
+.SS "\fBsys_type\fP& libMesh::TimeSolver::system ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 162 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_system\&.
+.PP
+.nf
+162 { return _system; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "\fBAutoPtr\fP<\fBDiffSolver\fP> libMesh::TimeSolver::_diff_solver\fC [protected]\fP, \fC [inherited]\fP"
+An implicit linear or nonlinear solver to use at each timestep\&. 
+.PP
+Definition at line 232 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TimeSolver::diff_solver(), libMesh::TimeSolver::init(), libMesh::TimeSolver::init_data(), libMesh::TimeSolver::reinit(), libMesh::UnsteadySolver::solve(), and libMesh::TimeSolver::solve()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> > libMesh::TimeSolver::_linear_solver\fC [protected]\fP, \fC [inherited]\fP"
+An implicit linear solver to use for adjoint problems\&. 
+.PP
+Definition at line 237 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TimeSolver::init(), libMesh::TimeSolver::init_data(), libMesh::TimeSolver::linear_solver(), and libMesh::TimeSolver::reinit()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBsys_type\fP& libMesh::TimeSolver::_system\fC [protected]\fP, \fC [inherited]\fP"
+A reference to the system we are solving\&. 
+.PP
+Definition at line 242 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::AdaptiveTimeSolver::advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::UnsteadySolver::du(), libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), element_residual(), libMesh::EigenTimeSolver::element_residual(), libMesh::UnsteadySolver::init(), libMesh::TimeSolver::init(), libMesh::EigenTimeSolver::init(), libMesh::UnsteadySolver::init_data(), libMesh::TimeSolver::init_data(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::UnsteadySolver::reinit(), libMesh::TimeSolver::reinit(), libMesh::UnsteadySolver::retrieve_timestep(), libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), side_residual(), libMesh::EigenTimeSolver::side_residual(), libMesh::TwostepTimeSolver::solve(), libMesh::UnsteadySolver::solve(), libMesh::EigenTimeSolver::solve(), and libMesh::TimeSolver::system()\&.
+.SS "bool libMesh::TimeSolver::first_solve\fC [protected]\fP, \fC [inherited]\fP"
+A bool that will be true the first time \fBsolve()\fP is called, and false thereafter 
+.PP
+Definition at line 248 of file time_solver\&.h\&.
+.SS "\fBAutoPtr\fP<\fBNumericVector\fP<\fBNumber\fP> > libMesh::TimeSolver::old_local_nonlinear_solution\fC [protected]\fP, \fC [inherited]\fP"
+Serial vector of _system\&.get_vector('_old_nonlinear_solution') 
+.PP
+Definition at line 253 of file time_solver\&.h\&.
+.SS "bool libMesh::TimeSolver::quiet\fC [inherited]\fP"
+Print extra debugging information if quiet == false\&. 
+.PP
+Definition at line 177 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TwostepTimeSolver::solve(), libMesh::UnsteadySolver::solve(), and libMesh::EigenTimeSolver::solve()\&.
+.SS "unsigned int libMesh::TimeSolver::reduce_deltat_on_diffsolver_failure\fC [inherited]\fP"
+This value (which defaults to zero) is the number of times the \fBTimeSolver\fP is allowed to halve deltat and let the \fBDiffSolver\fP repeat the latest failed solve with a reduced timestep\&. Note that this has no effect for SteadySolvers\&. Note that you must set at least one of the \fBDiffSolver\fP flags 'continue_after_max_iterations' or 'continue_after_backtrack_failure' to allow the \fBTimeSolver\fP to retry the solve\&. 
+.PP
+Definition at line 205 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TwostepTimeSolver::solve(), and libMesh::UnsteadySolver::solve()\&.
+.SS "\fBAutoPtr\fP<\fBSolutionHistory\fP> libMesh::TimeSolver::solution_history\fC [protected]\fP, \fC [inherited]\fP"
+An \fBAutoPtr\fP to a \fBSolutionHistory\fP object\&. Default is \fBNoSolutionHistory\fP, which the user can override by declaring a different kind of \fBSolutionHistory\fP in the application 
+.PP
+Definition at line 260 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::UnsteadySolver::retrieve_timestep(), and libMesh::TimeSolver::set_solution_history()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

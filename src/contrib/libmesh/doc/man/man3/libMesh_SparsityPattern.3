@@ -1,0 +1,71 @@
+.TH "libMesh::SparsityPattern" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SparsityPattern \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBGraph\fP"
+.br
+.ti -1c
+.RI "class \fBNonlocalGraph\fP"
+.br
+.ti -1c
+.RI "class \fBBuild\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector
+.br
+< \fBdof_id_type\fP, 
+.br
+\fBThreads::scalable_allocator\fP
+.br
+< \fBdof_id_type\fP > > \fBRow\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename BidirectionalIterator > static void \fBsort_row\fP (const BidirectionalIterator begin, BidirectionalIterator middle, const BidirectionalIterator \fBend\fP)"
+.br
+.ti -1c
+.RI "void \fB_dummy_function\fP (void)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This defines the sparsity pattern, or graph, of a sparse matrix\&. The format is quite simple -- the global indices of the nonzero entries in each row are packed into a vector\&. The global indices (i,j) of the nth nonzero entry of row i are given by j = sparsity_pattern[i][n]; 
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef std::vector<\fBdof_id_type\fP, \fBThreads::scalable_allocator\fP<\fBdof_id_type\fP> > \fBlibMesh::SparsityPattern::Row\fP"
+
+.PP
+Definition at line 49 of file sparsity_pattern\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "void libMesh::SparsityPattern::_dummy_function (void)"
+Dummy function that does nothing but can be used to prohibit compiler optimization in some situations where some compilers have optimization bugs\&. 
+.PP
+Definition at line 2417 of file dof_map\&.C\&.
+.PP
+.nf
+2418 {
+2419 }
+.fi
+.SS "template<typename BidirectionalIterator > static void libMesh::SparsityPattern::sort_row (const BidirectionalIteratorbegin, BidirectionalIteratormiddle, const BidirectionalIteratorend)\fC [static]\fP"
+Splices the two sorted ranges [begin,middle) and [middle,end) into one sorted range [begin,end)\&. This method is much like std::inplace_merge except it assumes the intersection of the two sorted ranges is empty and that any element in each range occurs only once in that range\&. Additionally, this sort occurs in-place, while std::inplace_merge may use a temporary buffer\&. 
+.PP
+Referenced by libMesh::SparsityPattern::Build::operator()()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

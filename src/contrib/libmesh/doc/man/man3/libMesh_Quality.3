@@ -1,0 +1,496 @@
+.TH "libMesh::Quality" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Quality \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBname\fP (const \fBElemQuality\fP q)"
+.br
+.ti -1c
+.RI "std::string \fBdescribe\fP (const \fBElemQuality\fP q)"
+.br
+.ti -1c
+.RI "std::vector< \fBElemQuality\fP > \fBvalid\fP (const \fBElemType\fP t)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const unsigned int \fBnum_quals\fP = 16"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A namespace for quality utility functions\&. 
+.SH "Function Documentation"
+.PP 
+.SS "std::string libMesh::Quality::describe (const ElemQualityq)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a description for a \fCElemQuality\fP \fCenum\fP 
+.RE
+.PP
+This function returns a string containing a short description of q\&. Useful for asking the enum what it computes\&. 
+.PP
+Definition at line 127 of file elem_quality\&.C\&.
+.PP
+References libMesh::ASPECT_RATIO, libMesh::ASPECT_RATIO_BETA, libMesh::ASPECT_RATIO_GAMMA, libMesh::CONDITION, libMesh::DIAGONAL, libMesh::DISTORTION, libMesh::JACOBIAN, libMesh::MAX_ANGLE, libMesh::MIN_ANGLE, libMesh::SHAPE, libMesh::SHEAR, libMesh::SIZE, libMesh::SKEW, libMesh::STRETCH, libMesh::TAPER, and libMesh::WARP\&.
+.PP
+.nf
+128 {
+129 
+130   std::ostringstream desc;
+131 
+132   switch (q)
+133     {
+134 
+135     case ASPECT_RATIO:
+136       desc << "Max edge length ratio\n"
+137            << "at element center\&.\n"
+138            << '\n'
+139            << "Suggested ranges:\n"
+140            << "Hexes: (1 -> 4)\n"
+141            << "Quads: (1 -> 4)";
+142       break;
+143 
+144     case SKEW:
+145       desc << "Maximum |cos A|, where A\n"
+146            << "is the angle between edges\n"
+147            << "at element center\&.\n"
+148            << '\n'
+149            << "Suggested ranges:\n"
+150            << "Hexes: (0 -> 0\&.5)\n"
+151            << "Quads: (0 -> 0\&.5)";
+152       break;
+153 
+154     case SHEAR:
+155       desc << "LIBMESH_DIM / K(Js)\n"
+156            << '\n'
+157            << "LIBMESH_DIM   = element dimension\&.\n"
+158            << "K(Js) = Condition number of \n"
+159            << "        Jacobian skew matrix\&.\n"
+160            << '\n'
+161            << "Suggested ranges:\n"
+162            << "Hexes(LIBMESH_DIM=3): (0\&.3 -> 1)\n"
+163            << "Quads(LIBMESH_DIM=2): (0\&.3 -> 1)";
+164       break;
+165 
+166     case SHAPE:
+167       desc << "LIBMESH_DIM / K(Jw)\n"
+168            << '\n'
+169            << "LIBMESH_DIM   = element dimension\&.\n"
+170            << "K(Jw) = Condition number of \n"
+171            << "        weighted Jacobian\n"
+172            << "        matrix\&.\n"
+173            << '\n'
+174            << "Suggested ranges:\n"
+175            << "Hexes(LIBMESH_DIM=3): (0\&.3 -> 1)\n"
+176            << "Tets(LIBMESH_DIM=3): (0\&.2 -> 1)\n"
+177            << "Quads(LIBMESH_DIM=2): (0\&.3 -> 1)\&.";
+178       break;
+179 
+180     case MAX_ANGLE:
+181       desc << "Largest included angle\&.\n"
+182            << '\n'
+183            << "Suggested ranges:\n"
+184            << "Quads: (90 -> 135)\n"
+185            << "Triangles: (60 -> 90)";
+186       break;
+187 
+188     case MIN_ANGLE:
+189       desc << "Smallest included angle\&.\n"
+190            << '\n'
+191            << "Suggested ranges:\n"
+192            << "Quads: (45 -> 90)\n"
+193            << "Triangles: (30 -> 60)";
+194       break;
+195 
+196     case CONDITION:
+197       desc << "Condition number of the\n"
+198            << "Jacobian matrix\&.\n"
+199            << '\n'
+200            << "Suggested ranges:\n"
+201            << "Quads: (1 -> 4)\n"
+202            << "Hexes: (1 -> 8)\n"
+203            << "Tris: (1 -> 1\&.3)\n"
+204            << "Tets: (1 -> 3)";
+205       break;
+206 
+207     case DISTORTION:
+208       desc << "min |J| * A / <A>\n"
+209            << '\n'
+210            << "|J| = norm of Jacobian matrix\n"
+211            << " A  = actual area\n"
+212            << "<A> = reference area\n"
+213            << '\n'
+214            << "Suggested ranges:\n"
+215            << "Quads: (0\&.6 -> 1), <A>=4\n"
+216            << "Hexes: (0\&.6 -> 1), <A>=8\n"
+217            << "Tris: (0\&.6 -> 1), <A>=1/2\n"
+218            << "Tets: (0\&.6 -> 1), <A>=1/6";
+219       break;
+220 
+221     case TAPER:
+222       desc << "Maximum ratio of lengths\n"
+223            << "derived from opposited edges\&.\n"
+224            << '\n'
+225            << "Suggested ranges:\n"
+226            << "Quads: (0\&.7 -> 1)\n"
+227            << "Hexes: (0\&.4 -> 1)";
+228       break;
+229 
+230     case WARP:
+231       desc << "cos D\n"
+232            << '\n'
+233            << "D = minimum dihedral angle\n"
+234            << "    formed by diagonals\&.\n"
+235            << '\n'
+236            << "Suggested ranges:\n"
+237            << "Quads: (0\&.9 -> 1)";
+238       break;
+239 
+240     case STRETCH:
+241       desc << "Sqrt(3) * L_min / L_max\n"
+242            << '\n'
+243            << "L_min = minimum edge length\&.\n"
+244            << "L_max = maximum edge length\&.\n"
+245            << '\n'
+246            << "Suggested ranges:\n"
+247            << "Quads: (0\&.25 -> 1)\n"
+248            << "Hexes: (0\&.25 -> 1)";
+249       break;
+250 
+251     case DIAGONAL:
+252       desc << "D_min / D_max\n"
+253            << '\n'
+254            << "D_min = minimum diagonal\&.\n"
+255            << "D_max = maximum diagonal\&.\n"
+256            << '\n'
+257            << "Suggested ranges:\n"
+258            << "Hexes: (0\&.65 -> 1)";
+259       break;
+260 
+261     case ASPECT_RATIO_BETA:
+262       desc << "CR / (3 * IR)\n"
+263            << '\n'
+264            << "CR = circumsphere radius\n"
+265            << "IR = inscribed sphere radius\n"
+266            << '\n'
+267            << "Suggested ranges:\n"
+268            << "Tets: (1 -> 3)";
+269       break;
+270 
+271     case ASPECT_RATIO_GAMMA:
+272       desc << "S^(3/2) / 8\&.479670 * V\n"
+273            << '\n'
+274            << "S = sum(si*si/6)\n"
+275            << "si = edge length\n"
+276            << "V = volume\n"
+277            << '\n'
+278            << "Suggested ranges:\n"
+279            << "Tets: (1 -> 3)";
+280       break;
+281 
+282     case SIZE:
+283       desc << "min (|J|, |1/J|)\n"
+284            << '\n'
+285            << "|J| = norm of Jacobian matrix\&.\n"
+286            << '\n'
+287            << "Suggested ranges:\n"
+288            << "Quads: (0\&.3 -> 1)\n"
+289            << "Hexes: (0\&.5 -> 1)\n"
+290            << "Tris: (0\&.25 -> 1)\n"
+291            << "Tets: (0\&.2 -> 1)";
+292       break;
+293 
+294     case JACOBIAN:
+295       desc << "Minimum Jacobian divided by\n"
+296            << "the lengths of the LIBMESH_DIM\n"
+297            << "largest edge vectors\&.\n"
+298            << '\n'
+299            << "LIBMESH_DIM = element dimension\&.\n"
+300            << '\n'
+301            << "Suggested ranges:\n"
+302            << "Quads: (0\&.5 -> 1)\n"
+303            << "Hexes: (0\&.5 -> 1)\n"
+304            << "Tris: (0\&.5 -> 1\&.155)\n"
+305            << "Tets: (0\&.5 -> 1\&.414)";
+306       break;
+307 
+308     default:
+309       desc << "Unknown";
+310       break;
+311     }
+312 
+313   return desc\&.str();
+314 }
+.fi
+.SS "std::string libMesh::Quality::name (const ElemQualityq)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a descriptive name for a \fCElemQuality\fP \fCenum\fP 
+.RE
+.PP
+This function returns a string containing some name for q\&. Useful for asking the enum what its name is\&. I added this since you may want a simple way to attach a name or description to the ElemQuality enums\&. It can be removed if it is found to be useless\&. 
+.PP
+Definition at line 39 of file elem_quality\&.C\&.
+.PP
+References libMesh::ASPECT_RATIO, libMesh::ASPECT_RATIO_BETA, libMesh::ASPECT_RATIO_GAMMA, libMesh::CONDITION, libMesh::DIAGONAL, libMesh::DISTORTION, libMesh::JACOBIAN, libMesh::MAX_ANGLE, libMesh::MIN_ANGLE, libMesh::SHAPE, libMesh::SHEAR, libMesh::SIZE, libMesh::SKEW, libMesh::STRETCH, libMesh::TAPER, and libMesh::WARP\&.
+.PP
+Referenced by GETPOT_NAMESPACE::GetPot::_convert_to_type_no_default(), libMesh::EquationSystems::add_system(), libMesh::Factory< Base >::build(), libMesh::Utility::complex_filename(), libMesh::EquationSystems::delete_system(), libMesh::demangle(), DMLibMeshSetUpName_Private(), DMView_libMesh(), libMesh::Factory< Base >::Factory(), libMesh::Parameters::get(), libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), libMesh::ReferenceCounter::increment_destructor_count(), libMesh::XdrMGF::init(), libMesh::Parameters::insert(), libMesh::libmesh_cast_ptr(), libMesh::libmesh_cast_ref(), libMesh::Xdr::open(), GETPOT_NAMESPACE::GetPot::variable::operator=(), libMesh::process_trace(), libMesh::TetGenIO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::EquationSystems::read(), libMesh::PltLoader::read_header(), libMesh::MeshData::read_tetgen(), libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject(), libMesh::Parameters::set(), libMesh::Parameters::Parameter< T >::type(), libMesh::EnsightIO::write(), libMesh::CheckpointIO::write(), libMesh::UnstructuredMesh::write(), libMesh::TecplotIO::write_binary(), and libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+40 {
+41   std::string its_name;
+42 
+43   switch (q)
+44     {
+45 
+46     case ASPECT_RATIO:
+47       its_name = "Aspect Ratio";
+48       break;
+49 
+50     case SKEW:
+51       its_name = "Skew";
+52       break;
+53 
+54     case SHEAR:
+55       its_name = "Shear";
+56       break;
+57 
+58     case SHAPE:
+59       its_name = "Shape";
+60       break;
+61 
+62     case MAX_ANGLE:
+63       its_name = "Maximum Angle";
+64       break;
+65 
+66     case MIN_ANGLE:
+67       its_name = "Minimum Angle";
+68       break;
+69 
+70     case CONDITION:
+71       its_name = "Condition Number";
+72       break;
+73 
+74     case DISTORTION:
+75       its_name = "Distortion";
+76       break;
+77 
+78     case TAPER:
+79       its_name = "Taper";
+80       break;
+81 
+82     case WARP:
+83       its_name = "Warp";
+84       break;
+85 
+86     case STRETCH:
+87       its_name = "Stretch";
+88       break;
+89 
+90     case DIAGONAL:
+91       its_name = "Diagonal";
+92       break;
+93 
+94     case ASPECT_RATIO_BETA:
+95       its_name = "AR Beta";
+96       break;
+97 
+98     case ASPECT_RATIO_GAMMA:
+99       its_name = "AR Gamma";
+100       break;
+101 
+102     case SIZE:
+103       its_name = "Size";
+104       break;
+105 
+106     case JACOBIAN:
+107       its_name = "Jacobian";
+108       break;
+109 
+110     default:
+111       its_name = "Unknown";
+112       break;
+113     }
+114 
+115   return its_name;
+116 }
+.fi
+.SS "std::vector< \fBElemQuality\fP > libMesh::Quality::valid (const ElemTypet)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the valid \fCElemQuality\fP metrics for a given \fCElemType\fP element type\&.
+.RE
+.PP
+Returns all valid quality metrics for element type t\&. 
+.PP
+Definition at line 321 of file elem_quality\&.C\&.
+.PP
+References libMesh::ASPECT_RATIO, libMesh::ASPECT_RATIO_BETA, libMesh::ASPECT_RATIO_GAMMA, libMesh::CONDITION, libMesh::DIAGONAL, libMesh::DISTORTION, libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::INFEDGE2, libMesh::INFHEX16, libMesh::INFHEX18, libMesh::INFHEX8, libMesh::INFPRISM12, libMesh::INFPRISM6, libMesh::INFQUAD4, libMesh::INFQUAD6, libMesh::JACOBIAN, libMesh::MAX_ANGLE, libMesh::MIN_ANGLE, libMesh::out, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::SHAPE, libMesh::SHEAR, libMesh::SIZE, libMesh::SKEW, libMesh::STRETCH, libMesh::TAPER, libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI6, and libMesh::WARP\&.
+.PP
+.nf
+322 {
+323   std::vector<ElemQuality> v;
+324 
+325   switch (t)
+326     {
+327     case EDGE2:
+328     case EDGE3:
+329     case EDGE4:
+330       {
+331         // None yet
+332         break;
+333       }
+334 
+335     case TRI3:
+336     case TRI6:
+337       {
+338         v\&.resize(7);
+339         v[0] = MAX_ANGLE;
+340         v[1] = MIN_ANGLE;
+341         v[2] = CONDITION;
+342         v[3] = JACOBIAN;
+343         v[4] = SIZE;
+344         v[5] = SHAPE;
+345         v[6] = DISTORTION;
+346         break;
+347       }
+348 
+349     case QUAD4:
+350     case QUAD8:
+351     case QUAD9:
+352       {
+353         v\&.resize(13);
+354         v[0]  = ASPECT_RATIO;
+355         v[1]  = SKEW;
+356         v[2]  = TAPER;
+357         v[3]  = WARP;
+358         v[4]  = STRETCH;
+359         v[5]  = MIN_ANGLE;
+360         v[6]  = MAX_ANGLE;
+361         v[7]  = CONDITION;
+362         v[8]  = JACOBIAN;
+363         v[9]  = SHEAR;
+364         v[10] = SHAPE;
+365         v[11] = SIZE;
+366         v[12] = DISTORTION;
+367         break;
+368       }
+369 
+370     case TET4:
+371     case TET10:
+372       {
+373         v\&.resize(7);
+374         v[0]  = ASPECT_RATIO_BETA;
+375         v[1]  = ASPECT_RATIO_GAMMA;
+376         v[2]  = CONDITION;
+377         v[3]  = JACOBIAN;
+378         v[4]  = SHAPE;
+379         v[5]  = SIZE;
+380         v[6]  = DISTORTION;
+381         break;
+382       }
+383 
+384     case HEX8:
+385     case HEX20:
+386     case HEX27:
+387       {
+388         v\&.resize(11);
+389         v[0]  = ASPECT_RATIO;
+390         v[1]  = SKEW;
+391         v[2]  = SHEAR;
+392         v[3] = SHAPE;
+393         v[4]  = CONDITION;
+394         v[5]  = JACOBIAN;
+395         v[6]  = DISTORTION;
+396         v[7]  = TAPER;
+397         v[8]  = STRETCH;
+398         v[9]  = DIAGONAL;
+399         v[10]  = SIZE;
+400         break;
+401       }
+402 
+403     case PRISM6:
+404     case PRISM18:
+405       {
+406         // None yet
+407         break;
+408       }
+409 
+410     case PYRAMID5:
+411     case PYRAMID13:
+412     case PYRAMID14:
+413       {
+414         // None yet
+415         break;
+416       }
+417 
+418 
+419 
+420 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+421 
+422     case INFEDGE2:
+423       {
+424         // None yet
+425         break;
+426       }
+427 
+428     case INFQUAD4:
+429     case INFQUAD6:
+430       {
+431         // None yet
+432         break;
+433       }
+434 
+435     case INFHEX8:
+436     case INFHEX16:
+437     case INFHEX18:
+438       {
+439         // None yet
+440         break;
+441       }
+442 
+443     case INFPRISM6:
+444     case INFPRISM12:
+445       {
+446         // None yet
+447         break;
+448       }
+449 
+450 #endif
+451 
+452 
+453     default:
+454       {
+455         libMesh::out << "Undefined element type!\&." << std::endl;
+456         libmesh_error();
+457       }
+458     }
+459 
+460   return v;
+461 }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "const unsigned int libMesh::Quality::num_quals = 16"
+The number of element quality types we have defined\&. This needs to be updated if you add one\&. 
+.PP
+Definition at line 45 of file elem_quality\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

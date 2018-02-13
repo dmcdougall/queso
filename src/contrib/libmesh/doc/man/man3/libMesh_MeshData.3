@@ -1,0 +1,2864 @@
+.TH "libMesh::MeshData" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshData \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_data\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< const \fBNode\fP 
+.br
+*, std::vector< \fBNumber\fP >
+.br
+ >::const_iterator \fBconst_node_data_iterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< const \fBElem\fP 
+.br
+*, std::vector< \fBNumber\fP >
+.br
+ >::const_iterator \fBconst_elem_data_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshData\fP (const \fBMeshBase\fP &m)"
+.br
+.ti -1c
+.RI "\fB~MeshData\fP ()"
+.br
+.ti -1c
+.RI "void \fBactivate\fP (const std::string &descriptor='')"
+.br
+.ti -1c
+.RI "void \fBenable_compatibility_mode\fP (const std::string &descriptor='')"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBslim\fP (const bool node_id_map=true, const bool elem_id_map=true)"
+.br
+.ti -1c
+.RI "void \fBtranslate\fP (const \fBMeshBase\fP &out_mesh, std::vector< \fBNumber\fP > &data_values, std::vector< std::string > &data_names) const "
+.br
+.ti -1c
+.RI "void \fBread\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "std::string \fBget_info\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_info\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBoperator()\fP (const \fBNode\fP *node, const unsigned int i=0) const "
+.br
+.ti -1c
+.RI "bool \fBhas_data\fP (const \fBNode\fP *node) const "
+.br
+.ti -1c
+.RI "const std::vector< \fBNumber\fP > & \fBget_data\fP (const \fBNode\fP *node) const "
+.br
+.ti -1c
+.RI "void \fBset_data\fP (const \fBNode\fP *node, const std::vector< \fBNumber\fP > &val)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_val_per_node\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_node_data\fP () const "
+.br
+.ti -1c
+.RI "\fBconst_node_data_iterator\fP \fBnode_data_begin\fP () const "
+.br
+.ti -1c
+.RI "\fBconst_node_data_iterator\fP \fBnode_data_end\fP () const "
+.br
+.ti -1c
+.RI "void \fBinsert_node_data\fP (std::map< const \fBNode\fP *, std::vector< \fBNumber\fP > > &nd, const bool close_elem_data=true)"
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBoperator()\fP (const \fBElem\fP *elem, const unsigned int i=0) const "
+.br
+.ti -1c
+.RI "bool \fBhas_data\fP (const \fBElem\fP *elem) const "
+.br
+.ti -1c
+.RI "const std::vector< \fBNumber\fP > & \fBget_data\fP (const \fBElem\fP *elem) const "
+.br
+.ti -1c
+.RI "void \fBset_data\fP (const \fBElem\fP *elem, const std::vector< \fBNumber\fP > &val)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_val_per_elem\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_elem_data\fP () const "
+.br
+.ti -1c
+.RI "\fBconst_elem_data_iterator\fP \fBelem_data_begin\fP () const "
+.br
+.ti -1c
+.RI "\fBconst_elem_data_iterator\fP \fBelem_data_end\fP () const "
+.br
+.ti -1c
+.RI "void \fBinsert_elem_data\fP (std::map< const \fBElem\fP *, std::vector< \fBNumber\fP > > &ed, const bool close_node_data=true)"
+.br
+.ti -1c
+.RI "bool \fBactive\fP () const "
+.br
+.ti -1c
+.RI "bool \fBcompatibility_mode\fP () const "
+.br
+.ti -1c
+.RI "bool \fBelem_initialized\fP () const "
+.br
+.ti -1c
+.RI "bool \fBnode_initialized\fP () const "
+.br
+.ti -1c
+.RI "const \fBNode\fP * \fBforeign_id_to_node\fP (const unsigned int fid) const "
+.br
+.ti -1c
+.RI "const \fBElem\fP * \fBforeign_id_to_elem\fP (const unsigned int fid) const "
+.br
+.ti -1c
+.RI "unsigned int \fBnode_to_foreign_id\fP (const \fBNode\fP *n) const "
+.br
+.ti -1c
+.RI "unsigned int \fBelem_to_foreign_id\fP (const \fBElem\fP *n) const "
+.br
+.ti -1c
+.RI "const \fBMeshDataUnvHeader\fP & \fBget_unv_header\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_unv_header\fP (\fBMeshDataUnvHeader\fP *unv_header)"
+.br
+.ti -1c
+.RI "void \fBassign\fP (const \fBMeshData\fP &omd)"
+.br
+.ti -1c
+.RI "void \fBadd_foreign_node_id\fP (const \fBNode\fP *node, const unsigned int foreign_node_id)"
+.br
+.ti -1c
+.RI "void \fBadd_foreign_elem_id\fP (const \fBElem\fP *elem, const unsigned int foreign_elem_id)"
+.br
+.ti -1c
+.RI "void \fBclose_foreign_id_maps\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBread_tetgen\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBread_unv\fP (const std::string &file_name)"
+.br
+.ti -1c
+.RI "void \fBread_unv_implementation\fP (std::istream &in_file)"
+.br
+.ti -1c
+.RI "void \fBwrite_unv\fP (const std::string &file_name)"
+.br
+.ti -1c
+.RI "void \fBwrite_unv_implementation\fP (std::ostream &out_file)"
+.br
+.ti -1c
+.RI "void \fBread_xdr\fP (const std::string &name, const \fBXdrMODE\fP mode=\fBREAD\fP)"
+.br
+.ti -1c
+.RI "void \fBwrite_xdr\fP (const std::string &name, const \fBXdrMODE\fP mode=\fBWRITE\fP)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "std::string \fB_data_descriptor\fP"
+.br
+.ti -1c
+.RI "std::map< const \fBNode\fP 
+.br
+*, std::vector< \fBNumber\fP > > \fB_node_data\fP"
+.br
+.ti -1c
+.RI "std::map< const \fBNode\fP 
+.br
+*, unsigned int > \fB_node_id\fP"
+.br
+.ti -1c
+.RI "std::map< unsigned int, const 
+.br
+\fBNode\fP * > \fB_id_node\fP"
+.br
+.ti -1c
+.RI "std::map< const \fBElem\fP 
+.br
+*, std::vector< \fBNumber\fP > > \fB_elem_data\fP"
+.br
+.ti -1c
+.RI "std::map< const \fBElem\fP 
+.br
+*, unsigned int > \fB_elem_id\fP"
+.br
+.ti -1c
+.RI "std::map< unsigned int, const 
+.br
+\fBElem\fP * > \fB_id_elem\fP"
+.br
+.ti -1c
+.RI "bool \fB_node_id_map_closed\fP"
+.br
+.ti -1c
+.RI "bool \fB_node_data_closed\fP"
+.br
+.ti -1c
+.RI "bool \fB_elem_id_map_closed\fP"
+.br
+.ti -1c
+.RI "bool \fB_elem_data_closed\fP"
+.br
+.ti -1c
+.RI "bool \fB_active\fP"
+.br
+.ti -1c
+.RI "bool \fB_compatibility_mode\fP"
+.br
+.ti -1c
+.RI "\fBMeshDataUnvHeader\fP * \fB_unv_header\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBMeshDataUnvHeader\fP"
+.br
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const \fBMeshData\fP &m)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBMeshData\fP\fP class handles actual data and the corresponding I/O on entities (nodes, elements) of meshes\&. The \fC\fBMeshData\fP\fP can be used when dealing with files that contain nodal or element-oriented data, numbered in the same format as a corresponding mesh file (when activated) or with the \fC\fBlibMesh\fP\fP element and node indices (when in compatibility mode)\&. To use \fC\fBMeshData\fP\fP, it has to be either activated or the compatibility mode has to be enabled\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer, 2003 
+.RE
+.PP
+
+.PP
+Definition at line 58 of file mesh_data\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<const \fBElem\fP*, std::vector<\fBNumber\fP> >::const_iterator \fBlibMesh::MeshData::const_elem_data_iterator\fP"
+A const iterator over the element-associated data entries of \fC\fBMeshData\fP\fP\&. Use this when a loop over all \fCNode*\fP in the \fC\fBMeshData\fP\fP is wanted\&. Note that only const versions are provided\&. Also these iterators should \fInot\fP be confused with the \fCnode_iterators\fP provided for the \fC\fBMesh\fP\fP classes! 
+.PP
+Definition at line 83 of file mesh_data\&.h\&.
+.SS "typedef std::map<const \fBNode\fP*, std::vector<\fBNumber\fP> >::const_iterator \fBlibMesh::MeshData::const_node_data_iterator\fP"
+A const iterator over the nodal data entries of \fC\fBMeshData\fP\fP\&. Use this when a loop over all \fCNode*\fP in the \fC\fBMeshData\fP\fP is wanted\&. Note that only const versions are provided\&. Also these iterators should \fInot\fP be confused with the \fCnode_iterators\fP provided for the \fC\fBMesh\fP\fP classes! 
+.PP
+Definition at line 73 of file mesh_data\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshData::MeshData (const \fBMeshBase\fP &m)"
+Default Constructor\&. Takes const reference to the mesh it belongs to\&. 
+.PP
+Definition at line 35 of file mesh_data\&.C\&.
+.PP
+.nf
+35                                     :
+36   _mesh               (m),
+37   _data_descriptor    (""),
+38   _node_id_map_closed (false),
+39   _node_data_closed   (false),
+40   _elem_id_map_closed (false),
+41   _elem_data_closed   (false),
+42   _active             (false),
+43   _compatibility_mode (false),
+44   _unv_header         (NULL)
+45 {
+46   // This class isn't actively maintained, doesn't work in parallel,
+47   // and usually isn't as good a solution as adding an additional
+48   // ExplicitSystem with appropriate data field(s)\&.
+49   libmesh_deprecated();
+50 }
+.fi
+.SS "libMesh::MeshData::~MeshData ()"
+Destructor\&. 
+.PP
+Definition at line 55 of file mesh_data\&.C\&.
+.PP
+References clear()\&.
+.PP
+.nf
+56 {
+57   clear();
+58 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::MeshData::activate (const std::string &descriptor = \fC''\fP)"
+When \fC\fBMeshData\fP\fP should be used, it has to be activated first, \fIprior\fP to reading in a mesh with the \fC\fBMesh::read()\fP\fP methods\&. This will ensure that element and node ids given in the mesh file, i\&.e\&. the foreign node and element ids, are stored in the corresponding id maps\&. Optionally takes a string that should help the user in identifying the data later on\&. 
+.PP
+Definition at line 64 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _data_descriptor, and libMesh::err\&.
+.PP
+.nf
+65 {
+66 #ifdef DEBUG
+67   if (_compatibility_mode)
+68     libMesh::err << "WARNING: MeshData was in compatibility mode, now being activated\&."
+69                  << std::endl;
+70 #endif
+71 
+72   _compatibility_mode = false;
+73   _active = true;
+74   _data_descriptor = descriptor;
+75 }
+.fi
+.SS "bool libMesh::MeshData::active () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is active and working\&. Use \fC\fBactivate()\fP\fP to bring this object alive\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1004 of file mesh_data\&.h\&.
+.PP
+References _active\&.
+.PP
+Referenced by libMesh::UNVIO::element_out(), get_info(), libMesh::UNVIO::node_out(), libMesh::LegacyXdrIO::read_mesh(), slim(), and libMesh::UNVIO::write_implementation()\&.
+.PP
+.nf
+1005 {
+1006   return _active;
+1007 }
+.fi
+.SS "void libMesh::MeshData::add_foreign_elem_id (const \fBElem\fP *elem, const unsigned intforeign_elem_id)\fC [inline]\fP"
+In general, \fC\fBMeshData\fP\fP gathers element-associated data from file, but it needs to relate this data with the \fCElem*\fP of the current mesh\&. \fBMesh\fP importers simply use this method to add such a map\&. 
+.PP
+Definition at line 1062 of file mesh_data\&.h\&.
+.PP
+References _active, _elem_id, _elem_id_map_closed, _id_elem, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by assign(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), and libMesh::LegacyXdrIO::read_mesh()\&.
+.PP
+.nf
+1064 {
+1065   if (_active)
+1066     {
+1067       libmesh_assert (!_elem_id_map_closed);
+1068       libmesh_assert(elem);
+1069       libmesh_assert (_elem_id\&.find(elem) == _elem_id\&.end());
+1070       libmesh_assert (_id_elem\&.find(foreign_elem_id) == _id_elem\&.end());
+1071 
+1072       _elem_id\&.insert(std::make_pair(elem, foreign_elem_id));
+1073       _id_elem\&.insert(std::make_pair(foreign_elem_id, elem));
+1074     }
+1075 }
+.fi
+.SS "void libMesh::MeshData::add_foreign_node_id (const \fBNode\fP *node, const unsigned intforeign_node_id)\fC [inline]\fP"
+In general, \fC\fBMeshData\fP\fP gathers nodal data from a file, but it needs to relate this data with the \fCNode*\fP of the current mesh\&. \fBMesh\fP importers simply use this method to add such a map\&. 
+.PP
+Definition at line 1036 of file mesh_data\&.h\&.
+.PP
+References _active, _id_node, _node_id, _node_id_map_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::VTKIO::read(), and libMesh::LegacyXdrIO::read_mesh()\&.
+.PP
+.nf
+1038 {
+1039   if (_active)
+1040     {
+1041       libmesh_assert (!_node_id_map_closed);
+1042       libmesh_assert(node);
+1043       libmesh_assert (_node_id\&.find(node) == _node_id\&.end());
+1044       libmesh_assert (_id_node\&.find(foreign_node_id) == _id_node\&.end());
+1045 
+1046       /*
+1047        * _always_ insert in _id_node and _node_id\&.  If we would
+1048        * use the mesh\&.node(unsigned int) method or the node\&.id()
+1049        * to get Node* and unsigned int, respectively, we would not
+1050        * be safe any more when the mesh gets refined or re-numbered
+1051        * within libMesh\&. And we could get in big trouble that would
+1052        * be hard to find when importing data _after_ having refined\&.\&.\&.
+1053        */
+1054       _node_id\&.insert(std::make_pair(node, foreign_node_id));
+1055       _id_node\&.insert(std::make_pair(foreign_node_id, node));
+1056     }
+1057 }
+.fi
+.SS "void libMesh::MeshData::assign (const \fBMeshData\fP &omd)"
+Assign to \fCthis\fP the data from the other \fC\fBMeshData\fP\fP\&. Used by \fC\fBBoundaryInfo\fP\fP when copying the \fC\fBMeshData\fP\fP from the \fCd\fP dimensional mesh to the \fCd-1\fP dimensional mesh (the boundary mesh)\&. 
+.PP
+Definition at line 719 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _data_descriptor, _elem_data, _elem_data_closed, _elem_id, _elem_id_map_closed, _id_node, _mesh, _node_data, _node_data_closed, _node_id, _node_id_map_closed, _unv_header, add_foreign_elem_id(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::id(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::BoundaryInfo::sync()\&.
+.PP
+.nf
+720 {
+721   this->_data_descriptor    = omd\&._data_descriptor;
+722   this->_node_id_map_closed = omd\&._node_id_map_closed;
+723   this->_node_data_closed   = omd\&._node_data_closed;
+724 
+725   // we have to be able to modify our elem id maps
+726   libmesh_assert (!this->_elem_id_map_closed);
+727 
+728   this->_elem_data_closed   = omd\&._elem_data_closed;
+729   this->_active             = omd\&._active;
+730   this->_compatibility_mode = omd\&._compatibility_mode;
+731 
+732   // this is ok because we do not manage the UnvHeader
+733   // in terms of memory, but only hold a pointer to it\&.\&.\&.
+734   this->_unv_header         = omd\&._unv_header;
+735 
+736   // Now copy the foreign id maps -- but only for the
+737   // nodes\&.  The nodes of the boundary mesh are actually
+738   // nodes of the volume mesh\&.
+739   this->_node_id = omd\&._node_id;
+740   this->_id_node = omd\&._id_node;
+741 
+742   // The element vector of the boundary mesh contains elements
+743   // that are new, and there _cannot_ be any associated
+744   // foreign id in the maps\&.  Therefore, fill the maps with
+745   // the libMesh id's\&.  But only when the other MeshData
+746   // has element ids\&.
+747   if ((this->_active) && (omd\&._elem_id\&.size() != 0))
+748     {
+749 
+750       MeshBase::const_element_iterator       elem_it  = _mesh\&.elements_begin();
+751       const MeshBase::const_element_iterator elem_end = _mesh\&.elements_end();
+752 
+753       for (; elem_it != elem_end; ++elem_it)
+754         {
+755           const Elem* elem = *elem_it;
+756           this->add_foreign_elem_id(elem, elem->id());
+757         }
+758     }
+759 
+760   // now we can safely assign omd's value
+761   this->_elem_id_map_closed   = omd\&._elem_id_map_closed;
+762 
+763 
+764   // and finally the node- and element-associated data
+765   this->_node_data = omd\&._node_data;
+766   this->_elem_data = omd\&._elem_data;
+767 }
+.fi
+.SS "void libMesh::MeshData::clear ()"
+Clears the data fields, but leaves the id maps untouched\&. Useful for clearing data for a new data file\&. Use \fC\fBslim()\fP\fP to delete the maps\&. 
+.PP
+Definition at line 109 of file mesh_data\&.C\&.
+.PP
+References _data_descriptor, _elem_data, _elem_data_closed, _node_data, and _node_data_closed\&.
+.PP
+Referenced by read_unv(), read_xdr(), and ~MeshData()\&.
+.PP
+.nf
+110 {
+111   _data_descriptor    = "";
+112   _node_data\&.clear();
+113   _elem_data\&.clear();
+114   _node_data_closed   = false;
+115   _elem_data_closed   = false;
+116 }
+.fi
+.SS "void libMesh::MeshData::close_foreign_id_maps ()"
+Signal to this object that the mesh importer finished adding node and element foreign-id maps\&. 
+.PP
+Definition at line 219 of file mesh_data\&.C\&.
+.PP
+References _active, _elem_id, _elem_id_map_closed, _id_elem, _id_node, _node_id, _node_id_map_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::TetGenIO::read_nodes_and_elem()\&.
+.PP
+.nf
+220 {
+221   if (_active)
+222     {
+223       libmesh_assert (!_elem_id\&.empty());
+224       libmesh_assert (!_id_elem\&.empty());
+225       libmesh_assert (!_node_id\&.empty());
+226       libmesh_assert (!_id_node\&.empty());
+227 
+228       _elem_id_map_closed = true;
+229       _node_id_map_closed = true;
+230     }
+231 }
+.fi
+.SS "bool libMesh::MeshData::compatibility_mode () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is in compatibility mode\&. See \fC\fBenable_compatibility_mode()\fP\fP for details\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1012 of file mesh_data\&.h\&.
+.PP
+References _compatibility_mode\&.
+.PP
+Referenced by libMesh::UNVIO::element_out(), get_info(), libMesh::UNVIO::node_out(), read(), slim(), write(), and libMesh::UNVIO::write_implementation()\&.
+.PP
+.nf
+1013 {
+1014   return _compatibility_mode;
+1015 }
+.fi
+.SS "\fBMeshData::const_elem_data_iterator\fP libMesh::MeshData::elem_data_begin () const\fC [inline]\fP"
+Returns a \fCMeshData::const_elem_data_iterators\fP which points to the beginning of the \fCElem*\fP data containers used here\&. 
+.PP
+Definition at line 986 of file mesh_data\&.h\&.
+.PP
+References _elem_data\&.
+.PP
+.nf
+987 {
+988   return _elem_data\&.begin();
+989 }
+.fi
+.SS "\fBMeshData::const_elem_data_iterator\fP libMesh::MeshData::elem_data_end () const\fC [inline]\fP"
+Returns a \fCMeshData::const_elem_data_iterators\fP which points to the end of the \fCElem*\fP data containers used here\&. 
+.PP
+Definition at line 994 of file mesh_data\&.h\&.
+.PP
+References _elem_data\&.
+.PP
+.nf
+995 {
+996   return _elem_data\&.end();
+997 }
+.fi
+.SS "bool libMesh::MeshData::elem_initialized () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use for \fIelement\fP associated data, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1020 of file mesh_data\&.h\&.
+.PP
+References _active, and _elem_data_closed\&.
+.PP
+Referenced by get_info()\&.
+.PP
+.nf
+1021 {
+1022   return (_active && _elem_data_closed);
+1023 }
+.fi
+.SS "unsigned int libMesh::MeshData::elem_to_foreign_id (const \fBElem\fP *n) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the foreign id this \fCElem*\fP maps to\&. 
+.RE
+.PP
+
+.PP
+Definition at line 496 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_id, _elem_id_map_closed, libMesh::err, libMesh::DofObject::id(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::UNVIO::element_out(), and write_xdr()\&.
+.PP
+.nf
+497 {
+498   libmesh_assert(e);
+499 
+500   if (_active)
+501     {
+502       // when active, use our _id_elem map
+503       libmesh_assert (_elem_id_map_closed);
+504 
+505       // look it up in the map
+506       std::map<const Elem*,
+507         unsigned int>::const_iterator pos = _elem_id\&.find(e);
+508 
+509       if (pos == _elem_id\&.end())
+510         {
+511           libMesh::err << "ERROR: No foreign id stored for the element "
+512                        << "with the libMesh id = "
+513                        << e->id()
+514                        << std::endl;
+515           libmesh_error();
+516           return 0;
+517         }
+518       else
+519         return pos->second;
+520     }
+521   else if (_compatibility_mode)
+522     // when only in compatibility mode,
+523     // return libMesh's element id
+524     return e->id();
+525 
+526   // should never get here
+527   libmesh_error();
+528   return 0;
+529 }
+.fi
+.SS "void libMesh::MeshData::enable_compatibility_mode (const std::string &descriptor = \fC''\fP)"
+When the \fC\fBMeshData\fP\fP should be used, but was \fInot\fP activated prior to reading in a mesh, then the compatibility mode enables to still use this object as if the \fC\fBMeshData\fP\fP was active\&. The foreign node and element ids are simply assigned the indices used in \fC\fBlibMesh\fP\fP\&. Note that the compatibility mode should be used with caution, since the node and element indices in \fC\fBlibMesh\fP\fP may be renumbered any time\&. This \fC\fBMeshData\fP\fP always employs the current node and element ids, it does \fInot\fP create an image of ids when compatibility mode was activated\&. 
+.PP
+Definition at line 81 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _data_descriptor, _elem_id, _elem_id_map_closed, _id_elem, _id_node, _node_id, _node_id_map_closed, and libMesh::err\&.
+.PP
+Referenced by libMesh::UNVIO::write_implementation()\&.
+.PP
+.nf
+82 {
+83   if (!_active)
+84     {
+85       _compatibility_mode = true;
+86       _active = false;
+87       // do as if the id maps are already closed
+88       _node_id_map_closed = true;
+89       _elem_id_map_closed = true;
+90       _data_descriptor = descriptor;
+91       // we can safely clear the id maps
+92       _node_id\&.clear();
+93       _id_node\&.clear();
+94       _elem_id\&.clear();
+95       _id_elem\&.clear();
+96     }
+97 #ifdef DEBUG
+98   else
+99     libMesh::err << "WARNING: MeshData was in compatibility mode, now being activated\&."
+100                  << std::endl;
+101 #endif
+102 }
+.fi
+.SS "const \fBElem\fP * libMesh::MeshData::foreign_id_to_elem (const unsigned intfid) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fCElem*\fP that this foreign id maps to\&. 
+.RE
+.PP
+
+.PP
+Definition at line 461 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_id_map_closed, _id_elem, _mesh, libMesh::MeshBase::elem(), libMesh::err, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by read_tetgen(), and read_xdr()\&.
+.PP
+.nf
+462 {
+463   if (_active)
+464     {
+465       // when active, use our _id_elem map
+466       libmesh_assert (_elem_id_map_closed);
+467 
+468       std::map<unsigned int,
+469         const Elem*>::const_iterator pos = _id_elem\&.find(fid);
+470 
+471       if (pos == _id_elem\&.end())
+472         {
+473           libMesh::err << "ERROR: Have no Elem* associated with the foreign id = "
+474                        << fid
+475                        << std::endl;
+476           libmesh_error();
+477           return NULL;
+478         }
+479       else
+480         return pos->second;
+481     }
+482   else if (_compatibility_mode)
+483     // when only in compatibility mode,
+484     // return element using the libMesh id
+485     return this->_mesh\&.elem(fid);
+486 
+487   // should never get here
+488   libmesh_error();
+489   return NULL;
+490 }
+.fi
+.SS "const \fBNode\fP * libMesh::MeshData::foreign_id_to_node (const unsigned intfid) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fCNode*\fP that this foreign id maps to\&. 
+.RE
+.PP
+
+.PP
+Definition at line 383 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _id_node, _mesh, _node_id_map_closed, libMesh::err, libMesh::libmesh_assert(), and libMesh::MeshBase::node_ptr()\&.
+.PP
+Referenced by read_tetgen(), read_unv_implementation(), and read_xdr()\&.
+.PP
+.nf
+384 {
+385   if (_active)
+386     {
+387       // when active, use our _id_node map
+388       libmesh_assert (_node_id_map_closed);
+389 
+390       std::map<unsigned int,
+391         const Node*>::const_iterator pos = _id_node\&.find(fid);
+392 
+393       if (pos == _id_node\&.end())
+394         {
+395           libMesh::err << "ERROR: Have no Node* associated with the foreign id = "
+396                        << fid
+397                        << std::endl;
+398           libmesh_error();
+399           return NULL;
+400         }
+401       else
+402         return pos->second;
+403     }
+404   else if (_compatibility_mode)
+405     // when only in compatibility mode,
+406     // return the node stored in the MeshBase
+407     // under its current id
+408     return this->_mesh\&.node_ptr(fid);
+409 
+410   // should never get here
+411   libmesh_error();
+412   return NULL;
+413 }
+.fi
+.SS "const std::vector< \fBNumber\fP > & libMesh::MeshData::get_data (const \fBNode\fP *node) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a const reference to the values associated with the node \fCnode\fP\&. \fIBeware:\fP this method will crash when there is no data associated with the node \fCnode!\fP Check existence through \fC\fBhas_data()\fP\fP first\&. 
+.RE
+.PP
+
+.PP
+Definition at line 872 of file mesh_data\&.h\&.
+.PP
+References _active, _compatibility_mode, _node_data, _node_data_closed, libMesh::err, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by write_unv_implementation(), and write_xdr()\&.
+.PP
+.nf
+873 {
+874   libmesh_assert (_active || _compatibility_mode);
+875   libmesh_assert (_node_data_closed);
+876 
+877   std::map<const Node*,
+878     std::vector<Number> >::const_iterator pos = _node_data\&.find(node);
+879 
+880 #ifdef DEBUG
+881   if (pos == _node_data\&.end())
+882     {
+883       libMesh::err << "ERROR: No data for this node\&.  Use has_data() first!" << std::endl;
+884       libmesh_error();
+885     }
+886 #endif
+887 
+888   return pos->second;
+889 }
+.fi
+.SS "const std::vector< \fBNumber\fP > & libMesh::MeshData::get_data (const \fBElem\fP *elem) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a const reference to the values associated with the element \fCelem\fP\&. \fIBeware:\fP this method will crash when there is no data associated with the element \fCelem!\fP Check existence through \fC\fBhas_data()\fP\fP first\&. 
+.RE
+.PP
+
+.PP
+Definition at line 955 of file mesh_data\&.h\&.
+.PP
+References _active, _compatibility_mode, _elem_data, _elem_data_closed, libMesh::err, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+956 {
+957   libmesh_assert (_active || _compatibility_mode);
+958   libmesh_assert (_elem_data_closed);
+959 
+960   std::map<const Elem*,
+961     std::vector<Number> >::const_iterator pos = _elem_data\&.find(elem);
+962 
+963 #ifdef DEBUG
+964   if (pos == _elem_data\&.end())
+965     {
+966       libMesh::err << "ERROR: No data for this element\&.  Use has_data() first!" << std::endl;
+967       libmesh_error();
+968     }
+969 #endif
+970 
+971   return pos->second;
+972 }
+.fi
+.SS "std::string libMesh::MeshData::get_info () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing relevant information about the mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 336 of file mesh_data\&.C\&.
+.PP
+References _data_descriptor, active(), compatibility_mode(), elem_initialized(), n_elem_data(), n_node_data(), n_val_per_elem(), n_val_per_node(), and node_initialized()\&.
+.PP
+Referenced by print_info()\&.
+.PP
+.nf
+337 {
+338   std::ostringstream oss;
+339 
+340   if (this->active() || this->compatibility_mode())
+341     {
+342       oss << " MeshData Information:\n";
+343       if (this->active())
+344         oss << "  object activated\&.\n";
+345       if (this->compatibility_mode())
+346         oss << "  object in compatibility mode\&.\n";
+347       if (this->_data_descriptor != "")
+348         oss << "  descriptor=" << this->_data_descriptor << '\n';
+349       if (this->elem_initialized())
+350         oss << "  Element associated data initialized\&.\n"
+351             << "   n_val_per_elem()=" << this->n_val_per_elem() << '\n'
+352             << "   n_elem_data()=" << this->n_elem_data() << '\n';
+353       if (this->node_initialized())
+354         oss << "  Node associated data initialized\&.\n"
+355             << "   n_val_per_node()=" << this->n_val_per_node() << '\n'
+356             << "   n_node_data()=" << this->n_node_data() << '\n';
+357     }
+358   else
+359     oss << " MeshData neither active nor in compatibility mode\&.\n";
+360 
+361   return oss\&.str();
+362 }
+.fi
+.SS "const \fBMeshDataUnvHeader\fP & libMesh::MeshData::get_unv_header () const\fC [inline]\fP"
+Read access to the \fC\fBMeshDataUnvHeader\fP\fP data structure\&. 
+.PP
+Definition at line 1079 of file mesh_data\&.h\&.
+.PP
+References _unv_header, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+1080 {
+1081   libmesh_assert(this->_unv_header);
+1082   return *this->_unv_header;
+1083 }
+.fi
+.SS "bool libMesh::MeshData::has_data (const \fBNode\fP *node) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when the node \fCnode\fP has data, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 858 of file mesh_data\&.h\&.
+.PP
+References _active, _compatibility_mode, _node_data, _node_data_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by write_unv_implementation(), and write_xdr()\&.
+.PP
+.nf
+859 {
+860   libmesh_assert (_active || _compatibility_mode);
+861   libmesh_assert (_node_data_closed);
+862 
+863   std::map<const Node*,
+864     std::vector<Number> >::const_iterator pos = _node_data\&.find(node);
+865 
+866   return (pos != _node_data\&.end());
+867 }
+.fi
+.SS "bool libMesh::MeshData::has_data (const \fBElem\fP *elem) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when the element \fCelem\fP has data, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 941 of file mesh_data\&.h\&.
+.PP
+References _active, _compatibility_mode, _elem_data, _elem_data_closed, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+942 {
+943   libmesh_assert (_active || _compatibility_mode);
+944   libmesh_assert (_elem_data_closed);
+945 
+946   std::map<const Elem*,
+947     std::vector<Number> >::const_iterator pos = _elem_data\&.find(elem);
+948 
+949   return (pos != _elem_data\&.end());
+950 }
+.fi
+.SS "void libMesh::MeshData::insert_elem_data (std::map< const \fBElem\fP *, std::vector< \fBNumber\fP > > &ed, const boolclose_node_data = \fCtrue\fP)"
+For the desperate user, element-associated boundary conditions may be inserted directly through the map \fCed\fP\&. Similar to the version for nodal data, it is imperative that the local \fC_elem_data\fP is empty, that the id maps are closed, that the size of the \fCstd::vector's\fP of each map have identical length and that the \fCElem*\fP point to elements of the associated mesh\&. Note that this method takes a non-const reference and essentially clears the passed-in data\&. If \fCclose_node_data\fP is \fCtrue\fP (default), then this \fC\fBMeshData\fP\fP is ready for use: write to file, use the operator() methods etc\&. If \fCfalse\fP, the user \fIhas\fP to add nodal data, too\&. 
+.PP
+Definition at line 601 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_data, _elem_data_closed, _elem_id_map_closed, _node_data_closed, _node_id_map_closed, libMesh::err, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+604 {
+605   libmesh_assert (this->_active || this->_compatibility_mode);
+606   // these are also true in compatibility mode
+607   libmesh_assert (this->_elem_id_map_closed);
+608 
+609   if (this->_elem_data_closed)
+610     {
+611       libMesh::err << "ERROR: Element data already closed!  Use clear() first!"
+612                    << std::endl;
+613       libmesh_error();
+614     }
+615 
+616   libmesh_assert (this->_elem_data\&.empty());
+617 
+618 #ifdef DEBUG
+619   std::map<const Elem*,
+620     std::vector<Number> >::const_iterator ed_pos = ed\&.begin();
+621   std::map<const Elem*,
+622     std::vector<Number> >::const_iterator ed_end = ed\&.end();
+623 
+624   // Compare entity-by-entity that the
+625   // sizes of the std::vector's are identical\&.
+626   const unsigned int reference_length = (*ed_pos)\&.second\&.size();
+627   ++ed_pos;
+628 
+629   for (; ed_pos != ed_end; ++ed_pos)
+630     if ( (*ed_pos)\&.second\&.size() != reference_length)
+631       {
+632         libMesh::err << "ERROR: Size mismatch\&."
+633                      << std::endl;
+634         libmesh_error();
+635       }
+636 #endif
+637 
+638   // copy over
+639   _elem_data = ed;
+640 
+641   // we may freely trash the ed
+642   ed\&.clear();
+643 
+644   // close elem data
+645   this->_elem_data_closed = true;
+646 
+647   // if user wants to, then close node data, too
+648   if (close_node_data)
+649     {
+650       libmesh_assert((this->_node_id_map_closed));
+651       this->_node_data_closed = true;
+652     }
+653 }
+.fi
+.SS "void libMesh::MeshData::insert_node_data (std::map< const \fBNode\fP *, std::vector< \fBNumber\fP > > &nd, const boolclose_elem_data = \fCtrue\fP)"
+For the desperate user, nodal boundary conditions may be inserted directly through the map \fCnd\fP\&. It is mandatory that there does not yet exist any other node data in this object, that the id maps are closed, that the size of the std::vector's of each map have identical length and that the Node* point to nodes of the associated mesh\&. Note that this method takes a non-const reference and essentially clears the passed-in data\&. If \fCclose_elem_data\fP is \fCtrue\fP (default), then this \fC\fBMeshData\fP\fP is ready for use: write to file, use the operator() methods etc\&. If \fCfalse\fP, the user \fIhas\fP to add element-associated data, too\&. 
+.PP
+Definition at line 537 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_data_closed, _elem_id_map_closed, _node_data, _node_data_closed, _node_id_map_closed, libMesh::err, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+540 {
+541   libmesh_assert (this->_active || this->_compatibility_mode);
+542   // these are also true in compatibility mode
+543   libmesh_assert (this->_node_id_map_closed);
+544 
+545   if (this->_node_data_closed)
+546     {
+547       libMesh::err << "ERROR: Nodal data already closed!  Use clear() first!"
+548                    << std::endl;
+549       libmesh_error();
+550     }
+551 
+552   libmesh_assert (this->_node_data\&.empty());
+553 
+554 #ifdef DEBUG
+555   std::map<const Node*,
+556     std::vector<Number> >::const_iterator nd_pos = nd\&.begin();
+557   std::map<const Node*,
+558     std::vector<Number> >::const_iterator nd_end = nd\&.end();
+559 
+560   // Compare entity-by-entity that the
+561   // sizes of the std::vector's are identical\&.
+562   // For this, simply take the length of the 0th
+563   // entry as reference length, and compare this
+564   // with the length of the 1st, 2nd\&.\&.\&.
+565   libmesh_assert (nd_pos != nd_end);
+566   const unsigned int reference_length = (*nd_pos)\&.second\&.size();
+567 
+568   // advance, so that we compare with the 1st
+569   ++nd_pos;
+570 
+571   for (; nd_pos != nd_end; ++nd_pos)
+572     if ( (*nd_pos)\&.second\&.size() != reference_length)
+573       {
+574         libMesh::err << "ERROR: Size mismatch\&."
+575                      << std::endl;
+576         libmesh_error();
+577       }
+578 #endif
+579 
+580   // copy over
+581   _node_data = nd;
+582 
+583   // we may freely trash the nd
+584   nd\&.clear();
+585 
+586   // close node data
+587   this->_node_data_closed = true;
+588 
+589   // if user wants to, then close elem data, too
+590   if (close_elem_data)
+591     {
+592       libmesh_assert((this->_elem_id_map_closed));
+593       this->_elem_data_closed = true;
+594     }
+595 }
+.fi
+.SS "unsigned int libMesh::MeshData::n_elem_data () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of elements for which this \fC\fBMeshData\fP\fP has data stored\&. 
+.RE
+.PP
+
+.PP
+Definition at line 708 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_data, _elem_data_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by get_info()\&.
+.PP
+.nf
+709 {
+710   libmesh_assert (this->_active || this->_compatibility_mode);
+711   libmesh_assert (this->_elem_data_closed);
+712 
+713   return _elem_data\&.size();
+714 }
+.fi
+.SS "unsigned int libMesh::MeshData::n_node_data () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of nodes for which this \fC\fBMeshData\fP\fP has data stored\&. 
+.RE
+.PP
+
+.PP
+Definition at line 678 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _node_data, _node_data_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by get_info()\&.
+.PP
+.nf
+679 {
+680   libmesh_assert (this->_active || this->_compatibility_mode);
+681   libmesh_assert (this->_node_data_closed);
+682 
+683   return this->_node_data\&.size();
+684 }
+.fi
+.SS "unsigned int libMesh::MeshData::n_val_per_elem () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of \fCNumber\fP -type data (i\&.e\&., the size of the \fCstd::vector<Number>\fP returned through the \fCoperator()\fP methods) associated with an element\&. Returns 0 when there is no element-associated data\&. 
+.RE
+.PP
+
+.PP
+Definition at line 689 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_data, _elem_data_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by get_info()\&.
+.PP
+.nf
+690 {
+691   libmesh_assert (this->_active || this->_compatibility_mode);
+692   libmesh_assert (this->_elem_data_closed);
+693 
+694   if (!_elem_data\&.empty())
+695     {
+696       std::map<const Elem*,
+697         std::vector<Number> >::const_iterator pos = _elem_data\&.begin();
+698       libmesh_assert (pos != _elem_data\&.end());
+699       return (pos->second\&.size());
+700     }
+701   else
+702     return 0;
+703 }
+.fi
+.SS "unsigned int libMesh::MeshData::n_val_per_node () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of \fCNumber\fP -type data (i\&.e\&., the size of the \fCstd::vector<Number>\fP returned through the \fCoperator()\fP methods) associated with a node\&. Returns 0 when no nodal data exists\&. 
+.RE
+.PP
+
+.PP
+Definition at line 659 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _node_data, _node_data_closed, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by get_info(), translate(), and write_unv_implementation()\&.
+.PP
+.nf
+660 {
+661   libmesh_assert (this->_active || this->_compatibility_mode);
+662   libmesh_assert (this->_node_data_closed);
+663 
+664   if (!this->_node_data\&.empty())
+665     {
+666       std::map<const Node*,
+667         std::vector<Number> >::const_iterator pos = _node_data\&.begin();
+668       libmesh_assert (pos != _node_data\&.end());
+669       return (pos->second\&.size());
+670     }
+671   else
+672     return 0;
+673 }
+.fi
+.SS "\fBMeshData::const_node_data_iterator\fP libMesh::MeshData::node_data_begin () const\fC [inline]\fP"
+Returns the \fC\fBMeshData::const_node_data_iterator\fP\fP which points to the beginning of the \fCNode*\fP data containers used here\&. 
+.PP
+Definition at line 903 of file mesh_data\&.h\&.
+.PP
+References _node_data\&.
+.PP
+.nf
+904 {
+905   return _node_data\&.begin();
+906 }
+.fi
+.SS "\fBMeshData::const_node_data_iterator\fP libMesh::MeshData::node_data_end () const\fC [inline]\fP"
+Returns the \fC\fBMeshData::const_node_data_iterator\fP\fP which points to the end of the \fCNode*\fP data containers used here\&. 
+.PP
+Definition at line 911 of file mesh_data\&.h\&.
+.PP
+References _node_data\&.
+.PP
+.nf
+912 {
+913   return _node_data\&.end();
+914 }
+.fi
+.SS "bool libMesh::MeshData::node_initialized () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use for \fInodal\fP data, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1028 of file mesh_data\&.h\&.
+.PP
+References _active, and _node_data_closed\&.
+.PP
+Referenced by get_info()\&.
+.PP
+.nf
+1029 {
+1030   return (_active && _node_data_closed);
+1031 }
+.fi
+.SS "unsigned int libMesh::MeshData::node_to_foreign_id (const \fBNode\fP *n) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the foreign id this \fCNode*\fP maps to\&. 
+.RE
+.PP
+
+.PP
+Definition at line 419 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _node_id, _node_id_map_closed, libMesh::err, libMesh::DofObject::id(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::UNVIO::element_out(), libMesh::UNVIO::node_out(), write_unv_implementation(), and write_xdr()\&.
+.PP
+.nf
+420 {
+421   libmesh_assert(n);
+422 
+423   if (_active)
+424     {
+425       // when active, use our _node_id map
+426       libmesh_assert (_node_id_map_closed);
+427 
+428       // look it up in the map
+429       std::map<const Node*,
+430         unsigned int>::const_iterator pos = _node_id\&.find(n);
+431 
+432       if (pos == _node_id\&.end())
+433         {
+434           libMesh::err << "ERROR: No foreign id stored for the node "
+435                        << "with the libMesh id = "
+436                        << n->id()
+437                        << std::endl;
+438           libmesh_error();
+439           return 0;
+440         }
+441       else
+442         return pos->second;
+443     }
+444   else if (_compatibility_mode)
+445     // when only in compatibility mode,
+446     // return libMesh's node id
+447     return n->id();
+448 
+449   // should never get here
+450   libmesh_error();
+451   return 0;
+452 }
+.fi
+.SS "\fBNumber\fP libMesh::MeshData::operator() (const \fBNode\fP *node, const unsigned inti = \fC0\fP) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $ i^{th} $ value (defaults to 0) associated with node \fCnode\fP\&. Returns \fC\fBlibMesh::zero\fP\fP when there is no such \fCnode\fP in the map\&. 
+.RE
+.PP
+
+.PP
+Definition at line 838 of file mesh_data\&.h\&.
+.PP
+References _active, _compatibility_mode, _node_data, _node_data_closed, libMesh::libmesh_assert(), and libMesh::zero\&.
+.PP
+.nf
+840 {
+841   libmesh_assert (_active || _compatibility_mode);
+842   libmesh_assert (_node_data_closed);
+843 
+844   std::map<const Node*,
+845     std::vector<Number> >::const_iterator pos = _node_data\&.find(node);
+846 
+847   if (pos == _node_data\&.end())
+848     return libMesh::zero;
+849 
+850   // we only get here when pos != _node_data\&.end()
+851   libmesh_assert_less (i, pos->second\&.size());
+852   return pos->second[i];
+853 }
+.fi
+.SS "\fBNumber\fP libMesh::MeshData::operator() (const \fBElem\fP *elem, const unsigned inti = \fC0\fP) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the $ i^{th} $ value (defaults to 0) associated with element \fCelem\fP\&. Returns \fC\fBlibMesh::zero\fP\fP when there is no data for \fCelem\fP in the map\&. 
+.RE
+.PP
+
+.PP
+Definition at line 921 of file mesh_data\&.h\&.
+.PP
+References _active, _compatibility_mode, _elem_data, _elem_data_closed, libMesh::libmesh_assert(), and libMesh::zero\&.
+.PP
+.nf
+923 {
+924   libmesh_assert (_active || _compatibility_mode);
+925   libmesh_assert (_elem_data_closed);
+926 
+927   std::map<const Elem*,
+928     std::vector<Number> >::const_iterator pos = _elem_data\&.find(elem);
+929 
+930   if (pos == _elem_data\&.end())
+931     return libMesh::zero;
+932 
+933   // we only get here when pos != _elem_data\&.end()
+934   libmesh_assert_less (i, pos->second\&.size());
+935   return pos->second[i];
+936 }
+.fi
+.SS "void libMesh::MeshData::print_info (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const"
+Prints relevant information about the mesh\&. 
+.PP
+Definition at line 367 of file mesh_data\&.C\&.
+.PP
+References get_info()\&.
+.PP
+Referenced by libMesh::operator<<()\&.
+.PP
+.nf
+368 {
+369   os << this->get_info()
+370      << std::endl;
+371 }
+.fi
+.SS "void libMesh::MeshData::read (const std::string &name)"
+Read mesh data from file named \fCname\fP\&. Guess format from the file extension\&. Note that prior to this you have to at least either \fCclose_node_map()\fP or \fCclose_elem_map()\fP\&. 
+.PP
+Definition at line 237 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_id_map_closed, _node_id_map_closed, compatibility_mode(), libMesh::DECODE, libMesh::err, libMesh::libmesh_assert(), libMesh::READ, read_tetgen(), read_unv(), read_xdr(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+238 {
+239   START_LOG("read()", "MeshData");
+240 
+241   libmesh_assert (_active || _compatibility_mode);
+242 
+243   // the id maps have to be closed before reading
+244   // (note that in compatibility mode these are also true)
+245   libmesh_assert (_elem_id_map_closed && _node_id_map_closed);
+246 
+247 #ifdef DEBUG
+248   if (this->compatibility_mode())
+249     libMesh::err << "WARNING: MeshData in compatibility mode, node and element ids" << std::endl
+250                  << "         stored in file may be totally different from libMesh ids!" << std::endl;
+251 #endif
+252 
+253   // Read the file based on extension\&.  We let all processors read the
+254   // data because it would be inaccurate to let only one processor
+255   // have it and we're too lazy to code up a proper parallel read or
+256   // read+broadcast right now\&.
+257 
+258   if (name\&.rfind("\&.xta") < name\&.size())
+259     this->read_xdr (name, READ);
+260 
+261   else if (name\&.rfind("\&.xtr")  < name\&.size())
+262     this->read_xdr (name, DECODE);
+263 
+264   else if (name\&.rfind("\&.unv") < name\&.size())
+265     this->read_unv (name);
+266 
+267   else if ((name\&.rfind("\&.node") < name\&.size()) ||
+268            (name\&.rfind("\&.ele") < name\&.size()))
+269     this->read_tetgen (name);
+270 
+271   else
+272     {
+273       libMesh::err << " ERROR: Unrecognized file extension: " << name
+274                    << "\n   I understand the following:\n\n"
+275                    << "     *\&.xta  -- Internal ASCII data format\n"
+276                    << "     *\&.xtr  -- Internal binary data format\n"
+277                    << "     *\&.unv  -- I-deas format\n"
+278                    << std::endl;
+279       libmesh_error();
+280 
+281     }
+282   STOP_LOG("read()", "MeshData");
+283 }
+.fi
+.SS "void libMesh::MeshData::read_tetgen (const std::string &name)\fC [protected]\fP"
+Read nodal/element oriented data in TetGen format\&. 
+.PP
+Definition at line 34 of file mesh_data_tetgen_support\&.C\&.
+.PP
+References _data_descriptor, _elem_data, _elem_data_closed, _node_data, _node_data_closed, libMesh::err, foreign_id_to_elem(), foreign_id_to_node(), libMesh::MeshTools::n_elem(), n_nodes, libMesh::Quality::name(), and libMesh::Real\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+35 {
+36   std::string name_node, name_ele, dummy;
+37   std::string desc = name;
+38 
+39 
+40   // Check name for *\&.node or *\&.ele extension\&.
+41   // Set std::istream for node_stream and ele_stream\&.
+42   if (name\&.rfind("\&.node") < name\&.size())
+43     {
+44       name_node = name;
+45       dummy     = name;
+46       std::size_t position = dummy\&.rfind("\&.node");
+47       name_ele     = dummy\&.replace(position, 5, "\&.ele");
+48       desc\&.erase(position);
+49     }
+50   else if (name\&.rfind("\&.ele") < name\&.size())
+51     {
+52       name_ele = name;
+53       dummy    = name;
+54       std::size_t position = dummy\&.rfind("\&.ele");
+55       name_node    = dummy\&.replace(position, 4, "\&.node");
+56       desc\&.erase(position);
+57     }
+58   else
+59     {
+60       libMesh::err << "ERROR: Unrecognized file name: "
+61                    << name << std::endl;
+62       libmesh_error();
+63     }
+64 
+65   // Set the streams from which to read in\&.
+66   std::ifstream node_stream (name_node\&.c_str());
+67   std::ifstream ele_stream  (name_ele\&.c_str());
+68 
+69   if ( !node_stream\&.good() || !ele_stream\&.good() )
+70     {
+71       libMesh::err << "ERROR: One or both Input file(s) not good\&." << std::endl
+72                    << "Error checking files "
+73                    << name_node << " and "
+74                    << name_ele  << std::endl;
+75       libmesh_error();
+76     }
+77 
+78 
+79   // Set the descriptive name\&.
+80   // TetGen won't give a name, so we use the filename\&.
+81   this->_data_descriptor = desc;
+82 
+83 
+84   //--------------------------------------------------
+85   // Read in the data associated with the nodes\&.
+86   {
+87     unsigned int n_node=0, f_n_id=0, nAttri=0, BoundMark=0;
+88     Real dummy_val=0\&.0;
+89     std::vector<Number> AttriValue;
+90 
+91     // Read the parameters from the node_stream\&.
+92     node_stream >> n_node     // Read the number of nodes
+93                 >> dummy_val  // Read the dimension
+94                 >> nAttri     // Read the number of attributes
+95                 >> BoundMark; // (0 or 1) boundary markers are in the stream or not\&.
+96 
+97     // Resize the values vector\&.
+98     AttriValue\&.resize(nAttri);
+99 
+100     for (unsigned int i=0; i<n_node; i++)
+101       {
+102         node_stream >> f_n_id;
+103 
+104 
+105         // Read the nodal coordinates for this node into dummy_val,
+106         // since we don't need them\&.
+107         for (unsigned int j=0; j<3; j++)
+108           node_stream >> dummy_val;
+109 
+110         // Read the attributes from the stream\&.
+111         for (unsigned int j=0; j<nAttri; j++)
+112           node_stream >> AttriValue[j];
+113 
+114         // Read boundary marker if BoundaryMarker=1\&.
+115         if (BoundMark == 1)
+116           node_stream >> dummy_val;
+117 
+118         // For the foreign node id locate the Node*\&.
+119         const Node* node = foreign_id_to_node(f_n_id);
+120 
+121         // Insert this node and the values in our _node_data\&.
+122         _node_data\&.insert (std::make_pair(node, AttriValue));
+123       }
+124   }
+125 
+126 
+127   //--------------------------------------------------
+128   // Read in the data associated with the elements\&.
+129   {
+130     unsigned int n_elem, f_e_id, n_nodes, nAttri=0;
+131     Real dummy_val=0\&.0;
+132     std::vector<Number> AttriValue;
+133 
+134     // Read the parameters from the ele_stream\&.
+135     ele_stream >> n_elem   // Read the number of tetrahedrons
+136                >> n_nodes  // Read the points per tetrahedron
+137                >> nAttri;  // Read the number of attributes
+138 
+139     // Resize the values vector\&.
+140     AttriValue\&.resize(nAttri);
+141 
+142     for (unsigned int i=0; i<n_elem; i++)
+143       {
+144         ele_stream >> f_e_id;
+145 
+146         // For the number of nodes for this element read them into dummy_val,
+147         // since we don't need them\&.
+148         for (unsigned int n=0; n<n_nodes; n++)
+149           ele_stream >> dummy_val;
+150 
+151         // Read the attributes from the stream\&.
+152         for (unsigned int j=0; j<nAttri; j++)
+153           ele_stream >> AttriValue[j];
+154 
+155         // For the foreign elem id locate the Elem*\&.
+156         const Elem* elem = foreign_id_to_elem(f_e_id);
+157 
+158         // Insert this elem and the values in our _elem_data\&.
+159         _elem_data\&.insert (std::make_pair(elem, AttriValue));
+160       }
+161   }
+162 
+163   //--------------------------------------------------
+164   // Finished reading\&.  Now ready for use\&.
+165   this->_node_data_closed = true;
+166   this->_elem_data_closed = true;
+167 
+168   node_stream\&.close();
+169   ele_stream\&.close();
+170 }
+.fi
+.SS "void libMesh::MeshData::read_unv (const std::string &file_name)\fC [protected]\fP"
+Read nodal/element oriented data in UNV format, either from an ASCII file or from a gzip'ed ASCII file, using the C++ wrapper \fCgzstream\fP to \fCzlib\&.h\fP\&. 
+.PP
+Definition at line 39 of file mesh_data_unv_support\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_id_map_closed, _node_id_map_closed, clear(), libMesh::err, libMesh::libmesh_assert(), and read_unv_implementation()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+40 {
+41   /*
+42    * we should better be active or in compatibility mode
+43    */
+44   libmesh_assert (this->_active || this->_compatibility_mode);
+45 
+46   /*
+47    * When reading data, make sure the id maps are ok
+48    */
+49   libmesh_assert (this->_node_id_map_closed);
+50   libmesh_assert (this->_elem_id_map_closed);
+51 
+52   /*
+53    * clear the data, but keep the id maps
+54    */
+55   this->clear();
+56 
+57   /*
+58    * We can read either "\&.unv", or "\&.unv\&.gz"
+59    * files, provided zlib\&.h is there
+60    */
+61   if (file_name\&.rfind("\&.gz") < file_name\&.size())
+62     {
+63 #ifdef LIBMESH_HAVE_GZSTREAM
+64       igzstream in_stream(file_name\&.c_str());
+65       this->read_unv_implementation (in_stream);
+66 #else
+67       libMesh::err << "ERROR:  You must have the zlib\&.h header "
+68                    << "files and libraries to read and write "
+69                    << "compressed streams\&."
+70                    << std::endl;
+71       libmesh_error();
+72 #endif
+73       return;
+74     }
+75 
+76   else
+77     {
+78       std::ifstream in_stream(file_name\&.c_str());
+79       this->read_unv_implementation (in_stream);
+80       return;
+81     }
+82 }
+.fi
+.SS "void libMesh::MeshData::read_unv_implementation (std::istream &in_file)\fC [protected]\fP"
+Actual implementation of reading nodal/element oriented data in UNV format\&. This has to be decoupled from \fC\fBread_unv()\fP\fP in order to allow reading both \fC\fP\&.unv and \fC\fP\&.unv\&.gz files\&. 
+.PP
+Definition at line 89 of file mesh_data_unv_support\&.C\&.
+.PP
+References _elem_data, _elem_data_closed, _node_data, _node_data_closed, _unv_header, libMesh::MeshDataUnvHeader::data_type, libMesh::MeshDataUnvHeader::dataset_location, libMesh::err, foreign_id_to_node(), libMesh::libmesh_assert(), libMesh::MeshDataUnvHeader::need_D_to_e(), libMesh::MeshDataUnvHeader::nvaldc, libMesh::MeshDataUnvHeader::read(), and libMesh::Real\&.
+.PP
+Referenced by read_unv()\&.
+.PP
+.nf
+90 {
+91   /*
+92    * This is the actual implementation of
+93    * reading in UNV format\&.  This enables
+94    * to read either through the conventional
+95    * C++ stream, or through a stream that
+96    * allows to read \&.gz'ed files\&.
+97    */
+98   if ( !in_file\&.good() )
+99     {
+100       libMesh::err << "ERROR: Input file not good\&."
+101                    << std::endl;
+102       libmesh_error();
+103     }
+104 
+105   const std::string _label_dataset_mesh_data = "2414";
+106 
+107   /*
+108    * locate the beginning of data set
+109    * and read it\&.
+110    */
+111   {
+112     std::string olds, news;
+113 
+114     while (true)
+115       {
+116         in_file >> olds >> news;
+117 
+118         /*
+119          * Yes, really dirty:
+120          *
+121          * When we found a dataset, and the user does
+122          * not want this dataset, we jump back here
+123          */
+124       go_and_find_the_next_dataset:
+125 
+126         /*
+127          * a "-1" followed by a number means the beginning of a dataset
+128          * stop combing at the end of the file
+129          */
+130         while( ((olds != "-1") || (news == "-1") ) && !in_file\&.eof() )
+131           {
+132             olds = news;
+133             in_file >> news;
+134           }
+135 
+136         if(in_file\&.eof())
+137           break;
+138 
+139         /*
+140          * if beginning of dataset
+141          */
+142         if (news == _label_dataset_mesh_data)
+143           {
+144 
+145             /*
+146              * Now read the data of interest\&.
+147              * Start with the header\&.  For
+148              * explanation of the variable
+149              * dataset_location, see below\&.
+150              */
+151             unsigned int dataset_location;
+152 
+153             /*
+154              * the type of data (complex, real,
+155              * float, double etc, see below)
+156              */
+157             unsigned int data_type;
+158 
+159             /*
+160              * the number of floating-point values per entity
+161              */
+162             unsigned int NVALDC;
+163 
+164 
+165             /*
+166              * If there is no MeshDataUnvHeader object
+167              * attached
+168              */
+169             if (_unv_header==NULL)
+170               {
+171                 /*
+172                  * Ignore the first lines that stand for
+173                  * analysis dataset label and name\&.
+174                  */
+175                 for(unsigned int i=0; i<3; i++)
+176                   in_file\&.ignore(256,'\n');
+177 
+178                 /*
+179                  * Read the dataset location, where
+180                  * 1: Data at nodes
+181                  * 2: Data on elements
+182                  * other sets are currently not supported\&.
+183                  */
+184                 in_file >> dataset_location;
+185 
+186                 /*
+187                  * Ignore five ID lines\&.
+188                  */
+189                 for(unsigned int i=0; i<6; i++)
+190                   in_file\&.ignore(256,'\n');
+191 
+192                 /*
+193                  * These data are all of no interest to us\&.\&.\&.
+194                  */
+195                 unsigned int model_type,
+196                   analysis_type,
+197                   data_characteristic,
+198                   result_type;
+199 
+200                 /*
+201                  * Read record 9\&.
+202                  */
+203                 in_file >> model_type           // not used here
+204                         >> analysis_type        // not used here
+205                         >> data_characteristic  // not used here
+206                         >> result_type          // not used here
+207                         >> data_type
+208                         >> NVALDC;
+209 
+210 
+211                 /*
+212                  * Ignore record 10 and 11
+213                  * (Integer analysis type specific data)\&.
+214                  */
+215                 for (unsigned int i=0; i<3; i++)
+216                   in_file\&.ignore(256,'\n');
+217 
+218                 /*
+219                  * Ignore record 12 and record 13\&.  Since there
+220                  * exist UNV files with 'D' instead of 'e' as
+221                  * 10th-power char, it is safer to use a string
+222                  * to read the dummy reals\&.
+223                  */
+224                 {
+225                   std::string dummy_Real;
+226                   for (unsigned int i=0; i<12; i++)
+227                     in_file >> dummy_Real;
+228                 }
+229 
+230               }
+231             else
+232               {
+233 
+234                 /*
+235                  * the read() method returns false when
+236                  * the user wanted a special header, and
+237                  * when the current header is _not_ the correct
+238                  * header
+239                  */
+240                 if (_unv_header->read(in_file))
+241                   {
+242                     dataset_location = _unv_header->dataset_location;
+243                     NVALDC = _unv_header->nvaldc;
+244                     data_type = _unv_header->data_type;
+245                   }
+246                 else
+247                   {
+248                     /*
+249                      * This is not the correct header\&.  Go
+250                      * and find the next\&.  For this to
+251                      * work correctly, shift to the
+252                      * next line, so that the "-1"
+253                      * disappears from olds
+254                      */
+255                     olds = news;
+256                     in_file >> news;
+257 
+258                     /*
+259                      * No good style, i know\&.\&.\&.
+260                      */
+261                     goto go_and_find_the_next_dataset;
+262                   }
+263 
+264               }
+265 
+266             /*
+267              * Check the location of the dataset\&.
+268              */
+269             if (dataset_location != 1)
+270               {
+271                 libMesh::err << "ERROR: Currently only Data at nodes is supported\&."
+272                              << std::endl;
+273                 libmesh_error();
+274               }
+275 
+276 
+277             /*
+278              * Now get the foreign node id number and the respective nodal data\&.
+279              */
+280             int f_n_id;
+281             std::vector<Number> values;
+282 
+283             while(true)
+284               {
+285                 in_file >> f_n_id;
+286 
+287                 /*
+288                  * if node_nr = -1 then we have reached the end of the dataset\&.
+289                  */
+290                 if (f_n_id==-1)
+291                   break;
+292 
+293                 /*
+294                  * Resize the values vector (usually data in three
+295                  * principle directions, i\&.e\&. NVALDC = 3)\&.
+296                  */
+297                 values\&.resize(NVALDC);
+298 
+299                 /*
+300                  * Read the meshdata for the respective node\&.
+301                  */
+302                 for (unsigned int data_cnt=0; data_cnt<NVALDC; data_cnt++)
+303                   {
+304                     /*
+305                      * Check what data type we are reading\&.
+306                      * 2,4: Real
+307                      * 5,6: Complex
+308                      * other data types are not supported yet\&.
+309                      * As again, these floats may also be written
+310                      * using a 'D' instead of an 'e'\&.
+311                      */
+312                     if (data_type == 2 || data_type == 4)
+313                       {
+314                         std::string buf;
+315                         in_file >> buf;
+316                         MeshDataUnvHeader::need_D_to_e(buf);
+317 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+318                         values[data_cnt] = Complex(std::atof(buf\&.c_str()), 0\&.);
+319 #else
+320                         values[data_cnt] = std::atof(buf\&.c_str());
+321 #endif
+322                       }
+323 
+324                     else if(data_type == 5 || data_type == 6)
+325 
+326                       {
+327 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+328                         Real re_val, im_val;
+329 
+330                         std::string buf;
+331                         in_file >> buf;
+332 
+333                         if (MeshDataUnvHeader::need_D_to_e(buf))
+334                           {
+335                             re_val = std::atof(buf\&.c_str());
+336                             in_file >> buf;
+337                             MeshDataUnvHeader::need_D_to_e(buf);
+338                             im_val = std::atof(buf\&.c_str());
+339                           }
+340                         else
+341                           {
+342                             re_val = std::atof(buf\&.c_str());
+343                             in_file >> im_val;
+344                           }
+345 
+346                         values[data_cnt] = Complex(re_val,im_val);
+347 #else
+348 
+349                         libMesh::err << "ERROR: Complex data only supported" << std::endl
+350                                      << "when libMesh is configured with --enable-complex!"
+351                                      << std::endl;
+352                         libmesh_error();
+353 #endif
+354                       }
+355 
+356                     else
+357                       {
+358                         libMesh::err << "ERROR: Data type not supported\&."
+359                                      << std::endl;
+360                         libmesh_error();
+361                       }
+362 
+363                   } // end loop data_cnt
+364 
+365                 /*
+366                  * Add the values vector to the MeshData data structure\&.
+367                  */
+368                 const Node* node = foreign_id_to_node(f_n_id);
+369                 _node_data\&.insert (std::make_pair(node, values));
+370 
+371               } // while(true)
+372           }
+373 
+374 
+375         else
+376           {
+377             /*
+378              * all other datasets are ignored
+379              */
+380           }
+381 
+382       }
+383   }
+384 
+385 
+386   /*
+387    * finished reading\&.  Ready for use, provided
+388    * there was any data contained in the file\&.
+389    */
+390   libmesh_assert ((this->_node_data\&.size() != 0) || (this->_elem_data\&.size() != 0));
+391 
+392   this->_node_data_closed = true;
+393   this->_elem_data_closed = true;
+394 }
+.fi
+.SS "void libMesh::MeshData::read_xdr (const std::string &name, const \fBXdrMODE\fPmode = \fC\fBREAD\fP\fP)\fC [protected]\fP"
+Read nodal/element oriented data using the \fC\fBXdr\fP\fP class that enables both ASCII and binary format through the same interface\&. By default uses ASCII format, but may easily be changed setting \fCmode\fP to \fCDECODE\fP\&. This code implements the output of the \fBMeshData\fP object in XDR format\&. This warrants some documentation\&. The output consists of 8 sections:
+.PP
+1\&.) The name of the data stored, if provided (string)
+.PP
+2\&.) A switch whether real or complex data is stored (string)
+.PP
+3\&.) The number of nodes for which values are stored (unsigned int)
+.PP
+4\&.) The number of elements for which values are stored (unsigned int)
+.PP
+for each node
+.PP
+5\&.) The foreign node id (unsigned int)
+.PP
+6\&.) The actual values (vector of real/complex)
+.PP
+end node loop
+.PP
+for each element
+.PP
+7\&.) The foreign element id (unsigned int)
+.PP
+8\&.) The actual values (vector of real/complex)
+.PP
+end node loop
+.PP
+Note that the actual IO is handled through the \fBXdr\fP class (to be renamed later?) which provides a uniform interface to both the XDR (eXternal Data Representation) interface and standard ASCII output\&. Thus this one section of code will write XDR or ASCII files with no changes\&.
+.PP
+clear the data, but keep the id maps
+.PP
+1\&.)
+.PP
+Read the descriptive name
+.PP
+2\&.)
+.PP
+Read: either real or complex
+.PP
+3\&.)
+.PP
+Read the number of nodes for which data is there
+.PP
+4\&.)
+.PP
+Read the number of elements for which data is there
+.PP
+5\&.)
+.PP
+Read the foreign node id, locate the Node* associated with this foreign id
+.PP
+6\&.)
+.PP
+the actual values for this node, \fBXdr\fP knows the length
+.PP
+insert this node and the values in the _node_data
+.PP
+7\&.)
+.PP
+Read the foreign elem id, locate the Elem*
+.PP
+8\&.)
+.PP
+the actual values for this elem, \fBXdr\fP knows how many
+.PP
+insert this elem and the values in our _elem_data \fIonly\fP when we own this element!
+.PP
+Definition at line 35 of file mesh_data_xdr_support\&.C\&.
+.PP
+References _active, _compatibility_mode, _data_descriptor, _elem_data, _elem_data_closed, _elem_id_map_closed, _mesh, _node_data, _node_data_closed, _node_id_map_closed, clear(), libMesh::Xdr::data(), libMesh::err, foreign_id_to_elem(), foreign_id_to_node(), libMesh::libmesh_assert(), libMesh::MeshTools::n_elem(), libMesh::ParallelObject::processor_id(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+37 {
+77   // we should better be active or in compatibility mode
+78   libmesh_assert (_active || _compatibility_mode);
+79 
+80 
+81   // make sure the id maps are ready
+82   libmesh_assert (_node_id_map_closed);
+83   libmesh_assert (_elem_id_map_closed);
+84 
+85 
+89   this->clear();
+90 
+91 
+92   Xdr io(name, mode);
+93 
+94 
+95   /*
+96    * all processors read the data in the same format,
+97    * but only the processor that owns the element stores
+98    * element-associated data\&.  For nodes, i haven't come
+99    * up with such asmart idea, yet\&.\&.\&. :-P
+100    */
+101   const unsigned int proc_id = _mesh\&.processor_id();
+102 
+103 
+104 
+110   {
+111     std::string desc = "";
+112     io\&.data (desc);
+113     this->_data_descriptor = desc;
+114   }
+115 
+116 
+117 
+123   {
+124     std::string vtype="";
+125     io\&.data (vtype);
+126 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+127     if (vtype != "COMPLEX")
+128       {
+129         libMesh::err << "ERROR: File does not contain complex-valued data!"
+130                      << std::endl;
+131         libmesh_error();
+132       }
+133 #elif LIBMESH_USE_REAL_NUMBERS
+134     if (vtype != "REAL")
+135       {
+136         libMesh::err << "ERROR: File does not contain real-valued data!"
+137                      << std::endl;
+138         libmesh_error();
+139       }
+140 #else
+141     /*
+142      * What number type is this?
+143      */
+144     libmesh_error();
+145 #endif
+146   }
+147 
+148 
+149 
+155   unsigned int n_node = 0;
+156   io\&.data (n_node);
+157 
+158 
+164   unsigned int n_elem = 0;
+165   io\&.data (n_elem);
+166 
+167 #ifdef DEBUG
+168   unsigned int previous_values_size = 0;
+169 #endif
+170 
+171   for (unsigned int n_cnt=0; n_cnt < n_node; n_cnt++)
+172     {
+179       unsigned int f_id = 0;
+180       io\&.data (f_id);
+181 
+182       const Node* node = foreign_id_to_node(f_id);
+183 
+184 
+191       {
+192         std::vector<Number> values;
+193         io\&.data (values);
+194 
+195 
+196 #ifdef DEBUG
+197         /*
+198          * make sure the size of the values vectors
+199          * are identical for all nodes
+200          */
+201         if (n_cnt == 0)
+202           previous_values_size = values\&.size();
+203         else
+204           {
+205             if (previous_values_size != values\&.size())
+206               {
+207                 libMesh::err << "ERROR: Size mismatch for n_cnt = " << n_cnt << std::endl;
+208                 libmesh_error();
+209               }
+210           }
+211 #endif
+212 
+213 
+217         _node_data\&.insert (std::make_pair(node, values));
+218       }
+219     }
+220 
+221 
+222 
+223 #ifdef DEBUG
+224   previous_values_size = 0;
+225 #endif
+226 
+227   for (unsigned int n_cnt=0; n_cnt < n_elem; n_cnt++)
+228     {
+234       unsigned int f_id = 0;
+235       io\&.data (f_id);
+236 
+237       const Elem* elem = foreign_id_to_elem(f_id);
+238 
+239 
+246       {
+247         std::vector<Number> values;
+248         io\&.data (values);
+249 
+250 
+251 #ifdef DEBUG
+252         /*
+253          * make sure the size of the values vectors
+254          * are identical for all elements
+255          */
+256         if (n_cnt == 0)
+257           previous_values_size = values\&.size();
+258         else
+259           {
+260             if (previous_values_size != values\&.size())
+261               {
+262                 libMesh::err << "ERROR: Size mismatch for n_cnt = " << n_cnt << std::endl;
+263                 libmesh_error();
+264               }
+265           }
+266 #endif
+267 
+268 
+273         if (elem->processor_id() == proc_id)
+274           _elem_data\&.insert (std::make_pair(elem, values));
+275       }
+276     }
+277 
+278 
+279   /*
+280    * finished reading\&.  Now ready for use, provided
+281    * there was any data contained in the file\&.
+282    */
+283   libmesh_assert ((this->_node_data\&.size() != 0) || (this->_elem_data\&.size() != 0));
+284 
+285   this->_node_data_closed = true;
+286   this->_elem_data_closed = true;
+287 }
+.fi
+.SS "void libMesh::MeshData::set_data (const \fBNode\fP *node, const std::vector< \fBNumber\fP > &val)\fC [inline]\fP"
+Sets all the data values associated with the node \fCnode\fP, overwriting any existing vector 
+.PP
+Definition at line 894 of file mesh_data\&.h\&.
+.PP
+References _node_data\&.
+.PP
+.nf
+896 {
+897   this->_node_data[node] = val;
+898 }
+.fi
+.SS "void libMesh::MeshData::set_data (const \fBElem\fP *elem, const std::vector< \fBNumber\fP > &val)\fC [inline]\fP"
+Sets all the data values associated with the element \fCelem\fP, overwriting any existing vector 
+.PP
+Definition at line 977 of file mesh_data\&.h\&.
+.PP
+References _elem_data\&.
+.PP
+.nf
+979 {
+980   this->_elem_data[elem] = val;
+981 }
+.fi
+.SS "void libMesh::MeshData::set_unv_header (\fBMeshDataUnvHeader\fP *unv_header)\fC [inline]\fP"
+Set the \fC\fBMeshDataUnvHeader\fP\fP data structure that will be used for output\&. 
+.PP
+Definition at line 1087 of file mesh_data\&.h\&.
+.PP
+References _unv_header, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+1088 {
+1089   libmesh_assert(unv_header);
+1090   this->_unv_header = unv_header;
+1091 }
+.fi
+.SS "void libMesh::MeshData::slim (const boolnode_id_map = \fCtrue\fP, const boolelem_id_map = \fCtrue\fP)"
+Once the data is properly read from file, the id maps can safely be cleared\&. However, if this object should remain able to \fIwrite\fP nodal or element oriented data to file, this method should better \fInot\fP be used\&. Use the appropriate \fCbool\fP to select the id map that should be cleared\&. By default, both id maps are deleted\&. 
+.PP
+Definition at line 122 of file mesh_data\&.C\&.
+.PP
+References _elem_id, _elem_id_map_closed, _id_elem, _id_node, _node_id, _node_id_map_closed, active(), compatibility_mode(), libMesh::err, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+124 {
+125   if (this->active())
+126     {
+127 
+128       if (node_id_map)
+129         {
+130           // dumb check
+131           libmesh_assert (_node_id_map_closed);
+132 
+133           _node_id_map_closed = false;
+134           _node_id\&.clear();
+135           _id_node\&.clear();
+136         }
+137 
+138       if (elem_id_map)
+139         {
+140           // dumb check
+141           libmesh_assert (_elem_id_map_closed);
+142 
+143           _elem_id_map_closed = false;
+144           _elem_id\&.clear();
+145           _id_elem\&.clear();
+146         }
+147     }
+148 
+149 #ifdef DEBUG
+150   else if (this->compatibility_mode())
+151     {
+152       libMesh::err << "WARNING: No need for MeshData::slim() in compatibility mode\&." << std::endl;
+153     }
+154 #endif
+155 }
+.fi
+.SS "void libMesh::MeshData::translate (const \fBMeshBase\fP &out_mesh, std::vector< \fBNumber\fP > &data_values, std::vector< std::string > &data_names) const"
+Translates the \fInodal\fP data contained in this object to \fCdata_values\fP and \fCdata_names\fP\&. These two vectors are particularly suitable for use with the \fC\fBMeshBase::write\fP\fP method that takes nodal data\&. E\&.g\&., the export method may be used for inspecting boundary conditions\&. A reference to the mesh for which the data should be written has to be provided\&. Note that this mesh \fIhas\fP to contain the nodes for which this \fC\fBMeshData\fP\fP holds data\&. I\&.e\&., \fCout_mesh\fP may only refer to the \fC\fBMeshBase\fP\fP itself (that this \fC\fBMeshData\fP\fP belongs to), or its \fC\fBBoundaryMesh\fP\fP, cf\&. \fC\fBMesh\fP\fP\&. 
+.PP
+Definition at line 160 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, libMesh::libmesh_assert(), libMesh::MeshBase::n_nodes(), n_val_per_node(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+163 {
+164   libmesh_assert (_active || _compatibility_mode);
+165 
+166   START_LOG("translate()", "MeshData");
+167 
+168   const unsigned int n_comp = this->n_val_per_node();
+169 
+170   // transfer our nodal data to a vector
+171   // that may be written concurrently
+172   // with the \p out_mesh\&.
+173   {
+174     // reserve memory for the nodal data
+175     values\&.reserve(n_comp*out_mesh\&.n_nodes());
+176 
+177     // iterate over the mesh's nodes
+178     MeshBase::const_node_iterator       nodes_it  = out_mesh\&.nodes_begin();
+179     const MeshBase::const_node_iterator nodes_end = out_mesh\&.nodes_end();
+180 
+181     // Do not use the \p get_data() method, but the operator()
+182     // method, since this returns by default a zero value,
+183     // when there is no nodal data\&.
+184     for (; nodes_it != nodes_end; ++nodes_it)
+185       {
+186         const Node* node = *nodes_it;
+187 
+188         for (unsigned int c= 0; c<n_comp; c++)
+189           values\&.push_back(this->operator()(node, c));
+190       }
+191   }
+192 
+193 
+194 
+195   // Now we have the data, nicely stored in \p values\&.
+196   // It remains to give names to the data, then write to
+197   // file\&.
+198   {
+199     names\&.reserve(n_comp);
+200 
+201     // this naming scheme only works up to n_comp=100
+202     // (at least for gmv-accepted variable names)
+203     libmesh_assert_less (n_comp, 100);
+204 
+205     for (unsigned int n=0; n<n_comp; n++)
+206       {
+207         std::ostringstream name_buf;
+208         name_buf << "bc_" << n;
+209         names\&.push_back(name_buf\&.str());
+210       }
+211   }
+212 
+213   STOP_LOG("translate()", "MeshData");
+214 }
+.fi
+.SS "void libMesh::MeshData::write (const std::string &name)"
+Write mesh data to file named \fCname\fP\&. Guess format from the file extension\&. 
+.PP
+Definition at line 290 of file mesh_data\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_id_map_closed, _node_id_map_closed, compatibility_mode(), libMesh::ENCODE, libMesh::err, libMesh::libmesh_assert(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::WRITE, write_unv(), and write_xdr()\&.
+.PP
+.nf
+291 {
+292   START_LOG("write()", "MeshData");
+293 
+294   libmesh_assert (_active || _compatibility_mode);
+295 
+296   // the id maps have to be closed before writing
+297   // (note that in compatibility mode these are also true)
+298   libmesh_assert (_elem_id_map_closed && _node_id_map_closed);
+299 
+300 #ifdef DEBUG
+301   if (this->compatibility_mode())
+302     libMesh::err << "WARNING: MeshData in compatibility mode\&.  Node and element ids" << std::endl
+303                  << "         written to file may differ from libMesh numbering" << std::endl
+304                  << "         next time this file is read!" << std::endl;
+305 #endif
+306 
+307   // Read the file based on extension
+308   {
+309     if (name\&.rfind("\&.xta") < name\&.size())
+310       write_xdr (name, WRITE);
+311 
+312     else if (name\&.rfind("\&.xtr")  < name\&.size())
+313       write_xdr (name, ENCODE);
+314 
+315     else if (name\&.rfind("\&.unv") < name\&.size())
+316       write_unv (name);
+317 
+318     else
+319       {
+320         libMesh::err << " ERROR: Unrecognized file extension: " << name
+321                      << "\n   I understand the following:\n\n"
+322                      << "     *\&.xta  -- Internal ASCII data format\n"
+323                      << "     *\&.xtr  -- Internal binary data format\n"
+324                      << "     *\&.unv  -- I-deas format\n"
+325                      << std::endl;
+326         libmesh_error();
+327 
+328       }
+329   }
+330   STOP_LOG("write()", "MeshData");
+331 }
+.fi
+.SS "void libMesh::MeshData::write_unv (const std::string &file_name)\fC [protected]\fP"
+Write nodal/element oriented data in UNV format, either to an ASCII file or to a gzip'ed ASCII file, using the C++ wrapper \fCgzstream\fP to \fCzlib\&.h\fP\&. 
+.PP
+Definition at line 401 of file mesh_data_unv_support\&.C\&.
+.PP
+References _active, _compatibility_mode, _elem_data_closed, _elem_id_map_closed, _node_data_closed, _node_id_map_closed, libMesh::err, libMesh::libmesh_assert(), and write_unv_implementation()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+402 {
+403   /*
+404    * we should better be active or in compatibility mode
+405    */
+406   libmesh_assert (this->_active || this->_compatibility_mode);
+407 
+408   /*
+409    * make sure the id maps are ready
+410    * and that we have data to write
+411    */
+412   libmesh_assert (this->_node_id_map_closed);
+413   libmesh_assert (this->_elem_id_map_closed);
+414 
+415   libmesh_assert (this->_node_data_closed);
+416   libmesh_assert (this->_elem_data_closed);
+417 
+418   if (file_name\&.rfind("\&.gz") < file_name\&.size())
+419     {
+420 #ifdef LIBMESH_HAVE_GZSTREAM
+421       ogzstream out_stream(file_name\&.c_str());
+422       this->write_unv_implementation (out_stream);
+423 #else
+424       libMesh::err << "ERROR:  You must have the zlib\&.h header "
+425                    << "files and libraries to read and write "
+426                    << "compressed streams\&."
+427                    << std::endl;
+428       libmesh_error();
+429 #endif
+430       return;
+431 
+432     }
+433 
+434   else
+435     {
+436       std::ofstream out_stream(file_name\&.c_str());
+437       this->write_unv_implementation (out_stream);
+438       return;
+439     }
+440 }
+.fi
+.SS "void libMesh::MeshData::write_unv_implementation (std::ostream &out_file)\fC [protected]\fP"
+Actual implementation of writing nodal/element oriented data in UNV format\&. This has to be decoupled from \fC\fBwrite_unv()\fP\fP in order to allow writing both \fC\fP\&.unv and \fC\fP\&.unv\&.gz files\&. 
+.PP
+Definition at line 447 of file mesh_data_unv_support\&.C\&.
+.PP
+References _elem_data, _node_data, _unv_header, libMesh::MeshDataUnvHeader::data_type, libMesh::err, get_data(), has_data(), libMesh::libmesh_assert(), n_val_per_node(), node_to_foreign_id(), libMesh::MeshDataUnvHeader::nvaldc, and libMesh::MeshDataUnvHeader::write()\&.
+.PP
+Referenced by write_unv()\&.
+.PP
+.nf
+448 {
+449   /*
+450    * This is the actual implementation of writing
+451    * unv files, either as \&.unv or as \&.unv\&.gz file
+452    */
+453   if ( !out_file\&.good() )
+454     {
+455       libMesh::err << "ERROR: Output file not good\&."
+456                    << std::endl;
+457       libmesh_error();
+458     }
+459 
+460 
+461   /*
+462    * the beginning marker of the dataset block for
+463    * nodal/element-associated data (not to be confused
+464    * with _desired_dataset_label!)
+465    */
+466   const std::string  _label_dataset_mesh_data    = "2414";
+467 
+468   /*
+469    * Currently this function handles only nodal data\&.
+470    */
+471   libmesh_assert (!_node_data\&.empty());
+472 
+473   if (!_elem_data\&.empty())
+474     libMesh::err << "WARNING: MeshData currently only supports nodal data for Universal files\&."
+475                  << std::endl
+476                  << "         Will proceed writing only nodal data, ignoring element data\&."
+477                  << std::endl;
+478 
+479 
+480   /*
+481    * Write the beginning of the dataset\&.
+482    */
+483   out_file << "    -1\n"
+484            << "  "
+485            << _label_dataset_mesh_data
+486            << "\n";
+487 
+488   /*
+489    * Write the header
+490    */
+491   if (_unv_header==NULL)
+492     {
+493       /*
+494        * create a header that holds at
+495        * least sufficient data to specify
+496        * what this data set currently holds\&.
+497        *
+498        * The empty constructor automatically
+499        * takes care of \p dataset_location
+500        * and \p data_type\&.
+501        */
+502       MeshDataUnvHeader my_header;
+503 
+504       /*
+505        * It remains to set the correct nvaldc\&.\&.\&.
+506        */
+507       my_header\&.nvaldc = this->n_val_per_node();
+508 
+509       /*
+510        * and the correct data type\&.  By default
+511        * only distinguish complex or real data\&.
+512        */
+513 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+514       my_header\&.data_type = 5;
+515 #else
+516       my_header\&.data_type = 2;
+517 #endif
+518 
+519       /*
+520        * write this default header, then let
+521        * the AutoPtr go out of scope\&.  This
+522        * will take care of memory management\&.
+523        */
+524       my_header\&.write (out_file);
+525     }
+526 
+527   else
+528     {
+529       /*
+530        * make sure our nvaldc coincide\&.
+531        */
+532       if (this->n_val_per_node() != _unv_header->nvaldc)
+533         {
+534           libMesh::err << "WARNING: nvaldc=" << _unv_header->nvaldc
+535                        << " of attached MeshDataUnvHeader object not valid!" << std::endl
+536                        << "         re-set nvaldc to " << this->n_val_per_node() << std::endl;
+537           _unv_header->nvaldc = this->n_val_per_node();
+538         }
+539 
+540 
+541       /*
+542        * only issue a warning when data_type does
+543        * not coincide\&.  Perhaps user provided some
+544        * other header in order to convert complex
+545        * to real\&.\&.\&.
+546        */
+547 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+548       const unsigned int my_data_type = 5;
+549 #else
+550       const unsigned int my_data_type = 2;
+551 #endif
+552       if (my_data_type != _unv_header->data_type)
+553         {
+554           libMesh::err << "WARNING: data_type=" << _unv_header->data_type
+555                        << " of attached MeshDataUnvHeader differs from" << std::endl
+556                        << "         default value=" << my_data_type
+557                        << " Perhaps the user wanted this," << std::endl
+558                        << "         so I use the value from the MeshDataUnvHeader\&."
+559                        << std::endl;
+560         }
+561       _unv_header->write (out_file);
+562     }
+563 
+564 
+565   /*
+566    * Write the foreign node number and the respective data\&.
+567    */
+568   std::map<const Node*,
+569     std::vector<Number> >::const_iterator nit = _node_data\&.begin();
+570 
+571   char buf[27];
+572   for (; nit != _node_data\&.end(); ++nit)
+573     {
+574       const Node* node = (*nit)\&.first;
+575 
+576       unsigned int f_n_id = node_to_foreign_id (node);
+577       std::sprintf(buf, "%10u\n", f_n_id);
+578       out_file << buf;
+579 
+580       /* since we are iterating over our own map, this libmesh_assert
+581        * should never break\&.\&.\&.
+582        */
+583       libmesh_assert (this->has_data(node));
+584 
+585       // const reference to the nodal values
+586       const std::vector<Number>& values = this->get_data(node);
+587 
+588       for (unsigned int v_cnt=0; v_cnt<values\&.size(); v_cnt++)
+589         {
+590 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+591           std::sprintf(buf, "%13\&.5E%13\&.5E", values[v_cnt]\&.real(),
+592                        values[v_cnt]\&.imag());
+593           out_file << buf;
+594 #else
+595           std::sprintf(buf, "%13\&.5E",
+596                        static_cast<double>(values[v_cnt]));
+597           out_file << buf;
+598 #endif
+599         }
+600 
+601       out_file << "\n";
+602 
+603 
+604     }
+605 
+606   /*
+607    * Write end of the dataset\&.
+608    */
+609   out_file << "    -1\n";
+610 }
+.fi
+.SS "void libMesh::MeshData::write_xdr (const std::string &name, const \fBXdrMODE\fPmode = \fC\fBWRITE\fP\fP)\fC [protected]\fP"
+Write nodal data in format comparable to the XDR format already known from \fC\fBMesh\fP\fP\&. By default uses ASCII format, but may easily be changed setting \fCmode\fP to \fCENCODE\fP\&. This code implements the output of the \fBMeshData\fP object in XDR format\&. This warrants some documentation\&. The output consists of 8 sections:
+.PP
+1\&.) The name of the data stored, if provided (string)
+.PP
+2\&.) A switch whether real or complex data is stored (string)
+.PP
+3\&.) The number of nodes for which values are stored (unsigned int)
+.PP
+4\&.) The number of elements for which values are stored (unsigned int)
+.PP
+for each node
+.PP
+5\&.) The foreign node id (unsigned int)
+.PP
+6\&.) The actual values (vector of real/complex)
+.PP
+end node loop
+.PP
+for each element
+.PP
+7\&.) The foreign element id (unsigned int)
+.PP
+8\&.) The actual values (vector of real/complex)
+.PP
+end node loop
+.PP
+Note that the actual IO is handled through the \fBXdr\fP class (to be renamed later?) which provides a uniform interface to both the XDR (eXternal Data Representation) interface and standard ASCII output\&. Thus this one section of code will write XDR or ASCII files with no changes\&.
+.PP
+1\&.)
+.PP
+Write the descriptive name
+.PP
+2\&.)
+.PP
+Write: either real or complex
+.PP
+3\&.)
+.PP
+Write the number of nodes for which data is there
+.PP
+4\&.)
+.PP
+Write the number of elements for which data is there
+.PP
+5\&.)
+.PP
+Write the foreign node id
+.PP
+6\&.)
+.PP
+the actual values for this node
+.PP
+7\&.)
+.PP
+Write the foreign element id
+.PP
+8\&.)
+.PP
+the actual values for this element
+.PP
+Definition at line 294 of file mesh_data_xdr_support\&.C\&.
+.PP
+References _data_descriptor, _elem_data, _elem_data_closed, _elem_id_map_closed, _node_data, _node_data_closed, _node_id_map_closed, libMesh::Xdr::data(), elem_to_foreign_id(), get_data(), has_data(), libMesh::libmesh_assert(), libMesh::MeshTools::n_elem(), and node_to_foreign_id()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+296 {
+335   /*
+336    * make sure the id maps are ready
+337    * and that we have data to write
+338    */
+339   libmesh_assert (_node_id_map_closed);
+340   libmesh_assert (_elem_id_map_closed);
+341 
+342   libmesh_assert (_node_data_closed);
+343   libmesh_assert (_elem_data_closed);
+344 
+345 
+346   Xdr io(name, mode);
+347 
+348 
+349   // all processors write the data in the same format
+350   //const unsigned int proc_id = _mesh\&.processor_id();
+351 
+357   {
+358     std::string desc = this->_data_descriptor;
+359     io\&.data (desc, "# Data description");
+360   }
+361 
+362 
+363 
+369   {
+370 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+371     std::string desc = "COMPLEX";
+372 #elif LIBMESH_USE_REAL_NUMBERS
+373     std::string desc = "REAL";
+374 #else
+375     better_you_choke_this\&.\&.\&.
+376 #endif
+377       io\&.data (desc, "# type of values");
+378   }
+379 
+380 
+381 
+387   {
+388     unsigned int n_node = this->_node_data\&.size();
+389     io\&.data (n_node, "# No\&. of nodes for which data is stored");
+390   }
+391 
+392 
+398   {
+399     unsigned int n_elem = this->_elem_data\&.size();
+400     io\&.data (n_elem, "# No\&. of elements for which data is stored");
+401   }
+402 
+403 
+404 
+405 
+406   std::map<const Node*,
+407     std::vector<Number> >::const_iterator nit = _node_data\&.begin ();
+408 
+409   for (; nit != _node_data\&.end(); ++nit)
+410     {
+411       const Node* node = (*nit)\&.first;
+412 
+418       {
+419         unsigned int f_id = node_to_foreign_id (node);
+420         io\&.data (f_id, "# Foreign node id");
+421       }
+422 
+423 
+429       {
+430         /*
+431          * since we are iterating over our @e own
+432          * map, this libmesh_assert should never break\&.\&.\&.
+433          */
+434         libmesh_assert (this->has_data(node));
+435 
+436         const std::vector<Number>& values = this->get_data(node);
+437 
+438         /*
+439          * copy the data to a local buf, since
+440          * the Xdr class needs write access, even
+441          * when only reading data
+442          */
+443         std::vector<Number> buf = values;
+444         io\&.data (buf, "# Values");
+445       }
+446     }
+447 
+448 
+449 
+450 
+451 
+452 
+453 
+454   std::map<const Elem*,
+455     std::vector<Number> >::const_iterator eit = _elem_data\&.begin ();
+456 
+457   for (; eit != _elem_data\&.end(); ++eit)
+458     {
+459       const Elem* elem = (*eit)\&.first;
+460 
+466       {
+467         unsigned int f_id = elem_to_foreign_id (elem);
+468         io\&.data (f_id, "# Foreign element id");
+469       }
+470 
+471 
+477       {
+478         /*
+479          * since we are iterating over our @e own
+480          * map, this libmesh_assert should never break\&.\&.\&.
+481          */
+482         libmesh_assert (this->has_data(elem));
+483 
+484         const std::vector<Number>& values = this->get_data(elem);
+485 
+486         /*
+487          * copy the data to a local buf, since
+488          * the Xdr class needs write access, even
+489          * when only reading data
+490          */
+491         std::vector<Number> buf = values;
+492         io\&.data (buf, "# Values");
+493       }
+494     }
+495 }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBMeshDataUnvHeader\fP\fC [friend]\fP"
+Make the \fC\fBMeshDataUnvHeader\fP\fP class a friend\&. 
+.PP
+Definition at line 631 of file mesh_data\&.h\&.
+.SS "std::ostream& operator<< (std::ostream &os, const \fBMeshData\fP &m)\fC [friend]\fP"
+Same as above, but allows you to use the stream syntax\&. 
+.PP
+Definition at line 374 of file mesh_data\&.C\&.
+.PP
+.nf
+375 {
+376   m\&.print_info(os);
+377   return os;
+378 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::MeshData::_active\fC [protected]\fP"
+\fCtrue\fP when this object is set active (to gather data during mesh import)\&. 
+.PP
+Definition at line 614 of file mesh_data\&.h\&.
+.PP
+Referenced by activate(), active(), add_foreign_elem_id(), add_foreign_node_id(), assign(), close_foreign_id_maps(), elem_initialized(), elem_to_foreign_id(), enable_compatibility_mode(), foreign_id_to_elem(), foreign_id_to_node(), get_data(), has_data(), insert_elem_data(), insert_node_data(), n_elem_data(), n_node_data(), n_val_per_elem(), n_val_per_node(), node_initialized(), node_to_foreign_id(), operator()(), read(), read_unv(), read_xdr(), translate(), write(), and write_unv()\&.
+.SS "bool libMesh::MeshData::_compatibility_mode\fC [protected]\fP"
+\fCtrue\fP when this object is in compatibility mode (use \fBlibMesh\fP's node and element numbers as fake foreign id's) 
+.PP
+Definition at line 621 of file mesh_data\&.h\&.
+.PP
+Referenced by activate(), assign(), compatibility_mode(), elem_to_foreign_id(), enable_compatibility_mode(), foreign_id_to_elem(), foreign_id_to_node(), get_data(), has_data(), insert_elem_data(), insert_node_data(), n_elem_data(), n_node_data(), n_val_per_elem(), n_val_per_node(), node_to_foreign_id(), operator()(), read(), read_unv(), read_xdr(), translate(), write(), and write_unv()\&.
+.SS "std::string libMesh::MeshData::_data_descriptor\fC [protected]\fP"
+Some name the user gave to the data when this object got activated 
+.PP
+Definition at line 522 of file mesh_data\&.h\&.
+.PP
+Referenced by activate(), assign(), clear(), enable_compatibility_mode(), get_info(), read_tetgen(), read_xdr(), and write_xdr()\&.
+.SS "std::map<const \fBElem\fP*, std::vector<\fBNumber\fP> > libMesh::MeshData::_elem_data\fC [protected]\fP"
+Maps element pointers to the element-associated data 
+.PP
+Definition at line 556 of file mesh_data\&.h\&.
+.PP
+Referenced by assign(), clear(), elem_data_begin(), elem_data_end(), get_data(), has_data(), insert_elem_data(), n_elem_data(), n_val_per_elem(), operator()(), read_tetgen(), read_unv_implementation(), read_xdr(), set_data(), write_unv_implementation(), and write_xdr()\&.
+.SS "bool libMesh::MeshData::_elem_data_closed\fC [protected]\fP"
+\fCtrue\fP when the element based data are properly initialized, false otherwise\&. 
+.PP
+Definition at line 606 of file mesh_data\&.h\&.
+.PP
+Referenced by assign(), clear(), elem_initialized(), get_data(), has_data(), insert_elem_data(), insert_node_data(), n_elem_data(), n_val_per_elem(), operator()(), read_tetgen(), read_unv_implementation(), read_xdr(), write_unv(), and write_xdr()\&.
+.SS "std::map<const \fBElem\fP*, unsigned int> libMesh::MeshData::_elem_id\fC [protected]\fP"
+Maps element pointers to element labels in the \fIforeign\fP format\&. 
+.PP
+Definition at line 563 of file mesh_data\&.h\&.
+.PP
+Referenced by add_foreign_elem_id(), assign(), close_foreign_id_maps(), elem_to_foreign_id(), enable_compatibility_mode(), and slim()\&.
+.SS "bool libMesh::MeshData::_elem_id_map_closed\fC [protected]\fP"
+\fCtrue\fP when the mesh importer finished adding element-id maps, and the element-id maps exist\&. Note that these maps may be deleted through \fC\fBslim()\fP\fP to save memory\&. Then the data is still accessible through the \fCElem*\fP, but the foreign element id's are lost\&. 
+.PP
+Definition at line 600 of file mesh_data\&.h\&.
+.PP
+Referenced by add_foreign_elem_id(), assign(), close_foreign_id_maps(), elem_to_foreign_id(), enable_compatibility_mode(), foreign_id_to_elem(), insert_elem_data(), insert_node_data(), read(), read_unv(), read_xdr(), slim(), write(), write_unv(), and write_xdr()\&.
+.SS "std::map<unsigned int, const \fBElem\fP*> libMesh::MeshData::_id_elem\fC [protected]\fP"
+Maps \fIforeign\fP element labels to element pointers of the current mesh\&. 
+.PP
+Definition at line 569 of file mesh_data\&.h\&.
+.PP
+Referenced by add_foreign_elem_id(), close_foreign_id_maps(), enable_compatibility_mode(), foreign_id_to_elem(), and slim()\&.
+.SS "std::map<unsigned int, const \fBNode\fP*> libMesh::MeshData::_id_node\fC [protected]\fP"
+Maps \fIforeign\fP node ids to node pointers of the current mesh\&. 
+.PP
+Definition at line 546 of file mesh_data\&.h\&.
+.PP
+Referenced by add_foreign_node_id(), assign(), close_foreign_id_maps(), enable_compatibility_mode(), foreign_id_to_node(), and slim()\&.
+.SS "const \fBMeshBase\fP& libMesh::MeshData::_mesh\fC [protected]\fP"
+The mesh this object belongs to 
+.PP
+Definition at line 516 of file mesh_data\&.h\&.
+.PP
+Referenced by assign(), foreign_id_to_elem(), foreign_id_to_node(), and read_xdr()\&.
+.SS "std::map<const \fBNode\fP*, std::vector<\fBNumber\fP> > libMesh::MeshData::_node_data\fC [protected]\fP"
+The map containing pointers to nodes in the mesh and the corresponding data\&. 
+.PP
+Definition at line 532 of file mesh_data\&.h\&.
+.PP
+Referenced by assign(), clear(), get_data(), has_data(), insert_node_data(), n_node_data(), n_val_per_node(), node_data_begin(), node_data_end(), operator()(), read_tetgen(), read_unv_implementation(), read_xdr(), set_data(), write_unv_implementation(), and write_xdr()\&.
+.SS "bool libMesh::MeshData::_node_data_closed\fC [protected]\fP"
+\fCtrue\fP when the nodal data are properly initialized, false otherwise\&. 
+.PP
+Definition at line 588 of file mesh_data\&.h\&.
+.PP
+Referenced by assign(), clear(), get_data(), has_data(), insert_elem_data(), insert_node_data(), n_node_data(), n_val_per_node(), node_initialized(), operator()(), read_tetgen(), read_unv_implementation(), read_xdr(), write_unv(), and write_xdr()\&.
+.SS "std::map<const \fBNode\fP*, unsigned int> libMesh::MeshData::_node_id\fC [protected]\fP"
+Maps node pointers to node numbers in the \fIforeign\fP format\&. 
+.PP
+Definition at line 539 of file mesh_data\&.h\&.
+.PP
+Referenced by add_foreign_node_id(), assign(), close_foreign_id_maps(), enable_compatibility_mode(), node_to_foreign_id(), and slim()\&.
+.SS "bool libMesh::MeshData::_node_id_map_closed\fC [protected]\fP"
+\fCtrue\fP when the mesh importer finished adding node-foreign-id maps, and the node-foreign-id maps exist\&. Note that these maps may be deleted through \fC\fBslim()\fP\fP to save memory\&. Then the data is still accessible through the \fCNode*\fP or \fCElem*\fP, but the foreign id's are lost\&. 
+.PP
+Definition at line 582 of file mesh_data\&.h\&.
+.PP
+Referenced by add_foreign_node_id(), assign(), close_foreign_id_maps(), enable_compatibility_mode(), foreign_id_to_node(), insert_elem_data(), insert_node_data(), node_to_foreign_id(), read(), read_unv(), read_xdr(), slim(), write(), write_unv(), and write_xdr()\&.
+.SS "\fBMeshDataUnvHeader\fP* libMesh::MeshData::_unv_header\fC [protected]\fP"
+The header information of universal files\&. 
+.PP
+Definition at line 626 of file mesh_data\&.h\&.
+.PP
+Referenced by assign(), get_unv_header(), read_unv_implementation(), set_unv_header(), and write_unv_implementation()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

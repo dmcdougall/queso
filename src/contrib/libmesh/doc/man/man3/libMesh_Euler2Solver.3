@@ -1,0 +1,1218 @@
+.TH "libMesh::Euler2Solver" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Euler2Solver \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <euler2_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::UnsteadySolver\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBUnsteadySolver\fP \fBParent\fP"
+.br
+.ti -1c
+.RI "typedef \fBDifferentiableSystem\fP \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEuler2Solver\fP (\fBsys_type\fP &s)"
+.br
+.ti -1c
+.RI "virtual \fB~Euler2Solver\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBerror_order\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBelement_residual\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual bool \fBside_residual\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit_data\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBreinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBsolve\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadvance_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadjoint_advance_timestep\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBretrieve_timestep\fP ()"
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBold_nonlinear_solution\fP (const \fBdof_id_type\fP global_dof_number) const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBdu\fP (const \fBSystemNorm\fP &norm) const "
+.br
+.ti -1c
+.RI "virtual bool \fBis_steady\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBbefore_timestep\fP ()"
+.br
+.ti -1c
+.RI "const \fBsys_type\fP & \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBDiffSolver\fP > & \fBdiff_solver\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBLinearSolver\fP
+.br
+< \fBNumber\fP > > & \fBlinear_solver\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_solution_history\fP (const \fBSolutionHistory\fP &_solution_history)"
+.br
+.ti -1c
+.RI "bool \fBis_adjoint\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_is_adjoint\fP (bool _is_adjoint_value)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBtheta\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fBold_local_nonlinear_solution\fP"
+.br
+.ti -1c
+.RI "bool \fBquiet\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBreduce_deltat_on_diffsolver_failure\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBfirst_solve\fP"
+.br
+.ti -1c
+.RI "bool \fBfirst_adjoint_step\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBDiffSolver\fP > \fB_diff_solver\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBLinearSolver\fP< \fBNumber\fP > > \fB_linear_solver\fP"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBSolutionHistory\fP > \fBsolution_history\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a theta-method (defaulting to Backward Euler with theta = 1\&.0) solver to handle time integration of DifferentiableSystems\&. The 'Euler2' solver differs from Euler in how it evaluates residuals at intermediate theta values: Euler solves m(u,u') = f(theta*u_new + (1-theta)*u_old), Euler2 solves m(u') = theta*f(u_new) + (1-theta)*f(u_old) i\&.e\&. the trapezoidal rule for theta = 0\&.5
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2006 
+.RE
+.PP
+
+.PP
+Definition at line 50 of file euler2_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "typedef \fBUnsteadySolver\fP \fBlibMesh::Euler2Solver::Parent\fP"
+The parent class 
+.PP
+Definition at line 56 of file euler2_solver\&.h\&.
+.SS "typedef \fBDifferentiableSystem\fP \fBlibMesh::TimeSolver::sys_type\fP\fC [inherited]\fP"
+The type of system 
+.PP
+Definition at line 66 of file time_solver\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Euler2Solver::Euler2Solver (\fBsys_type\fP &s)\fC [explicit]\fP"
+Constructor\&. Requires a reference to the system to be solved\&. 
+.PP
+Definition at line 27 of file euler2_solver\&.C\&.
+.PP
+.nf
+28   : UnsteadySolver(s), theta(1\&.)
+29 {
+30 }
+.fi
+.SS "libMesh::Euler2Solver::~Euler2Solver ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 34 of file euler2_solver\&.C\&.
+.PP
+.nf
+35 {
+36 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::UnsteadySolver::adjoint_advance_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method advances the adjoint solution to the previous timestep, after an adjoint_solve() has been performed\&. This will be done before every UnsteadySolver::adjoint_solve()\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 178 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DifferentiableSystem::deltat, libMesh::UnsteadySolver::first_adjoint_step, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::NumericVector< T >::localize(), libMesh::UnsteadySolver::old_local_nonlinear_solution, libMesh::TimeSolver::solution_history, and libMesh::System::time\&.
+.PP
+.nf
+179 {
+180   // On the first call of this function, we dont save the adjoint solution or
+181   // decrement the time, we just call the retrieve function below
+182   if(!first_adjoint_step)
+183     {
+184       // Call the store function to store the last adjoint before decrementing the time
+185       solution_history->store();
+186       // Decrement the system time
+187       _system\&.time -= _system\&.deltat;
+188     }
+189   else
+190     {
+191       first_adjoint_step = false;
+192     }
+193 
+194   // Retrieve the primal solution vectors at this time using the
+195   // solution_history object
+196   solution_history->retrieve();
+197 
+198   // Dont forget to localize the old_nonlinear_solution !
+199   _system\&.get_vector("_old_nonlinear_solution")\&.localize
+200     (*old_local_nonlinear_solution,
+201      _system\&.get_dof_map()\&.get_send_list());
+202 }
+.fi
+.SS "void libMesh::UnsteadySolver::advance_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method advances the solution to the next timestep, after a \fBsolve()\fP has been performed\&. Often this will be done after every \fBUnsteadySolver::solve()\fP, but adaptive mesh refinement and/or adaptive time step selection may require some \fBsolve()\fP steps to be repeated\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Reimplemented in \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 152 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DifferentiableSystem::deltat, libMesh::UnsteadySolver::first_solve, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::NumericVector< T >::localize(), libMesh::UnsteadySolver::old_local_nonlinear_solution, libMesh::System::solution, libMesh::TimeSolver::solution_history, and libMesh::System::time\&.
+.PP
+Referenced by libMesh::UnsteadySolver::solve()\&.
+.PP
+.nf
+153 {
+154   if (!first_solve)
+155     {
+156       // Store the solution, does nothing by default
+157       // User has to attach appropriate solution_history object for this to
+158       // actually store anything anywhere
+159       solution_history->store();
+160 
+161       _system\&.time += _system\&.deltat;
+162     }
+163 
+164   NumericVector<Number> &old_nonlinear_soln =
+165     _system\&.get_vector("_old_nonlinear_solution");
+166   NumericVector<Number> &nonlinear_solution =
+167     *(_system\&.solution);
+168 
+169   old_nonlinear_soln = nonlinear_solution;
+170 
+171   old_nonlinear_soln\&.localize
+172     (*old_local_nonlinear_solution,
+173      _system\&.get_dof_map()\&.get_send_list());
+174 }
+.fi
+.SS "virtual void libMesh::TimeSolver::before_timestep ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method is for subclasses or users to override to do arbitrary processing between timesteps 
+.PP
+Definition at line 152 of file time_solver\&.h\&.
+.PP
+.nf
+152 {}
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBDiffSolver\fP>& libMesh::TimeSolver::diff_solver ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+An implicit linear or nonlinear solver to use at each timestep\&. 
+.PP
+Reimplemented in \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 167 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_diff_solver\&.
+.PP
+.nf
+167 { return _diff_solver; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "\fBReal\fP libMesh::UnsteadySolver::du (const \fBSystemNorm\fP &norm) const\fC [virtual]\fP, \fC [inherited]\fP"
+Computes the size of ||u^{n+1} - u^{n}|| in some norm\&.
+.PP
+Note that, while you can always call this function, its result may or may not be very meaningful\&. For example, if you call this function right after calling \fBadvance_timestep()\fP then you'll get a result of zero since old_nonlinear_solution is set equal to nonlinear_solution in this function\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 227 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::calculate_norm(), libMesh::System::get_vector(), and libMesh::System::solution\&.
+.PP
+.nf
+228 {
+229 
+230   AutoPtr<NumericVector<Number> > solution_copy =
+231     _system\&.solution->clone();
+232 
+233   solution_copy->add(-1\&., _system\&.get_vector("_old_nonlinear_solution"));
+234 
+235   solution_copy->close();
+236 
+237   return _system\&.calculate_norm(*solution_copy, norm);
+238 }
+.fi
+.SS "bool libMesh::Euler2Solver::element_residual (boolrequest_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP"
+This method uses the \fBDifferentiableSystem\fP's element_time_derivative() and element_constraint() to build a full residual on an element\&. What combination it uses will depend on theta\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 50 of file euler2_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DifferentiableSystem::deltat, libMesh::DiffContext::elem_reinit(), libMesh::DiffContext::elem_solution_derivative, libMesh::DifferentiablePhysics::element_constraint(), libMesh::DifferentiablePhysics::element_time_derivative(), libMesh::DifferentiablePhysics::eulerian_residual(), libMesh::DiffContext::fixed_solution_derivative, libMesh::DiffContext::get_dof_indices(), libMesh::DiffContext::get_elem_fixed_solution(), libMesh::DiffContext::get_elem_jacobian(), libMesh::DiffContext::get_elem_residual(), libMesh::DiffContext::get_elem_solution(), libMesh::DifferentiablePhysics::mass_residual(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::DenseVector< T >::size(), libMesh::DenseVector< T >::swap(), libMesh::DenseMatrix< T >::swap(), theta, libMesh::System::use_fixed_solution, libMesh::DenseMatrix< T >::zero(), and libMesh::DenseVector< T >::zero()\&.
+.PP
+.nf
+52 {
+53   unsigned int n_dofs = context\&.get_elem_solution()\&.size();
+54 
+55   // Local nonlinear solution at old timestep
+56   DenseVector<Number> old_elem_solution(n_dofs);
+57   for (unsigned int i=0; i != n_dofs; ++i)
+58     old_elem_solution(i) =
+59       old_nonlinear_solution(context\&.get_dof_indices()[i]);
+60 
+61   // We evaluate mass_residual with the change in solution
+62   // to get the mass matrix, reusing old_elem_solution to hold that
+63   // delta_solution\&.
+64   DenseVector<Number> delta_elem_solution(context\&.get_elem_solution());
+65   delta_elem_solution -= old_elem_solution;
+66 
+67   // Our first evaluations are at the true elem_solution
+68   context\&.elem_solution_derivative = 1\&.0;
+69 
+70   // If a fixed solution is requested, we'll use the elem_solution
+71   // at the new timestep
+72   if (_system\&.use_fixed_solution)
+73     context\&.get_elem_fixed_solution() = context\&.get_elem_solution();
+74 
+75   context\&.fixed_solution_derivative = 1\&.0;
+76 
+77   // We're going to compute just the change in elem_residual
+78   // (and possibly elem_jacobian), then add back the old values
+79   DenseVector<Number> total_elem_residual(context\&.get_elem_residual());
+80   DenseMatrix<Number> old_elem_jacobian, total_elem_jacobian;
+81   if (request_jacobian)
+82     {
+83       old_elem_jacobian = context\&.get_elem_jacobian();
+84       total_elem_jacobian = context\&.get_elem_jacobian();
+85       context\&.get_elem_jacobian()\&.zero();
+86     }
+87   context\&.get_elem_residual()\&.zero();
+88 
+89   // First, evaluate time derivative at the new timestep\&.
+90   // The element should already be in the proper place
+91   // even for a moving mesh problem\&.
+92   bool jacobian_computed =
+93     _system\&.element_time_derivative(request_jacobian, context);
+94 
+95   // For a moving mesh problem we may need the pseudoconvection term too
+96   jacobian_computed =
+97     _system\&.eulerian_residual(jacobian_computed, context) && jacobian_computed;
+98 
+99   // Scale the new time-dependent residual and jacobian correctly
+100   context\&.get_elem_residual() *= (theta * _system\&.deltat);
+101   total_elem_residual += context\&.get_elem_residual();
+102   context\&.get_elem_residual()\&.zero();
+103 
+104   if (jacobian_computed)
+105     {
+106       context\&.get_elem_jacobian() *= (theta * _system\&.deltat);
+107       total_elem_jacobian += context\&.get_elem_jacobian();
+108       context\&.get_elem_jacobian()\&.zero();
+109     }
+110 
+111   // Next, evaluate the mass residual at the new timestep,
+112   // with the delta_solution\&.
+113   // Evaluating the mass residual at both old and new timesteps will be
+114   // redundant in most problems but may be necessary for time accuracy
+115   // or stability in moving mesh problems or problems with user-overridden
+116   // mass_residual functions
+117 
+118   // Move elem_->delta_, delta_->elem_
+119   context\&.get_elem_solution()\&.swap(delta_elem_solution);
+120 
+121   jacobian_computed = _system\&.mass_residual(jacobian_computed, context) &&
+122     jacobian_computed;
+123 
+124   context\&.get_elem_residual() *= -theta;
+125   total_elem_residual += context\&.get_elem_residual();
+126   context\&.get_elem_residual()\&.zero();
+127 
+128   if (jacobian_computed)
+129     {
+130       // The minus sign trick here is to avoid using a non-1
+131       // elem_solution_derivative:
+132       context\&.get_elem_jacobian() *= -theta;
+133       total_elem_jacobian += context\&.get_elem_jacobian();
+134       context\&.get_elem_jacobian()\&.zero();
+135     }
+136 
+137   // Add the time-dependent term for the old solution
+138 
+139   // Make sure elem_solution is set up for elem_reinit to use
+140   // Move delta_->old_, old_->elem_
+141   context\&.get_elem_solution()\&.swap(old_elem_solution);
+142 
+143   // Move the mesh into place first if necessary
+144   context\&.elem_reinit(0\&.);
+145 
+146   if (_system\&.use_fixed_solution)
+147     {
+148       context\&.elem_solution_derivative = 0\&.0;
+149       jacobian_computed =
+150         _system\&.element_time_derivative(jacobian_computed, context) &&
+151         jacobian_computed;
+152       jacobian_computed =
+153         _system\&.eulerian_residual(jacobian_computed, context) &&
+154         jacobian_computed;
+155       context\&.elem_solution_derivative = 1\&.0;
+156       context\&.get_elem_residual() *= ((1\&. - theta) * _system\&.deltat);
+157       total_elem_residual += context\&.get_elem_residual();
+158       if (jacobian_computed)
+159         {
+160           context\&.get_elem_jacobian() *= ((1\&. - theta) * _system\&.deltat);
+161           total_elem_jacobian += context\&.get_elem_jacobian();
+162           context\&.get_elem_jacobian()\&.zero();
+163         }
+164     }
+165   else
+166     {
+167       // FIXME - we should detect if element_time_derivative() edits
+168       // elem_jacobian and lies about it!
+169       _system\&.element_time_derivative(false, context);
+170       _system\&.eulerian_residual(false, context);
+171       context\&.get_elem_residual() *= ((1\&. - theta) * _system\&.deltat);
+172       total_elem_residual += context\&.get_elem_residual();
+173     }
+174 
+175   context\&.get_elem_residual()\&.zero();
+176 
+177   // Add the mass residual term for the old solution
+178 
+179   // Move old_->old_, delta_->elem_
+180   context\&.get_elem_solution()\&.swap(old_elem_solution);
+181 
+182   jacobian_computed = _system\&.mass_residual(jacobian_computed, context) &&
+183     jacobian_computed;
+184 
+185   context\&.get_elem_residual() *= -(1\&. - theta);
+186   total_elem_residual += context\&.get_elem_residual();
+187   context\&.get_elem_residual()\&.zero();
+188 
+189   if (jacobian_computed)
+190     {
+191       // The minus sign trick here is to avoid using a non-1
+192       // *_solution_derivative:
+193       context\&.get_elem_jacobian() *= -(1\&. - theta);
+194       total_elem_jacobian += context\&.get_elem_jacobian();
+195       context\&.get_elem_jacobian()\&.zero();
+196     }
+197 
+198   // Restore the elem_solution
+199   // Move elem_->elem_, delta_->delta_
+200   context\&.get_elem_solution()\&.swap(delta_elem_solution);
+201 
+202   // Restore the elem position if necessary
+203   context\&.elem_reinit(1\&.);
+204 
+205   // Add the constraint term
+206   jacobian_computed = _system\&.element_constraint(jacobian_computed, context) &&
+207     jacobian_computed;
+208 
+209   // Add back the previously accumulated residual and jacobian
+210   context\&.get_elem_residual() += total_elem_residual;
+211   if (request_jacobian)
+212     {
+213       if (jacobian_computed)
+214         context\&.get_elem_jacobian() += total_elem_jacobian;
+215       else
+216         context\&.get_elem_jacobian()\&.swap(old_elem_jacobian);
+217     }
+218 
+219   return jacobian_computed;
+220 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "\fBReal\fP libMesh::Euler2Solver::error_order () const\fC [virtual]\fP"
+Error convergence order: 2 for Crank-Nicolson, 1 otherwise 
+.PP
+Implements \fBlibMesh::UnsteadySolver\fP\&.
+.PP
+Definition at line 40 of file euler2_solver\&.C\&.
+.PP
+References theta\&.
+.PP
+.nf
+41 {
+42   if (theta == 0\&.5)
+43     return 2\&.;
+44   return 1\&.;
+45 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::UnsteadySolver::init ()\fC [virtual]\fP, \fC [inherited]\fP"
+The initialization function\&. This method is used to initialize internal data structures before a simulation begins\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Reimplemented in \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 46 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::add_vector(), and libMesh::TimeSolver::init()\&.
+.PP
+.nf
+47 {
+48   TimeSolver::init();
+49 
+50   _system\&.add_vector("_old_nonlinear_solution");
+51 }
+.fi
+.SS "void libMesh::UnsteadySolver::init_data ()\fC [virtual]\fP, \fC [inherited]\fP"
+The data initialization function\&. This method is used to initialize internal data structures after the underlying \fBSystem\fP has been initialized 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 55 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::GHOSTED, libMesh::TimeSolver::init_data(), libMesh::System::n_dofs(), libMesh::System::n_local_dofs(), libMesh::UnsteadySolver::old_local_nonlinear_solution, and libMesh::SERIAL\&.
+.PP
+.nf
+56 {
+57   TimeSolver::init_data();
+58 
+59 #ifdef LIBMESH_ENABLE_GHOSTED
+60   old_local_nonlinear_solution->init (_system\&.n_dofs(), _system\&.n_local_dofs(),
+61                                       _system\&.get_dof_map()\&.get_send_list(), false,
+62                                       GHOSTED);
+63 #else
+64   old_local_nonlinear_solution->init (_system\&.n_dofs(), false, SERIAL);
+65 #endif
+66 }
+.fi
+.SS "bool libMesh::TimeSolver::is_adjoint () const\fC [inline]\fP, \fC [inherited]\fP"
+Accessor for querying whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 217 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_is_adjoint\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+218   { return _is_adjoint; }
+.fi
+.SS "virtual bool libMesh::UnsteadySolver::is_steady () const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This is not a steady-state solver\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 149 of file unsteady_solver\&.h\&.
+.PP
+.nf
+149 { return false; }
+.fi
+.SS "virtual \fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> >& libMesh::TimeSolver::linear_solver ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+An implicit linear solver to use for adjoint and sensitivity problems\&. 
+.PP
+Definition at line 172 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_linear_solver\&.
+.PP
+.nf
+172 { return _linear_solver; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBNumber\fP libMesh::UnsteadySolver::old_nonlinear_solution (const \fBdof_id_type\fPglobal_dof_number) const\fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the old nonlinear solution for the specified global DOF\&. 
+.RE
+.PP
+
+.PP
+Definition at line 216 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::n_dofs(), and libMesh::UnsteadySolver::old_local_nonlinear_solution\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), element_residual(), libMesh::EulerSolver::side_residual(), and side_residual()\&.
+.PP
+.nf
+218 {
+219   libmesh_assert_less (global_dof_number, _system\&.get_dof_map()\&.n_dofs());
+220   libmesh_assert_less (global_dof_number, old_local_nonlinear_solution->size());
+221 
+222   return (*old_local_nonlinear_solution)(global_dof_number);
+223 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::UnsteadySolver::reinit ()\fC [virtual]\fP, \fC [inherited]\fP"
+The reinitialization function\&. This method is used to resize internal data vectors after a mesh change\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Reimplemented in \fBlibMesh::AdaptiveTimeSolver\fP\&.
+.PP
+Definition at line 70 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::GHOSTED, libMesh::NumericVector< T >::localize(), libMesh::System::n_dofs(), libMesh::System::n_local_dofs(), libMesh::UnsteadySolver::old_local_nonlinear_solution, libMesh::TimeSolver::reinit(), and libMesh::SERIAL\&.
+.PP
+.nf
+71 {
+72   TimeSolver::reinit();
+73 
+74 #ifdef LIBMESH_ENABLE_GHOSTED
+75   old_local_nonlinear_solution->init (_system\&.n_dofs(), _system\&.n_local_dofs(),
+76                                       _system\&.get_dof_map()\&.get_send_list(), false,
+77                                       GHOSTED);
+78 #else
+79   old_local_nonlinear_solution->init (_system\&.n_dofs(), false, SERIAL);
+80 #endif
+81 
+82   // localize the old solution
+83   NumericVector<Number> &old_nonlinear_soln =
+84     _system\&.get_vector("_old_nonlinear_solution");
+85 
+86   old_nonlinear_soln\&.localize
+87     (*old_local_nonlinear_solution,
+88      _system\&.get_dof_map()\&.get_send_list());
+89 }
+.fi
+.SS "void libMesh::UnsteadySolver::retrieve_timestep ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method retrieves all the stored solutions at the current system\&.time 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 204 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::System::get_dof_map(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::NumericVector< T >::localize(), libMesh::UnsteadySolver::old_local_nonlinear_solution, and libMesh::TimeSolver::solution_history\&.
+.PP
+.nf
+205 {
+206   // Retrieve all the stored vectors at the current time
+207   solution_history->retrieve();
+208 
+209   // Dont forget to localize the old_nonlinear_solution !
+210   _system\&.get_vector("_old_nonlinear_solution")\&.localize
+211     (*old_local_nonlinear_solution,
+212      _system\&.get_dof_map()\&.get_send_list());
+213 }
+.fi
+.SS "void libMesh::TimeSolver::set_is_adjoint (bool_is_adjoint_value)\fC [inline]\fP, \fC [inherited]\fP"
+Accessor for setting whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 224 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_is_adjoint\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::adjoint_solve(), libMesh::FEMSystem::postprocess(), and libMesh::DifferentiableSystem::solve()\&.
+.PP
+.nf
+225   { _is_adjoint = _is_adjoint_value; }
+.fi
+.SS "void libMesh::TimeSolver::set_solution_history (const \fBSolutionHistory\fP &_solution_history)\fC [inherited]\fP"
+A setter function users will employ if they need to do something other than save no solution history 
+.PP
+Definition at line 97 of file time_solver\&.C\&.
+.PP
+References libMesh::SolutionHistory::clone(), and libMesh::TimeSolver::solution_history\&.
+.PP
+.nf
+98 {
+99   solution_history = _solution_history\&.clone();
+100 }
+.fi
+.SS "bool libMesh::Euler2Solver::side_residual (boolrequest_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP"
+This method uses the \fBDifferentiableSystem\fP's side_time_derivative() and side_constraint() to build a full residual on an element's side\&. What combination it uses will depend on theta\&. 
+.PP
+Implements \fBlibMesh::TimeSolver\fP\&.
+.PP
+Definition at line 224 of file euler2_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_system, libMesh::DifferentiableSystem::deltat, libMesh::DiffContext::elem_side_reinit(), libMesh::DiffContext::elem_solution_derivative, libMesh::DiffContext::fixed_solution_derivative, libMesh::DiffContext::get_dof_indices(), libMesh::DiffContext::get_elem_fixed_solution(), libMesh::DiffContext::get_elem_jacobian(), libMesh::DiffContext::get_elem_residual(), libMesh::DiffContext::get_elem_solution(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::DifferentiablePhysics::side_constraint(), libMesh::DifferentiablePhysics::side_mass_residual(), libMesh::DifferentiablePhysics::side_time_derivative(), libMesh::DenseVector< T >::size(), libMesh::DenseVector< T >::swap(), libMesh::DenseMatrix< T >::swap(), theta, libMesh::System::use_fixed_solution, libMesh::DenseMatrix< T >::zero(), and libMesh::DenseVector< T >::zero()\&.
+.PP
+.nf
+226 {
+227   unsigned int n_dofs = context\&.get_elem_solution()\&.size();
+228 
+229   // Local nonlinear solution at old timestep
+230   DenseVector<Number> old_elem_solution(n_dofs);
+231   for (unsigned int i=0; i != n_dofs; ++i)
+232     old_elem_solution(i) =
+233       old_nonlinear_solution(context\&.get_dof_indices()[i]);
+234 
+235   // We evaluate mass_residual with the change in solution
+236   // to get the mass matrix, reusing old_elem_solution to hold that
+237   // delta_solution\&.
+238   DenseVector<Number> delta_elem_solution(context\&.get_elem_solution());
+239   delta_elem_solution -= old_elem_solution;
+240 
+241   // Our first evaluations are at the true elem_solution
+242   context\&.elem_solution_derivative = 1\&.0;
+243 
+244   // If a fixed solution is requested, we'll use the elem_solution
+245   // at the new timestep
+246   if (_system\&.use_fixed_solution)
+247     context\&.get_elem_fixed_solution() = context\&.get_elem_solution();
+248 
+249   context\&.fixed_solution_derivative = 1\&.0;
+250 
+251   // We're going to compute just the change in elem_residual
+252   // (and possibly elem_jacobian), then add back the old values
+253   DenseVector<Number> total_elem_residual(context\&.get_elem_residual());
+254   DenseMatrix<Number> old_elem_jacobian, total_elem_jacobian;
+255   if (request_jacobian)
+256     {
+257       old_elem_jacobian = context\&.get_elem_jacobian();
+258       total_elem_jacobian = context\&.get_elem_jacobian();
+259       context\&.get_elem_jacobian()\&.zero();
+260     }
+261   context\&.get_elem_residual()\&.zero();
+262 
+263   // First, evaluate time derivative at the new timestep\&.
+264   // The element should already be in the proper place
+265   // even for a moving mesh problem\&.
+266   bool jacobian_computed =
+267     _system\&.side_time_derivative(request_jacobian, context);
+268 
+269   // Scale the time-dependent residual and jacobian correctly
+270   context\&.get_elem_residual() *= (theta * _system\&.deltat);
+271   total_elem_residual += context\&.get_elem_residual();
+272   context\&.get_elem_residual()\&.zero();
+273 
+274   if (jacobian_computed)
+275     {
+276       context\&.get_elem_jacobian() *= (theta * _system\&.deltat);
+277       total_elem_jacobian += context\&.get_elem_jacobian();
+278       context\&.get_elem_jacobian()\&.zero();
+279     }
+280 
+281   // Next, evaluate the mass residual at the new timestep,
+282   // with the delta_solution\&.
+283   // Evaluating the mass residual at both old and new timesteps will be
+284   // redundant in most problems but may be necessary for time accuracy
+285   // or stability in moving mesh problems or problems with user-overridden
+286   // mass_residual functions
+287 
+288   // Move elem_->delta_, delta_->elem_
+289   context\&.get_elem_solution()\&.swap(delta_elem_solution);
+290 
+291   jacobian_computed = _system\&.side_mass_residual(jacobian_computed, context) &&
+292     jacobian_computed;
+293 
+294   context\&.get_elem_residual() *= -theta;
+295   total_elem_residual += context\&.get_elem_residual();
+296   context\&.get_elem_residual()\&.zero();
+297 
+298   if (jacobian_computed)
+299     {
+300       // The minus sign trick here is to avoid using a non-1
+301       // elem_solution_derivative:
+302       context\&.get_elem_jacobian() *= -theta;
+303       total_elem_jacobian += context\&.get_elem_jacobian();
+304       context\&.get_elem_jacobian()\&.zero();
+305     }
+306 
+307   // Add the time-dependent term for the old solution
+308 
+309   // Make sure elem_solution is set up for elem_reinit to use
+310   // Move delta_->old_, old_->elem_
+311   context\&.get_elem_solution()\&.swap(old_elem_solution);
+312 
+313   // Move the mesh into place first if necessary
+314   context\&.elem_side_reinit(0\&.);
+315 
+316   if (_system\&.use_fixed_solution)
+317     {
+318       context\&.elem_solution_derivative = 0\&.0;
+319       jacobian_computed =
+320         _system\&.side_time_derivative(jacobian_computed, context) &&
+321         jacobian_computed;
+322       context\&.elem_solution_derivative = 1\&.0;
+323       context\&.get_elem_residual() *= ((1\&. - theta) * _system\&.deltat);
+324       total_elem_residual += context\&.get_elem_residual();
+325       if (jacobian_computed)
+326         {
+327           context\&.get_elem_jacobian() *= ((1\&. - theta) * _system\&.deltat);
+328           total_elem_jacobian += context\&.get_elem_jacobian();
+329           context\&.get_elem_jacobian()\&.zero();
+330         }
+331     }
+332   else
+333     {
+334       // FIXME - we should detect if side_time_derivative() edits
+335       // elem_jacobian and lies about it!
+336       _system\&.side_time_derivative(false, context);
+337       context\&.get_elem_residual() *= ((1\&. - theta) * _system\&.deltat);
+338       total_elem_residual += context\&.get_elem_residual();
+339     }
+340 
+341   context\&.get_elem_residual()\&.zero();
+342 
+343   // Add the mass residual term for the old solution
+344 
+345   // Move old_->old_, delta_->elem_
+346   context\&.get_elem_solution()\&.swap(old_elem_solution);
+347 
+348   jacobian_computed =
+349     _system\&.side_mass_residual(jacobian_computed, context) &&
+350     jacobian_computed;
+351 
+352   context\&.get_elem_residual() *= -(1\&. - theta);
+353   total_elem_residual += context\&.get_elem_residual();
+354   context\&.get_elem_residual()\&.zero();
+355 
+356   if (jacobian_computed)
+357     {
+358       // The minus sign trick here is to avoid using a non-1
+359       // *_solution_derivative:
+360       context\&.get_elem_jacobian() *= -(1\&. - theta);
+361       total_elem_jacobian += context\&.get_elem_jacobian();
+362       context\&.get_elem_jacobian()\&.zero();
+363     }
+364 
+365   // Restore the elem_solution
+366   // Move elem_->elem_, delta_->delta_
+367   context\&.get_elem_solution()\&.swap(delta_elem_solution);
+368 
+369   // Restore the elem position if necessary
+370   context\&.elem_side_reinit(1\&.);
+371 
+372   // Add the constraint term
+373   jacobian_computed = _system\&.side_constraint(jacobian_computed, context) &&
+374     jacobian_computed;
+375 
+376   // Add back the previously accumulated residual and jacobian
+377   context\&.get_elem_residual() += total_elem_residual;
+378   if (request_jacobian)
+379     {
+380       if (jacobian_computed)
+381         context\&.get_elem_jacobian() += total_elem_jacobian;
+382       else
+383         context\&.get_elem_jacobian()\&.swap(old_elem_jacobian);
+384     }
+385 
+386   return jacobian_computed;
+387 }
+.fi
+.SS "void libMesh::UnsteadySolver::solve ()\fC [virtual]\fP, \fC [inherited]\fP"
+This method solves for the solution at the next timestep\&. Usually we will only need to solve one (non)linear system per timestep, but more complex subclasses may override this\&. 
+.PP
+Reimplemented from \fBlibMesh::TimeSolver\fP\&.
+.PP
+Reimplemented in \fBlibMesh::AdaptiveTimeSolver\fP, and \fBlibMesh::TwostepTimeSolver\fP\&.
+.PP
+Definition at line 93 of file unsteady_solver\&.C\&.
+.PP
+References libMesh::TimeSolver::_diff_solver, libMesh::TimeSolver::_system, libMesh::UnsteadySolver::advance_timestep(), libMesh::DifferentiableSystem::deltat, libMesh::DiffSolver::DIVERGED_BACKTRACKING_FAILURE, libMesh::DiffSolver::DIVERGED_MAX_NONLINEAR_ITERATIONS, libMesh::UnsteadySolver::first_solve, libMesh::out, libMesh::TimeSolver::quiet, and libMesh::TimeSolver::reduce_deltat_on_diffsolver_failure\&.
+.PP
+.nf
+94 {
+95   if (first_solve)
+96     {
+97       advance_timestep();
+98       first_solve = false;
+99     }
+100 
+101   unsigned int solve_result = _diff_solver->solve();
+102 
+103   // If we requested the UnsteadySolver to attempt reducing dt after a
+104   // failed DiffSolver solve, check the results of the solve now\&.
+105   if (reduce_deltat_on_diffsolver_failure)
+106     {
+107       bool backtracking_failed =
+108         solve_result & DiffSolver::DIVERGED_BACKTRACKING_FAILURE;
+109 
+110       bool max_iterations =
+111         solve_result & DiffSolver::DIVERGED_MAX_NONLINEAR_ITERATIONS;
+112 
+113       if (backtracking_failed || max_iterations)
+114         {
+115           // Cut timestep in half
+116           for (unsigned int nr=0; nr<reduce_deltat_on_diffsolver_failure; ++nr)
+117             {
+118               _system\&.deltat *= 0\&.5;
+119               libMesh::out << "Newton backtracking failed\&.  Trying with smaller timestep, dt="
+120                            << _system\&.deltat << std::endl;
+121 
+122               solve_result = _diff_solver->solve();
+123 
+124               // Check solve results with reduced timestep
+125               bool backtracking_still_failed =
+126                 solve_result & DiffSolver::DIVERGED_BACKTRACKING_FAILURE;
+127 
+128               bool backtracking_max_iterations =
+129                 solve_result & DiffSolver::DIVERGED_MAX_NONLINEAR_ITERATIONS;
+130 
+131               if (!backtracking_still_failed && !backtracking_max_iterations)
+132                 {
+133                   if (!quiet)
+134                     libMesh::out << "Reduced dt solve succeeded\&." << std::endl;
+135                   return;
+136                 }
+137             }
+138 
+139           // If we made it here, we still couldn't converge the solve after
+140           // reducing deltat
+141           libMesh::out << "DiffSolver::solve() did not succeed after "
+142                        << reduce_deltat_on_diffsolver_failure
+143                        << " attempts\&." << std::endl;
+144           libmesh_convergence_failure();
+145 
+146         } // end if (backtracking_failed || max_iterations)
+147     } // end if (reduce_deltat_on_diffsolver_failure)
+148 }
+.fi
+.SS "const \fBsys_type\fP& libMesh::TimeSolver::system () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 157 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_system\&.
+.PP
+Referenced by libMesh::TimeSolver::reinit(), and libMesh::TimeSolver::solve()\&.
+.PP
+.nf
+157 { return _system; }
+.fi
+.SS "\fBsys_type\fP& libMesh::TimeSolver::system ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 162 of file time_solver\&.h\&.
+.PP
+References libMesh::TimeSolver::_system\&.
+.PP
+.nf
+162 { return _system; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "\fBAutoPtr\fP<\fBDiffSolver\fP> libMesh::TimeSolver::_diff_solver\fC [protected]\fP, \fC [inherited]\fP"
+An implicit linear or nonlinear solver to use at each timestep\&. 
+.PP
+Definition at line 232 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TimeSolver::diff_solver(), libMesh::TimeSolver::init(), libMesh::TimeSolver::init_data(), libMesh::TimeSolver::reinit(), libMesh::UnsteadySolver::solve(), and libMesh::TimeSolver::solve()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBAutoPtr\fP<\fBLinearSolver\fP<\fBNumber\fP> > libMesh::TimeSolver::_linear_solver\fC [protected]\fP, \fC [inherited]\fP"
+An implicit linear solver to use for adjoint problems\&. 
+.PP
+Definition at line 237 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TimeSolver::init(), libMesh::TimeSolver::init_data(), libMesh::TimeSolver::linear_solver(), and libMesh::TimeSolver::reinit()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBsys_type\fP& libMesh::TimeSolver::_system\fC [protected]\fP, \fC [inherited]\fP"
+A reference to the system we are solving\&. 
+.PP
+Definition at line 242 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::AdaptiveTimeSolver::advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::UnsteadySolver::du(), libMesh::EulerSolver::element_residual(), element_residual(), libMesh::SteadySolver::element_residual(), libMesh::EigenTimeSolver::element_residual(), libMesh::UnsteadySolver::init(), libMesh::TimeSolver::init(), libMesh::EigenTimeSolver::init(), libMesh::UnsteadySolver::init_data(), libMesh::TimeSolver::init_data(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::UnsteadySolver::reinit(), libMesh::TimeSolver::reinit(), libMesh::UnsteadySolver::retrieve_timestep(), libMesh::EulerSolver::side_residual(), side_residual(), libMesh::SteadySolver::side_residual(), libMesh::EigenTimeSolver::side_residual(), libMesh::TwostepTimeSolver::solve(), libMesh::UnsteadySolver::solve(), libMesh::EigenTimeSolver::solve(), and libMesh::TimeSolver::system()\&.
+.SS "bool libMesh::UnsteadySolver::first_adjoint_step\fC [protected]\fP, \fC [inherited]\fP"
+A bool that will be true the first time \fBadjoint_advance_timestep()\fP is called, (when the primal solution is to be used to set adjoint boundary conditions) and false thereafter 
+.PP
+Definition at line 163 of file unsteady_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep()\&.
+.SS "bool libMesh::UnsteadySolver::first_solve\fC [protected]\fP, \fC [inherited]\fP"
+A bool that will be true the first time \fBsolve()\fP is called, and false thereafter 
+.PP
+Definition at line 157 of file unsteady_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::TwostepTimeSolver::solve(), and libMesh::UnsteadySolver::solve()\&.
+.SS "\fBAutoPtr\fP<\fBNumericVector\fP<\fBNumber\fP> > libMesh::UnsteadySolver::old_local_nonlinear_solution\fC [inherited]\fP"
+Serial vector of _system\&.get_vector('_old_nonlinear_solution') 
+.PP
+Definition at line 133 of file unsteady_solver\&.h\&.
+.PP
+Referenced by libMesh::AdaptiveTimeSolver::AdaptiveTimeSolver(), libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::AdaptiveTimeSolver::init(), libMesh::UnsteadySolver::init_data(), libMesh::UnsteadySolver::old_nonlinear_solution(), libMesh::UnsteadySolver::reinit(), libMesh::UnsteadySolver::retrieve_timestep(), and libMesh::AdaptiveTimeSolver::~AdaptiveTimeSolver()\&.
+.SS "bool libMesh::TimeSolver::quiet\fC [inherited]\fP"
+Print extra debugging information if quiet == false\&. 
+.PP
+Definition at line 177 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TwostepTimeSolver::solve(), libMesh::UnsteadySolver::solve(), and libMesh::EigenTimeSolver::solve()\&.
+.SS "unsigned int libMesh::TimeSolver::reduce_deltat_on_diffsolver_failure\fC [inherited]\fP"
+This value (which defaults to zero) is the number of times the \fBTimeSolver\fP is allowed to halve deltat and let the \fBDiffSolver\fP repeat the latest failed solve with a reduced timestep\&. Note that this has no effect for SteadySolvers\&. Note that you must set at least one of the \fBDiffSolver\fP flags 'continue_after_max_iterations' or 'continue_after_backtrack_failure' to allow the \fBTimeSolver\fP to retry the solve\&. 
+.PP
+Definition at line 205 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::TwostepTimeSolver::solve(), and libMesh::UnsteadySolver::solve()\&.
+.SS "\fBAutoPtr\fP<\fBSolutionHistory\fP> libMesh::TimeSolver::solution_history\fC [protected]\fP, \fC [inherited]\fP"
+An \fBAutoPtr\fP to a \fBSolutionHistory\fP object\&. Default is \fBNoSolutionHistory\fP, which the user can override by declaring a different kind of \fBSolutionHistory\fP in the application 
+.PP
+Definition at line 260 of file time_solver\&.h\&.
+.PP
+Referenced by libMesh::UnsteadySolver::adjoint_advance_timestep(), libMesh::UnsteadySolver::advance_timestep(), libMesh::UnsteadySolver::retrieve_timestep(), and libMesh::TimeSolver::set_solution_history()\&.
+.SS "\fBReal\fP libMesh::Euler2Solver::theta"
+The value for the theta method to employ: 1\&.0 corresponds to backwards Euler, 0\&.0 corresponds to forwards Euler, 0\&.5 corresponds to a Crank-Nicolson-like scheme\&. 
+.PP
+Definition at line 98 of file euler2_solver\&.h\&.
+.PP
+Referenced by element_residual(), error_order(), and side_residual()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

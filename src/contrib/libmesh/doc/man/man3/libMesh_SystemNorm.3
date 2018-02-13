@@ -1,0 +1,479 @@
+.TH "libMesh::SystemNorm" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SystemNorm \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <system_norm\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSystemNorm\fP ()"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP (const \fBFEMNormType\fP &t)"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP (const std::vector< \fBFEMNormType\fP > &norms)"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP (const std::vector< \fBFEMNormType\fP > &norms, std::vector< \fBReal\fP > &weights)"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP (const std::vector< \fBFEMNormType\fP > &norms, std::vector< std::vector< \fBReal\fP > > &weights)"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP (const \fBSystemNorm\fP &s)"
+.br
+.ti -1c
+.RI "bool \fBis_discrete\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBcalculate_norm\fP (const std::vector< \fBReal\fP > &v)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBcalculate_norm\fP (const std::vector< \fBReal\fP > &v1, const std::vector< \fBReal\fP > &v2)"
+.br
+.ti -1c
+.RI "bool \fBis_identity\fP ()"
+.br
+.ti -1c
+.RI "\fBFEMNormType\fP \fBtype\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "void \fBset_type\fP (unsigned int var, const \fBFEMNormType\fP &t)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBweight\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "void \fBset_weight\fP (unsigned int var, \fBReal\fP w)"
+.br
+.ti -1c
+.RI "void \fBset_off_diagonal_weight\fP (unsigned int i, unsigned int j, \fBReal\fP w)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBweight_sq\fP (unsigned int var) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBFEMNormType\fP > \fB_norms\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fB_weights\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fB_weights_sq\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector< \fBReal\fP > > \fB_off_diagonal_weights\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a norm/seminorm to be applied to a \fBNumericVector\fP which contains coefficients in a finite element space\&.
+.PP
+Discrete vector norms and weighted l2 combinations of Sobolev norms and seminorms are representable\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2008 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file system_norm\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::SystemNorm::SystemNorm ()\fC [inline]\fP"
+Constructor, defaults to DISCRETE_L2 
+.PP
+Definition at line 172 of file system_norm\&.h\&.
+.PP
+.nf
+172                        :
+173   _norms(1, DISCRETE_L2), _weights(1, 1\&.0), _weights_sq(1, 1\&.0)
+174 {
+175 }
+.fi
+.SS "libMesh::SystemNorm::SystemNorm (const \fBFEMNormType\fP &t)\fC [inline]\fP"
+Constructor, for discrete vector norms, systems with one variable, and systems for which the same norm type should be used with a weight of one on each variable\&.
+.PP
+This is deliberately an implicit constructor; we want user code to be able to include lines like 'error_norm = L2' 
+.PP
+Definition at line 179 of file system_norm\&.h\&.
+.PP
+.nf
+179                                            :
+180   _norms(1, t), _weights(1, 1\&.0), _weights_sq(1, 1\&.0)
+181 {
+182 }
+.fi
+.SS "libMesh::SystemNorm::SystemNorm (const std::vector< \fBFEMNormType\fP > &norms)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor, for unweighted sobolev norms on systems with multiple variables\&.
+.PP
+For a system with n variables, the final norm will be the l2 norm of the n-vector of the norms in each variable\&. 
+.PP
+Definition at line 186 of file system_norm\&.h\&.
+.PP
+References _norms, and libMesh::DISCRETE_L2\&.
+.PP
+.nf
+186                                                           :
+187   _norms(norms), _weights(1, 1\&.0), _weights_sq(1, 1\&.0)
+188 {
+189   if (_norms\&.empty())
+190     _norms\&.push_back(DISCRETE_L2);
+191 }
+.fi
+.SS "libMesh::SystemNorm::SystemNorm (const std::vector< \fBFEMNormType\fP > &norms, std::vector< \fBReal\fP > &weights)\fC [inline]\fP"
+Constructor, for weighted sobolev norms on systems with multiple variables\&.
+.PP
+For a system with n variables, the final norm will be the l2 norm of the n-vector of the norms in each variable, each multiplied by weight\&. 
+.PP
+Definition at line 195 of file system_norm\&.h\&.
+.PP
+References _norms, _weights, _weights_sq, and libMesh::DISCRETE_L2\&.
+.PP
+.nf
+196                                                  :
+197   _norms(norms), _weights(weights), _weights_sq(_weights\&.size(), 0\&.0)
+198 {
+199   if (_norms\&.empty())
+200     _norms\&.push_back(DISCRETE_L2);
+201 
+202   if (_weights\&.empty())
+203     {
+204       _weights\&.push_back(1\&.0);
+205       _weights_sq\&.push_back(1\&.0);
+206     }
+207   else
+208     for (std::size_t i=0; i != _weights\&.size(); ++i)
+209       _weights_sq[i] = _weights[i] * _weights[i];
+210 }
+.fi
+.SS "libMesh::SystemNorm::SystemNorm (const std::vector< \fBFEMNormType\fP > &norms, std::vector< std::vector< \fBReal\fP > > &weights)\fC [inline]\fP"
+Constructor, for weighted sobolev norms on systems with multiple variables and their adjoints
+.PP
+For a system with n variables, the final norm computed will be of the form norm_u^T*R*norm_z where R is a scaling matrix 
+.PP
+Definition at line 213 of file system_norm\&.h\&.
+.PP
+References _norms, _off_diagonal_weights, _weights, _weights_sq, and libMesh::DISCRETE_L2\&.
+.PP
+.nf
+214                                                             :
+215   _norms(norms), _weights(weights\&.size()), _off_diagonal_weights(weights)
+216 {
+217   if(_norms\&.empty())
+218     _norms\&.push_back(DISCRETE_L2);
+219 
+220   if (_weights\&.empty())
+221     {
+222       _weights\&.push_back(1\&.0);
+223       _weights_sq\&.push_back(1\&.0);
+224     }
+225   else
+226     {
+227       // Loop over the entries of the user provided matrix and store its entries in
+228       // the _off_diagonal_weights or _diagonal_weights
+229       for(std::size_t i=0; i!=_off_diagonal_weights\&.size(); ++i)
+230         {
+231           if(_off_diagonal_weights[i]\&.size() > i)
+232             {
+233               _weights[i] = _off_diagonal_weights[i][i];
+234               _off_diagonal_weights[i][i] = 0;
+235             }
+236           else
+237             _weights[i] = 1\&.0;
+238         }
+239       for (std::size_t i=0; i != _weights\&.size(); ++i)
+240         _weights_sq[i] = _weights[i] * _weights[i];
+241     }
+242 }
+.fi
+.SS "libMesh::SystemNorm::SystemNorm (const \fBSystemNorm\fP &s)\fC [inline]\fP"
+Copy Constructor 
+.PP
+Definition at line 245 of file system_norm\&.h\&.
+.PP
+.nf
+245                                           :
+246   _norms(s\&._norms), _weights(s\&._weights), _weights_sq(s\&._weights_sq)
+247 {
+248 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBReal\fP libMesh::SystemNorm::calculate_norm (const std::vector< \fBReal\fP > &v)\fC [inline]\fP"
+Returns the weighted norm v^T*W*v where W represents our weights matrix or weights vector times identity matrix\&. 
+.PP
+Definition at line 390 of file system_norm\&.h\&.
+.PP
+Referenced by libMesh::AdjointResidualErrorEstimator::estimate_error()\&.
+.PP
+.nf
+391 {
+392   return this->calculate_norm(v1,v1);
+393 }
+.fi
+.SS "\fBReal\fP libMesh::SystemNorm::calculate_norm (const std::vector< \fBReal\fP > &v1, const std::vector< \fBReal\fP > &v2)\fC [inline]\fP"
+Returns the weighted inner product v1^T*W*v2 where R is our weights 
+.PP
+Definition at line 343 of file system_norm\&.h\&.
+.PP
+References _off_diagonal_weights, _weights, and libMesh::Real\&.
+.PP
+.nf
+344 {
+345   // The vectors are assumed to both be vectors of the (same number
+346   // of) components
+347   std::size_t vsize = v1\&.size();
+348   libmesh_assert_equal_to (vsize, v2\&.size());
+349 
+350   // We'll support implicitly defining weights, but if the user sets
+351   // more weights than he uses then something's probably wrong
+352   std::size_t diagsize = this->_weights\&.size();
+353   libmesh_assert_greater_equal (vsize, diagsize);
+354 
+355   // Initialize the variable val
+356   Real val = 0\&.;
+357 
+358   // Loop over all the components of the system with explicit
+359   // weights
+360   for(std::size_t i = 0; i != diagsize; i++)
+361     {
+362       val += this->_weights[i] * v1[i] * v2[i];
+363     }
+364   // Loop over all the components of the system with implicit
+365   // weights
+366   for(std::size_t i = diagsize; i < vsize; i++)
+367     {
+368       val += v1[i] * v2[i];
+369     }
+370 
+371   // Loop over the components of the system
+372   std::size_t nrows = this->_off_diagonal_weights\&.size();
+373   libmesh_assert_less_equal (vsize, nrows);
+374 
+375   for(std::size_t i = 0; i != nrows; i++)
+376     {
+377       std::size_t ncols = this->_off_diagonal_weights[i]\&.size();
+378       for(std::size_t j=0; j != ncols; j++)
+379         {
+380           // Note that the diagonal weights here were set to zero
+381           // in the constructor
+382           val += this->_off_diagonal_weights[i][j] * v1[i] * v2[j];
+383         }
+384     }
+385 
+386   return(val);
+387 }
+.fi
+.SS "bool libMesh::SystemNorm::is_discrete () const\fC [inline]\fP"
+Returns true if this is purely a discrete norm 
+.PP
+Definition at line 252 of file system_norm\&.h\&.
+.PP
+References _norms, libMesh::DISCRETE_L1, libMesh::DISCRETE_L2, libMesh::DISCRETE_L_INF, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::System::calculate_norm()\&.
+.PP
+.nf
+253 {
+254   libmesh_assert (!_norms\&.empty());
+255 
+256   if (_norms[0] == DISCRETE_L1 ||
+257       _norms[0] == DISCRETE_L2 ||
+258       _norms[0] == DISCRETE_L_INF)
+259     return true;
+260 
+261   return false;
+262 }
+.fi
+.SS "bool libMesh::SystemNorm::is_identity ()\fC [inline]\fP"
+Returns true if no weight matrix W is specified or an identiy matrix is specified, otherwise returns false 
+.PP
+Definition at line 396 of file system_norm\&.h\&.
+.PP
+References _off_diagonal_weights, and _weights\&.
+.PP
+Referenced by libMesh::AdjointResidualErrorEstimator::estimate_error()\&.
+.PP
+.nf
+397 {
+398   std::size_t nrows = this->_off_diagonal_weights\&.size();
+399 
+400   // If any of the off-diagonal elements is not 0, then we are in the non-identity case
+401   for(std::size_t i = 0; i != nrows; i++)
+402     {
+403       std::size_t ncols = this->_off_diagonal_weights[i]\&.size();
+404       for(std::size_t j = 0; j != ncols; j++)
+405         {
+406           if(_off_diagonal_weights[i][j] != 0)
+407             {
+408               return(false);
+409             }
+410         }
+411     }
+412 
+413   // If any of the diagonal elements is not 1, then we are in the non-identity case
+414   nrows = this->_weights\&.size();
+415   for(std::size_t i = 0; i != nrows; i++)
+416     if(_weights[i] != 1)
+417       return(false);
+418 
+419   // If all the off-diagonals elements are 0, and diagonal elements 1, then we are in an identity case
+420   return(true);
+421 }
+.fi
+.SS "void libMesh::SystemNorm::set_off_diagonal_weight (unsigned inti, unsigned intj, \fBReal\fPw)\fC [inline]\fP"
+Sets the weight corresponding to the norm from the variable pair v1(var1) coming from v2(var2)\&. See calculate_norm 
+.PP
+Definition at line 314 of file system_norm\&.h\&.
+.PP
+References _off_diagonal_weights, _weights, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+315 {
+316   libmesh_assert (!_weights\&.empty());
+317 
+318   if (i >= _off_diagonal_weights\&.size())
+319     {
+320       _off_diagonal_weights\&.resize(i+1);
+321     }
+322 
+323   if (j >= _off_diagonal_weights[i]\&.size())
+324     {
+325       _off_diagonal_weights[i]\&.resize(j+1, 0\&.);
+326     }
+327 
+328   _off_diagonal_weights[i][j] = w;
+329 
+330 }
+.fi
+.SS "void libMesh::SystemNorm::set_type (unsigned intvar, const \fBFEMNormType\fP &t)\fC [inline]\fP"
+Sets the type of the norm in variable \fCvar\fP 
+.PP
+Definition at line 278 of file system_norm\&.h\&.
+.PP
+References _norms, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+279 {
+280   libmesh_assert (!_norms\&.empty());
+281 
+282   if (var >= _norms\&.size())
+283     _norms\&.resize(var+1, t);
+284 
+285   _norms[var] = t;
+286 }
+.fi
+.SS "void libMesh::SystemNorm::set_weight (unsigned intvar, \fBReal\fPw)\fC [inline]\fP"
+Sets the weight corresponding to the norm in variable \fCvar\fP 
+.PP
+Definition at line 299 of file system_norm\&.h\&.
+.PP
+References _weights, _weights_sq, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+300 {
+301   libmesh_assert (!_weights\&.empty());
+302 
+303   if (var >= _weights\&.size())
+304     {
+305       _weights\&.resize(var+1, 1\&.0);
+306       _weights_sq\&.resize(var+1, 1\&.0);
+307     }
+308 
+309   _weights[var] = w;
+310   _weights_sq[var] = w*w;
+311 }
+.fi
+.SS "\fBFEMNormType\fP libMesh::SystemNorm::type (unsigned intvar) const\fC [inline]\fP"
+Returns the type of the norm in variable \fCvar\fP 
+.PP
+Definition at line 266 of file system_norm\&.h\&.
+.PP
+References _norms, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::System::calculate_norm(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.PP
+.nf
+267 {
+268   libmesh_assert (!_norms\&.empty());
+269 
+270   std::size_t i = (var < _norms\&.size()) ? var : _norms\&.size() - 1;
+271 
+272   return _norms[i];
+273 }
+.fi
+.SS "\fBReal\fP libMesh::SystemNorm::weight (unsigned intvar) const\fC [inline]\fP"
+Returns the weight corresponding to the norm in variable \fCvar\fP 
+.PP
+Definition at line 290 of file system_norm\&.h\&.
+.PP
+References _weights, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::System::calculate_norm(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.PP
+.nf
+291 {
+292   libmesh_assert (!_weights\&.empty());
+293 
+294   return (var < _weights\&.size()) ? _weights[var] : 1\&.0;
+295 }
+.fi
+.SS "\fBReal\fP libMesh::SystemNorm::weight_sq (unsigned intvar) const\fC [inline]\fP"
+Returns the squared weight corresponding to the norm in variable \fCvar\fP\&. We cache that at construction time to save a few flops\&. 
+.PP
+Definition at line 334 of file system_norm\&.h\&.
+.PP
+References _weights_sq, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::System::calculate_norm(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.PP
+.nf
+335 {
+336   libmesh_assert (!_weights_sq\&.empty());
+337 
+338   return (var < _weights_sq\&.size()) ? _weights_sq[var] : 1\&.0;
+339 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<\fBFEMNormType\fP> libMesh::SystemNorm::_norms\fC [private]\fP"
+
+.PP
+Definition at line 154 of file system_norm\&.h\&.
+.PP
+Referenced by is_discrete(), set_type(), SystemNorm(), and type()\&.
+.SS "std::vector<std::vector<\fBReal\fP> > libMesh::SystemNorm::_off_diagonal_weights\fC [private]\fP"
+One more data structure needed to store the off diagonal components for the generalize \fBSystemNorm\fP case 
+.PP
+Definition at line 163 of file system_norm\&.h\&.
+.PP
+Referenced by calculate_norm(), is_identity(), set_off_diagonal_weight(), and SystemNorm()\&.
+.SS "std::vector<\fBReal\fP> libMesh::SystemNorm::_weights\fC [private]\fP"
+
+.PP
+Definition at line 156 of file system_norm\&.h\&.
+.PP
+Referenced by calculate_norm(), is_identity(), set_off_diagonal_weight(), set_weight(), SystemNorm(), and weight()\&.
+.SS "std::vector<\fBReal\fP> libMesh::SystemNorm::_weights_sq\fC [private]\fP"
+
+.PP
+Definition at line 157 of file system_norm\&.h\&.
+.PP
+Referenced by set_weight(), SystemNorm(), and weight_sq()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,423 @@
+.TH "libMesh::StoredRange< iterator_type, object_type >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::StoredRange< iterator_type, object_type > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <stored_range\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector
+.br
+< object_type >
+.br
+::\fBconst_iterator\fP \fBconst_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStoredRange\fP (const unsigned int new_grainsize=1000)"
+.br
+.ti -1c
+.RI "\fBStoredRange\fP (const iterator_type &first, const iterator_type &last, const unsigned int new_grainsize=1000)"
+.br
+.ti -1c
+.RI "\fBStoredRange\fP (const \fBStoredRange\fP< iterator_type, object_type > &er)"
+.br
+.ti -1c
+.RI "\fBStoredRange\fP (const \fBStoredRange\fP< iterator_type, object_type > &er, const \fBconst_iterator\fP &begin_range, const \fBconst_iterator\fP &end_range)"
+.br
+.ti -1c
+.RI "\fBStoredRange\fP (\fBStoredRange\fP< iterator_type, object_type > &r, \fBThreads::split\fP)"
+.br
+.ti -1c
+.RI "\fBStoredRange\fP< iterator_type, 
+.br
+object_type > & \fBreset\fP (const iterator_type &first, const iterator_type &last)"
+.br
+.ti -1c
+.RI "\fBStoredRange\fP< iterator_type, 
+.br
+object_type > & \fBreset\fP ()"
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fBbegin\fP () const "
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fBend\fP () const "
+.br
+.ti -1c
+.RI "std::size_t \fBfirst_idx\fP () const "
+.br
+.ti -1c
+.RI "std::size_t \fBlast_idx\fP () const "
+.br
+.ti -1c
+.RI "std::size_t \fBgrainsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBgrainsize\fP (const unsigned int &gs)"
+.br
+.ti -1c
+.RI "std::size_t \fBsize\fP () const "
+.br
+.ti -1c
+.RI "bool \fBempty\fP () const "
+.br
+.ti -1c
+.RI "bool \fBis_divisible\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBconst_iterator\fP \fB_end\fP"
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fB_begin\fP"
+.br
+.ti -1c
+.RI "std::size_t \fB_last\fP"
+.br
+.ti -1c
+.RI "std::size_t \fB_first\fP"
+.br
+.ti -1c
+.RI "std::size_t \fB_grainsize\fP"
+.br
+.ti -1c
+.RI "std::vector< object_type > \fB_objs\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename iterator_type, typename object_type>class libMesh::StoredRange< iterator_type, object_type >"
+The \fC\fBStoredRange\fP\fP class defined a contiguous, divisible set of objects This class is used primarily as the argument to function objects\&. The range can then be subdivided into a number of 'tasks' which can be executed in parallel\&. This concept is central to the Threading Building Blocks template library which can optionally be used by \fC\fBlibMesh\fP\fP to implement shared-memory parallelism\&.
+.PP
+The implementation takes a user-provided object range and packs it into a contiguous vector which can then be subdivided efficiently\&. A first-cut implementation using raw element iterators incurred simply too much overhead by using the predicated iterators, specifically operations such as advancing such iterators has a cost proportional to the amount the iterator is advanced\&. Hence in this implementation the user-provided range is packed into a vector\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2008\&. 
+.RE
+.PP
+
+.PP
+Definition at line 51 of file stored_range\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename iterator_type, typename object_type> typedef std::vector<object_type>::\fBconst_iterator\fP \fBlibMesh::StoredRange\fP< iterator_type, object_type >::\fBconst_iterator\fP"
+Allows an \fC\fBStoredRange\fP\fP to behave like an STL container\&. 
+.PP
+Definition at line 57 of file stored_range\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename iterator_type, typename object_type> \fBlibMesh::StoredRange\fP< iterator_type, object_type >::\fBStoredRange\fP (const unsigned intnew_grainsize = \fC1000\fP)\fC [inline]\fP"
+Constructor\&. Optionally takes the \fCgrainsize\fP parameter, which is the smallest chunk the range may be broken into for parallel execution\&. 
+.PP
+Definition at line 64 of file stored_range\&.h\&.
+.PP
+.nf
+64                                                         :
+65     _end(),
+66     _begin(),
+67     _last(),
+68     _first(),
+69     _grainsize(new_grainsize),
+70     _objs()
+71   {}
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBlibMesh::StoredRange\fP< iterator_type, object_type >::\fBStoredRange\fP (const iterator_type &first, const iterator_type &last, const unsigned intnew_grainsize = \fC1000\fP)\fC [inline]\fP"
+Constructor\&. Takes the beginning and end of the range\&. Optionally takes the \fCgrainsize\fP parameter, which is the smallest chunk the range may be broken into for parallel execution\&. 
+.PP
+Definition at line 79 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::reset()\&.
+.PP
+.nf
+81                                                         :
+82     _end(),
+83     _begin(),
+84     _last(),
+85     _first(),
+86     _grainsize(new_grainsize),
+87     _objs()
+88   {
+89     this->reset(first, last);
+90   }
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBlibMesh::StoredRange\fP< iterator_type, object_type >::\fBStoredRange\fP (const \fBStoredRange\fP< iterator_type, object_type > &er)\fC [inline]\fP"
+Copy constructor\&. The \fC\fBStoredRange\fP\fP can be copied into subranges for parallel execution\&. In this way the initial \fC\fBStoredRange\fP\fP can be thought of as the root of a binary tree\&. The root element is the only element which interacts with the user\&. It takes a specified range of objects and packs it into a contiguous vector which can be split efficiently\&. However, there is no need for the child ranges to contain this vector, so long as the parent outlives the children\&. So we implement the copy constructor to specifically omit the \fC_objs\fP vector\&. 
+.PP
+Definition at line 105 of file stored_range\&.h\&.
+.PP
+.nf
+105                                                                 :
+106     _end(er\&._end),
+107     _begin(er\&._begin),
+108     _last(er\&._last),
+109     _first(er\&._first),
+110     _grainsize(er\&._grainsize),
+111     _objs()
+112   {
+113     // specifically, do *not* copy the vector
+114   }
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBlibMesh::StoredRange\fP< iterator_type, object_type >::\fBStoredRange\fP (const \fBStoredRange\fP< iterator_type, object_type > &er, const \fBconst_iterator\fP &begin_range, const \fBconst_iterator\fP &end_range)\fC [inline]\fP"
+NOTE: When using pthreads this constructor is MANDATORY!!!
+.PP
+Copy constructor\&. The \fC\fBStoredRange\fP\fP can be copied into subranges for parallel execution\&. In this way the initial \fC\fBStoredRange\fP\fP can be thought of as the root of a binary tree\&. The root element is the only element which interacts with the user\&. It takes a specified range of objects and packs it into a contiguous vector which can be split efficiently\&. However, there is no need for the child ranges to contain this vector, so long as the parent outlives the children\&. So we implement the copy constructor to specifically omit the \fC_objs\fP vector\&. This version allows you to set the beginning and ending of this new range to be different from that of the one we're copying\&. 
+.PP
+Definition at line 133 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, libMesh::StoredRange< iterator_type, object_type >::_end, libMesh::StoredRange< iterator_type, object_type >::_first, and libMesh::StoredRange< iterator_type, object_type >::_last\&.
+.PP
+.nf
+135                                                :
+136     _end(end_range),
+137     _begin(begin_range),
+138     _last(0), // Initialize these in a moment
+139     _first(0),
+140     _grainsize(er\&._grainsize),
+141     _objs()
+142   {
+143     // specifically, do *not* copy the vector
+144 
+145     _first = std::distance(er\&._begin, _begin);
+146     _last = _first + std::distance(_begin, _end);
+147   }
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBlibMesh::StoredRange\fP< iterator_type, object_type >::\fBStoredRange\fP (\fBStoredRange\fP< iterator_type, object_type > &r, \fBThreads::split\fP)\fC [inline]\fP"
+Splits the range \fCr\fP\&. The first half of the range is left in place, the second half of the range is placed in *this\&. 
+.PP
+Definition at line 154 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, libMesh::StoredRange< iterator_type, object_type >::_end, libMesh::StoredRange< iterator_type, object_type >::_first, and libMesh::StoredRange< iterator_type, object_type >::_last\&.
+.PP
+.nf
+154                                                                          :
+155     _end(r\&._end),
+156     _begin(r\&._begin),
+157     _last(r\&._last),
+158     _first(r\&._first),
+159     _grainsize(r\&._grainsize),
+160     _objs()
+161   {
+162     const_iterator
+163       beginning = r\&._begin,
+164       ending    = r\&._end,
+165       middle    = beginning + std::distance(beginning, ending)/2u;
+166 
+167     r\&._end = _begin = middle;
+168 
+169     std::size_t
+170       first = r\&._first,
+171       last  = r\&._last,
+172       half  = first + (last-first)/2u;
+173 
+174     r\&._last = _first = half;
+175   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename iterator_type, typename object_type> \fBconst_iterator\fP \fBlibMesh::StoredRange\fP< iterator_type, object_type >::begin () const\fC [inline]\fP"
+Beginning of the range\&. 
+.PP
+Definition at line 221 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.PP
+.nf
+221 { return _begin; }
+.fi
+.SS "template<typename iterator_type, typename object_type> bool \fBlibMesh::StoredRange\fP< iterator_type, object_type >::empty () const\fC [inline]\fP"
+Returns true if the range is empty\&. 
+.PP
+Definition at line 261 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, and libMesh::StoredRange< iterator_type, object_type >::_end\&.
+.PP
+Referenced by libMesh::DofMap::create_dof_constraints()\&.
+.PP
+.nf
+261 { return (_begin == _end); }
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBconst_iterator\fP \fBlibMesh::StoredRange\fP< iterator_type, object_type >::end () const\fC [inline]\fP"
+End of the range\&. 
+.PP
+Definition at line 226 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_end\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.PP
+.nf
+226 { return _end; }
+.fi
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::first_idx () const\fC [inline]\fP"
+Index in the stored vector of the first object\&. 
+.PP
+Definition at line 231 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_first\&.
+.PP
+.nf
+231 { return _first; }
+.fi
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::grainsize () const\fC [inline]\fP"
+The grain size for the range\&. The range will be subdivided into subranges not to exceed the grain size\&. 
+.PP
+Definition at line 242 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_grainsize\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::is_divisible()\&.
+.PP
+.nf
+242 {return _grainsize;}
+.fi
+.SS "template<typename iterator_type, typename object_type> void \fBlibMesh::StoredRange\fP< iterator_type, object_type >::grainsize (const unsigned int &gs)\fC [inline]\fP"
+Set the grain size\&. 
+.PP
+Definition at line 247 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_grainsize\&.
+.PP
+.nf
+247 {_grainsize = gs;}
+.fi
+.SS "template<typename iterator_type, typename object_type> bool \fBlibMesh::StoredRange\fP< iterator_type, object_type >::is_divisible () const\fC [inline]\fP"
+Returns true if the range can be subdivided\&. 
+.PP
+Definition at line 266 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, libMesh::StoredRange< iterator_type, object_type >::_end, and libMesh::StoredRange< iterator_type, object_type >::grainsize()\&.
+.PP
+.nf
+266 { return this->grainsize() < static_cast<unsigned int>(std::distance(_begin, _end)); }
+.fi
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::last_idx () const\fC [inline]\fP"
+Index in the stored vector of the last object\&. 
+.PP
+Definition at line 236 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_last\&.
+.PP
+.nf
+236 { return _last; }
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBStoredRange\fP<iterator_type, object_type>& \fBlibMesh::StoredRange\fP< iterator_type, object_type >::reset (const iterator_type &first, const iterator_type &last)\fC [inline]\fP"
+Resets the \fC\fBStoredRange\fP\fP to contain [first,last)\&. Returns a reference to itself for convenience, so functions expecting a StoredRange<> can be passed e\&.g\&. foo\&.reset(begin,end)\&. 
+.PP
+Definition at line 183 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, libMesh::StoredRange< iterator_type, object_type >::_end, libMesh::StoredRange< iterator_type, object_type >::_first, libMesh::StoredRange< iterator_type, object_type >::_last, and libMesh::StoredRange< iterator_type, object_type >::_objs\&.
+.PP
+Referenced by libMesh::DofMap::create_dof_constraints()\&.
+.PP
+.nf
+185   {
+186     _objs\&.clear();
+187 
+188     for (iterator_type it=first; it!=last; ++it)
+189       _objs\&.push_back(*it);
+190 
+191     _begin = _objs\&.begin();
+192     _end   = _objs\&.end();
+193 
+194     _first = 0;
+195     _last  = _objs\&.size();
+196 
+197     return *this;
+198   }
+.fi
+.SS "template<typename iterator_type, typename object_type> \fBStoredRange\fP<iterator_type, object_type>& \fBlibMesh::StoredRange\fP< iterator_type, object_type >::reset ()\fC [inline]\fP"
+Resets the range to the last specified range\&. This method only exists for efficiency -- it is more efficient to set the range to its previous value without rebuilding the underlying vector\&. Returns a reference to itself for convenience, so functions expecting a StoredRange<> can be passed e\&.g\&. \fBfoo\&.reset()\fP\&. 
+.PP
+Definition at line 207 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, libMesh::StoredRange< iterator_type, object_type >::_end, libMesh::StoredRange< iterator_type, object_type >::_first, libMesh::StoredRange< iterator_type, object_type >::_last, and libMesh::StoredRange< iterator_type, object_type >::_objs\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::StoredRange()\&.
+.PP
+.nf
+208   {
+209     _begin = _objs\&.begin();
+210     _end   = _objs\&.end();
+211 
+212     _first = 0;
+213     _last  = _objs\&.size();
+214 
+215     return *this;
+216   }
+.fi
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::size () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the size of the range\&. 
+.RE
+.PP
+
+.PP
+Definition at line 252 of file stored_range\&.h\&.
+.PP
+References libMesh::StoredRange< iterator_type, object_type >::_begin, and libMesh::StoredRange< iterator_type, object_type >::_end\&.
+.PP
+.nf
+252 { return std::distance(_begin, _end); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename iterator_type, typename object_type> \fBconst_iterator\fP \fBlibMesh::StoredRange\fP< iterator_type, object_type >::_begin\fC [private]\fP"
+
+.PP
+Definition at line 271 of file stored_range\&.h\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::begin(), libMesh::StoredRange< iterator_type, object_type >::empty(), libMesh::StoredRange< iterator_type, object_type >::is_divisible(), libMesh::StoredRange< iterator_type, object_type >::reset(), libMesh::StoredRange< iterator_type, object_type >::size(), and libMesh::StoredRange< iterator_type, object_type >::StoredRange()\&.
+.SS "template<typename iterator_type, typename object_type> \fBconst_iterator\fP \fBlibMesh::StoredRange\fP< iterator_type, object_type >::_end\fC [private]\fP"
+
+.PP
+Definition at line 270 of file stored_range\&.h\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::empty(), libMesh::StoredRange< iterator_type, object_type >::end(), libMesh::StoredRange< iterator_type, object_type >::is_divisible(), libMesh::StoredRange< iterator_type, object_type >::reset(), libMesh::StoredRange< iterator_type, object_type >::size(), and libMesh::StoredRange< iterator_type, object_type >::StoredRange()\&.
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::_first\fC [private]\fP"
+
+.PP
+Definition at line 273 of file stored_range\&.h\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::first_idx(), libMesh::StoredRange< iterator_type, object_type >::reset(), and libMesh::StoredRange< iterator_type, object_type >::StoredRange()\&.
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::_grainsize\fC [private]\fP"
+
+.PP
+Definition at line 274 of file stored_range\&.h\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::grainsize()\&.
+.SS "template<typename iterator_type, typename object_type> std::size_t \fBlibMesh::StoredRange\fP< iterator_type, object_type >::_last\fC [private]\fP"
+
+.PP
+Definition at line 272 of file stored_range\&.h\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::last_idx(), libMesh::StoredRange< iterator_type, object_type >::reset(), and libMesh::StoredRange< iterator_type, object_type >::StoredRange()\&.
+.SS "template<typename iterator_type, typename object_type> std::vector<object_type> \fBlibMesh::StoredRange\fP< iterator_type, object_type >::_objs\fC [private]\fP"
+
+.PP
+Definition at line 275 of file stored_range\&.h\&.
+.PP
+Referenced by libMesh::StoredRange< iterator_type, object_type >::reset()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

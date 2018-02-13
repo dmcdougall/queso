@@ -1,0 +1,72 @@
+.TH "libMesh::LibMeshInit" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LibMeshInit \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <libmesh\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLibMeshInit\fP (int argc, const char *const *argv, MPI_Comm COMM_WORLD_IN=MPI_COMM_WORLD)"
+.br
+.ti -1c
+.RI "\fBLibMeshInit\fP (int argc, const char *const *argv)"
+.br
+.ti -1c
+.RI "virtual \fB~LibMeshInit\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBParallel::Communicator\fP \fB_comm\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBLibMeshInit\fP\fP class, when constructed, initializes the dependent libraries (e\&.g\&. MPI or PETSC) and does the command line parsing needed by \fBlibMesh\fP\&. The \fBLibMeshInit\fP destructor closes those libraries properly\&.
+.PP
+For most users, a single \fBLibMeshInit\fP object should be created at the start of your main() function\&. This object replaces the previous \fBlibMesh::init()\fP/libMesh::close() methods, which are now deprecated\&. 
+.PP
+Definition at line 57 of file libmesh\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::LibMeshInit::LibMeshInit (intargc, const char *const *argv, MPI_CommCOMM_WORLD_IN = \fCMPI_COMM_WORLD\fP)"
+Initialize the library for use, with the command line options provided\&. This will e\&.g\&. call PetscInitialize if PETSC is available\&. You must create a \fBLibMeshInit\fP object before using any of the library functionality\&. This method may take an optional parameter to use a user-specified MPI communicator\&. 
+.SS "libMesh::LibMeshInit::LibMeshInit (intargc, const char *const *argv)"
+
+.SS "virtual libMesh::LibMeshInit::~LibMeshInit ()\fC [virtual]\fP"
+
+.SH "Member Function Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::LibMeshInit::comm () const\fC [inline]\fP"
+
+.PP
+Definition at line 76 of file libmesh\&.h\&.
+.PP
+References _comm\&.
+.PP
+.nf
+76 { return _comm; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBParallel::Communicator\fP libMesh::LibMeshInit::_comm\fC [private]\fP"
+
+.PP
+Definition at line 79 of file libmesh\&.h\&.
+.PP
+Referenced by comm()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

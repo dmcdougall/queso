@@ -1,0 +1,127 @@
+.TH "libMesh::TriangleInterface::PolygonHole" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TriangleInterface::PolygonHole \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_triangle_holes\&.h>\fP
+.PP
+Inherits \fBlibMesh::TriangleInterface::Hole\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPolygonHole\fP (const \fBPoint\fP &center, \fBReal\fP radius, unsigned int \fBn_points\fP)"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBn_points\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBpoint\fP (const unsigned int n) const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBinside\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP \fB_center\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_radius\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_n_points\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A concrete instantiation of the \fBHole\fP class that describes polygonal (triangular, square, pentagonal, \&.\&.\&.) holes\&. 
+.PP
+Definition at line 77 of file mesh_triangle_holes\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TriangleInterface::PolygonHole::PolygonHole (const \fBPoint\fP &center, \fBReal\fPradius, unsigned intn_points)"
+Constructor specifying the center, radius, and number of points which comprise the hole\&. The points will all lie on a circle of radius r\&. 
+.PP
+Definition at line 33 of file mesh_triangle_holes\&.C\&.
+.PP
+.nf
+34   : _center(center),
+35     _radius(radius),
+36     _n_points(n_points_in)
+37 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBPoint\fP libMesh::TriangleInterface::PolygonHole::inside () const\fC [virtual]\fP"
+Return an (arbitrary) point which lies inside the hole\&. 
+.PP
+Implements \fBlibMesh::TriangleInterface::Hole\fP\&.
+.PP
+Definition at line 57 of file mesh_triangle_holes\&.C\&.
+.PP
+.nf
+58 {
+59   // The center of the hole is definitely inside\&.
+60   return _center;
+61 }
+.fi
+.SS "unsigned int libMesh::TriangleInterface::PolygonHole::n_points () const\fC [virtual]\fP"
+The number of geometric points which define the hole\&. 
+.PP
+Implements \fBlibMesh::TriangleInterface::Hole\fP\&.
+.PP
+Definition at line 40 of file mesh_triangle_holes\&.C\&.
+.PP
+References _n_points\&.
+.PP
+.nf
+41 {
+42   return _n_points;
+43 }
+.fi
+.SS "\fBPoint\fP libMesh::TriangleInterface::PolygonHole::point (const unsigned intn) const\fC [virtual]\fP"
+Return the nth point defining the hole\&. 
+.PP
+Implements \fBlibMesh::TriangleInterface::Hole\fP\&.
+.PP
+Definition at line 45 of file mesh_triangle_holes\&.C\&.
+.PP
+References libMesh::pi, and libMesh::Real\&.
+.PP
+.nf
+46 {
+47   // The nth point lies at the angle theta = 2 * pi * n / _n_points
+48   const Real theta = static_cast<Real>(n) * 2\&.0 * libMesh::pi / static_cast<Real>(_n_points);
+49 
+50   return Point(_center(0) + _radius*std::cos(theta), // x=r*cos(theta)
+51                _center(1) + _radius*std::sin(theta), // y=r*sin(theta)
+52                0\&.);
+53 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBPoint\fP libMesh::TriangleInterface::PolygonHole::_center\fC [private]\fP"
+(x,y) location of the center of the hole 
+.PP
+Definition at line 97 of file mesh_triangle_holes\&.h\&.
+.SS "unsigned int libMesh::TriangleInterface::PolygonHole::_n_points\fC [private]\fP"
+number of points used to describe the hole\&. The actual points can be generated knowing the center and radius\&. For example, n_points=3 would generate a triangular hole\&. 
+.PP
+Definition at line 109 of file mesh_triangle_holes\&.h\&.
+.PP
+Referenced by n_points()\&.
+.SS "\fBReal\fP libMesh::TriangleInterface::PolygonHole::_radius\fC [private]\fP"
+circular hole radius 
+.PP
+Definition at line 102 of file mesh_triangle_holes\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

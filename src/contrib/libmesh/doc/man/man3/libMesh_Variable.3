@@ -1,0 +1,264 @@
+.TH "libMesh::Variable" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Variable \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <variable\&.h>\fP
+.PP
+Inherited by \fBlibMesh::VariableGroup\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBVariable\fP (\fBSystem\fP *\fBsys\fP, const std::string &var_name, const unsigned int var_number, const unsigned int first_scalar_num, const \fBFEType\fP &var_type)"
+.br
+.ti -1c
+.RI "\fBVariable\fP (\fBSystem\fP *\fBsys\fP, const std::string &var_name, const unsigned int var_number, const unsigned int first_scalar_num, const \fBFEType\fP &var_type, const std::set< \fBsubdomain_id_type\fP > &var_active_subdomains)"
+.br
+.ti -1c
+.RI "\fBSystem\fP * \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "const std::string & \fBname\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBnumber\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBfirst_scalar_number\fP () const "
+.br
+.ti -1c
+.RI "const \fBFEType\fP & \fBtype\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_components\fP () const "
+.br
+.ti -1c
+.RI "bool \fBactive_on_subdomain\fP (\fBsubdomain_id_type\fP sid) const "
+.br
+.ti -1c
+.RI "bool \fBimplicitly_active\fP () const "
+.br
+.ti -1c
+.RI "const std::set
+.br
+< \fBsubdomain_id_type\fP > & \fBactive_subdomains\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSystem\fP * \fB_sys\fP"
+.br
+.ti -1c
+.RI "std::string \fB_name\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_number\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_first_scalar_number\fP"
+.br
+.ti -1c
+.RI "\fBFEType\fP \fB_type\fP"
+.br
+.ti -1c
+.RI "std::set< \fBsubdomain_id_type\fP > \fB_active_subdomains\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines the notion of a variable in the system\&. A variable is one of potentially several unknowns in the problem at hand\&. A variable is described by a unique name, a finite element approximation family, and (optionally) a list of subdomains to which the variable is restricted\&. 
+.PP
+Definition at line 44 of file variable\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Variable::Variable (\fBSystem\fP *sys, const std::string &var_name, const unsigned intvar_number, const unsigned intfirst_scalar_num, const \fBFEType\fP &var_type)\fC [inline]\fP"
+Constructor\&. Omits the subdomain mapping, hence this constructor creates a variable which is active on all subdomains\&. 
+.PP
+Definition at line 53 of file variable\&.h\&.
+.PP
+Referenced by libMesh::VariableGroup::variable()\&.
+.PP
+.nf
+57                                     :
+58     _sys(sys),
+59     _name(var_name),
+60     _number(var_number),
+61     _first_scalar_number(first_scalar_num),
+62     _type(var_type),
+63     _active_subdomains()
+64   {}
+.fi
+.SS "libMesh::Variable::Variable (\fBSystem\fP *sys, const std::string &var_name, const unsigned intvar_number, const unsigned intfirst_scalar_num, const \fBFEType\fP &var_type, const std::set< \fBsubdomain_id_type\fP > &var_active_subdomains)\fC [inline]\fP"
+Constructor\&. Takes a set which contains the subdomain indices for which this variable is active\&. 
+.PP
+Definition at line 70 of file variable\&.h\&.
+.PP
+.nf
+75                                                                     :
+76     _sys(sys),
+77     _name(var_name),
+78     _number(var_number),
+79     _first_scalar_number(first_scalar_num),
+80     _type(var_type),
+81     _active_subdomains(var_active_subdomains)
+82   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::Variable::active_on_subdomain (\fBsubdomain_id_type\fPsid) const\fC [inline]\fP"
+\fCreturns\fP \fCtrue\fP if this variable is active on subdomain \fCsid\fP, \fCfalse\fP otherwise\&. Note that we interperet the special case of an empty \fC_active_subdomains\fP container as active everywhere, i\&.e\&. for all subdomains\&. 
+.PP
+Definition at line 129 of file variable\&.h\&.
+.PP
+References _active_subdomains\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EquationSystems::get_solution(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), and libMesh::DofMap::reinit()\&.
+.PP
+.nf
+130   { return (_active_subdomains\&.empty() || _active_subdomains\&.count(sid));  }
+.fi
+.SS "const std::set<\fBsubdomain_id_type\fP>& libMesh::Variable::active_subdomains () const\fC [inline]\fP"
+Returns set of subdomain ids this variable lives on 
+.PP
+Definition at line 143 of file variable\&.h\&.
+.PP
+References _active_subdomains\&.
+.PP
+Referenced by libMesh::VariableGroup::variable(), and libMesh::System::write_header()\&.
+.PP
+.nf
+144   { return _active_subdomains; }
+.fi
+.SS "unsigned int libMesh::Variable::first_scalar_number () const\fC [inline]\fP"
+The index of the first scalar component of this variable in the system\&. 
+.PP
+Definition at line 108 of file variable\&.h\&.
+.PP
+References _first_scalar_number\&.
+.PP
+Referenced by libMesh::System::n_components(), and libMesh::VariableGroup::variable()\&.
+.PP
+.nf
+109   { return _first_scalar_number; }
+.fi
+.SS "bool libMesh::Variable::implicitly_active () const\fC [inline]\fP"
+\fCreturns\fP \fCtrue\fP if this variable is active on all subdomains because it has no specified activity map\&. This can be used to perform more efficient computations in some places\&. 
+.PP
+Definition at line 137 of file variable\&.h\&.
+.PP
+References _active_subdomains\&.
+.PP
+.nf
+138   { return _active_subdomains\&.empty(); }
+.fi
+.SS "unsigned int libMesh::Variable::n_components () const\fC [inline]\fP"
+The number of components of this variable\&. 
+.PP
+Definition at line 120 of file variable\&.h\&.
+.PP
+References _type, libMesh::FEType::family, libMesh::FEType::order, libMesh::SCALAR, and type()\&.
+.PP
+Referenced by libMesh::WrappedFunction< Output >::component(), libMesh::System::n_components(), and libMesh::WrappedFunction< Output >::operator()()\&.
+.PP
+.nf
+121   { return type()\&.family == SCALAR ? _type\&.order : 1; }
+.fi
+.SS "const std::string& libMesh::Variable::name () const\fC [inline]\fP"
+Arbitrary, user-specified name of the variable\&. 
+.PP
+Definition at line 95 of file variable\&.h\&.
+.PP
+References _name\&.
+.PP
+Referenced by DMLibMeshSetSystem(), and libMesh::VariableGroup::variable()\&.
+.PP
+.nf
+96   { return _name; }
+.fi
+.SS "unsigned int libMesh::Variable::number () const\fC [inline]\fP"
+The rank of this variable in the system\&. 
+.PP
+Definition at line 101 of file variable\&.h\&.
+.PP
+References _number\&.
+.PP
+Referenced by libMesh::VariableGroup::variable()\&.
+.PP
+.nf
+102   { return _number; }
+.fi
+.SS "\fBSystem\fP* libMesh::Variable::system () const\fC [inline]\fP"
+The \fBSystem\fP this \fBVariable\fP is part of\&. 
+.PP
+Definition at line 87 of file variable\&.h\&.
+.PP
+References _sys\&.
+.PP
+Referenced by libMesh::VariableGroup::variable()\&.
+.PP
+.nf
+88   {
+89     return _sys;
+90   }
+.fi
+.SS "const \fBFEType\fP& libMesh::Variable::type () const\fC [inline]\fP"
+The \fC\fBFEType\fP\fP for this variable\&. 
+.PP
+Definition at line 114 of file variable\&.h\&.
+.PP
+References _type\&.
+.PP
+Referenced by libMesh::WrappedFunction< Output >::component(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::System::get_info(), n_components(), libMesh::WrappedFunction< Output >::operator()(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), libMesh::System::project_vector(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_vectors(), libMesh::DofMap::reinit(), libMesh::DofMap::SCALAR_dof_indices(), libMesh::VariableGroup::variable(), libMesh::System::write_parallel_data(), libMesh::System::write_serialized_vector(), and libMesh::System::write_serialized_vectors()\&.
+.PP
+.nf
+115   { return _type; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::set<\fBsubdomain_id_type\fP> libMesh::Variable::_active_subdomains\fC [protected]\fP"
+
+.PP
+Definition at line 152 of file variable\&.h\&.
+.PP
+Referenced by active_on_subdomain(), active_subdomains(), and implicitly_active()\&.
+.SS "unsigned int libMesh::Variable::_first_scalar_number\fC [protected]\fP"
+
+.PP
+Definition at line 150 of file variable\&.h\&.
+.PP
+Referenced by first_scalar_number(), and libMesh::VariableGroup::first_scalar_number()\&.
+.SS "std::string libMesh::Variable::_name\fC [protected]\fP"
+
+.PP
+Definition at line 148 of file variable\&.h\&.
+.PP
+Referenced by name()\&.
+.SS "unsigned int libMesh::Variable::_number\fC [protected]\fP"
+
+.PP
+Definition at line 149 of file variable\&.h\&.
+.PP
+Referenced by number(), and libMesh::VariableGroup::number()\&.
+.SS "\fBSystem\fP* libMesh::Variable::_sys\fC [protected]\fP"
+
+.PP
+Definition at line 147 of file variable\&.h\&.
+.PP
+Referenced by system()\&.
+.SS "\fBFEType\fP libMesh::Variable::_type\fC [protected]\fP"
+
+.PP
+Definition at line 151 of file variable\&.h\&.
+.PP
+Referenced by n_components(), and type()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

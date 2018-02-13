@@ -1,0 +1,230 @@
+.TH "libMesh::ConstFunction< Output >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ConstFunction< Output > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <const_function\&.h>\fP
+.PP
+Inherits \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Inherited by \fBlibMesh::ZeroFunction< Output >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBConstFunction\fP (const Output &c)"
+.br
+.ti -1c
+.RI "virtual Output \fBoperator()\fP (const \fBPoint\fP &, const \fBReal\fP=0)"
+.br
+.ti -1c
+.RI "virtual void \fBoperator()\fP (const \fBPoint\fP &, const \fBReal\fP, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBFunctionBase\fP
+.br
+< Output > > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBoperator()\fP (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)"
+.br
+.ti -1c
+.RI "virtual Output \fBcomponent\fP (unsigned int i, const \fBPoint\fP &p, \fBReal\fP time=0\&.)"
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBFunctionBase\fP * \fB_master\fP"
+.br
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "Output \fB_c\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Output = Number>class libMesh::ConstFunction< Output >"
+
+.PP
+Definition at line 33 of file const_function\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename Output  = Number> \fBlibMesh::ConstFunction\fP< Output >::\fBConstFunction\fP (const Output &c)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 37 of file const_function\&.h\&.
+.PP
+References libMesh::FunctionBase< Output >::_initialized\&.
+.PP
+.nf
+37 : _c(c) { this->_initialized = true; }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Output> virtual void \fBlibMesh::FunctionBase\fP< Output >::clear ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Clears the function\&. 
+.PP
+Reimplemented in \fBlibMesh::ParsedFunction< Output >\fP, \fBlibMesh::MeshFunction\fP, and \fBlibMesh::AnalyticFunction< Output >\fP\&.
+.PP
+Definition at line 90 of file function_base\&.h\&.
+.PP
+.nf
+90 {}
+.fi
+.SS "template<typename Output  = Number> virtual \fBAutoPtr\fP<\fBFunctionBase\fP<Output> > \fBlibMesh::ConstFunction\fP< Output >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Returns a new copy of the function\&. The new copy should be as ``deep'' as necessary to allow independent destruction and simultaneous evaluations of the copies in different threads\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Reimplemented in \fBlibMesh::ZeroFunction< Output >\fP\&.
+.PP
+Definition at line 52 of file const_function\&.h\&.
+.PP
+References libMesh::ConstFunction< Output >::_c\&.
+.PP
+.nf
+52                                                        {
+53     return AutoPtr<FunctionBase<Output> >
+54       (new ConstFunction<Output>(_c));
+55   }
+.fi
+.SS "template<typename Output > Output \fBlibMesh::FunctionBase\fP< Output >::component (unsigned inti, const \fBPoint\fP &p, \fBReal\fPtime = \fC0\&.\fP)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the vector component \fCi\fP at coordinate \fCp\fP and time \fCtime\fP\&. Subclasses aren't required to overload this, since the default implementation is based on the full vector evaluation, which is often correct\&. Subclasses are recommended to overload this, since the default implementation is based on a vector evaluation, which is usually unnecessarily inefficient\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::ParsedFunction< Output >\fP, and \fBlibMesh::WrappedFunction< Output >\fP\&.
+.PP
+Definition at line 203 of file function_base\&.h\&.
+.PP
+Referenced by libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.PP
+.nf
+206 {
+207   DenseVector<Output> outvec(i+1);
+208   (*this)(p, time, outvec);
+209   return outvec(i);
+210 }
+.fi
+.SS "template<typename Output> virtual void \fBlibMesh::FunctionBase\fP< Output >::init ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+The actual initialization process\&. 
+.PP
+Reimplemented in \fBlibMesh::ParsedFunction< Output >\fP, \fBlibMesh::MeshFunction\fP, and \fBlibMesh::AnalyticFunction< Output >\fP\&.
+.PP
+Definition at line 85 of file function_base\&.h\&.
+.PP
+.nf
+85 {}
+.fi
+.SS "template<typename Output > bool \fBlibMesh::FunctionBase\fP< Output >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this object is properly initialized and ready for use, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 194 of file function_base\&.h\&.
+.PP
+.nf
+195 {
+196   return (this->_initialized);
+197 }
+.fi
+.SS "template<typename Output  = Number> virtual Output \fBlibMesh::ConstFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime = \fC0\fP)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the scalar value at coordinate \fCp\fP and time \fCtime\fP, which defaults to zero\&. Purely virtual, so you have to overload it\&. Note that this cannot be a const method, check \fC\fBMeshFunction\fP\fP\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 39 of file const_function\&.h\&.
+.PP
+References libMesh::ConstFunction< Output >::_c\&.
+.PP
+.nf
+41   { return _c; }
+.fi
+.SS "template<typename Output  = Number> virtual void \fBlibMesh::ConstFunction\fP< Output >::operator() (const \fBPoint\fP &p, const \fBReal\fPtime, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [virtual]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP and for time \fCtime\fP\&. Purely virtual, so you have to overload it\&. Note that this cannot be a const method, check \fC\fBMeshFunction\fP\fP\&. 
+.PP
+Implements \fBlibMesh::FunctionBase< Output >\fP\&.
+.PP
+Definition at line 43 of file const_function\&.h\&.
+.PP
+References libMesh::ConstFunction< Output >::_c, and libMesh::DenseVector< T >::size()\&.
+.PP
+.nf
+46   {
+47     unsigned int size = output\&.size();
+48     for (unsigned int i=0; i != size; ++i)
+49       output(i) = _c;
+50   }
+.fi
+.SS "template<typename Output> void \fBlibMesh::FunctionBase\fP< Output >::operator() (const \fBPoint\fP &p, \fBDenseVector\fP< Output > &output)\fC [inline]\fP, \fC [inherited]\fP"
+Return function for vectors\&. Returns in \fCoutput\fP the values of the data at the coordinate \fCp\fP\&. 
+.PP
+Definition at line 216 of file function_base\&.h\&.
+.PP
+.nf
+218 {
+219   // Call the time-dependent function with t=0\&.
+220   this->operator()(p, 0\&., output);
+221 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename Output  = Number> Output \fBlibMesh::ConstFunction\fP< Output >::_c\fC [private]\fP"
+
+.PP
+Definition at line 58 of file const_function\&.h\&.
+.PP
+Referenced by libMesh::ConstFunction< Output >::clone(), and libMesh::ConstFunction< Output >::operator()()\&.
+.SS "template<typename Output> bool \fBlibMesh::FunctionBase\fP< Output >::_initialized\fC [protected]\fP, \fC [inherited]\fP"
+When \fC\fBinit()\fP\fP was called so that everything is ready for calls to \fCoperator()\fP (\&.\&.\&.), then this \fCbool\fP is true\&. 
+.PP
+Definition at line 166 of file function_base\&.h\&.
+.PP
+Referenced by libMesh::AnalyticFunction< Output >::AnalyticFunction(), libMesh::ConstFunction< Output >::ConstFunction(), libMesh::ParsedFunction< Output >::ParsedFunction(), and libMesh::WrappedFunction< Output >::WrappedFunction()\&.
+.SS "template<typename Output> const \fBFunctionBase\fP* \fBlibMesh::FunctionBase\fP< Output >::_master\fC [protected]\fP, \fC [inherited]\fP"
+Const pointer to our master, initialized to \fCNULL\fP\&. There may be cases where multiple functions are required, but to save memory, one master handles some centralized data\&. 
+.PP
+Definition at line 160 of file function_base\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

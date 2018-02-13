@@ -1,0 +1,979 @@
+.TH "libMesh::GmshIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::GmshIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gmsh_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP, and \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGmshIO\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "\fBGmshIO\fP (const \fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "bool & \fBbinary\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBread_mesh\fP (std::istream &in)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_mesh\fP (std::ostream &\fBout\fP)"
+.br
+.ti -1c
+.RI "void \fBwrite_post\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_binary\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes in the Gmsh format\&. For a full description of the Gmsh format and to obtain the GMSH software see \fCthe Gmsh home page\fP
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2004, 2014 
+.PP
+Martin Luthi (mluthi@tnoo.net), 2005: massive overhaul and extension, plus support for reading meshes and writing results 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file gmsh_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::GmshIO::GmshIO (\fBMeshBase\fP &mesh)\fC [explicit]\fP"
+Constructor\&. Takes a non-const \fBMesh\fP reference which it will fill up with elements via the \fBread()\fP command\&. 
+.PP
+Definition at line 310 of file gmsh_io\&.C\&.
+.PP
+.nf
+310                               :
+311   MeshInput<MeshBase>  (mesh),
+312   MeshOutput<MeshBase> (mesh),
+313   _binary (false)
+314 {
+315 }
+.fi
+.SS "libMesh::GmshIO::GmshIO (const \fBMeshBase\fP &mesh)\fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. 
+.PP
+Definition at line 302 of file gmsh_io\&.C\&.
+.PP
+.nf
+302                                     :
+303   MeshOutput<MeshBase>(mesh),
+304   _binary(false)
+305 {
+306 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "bool & libMesh::GmshIO::binary ()"
+Flag indicating whether or not to write a binary file\&. While binary files may end up being smaller than equivalent ASCII files, they will almost certainly take longer to write\&. The reason for this is that the ostream::write() function which is used to write 'binary' data to streams, only takes a pointer to char as its first argument\&. This means if you want to write anything other than a buffer of chars, you first have to use a strange memcpy hack to get the data into the desired format\&. See the templated to_binary_stream() function below\&. 
+.PP
+Definition at line 319 of file gmsh_io\&.C\&.
+.PP
+References _binary\&.
+.PP
+Referenced by write_post()\&.
+.PP
+.nf
+320 {
+321   return _binary;
+322 }
+.fi
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), libMesh::UNVIO::write_implementation(), write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::GmshIO::read (const std::string &name)\fC [virtual]\fP"
+Reads in a mesh in the Gmsh *\&.msh format from the ASCII file given by name\&.
+.PP
+The user is responsible for calling \fBMesh::prepare_for_use()\fP after reading the mesh and before using it\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 326 of file gmsh_io\&.C\&.
+.PP
+References read_mesh()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+327 {
+328   std::ifstream in (name\&.c_str());
+329   this->read_mesh (in);
+330 }
+.fi
+.SS "void libMesh::GmshIO::read_mesh (std::istream &in)\fC [private]\fP, \fC [virtual]\fP"
+Implementation of the \fBread()\fP function\&. This function is called by the public interface function and implements reading the file\&. 
+.PP
+Definition at line 334 of file gmsh_io\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::MeshBase::boundary_info, libMesh::Elem::build(), libMesh::Elem::build_side(), libMesh::MeshBase::clear(), libMesh::MeshBase::delete_elem(), libMesh::Elem::dim(), end, libMesh::err, libMesh::libmesh_assert(), std::max(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshInput< MeshBase >::mesh(), std::min(), libMesh::Elem::n_nodes(), libMesh::Elem::n_sides(), libMesh::Elem::node(), libMesh::MeshBase::node_ptr(), libMesh::processor_id(), libMesh::Real, libMesh::MeshBase::reserve_elem(), libMesh::MeshBase::reserve_nodes(), libMesh::DofObject::set_id(), libMesh::MeshBase::set_mesh_dimension(), libMesh::Elem::set_node(), side, libMesh::Elem::subdomain_id(), and libMesh::x\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+335 {
+336   // This is a serial-only process for now;
+337   // the Mesh should be read on processor 0 and
+338   // broadcast later
+339   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.processor_id(), 0);
+340 
+341   libmesh_assert(in\&.good());
+342 
+343   // initialize the map with element types
+344   init_eletypes();
+345 
+346   // clear any data in the mesh
+347   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+348   mesh\&.clear();
+349 
+350   // some variables
+351   int format=0, size=0;
+352   Real version = 1\&.0;
+353 
+354   // map to hold the node numbers for translation
+355   // note the the nodes can be non-consecutive
+356   std::map<unsigned int, unsigned int> nodetrans;
+357 
+358   // For reading the file line by line
+359   std::string s;
+360 
+361   while (true)
+362     {
+363       // Try to read something\&.  This may set EOF!
+364       std::getline(in, s);
+365 
+366       if (in)
+367         {
+368           // Process s\&.\&.\&.
+369 
+370           if (s\&.find("$MeshFormat") == 0)
+371             {
+372               in >> version >> format >> size;
+373               if ((version != 2\&.0) && (version != 2\&.1) && (version != 2\&.2))
+374                 {
+375                   // Some notes on gmsh mesh versions:
+376                   //
+377                   // Mesh version 2\&.0 goes back as far as I know\&.  It's not explicitly
+378                   // mentioned here: http://www\&.geuz\&.org/gmsh/doc/VERSIONS\&.txt
+379                   //
+380                   // As of gmsh-2\&.4\&.0:
+381                   // bumped mesh version format to 2\&.1 (small change in the $PhysicalNames
+382                   // section, where the group dimension is now required);
+383                   // [Since we don't even parse the PhysicalNames section at the time
+384                   //  of this writing, I don't think this change affects us\&.]
+385                   //
+386                   // Mesh version 2\&.2 tested by Manav Bhatia; no other
+387                   // libMesh code changes were required for support
+388                   libmesh_error_msg("Error: Unknown msh file version " << version);
+389                 }
+390 
+391               if (format)
+392                 libmesh_error_msg("Error: Unknown data format for mesh in Gmsh reader\&.");
+393             }
+394 
+395           // read the node block
+396           else if (s\&.find("$NOD") == 0 ||
+397                    s\&.find("$NOE") == 0 ||
+398                    s\&.find("$Nodes") == 0)
+399             {
+400               unsigned int num_nodes = 0;
+401               in >> num_nodes;
+402               mesh\&.reserve_nodes (num_nodes);
+403 
+404               // read in the nodal coordinates and form points\&.
+405               Real x, y, z;
+406               unsigned int id;
+407 
+408               // add the nodal coordinates to the mesh
+409               for (unsigned int i=0; i<num_nodes; ++i)
+410                 {
+411                   in >> id >> x >> y >> z;
+412                   mesh\&.add_point (Point(x, y, z), i);
+413                   nodetrans[id] = i;
+414                 }
+415 
+416               // read the $ENDNOD delimiter
+417               std::getline(in, s);
+418             }
+419 
+420 
+421           // Read the element block
+422           else if (s\&.find("$ELM") == 0 ||
+423                    s\&.find("$Elements") == 0)
+424             {
+425               // For reading the number of elements and the node ids from the stream
+426               unsigned int
+427                 num_elem = 0,
+428                 node_id = 0;
+429 
+430               // read how many elements are there, and reserve space in the mesh
+431               in >> num_elem;
+432               mesh\&.reserve_elem (num_elem);
+433 
+434               // As of version 2\&.2, the format for each element line is:
+435               // elm-number elm-type number-of-tags < tag > \&.\&.\&. node-number-list
+436               // From the Gmsh docs:
+437               // * the first tag is the number of the
+438               //   physical entity to which the element belongs
+439               // * the second is the number of the elementary geometrical
+440               //   entity to which the element belongs
+441               // * the third is the number of mesh partitions to which the element
+442               //   belongs
+443               // * The rest of the tags are the partition ids (negative
+444               //   partition ids indicate ghost cells)\&. A zero tag is
+445               //   equivalent to no tag\&. Gmsh and most codes using the
+446               //   MSH 2 format require at least the first two tags
+447               //   (physical and elementary tags)\&.
+448 
+449               // Keep track of all the element dimensions seen
+450               std::vector<unsigned> elem_dimensions_seen(3);
+451 
+452               // read the elements
+453               for (unsigned int iel=0; iel<num_elem; ++iel)
+454                 {
+455                   unsigned int
+456                     id, type,
+457                     physical=1, elementary=1,
+458                     nnodes=0, ntags;
+459 
+460                   // Note: tag has to be an int because it could be negative,
+461                   // see above\&.
+462                   int tag;
+463 
+464                   if (version <= 1\&.0)
+465                     in >> id >> type >> physical >> elementary >> nnodes;
+466 
+467                   else
+468                     {
+469                       in >> id >> type >> ntags;
+470 
+471                       if (ntags > 2)
+472                         libmesh_do_once(libMesh::err << "Warning, ntags=" << ntags << ", but we currently only support reading 2 flags\&." << std::endl;);
+473 
+474                       for (unsigned int j = 0; j < ntags; j++)
+475                         {
+476                           in >> tag;
+477                           if (j == 0)
+478                             physical = tag;
+479                           else if (j == 1)
+480                             elementary = tag;
+481                         }
+482                     }
+483 
+484                   // consult the import element table which element to build
+485                   const elementDefinition& eletype = eletypes_imp[type];
+486 
+487                   // If type wasn't recognized, it will default-construct and return an invalid one\&.\&.\&.
+488                   if (eletype\&.nnodes == 0)
+489                     libmesh_error_msg("Unrecognized element type " << type);
+490 
+491                   // If we read nnodes, make sure it matches the number in eletype\&.nnodes
+492                   if (nnodes != 0 && nnodes != eletype\&.nnodes)
+493                     libmesh_error_msg("nnodes = " << nnodes << " and eletype\&.nnodes = " << eletype\&.nnodes << " do not match\&.");
+494 
+495                   // Assign the value from the eletype object\&.
+496                   nnodes = eletype\&.nnodes;
+497 
+498                   // Record this element dimension as being "seen"\&.
+499                   // We will treat all elements with dimension <
+500                   // max(dimension) as specifying boundary conditions,
+501                   // but we won't know what max_elem_dimension_seen is
+502                   // until we read the entire file\&.
+503                   elem_dimensions_seen[eletype\&.dim-1] = 1;
+504 
+505                   // Add the element to the mesh
+506                   {
+507                     Elem* elem = Elem::build(eletype\&.type)\&.release();
+508                     elem->set_id(iel);
+509                     elem = mesh\&.add_elem(elem);
+510 
+511                     // Make sure that the libmesh element we added has nnodes nodes\&.
+512                     if (elem->n_nodes() != nnodes)
+513                       libmesh_error_msg("Number of nodes for element " \
+514                                         << id \
+515                                         << " of type " << eletypes_imp[type]\&.type \
+516                                         << " (Gmsh type " << type \
+517                                         << ") does not match Libmesh definition\&. " \
+518                                         << "I expected " << elem->n_nodes() \
+519                                         << " nodes, but got " << nnodes);
+520 
+521                     // Add node pointers to the elements\&.
+522                     // If there is a node translation table, use it\&.
+523                     if (eletype\&.nodes\&.size() > 0)
+524                       for (unsigned int i=0; i<nnodes; i++)
+525                         {
+526                           in >> node_id;
+527                           elem->set_node(eletype\&.nodes[i]) = mesh\&.node_ptr(nodetrans[node_id]);
+528                         }
+529                     else
+530                       {
+531                         for (unsigned int i=0; i<nnodes; i++)
+532                           {
+533                             in >> node_id;
+534                             elem->set_node(i) = mesh\&.node_ptr(nodetrans[node_id]);
+535                           }
+536                       }
+537 
+538                     // Finally, set the subdomain ID to physical\&.  If this is a lower-dimension element, this ID will
+539                     // eventually go into the Mesh's BoundaryInfo object\&.
+540                     elem->subdomain_id() = static_cast<subdomain_id_type>(physical);
+541                   }
+542                 } // element loop
+543 
+544               // read the $ENDELM delimiter
+545               std::getline(in, s);
+546 
+547               // Record the max and min element dimension seen while reading the file\&.
+548               unsigned
+549                 max_elem_dimension_seen=1,
+550                 min_elem_dimension_seen=3;
+551 
+552               for (unsigned i=0; i<elem_dimensions_seen\&.size(); ++i)
+553                 if (elem_dimensions_seen[i])
+554                   {
+555                     // Debugging
+556                     // libMesh::out << "Seen elements of dimension " << i+1 << std::endl;
+557                     max_elem_dimension_seen = std::max(max_elem_dimension_seen, i+1);
+558                     min_elem_dimension_seen = std::min(min_elem_dimension_seen, i+1);
+559                   }
+560 
+561               // Debugging:
+562               // libMesh::out << "max_elem_dimension_seen=" << max_elem_dimension_seen << std::endl;
+563               // libMesh::out << "min_elem_dimension_seen=" << min_elem_dimension_seen << std::endl;
+564 
+565               // If the difference between the max and min element dimension seen is larger than
+566               // 1, (e\&.g\&. the file has 1D and 3D elements only) we don't handle this case\&.
+567               if (max_elem_dimension_seen - min_elem_dimension_seen > 1)
+568                 libmesh_error_msg("Cannot handle meshes with dimension mismatch greater than 1\&.");
+569 
+570               // How many different element dimensions did we see while reading from file?
+571               unsigned n_dims_seen = std::accumulate(elem_dimensions_seen\&.begin(),
+572                                                      elem_dimensions_seen\&.end(),
+573                                                      static_cast<unsigned>(0),
+574                                                      std::plus<unsigned>());
+575 
+576               // Have not yet tested a case where 1, 2, and 3D elements are all in the same Mesh,
+577               // though it should theoretically be possible to handle\&.
+578               if (n_dims_seen == 3)
+579                 libmesh_error_msg("Reading meshes with 1, 2, and 3D elements not currently supported\&.");
+580 
+581               // Set mesh_dimension based on the largest element dimension seen\&.
+582               mesh\&.set_mesh_dimension(max_elem_dimension_seen);
+583 
+584               if (n_dims_seen > 1)
+585                 {
+586                   // map from (node ids) -> elem of lower dimensional elements that can provide boundary conditions
+587                   typedef std::map<std::vector<dof_id_type>, Elem*> provide_container_t;
+588                   provide_container_t provide_bcs;
+589 
+590                   // 1st loop over active elements - get info about lower-dimensional elements\&.
+591                   {
+592                     MeshBase::element_iterator       it  = mesh\&.active_elements_begin();
+593                     const MeshBase::element_iterator end = mesh\&.active_elements_end();
+594                     for ( ; it != end; ++it)
+595                       {
+596                         Elem* elem = *it;
+597 
+598                         if (elem->dim() < max_elem_dimension_seen)
+599                           {
+600                             // Debugging status
+601                             // libMesh::out << "Processing Elem " << elem->id() << " as a boundary element\&." << std::endl;
+602 
+603                             // To be pushed into the provide_bcs data structure
+604                             std::vector<dof_id_type> node_ids(elem->n_nodes());
+605 
+606                             // To be consistent with the previous GmshIO behavior, add all the lower-dimensional elements' nodes to
+607                             // the Mesh's BoundaryInfo object with the lower-dimensional element's subdomain ID\&.
+608                             for (unsigned n=0; n<elem->n_nodes(); n++)
+609                               {
+610                                 mesh\&.boundary_info->add_node(elem->node(n), elem->subdomain_id());
+611 
+612                                 // And save for our local data structure
+613                                 node_ids[n] = elem->node(n);
+614                               }
+615 
+616                             // Sort before putting into the map
+617                             std::sort(node_ids\&.begin(), node_ids\&.end());
+618                             provide_bcs[node_ids] = elem;
+619                           }
+620                       }
+621                   } // end 1st loop over active elements
+622 
+623                   // Debugging: What did we put in the provide_bcs data structure?
+624                   // {
+625                   //   provide_container_t::iterator provide_it = provide_bcs\&.begin();
+626                   //   provide_container_t::iterator provide_end = provide_bcs\&.end();
+627                   //   for ( ; provide_it != provide_end; ++provide_it)
+628                   //     {
+629                   //       std::vector<dof_id_type> node_list = (*provide_it)\&.first;
+630                   //       Elem* elem = (*provide_it)\&.second;
+631                   //
+632                   //       libMesh::out << "Elem " << elem->id() << " provides BCs for the face: ";
+633                   //       for (unsigned i=0; i<node_list\&.size(); ++i)
+634                   //         libMesh::out << node_list[i] << " ";
+635                   //       libMesh::out << std::endl;
+636                   //     }
+637                   // }
+638 
+639                   // 2nd loop over active elements - use lower dimensional element data to set BCs for higher dimensional elements
+640                   {
+641                     MeshBase::element_iterator       it  = mesh\&.active_elements_begin();
+642                     const MeshBase::element_iterator end = mesh\&.active_elements_end();
+643                     for ( ; it != end; ++it)
+644                       {
+645                         Elem* elem = *it;
+646 
+647                         if (elem->dim() == max_elem_dimension_seen)
+648                           {
+649                             // This is a max-dimension element that
+650                             // may require BCs\&.  For each of its
+651                             // sides, including internal sides, we'll
+652                             // see if a lower-dimensional element
+653                             // provides boundary information for it\&.
+654                             // Note that we have not yet called
+655                             // find_neighbors(), so we can't use
+656                             // elem->neighbor(s) in this algorithm\&.\&.\&.
+657 
+658                             for (unsigned int s=0; s<elem->n_sides(); s++)
+659                               {
+660                                 AutoPtr<Elem> side (elem->build_side(s));
+661 
+662                                 // Build up a node_ids vector, which is the key
+663                                 std::vector<dof_id_type> node_ids(side->n_nodes());
+664                                 for (unsigned n=0; n<side->n_nodes(); n++)
+665                                   node_ids[n] = side->node(n);
+666 
+667                                 // Sort the vector before using it as a key
+668                                 std::sort(node_ids\&.begin(), node_ids\&.end());
+669 
+670                                 // Look for this key in the provide_bcs map
+671                                 provide_container_t::iterator iter = provide_bcs\&.find(node_ids);
+672 
+673                                 if (iter != provide_bcs\&.end())
+674                                   {
+675                                     Elem* lower_dim_elem = (*iter)\&.second;
+676 
+677                                     // libMesh::out << "Elem "
+678                                     //              << lower_dim_elem->id()
+679                                     //              << " provides BCs for side "
+680                                     //              << s
+681                                     //              << " of Elem "
+682                                     //              << elem->id()
+683                                     //              << std::endl;
+684 
+685                                     // Add boundary information based on the lower-dimensional element's subdomain id\&.
+686                                     mesh\&.boundary_info->add_side(elem, s, lower_dim_elem->subdomain_id());
+687                                   }
+688                               }
+689                           }
+690                       }
+691                   } // end 2nd loop over active elements
+692 
+693                   // 3rd loop over active elements - Remove the lower-dimensional elements
+694                   {
+695                     MeshBase::element_iterator       it  = mesh\&.active_elements_begin();
+696                     const MeshBase::element_iterator end = mesh\&.active_elements_end();
+697                     for ( ; it != end; ++it)
+698                       {
+699                         Elem* elem = *it;
+700 
+701                         if (elem->dim() < max_elem_dimension_seen)
+702                           mesh\&.delete_elem(elem);
+703                       }
+704                   } // end 3rd loop over active elements
+705                 } // end if (n_dims_seen > 1)
+706             } // if $ELM
+707 
+708           continue;
+709         } // if (in)
+710 
+711 
+712       // If !in, check to see if EOF was set\&.  If so, break out
+713       // of while loop\&.
+714       if (in\&.eof())
+715         break;
+716 
+717       // If !in and !in\&.eof(), stream is in a bad state!
+718       libmesh_error_msg("Stream is bad! Perhaps the file does not exist?");
+719 
+720     } // while true
+721 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and libMesh::UCDIO::read_implementation()\&.
+.SS "void libMesh::GmshIO::write (const std::string &name)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file in the Gmsh *\&.msh format\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 725 of file gmsh_io\&.C\&.
+.PP
+References libMesh::processor_id(), and write_mesh()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+726 {
+727   if (MeshOutput<MeshBase>::mesh()\&.processor_id() == 0)
+728     {
+729       // Open the output file stream
+730       std::ofstream out_stream (name\&.c_str());
+731 
+732       // Make sure it opened correctly
+733       if (!out_stream\&.good())
+734         libmesh_file_error(name\&.c_str());
+735 
+736       this->write_mesh (out_stream);
+737     }
+738 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::GmshIO::write_mesh (std::ostream &out)\fC [private]\fP, \fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. This will write an ASCII *\&.msh file\&. 
+.PP
+Definition at line 757 of file gmsh_io\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), end, libMesh::DofObject::id(), libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::n_active_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), libMesh::MeshBase::node(), libMesh::DofObject::processor_id(), libMesh::Real, libMesh::Elem::subdomain_id(), and libMesh::Elem::type()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+758 {
+759   // Be sure that the stream is valid\&.
+760   libmesh_assert (out_stream\&.good());
+761 
+762   // initialize the map with element types
+763   init_eletypes();
+764 
+765   // Get a const reference to the mesh
+766   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+767 
+768   // Note: we are using version 2\&.0 of the gmsh output format\&.
+769 
+770   // Write the file header\&.
+771   out_stream << "$MeshFormat\n";
+772   out_stream << "2\&.0 0 " << sizeof(Real) << '\n';
+773   out_stream << "$EndMeshFormat\n";
+774 
+775   // write the nodes in (n x y z) format
+776   out_stream << "$Nodes\n";
+777   out_stream << mesh\&.n_nodes() << '\n';
+778 
+779   for (unsigned int v=0; v<mesh\&.n_nodes(); v++)
+780     out_stream << mesh\&.node(v)\&.id()+1 << " "
+781                << mesh\&.node(v)(0) << " "
+782                << mesh\&.node(v)(1) << " "
+783                << mesh\&.node(v)(2) << '\n';
+784   out_stream << "$EndNodes\n";
+785 
+786   {
+787     // write the connectivity
+788     out_stream << "$Elements\n";
+789     out_stream << mesh\&.n_active_elem() << '\n';
+790 
+791     MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+792     const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+793 
+794     // loop over the elements
+795     for ( ; it != end; ++it)
+796       {
+797         const Elem* elem = *it;
+798 
+799         // Make sure we have a valid entry for
+800         // the current element type\&.
+801         libmesh_assert (eletypes_exp\&.count(elem->type()));
+802 
+803         // consult the export element table
+804         const elementDefinition& eletype = eletypes_exp[elem->type()];
+805 
+806         // The element mapper better not require any more nodes
+807         // than are present in the current element!
+808         libmesh_assert_less_equal (eletype\&.nodes\&.size(), elem->n_nodes());
+809 
+810         // elements ids are 1 based in Gmsh
+811         out_stream << elem->id()+1 << " ";
+812 
+813         // element type
+814         out_stream << eletype\&.exptype;
+815 
+816         // write the number of tags and
+817         // tag1 (physical entity), tag2 (geometric entity), and tag3 (partition entity)
+818         out_stream << " 3 "
+819                    << static_cast<unsigned int>(elem->subdomain_id())
+820                    << " 1 "
+821                    << (elem->processor_id()+1) << " ";
+822 
+823         // if there is a node translation table, use it
+824         if (eletype\&.nodes\&.size() > 0)
+825           for (unsigned int i=0; i < elem->n_nodes(); i++)
+826             out_stream << elem->node(eletype\&.nodes[i])+1 << " "; // gmsh is 1-based
+827         // otherwise keep the same node order
+828         else
+829           for (unsigned int i=0; i < elem->n_nodes(); i++)
+830             out_stream << elem->node(i)+1 << " ";                  // gmsh is 1-based
+831         out_stream << "\n";
+832       } // element loop
+833     out_stream << "$EndElements\n";
+834   }
+835 }
+.fi
+.SS "void libMesh::GmshIO::write_nodal_data (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)\fC [virtual]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented from \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 742 of file gmsh_io\&.C\&.
+.PP
+References libMesh::processor_id(), libMesh::START_LOG(), libMesh::STOP_LOG(), and write_post()\&.
+.PP
+.nf
+745 {
+746   START_LOG("write_nodal_data()", "GmshIO");
+747 
+748   //this->_binary = true;
+749   if (MeshOutput<MeshBase>::mesh()\&.processor_id() == 0)
+750     this->write_post  (fname, &soln, &names);
+751 
+752   STOP_LOG("write_nodal_data()", "GmshIO");
+753 }
+.fi
+.SS "void libMesh::GmshIO::write_post (const std::string &fname, const std::vector< \fBNumber\fP > *v = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)\fC [private]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write an ASCII or binary *\&.pos file, depending on the binary flag\&. 
+.PP
+Definition at line 839 of file gmsh_io\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), binary(), libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, end, libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::libmesh_real(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::n_nodes(), libMesh::n_vars, libMesh::Elem::n_vertices(), libMesh::Elem::node(), libMesh::out, libMesh::Elem::point(), libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::processor_id(), libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by write_nodal_data()\&.
+.PP
+.nf
+842 {
+843 
+844   // Should only do this on processor 0!
+845   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.processor_id(), 0);
+846 
+847   // Create an output stream
+848   std::ofstream out_stream(fname\&.c_str());
+849 
+850   // Make sure it opened correctly
+851   if (!out_stream\&.good())
+852     libmesh_file_error(fname\&.c_str());
+853 
+854   // initialize the map with element types
+855   init_eletypes();
+856 
+857   // create a character buffer
+858   char buf[80];
+859 
+860   // Get a constant reference to the mesh\&.
+861   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+862 
+863   //  write the data
+864   if ((solution_names != NULL) && (v != NULL))
+865     {
+866       const unsigned int n_vars =
+867         libmesh_cast_int<unsigned int>(solution_names->size());
+868 
+869       if (!(v->size() == mesh\&.n_nodes()*n_vars))
+870         libMesh::err << "ERROR: v->size()=" << v->size()
+871                      << ", mesh\&.n_nodes()=" << mesh\&.n_nodes()
+872                      << ", n_vars=" << n_vars
+873                      << ", mesh\&.n_nodes()*n_vars=" << mesh\&.n_nodes()*n_vars
+874                      << "\n";
+875 
+876       libmesh_assert_equal_to (v->size(), mesh\&.n_nodes()*n_vars);
+877 
+878       // write the header
+879       out_stream << "$PostFormat\n";
+880       if (this->binary())
+881         out_stream << "1\&.2 1 " << sizeof(double) << "\n";
+882       else
+883         out_stream << "1\&.2 0 " << sizeof(double) << "\n";
+884       out_stream << "$EndPostFormat\n";
+885 
+886       // Loop over the elements to see how much of each type there are
+887       unsigned int n_points=0, n_lines=0, n_triangles=0, n_quadrangles=0,
+888         n_tetrahedra=0, n_hexahedra=0, n_prisms=0, n_pyramids=0;
+889       unsigned int n_scalar=0, n_vector=0, n_tensor=0;
+890       unsigned int nb_text2d=0, nb_text2d_chars=0, nb_text3d=0, nb_text3d_chars=0;
+891 
+892       {
+893         MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+894         const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+895 
+896 
+897         for ( ; it != end; ++it)
+898           {
+899             const ElemType elemtype = (*it)->type();
+900 
+901             switch (elemtype)
+902               {
+903               case EDGE2:
+904               case EDGE3:
+905               case EDGE4:
+906                 {
+907                   n_lines += 1;
+908                   break;
+909                 }
+910               case TRI3:
+911               case TRI6:
+912                 {
+913                   n_triangles += 1;
+914                   break;
+915                 }
+916               case QUAD4:
+917               case QUAD8:
+918               case QUAD9:
+919                 {
+920                   n_quadrangles += 1;
+921                   break;
+922                 }
+923               case TET4:
+924               case TET10:
+925                 {
+926                   n_tetrahedra += 1;
+927                   break;
+928                 }
+929               case HEX8:
+930               case HEX20:
+931               case HEX27:
+932                 {
+933                   n_hexahedra += 1;
+934                   break;
+935                 }
+936               case PRISM6:
+937               case PRISM15:
+938               case PRISM18:
+939                 {
+940                   n_prisms += 1;
+941                   break;
+942                 }
+943               case PYRAMID5:
+944                 {
+945                   n_pyramids += 1;
+946                   break;
+947                 }
+948               default:
+949                 libmesh_error_msg("ERROR: Nonexistent element type " << (*it)->type());
+950               }
+951           }
+952       }
+953 
+954       // create a view for each variable
+955       for (unsigned int ivar=0; ivar < n_vars; ivar++)
+956         {
+957           std::string varname = (*solution_names)[ivar];
+958 
+959           // at the moment, we just write out scalar quantities
+960           // later this should be made configurable through
+961           // options to the writer class
+962           n_scalar = 1;
+963 
+964           // write the variable as a view, and the number of time steps
+965           out_stream << "$View\n" << varname << " " << 1 << "\n";
+966 
+967           // write how many of each geometry type are written
+968           out_stream << n_points * n_scalar << " "
+969                      << n_points * n_vector << " "
+970                      << n_points * n_tensor << " "
+971                      << n_lines * n_scalar << " "
+972                      << n_lines * n_vector << " "
+973                      << n_lines * n_tensor << " "
+974                      << n_triangles * n_scalar << " "
+975                      << n_triangles * n_vector << " "
+976                      << n_triangles * n_tensor << " "
+977                      << n_quadrangles * n_scalar << " "
+978                      << n_quadrangles * n_vector << " "
+979                      << n_quadrangles * n_tensor << " "
+980                      << n_tetrahedra * n_scalar << " "
+981                      << n_tetrahedra * n_vector << " "
+982                      << n_tetrahedra * n_tensor << " "
+983                      << n_hexahedra * n_scalar << " "
+984                      << n_hexahedra * n_vector << " "
+985                      << n_hexahedra * n_tensor << " "
+986                      << n_prisms * n_scalar << " "
+987                      << n_prisms * n_vector << " "
+988                      << n_prisms * n_tensor << " "
+989                      << n_pyramids * n_scalar << " "
+990                      << n_pyramids * n_vector << " "
+991                      << n_pyramids * n_tensor << " "
+992                      << nb_text2d << " "
+993                      << nb_text2d_chars << " "
+994                      << nb_text3d << " "
+995                      << nb_text3d_chars << "\n";
+996 
+997           // if binary, write a marker to identify the endianness of the file
+998           if (this->binary())
+999             {
+1000               const int one = 1;
+1001               std::memcpy(buf, &one, sizeof(int));
+1002               out_stream\&.write(buf, sizeof(int));
+1003             }
+1004 
+1005           // the time steps (there is just 1 at the moment)
+1006           if (this->binary())
+1007             {
+1008               double one = 1;
+1009               std::memcpy(buf, &one, sizeof(double));
+1010               out_stream\&.write(buf, sizeof(double));
+1011             }
+1012           else
+1013             out_stream << "1\n";
+1014 
+1015           // Loop over the elements and write out the data
+1016           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1017           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1018 
+1019           for ( ; it != end; ++it)
+1020             {
+1021               const Elem* elem = *it;
+1022 
+1023               // this is quite crappy, but I did not invent that file format!
+1024               for (unsigned int d=0; d<3; d++)  // loop over the dimensions
+1025                 {
+1026                   for (unsigned int n=0; n < elem->n_vertices(); n++)   // loop over vertices
+1027                     {
+1028                       const Point& vertex = elem->point(n);
+1029                       if (this->binary())
+1030                         {
+1031                           double tmp = vertex(d);
+1032                           std::memcpy(buf, &tmp, sizeof(double));
+1033                           out_stream\&.write(reinterpret_cast<char *>(buf), sizeof(double));
+1034                         }
+1035                       else
+1036                         out_stream << vertex(d) << " ";
+1037                     }
+1038                   if (!this->binary())
+1039                     out_stream << "\n";
+1040                 }
+1041 
+1042               // now finally write out the data
+1043               for (unsigned int i=0; i < elem->n_vertices(); i++)   // loop over vertices
+1044                 if (this->binary())
+1045                   {
+1046 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+1047                     libMesh::out << "WARNING: Gmsh::write_post does not fully support "
+1048                                  << "complex numbers\&. Will only write the real part of "
+1049                                  << "variable " << varname << std::endl;
+1050 #endif
+1051                     double tmp = libmesh_real((*v)[elem->node(i)*n_vars + ivar]);
+1052                     std::memcpy(buf, &tmp, sizeof(double));
+1053                     out_stream\&.write(reinterpret_cast<char *>(buf), sizeof(double));
+1054                   }
+1055                 else
+1056                   {
+1057 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+1058                     libMesh::out << "WARNING: Gmsh::write_post does not fully support "
+1059                                  << "complex numbers\&. Will only write the real part of "
+1060                                  << "variable " << varname << std::endl;
+1061 #endif
+1062                     out_stream << libmesh_real((*v)[elem->node(i)*n_vars + ivar]) << "\n";
+1063                   }
+1064             }
+1065           if (this->binary())
+1066             out_stream << "\n";
+1067           out_stream << "$EndView\n";
+1068 
+1069         } // end variable loop (writing the views)
+1070     }
+1071 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::GmshIO::_binary\fC [private]\fP"
+Flag to write binary data\&. 
+.PP
+Definition at line 133 of file gmsh_io\&.h\&.
+.PP
+Referenced by binary()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

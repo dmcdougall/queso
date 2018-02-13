@@ -1,0 +1,186 @@
+.TH "libMesh::Surface" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Surface \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <surface\&.h>\fP
+.PP
+Inherited by \fBlibMesh::Plane\fP, and \fBlibMesh::Sphere\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSurface\fP ()"
+.br
+.ti -1c
+.RI "\fBSurface\fP (const \fBSurface\fP &)"
+.br
+.ti -1c
+.RI "virtual \fB~Surface\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBabove_surface\fP (const \fBPoint\fP &p) const =0"
+.br
+.ti -1c
+.RI "virtual bool \fBbelow_surface\fP (const \fBPoint\fP &p) const =0"
+.br
+.ti -1c
+.RI "virtual bool \fBon_surface\fP (const \fBPoint\fP &p) const =0"
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBclosest_point\fP (const \fBPoint\fP &p) const =0"
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBunit_normal\fP (const \fBPoint\fP &p) const =0"
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBsurface_coords\fP (const \fBPoint\fP &\fBworld_coords\fP) const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBworld_coords\fP (const \fBPoint\fP &surf_coords) const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a surface\&. A surface is a two-dimensional object living in three-dimensional space\&. Examples of surfaces are planes, hollow spheres, hollow cylinders, etc\&.\&.\&. This is a generic base class that describes the useful functionality a surface will provide\&. Specific derived classes actually implement the functionality, so this class has pure virtual members\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002 
+.RE
+.PP
+
+.PP
+Definition at line 45 of file surface\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Surface::Surface ()\fC [inline]\fP"
+Constructor\&. Does nothing at the moment\&. 
+.PP
+Definition at line 52 of file surface\&.h\&.
+.PP
+.nf
+52 {}
+.fi
+.SS "libMesh::Surface::Surface (const \fBSurface\fP &)\fC [inline]\fP"
+Copy-constructor\&. 
+.PP
+Definition at line 57 of file surface\&.h\&.
+.PP
+.nf
+57 {}
+.fi
+.SS "virtual libMesh::Surface::~Surface ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 62 of file surface\&.h\&.
+.PP
+.nf
+62 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual bool libMesh::Surface::above_surface (const \fBPoint\fP &p) const\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is above the surface, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::Sphere\fP, and \fBlibMesh::Plane\fP\&.
+.SS "virtual bool libMesh::Surface::below_surface (const \fBPoint\fP &p) const\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is below the surface, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::Sphere\fP, and \fBlibMesh::Plane\fP\&.
+.SS "virtual \fBPoint\fP libMesh::Surface::closest_point (const \fBPoint\fP &p) const\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the closest point on the surface to point p\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::Sphere\fP, and \fBlibMesh::Plane\fP\&.
+.SS "virtual bool libMesh::Surface::on_surface (const \fBPoint\fP &p) const\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is on the surface, false otherwise\&. Note that the definition of on the surface really means 'very close' to account for roundoff error\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::Sphere\fP, and \fBlibMesh::Plane\fP\&.
+.SS "\fBPoint\fP libMesh::Surface::surface_coords (const \fBPoint\fP &world_coords) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBPoint\fP\fP \fCworld_coords\fP in the surface's coordinate system\&. \fCworld_coords\fP is in the world coordinate system\&. This method is not purely virtual, because there may be surfaces that do not have an own coordinate system\&. These simply do not have to overload this method\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::Sphere\fP\&.
+.PP
+Definition at line 121 of file surface\&.h\&.
+.PP
+.nf
+122 {
+123   Point p (from_world_coords);
+124   return p;
+125 }
+.fi
+.SS "virtual \fBPoint\fP libMesh::Surface::unit_normal (const \fBPoint\fP &p) const\fC [pure virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a unit vector normal to the surface at point p\&. 
+.RE
+.PP
+
+.PP
+Implemented in \fBlibMesh::Sphere\fP, and \fBlibMesh::Plane\fP\&.
+.SS "\fBPoint\fP libMesh::Surface::world_coords (const \fBPoint\fP &surf_coords) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the world (cartesian) coordinates for the surface coordinates \fCsurf_coords\fP\&. This method is not purely virtual, because there may be surfaces that do not have an own coordinate system\&. These simply do not have to overload this method\&. 
+.RE
+.PP
+
+.PP
+Reimplemented in \fBlibMesh::Sphere\fP\&.
+.PP
+Definition at line 130 of file surface\&.h\&.
+.PP
+.nf
+131 {
+132   Point p (surf_coords);
+133   return p;
+134 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,361 @@
+.TH "libMesh::MemorySolutionHistory" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MemorySolutionHistory \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <memory_solution_history\&.h>\fP
+.PP
+Inherits \fBlibMesh::SolutionHistory\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::list< std::pair
+.br
+< \fBReal\fP, std::map< std::string, 
+.br
+\fBNumericVector\fP< \fBNumber\fP >
+.br
+ * > > >::iterator \fBstored_solutions_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMemorySolutionHistory\fP (\fBSystem\fP &system_)"
+.br
+.ti -1c
+.RI "\fB~MemorySolutionHistory\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBstore\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBretrieve\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< \fBSolutionHistory\fP > \fBclone\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_overwrite_previously_stored\fP (bool val)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBoverwrite_previously_stored\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBfind_stored_entry\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::list< std::pair< \fBReal\fP, 
+.br
+std::map< std::string, 
+.br
+\fBNumericVector\fP< \fBNumber\fP > * > > > \fBstored_solutions\fP"
+.br
+.ti -1c
+.RI "\fBstored_solutions_iterator\fP \fBstored_sols\fP"
+.br
+.ti -1c
+.RI "\fBSystem\fP & \fB_system\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Subclass of Solution History that stores the solutions and other important vectors in memory\&. 
+.PP
+Definition at line 34 of file memory_solution_history\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::list<std::pair<\fBReal\fP, std::map<std::string, \fBNumericVector\fP<\fBNumber\fP>*> > >::iterator \fBlibMesh::MemorySolutionHistory::stored_solutions_iterator\fP"
+
+.PP
+Definition at line 54 of file memory_solution_history\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MemorySolutionHistory::MemorySolutionHistory (\fBSystem\fP &system_)\fC [inline]\fP"
+
+.PP
+Definition at line 40 of file memory_solution_history\&.h\&.
+.PP
+Referenced by clone()\&.
+.PP
+.nf
+40                                           : stored_sols(stored_solutions\&.end()), _system(system_)
+41   { libmesh_experimental(); }
+.fi
+.SS "libMesh::MemorySolutionHistory::~MemorySolutionHistory ()"
+
+.PP
+Definition at line 11 of file memory_solution_history\&.C\&.
+.PP
+References stored_solutions\&.
+.PP
+.nf
+12 {
+13   stored_solutions_iterator stored_sols_it = stored_solutions\&.begin();
+14   const stored_solutions_iterator stored_sols_end = stored_solutions\&.end();
+15 
+16   for(; stored_sols_it != stored_sols_end; ++stored_sols_it)
+17     {
+18       // The saved vectors at this timestep
+19       std::map<std::string, NumericVector<Number> *> saved_vectors = stored_sols_it->second;
+20 
+21       std::map<std::string, NumericVector<Number> *>::iterator vec = saved_vectors\&.begin();
+22       std::map<std::string, NumericVector<Number> *>::iterator vec_end = saved_vectors\&.end();
+23 
+24       // Loop over all the saved vectors
+25       for (; vec != vec_end; ++vec)
+26         {
+27           // Delete this saved vector
+28           delete vec->second;
+29         }
+30     }
+31 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual \fBAutoPtr\fP<\fBSolutionHistory\fP > libMesh::MemorySolutionHistory::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Implements \fBlibMesh::SolutionHistory\fP\&.
+.PP
+Definition at line 57 of file memory_solution_history\&.h\&.
+.PP
+References _system, and MemorySolutionHistory()\&.
+.PP
+.nf
+57                                                   {
+58     return AutoPtr<SolutionHistory >
+59       (new MemorySolutionHistory(_system));}
+.fi
+.SS "void libMesh::MemorySolutionHistory::find_stored_entry ()\fC [private]\fP"
+
+.PP
+Definition at line 35 of file memory_solution_history\&.C\&.
+.PP
+References _system, std::abs(), libMesh::libmesh_assert(), stored_sols, stored_solutions, libMesh::System::time, and libMesh::TOLERANCE\&.
+.PP
+Referenced by retrieve(), and store()\&.
+.PP
+.nf
+36 {
+37   if (stored_solutions\&.begin() == stored_solutions\&.end())
+38     return;
+39 
+40   libmesh_assert (stored_sols != stored_solutions\&.end());
+41 
+42   if (std::abs(stored_sols->first - _system\&.time) < TOLERANCE)
+43     return;
+44 
+45   // If we're not at the front, check the previous entry
+46   if (stored_sols != stored_solutions\&.begin())
+47     {
+48       stored_solutions_iterator test_it = stored_sols;
+49       if (std::abs((--test_it)->first - _system\&.time) < TOLERANCE)
+50         {
+51           --stored_sols;
+52           return;
+53         }
+54     }
+55 
+56   // If we're not at the end, check the subsequent entry
+57   stored_solutions_iterator test_it = stored_sols;
+58   if ((++test_it) != stored_solutions\&.end())
+59     {
+60       if (std::abs(test_it->first - _system\&.time) < TOLERANCE)
+61         {
+62           ++stored_sols;
+63           return;
+64         }
+65     }
+66 }
+.fi
+.SS "void libMesh::MemorySolutionHistory::retrieve ()\fC [virtual]\fP"
+
+.PP
+Implements \fBlibMesh::SolutionHistory\fP\&.
+.PP
+Definition at line 140 of file memory_solution_history\&.C\&.
+.PP
+References _system, std::abs(), find_stored_entry(), libMesh::System::get_vector(), libMesh::Real, libMesh::System::solution, stored_sols, stored_solutions, libMesh::System::time, and libMesh::TOLERANCE\&.
+.PP
+.nf
+141 {
+142   this->find_stored_entry();
+143 
+144   // Get the time at which we are recovering the solution vectors
+145   Real recovery_time = stored_sols->first;
+146 
+147   // Print out what time we are recovering vectors at
+148   //    libMesh::out << "Recovering solution vectors at time: " <<
+149   //                 recovery_time << std::endl;
+150 
+151   // Do we not have a solution for this time?  Then
+152   // there's nothing to do\&.
+153   if(stored_sols == stored_solutions\&.end() ||
+154      std::abs(recovery_time - _system\&.time) > TOLERANCE)
+155     {
+156       //libMesh::out << "No more solutions to recover ! We are at time t = " <<
+157       //                     _system\&.time << std::endl;
+158       return;
+159     }
+160 
+161   // Get the saved vectors at this timestep
+162   std::map<std::string, NumericVector<Number> *>& saved_vectors = stored_sols->second;
+163 
+164   std::map<std::string, NumericVector<Number> *>::iterator vec = saved_vectors\&.begin();
+165   std::map<std::string, NumericVector<Number> *>::iterator vec_end = saved_vectors\&.end();
+166 
+167   // Loop over all the saved vectors
+168   for (; vec != vec_end; ++vec)
+169     {
+170       // The name of this vector
+171       const std::string& vec_name = vec->first;
+172 
+173       // Get the vec_name entry in the saved vectors map and set the
+174       // current system vec[vec_name] entry to it
+175       if (vec_name != "_solution")
+176         _system\&.get_vector(vec_name) = *(vec->second);
+177     }
+178 
+179   // Of course, we will *always* have to get the actual solution
+180   std::string _solution("_solution");
+181   *(_system\&.solution) = *(saved_vectors[_solution]);
+182 }
+.fi
+.SS "void libMesh::SolutionHistory::set_overwrite_previously_stored (boolval)\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 54 of file solution_history\&.h\&.
+.PP
+References libMesh::SolutionHistory::overwrite_previously_stored\&.
+.PP
+.nf
+55   { overwrite_previously_stored = val; }
+.fi
+.SS "void libMesh::MemorySolutionHistory::store ()\fC [virtual]\fP"
+
+.PP
+Implements \fBlibMesh::SolutionHistory\fP\&.
+.PP
+Definition at line 70 of file memory_solution_history\&.C\&.
+.PP
+References _system, std::abs(), find_stored_entry(), libMesh::libmesh_assert(), libMesh::SolutionHistory::overwrite_previously_stored, libMesh::System::project_solution_on_reinit(), libMesh::System::solution, stored_sols, stored_solutions, libMesh::System::time, libMesh::TOLERANCE, libMesh::System::vector_preservation(), libMesh::System::vectors_begin(), and libMesh::System::vectors_end()\&.
+.PP
+.nf
+71 {
+72   this->find_stored_entry();
+73 
+74   // In an empty history we create the first entry
+75   if (stored_solutions\&.begin() == stored_solutions\&.end())
+76     {
+77       stored_solutions\&.push_back
+78         (std::make_pair(_system\&.time,
+79                         std::map<std::string, NumericVector<Number> *>()));
+80       stored_sols = stored_solutions\&.begin();
+81     }
+82 
+83   // If we're past the end we can create a new entry
+84   if (_system\&.time - stored_sols->first > TOLERANCE )
+85     {
+86 #ifndef NDEBUG
+87       ++stored_sols;
+88       libmesh_assert (stored_sols == stored_solutions\&.end());
+89 #endif
+90       stored_solutions\&.push_back
+91         (std::make_pair(_system\&.time,
+92                         std::map<std::string, NumericVector<Number> *>()));
+93       stored_sols = stored_solutions\&.end();
+94       --stored_sols;
+95     }
+96 
+97   // If we're before the beginning we can create a new entry
+98   else if (stored_sols->first - _system\&.time > TOLERANCE)
+99     {
+100       libmesh_assert (stored_sols == stored_solutions\&.begin());
+101       stored_solutions\&.push_front
+102         (std::make_pair(_system\&.time,
+103                         std::map<std::string, NumericVector<Number> *>()));
+104       stored_sols = stored_solutions\&.begin();
+105     }
+106 
+107   // We don't support inserting entries elsewhere
+108   libmesh_assert(std::abs(stored_sols->first - _system\&.time) < TOLERANCE);
+109 
+110   // Map of stored vectors for this solution step
+111   std::map<std::string, NumericVector<Number> *>& saved_vectors = stored_sols->second;
+112 
+113   // Loop over all the system vectors
+114   for (System::vectors_iterator vec = _system\&.vectors_begin(); vec != _system\&.vectors_end(); ++vec)
+115     {
+116       // The name of this vector
+117       const std::string& vec_name = vec->first;
+118 
+119       // If we haven't seen this vector before or if we have and
+120       // want to overwrite it
+121       if ((overwrite_previously_stored ||
+122            !saved_vectors\&.count(vec_name)) &&
+123           // and if we think it's worth preserving
+124           _system\&.vector_preservation(vec_name))
+125         {
+126           // Then we save it\&.
+127           saved_vectors[vec_name] = vec->second->clone()\&.release();
+128         }
+129     }
+130 
+131   // Of course, we will usually save the actual solution
+132   std::string _solution("_solution");
+133   if ((overwrite_previously_stored ||
+134        !saved_vectors\&.count(_solution)) &&
+135       // and if we think it's worth preserving
+136       _system\&.project_solution_on_reinit())
+137     saved_vectors[_solution] = _system\&.solution->clone()\&.release();
+138 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBSystem\fP& libMesh::MemorySolutionHistory::_system\fC [private]\fP"
+
+.PP
+Definition at line 74 of file memory_solution_history\&.h\&.
+.PP
+Referenced by clone(), find_stored_entry(), retrieve(), and store()\&.
+.SS "bool libMesh::SolutionHistory::overwrite_previously_stored\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 61 of file solution_history\&.h\&.
+.PP
+Referenced by libMesh::SolutionHistory::set_overwrite_previously_stored(), and store()\&.
+.SS "\fBstored_solutions_iterator\fP libMesh::MemorySolutionHistory::stored_sols\fC [private]\fP"
+
+.PP
+Definition at line 68 of file memory_solution_history\&.h\&.
+.PP
+Referenced by find_stored_entry(), retrieve(), and store()\&.
+.SS "std::list<std::pair<\fBReal\fP, std::map<std::string, \fBNumericVector\fP<\fBNumber\fP>*> > > libMesh::MemorySolutionHistory::stored_solutions\fC [private]\fP"
+
+.PP
+Definition at line 65 of file memory_solution_history\&.h\&.
+.PP
+Referenced by find_stored_entry(), retrieve(), store(), and ~MemorySolutionHistory()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

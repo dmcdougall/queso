@@ -1,0 +1,479 @@
+.TH "libMesh::FEMPhysics" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::FEMPhysics \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fem_physics\&.h>\fP
+.PP
+Inherits \fBlibMesh::DifferentiablePhysics\fP\&.
+.PP
+Inherited by \fBlibMesh::FEMSystem\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFEMPhysics\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~FEMPhysics\fP ()"
+.br
+.ti -1c
+.RI "virtual bool \fBeulerian_residual\fP (bool request_jacobian, \fBDiffContext\fP &context)"
+.br
+.ti -1c
+.RI "virtual bool \fBmass_residual\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP
+.br
+< \fBDifferentiablePhysics\fP > \fBclone_physics\fP ()=0"
+.br
+.ti -1c
+.RI "virtual void \fBclear_physics\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit_physics\fP (const \fBSystem\fP &\fBsys\fP)"
+.br
+.ti -1c
+.RI "virtual bool \fBelement_time_derivative\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual bool \fBelement_constraint\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual bool \fBside_time_derivative\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual bool \fBside_constraint\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBtime_evolving\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "bool \fBis_time_evolving\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "virtual bool \fBside_mass_residual\fP (bool request_jacobian, \fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBinit_context\fP (\fBDiffContext\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBset_mesh_system\fP (\fBSystem\fP *\fBsys\fP)"
+.br
+.ti -1c
+.RI "const \fBSystem\fP * \fBget_mesh_system\fP () const "
+.br
+.ti -1c
+.RI "\fBSystem\fP * \fBget_mesh_system\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBset_mesh_x_var\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_mesh_x_var\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBset_mesh_y_var\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_mesh_y_var\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBset_mesh_z_var\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "unsigned int \fBget_mesh_z_var\fP () const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fBcompute_internal_sides\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSystem\fP * \fB_mesh_sys\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_mesh_x_var\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_mesh_y_var\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_mesh_z_var\fP"
+.br
+.ti -1c
+.RI "std::vector< bool > \fB_time_evolving\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides a specific system class\&. It aims to generalize any system, linear or nonlinear, which provides both a residual and a Jacobian\&.
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2012 
+.RE
+.PP
+
+.PP
+Definition at line 48 of file fem_physics\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::FEMPhysics::FEMPhysics ()\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 55 of file fem_physics\&.h\&.
+.PP
+.nf
+55                 :
+56     DifferentiablePhysics()
+57   {}
+.fi
+.SS "virtual libMesh::FEMPhysics::~FEMPhysics ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 62 of file fem_physics\&.h\&.
+.PP
+.nf
+62 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void libMesh::DifferentiablePhysics::clear_physics ()\fC [virtual]\fP, \fC [inherited]\fP"
+Clear any data structures associated with the physics\&. 
+.PP
+Referenced by libMesh::DifferentiableSystem::clear()\&.
+.SS "virtual \fBAutoPtr\fP<\fBDifferentiablePhysics\fP> libMesh::DifferentiablePhysics::clone_physics ()\fC [pure virtual]\fP, \fC [inherited]\fP"
+Copy of this object\&. User should override to copy any needed state\&. 
+.PP
+Implemented in \fBlibMesh::DifferentiableSystem\fP\&.
+.PP
+Referenced by libMesh::DifferentiableSystem::attach_physics()\&.
+.SS "virtual bool libMesh::DifferentiablePhysics::element_constraint (boolrequest_jacobian, \fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Adds the constraint contribution on \fCelem\fP to elem_residual\&. If this method receives request_jacobian = true, then it should compute elem_jacobian and return true if possible\&. If elem_jacobian has not been computed then the method should return false\&.
+.PP
+Users may need to reimplement this for their particular PDE\&.
+.PP
+To implement the constraint 0 = G(u), the user should examine u = elem_solution and add (G(u), phi_i) to elem_residual in elem_constraint()\&. 
+.PP
+Definition at line 123 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::SteadySolver::element_residual(), and libMesh::EigenTimeSolver::element_residual()\&.
+.PP
+.nf
+124                                                   {
+125     return request_jacobian;
+126   }
+.fi
+.SS "virtual bool libMesh::DifferentiablePhysics::element_time_derivative (boolrequest_jacobian, \fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Adds the time derivative contribution on \fCelem\fP to elem_residual\&. If this method receives request_jacobian = true, then it should compute elem_jacobian and return true if possible\&. If elem_jacobian has not been computed then the method should return false\&.
+.PP
+Users need to reimplement this for their particular PDE\&.
+.PP
+To implement the physics model du/dt = F(u), the user should examine u = elem_solution and add (F(u), phi_i) to elem_residual in elem_time_derivative()\&. 
+.PP
+Definition at line 105 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::SteadySolver::element_residual(), and libMesh::EigenTimeSolver::element_residual()\&.
+.PP
+.nf
+106                                                        {
+107     return request_jacobian;
+108   }
+.fi
+.SS "virtual bool libMesh::FEMPhysics::eulerian_residual (boolrequest_jacobian, \fBDiffContext\fP &context)\fC [virtual]\fP"
+Adds a pseudo-convection contribution on \fCelem\fP to elem_residual, if the nodes of \fCelem\fP are being translated by a moving mesh\&.
+.PP
+This function assumes that the user's time derivative equations (except for any equations involving unknown mesh xyz coordinates themselves) are expressed in an Eulerian frame of reference, and that the user is satisfied with an unstabilized convection term\&. Lagrangian equations will probably require overriding \fBeulerian_residual()\fP with a blank function; ALE or stabilized formulations will require reimplementing \fBeulerian_residual()\fP entirely\&. 
+.PP
+Reimplemented from \fBlibMesh::DifferentiablePhysics\fP\&.
+.SS "const \fBSystem\fP * libMesh::DifferentiablePhysics::get_mesh_system () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns a const reference to the system with variables corresponding to mesh nodal coordinates, or NULL if the mesh is fixed\&. Useful for ALE calculations\&. 
+.PP
+Definition at line 414 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_sys\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+415 {
+416   return _mesh_sys;
+417 }
+.fi
+.SS "\fBSystem\fP * libMesh::DifferentiablePhysics::get_mesh_system ()\fC [inline]\fP, \fC [inherited]\fP"
+Returns a reference to the system with variables corresponding to mesh nodal coordinates, or NULL if the mesh is fixed\&. 
+.PP
+Definition at line 420 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_sys\&.
+.PP
+.nf
+421 {
+422   return _mesh_sys;
+423 }
+.fi
+.SS "unsigned int libMesh::DifferentiablePhysics::get_mesh_x_var () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the variable number corresponding to the mesh x coordinate\&. Useful for ALE calculations\&. 
+.PP
+Definition at line 426 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_x_var\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+427 {
+428   return _mesh_x_var;
+429 }
+.fi
+.SS "unsigned int libMesh::DifferentiablePhysics::get_mesh_y_var () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the variable number corresponding to the mesh y coordinate\&. Useful for ALE calculations\&. 
+.PP
+Definition at line 432 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_y_var\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+433 {
+434   return _mesh_y_var;
+435 }
+.fi
+.SS "unsigned int libMesh::DifferentiablePhysics::get_mesh_z_var () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the variable number corresponding to the mesh z coordinate\&. Useful for ALE calculations\&. 
+.PP
+Definition at line 438 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_z_var\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+439 {
+440   return _mesh_z_var;
+441 }
+.fi
+.SS "virtual void libMesh::DifferentiablePhysics::init_context (\fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+Reimplemented in \fBlibMesh::FEMSystem\fP\&.
+.PP
+Definition at line 257 of file diff_physics\&.h\&.
+.PP
+.nf
+257 {}
+.fi
+.SS "virtual void libMesh::DifferentiablePhysics::init_physics (const \fBSystem\fP &sys)\fC [virtual]\fP, \fC [inherited]\fP"
+Initialize any data structures associated with the physics\&. 
+.PP
+Referenced by libMesh::DifferentiableSystem::attach_physics(), and libMesh::DifferentiableSystem::init_data()\&.
+.SS "bool libMesh::DifferentiablePhysics::is_time_evolving (unsigned intvar) const\fC [inline]\fP, \fC [inherited]\fP"
+Returns true iff variable \fCvar\fP is evolving with respect to time\&. In general, the user's \fBinit()\fP function should have set \fBtime_evolving()\fP for any variables which behave like du/dt = F(u), and should not call \fBtime_evolving()\fP for any variables which behave like 0 = G(u)\&. 
+.PP
+Definition at line 201 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_time_evolving\&.
+.PP
+Referenced by libMesh::FEMSystem::init_context()\&.
+.PP
+.nf
+201                                                  {
+202     return _time_evolving[var];
+203   }
+.fi
+.SS "virtual bool libMesh::FEMPhysics::mass_residual (boolrequest_jacobian, \fBDiffContext\fP &)\fC [virtual]\fP"
+Adds a mass vector contribution on \fCelem\fP to elem_residual\&. If this method receives request_jacobian = true, then it should compute elem_jacobian and return true if possible\&. If elem_jacobian has not been computed then the method should return false\&.
+.PP
+Most problems can use the reimplementation in \fBFEMPhysics::mass_residual\fP; few users will need to reimplement this themselves\&. 
+.PP
+Reimplemented from \fBlibMesh::DifferentiablePhysics\fP\&.
+.SS "void libMesh::DifferentiablePhysics::set_mesh_system (\fBSystem\fP *sys)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Tells the \fBDifferentiablePhysics\fP that system \fCsys\fP contains the isoparametric Lagrangian variables which correspond to the coordinates of mesh nodes, in problems where the mesh itself is expected to move in time\&.
+.PP
+The system with mesh coordinate data (which may be \fCthis\fP system itself, for fully coupled moving mesh problems) is currently assumed to have new (end of time step) mesh coordinates stored in solution, old (beginning of time step) mesh coordinates stored in _old_nonlinear_solution, and constant velocity motion during each time step\&.
+.PP
+Activating this function ensures that local (but not neighbor!) element geometry is correctly repositioned when evaluating element residuals\&.
+.PP
+Currently \fCsys\fP must be \fC*this\fP for a tightly coupled moving mesh problem or NULL to stop mesh movement; loosely coupled moving mesh problems are not implemented\&.
+.PP
+This code is experimental\&. 'Trust but verify, and not in that
+order' 
+.PP
+Definition at line 370 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_sys, and libMesh::sys\&.
+.PP
+.nf
+371 {
+372   // For now we assume that we're doing fully coupled mesh motion
+373   //  if (sys && sys != this)
+374   //    libmesh_not_implemented();
+375 
+376   // For the foreseeable future we'll assume that we keep these
+377   // Systems in the same EquationSystems
+378   // libmesh_assert_equal_to (&this->get_equation_systems(),
+379   //                          &sys->get_equation_systems());
+380 
+381   // And for the immediate future this code may not even work
+382   libmesh_experimental();
+383 
+384   _mesh_sys = sys;
+385 }
+.fi
+.SS "void libMesh::DifferentiablePhysics::set_mesh_x_var (unsigned intvar)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Tells the \fBDifferentiablePhysics\fP that variable \fCvar\fP from the mesh system should be used to update the x coordinate of mesh nodes, in problems where the mesh itself is expected to move in time\&.
+.PP
+The system with mesh coordinate data (which may be this system itself, for fully coupled moving mesh problems) is currently assumed to have new (end of time step) mesh coordinates stored in solution, old (beginning of time step) mesh coordinates stored in _old_nonlinear_solution, and constant velocity motion during each time step\&.
+.PP
+Activating this function ensures that local (but not neighbor!) element geometry is correctly repositioned when evaluating element residuals\&. 
+.PP
+Definition at line 390 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_x_var\&.
+.PP
+.nf
+391 {
+392   _mesh_x_var = var;
+393 }
+.fi
+.SS "void libMesh::DifferentiablePhysics::set_mesh_y_var (unsigned intvar)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Tells the \fBDifferentiablePhysics\fP that variable \fCvar\fP from the mesh system should be used to update the y coordinate of mesh nodes\&. 
+.PP
+Definition at line 398 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_y_var\&.
+.PP
+.nf
+399 {
+400   _mesh_y_var = var;
+401 }
+.fi
+.SS "void libMesh::DifferentiablePhysics::set_mesh_z_var (unsigned intvar)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Tells the \fBDifferentiablePhysics\fP that variable \fCvar\fP from the mesh system should be used to update the z coordinate of mesh nodes\&. 
+.PP
+Definition at line 406 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_mesh_z_var\&.
+.PP
+.nf
+407 {
+408   _mesh_z_var = var;
+409 }
+.fi
+.SS "virtual bool libMesh::DifferentiablePhysics::side_constraint (boolrequest_jacobian, \fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Adds the time derivative contribution on \fCside\fP of \fCelem\fP to elem_residual\&. If this method receives request_jacobian = true, then it should compute elem_jacobian and return true if possible\&. If elem_jacobian has not been computed then the method should return false\&.
+.PP
+Users may need to reimplement this for their particular PDE depending on the boundary conditions\&.
+.PP
+To implement a weak form of the constraint 0 = G(u), the user should examine u = elem_solution and add (G(u), phi_i) boundary integral contributions to elem_residual in \fBside_constraint()\fP\&. 
+.PP
+Definition at line 172 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), libMesh::SteadySolver::side_residual(), and libMesh::EigenTimeSolver::side_residual()\&.
+.PP
+.nf
+173                                                {
+174     return request_jacobian;
+175   }
+.fi
+.SS "virtual bool libMesh::DifferentiablePhysics::side_mass_residual (boolrequest_jacobian, \fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Adds a mass vector contribution on \fCside\fP of \fCelem\fP to elem_residual\&. If this method receives request_jacobian = true, then it should compute elem_jacobian and return true if possible\&. If elem_jacobian has not been computed then the method should return false\&.
+.PP
+For most problems, the default implementation of 'do nothing' is correct; users with boundary conditions including time derivatives may need to reimplement this themselves\&. 
+.PP
+Definition at line 246 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), and libMesh::EigenTimeSolver::side_residual()\&.
+.PP
+.nf
+247                                                   {
+248     return request_jacobian;
+249   }
+.fi
+.SS "virtual bool libMesh::DifferentiablePhysics::side_time_derivative (boolrequest_jacobian, \fBDiffContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Adds the time derivative contribution on \fCside\fP of \fCelem\fP to elem_residual\&. If this method receives request_jacobian = true, then it should compute elem_jacobian and return true if possible\&. If elem_jacobian has not been computed then the method should return false\&.
+.PP
+Users may need to reimplement this for their particular PDE depending on the boundary conditions\&.
+.PP
+To implement a weak form of the source term du/dt = F(u) on sides, such as might arise in a flux boundary condition, the user should examine u = elem_solution and add (F(u), phi_i) boundary integral contributions to elem_residual in \fBside_constraint()\fP\&. 
+.PP
+Definition at line 152 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), libMesh::SteadySolver::side_residual(), and libMesh::EigenTimeSolver::side_residual()\&.
+.PP
+.nf
+153                                                     {
+154     return request_jacobian;
+155   }
+.fi
+.SS "virtual void libMesh::DifferentiablePhysics::time_evolving (unsigned intvar)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Tells the DiffSystem that variable var is evolving with respect to time\&. In general, the user's \fBinit()\fP function should call \fBtime_evolving()\fP for any variables which behave like du/dt = F(u), and should not call \fBtime_evolving()\fP for any variables which behave like 0 = G(u)\&.
+.PP
+Most derived systems will not have to reimplment this function; however any system which reimplements \fBmass_residual()\fP may have to reimplement \fBtime_evolving()\fP to prepare data structures\&. 
+.PP
+Definition at line 188 of file diff_physics\&.h\&.
+.PP
+References libMesh::DifferentiablePhysics::_time_evolving\&.
+.PP
+.nf
+188                                                 {
+189     if (_time_evolving\&.size() <= var)
+190       _time_evolving\&.resize(var+1, false);
+191     _time_evolving[var] = true;
+192   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBSystem\fP* libMesh::DifferentiablePhysics::_mesh_sys\fC [protected]\fP, \fC [inherited]\fP"
+\fBSystem\fP from which to acquire moving mesh information 
+.PP
+Definition at line 349 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::DifferentiablePhysics::get_mesh_system(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::mesh_position_set(), libMesh::FEMSystem::numerical_jacobian(), and libMesh::DifferentiablePhysics::set_mesh_system()\&.
+.SS "unsigned int libMesh::DifferentiablePhysics::_mesh_x_var\fC [protected]\fP, \fC [inherited]\fP"
+Variables from which to acquire moving mesh information 
+.PP
+Definition at line 354 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::DifferentiablePhysics::get_mesh_x_var(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::numerical_jacobian(), and libMesh::DifferentiablePhysics::set_mesh_x_var()\&.
+.SS "unsigned int libMesh::DifferentiablePhysics::_mesh_y_var\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 354 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::DifferentiablePhysics::get_mesh_y_var(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::numerical_jacobian(), and libMesh::DifferentiablePhysics::set_mesh_y_var()\&.
+.SS "unsigned int libMesh::DifferentiablePhysics::_mesh_z_var\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 354 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::DifferentiablePhysics::get_mesh_z_var(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::numerical_jacobian(), and libMesh::DifferentiablePhysics::set_mesh_z_var()\&.
+.SS "std::vector<bool> libMesh::DifferentiablePhysics::_time_evolving\fC [protected]\fP, \fC [inherited]\fP"
+Stores bools to tell us which variables are evolving in time and which are just constraints 
+.PP
+Definition at line 360 of file diff_physics\&.h\&.
+.PP
+Referenced by libMesh::DifferentiablePhysics::is_time_evolving(), and libMesh::DifferentiablePhysics::time_evolving()\&.
+.SS "bool libMesh::DifferentiablePhysics::compute_internal_sides\fC [inherited]\fP"
+\fCcompute_internal_sides\fP is false by default, indicating that side_* computations will only be done on boundary sides\&. If compute_internal_sides is true, computations will be done on sides between elements as well\&. 
+.PP
+Definition at line 134 of file diff_physics\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

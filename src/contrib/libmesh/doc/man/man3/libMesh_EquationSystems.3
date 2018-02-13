@@ -1,0 +1,2961 @@
+.TH "libMesh::EquationSystems" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::EquationSystems \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <equation_systems\&.h>\fP
+.PP
+Inherits \fBlibMesh::ReferenceCountedObject< EquationSystems >\fP, and \fBlibMesh::ParallelObject\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBReadFlags\fP { \fBREAD_HEADER\fP = 1, \fBREAD_DATA\fP = 2, \fBREAD_ADDITIONAL_DATA\fP = 4, \fBREAD_LEGACY_FORMAT\fP = 8, \fBTRY_READ_IFEMS\fP = 16, \fBREAD_BASIC_ONLY\fP = 32 }"
+.br
+.ti -1c
+.RI "enum \fBWriteFlags\fP { \fBWRITE_DATA\fP = 1, \fBWRITE_ADDITIONAL_DATA\fP = 2, \fBWRITE_PARALLEL_FILES\fP = 4, \fBWRITE_SERIAL_FILES\fP = 8 }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEquationSystems\fP (\fBMeshBase\fP &\fBmesh\fP, \fBMeshData\fP *mesh_data=NULL)"
+.br
+.ti -1c
+.RI "virtual \fB~EquationSystems\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBreinit\fP ()"
+.br
+.ti -1c
+.RI "void \fBupdate\fP ()"
+.br
+.ti -1c
+.RI "unsigned int \fBn_systems\fP () const "
+.br
+.ti -1c
+.RI "bool \fBhas_system\fP (const std::string &name) const "
+.br
+.ti -1c
+.RI "template<typename T_sys > const T_sys & \fBget_system\fP (const std::string &name) const "
+.br
+.ti -1c
+.RI "template<typename T_sys > T_sys & \fBget_system\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "template<typename T_sys > const T_sys & \fBget_system\fP (const unsigned int num) const "
+.br
+.ti -1c
+.RI "template<typename T_sys > T_sys & \fBget_system\fP (const unsigned int num)"
+.br
+.ti -1c
+.RI "const \fBSystem\fP & \fBget_system\fP (const std::string &name) const "
+.br
+.ti -1c
+.RI "\fBSystem\fP & \fBget_system\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "const \fBSystem\fP & \fBget_system\fP (const unsigned int num) const "
+.br
+.ti -1c
+.RI "\fBSystem\fP & \fBget_system\fP (const unsigned int num)"
+.br
+.ti -1c
+.RI "virtual \fBSystem\fP & \fBadd_system\fP (const std::string &system_type, const std::string &name)"
+.br
+.ti -1c
+.RI "template<typename T_sys > T_sys & \fBadd_system\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBdelete_system\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_vars\fP () const "
+.br
+.ti -1c
+.RI "std::size_t \fBn_dofs\fP () const "
+.br
+.ti -1c
+.RI "std::size_t \fBn_active_dofs\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBsolve\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBadjoint_solve\fP (const \fBQoISet\fP &qoi_indices=\fBQoISet\fP())"
+.br
+.ti -1c
+.RI "virtual void \fBsensitivity_solve\fP (const \fBParameterVector\fP &\fBparameters\fP)"
+.br
+.ti -1c
+.RI "void \fBbuild_variable_names\fP (std::vector< std::string > &var_names, const \fBFEType\fP *type=NULL, const std::set< std::string > *system_names=NULL) const "
+.br
+.ti -1c
+.RI "void \fBbuild_solution_vector\fP (std::vector< \fBNumber\fP > &soln, const std::string &system_name, const std::string &variable_name='all_vars') const "
+.br
+.ti -1c
+.RI "void \fBbuild_solution_vector\fP (std::vector< \fBNumber\fP > &soln, const std::set< std::string > *system_names=NULL) const "
+.br
+.ti -1c
+.RI "void \fBget_solution\fP (std::vector< \fBNumber\fP > &soln, std::vector< std::string > &names) const "
+.br
+.ti -1c
+.RI "void \fBbuild_discontinuous_solution_vector\fP (std::vector< \fBNumber\fP > &soln, const std::set< std::string > *system_names=NULL) const "
+.br
+.ti -1c
+.RI "template<typename InValType > void \fBread\fP (const std::string &name, const \fBXdrMODE\fP, const unsigned int read_flags=(\fBREAD_HEADER\fP|\fBREAD_DATA\fP), bool partition_agnostic=true)"
+.br
+.ti -1c
+.RI "void \fBread\fP (const std::string &name, const \fBXdrMODE\fP mode, const unsigned int read_flags=(\fBREAD_HEADER\fP|\fBREAD_DATA\fP), bool partition_agnostic=true)"
+.br
+.ti -1c
+.RI "template<typename InValType > void \fBread\fP (const std::string &name, const unsigned int read_flags=(\fBREAD_HEADER\fP|\fBREAD_DATA\fP), bool partition_agnostic=true)"
+.br
+.ti -1c
+.RI "void \fBread\fP (const std::string &name, const unsigned int read_flags=(\fBREAD_HEADER\fP|\fBREAD_DATA\fP), bool partition_agnostic=true)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const std::string &name, const \fBXdrMODE\fP, const unsigned int write_flags=(\fBWRITE_DATA\fP), bool partition_agnostic=true) const "
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const std::string &name, const unsigned int write_flags=(\fBWRITE_DATA\fP), bool partition_agnostic=true) const "
+.br
+.ti -1c
+.RI "virtual bool \fBcompare\fP (const \fBEquationSystems\fP &other_es, const \fBReal\fP threshold, const bool verbose) const "
+.br
+.ti -1c
+.RI "virtual std::string \fBget_info\fP () const "
+.br
+.ti -1c
+.RI "void \fBprint_info\fP (std::ostream &os=\fBlibMesh::out\fP) const "
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBget_mesh\fP () const "
+.br
+.ti -1c
+.RI "\fBMeshBase\fP & \fBget_mesh\fP ()"
+.br
+.ti -1c
+.RI "bool \fBhas_mesh_data\fP () const "
+.br
+.ti -1c
+.RI "const \fBMeshData\fP & \fBget_mesh_data\fP () const "
+.br
+.ti -1c
+.RI "\fBMeshData\fP & \fBget_mesh_data\fP ()"
+.br
+.ti -1c
+.RI "void \fBallgather\fP ()"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBParameters\fP \fBparameters\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+\fBSystem\fP * >::iterator \fBsystem_iterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+\fBSystem\fP * >::const_iterator \fBconst_system_iterator\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "\fBMeshData\fP * \fB_mesh_data\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, \fBSystem\fP * > \fB_systems\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename InValType > void \fB_read_impl\fP (const std::string &name, const \fBXdrMODE\fP, const unsigned int read_flags, bool partition_agnostic=true)"
+.br
+.ti -1c
+.RI "void \fB_add_system_to_nodes_and_elems\fP ()"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &os, const \fBEquationSystems\fP &es)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This is the \fC\fBEquationSystems\fP\fP class\&. It is in charge of handling all the various equation systems defined for a \fC\fBMeshBase\fP\fP\&. It may have multiple systems, which may be active or inactive, so that at different solution stages only a sub-set may be solved for\&. Also, through the templated access, \fIdifferent\fP types of systems may be handled\&. Also other features, like flags, parameters, I/O etc are provided\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2002-2007 
+.RE
+.PP
+
+.PP
+Definition at line 68 of file equation_systems\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, \fBSystem\fP*>::const_iterator \fBlibMesh::EquationSystems::const_system_iterator\fP\fC [protected]\fP"
+Typedef for constatnt system iterators 
+.PP
+Definition at line 475 of file equation_systems\&.h\&.
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "typedef std::map<std::string, \fBSystem\fP*>::iterator \fBlibMesh::EquationSystems::system_iterator\fP\fC [protected]\fP"
+Typedef for system iterators 
+.PP
+Definition at line 470 of file equation_systems\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::EquationSystems::ReadFlags\fP"
+Define enumeration to set properties in \fBEquationSystems::read()\fP 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIREAD_HEADER \fP\fP
+.TP
+\fB\fIREAD_DATA \fP\fP
+.TP
+\fB\fIREAD_ADDITIONAL_DATA \fP\fP
+.TP
+\fB\fIREAD_LEGACY_FORMAT \fP\fP
+.TP
+\fB\fITRY_READ_IFEMS \fP\fP
+.TP
+\fB\fIREAD_BASIC_ONLY \fP\fP
+.PP
+Definition at line 77 of file equation_systems\&.h\&.
+.PP
+.nf
+77                  { READ_HEADER           = 1,
+78                    READ_DATA             = 2,
+79                    READ_ADDITIONAL_DATA  = 4,
+80                    READ_LEGACY_FORMAT    = 8,
+81                    TRY_READ_IFEMS        = 16,
+82                    READ_BASIC_ONLY       = 32 };
+.fi
+.SS "enum \fBlibMesh::EquationSystems::WriteFlags\fP"
+Define enumeration to set properties in \fBEquationSystems::write()\fP 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIWRITE_DATA \fP\fP
+.TP
+\fB\fIWRITE_ADDITIONAL_DATA \fP\fP
+.TP
+\fB\fIWRITE_PARALLEL_FILES \fP\fP
+.TP
+\fB\fIWRITE_SERIAL_FILES \fP\fP
+.PP
+Definition at line 87 of file equation_systems\&.h\&.
+.PP
+.nf
+87                   { WRITE_DATA             = 1,
+88                     WRITE_ADDITIONAL_DATA  = 2,
+89                     WRITE_PARALLEL_FILES   = 4,
+90                     WRITE_SERIAL_FILES     = 8 };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::EquationSystems::EquationSystems (\fBMeshBase\fP &mesh, \fBMeshData\fP *mesh_data = \fCNULL\fP)"
+Constructor\&. 
+.PP
+Definition at line 54 of file equation_systems\&.C\&.
+.PP
+References parameters, libMesh::Real, libMesh::Parameters::set(), and libMesh::TOLERANCE\&.
+.PP
+.nf
+54                                                                   :
+55   ParallelObject (m),
+56   _mesh          (m),
+57   _mesh_data     (mesh_data)
+58 {
+59   // Set default parameters
+60   this->parameters\&.set<Real>        ("linear solver tolerance") = TOLERANCE * TOLERANCE;
+61   this->parameters\&.set<unsigned int>("linear solver maximum iterations") = 5000;
+62 }
+.fi
+.SS "libMesh::EquationSystems::~EquationSystems ()\fC [virtual]\fP"
+Destructor\&. Should be virtual, since the user may want to derive subclasses of \fBEquationSystems\fP\&. 
+.PP
+Definition at line 66 of file equation_systems\&.C\&.
+.PP
+References clear()\&.
+.PP
+.nf
+67 {
+68   this->clear ();
+69 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::EquationSystems::_add_system_to_nodes_and_elems ()\fC [private]\fP"
+This function is used in the implementation of add_system, it loops over the nodes and elements of the \fBMesh\fP, adding the system to each one\&. The main reason to separate this part is to avoid coupling this header file to \fBmesh\&.h\fP, and \fBelem\&.h\fP\&. 
+.PP
+Definition at line 1308 of file equation_systems\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+Referenced by add_system()\&.
+.PP
+.nf
+1309 {
+1310   // All the nodes
+1311   MeshBase::node_iterator       node_it  = _mesh\&.nodes_begin();
+1312   const MeshBase::node_iterator node_end = _mesh\&.nodes_end();
+1313 
+1314   for ( ; node_it != node_end; ++node_it)
+1315     (*node_it)->add_system();
+1316 
+1317   // All the elements
+1318   MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+1319   const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+1320 
+1321   for ( ; elem_it != elem_end; ++elem_it)
+1322     (*elem_it)->add_system();
+1323 }
+.fi
+.SS "template<typename InValType > template void libMesh::EquationSystems::_read_impl< \fBReal\fP > (const std::string &name, const \fBXdrMODE\fP, const unsigned intread_flags, boolpartition_agnostic = \fCtrue\fP)\fC [private]\fP"
+Actual read implementation\&. This can be called repeatedly inside a try-catch block in an attempt to read broken files\&.
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpartition_agnostic\fP If true then the mesh and degrees of freedom will be temporarily renumbered in a partition agnostic way so that files written using 'n' mpi processes can be re-read on 'm' mpi processes\&. Note that this renumbering is not compatible with meshes that have two nodes in exactly the same position! 
+.RE
+.PP
+This program implements the output of an \fBEquationSystems\fP object\&. This warrants some documentation\&. The output file essentially consists of 11 sections: 
+.PP
+.nf
+1.) A version header (for non-'legacy' formats, libMesh-0.7.0 and greater).
+2.) The number of individual equation systems (unsigned int)
+
+for each system
+
+3.)  The name of the system (string)
+4.)  The type of the system (string)
+
+handled through System::read():
+
++-------------------------------------------------------------+
+|  5.) The number of variables in the system (unsigned int)   |
+|                                                             |
+|   for each variable in the system                           |
+|                                                             |
+|    6.) The name of the variable (string)                    |
+|                                                             |
+|    7.) Combined in an FEType:                               |
+|         - The approximation order(s) of the variable (Order |
+|           Enum, cast to int/s)                              |
+|         - The finite element family/ies of the variable     |
+|           (FEFamily Enum, cast to int/s)                    |
+|                                                             |
+|   end variable loop                                         |
+|                                                             |
+| 8.) The number of additional vectors (unsigned int),        |
+|                                                             |
+|    for each additional vector in the equation system object |
+|                                                             |
+|    9.) the name of the additional vector  (string)          |
++-------------------------------------------------------------+
+
+end system loop
+
+
+for each system, handled through System::read_{serialized,parallel}_data():
+
++--------------------------------------------------------------+
+| 10.) The global solution vector, re-ordered to be node-major |
+|     (More on this later.)                                    |
+|                                                              |
+|    for each additional vector in the equation system object  |
+|                                                              |
+|    11.) The global additional vector, re-ordered to be       |
+|         node-major (More on this later.)                     |
++--------------------------------------------------------------+
+
+end system loop
+
+.fi
+.PP
+.PP
+Note that the actual IO is handled through the \fBXdr\fP class (to be renamed later?) which provides a uniform interface to both the XDR (eXternal Data Representation) interface and standard ASCII output\&. Thus this one section of code will read XDR or ASCII files with no changes\&.
+.PP
+Definition at line 154 of file equation_systems_io\&.C\&.
+.PP
+References _mesh, add_system(), libMesh::Parallel::Communicator::broadcast(), libMesh::Xdr::close(), libMesh::ParallelObject::comm(), libMesh::Xdr::data(), libMesh::MeshBase::fix_broken_node_and_element_numbering(), get_mesh(), get_system(), libMesh::MeshTools::Private::globally_renumber_nodes_and_elements(), init(), libMesh::libmesh_assert(), mesh, libMesh::ParallelObject::processor_id(), read(), READ_ADDITIONAL_DATA, READ_BASIC_ONLY, READ_DATA, READ_HEADER, libMesh::System::read_header(), READ_LEGACY_FORMAT, libMesh::Xdr::reading(), libMesh::System::set_basic_system_only(), libMesh::Xdr::set_version(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::sys, TRY_READ_IFEMS, and update()\&.
+.PP
+.nf
+158 {
+222   // Set booleans from the read_flags argument
+223   const bool read_header          = read_flags & EquationSystems::READ_HEADER;
+224   const bool read_data            = read_flags & EquationSystems::READ_DATA;
+225   const bool read_additional_data = read_flags & EquationSystems::READ_ADDITIONAL_DATA;
+226   const bool read_legacy_format   = read_flags & EquationSystems::READ_LEGACY_FORMAT;
+227   const bool try_read_ifems       = read_flags & EquationSystems::TRY_READ_IFEMS;
+228   const bool read_basic_only      = read_flags & EquationSystems::READ_BASIC_ONLY;
+229   bool read_parallel_files  = false;
+230 
+231   std::map<std::string, System*> xda_systems;
+232 
+233   // This will unzip a file with \&.bz2 as the extension, otherwise it
+234   // simply returns the name if the file need not be unzipped\&.
+235   Xdr io ((this->processor_id() == 0) ? name : "", mode);
+236   libmesh_assert (io\&.reading());
+237 
+238   {
+239     // 1\&.)
+240     // Read the version header\&.
+241     std::string version = "legacy";
+242     if (!read_legacy_format)
+243       {
+244         if (this->processor_id() == 0) io\&.data(version);
+245         this->comm()\&.broadcast(version);
+246 
+247         // All processors have the version header, if it does not contain
+248         // "libMesh" something then it is a legacy file\&.
+249         std::string::size_type lm_pos = version\&.find("libMesh");
+250         if (!(lm_pos < version\&.size()))
+251           {
+252             io\&.close();
+253 
+254             // Recursively call this read() function but with the
+255             // EquationSystems::READ_LEGACY_FORMAT bit set\&.
+256             this->read (name, mode, (read_flags | EquationSystems::READ_LEGACY_FORMAT), partition_agnostic);
+257             return;
+258           }
+259 
+260         // Figure out the libMesh version that created this file
+261         std::istringstream iss(version\&.substr(lm_pos + 8));
+262         int ver_major = 0, ver_minor = 0, ver_patch = 0;
+263         char dot;
+264         iss >> ver_major >> dot >> ver_minor >> dot >> ver_patch;
+265         io\&.set_version(LIBMESH_VERSION_ID(ver_major, ver_minor, ver_patch));
+266 
+267 
+268         read_parallel_files = (version\&.rfind(" parallel") < version\&.size());
+269 
+270         // If requested that we try to read infinite element information,
+271         // and the string " with infinite elements" is not in the version,
+272         // then tack it on\&.  This is for compatibility reading ifem
+273         // files written prior to 11/10/2008 - BSK
+274         if (try_read_ifems)
+275           if (!(version\&.rfind(" with infinite elements") < version\&.size()))
+276             version += " with infinite elements";
+277 
+278       }
+279     else
+280       libmesh_deprecated();
+281 
+282     START_LOG("read()","EquationSystems");
+283 
+284     // 2\&.)
+285     // Read the number of equation systems
+286     unsigned int n_sys=0;
+287     if (this->processor_id() == 0) io\&.data (n_sys);
+288     this->comm()\&.broadcast(n_sys);
+289 
+290     for (unsigned int sys=0; sys<n_sys; sys++)
+291       {
+292         // 3\&.)
+293         // Read the name of the sys-th equation system
+294         std::string sys_name;
+295         if (this->processor_id() == 0) io\&.data (sys_name);
+296         this->comm()\&.broadcast(sys_name);
+297 
+298         // 4\&.)
+299         // Read the type of the sys-th equation system
+300         std::string sys_type;
+301         if (this->processor_id() == 0) io\&.data (sys_type);
+302         this->comm()\&.broadcast(sys_type);
+303 
+304         if (read_header)
+305           this->add_system (sys_type, sys_name);
+306 
+307         // 5\&.) - 9\&.)
+308         // Let System::read_header() do the job
+309         System& new_system = this->get_system(sys_name);
+310         new_system\&.read_header (io,
+311                                 version,
+312                                 read_header,
+313                                 read_additional_data,
+314                                 read_legacy_format);
+315 
+316         xda_systems\&.insert(std::make_pair(sys_name, &new_system));
+317 
+318         // If we're only creating "basic" systems, we need to tell
+319         // each system that before we call init() later\&.
+320         if (read_basic_only)
+321           new_system\&.set_basic_system_only();
+322       }
+323   }
+324 
+325 
+326 
+327   // Now we are ready to initialize the underlying data
+328   // structures\&. This will initialize the vectors for
+329   // storage, the dof_map, etc\&.\&.\&.
+330   if (read_header)
+331     this->init();
+332 
+333   // 10\&.) & 11\&.)
+334   // Read and set the numeric vector values
+335   if (read_data)
+336     {
+337       // the EquationSystems::read() method should look constant from the mesh
+338       // perspective, but we need to assign a temporary numbering to the nodes
+339       // and elements in the mesh, which requires that we abuse const_cast
+340       if (!read_legacy_format && partition_agnostic)
+341         {
+342           MeshBase &mesh = const_cast<MeshBase&>(this->get_mesh());
+343           MeshTools::Private::globally_renumber_nodes_and_elements(mesh);
+344         }
+345 
+346       Xdr local_io (read_parallel_files ? local_file_name(this->processor_id(),name) : "", mode);
+347 
+348       std::map<std::string, System*>::iterator
+349         pos = xda_systems\&.begin();
+350 
+351       for (; pos != xda_systems\&.end(); ++pos)
+352         if (read_legacy_format)
+353           {
+354             libmesh_deprecated();
+355             pos->second->read_legacy_data (io, read_additional_data);
+356           }
+357         else
+358           if (read_parallel_files)
+359             pos->second->read_parallel_data<InValType>   (local_io, read_additional_data);
+360           else
+361             pos->second->read_serialized_data<InValType> (io, read_additional_data);
+362 
+363 
+364       // Undo the temporary numbering\&.
+365       if (!read_legacy_format && partition_agnostic)
+366         _mesh\&.fix_broken_node_and_element_numbering();
+367     }
+368 
+369   STOP_LOG("read()","EquationSystems");
+370 
+371   // Localize each system's data
+372   this->update();
+373 }
+.fi
+.SS "\fBSystem\fP & libMesh::EquationSystems::add_system (const std::string &system_type, const std::string &name)\fC [virtual]\fP"
+Add the system of type \fCsystem_type\fP named \fCname\fP to the systems array\&. 
+.PP
+Definition at line 336 of file equation_systems\&.C\&.
+.PP
+References _systems, libMesh::err, get_system(), and libMesh::Quality::name()\&.
+.PP
+Referenced by _read_impl(), and libMesh::ErrorVector::plot_error()\&.
+.PP
+.nf
+338 {
+339   // If the user already built a system with this name, we'll
+340   // trust them and we'll use it\&.  That way they can pre-add
+341   // non-standard derived system classes, and if their restart file
+342   // has some non-standard sys_type we won't throw an error\&.
+343   if (_systems\&.count(name))
+344     {
+345       return this->get_system(name);
+346     }
+347   // Build a basic System
+348   else if (sys_type == "Basic")
+349     this->add_system<System> (name);
+350 
+351   // Build a Newmark system
+352   else if (sys_type == "Newmark")
+353     this->add_system<NewmarkSystem> (name);
+354 
+355   // Build an Explicit system
+356   else if ((sys_type == "Explicit"))
+357     this->add_system<ExplicitSystem> (name);
+358 
+359   // Build an Implicit system
+360   else if ((sys_type == "Implicit") ||
+361            (sys_type == "Steady"  ))
+362     this->add_system<ImplicitSystem> (name);
+363 
+364   // build a transient implicit linear system
+365   else if ((sys_type == "Transient") ||
+366            (sys_type == "TransientImplicit") ||
+367            (sys_type == "TransientLinearImplicit"))
+368     this->add_system<TransientLinearImplicitSystem> (name);
+369 
+370   // build a transient implicit nonlinear system
+371   else if (sys_type == "TransientNonlinearImplicit")
+372     this->add_system<TransientNonlinearImplicitSystem> (name);
+373 
+374   // build a transient explicit system
+375   else if (sys_type == "TransientExplicit")
+376     this->add_system<TransientExplicitSystem> (name);
+377 
+378   // build a linear implicit system
+379   else if (sys_type == "LinearImplicit")
+380     this->add_system<LinearImplicitSystem> (name);
+381 
+382   // build a nonlinear implicit system
+383   else if (sys_type == "NonlinearImplicit")
+384     this->add_system<NonlinearImplicitSystem> (name);
+385 
+386   // build a Reduced Basis Construction system
+387   else if (sys_type == "RBConstruction")
+388     this->add_system<RBConstruction> (name);
+389 
+390   // build a transient Reduced Basis Construction system
+391   else if (sys_type == "TransientRBConstruction")
+392     this->add_system<TransientRBConstruction> (name);
+393 
+394 #ifdef LIBMESH_HAVE_SLEPC
+395   // build an eigen system
+396   else if (sys_type == "Eigen")
+397     this->add_system<EigenSystem> (name);
+398 #endif
+399 
+400 #if defined(LIBMESH_USE_COMPLEX_NUMBERS)
+401   // build a frequency system
+402   else if (sys_type == "Frequency")
+403     this->add_system<FrequencySystem> (name);
+404 #endif
+405 
+406   else
+407     {
+408       libMesh::err << "ERROR: Unknown system type: "
+409                    << sys_type
+410                    << std::endl;
+411       libmesh_error();
+412     }
+413 
+414   // Return a reference to the new system
+415   //return (*this)(name);
+416   return this->get_system(name);
+417 }
+.fi
+.SS "template<typename T_sys > T_sys & libMesh::EquationSystems::add_system (const std::string &name)\fC [inline]\fP"
+Add the system named \fCname\fP to the systems array\&. 
+.PP
+Definition at line 556 of file equation_systems\&.h\&.
+.PP
+References _add_system_to_nodes_and_elems(), _systems, n_systems(), and libMesh::Quality::name()\&.
+.PP
+.nf
+557 {
+558   T_sys* ptr = NULL;
+559 
+560   if (!_systems\&.count(name))
+561     {
+562       ptr = new T_sys(*this, name, this->n_systems());
+563 
+564       _systems\&.insert (std::make_pair(name, ptr));
+565 
+566       // Tell all the \p DofObject entities to add a system\&.
+567       this->_add_system_to_nodes_and_elems();
+568     }
+569   else
+570     {
+571       // We now allow redundant add_system calls, to make it
+572       // easier to load data from files for user-derived system
+573       // subclasses
+574       //      libMesh::err << "ERROR: There was already a system"
+575       //<< " named " << name
+576       //<< std::endl;
+577 
+578       //      libmesh_error();
+579 
+580       ptr = &(this->get_system<T_sys>(name));
+581     }
+582 
+583   // Return a dynamically casted reference to the newly added System\&.
+584   return *ptr;
+585 }
+.fi
+.SS "void libMesh::EquationSystems::adjoint_solve (const \fBQoISet\fP &qoi_indices = \fC\fBQoISet\fP()\fP)\fC [virtual]\fP"
+Call \fCadjoint_solve\fP on all the individual equation systems\&.
+.PP
+By default this function solves each system's adjoint once, in the reverse order from that in which they were added\&. For more sophisticated decoupled problems the user may with to override this behavior in a derived class\&. 
+.PP
+Definition at line 463 of file equation_systems\&.C\&.
+.PP
+References get_system(), libMesh::libmesh_assert(), and n_systems()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error()\&.
+.PP
+.nf
+464 {
+465   libmesh_assert (this->n_systems());
+466 
+467   for (unsigned int i=this->n_systems(); i != 0; --i)
+468     this->get_system(i-1)\&.adjoint_solve(qoi_indices);
+469 }
+.fi
+.SS "void libMesh::EquationSystems::allgather ()"
+Serializes a distributed mesh and its associated degree of freedom numbering for all systems 
+.PP
+Definition at line 272 of file equation_systems\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::allgather(), libMesh::DofMap::create_dof_constraints(), libMesh::DofMap::distribute_dofs(), libMesh::dof_map, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::System::get_dof_map(), get_system(), libMesh::MeshBase::is_serial(), n_systems(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::DofMap::prepare_send_list(), libMesh::DofMap::process_constraints(), libMesh::sys, libMesh::System::time, and libMesh::System::user_constrain()\&.
+.PP
+.nf
+273 {
+274   // A serial mesh means nothing needs to be done
+275   if (_mesh\&.is_serial())
+276     return;
+277 
+278   const unsigned int n_sys = this->n_systems();
+279 
+280   libmesh_assert_not_equal_to (n_sys, 0);
+281 
+282   // Gather the mesh
+283   _mesh\&.allgather();
+284 
+285   // Tell all the \p DofObject entities how many systems
+286   // there are\&.
+287   {
+288     MeshBase::node_iterator       node_it  = _mesh\&.nodes_begin();
+289     const MeshBase::node_iterator node_end = _mesh\&.nodes_end();
+290 
+291     for ( ; node_it != node_end; ++node_it)
+292       (*node_it)->set_n_systems(n_sys);
+293 
+294     MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+295     const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+296 
+297     for ( ; elem_it != elem_end; ++elem_it)
+298       (*elem_it)->set_n_systems(n_sys);
+299   }
+300 
+301   // And distribute each system's dofs
+302   for (unsigned int i=0; i != this->n_systems(); ++i)
+303     {
+304       System &sys = this->get_system(i);
+305       DofMap &dof_map = sys\&.get_dof_map();
+306       dof_map\&.distribute_dofs(_mesh);
+307 
+308 #ifdef LIBMESH_ENABLE_CONSTRAINTS
+309       // The user probably won't need constraint equations or the
+310       // send_list after an allgather, but let's keep it in consistent
+311       // shape just in case\&.
+312       dof_map\&.create_dof_constraints(_mesh, sys\&.time);
+313       sys\&.user_constrain();
+314       dof_map\&.process_constraints(_mesh);
+315 #endif
+316       dof_map\&.prepare_send_list();
+317     }
+318 }
+.fi
+.SS "void libMesh::EquationSystems::build_discontinuous_solution_vector (std::vector< \fBNumber\fP > &soln, const std::set< std::string > *system_names = \fCNULL\fP) const"
+Fill the input vector \fCsoln\fP with solution values\&. The entries will be in variable-major format (corresponding to the names from \fC\fBbuild_variable_names()\fP\fP)\&. If systems_names!=NULL, only include data from the specified systems\&. 
+.PP
+Definition at line 1008 of file equation_systems\&.C\&.
+.PP
+References _mesh, _systems, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::dim, libMesh::DofMap::dof_indices(), end, libMesh::System::get_dof_map(), libMesh::Elem::infinite(), libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_nodes(), n_systems(), libMesh::System::n_vars(), libMesh::FEInterface::nodal_soln(), libMesh::ParallelObject::processor_id(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::System::update_global_solution(), and libMesh::System::variable_type()\&.
+.PP
+Referenced by libMesh::ExodusII_IO::write_discontinuous_exodusII(), and libMesh::GMVIO::write_discontinuous_gmv()\&.
+.PP
+.nf
+1010 {
+1011   START_LOG("build_discontinuous_solution_vector()", "EquationSystems");
+1012 
+1013   libmesh_assert (this->n_systems());
+1014 
+1015   const unsigned int dim = _mesh\&.mesh_dimension();
+1016 
+1017   // Get the number of variables (nv) by counting the number of variables
+1018   // in each system listed in system_names
+1019   unsigned int nv = 0;
+1020 
+1021   const_system_iterator       pos = _systems\&.begin();
+1022   const const_system_iterator end = _systems\&.end();
+1023 
+1024   for (; pos != end; ++pos)
+1025     {
+1026       // Check current system is listed in system_names, and skip pos if not
+1027       bool use_current_system = (system_names == NULL);
+1028       if(!use_current_system)
+1029         {
+1030           use_current_system =
+1031             (std::find( system_names->begin(), system_names->end(), pos->first )
+1032                != system_names->end());
+1033         }
+1034       if(!use_current_system)
+1035         {
+1036           continue;
+1037         }
+1038 
+1039       const System& system  = *(pos->second);
+1040       nv += system\&.n_vars();
+1041     }
+1042 
+1043   unsigned int tw=0;
+1044 
+1045   // get the total weight
+1046   {
+1047     MeshBase::element_iterator       it  = _mesh\&.active_elements_begin();
+1048     const MeshBase::element_iterator end = _mesh\&.active_elements_end();
+1049 
+1050     for ( ; it != end; ++it)
+1051       tw += (*it)->n_nodes();
+1052   }
+1053 
+1054 
+1055   // Only if we are on processor zero, allocate the storage
+1056   // to hold (number_of_nodes)*(number_of_variables) entries\&.
+1057   if (_mesh\&.processor_id() == 0)
+1058     soln\&.resize(tw*nv);
+1059 
+1060   std::vector<Number> sys_soln;
+1061 
+1062 
+1063   unsigned int var_num=0;
+1064 
+1065   // For each system in this EquationSystems object,
+1066   // update the global solution and if we are on processor 0,
+1067   // loop over the elements and build the nodal solution
+1068   // from the element solution\&.  Then insert this nodal solution
+1069   // into the vector passed to build_solution_vector\&.
+1070   pos = _systems\&.begin();
+1071 
+1072   for (; pos != end; ++pos)
+1073     {
+1074       // Check current system is listed in system_names, and skip pos if not
+1075       bool use_current_system = (system_names == NULL);
+1076       if(!use_current_system)
+1077         {
+1078           use_current_system =
+1079             (std::find( system_names->begin(), system_names->end(), pos->first )
+1080                != system_names->end());
+1081         }
+1082       if(!use_current_system)
+1083         {
+1084           continue;
+1085         }
+1086 
+1087       const System& system  = *(pos->second);
+1088       const unsigned int nv_sys = system\&.n_vars();
+1089 
+1090       system\&.update_global_solution (sys_soln, 0);
+1091 
+1092       if (_mesh\&.processor_id() == 0)
+1093         {
+1094           std::vector<Number>       elem_soln;   // The finite element solution
+1095           std::vector<Number>       nodal_soln;  // The FE solution interpolated to the nodes
+1096           std::vector<dof_id_type>  dof_indices; // The DOF indices for the finite element
+1097 
+1098           for (unsigned int var=0; var<nv_sys; var++)
+1099             {
+1100               const FEType& fe_type    = system\&.variable_type(var);
+1101 
+1102               MeshBase::element_iterator       it       = _mesh\&.active_elements_begin();
+1103               const MeshBase::element_iterator end_elem = _mesh\&.active_elements_end();
+1104 
+1105               unsigned int nn=0;
+1106 
+1107               for ( ; it != end_elem; ++it)
+1108                 {
+1109                   const Elem* elem = *it;
+1110                   system\&.get_dof_map()\&.dof_indices (elem, dof_indices, var);
+1111 
+1112                   elem_soln\&.resize(dof_indices\&.size());
+1113 
+1114                   for (unsigned int i=0; i<dof_indices\&.size(); i++)
+1115                     elem_soln[i] = sys_soln[dof_indices[i]];
+1116 
+1117                   FEInterface::nodal_soln (dim,
+1118                                            fe_type,
+1119                                            elem,
+1120                                            elem_soln,
+1121                                            nodal_soln);
+1122 
+1123 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+1124                   // infinite elements should be skipped\&.\&.\&.
+1125                   if (!elem->infinite())
+1126 #endif
+1127                     {
+1128                       libmesh_assert_equal_to (nodal_soln\&.size(), elem->n_nodes());
+1129 
+1130                       for (unsigned int n=0; n<elem->n_nodes(); n++)
+1131                         {
+1132                           soln[nv*(nn++) + (var + var_num)] +=
+1133                             nodal_soln[n];
+1134                         }
+1135                     }
+1136                 }
+1137             }
+1138         }
+1139 
+1140       var_num += nv_sys;
+1141     }
+1142 
+1143   STOP_LOG("build_discontinuous_solution_vector()", "EquationSystems");
+1144 }
+.fi
+.SS "void libMesh::EquationSystems::build_solution_vector (std::vector< \fBNumber\fP > &soln, const std::string &system_name, const std::string &variable_name = \fC'all_vars'\fP) const"
+Fill the input vector \fCsoln\fP with the solution values for the system named \fCname\fP\&. Note that the input vector \fCsoln\fP will only be assembled on processor 0, so this method is only applicable to outputting plot files from processor 0\&. 
+.PP
+Definition at line 587 of file equation_systems\&.C\&.
+.PP
+Referenced by libMesh::MeshOutput< MT >::_build_variable_names_and_solution_vector()\&.
+.PP
+.nf
+590 {
+591   //TODO:[BSK] re-implement this from the method below
+592   libmesh_error();
+593 
+594   //   // Get a reference to the named system
+595   //   const System& system = this->get_system(system_name);
+596 
+597   //   // Get the number associated with the variable_name we are passed
+598   //   const unsigned short int variable_num = system\&.variable_number(variable_name);
+599 
+600   //   // Get the dimension of the current mesh
+601   //   const unsigned int dim = _mesh\&.mesh_dimension();
+602 
+603   //   // If we're on processor 0, allocate enough memory to hold the solution\&.
+604   //   // Since we're only looking at one variable, there will be one solution value
+605   //   // for each node in the mesh\&.
+606   //   if (_mesh\&.processor_id() == 0)
+607   //     soln\&.resize(_mesh\&.n_nodes());
+608 
+609   //   // Vector to hold the global solution from all processors
+610   //   std::vector<Number> sys_soln;
+611 
+612   //   // Update the global solution from all processors
+613   //   system\&.update_global_solution (sys_soln, 0);
+614 
+615   //   // Temporary vector to store the solution on an individual element\&.
+616   //   std::vector<Number>       elem_soln;
+617 
+618   //   // The FE solution interpolated to the nodes
+619   //   std::vector<Number>       nodal_soln;
+620 
+621   //   // The DOF indices for the element
+622   //   std::vector<dof_id_type> dof_indices;
+623 
+624   //   // Determine the finite/infinite element type used in this system
+625   //   const FEType& fe_type    = system\&.variable_type(variable_num);
+626 
+627   //   // Define iterators to iterate over all the elements of the mesh
+628   //   const_active_elem_iterator       it (_mesh\&.elements_begin());
+629   //   const const_active_elem_iterator end(_mesh\&.elements_end());
+630 
+631   //   // Loop over elements
+632   //   for ( ; it != end; ++it)
+633   //     {
+634   //       // Convenient shortcut to the element pointer
+635   //       const Elem* elem = *it;
+636 
+637   //       // Fill the dof_indices vector for this variable
+638   //       system\&.get_dof_map()\&.dof_indices(elem,
+639   //        dof_indices,
+640   //        variable_num);
+641 
+642   //       // Resize the element solution vector to fit the
+643   //       // dof_indices for this element\&.
+644   //       elem_soln\&.resize(dof_indices\&.size());
+645 
+646   //       // Transfer the system solution to the element
+647   //       // solution by mapping it through the dof_indices vector\&.
+648   //       for (unsigned int i=0; i<dof_indices\&.size(); i++)
+649   // elem_soln[i] = sys_soln[dof_indices[i]];
+650 
+651   //       // Using the FE interface, compute the nodal_soln
+652   //       // for the current elemnt type given the elem_soln
+653   //       FEInterface::nodal_soln (dim,
+654   //        fe_type,
+655   //        elem,
+656   //        elem_soln,
+657   //        nodal_soln);
+658 
+659   //       // Sanity check -- make sure that there are the same number
+660   //       // of entries in the nodal_soln as there are nodes in the
+661   //       // element!
+662   //       libmesh_assert_equal_to (nodal_soln\&.size(), elem->n_nodes());
+663 
+664   //       // Copy the nodal solution over into the correct place in
+665   //       // the global soln vector which will be returned to the user\&.
+666   //       for (unsigned int n=0; n<elem->n_nodes(); n++)
+667   // soln[elem->node(n)] = nodal_soln[n];
+668   //     }
+669 }
+.fi
+.SS "void libMesh::EquationSystems::build_solution_vector (std::vector< \fBNumber\fP > &soln, const std::set< std::string > *system_names = \fCNULL\fP) const"
+Fill the input vector \fCsoln\fP with solution values\&. The entries will be in variable-major format (corresponding to the names from \fC\fBbuild_variable_names()\fP\fP)\&. If systems_names!=NULL, only include data from the specified systems\&. 
+.PP
+Definition at line 674 of file equation_systems\&.C\&.
+.PP
+References libMesh::ParallelObject::_communicator, _mesh, _systems, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::Variable::active_on_subdomain(), libMesh::NumericVector< T >::add(), libMesh::NumericVector< T >::build(), libMesh::NumericVector< T >::close(), libMesh::System::current_local_solution, libMesh::dim, libMesh::DofMap::dof_indices(), libMesh::dof_map, end, libMesh::FEInterface::field_type(), libMesh::System::get_dof_map(), libMesh::Elem::get_node(), libMesh::Elem::infinite(), libMesh::NumericVector< T >::init(), libMesh::libmesh_assert(), libMesh::MeshBase::local_nodes_begin(), libMesh::MeshBase::local_nodes_end(), libMesh::NumericVector< T >::localize_to_one(), libMesh::MeshBase::max_node_id(), libMesh::MeshBase::mesh_dimension(), libMesh::DofObject::n_dofs(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), n_systems(), libMesh::System::n_vars(), libMesh::FEInterface::n_vec_dim(), libMesh::FEInterface::nodal_soln(), libMesh::Elem::node(), libMesh::System::number(), libMesh::PARALLEL, libMesh::System::solution, libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::TYPE_VECTOR, libMesh::System::update(), libMesh::System::variable(), and libMesh::System::variable_type()\&.
+.PP
+.nf
+676 {
+677   START_LOG("build_solution_vector()", "EquationSystems");
+678 
+679   // This function must be run on all processors at once
+680   parallel_object_only();
+681 
+682   libmesh_assert (this->n_systems());
+683 
+684   const unsigned int dim = _mesh\&.mesh_dimension();
+685   const dof_id_type nn   = _mesh\&.n_nodes();
+686 
+687   // We'd better have a contiguous node numbering
+688   libmesh_assert_equal_to (nn, _mesh\&.max_node_id());
+689 
+690   // allocate storage to hold
+691   // (number_of_nodes)*(number_of_variables) entries\&.
+692   // We have to differentiate between between scalar and vector
+693   // variables\&. We intercept vector variables and treat each
+694   // component as a scalar variable (consistently with build_solution_names)\&.
+695 
+696   unsigned int nv = 0;
+697 
+698   //Could this be replaced by a/some convenience methods?[PB]
+699   {
+700     unsigned int n_scalar_vars = 0;
+701     unsigned int n_vector_vars = 0;
+702     const_system_iterator       pos = _systems\&.begin();
+703     const const_system_iterator end = _systems\&.end();
+704 
+705     for (; pos != end; ++pos)
+706       {
+707         // Check current system is listed in system_names, and skip pos if not
+708         bool use_current_system = (system_names == NULL);
+709         if(!use_current_system)
+710           {
+711             use_current_system = std::find( system_names->begin(), system_names->end(), pos->first ) != system_names->end();
+712           }
+713         if(!use_current_system)
+714           {
+715             continue;
+716           }
+717 
+718         for (unsigned int vn=0; vn<pos->second->n_vars(); vn++)
+719           {
+720             if( FEInterface::field_type(pos->second->variable_type(vn)) ==
+721                 TYPE_VECTOR )
+722               n_vector_vars++;
+723             else
+724               n_scalar_vars++;
+725           }
+726       }
+727     // Here, we're assuming the number of vector components is the same
+728     // as the mesh dimension\&. Will break for mixed dimension meshes\&.
+729     nv = n_scalar_vars + dim*n_vector_vars;
+730   }
+731 
+732   // Get the number of elements that share each node\&.  We will
+733   // compute the average value at each node\&.  This is particularly
+734   // useful for plotting discontinuous data\&.
+735   MeshBase::element_iterator       e_it  = _mesh\&.active_local_elements_begin();
+736   const MeshBase::element_iterator e_end = _mesh\&.active_local_elements_end();
+737 
+738   // Get the number of local nodes
+739   dof_id_type n_local_nodes = std::distance(_mesh\&.local_nodes_begin(), _mesh\&.local_nodes_end());
+740 
+741   // Create a NumericVector to hold the parallel solution
+742   AutoPtr<NumericVector<Number> > parallel_soln_ptr = NumericVector<Number>::build(_communicator);
+743   NumericVector<Number> &parallel_soln = *parallel_soln_ptr;
+744   parallel_soln\&.init(nn*nv, n_local_nodes*nv, false, PARALLEL);
+745 
+746   // Create a NumericVector to hold the "repeat_count" for each node - this is essentially
+747   // the number of elements contributing to that node's value
+748   AutoPtr<NumericVector<Number> > repeat_count_ptr = NumericVector<Number>::build(_communicator);
+749   NumericVector<Number> &repeat_count = *repeat_count_ptr;
+750   repeat_count\&.init(nn*nv, n_local_nodes*nv, false, PARALLEL);
+751 
+752   repeat_count\&.close();
+753 
+754   unsigned int var_num=0;
+755 
+756   // For each system in this EquationSystems object,
+757   // update the global solution and if we are on processor 0,
+758   // loop over the elements and build the nodal solution
+759   // from the element solution\&.  Then insert this nodal solution
+760   // into the vector passed to build_solution_vector\&.
+761   const_system_iterator       pos = _systems\&.begin();
+762   const const_system_iterator end = _systems\&.end();
+763 
+764   for (; pos != end; ++pos)
+765     {
+766       // Check current system is listed in system_names, and skip pos if not
+767       bool use_current_system = (system_names == NULL);
+768       if(!use_current_system)
+769         {
+770           use_current_system = std::find( system_names->begin(), system_names->end(), pos->first ) != system_names->end();
+771         }
+772       if(!use_current_system)
+773         {
+774           continue;
+775         }
+776 
+777       const System& system  = *(pos->second);
+778       const unsigned int nv_sys = system\&.n_vars();
+779       const unsigned int sys_num = system\&.number();
+780 
+781       //Could this be replaced by a/some convenience methods?[PB]
+782       unsigned int n_scalar_vars = 0;
+783       unsigned int n_vector_vars = 0;
+784       for (unsigned int vn=0; vn<pos->second->n_vars(); vn++)
+785         {
+786           if( FEInterface::field_type(pos->second->variable_type(vn)) ==
+787               TYPE_VECTOR )
+788             n_vector_vars++;
+789           else
+790             n_scalar_vars++;
+791         }
+792 
+793       // Here, we're assuming the number of vector components is the same
+794       // as the mesh dimension\&. Will break for mixed dimension meshes\&.
+795       unsigned int nv_sys_split = n_scalar_vars + dim*n_vector_vars;
+796 
+797       // Update the current_local_solution
+798       {
+799         System & non_const_sys = const_cast<System &>(system);
+800         non_const_sys\&.solution->close();
+801         non_const_sys\&.update();
+802       }
+803 
+804       NumericVector<Number> & sys_soln(*system\&.current_local_solution);
+805 
+806       std::vector<Number>      elem_soln;   // The finite element solution
+807       std::vector<Number>      nodal_soln;  // The FE solution interpolated to the nodes
+808       std::vector<dof_id_type> dof_indices; // The DOF indices for the finite element
+809 
+810       for (unsigned int var=0; var<nv_sys; var++)
+811         {
+812           const FEType& fe_type           = system\&.variable_type(var);
+813           const Variable &var_description = system\&.variable(var);
+814           const DofMap &dof_map           = system\&.get_dof_map();
+815 
+816           unsigned int n_vec_dim = FEInterface::n_vec_dim( pos->second->get_mesh(), fe_type );
+817 
+818           MeshBase::element_iterator       it       = _mesh\&.active_local_elements_begin();
+819           const MeshBase::element_iterator end_elem = _mesh\&.active_local_elements_end();
+820 
+821           for ( ; it != end_elem; ++it)
+822             {
+823               const Elem* elem = *it;
+824 
+825               if (var_description\&.active_on_subdomain((*it)->subdomain_id()))
+826                 {
+827                   dof_map\&.dof_indices (elem, dof_indices, var);
+828 
+829                   elem_soln\&.resize(dof_indices\&.size());
+830 
+831                   for (unsigned int i=0; i<dof_indices\&.size(); i++)
+832                     elem_soln[i] = sys_soln(dof_indices[i]);
+833 
+834                   FEInterface::nodal_soln (dim,
+835                                            fe_type,
+836                                            elem,
+837                                            elem_soln,
+838                                            nodal_soln);
+839 
+840 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+841                   // infinite elements should be skipped\&.\&.\&.
+842                   if (!elem->infinite())
+843 #endif
+844                     {
+845                       libmesh_assert_equal_to (nodal_soln\&.size(), n_vec_dim*elem->n_nodes());
+846 
+847                       for (unsigned int n=0; n<elem->n_nodes(); n++)
+848                         {
+849                           for( unsigned int d=0; d < n_vec_dim; d++ )
+850                             {
+851                               // For vector-valued elements, all components are in nodal_soln\&. For each
+852                               // node, the components are stored in order, i\&.e\&. node_0 -> s0_x, s0_y, s0_z
+853                               parallel_soln\&.add(nv*(elem->node(n)) + (var+d + var_num), nodal_soln[n_vec_dim*n+d]);
+854 
+855                               // Increment the repeat count for this position
+856                               repeat_count\&.add(nv*(elem->node(n)) + (var+d + var_num), 1);
+857                             }
+858                         }
+859                     }
+860                 }
+861               else // If this variable doesn't exist on this subdomain we have to still increment repeat_count so that we won't divide by 0 later:
+862                 for (unsigned int n=0; n<elem->n_nodes(); n++)
+863                   // Only do this if this variable has NO DoFs at this node\&.\&.\&. it might have some from an ajoining element\&.\&.\&.
+864                   if(!elem->get_node(n)->n_dofs(sys_num, var))
+865                     for( unsigned int d=0; d < n_vec_dim; d++ )
+866                       repeat_count\&.add(nv*(elem->node(n)) + (var+d + var_num), 1);
+867 
+868             } // end loop over elements
+869         } // end loop on variables in this system
+870 
+871       var_num += nv_sys_split;
+872     } // end loop over systems
+873 
+874   parallel_soln\&.close();
+875   repeat_count\&.close();
+876 
+877   // Divide to get the average value at the nodes
+878   parallel_soln /= repeat_count;
+879 
+880   parallel_soln\&.localize_to_one(soln);
+881 
+882   STOP_LOG("build_solution_vector()", "EquationSystems");
+883 }
+.fi
+.SS "void libMesh::EquationSystems::build_variable_names (std::vector< std::string > &var_names, const \fBFEType\fP *type = \fCNULL\fP, const std::set< std::string > *system_names = \fCNULL\fP) const"
+Fill the input vector \fCvar_names\fP with the names of the variables for each system\&. If \fCtype\fP is passed, only variables of the specified type will be populated\&. If systems_names!=NULL, only include names from the specified systems\&. 
+.PP
+Definition at line 473 of file equation_systems\&.C\&.
+.PP
+References _systems, libMesh::dim, end, libMesh::err, libMesh::FEInterface::field_type(), get_mesh(), libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), n_systems(), n_vars(), libMesh::FEInterface::n_vec_dim(), and libMesh::TYPE_VECTOR\&.
+.PP
+Referenced by libMesh::MeshOutput< MT >::_build_variable_names_and_solution_vector(), libMesh::ExodusII_IO::write_discontinuous_exodusII(), libMesh::GMVIO::write_discontinuous_gmv(), and libMesh::ExodusII_IO::write_element_data()\&.
+.PP
+.nf
+476 {
+477   libmesh_assert (this->n_systems());
+478 
+479   unsigned int var_num=0;
+480 
+481   const_system_iterator       pos = _systems\&.begin();
+482   const const_system_iterator end = _systems\&.end();
+483 
+484   // Need to size var_names by scalar variables plus all the
+485   // vector components for all the vector variables
+486   //Could this be replaced by a/some convenience methods?[PB]
+487   {
+488     unsigned int n_scalar_vars = 0;
+489     unsigned int n_vector_vars = 0;
+490 
+491     for (; pos != end; ++pos)
+492       {
+493         // Check current system is listed in system_names, and skip pos if not
+494         bool use_current_system = (system_names == NULL);
+495         if(!use_current_system)
+496           {
+497             use_current_system = std::find( system_names->begin(), system_names->end(), pos->first ) != system_names->end();
+498           }
+499         if(!use_current_system)
+500           {
+501             continue;
+502           }
+503 
+504         for (unsigned int vn=0; vn<pos->second->n_vars(); vn++)
+505           {
+506             if( FEInterface::field_type(pos->second->variable_type(vn)) ==
+507                 TYPE_VECTOR )
+508               n_vector_vars++;
+509             else
+510               n_scalar_vars++;
+511           }
+512       }
+513 
+514     // Here, we're assuming the number of vector components is the same
+515     // as the mesh dimension\&. Will break for mixed dimension meshes\&.
+516     unsigned int dim = this->get_mesh()\&.mesh_dimension();
+517     unsigned int nv = n_scalar_vars + dim*n_vector_vars;
+518 
+519     // We'd better not have more than dim*his->n_vars() (all vector variables)
+520     libmesh_assert_less_equal ( nv, dim*this->n_vars() );
+521 
+522     // Here, we're assuming the number of vector components is the same
+523     // as the mesh dimension\&. Will break for mixed dimension meshes\&.
+524 
+525     var_names\&.resize( nv );
+526   }
+527 
+528   // reset
+529   pos = _systems\&.begin();
+530 
+531   for (; pos != end; ++pos)
+532     {
+533       // Check current system is listed in system_names, and skip pos if not
+534       bool use_current_system = (system_names == NULL);
+535       if(!use_current_system)
+536         {
+537           use_current_system = std::find( system_names->begin(), system_names->end(), pos->first ) != system_names->end();
+538         }
+539       if(!use_current_system)
+540         {
+541           continue;
+542         }
+543 
+544       for (unsigned int vn=0; vn<pos->second->n_vars(); vn++)
+545         {
+546           std::string var_name = pos->second->variable_name(vn);
+547           FEType fe_type = pos->second->variable_type(vn);
+548 
+549           unsigned int n_vec_dim = FEInterface::n_vec_dim( pos->second->get_mesh(), fe_type);
+550 
+551           // Filter on the type if requested
+552           if (type == NULL || (type && *type == fe_type))
+553             {
+554               if( FEInterface::field_type(fe_type) == TYPE_VECTOR )
+555                 {
+556                   switch(n_vec_dim)
+557                     {
+558                     case 0:
+559                     case 1:
+560                       var_names[var_num++] = var_name;
+561                       break;
+562                     case 2:
+563                       var_names[var_num++] = var_name+"_x";
+564                       var_names[var_num++] = var_name+"_y";
+565                       break;
+566                     case 3:
+567                       var_names[var_num++] = var_name+"_x";
+568                       var_names[var_num++] = var_name+"_y";
+569                       var_names[var_num++] = var_name+"_z";
+570                       break;
+571                     default:
+572                       libMesh::err << "Invalid dim in build_variable_names" << std::endl;
+573                       libmesh_error();
+574                     }
+575                 }
+576               else
+577                 var_names[var_num++] = var_name;
+578             }
+579         }
+580     }
+581   // Now resize again in case we filtered any names
+582   var_names\&.resize(var_num);
+583 }
+.fi
+.SS "void libMesh::EquationSystems::clear ()\fC [virtual]\fP"
+Returns tha data structure to a pristine state\&. 
+.PP
+Definition at line 73 of file equation_systems\&.C\&.
+.PP
+References _systems, libMesh::Parameters::clear(), parameters, and libMesh::sys\&.
+.PP
+Referenced by ~EquationSystems()\&.
+.PP
+.nf
+74 {
+75   // Clear any additional parameters
+76   parameters\&.clear ();
+77 
+78   // clear the systems\&.  We must delete them
+79   // since we newed them!
+80   while (!_systems\&.empty())
+81     {
+82       system_iterator pos = _systems\&.begin();
+83 
+84       System *sys = pos->second;
+85       delete sys;
+86       sys = NULL;
+87 
+88       _systems\&.erase (pos);
+89     }
+90 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), _read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "bool libMesh::EquationSystems::compare (const \fBEquationSystems\fP &other_es, const \fBReal\fPthreshold, const boolverbose) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this equation system contains identical data, up to the given threshold\&. Delegates most of the comparisons to perform to the responsible systems 
+.RE
+.PP
+
+.PP
+Definition at line 1148 of file equation_systems\&.C\&.
+.PP
+References _systems, libMesh::System::compare(), end, get_system(), n_systems(), and libMesh::out\&.
+.PP
+.nf
+1151 {
+1152   // safety check, whether we handle at least the same number
+1153   // of systems
+1154   std::vector<bool> os_result;
+1155 
+1156   if (this->n_systems() != other_es\&.n_systems())
+1157     {
+1158       if (verbose)
+1159         {
+1160           libMesh::out << "  Fatal difference\&. This system handles "
+1161                        << this->n_systems() << " systems," << std::endl
+1162                        << "  while the other system handles "
+1163                        << other_es\&.n_systems()
+1164                        << " systems\&." << std::endl
+1165                        << "  Aborting comparison\&." << std::endl;
+1166         }
+1167       return false;
+1168     }
+1169   else
+1170     {
+1171       // start comparing each system
+1172       const_system_iterator       pos = _systems\&.begin();
+1173       const const_system_iterator end = _systems\&.end();
+1174 
+1175       for (; pos != end; ++pos)
+1176         {
+1177           const std::string& sys_name = pos->first;
+1178           const System&  system        = *(pos->second);
+1179 
+1180           // get the other system
+1181           const System& other_system   = other_es\&.get_system (sys_name);
+1182 
+1183           os_result\&.push_back (system\&.compare (other_system, threshold, verbose));
+1184 
+1185         }
+1186 
+1187     }
+1188 
+1189 
+1190   // sum up the results
+1191   if (os_result\&.size()==0)
+1192     return true;
+1193   else
+1194     {
+1195       bool os_identical;
+1196       unsigned int n = 0;
+1197       do
+1198         {
+1199           os_identical = os_result[n];
+1200           n++;
+1201         }
+1202       while (os_identical && n<os_result\&.size());
+1203       return os_identical;
+1204     }
+1205 }
+.fi
+.SS "void libMesh::EquationSystems::delete_system (const std::string &name)"
+Remove the system named \fCname\fP from the systems array\&. This function is now deprecated - write the libmesh-devel mailing list if you need it reimplemented\&. 
+.PP
+Definition at line 424 of file equation_systems\&.C\&.
+.PP
+References _systems, libMesh::err, and libMesh::Quality::name()\&.
+.PP
+.nf
+425 {
+426   libmesh_deprecated();
+427 
+428   if (!_systems\&.count(name))
+429     {
+430       libMesh::err << "ERROR: no system named "
+431                    << name  << std::endl;
+432 
+433       libmesh_error();
+434     }
+435 
+436   delete _systems[name];
+437 
+438   _systems\&.erase (name);
+439 }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "std::string libMesh::EquationSystems::get_info () const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a string containing information about the systems, flags, and parameters\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1209 of file equation_systems\&.C\&.
+.PP
+References _systems, end, and n_systems()\&.
+.PP
+Referenced by print_info()\&.
+.PP
+.nf
+1210 {
+1211   std::ostringstream oss;
+1212 
+1213   oss << " EquationSystems\n"
+1214       << "  n_systems()=" << this->n_systems() << '\n';
+1215 
+1216   // Print the info for the individual systems
+1217   const_system_iterator       pos = _systems\&.begin();
+1218   const const_system_iterator end = _systems\&.end();
+1219 
+1220   for (; pos != end; ++pos)
+1221     oss << pos->second->get_info();
+1222 
+1223 
+1224   //   // Possibly print the parameters
+1225   //   if (!this->parameters\&.empty())
+1226   //     {
+1227   //       oss << "  n_parameters()=" << this->n_parameters() << '\n';
+1228   //       oss << "   Parameters:\n";
+1229 
+1230   //       for (std::map<std::string, Real>::const_iterator
+1231   //      param = _parameters\&.begin(); param != _parameters\&.end();
+1232   //    ++param)
+1233   // oss << "    "
+1234   //     << "\""
+1235   //     << param->first
+1236   //     << "\""
+1237   //     << "="
+1238   //     << param->second
+1239   //     << '\n';
+1240   //     }
+1241 
+1242   return oss\&.str();
+1243 }
+.fi
+.SS "const \fBMeshBase\fP & libMesh::EquationSystems::get_mesh () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the mesh 
+.RE
+.PP
+
+.PP
+Definition at line 509 of file equation_systems\&.h\&.
+.PP
+References _mesh\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), _read_impl(), build_variable_names(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::MeshFunction::init(), libMesh::MeshFunction::operator()(), reinit(), libMesh::VTKIO::system_vectors_to_vtk(), and write()\&.
+.PP
+.nf
+510 {
+511   return _mesh;
+512 }
+.fi
+.SS "\fBMeshBase\fP & libMesh::EquationSystems::get_mesh ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the mesh 
+.RE
+.PP
+
+.PP
+Definition at line 517 of file equation_systems\&.h\&.
+.PP
+References _mesh\&.
+.PP
+.nf
+518 {
+519   return _mesh;
+520 }
+.fi
+.SS "const \fBMeshData\fP & libMesh::EquationSystems::get_mesh_data () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the mesh_data 
+.RE
+.PP
+
+.PP
+Definition at line 524 of file equation_systems\&.h\&.
+.PP
+References _mesh_data, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+525 {
+526   libmesh_assert(_mesh_data);
+527   return *_mesh_data;
+528 }
+.fi
+.SS "\fBMeshData\fP & libMesh::EquationSystems::get_mesh_data ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the mesh_data 
+.RE
+.PP
+
+.PP
+Definition at line 532 of file equation_systems\&.h\&.
+.PP
+References _mesh_data, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+533 {
+534   libmesh_assert(_mesh_data);
+535   return *_mesh_data;
+536 }
+.fi
+.SS "void libMesh::EquationSystems::get_solution (std::vector< \fBNumber\fP > &soln, std::vector< std::string > &names) const"
+Retrieve the solution data for CONSTANT MONOMIALs\&. If \fCnames\fP is populated, only the variables corresponding to those names will be retrieved\&. This can be used to filter which variables are retrieved\&. 
+.PP
+Definition at line 886 of file equation_systems\&.C\&.
+.PP
+References libMesh::ParallelObject::_communicator, _mesh, _systems, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::Variable::active_on_subdomain(), libMesh::NumericVector< T >::build(), libMesh::NumericVector< T >::close(), libMesh::CONSTANT, libMesh::System::current_local_solution, libMesh::DofMap::dof_indices(), libMesh::dof_map, end, libMesh::System::get_dof_map(), libMesh::DofObject::id(), libMesh::NumericVector< T >::init(), libMesh::libmesh_assert(), libMesh::MeshBase::local_elements_begin(), libMesh::MeshBase::local_elements_end(), libMesh::NumericVector< T >::localize_to_one(), libMesh::MeshBase::max_elem_id(), libMesh::MONOMIAL, libMesh::MeshBase::n_elem(), n_systems(), libMesh::System::n_vars(), libMesh::PARALLEL, libMesh::NumericVector< T >::set(), libMesh::System::solution, libMesh::System::update(), libMesh::System::variable(), libMesh::System::variable_name(), and libMesh::System::variable_type()\&.
+.PP
+Referenced by libMesh::ExodusII_IO::write_element_data()\&.
+.PP
+.nf
+888 {
+889   // This function must be run on all processors at once
+890   parallel_object_only();
+891 
+892   libmesh_assert (this->n_systems());
+893 
+894   const dof_id_type ne  = _mesh\&.n_elem();
+895 
+896   libmesh_assert_equal_to (ne, _mesh\&.max_elem_id());
+897 
+898   // Get the number of local elements
+899   dof_id_type n_local_elems = std::distance(_mesh\&.local_elements_begin(), _mesh\&.local_elements_end());
+900 
+901   // If the names vector has entries, we will only populate the soln vector
+902   // with names included in that list\&.  Note: The names vector may be
+903   // reordered upon exiting this function
+904   std::vector<std::string> filter_names = names;
+905   bool is_filter_names = ! filter_names\&.empty();
+906 
+907   soln\&.clear();
+908   names\&.clear();
+909 
+910   const FEType type(CONSTANT, MONOMIAL);
+911 
+912   dof_id_type nv = 0;
+913 
+914   // Find the total number of variables to output
+915   {
+916     const_system_iterator       pos = _systems\&.begin();
+917     const const_system_iterator end = _systems\&.end();
+918 
+919     for (; pos != end; ++pos)
+920       {
+921         const System& system  = *(pos->second);
+922         const unsigned int nv_sys = system\&.n_vars();
+923 
+924         for (unsigned int var=0; var < nv_sys; ++var)
+925           {
+926             if ( system\&.variable_type( var ) != type ||
+927                  ( is_filter_names && std::find(filter_names\&.begin(), filter_names\&.end(), system\&.variable_name( var )) == filter_names\&.end()) )
+928               continue;
+929 
+930             nv++;
+931           }
+932       }
+933   }
+934 
+935   if(!nv) // If there are no variables to write out don't do anything\&.\&.\&.
+936     return;
+937 
+938   // Create a NumericVector to hold the parallel solution
+939   AutoPtr<NumericVector<Number> > parallel_soln_ptr = NumericVector<Number>::build(_communicator);
+940   NumericVector<Number> &parallel_soln = *parallel_soln_ptr;
+941   parallel_soln\&.init(ne*nv, n_local_elems*nv, false, PARALLEL);
+942 
+943   dof_id_type var_num = 0;
+944 
+945   // For each system in this EquationSystems object,
+946   // update the global solution and collect the
+947   // CONSTANT MONOMIALs\&.  The entries are in variable-major
+948   // format\&.
+949   const_system_iterator       pos = _systems\&.begin();
+950   const const_system_iterator end = _systems\&.end();
+951 
+952   for (; pos != end; ++pos)
+953     {
+954       const System& system  = *(pos->second);
+955       const unsigned int nv_sys = system\&.n_vars();
+956 
+957       // Update the current_local_solution
+958       {
+959         System & non_const_sys = const_cast<System &>(system);
+960         non_const_sys\&.solution->close();
+961         non_const_sys\&.update();
+962       }
+963 
+964       NumericVector<Number> & sys_soln(*system\&.current_local_solution);
+965 
+966       std::vector<dof_id_type> dof_indices; // The DOF indices for the finite element
+967 
+968       // Loop over the variable names and load them in order
+969       for (unsigned int var=0; var < nv_sys; ++var)
+970         {
+971           if ( system\&.variable_type( var ) != type ||
+972                ( is_filter_names && std::find(filter_names\&.begin(), filter_names\&.end(), system\&.variable_name( var )) == filter_names\&.end()) )
+973             continue;
+974 
+975           names\&.push_back( system\&.variable_name( var ) );
+976 
+977           const Variable & variable = system\&.variable(var);
+978           const DofMap & dof_map = system\&.get_dof_map();
+979 
+980           MeshBase::element_iterator       it       = _mesh\&.active_local_elements_begin();
+981           const MeshBase::element_iterator end_elem = _mesh\&.active_local_elements_end();
+982 
+983           for ( ; it != end_elem; ++it)
+984             {
+985               if (variable\&.active_on_subdomain((*it)->subdomain_id()))
+986                 {
+987                   const Elem* elem = *it;
+988 
+989                   dof_map\&.dof_indices (elem, dof_indices, var);
+990 
+991                   libmesh_assert_equal_to ( 1, dof_indices\&.size() );
+992 
+993                   parallel_soln\&.set((ne*var_num)+elem->id(), sys_soln(dof_indices[0]));
+994                 }
+995             }
+996 
+997           var_num++;
+998         } // end loop on variables in this system
+999     } // end loop over systems
+1000 
+1001   parallel_soln\&.close();
+1002 
+1003   parallel_soln\&.localize_to_one(soln);
+1004 }
+.fi
+.SS "template<typename T_sys > const \fBSystem\fP & libMesh::EquationSystems::get_system (const std::string &name) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system named \fCname\fP\&. The template argument defines the return type\&. For example, const SteadySystem& sys = eq\&.get_system<SteadySystem> ('sys'); is an example of how the method might be used 
+.RE
+.PP
+
+.PP
+Definition at line 661 of file equation_systems\&.h\&.
+.PP
+References _systems, and libMesh::err\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), _read_impl(), libMesh::EnsightIO::add_scalar(), add_system(), libMesh::EnsightIO::add_vector(), adjoint_solve(), allgather(), libMesh::ExactSolution::attach_exact_deriv(), libMesh::ExactSolution::attach_exact_hessian(), compare(), libMesh::ExactSolution::compute_error(), libMesh::GMVIO::copy_nodal_solution(), libMesh::ExactSolution::error_norm(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactSolution::ExactSolution(), init(), reinit(), sensitivity_solve(), solve(), libMesh::VTKIO::system_vectors_to_vtk(), update(), libMesh::EnsightIO::write_scalar_ascii(), and libMesh::EnsightIO::write_vector_ascii()\&.
+.PP
+.nf
+662 {
+663   const_system_iterator pos = _systems\&.find(name);
+664 
+665   // Check for errors
+666   if (pos == _systems\&.end())
+667     {
+668       libMesh::err << "ERROR: no system named \"" << name << "\" found!"
+669                    << std::endl;
+670       libmesh_error();
+671     }
+672 
+673   // Attempt dynamic cast
+674   return *libmesh_cast_ptr<T_sys*>(pos->second);
+675 }
+.fi
+.SS "template<typename T_sys > \fBSystem\fP & libMesh::EquationSystems::get_system (const std::string &name)\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable referene to the system named \fCname\fP\&. The template argument defines the return type\&. For example, const SteadySystem& sys = eq\&.get_system<SteadySystem> ('sys'); is an example of how the method might be used 
+.RE
+.PP
+
+.PP
+Definition at line 684 of file equation_systems\&.h\&.
+.PP
+References _systems, and libMesh::err\&.
+.PP
+.nf
+685 {
+686   system_iterator pos = _systems\&.find(name);
+687 
+688   // Check for errors
+689   if (pos == _systems\&.end())
+690     {
+691       libMesh::err << "ERROR: no system named " << name << " found!"
+692                    << std::endl;
+693       libmesh_error();
+694     }
+695 
+696   // Attempt dynamic cast
+697   return *libmesh_cast_ptr<T_sys*>(pos->second);
+698 }
+.fi
+.SS "template<typename T_sys > const \fBSystem\fP & libMesh::EquationSystems::get_system (const unsigned intnum) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to system number \fCnum\fP\&. The template argument defines the return type\&. For example, const SteadySystem& sys = eq\&.get_system<SteadySystem> (0); is an example of how the method might be used 
+.RE
+.PP
+
+.PP
+Definition at line 602 of file equation_systems\&.h\&.
+.PP
+References _systems, end, libMesh::err, and n_systems()\&.
+.PP
+.nf
+603 {
+604   libmesh_assert_less (num, this->n_systems());
+605 
+606 
+607   const_system_iterator       pos = _systems\&.begin();
+608   const const_system_iterator end = _systems\&.end();
+609 
+610   for (; pos != end; ++pos)
+611     if (pos->second->number() == num)
+612       break;
+613 
+614   // Check for errors
+615   if (pos == end)
+616     {
+617       libMesh::err << "ERROR: no system number " << num << " found!"
+618                    << std::endl;
+619       libmesh_error();
+620     }
+621 
+622   // Attempt dynamic cast
+623   return *libmesh_cast_ptr<T_sys*>(pos->second);
+624 }
+.fi
+.SS "template<typename T_sys > \fBSystem\fP & libMesh::EquationSystems::get_system (const unsigned intnum)\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable referene to the system number \fCnum\fP\&. The template argument defines the return type\&. For example, const SteadySystem& sys = eq\&.get_system<SteadySystem> (0); is an example of how the method might be used 
+.RE
+.PP
+
+.PP
+Definition at line 631 of file equation_systems\&.h\&.
+.PP
+References _systems, end, libMesh::err, and n_systems()\&.
+.PP
+.nf
+632 {
+633   libmesh_assert_less (num, this->n_systems());
+634 
+635   const_system_iterator       pos = _systems\&.begin();
+636   const const_system_iterator end = _systems\&.end();
+637 
+638   for (; pos != end; ++pos)
+639     if (pos->second->number() == num)
+640       break;
+641 
+642   // Check for errors
+643   if (pos == end)
+644     {
+645       libMesh::err << "ERROR: no system number " << num << " found!"
+646                    << std::endl;
+647       libmesh_error();
+648     }
+649 
+650   // Attempt dynamic cast
+651   return *libmesh_cast_ptr<T_sys*>(pos->second);
+652 }
+.fi
+.SS "const \fBSystem\fP& libMesh::EquationSystems::get_system (const std::string &name) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system named \fCname\fP\&. 
+.RE
+.PP
+
+.SS "\fBSystem\fP& libMesh::EquationSystems::get_system (const std::string &name)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable referene to the system named \fCname\fP\&. 
+.RE
+.PP
+
+.SS "const \fBSystem\fP& libMesh::EquationSystems::get_system (const unsigned intnum) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to system number \fCnum\fP\&. 
+.RE
+.PP
+
+.SS "\fBSystem\fP& libMesh::EquationSystems::get_system (const unsigned intnum)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable referene to the system number \fCnum\fP\&. 
+.RE
+.PP
+
+.SS "bool libMesh::EquationSystems::has_mesh_data () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true when the _mesh_data pointer is not NULL\&. This is needed because get_mesh_data will fail if it is NULL 
+.RE
+.PP
+
+.PP
+Definition at line 539 of file equation_systems\&.h\&.
+.PP
+References _mesh_data\&.
+.PP
+.nf
+540 {
+541   return (_mesh_data!=NULL);
+542 }
+.fi
+.SS "bool libMesh::EquationSystems::has_system (const std::string &name) const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the system named \fCname\fP exists within this \fBEquationSystems\fP object\&. 
+.RE
+.PP
+
+.PP
+Definition at line 590 of file equation_systems\&.h\&.
+.PP
+References _systems\&.
+.PP
+Referenced by libMesh::EnsightIO::add_scalar(), libMesh::EnsightIO::add_vector(), libMesh::ExactSolution::compute_error(), and libMesh::ExactSolution::error_norm()\&.
+.PP
+.nf
+591 {
+592   if (_systems\&.find(name) == _systems\&.end())
+593     return false;
+594   return true;
+595 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::EquationSystems::init ()\fC [virtual]\fP"
+Initialize all the systems 
+.PP
+Definition at line 94 of file equation_systems\&.C\&.
+.PP
+References _mesh, libMesh::MeshRefinement::clean_refinement_flags(), libMesh::MeshBase::delete_remote_elements(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), get_system(), libMesh::ParallelObject::n_processors(), n_systems(), libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+Referenced by _read_impl(), libMesh::Solver::init(), and libMesh::ErrorVector::plot_error()\&.
+.PP
+.nf
+95 {
+96   const unsigned int n_sys = this->n_systems();
+97 
+98   libmesh_assert_not_equal_to (n_sys, 0);
+99 
+100   // Distribute the mesh if possible
+101   if (this->n_processors() > 1)
+102     _mesh\&.delete_remote_elements();
+103 
+104   // Tell all the \p DofObject entities how many systems
+105   // there are\&.
+106   {
+107     MeshBase::node_iterator       node_it  = _mesh\&.nodes_begin();
+108     const MeshBase::node_iterator node_end = _mesh\&.nodes_end();
+109 
+110     for ( ; node_it != node_end; ++node_it)
+111       (*node_it)->set_n_systems(n_sys);
+112 
+113     MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+114     const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+115 
+116     for ( ; elem_it != elem_end; ++elem_it)
+117       (*elem_it)->set_n_systems(n_sys);
+118   }
+119 
+120   for (unsigned int i=0; i != this->n_systems(); ++i)
+121     this->get_system(i)\&.init();
+122 
+123 #ifdef LIBMESH_ENABLE_AMR
+124   MeshRefinement mesh_refine(_mesh);
+125   mesh_refine\&.clean_refinement_flags();
+126 #endif
+127 }
+.fi
+.SS "std::size_t libMesh::EquationSystems::n_active_dofs () const"
+Returns the number of active degrees of freedom for the \fBEquationSystems\fP object\&. 
+.PP
+Definition at line 1294 of file equation_systems\&.C\&.
+.PP
+References _systems, and end\&.
+.PP
+.nf
+1295 {
+1296   std::size_t tot=0;
+1297 
+1298   const_system_iterator       pos = _systems\&.begin();
+1299   const const_system_iterator end = _systems\&.end();
+1300 
+1301   for (; pos != end; ++pos)
+1302     tot += pos->second->n_active_dofs();
+1303 
+1304   return tot;
+1305 }
+.fi
+.SS "std::size_t libMesh::EquationSystems::n_dofs () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the total number of degrees of freedom in all systems\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1278 of file equation_systems\&.C\&.
+.PP
+References _systems, and end\&.
+.PP
+.nf
+1279 {
+1280   std::size_t tot=0;
+1281 
+1282   const_system_iterator       pos = _systems\&.begin();
+1283   const const_system_iterator end = _systems\&.end();
+1284 
+1285   for (; pos != end; ++pos)
+1286     tot += pos->second->n_dofs();
+1287 
+1288   return tot;
+1289 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "unsigned int libMesh::EquationSystems::n_systems () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of equation systems\&. 
+.RE
+.PP
+
+.PP
+Definition at line 546 of file equation_systems\&.h\&.
+.PP
+References _systems\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), add_system(), adjoint_solve(), allgather(), libMesh::ExactSolution::attach_exact_deriv(), libMesh::ExactSolution::attach_exact_hessian(), build_discontinuous_solution_vector(), build_solution_vector(), build_variable_names(), compare(), libMesh::GMVIO::copy_nodal_solution(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactSolution::ExactSolution(), get_info(), get_solution(), get_system(), init(), reinit(), sensitivity_solve(), solve(), libMesh::VTKIO::system_vectors_to_vtk(), update(), and write()\&.
+.PP
+.nf
+547 {
+548   return libmesh_cast_int<unsigned int>(_systems\&.size());
+549 }
+.fi
+.SS "unsigned int libMesh::EquationSystems::n_vars () const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the total number of variables in all systems\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1263 of file equation_systems\&.C\&.
+.PP
+References _systems, and end\&.
+.PP
+Referenced by build_variable_names()\&.
+.PP
+.nf
+1264 {
+1265   unsigned int tot=0;
+1266 
+1267   const_system_iterator       pos = _systems\&.begin();
+1268   const const_system_iterator end = _systems\&.end();
+1269 
+1270   for (; pos != end; ++pos)
+1271     tot += pos->second->n_vars();
+1272 
+1273   return tot;
+1274 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "void libMesh::EquationSystems::print_info (std::ostream &os = \fC\fBlibMesh::out\fP\fP) const"
+Prints information about the equation systems, by default to \fBlibMesh::out\fP\&. 
+.PP
+Definition at line 1247 of file equation_systems\&.C\&.
+.PP
+References get_info()\&.
+.PP
+Referenced by libMesh::operator<<()\&.
+.PP
+.nf
+1248 {
+1249   os << this->get_info()
+1250      << std::endl;
+1251 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), _read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename InValType > template void libMesh::EquationSystems::read< \fBReal\fP > (const std::string &name, const \fBXdrMODE\fP, const unsigned intread_flags = \fC(\fBREAD_HEADER\fP|\fBREAD_DATA\fP)\fP, boolpartition_agnostic = \fCtrue\fP)"
+Read & initialize the systems from disk using the XDR data format\&. This format allows for machine-independent binary output\&.
+.PP
+Set which sections of the file to read by bitwise OR'ing the \fBEquationSystems::ReadFlags\fP enumeration together\&. For example, to read all sections of the file, set read_flags to: (READ_HEADER | READ_DATA | READ_ADDITIONAL_DATA)
+.PP
+Note that the equation system can be defined without initializing the data vectors to any solution values\&. This can be done by omitting READ_DATA in the read_flags parameter\&.
+.PP
+If XdrMODE is omitted, it will be inferred as READ for filenames containing \&.xda or as DECODE for filenames containing \&.xdr
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpartition_agnostic\fP If true then the mesh and degrees of freedom will be temporarily renumbered in a partition agnostic way so that files written using 'n' mpi processes can be re-read on 'm' mpi processes\&. Note that this renumbering is not compatible with meshes that have two nodes in exactly the same position! 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file equation_systems_io\&.C\&.
+.PP
+References _mesh, libMesh::Quality::name(), libMesh::out, and TRY_READ_IFEMS\&.
+.PP
+Referenced by _read_impl(), and read()\&.
+.PP
+.nf
+96 {
+97 #ifdef LIBMESH_ENABLE_EXCEPTIONS
+98 
+99   // If we have exceptions enabled we can be considerate and try
+100   // to read old restart files which contain infinite element
+101   // information but do not have the " with infinite elements"
+102   // string in the version information\&.
+103 
+104   // First try the read the user requested
+105   try
+106     {
+107       this->_read_impl<InValType> (name, mode, read_flags, partition_agnostic);
+108     }
+109 
+110   // If that fails, try it again but explicitly request we look for infinite element info
+111   catch (\&.\&.\&.)
+112     {
+113       libMesh::out << "\n*********************************************************************\n"
+114                    << "READING THE FILE \"" << name << "\" FAILED\&.\n"
+115                    << "It is possible this file contains infinite element information,\n"
+116                    << "but the version string does not contain \" with infinite elements\"\n"
+117                    << "Let's try this again, but looking for infinite element information\&.\&.\&.\n"
+118                    << "*********************************************************************\n"
+119                    << std::endl;
+120 
+121       try
+122         {
+123           this->_read_impl<InValType> (name, mode, read_flags | EquationSystems::TRY_READ_IFEMS, partition_agnostic);
+124         }
+125 
+126       // If all that failed, we are out of ideas here\&.\&.\&.
+127       catch (\&.\&.\&.)
+128         {
+129           libMesh::out << "\n*********************************************************************\n"
+130                        << "Well, at least we tried!\n"
+131                        << "Good Luck!!\n"
+132                        << "*********************************************************************\n"
+133                        << std::endl;
+134           throw;
+135         }
+136     }
+137 
+138 #else
+139 
+140   // no exceptions - cross your fingers\&.\&.\&.
+141   this->_read_impl<InValType> (name, mode, read_flags, partition_agnostic);
+142 
+143 #endif // #ifdef LIBMESH_ENABLE_EXCEPTIONS
+144 
+145 #ifdef LIBMESH_ENABLE_AMR
+146   MeshRefinement mesh_refine(_mesh);
+147   mesh_refine\&.clean_refinement_flags();
+148 #endif
+149 }
+.fi
+.SS "void libMesh::EquationSystems::read (const std::string &name, const \fBXdrMODE\fPmode, const unsigned intread_flags = \fC(\fBREAD_HEADER\fP | \fBREAD_DATA\fP)\fP, boolpartition_agnostic = \fCtrue\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 335 of file equation_systems\&.h\&.
+.PP
+References libMesh::Quality::name()\&.
+.PP
+.nf
+339   { read<Number>(name, mode, read_flags, partition_agnostic); }
+.fi
+.SS "template<typename InValType > template void libMesh::EquationSystems::read< \fBReal\fP > (const std::string &name, const unsigned intread_flags = \fC(\fBREAD_HEADER\fP|\fBREAD_DATA\fP)\fP, boolpartition_agnostic = \fCtrue\fP)"
+
+.PP
+Definition at line 74 of file equation_systems_io\&.C\&.
+.PP
+References _mesh, libMesh::MeshRefinement::clean_refinement_flags(), libMesh::DECODE, libMesh::READ, and read()\&.
+.PP
+.nf
+77 {
+78   XdrMODE mode = READ;
+79   if (name\&.find("\&.xdr") != std::string::npos)
+80     mode = DECODE;
+81   this->read(name, mode, read_flags, partition_agnostic);
+82 
+83 #ifdef LIBMESH_ENABLE_AMR
+84   MeshRefinement mesh_refine(_mesh);
+85   mesh_refine\&.clean_refinement_flags();
+86 #endif
+87 }
+.fi
+.SS "void libMesh::EquationSystems::read (const std::string &name, const unsigned intread_flags = \fC(\fBREAD_HEADER\fP | \fBREAD_DATA\fP)\fP, boolpartition_agnostic = \fCtrue\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 346 of file equation_systems\&.h\&.
+.PP
+References libMesh::Quality::name()\&.
+.PP
+.nf
+349   { read<Number>(name, read_flags, partition_agnostic); }
+.fi
+.SS "void libMesh::EquationSystems::reinit ()\fC [virtual]\fP"
+Reinitialize all the systems 
+.PP
+Definition at line 131 of file equation_systems\&.C\&.
+.PP
+References _mesh, libMesh::MeshRefinement::coarsen_elements(), libMesh::MeshBase::contract(), libMesh::DofMap::create_dof_constraints(), libMesh::DofMap::distribute_dofs(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::MeshRefinement::face_level_mismatch_limit(), libMesh::System::get_dof_map(), get_mesh(), get_system(), n_systems(), libMesh::DofObject::n_systems(), libMesh::System::n_vars(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::DofMap::prepare_send_list(), libMesh::DofMap::process_constraints(), libMesh::System::prolong_vectors(), libMesh::MeshRefinement::refine_elements(), libMesh::System::restrict_vectors(), libMesh::sys, libMesh::System::time, and libMesh::System::user_constrain()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+132 {
+133   parallel_object_only();
+134 
+135   libmesh_assert_not_equal_to (this->n_systems(), 0);
+136 
+137 #ifdef DEBUG
+138   // Make sure all the \p DofObject entities know how many systems
+139   // there are\&.
+140   {
+141     // All the nodes
+142     MeshBase::node_iterator       node_it  = _mesh\&.nodes_begin();
+143     const MeshBase::node_iterator node_end = _mesh\&.nodes_end();
+144 
+145     for ( ; node_it != node_end; ++node_it)
+146       {
+147         Node *node = *node_it;
+148         libmesh_assert_equal_to (node->n_systems(), this->n_systems());
+149       }
+150 
+151     // All the elements
+152     MeshBase::element_iterator       elem_it  = _mesh\&.elements_begin();
+153     const MeshBase::element_iterator elem_end = _mesh\&.elements_end();
+154 
+155     for ( ; elem_it != elem_end; ++elem_it)
+156       {
+157         Elem *elem = *elem_it;
+158         libmesh_assert_equal_to (elem->n_systems(), this->n_systems());
+159       }
+160   }
+161 #endif
+162 
+163   // Localize each system's vectors
+164   for (unsigned int i=0; i != this->n_systems(); ++i)
+165     this->get_system(i)\&.re_update();
+166 
+167 #ifdef LIBMESH_ENABLE_AMR
+168 
+169   bool dof_constraints_created = false;
+170   bool mesh_changed = false;
+171 
+172   // FIXME: For backwards compatibility, assume
+173   // refine_and_coarsen_elements or refine_uniformly have already
+174   // been called
+175   {
+176     for (unsigned int i=0; i != this->n_systems(); ++i)
+177       {
+178         System &sys = this->get_system(i);
+179 
+180         // Don't do anything if the system doesn't have any variables in it
+181         if(!sys\&.n_vars())
+182           continue;
+183 
+184         sys\&.get_dof_map()\&.distribute_dofs(_mesh);
+185 
+186         // Recreate any hanging node constraints
+187         sys\&.get_dof_map()\&.create_dof_constraints(_mesh, sys\&.time);
+188 
+189         // Apply any user-defined constraints
+190         sys\&.user_constrain();
+191 
+192         // Expand any recursive constraints
+193         sys\&.get_dof_map()\&.process_constraints(_mesh);
+194 
+195         // And clean up the send_list before we use it again
+196         sys\&.get_dof_map()\&.prepare_send_list();
+197 
+198         sys\&.prolong_vectors();
+199       }
+200     mesh_changed = true;
+201     dof_constraints_created = true;
+202   }
+203 
+204   // FIXME: Where should the user set maintain_level_one now??
+205   // Don't override previous settings, for now
+206 
+207   MeshRefinement mesh_refine(_mesh);
+208 
+209   mesh_refine\&.face_level_mismatch_limit() = false;
+210 
+211   // Try to coarsen the mesh, then restrict each system's vectors
+212   // if necessary
+213   if (mesh_refine\&.coarsen_elements())
+214     {
+215       for (unsigned int i=0; i != this->n_systems(); ++i)
+216         {
+217           System &sys = this->get_system(i);
+218           if (!dof_constraints_created)
+219             {
+220               sys\&.get_dof_map()\&.distribute_dofs(_mesh);
+221               sys\&.get_dof_map()\&.create_dof_constraints(_mesh, sys\&.time);
+222               sys\&.user_constrain();
+223               sys\&.get_dof_map()\&.process_constraints(_mesh);
+224               sys\&.get_dof_map()\&.prepare_send_list();
+225 
+226             }
+227           sys\&.restrict_vectors();
+228         }
+229       mesh_changed = true;
+230       dof_constraints_created = true;
+231     }
+232 
+233   // Once vectors are all restricted, we can delete
+234   // children of coarsened elements
+235   if (mesh_changed)
+236     this->get_mesh()\&.contract();
+237 
+238   // Try to refine the mesh, then prolong each system's vectors
+239   // if necessary
+240   if (mesh_refine\&.refine_elements())
+241     {
+242       for (unsigned int i=0; i != this->n_systems(); ++i)
+243         {
+244           System &sys = this->get_system(i);
+245           if (!dof_constraints_created)
+246             {
+247               sys\&.get_dof_map()\&.distribute_dofs(_mesh);
+248               sys\&.get_dof_map()\&.create_dof_constraints(_mesh, sys\&.time);
+249               sys\&.user_constrain();
+250               sys\&.get_dof_map()\&.process_constraints(_mesh);
+251               sys\&.get_dof_map()\&.prepare_send_list();
+252 
+253             }
+254           sys\&.prolong_vectors();
+255         }
+256       mesh_changed = true;
+257       // dof_constraints_created = true;
+258     }
+259 
+260   // If the mesh has changed, systems will need to create new dof
+261   // constraints and update their global solution vectors
+262   if (mesh_changed)
+263     {
+264       for (unsigned int i=0; i != this->n_systems(); ++i)
+265         this->get_system(i)\&.reinit();
+266     }
+267 #endif // #ifdef LIBMESH_ENABLE_AMR
+268 }
+.fi
+.SS "void libMesh::EquationSystems::sensitivity_solve (const \fBParameterVector\fP &parameters)\fC [virtual]\fP"
+Call \fCsensitivity_solve\fP on all the individual equation systems\&.
+.PP
+By default this function solves each sensitivity system once, in the order in which in which they were added\&. For more sophisticated decoupled problems the user may with to override this behavior in a derived class\&. 
+.PP
+Definition at line 453 of file equation_systems\&.C\&.
+.PP
+References get_system(), libMesh::libmesh_assert(), and n_systems()\&.
+.PP
+.nf
+454 {
+455   libmesh_assert (this->n_systems());
+456 
+457   for (unsigned int i=0; i != this->n_systems(); ++i)
+458     this->get_system(i)\&.sensitivity_solve(parameters_in);
+459 }
+.fi
+.SS "void libMesh::EquationSystems::solve ()\fC [virtual]\fP"
+Call \fCsolve\fP on all the individual equation systems\&.
+.PP
+By default this function solves each equation system once, in the order they were added\&. For more sophisticated decoupled problems the user may with to override this behavior in a derived class\&. 
+.PP
+Definition at line 443 of file equation_systems\&.C\&.
+.PP
+References get_system(), libMesh::libmesh_assert(), and n_systems()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), and libMesh::Solver::solve()\&.
+.PP
+.nf
+444 {
+445   libmesh_assert (this->n_systems());
+446 
+447   for (unsigned int i=0; i != this->n_systems(); ++i)
+448     this->get_system(i)\&.solve();
+449 }
+.fi
+.SS "void libMesh::EquationSystems::update ()"
+Updates local values for all the systems 
+.PP
+Definition at line 323 of file equation_systems\&.C\&.
+.PP
+References get_system(), n_systems(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by _read_impl()\&.
+.PP
+.nf
+324 {
+325   START_LOG("update()","EquationSystems");
+326 
+327   // Localize each system's vectors
+328   for (unsigned int i=0; i != this->n_systems(); ++i)
+329     this->get_system(i)\&.update();
+330 
+331   STOP_LOG("update()","EquationSystems");
+332 }
+.fi
+.SS "void libMesh::EquationSystems::write (const std::string &name, const \fBXdrMODE\fPmode, const unsigned intwrite_flags = \fC(\fBWRITE_DATA\fP)\fP, boolpartition_agnostic = \fCtrue\fP) const"
+Write the systems to disk using the XDR data format\&. This format allows for machine-independent binary output\&.
+.PP
+Set the writing properties using the \fBEquationSystems::WriteFlags\fP enumeration\&. Set which sections to write out by bitwise OR'ing the enumeration values\&. Write everything by setting write_flags to: (WRITE_DATA | WRITE_ADDITIONAL_DATA)
+.PP
+Note that the solution data can be omitted by calling this routine with WRITE_DATA omitted in the write_flags argument\&.
+.PP
+If XdrMODE is omitted, it will be inferred as WRITE for filenames containing \&.xda or as ENCODE for filenames containing \&.xdr
+.PP
+\fBParameters:\fP
+.RS 4
+\fIpartition_agnostic\fP If true then the mesh and degrees of freedom will be temporarily renumbered in a partition agnostic way so that files written using 'n' mpi processes can be re-read on 'm' mpi processes\&. Note that this renumbering is not compatible with meshes that have two nodes in exactly the same position! 
+.RE
+.PP
+This program implements the output of an \fBEquationSystems\fP object\&. This warrants some documentation\&. The output file essentially consists of 11 sections: 
+.PP
+.nf
+1.) The version header.
+2.) The number of individual equation systems (unsigned int)
+
+for each system
+
+3.)  The name of the system (string)
+4.)  The type of the system (string)
+
+handled through System::read():
+
++-------------------------------------------------------------+
+|  5.) The number of variables in the system (unsigned int)   |
+|                                                             |
+|   for each variable in the system                           |
+|                                                             |
+|    6.) The name of the variable (string)                    |
+|                                                             |
+|    7.) Combined in an FEType:                               |
+|         - The approximation order(s) of the variable (Order |
+|           Enum, cast to int/s)                              |
+|         - The finite element family/ies of the variable     |
+|           (FEFamily Enum, cast to int/s)                    |
+|                                                             |
+|   end variable loop                                         |
+|                                                             |
+| 8.) The number of additional vectors (unsigned int),        |
+|                                                             |
+|    for each additional vector in the equation system object |
+|                                                             |
+|    9.) the name of the additional vector  (string)          |
++-------------------------------------------------------------+
+
+end system loop
+
+
+for each system, handled through System::write_{serialized,parallel}_data():
+
++--------------------------------------------------------------+
+| 10.) The global solution vector, re-ordered to be node-major |
+|     (More on this later.)                                    |
+|                                                              |
+|    for each additional vector in the equation system object  |
+|                                                              |
+|    11.) The global additional vector, re-ordered to be       |
+|         node-major (More on this later.)                     |
++--------------------------------------------------------------+
+
+end system loop
+
+.fi
+.PP
+.PP
+Note that the actual IO is handled through the \fBXdr\fP class (to be renamed later?) which provides a uniform interface to both the XDR (eXternal Data Representation) interface and standard ASCII output\&. Thus this one section of code will write XDR or ASCII files with no changes\&.
+.PP
+Definition at line 389 of file equation_systems_io\&.C\&.
+.PP
+References _mesh, _systems, libMesh::Xdr::data(), libMesh::get_io_compatibility_version(), get_mesh(), libMesh::MeshTools::Private::globally_renumber_nodes_and_elements(), libMesh::MeshBase::is_serial(), libMesh::libmesh_assert(), mesh, n_systems(), libMesh::ParallelObject::processor_id(), libMesh::Xdr::set_version(), libMesh::START_LOG(), libMesh::STOP_LOG(), WRITE_ADDITIONAL_DATA, WRITE_DATA, WRITE_PARALLEL_FILES, WRITE_SERIAL_FILES, and libMesh::Xdr::writing()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+393 {
+457   // the EquationSystems::write() method should look constant,
+458   // but we need to assign a temporary numbering to the nodes
+459   // and elements in the mesh, which requires that we abuse const_cast
+460   if(partition_agnostic)
+461     {
+462       MeshBase &mesh = const_cast<MeshBase&>(this->get_mesh());
+463       MeshTools::Private::globally_renumber_nodes_and_elements(mesh);
+464     }
+465 
+466   // set booleans from write_flags argument
+467   const bool write_data            = write_flags & EquationSystems::WRITE_DATA;
+468   const bool write_additional_data = write_flags & EquationSystems::WRITE_ADDITIONAL_DATA;
+469 
+470   // always write parallel files if we're instructed to write in
+471   // parallel
+472   const bool write_parallel_files  =
+473     (write_flags & EquationSystems::WRITE_PARALLEL_FILES) ||
+474     // but also write parallel files if we haven't been instructed to
+475     // write in serial and we're on a distributed mesh
+476     (!(write_flags & EquationSystems::WRITE_SERIAL_FILES) &&
+477      !this->get_mesh()\&.is_serial());
+478 
+479   // New scope so that io will close before we try to zip the file
+480   {
+481     Xdr io((this->processor_id()==0) ? name : "", mode);
+482     libmesh_assert (io\&.writing());
+483 
+484     START_LOG("write()","EquationSystems");
+485 
+486     const unsigned int proc_id = this->processor_id();
+487     unsigned int n_sys         = this->n_systems();
+488 
+489     std::map<std::string, System*>::const_iterator
+490       pos = _systems\&.begin();
+491 
+492     // set the version number in the Xdr object
+493     io\&.set_version(LIBMESH_VERSION_ID(LIBMESH_MAJOR_VERSION,
+494                                       LIBMESH_MINOR_VERSION,
+495                                       LIBMESH_MICRO_VERSION));
+496 
+497     // Only write the header information
+498     // if we are processor 0\&.
+499     if (proc_id == 0)
+500       {
+501         std::string comment;
+502         char buf[256];
+503 
+504         // 1\&.)
+505         // Write the version header
+506         std::string version("libMesh-" + libMesh::get_io_compatibility_version());
+507         if (write_parallel_files) version += " parallel";
+508 
+509 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+510         version += " with infinite elements";
+511 #endif
+512         io\&.data (version, "# File Format Identifier");
+513 
+514         // 2\&.)
+515         // Write the number of equation systems
+516         io\&.data (n_sys, "# No\&. of Equation Systems");
+517 
+518         while (pos != _systems\&.end())
+519           {
+520             // 3\&.)
+521             // Write the name of the sys_num-th system
+522             {
+523               const unsigned int sys_num = pos->second->number();
+524               std::string sys_name       = pos->first;
+525 
+526               comment =  "# Name, System No\&. ";
+527               std::sprintf(buf, "%u", sys_num);
+528               comment += buf;
+529 
+530               io\&.data (sys_name, comment\&.c_str());
+531             }
+532 
+533             // 4\&.)
+534             // Write the type of system handled
+535             {
+536               const unsigned int sys_num = pos->second->number();
+537               std::string sys_type       = pos->second->system_type();
+538 
+539               comment =  "# Type, System No\&. ";
+540               std::sprintf(buf, "%u", sys_num);
+541               comment += buf;
+542 
+543               io\&.data (sys_type, comment\&.c_str());
+544             }
+545 
+546             // 5\&.) - 9\&.)
+547             // Let System::write_header() do the job
+548             pos->second->write_header (io, version, write_additional_data);
+549 
+550             ++pos;
+551           }
+552       }
+553 
+554     // Start from the first system, again,
+555     // to write vectors to disk, if wanted
+556     if (write_data)
+557       {
+558         // open a parallel buffer if warranted\&.
+559         Xdr local_io (write_parallel_files ? local_file_name(this->processor_id(),name) : "", mode);
+560 
+561         for (pos = _systems\&.begin(); pos != _systems\&.end(); ++pos)
+562           {
+563             // 10\&.) + 11\&.)
+564             if (write_parallel_files)
+565               pos->second->write_parallel_data (local_io,write_additional_data);
+566             else
+567               pos->second->write_serialized_data (io,write_additional_data);
+568           }
+569       }
+570 
+571     STOP_LOG("write()","EquationSystems");
+572   }
+573 
+574   // the EquationSystems::write() method should look constant,
+575   // but we need to undo the temporary numbering of the nodes
+576   // and elements in the mesh, which requires that we abuse const_cast
+577   if(partition_agnostic)
+578     const_cast<MeshBase&>(_mesh)\&.fix_broken_node_and_element_numbering();
+579 }
+.fi
+.SS "void libMesh::EquationSystems::write (const std::string &name, const unsigned intwrite_flags = \fC(\fBWRITE_DATA\fP)\fP, boolpartition_agnostic = \fCtrue\fP) const"
+
+.PP
+Definition at line 377 of file equation_systems_io\&.C\&.
+.PP
+References libMesh::ENCODE, libMesh::WRITE, and write()\&.
+.PP
+.nf
+380 {
+381   XdrMODE mode = WRITE;
+382   if (name\&.find("\&.xdr") != std::string::npos)
+383     mode = ENCODE;
+384   this->write(name, mode, write_flags, partition_agnostic);
+385 }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "std::ostream& operator<< (std::ostream &os, const \fBEquationSystems\fP &es)\fC [friend]\fP"
+Same as above, but allows you to also use stream syntax\&. 
+.PP
+Definition at line 1255 of file equation_systems\&.C\&.
+.PP
+.nf
+1256 {
+1257   es\&.print_info(os);
+1258   return os;
+1259 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by build_solution_vector(), libMesh::ParallelObject::comm(), get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBMeshBase\fP& libMesh::EquationSystems::_mesh\fC [protected]\fP"
+The mesh data structure 
+.PP
+Definition at line 454 of file equation_systems\&.h\&.
+.PP
+Referenced by _add_system_to_nodes_and_elems(), _read_impl(), allgather(), build_discontinuous_solution_vector(), build_solution_vector(), get_mesh(), get_solution(), init(), read(), reinit(), and write()\&.
+.SS "\fBMeshData\fP* libMesh::EquationSystems::_mesh_data\fC [protected]\fP"
+A pointer to the \fBMeshData\fP object you would like to use\&. Can be NULL\&. 
+.PP
+Definition at line 460 of file equation_systems\&.h\&.
+.PP
+Referenced by get_mesh_data(), and has_mesh_data()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "std::map<std::string, \fBSystem\fP*> libMesh::EquationSystems::_systems\fC [protected]\fP"
+Data structure holding the systems\&. 
+.PP
+Definition at line 465 of file equation_systems\&.h\&.
+.PP
+Referenced by add_system(), build_discontinuous_solution_vector(), build_solution_vector(), build_variable_names(), clear(), compare(), delete_system(), get_info(), get_solution(), get_system(), has_system(), n_active_dofs(), n_dofs(), n_systems(), n_vars(), and write()\&.
+.SS "\fBParameters\fP libMesh::EquationSystems::parameters"
+Data structure holding arbitrary parameters\&. 
+.PP
+Definition at line 445 of file equation_systems\&.h\&.
+.PP
+Referenced by libMesh::ExactSolution::attach_exact_deriv(), libMesh::ExactSolution::attach_exact_hessian(), libMesh::NewmarkSystem::clear(), clear(), libMesh::FrequencySystem::clear_all(), EquationSystems(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::FEComputeData::init(), libMesh::FrequencySystem::init_data(), libMesh::FrequencySystem::n_frequencies(), libMesh::NewmarkSystem::NewmarkSystem(), libMesh::NonlinearImplicitSystem::NonlinearImplicitSystem(), libMesh::FrequencySystem::set_current_frequency(), libMesh::FrequencySystem::set_frequencies(), libMesh::FrequencySystem::set_frequencies_by_range(), libMesh::FrequencySystem::set_frequencies_by_steps(), libMesh::NewmarkSystem::set_newmark_parameters(), libMesh::NonlinearImplicitSystem::set_solver_parameters(), libMesh::CondensedEigenSystem::solve(), libMesh::EigenSystem::solve(), libMesh::LinearImplicitSystem::solve(), libMesh::FrequencySystem::solve(), and libMesh::WrappedFunction< Output >::WrappedFunction()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

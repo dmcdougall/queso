@@ -1,0 +1,87 @@
+.TH "libMesh::MeshSerializer" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshSerializer \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_serializer\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshSerializer\fP (\fBMeshBase\fP &\fBmesh\fP, bool need_serial=true)"
+.br
+.ti -1c
+.RI "\fB~MeshSerializer\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fB_mesh\fP"
+.br
+.ti -1c
+.RI "bool \fBreparallelize\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Temporarily serialize a \fBParallelMesh\fP for output; a distributed mesh is allgathered by the \fBMeshSerializer\fP constructor if need_serial is true, then remote elements are deleted again by the destructor\&. 
+.PP
+Definition at line 38 of file mesh_serializer\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshSerializer::MeshSerializer (\fBMeshBase\fP &mesh, boolneed_serial = \fCtrue\fP)"
+
+.PP
+Definition at line 27 of file mesh_serializer\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::allgather(), libMesh::ParallelObject::comm(), libMesh::MeshBase::is_serial(), libMesh::libmesh_parallel_only(), and reparallelize\&.
+.PP
+.nf
+27                                                                :
+28   _mesh(mesh),
+29   reparallelize(false)
+30 {
+31   libmesh_parallel_only(mesh\&.comm());
+32   if (need_serial && !_mesh\&.is_serial()) {
+33     reparallelize = true;
+34     _mesh\&.allgather();
+35   }
+36 }
+.fi
+.SS "libMesh::MeshSerializer::~MeshSerializer ()"
+
+.PP
+Definition at line 40 of file mesh_serializer\&.C\&.
+.PP
+References _mesh, libMesh::MeshBase::delete_remote_elements(), and reparallelize\&.
+.PP
+.nf
+41 {
+42   if (reparallelize)
+43     _mesh\&.delete_remote_elements();
+44 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMeshBase\fP& libMesh::MeshSerializer::_mesh\fC [private]\fP"
+
+.PP
+Definition at line 46 of file mesh_serializer\&.h\&.
+.PP
+Referenced by MeshSerializer(), and ~MeshSerializer()\&.
+.SS "bool libMesh::MeshSerializer::reparallelize\fC [private]\fP"
+
+.PP
+Definition at line 47 of file mesh_serializer\&.h\&.
+.PP
+Referenced by MeshSerializer(), and ~MeshSerializer()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

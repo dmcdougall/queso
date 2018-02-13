@@ -1,0 +1,339 @@
+.TH "libMesh::TransientSystem< Base >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TransientSystem< Base > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <transient_system\&.h>\fP
+.PP
+Inherits Base\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBTransientSystem\fP< Base > \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTransientSystem\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned int number)"
+.br
+.ti -1c
+.RI "virtual \fB~TransientSystem\fP ()"
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBreinit\fP ()"
+.br
+.ti -1c
+.RI "virtual std::string \fBsystem_type\fP () const "
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBold_solution\fP (const \fBdof_id_type\fP global_dof_number) const "
+.br
+.ti -1c
+.RI "\fBNumber\fP \fBolder_solution\fP (const \fBdof_id_type\fP global_dof_number) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fBold_local_solution\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fBolder_local_solution\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBinit_data\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBre_update\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Base>class libMesh::TransientSystem< Base >"
+This class provides a specific system class\&. It aims at transient systems, offering nothing more than just the essentials needed to solve a system\&. Note that still additional vectors/matrices may be added, as offered in the parent classes\&. 
+.PP
+Definition at line 48 of file transient_system\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<class Base> typedef \fBTransientSystem\fP<Base> \fBlibMesh::TransientSystem\fP< Base >::\fBsys_type\fP"
+The type of system\&. 
+.PP
+Definition at line 68 of file transient_system\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Base > \fBlibMesh::TransientSystem\fP< Base >::\fBTransientSystem\fP (\fBEquationSystems\fP &es, const std::string &name, const unsigned intnumber)"
+Constructor\&. Initializes required data structures\&. 
+.PP
+Definition at line 38 of file transient_system\&.C\&.
+.PP
+References libMesh::GHOSTED, libMesh::TransientSystem< Base >::old_local_solution, libMesh::TransientSystem< Base >::older_local_solution, and libMesh::SERIAL\&.
+.PP
+.nf
+40                                                                       :
+41 
+42   Base                 (es, name_in, number_in)
+43 {
+44 #ifdef LIBMESH_ENABLE_GHOSTED
+45   old_local_solution =
+46     AutoPtr<NumericVector<Number> >
+47     (&(this->add_vector("_transient_old_local_solution", true, GHOSTED)));
+48   older_local_solution =
+49     AutoPtr<NumericVector<Number> >
+50     (&(this->add_vector("_transient_older_local_solution", true, GHOSTED)));
+51 #else
+52   old_local_solution =
+53     AutoPtr<NumericVector<Number> >
+54     (&(this->add_vector("_transient_old_local_solution", true, SERIAL)));
+55   older_local_solution =
+56     AutoPtr<NumericVector<Number> >
+57     (&(this->add_vector("_transient_older_local_solution", true, SERIAL)));
+58 #endif
+59 }
+.fi
+.SS "template<class Base > \fBlibMesh::TransientSystem\fP< Base >::~\fBTransientSystem\fP ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 64 of file transient_system\&.C\&.
+.PP
+.nf
+65 {
+66   this->clear();
+67 
+68   // We still have AutoPtrs for API compatibility, but
+69   // now that we're System::add_vector()ing these, we can trust
+70   // the base class to handle memory management
+71   old_local_solution\&.release();
+72   older_local_solution\&.release();
+73 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Base > void \fBlibMesh::TransientSystem\fP< Base >::clear ()\fC [virtual]\fP"
+Clear all the data structures associated with the system\&. 
+.PP
+Reimplemented in \fBlibMesh::TransientRBConstruction\fP\&.
+.PP
+Definition at line 78 of file transient_system\&.C\&.
+.PP
+.nf
+79 {
+80   // clear the parent data
+81   Base::clear();
+82 
+83   // the old & older local solutions
+84   // are now deleted by System!
+85   // old_local_solution->clear();
+86   // older_local_solution->clear();
+87 
+88   // FIXME: This preserves maximum backwards compatibility,
+89   // but is probably grossly unnecessary:
+90   old_local_solution\&.release();
+91   older_local_solution\&.release();
+92 
+93   old_local_solution =
+94     AutoPtr<NumericVector<Number> >
+95     (&(this->add_vector("_transient_old_local_solution")));
+96   older_local_solution =
+97     AutoPtr<NumericVector<Number> >
+98     (&(this->add_vector("_transient_older_local_solution")));
+99 }
+.fi
+.SS "template<class Base > void \fBlibMesh::TransientSystem\fP< Base >::init_data ()\fC [protected]\fP, \fC [virtual]\fP"
+Initializes the member data fields associated with the system, so that, e\&.g\&., \fCassemble()\fP may be used\&. 
+.PP
+Definition at line 105 of file transient_system\&.C\&.
+.PP
+References libMesh::get_dof_map(), libMesh::GHOSTED, and libMesh::SERIAL\&.
+.PP
+.nf
+106 {
+107   // initialize parent data
+108   Base::init_data();
+109 
+110   // Initialize the old & older solutions
+111   // Using new ghosted vectors if enabled
+112 #ifdef LIBMESH_ENABLE_GHOSTED
+113   old_local_solution->init   (this->n_dofs(), this->n_local_dofs(),
+114                               this->get_dof_map()\&.get_send_list(), false,
+115                               GHOSTED);
+116   older_local_solution->init (this->n_dofs(), this->n_local_dofs(),
+117                               this->get_dof_map()\&.get_send_list(), false,
+118                               GHOSTED);
+119 #else
+120   old_local_solution->init   (this->n_dofs(), false, SERIAL);
+121   older_local_solution->init (this->n_dofs(), false, SERIAL);
+122 #endif
+123 }
+.fi
+.SS "template<class Base > \fBNumber\fP \fBlibMesh::TransientSystem\fP< Base >::old_solution (const \fBdof_id_type\fPglobal_dof_number) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the old solution (at the previous timestep) for the specified global DOF\&. 
+.RE
+.PP
+
+.PP
+Definition at line 177 of file transient_system\&.C\&.
+.PP
+References libMesh::get_dof_map()\&.
+.PP
+.nf
+178 {
+179   // Check the sizes
+180   libmesh_assert_less (global_dof_number, this->get_dof_map()\&.n_dofs());
+181   libmesh_assert_less (global_dof_number, old_local_solution->size());
+182 
+183   return (*old_local_solution)(global_dof_number);
+184 }
+.fi
+.SS "template<class Base > \fBNumber\fP \fBlibMesh::TransientSystem\fP< Base >::older_solution (const \fBdof_id_type\fPglobal_dof_number) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the older solution (two timesteps ago) for the specified global DOF\&. 
+.RE
+.PP
+
+.PP
+Definition at line 189 of file transient_system\&.C\&.
+.PP
+References libMesh::get_dof_map()\&.
+.PP
+.nf
+190 {
+191   // Check the sizes
+192   libmesh_assert_less (global_dof_number, this->get_dof_map()\&.n_dofs());
+193   libmesh_assert_less (global_dof_number, older_local_solution->size());
+194 
+195   return (*older_local_solution)(global_dof_number);
+196 }
+.fi
+.SS "template<class Base > void \fBlibMesh::TransientSystem\fP< Base >::re_update ()\fC [protected]\fP, \fC [virtual]\fP"
+Re-update the local values when the mesh has changed\&. This method takes the data updated by \fCupdate()\fP and makes it up-to-date on the current mesh\&. 
+.PP
+Definition at line 142 of file transient_system\&.C\&.
+.PP
+References libMesh::get_dof_map(), and get_dof_map()\&.
+.PP
+.nf
+143 {
+144   // re_update the parent system
+145   Base::re_update ();
+146 
+147   const std::vector<dof_id_type>& send_list = this->get_dof_map()\&.get_send_list ();
+148 
+149   const dof_id_type first_local_dof = Base::get_dof_map()\&.first_dof();
+150   const dof_id_type end_local_dof  = Base::get_dof_map()\&.end_dof();
+151 
+152   // Check sizes
+153   libmesh_assert_greater_equal (end_local_dof, first_local_dof);
+154   libmesh_assert_greater_equal (older_local_solution->size(), send_list\&.size());
+155   libmesh_assert_greater_equal (old_local_solution->size(), send_list\&.size());
+156 
+157   // Even if we don't have to do anything ourselves, localize() may
+158   // use parallel_only tools
+159   // if (first_local_dof == end_local_dof)
+160   //   return;
+161 
+162   // Update the old & older solutions with the send_list,
+163   // which may have changed since their last update\&.
+164   older_local_solution->localize (first_local_dof,
+165                                   end_local_dof-1,
+166                                   send_list);
+167 
+168   old_local_solution->localize (first_local_dof,
+169                                 end_local_dof-1,
+170                                 send_list);
+171 }
+.fi
+.SS "template<class Base > void \fBlibMesh::TransientSystem\fP< Base >::reinit ()\fC [virtual]\fP"
+Reinitializes the member data fields associated with the system, so that, e\&.g\&., \fCassemble()\fP may be used\&. 
+.PP
+Definition at line 128 of file transient_system\&.C\&.
+.PP
+.nf
+129 {
+130   // initialize parent data
+131   Base::reinit();
+132 
+133   // Project the old & older vectors to the new mesh
+134   // The System::reinit handles this now
+135   // this->project_vector (*old_local_solution);
+136   // this->project_vector (*older_local_solution);
+137 }
+.fi
+.SS "template<class Base> \fBsys_type\fP& \fBlibMesh::TransientSystem\fP< Base >::system ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a clever pointer to the system\&. 
+.RE
+.PP
+
+.PP
+Definition at line 73 of file transient_system\&.h\&.
+.PP
+.nf
+73 { return *this; }
+.fi
+.SS "template<class Base > std::string \fBlibMesh::TransientSystem\fP< Base >::system_type () const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fC'Transient'\fP prepended to T::system_type()\&. Helps in identifying the system type in an equation system file\&. 
+.RE
+.PP
+
+.PP
+Definition at line 160 of file transient_system\&.h\&.
+.PP
+.nf
+161 {
+162   std::string type = "Transient";
+163   type += Base::system_type ();
+164 
+165   return type;
+166 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Base> \fBAutoPtr\fP<\fBNumericVector\fP<\fBNumber\fP> > \fBlibMesh::TransientSystem\fP< Base >::old_local_solution"
+All the values I need to compute my contribution to the simulation at hand\&. Think of this as the current solution with any ghost values needed from other processors\&. 
+.PP
+Definition at line 116 of file transient_system\&.h\&.
+.PP
+Referenced by libMesh::TransientSystem< Base >::TransientSystem()\&.
+.SS "template<class Base> \fBAutoPtr\fP<\fBNumericVector\fP<\fBNumber\fP> > \fBlibMesh::TransientSystem\fP< Base >::older_local_solution"
+All the values I need to compute my contribution to the simulation at hand\&. Think of this as the current solution with any ghost values needed from other processors\&. 
+.PP
+Definition at line 124 of file transient_system\&.h\&.
+.PP
+Referenced by libMesh::TransientSystem< Base >::TransientSystem()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

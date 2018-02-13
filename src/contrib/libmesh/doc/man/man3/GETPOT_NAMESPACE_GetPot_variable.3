@@ -1,0 +1,223 @@
+.TH "GETPOT_NAMESPACE::GetPot::variable" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GETPOT_NAMESPACE::GetPot::variable \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBvariable\fP ()"
+.br
+.ti -1c
+.RI "\fBvariable\fP (const \fBvariable\fP &)"
+.br
+.ti -1c
+.RI "\fBvariable\fP (const char *Name, const char *Value, const char *FieldSeparator)"
+.br
+.ti -1c
+.RI "\fB~variable\fP ()"
+.br
+.ti -1c
+.RI "\fBvariable\fP & \fBoperator=\fP (const \fBvariable\fP &Other)"
+.br
+.ti -1c
+.RI "void \fBtake\fP (const char *Value, const char *FieldSeparator)"
+.br
+.ti -1c
+.RI "const std::string * \fBget_element\fP (unsigned Idx) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBname\fP"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBvalue\fP"
+.br
+.ti -1c
+.RI "std::string \fBoriginal\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Variable to be specified on the command line or in input files\&. (i\&.e\&. of the form var='12 312 341') 
+.PP
+Definition at line 374 of file getpot\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GETPOT_NAMESPACE::GetPot::variable::variable ()\fC [inline]\fP"
+constructors, destructors, assignment operator 
+.PP
+Definition at line 3633 of file getpot\&.h\&.
+.PP
+.nf
+3634   : name(),
+3635     value(),
+3636     original()
+3637 {}
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::variable::variable (const \fBvariable\fP &Other)\fC [inline]\fP"
+
+.PP
+Definition at line 3642 of file getpot\&.h\&.
+.PP
+References GETPOT_NAMESPACE::GetPot::operator=(), and operator=()\&.
+.PP
+.nf
+3643 {
+3644 #ifdef WIN32
+3645   operator=(Other);
+3646 #else
+3647   GetPot::variable::operator=(Other);
+3648 #endif
+3649 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::variable::variable (const char *Name, const char *Value, const char *FieldSeparator)\fC [inline]\fP"
+
+.PP
+Definition at line 3654 of file getpot\&.h\&.
+.PP
+References take()\&.
+.PP
+.nf
+3655   : name(Name)
+3656 {
+3657   // make a copy of the 'Value'
+3658   take(Value, FieldSeparator);
+3659 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::variable::~variable ()\fC [inline]\fP"
+
+.PP
+Definition at line 3729 of file getpot\&.h\&.
+.PP
+.nf
+3730 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "const std::string * GETPOT_NAMESPACE::GetPot::variable::get_element (unsignedIdx) const\fC [inline]\fP"
+get a specific element in the string vector (return 0 if not present) 
+.PP
+Definition at line 3664 of file getpot\&.h\&.
+.PP
+Referenced by GETPOT_NAMESPACE::GetPot::get_value_no_default(), and GETPOT_NAMESPACE::GetPot::operator()()\&.
+.PP
+.nf
+3665 {
+3666   if (Idx >= value\&.size())
+3667     return 0;
+3668   else
+3669     return &(value[Idx]);
+3670 }
+.fi
+.SS "\fBGetPot::variable\fP & GETPOT_NAMESPACE::GetPot::variable::operator= (const \fBvariable\fP &Other)\fC [inline]\fP"
+
+.PP
+Definition at line 3735 of file getpot\&.h\&.
+.PP
+References libMesh::Quality::name(), name, original, and value\&.
+.PP
+Referenced by variable()\&.
+.PP
+.nf
+3736 {
+3737   if (&Other != this)
+3738     {
+3739       name     = Other\&.name;
+3740       value    = Other\&.value;
+3741       original = Other\&.original;
+3742     }
+3743   return *this;
+3744 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::variable::take (const char *Value, const char *FieldSeparator)\fC [inline]\fP"
+
+.PP
+Definition at line 3675 of file getpot\&.h\&.
+.PP
+Referenced by variable()\&.
+.PP
+.nf
+3676 {
+3677   original = std::string(Value); // string member var
+3678   value\&.clear();                 // vector<string> member var
+3679 
+3680   /*
+3681   // separate string by white space delimiters using 'strtok'
+3682   // thread safe usage of strtok (no static members)
+3683   char* spt = 0;
+3684   // make a copy of the 'Value'
+3685   char* copy = new char[strlen(Value)+1];
+3686   strcpy(copy, Value);
+3687   char* follow_token = strtok_r(copy, FieldSeparator, &spt);
+3688   while (follow_token != 0)
+3689   {
+3690   value\&.push_back(std::string(follow_token));
+3691   follow_token = strtok_r(NULL, FieldSeparator, &spt);
+3692   }
+3693 
+3694   delete [] copy;
+3695   */
+3696 
+3697   // Don't use strtok, instead tokenize the input char "Value" using std::string operations so
+3698   // that the results end up in the local "value" member
+3699 
+3700   // Construct std::string objects from the input char*s\&.  I think the only
+3701   // FieldSeparator recognized by GetPot is whitespace?
+3702   std::string Value_str = std::string(Value);
+3703   std::string delimiters = std::string(FieldSeparator);
+3704 
+3705   // Skip delimiters at beginning\&.
+3706   std::string::size_type lastPos = Value_str\&.find_first_not_of(delimiters, 0);
+3707 
+3708   // Find first "non-delimiter"\&.
+3709   std::string::size_type pos     = Value_str\&.find_first_of(delimiters, lastPos);
+3710 
+3711   // Loop over the input string until all the tokens have been pushed back
+3712   // into the local "value" member\&.
+3713   while (std::string::npos != pos || std::string::npos != lastPos)
+3714     {
+3715       // Found a token, add it to the vector\&.
+3716       value\&.push_back(Value_str\&.substr(lastPos, pos - lastPos));
+3717 
+3718       // Skip delimiters\&.  Note the "not_of"
+3719       lastPos = Value_str\&.find_first_not_of(delimiters, pos);
+3720 
+3721       // Find next "non-delimiter"
+3722       pos = Value_str\&.find_first_of(delimiters, lastPos);
+3723     }
+3724 
+3725   // We're done, all the tokens should now be in the vector<string>
+3726 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::string GETPOT_NAMESPACE::GetPot::variable::name"
+data memebers 
+.PP
+Definition at line 396 of file getpot\&.h\&.
+.PP
+Referenced by GETPOT_NAMESPACE::GetPot::_DBE_expand(), and operator=()\&.
+.SS "std::string GETPOT_NAMESPACE::GetPot::variable::original"
+
+.PP
+Definition at line 398 of file getpot\&.h\&.
+.PP
+Referenced by GETPOT_NAMESPACE::GetPot::_DBE_expand(), GETPOT_NAMESPACE::GetPot::_DBE_get_variable(), GETPOT_NAMESPACE::GetPot::get_value_no_default(), GETPOT_NAMESPACE::GetPot::operator()(), and operator=()\&.
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::variable::value"
+
+.PP
+Definition at line 397 of file getpot\&.h\&.
+.PP
+Referenced by operator=(), and GETPOT_NAMESPACE::GetPot::vector_variable_size()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

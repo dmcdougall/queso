@@ -1,0 +1,251 @@
+.TH "libMesh::PeriodicBoundary" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PeriodicBoundary \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <periodic_boundary\&.h>\fP
+.PP
+Inherits \fBlibMesh::PeriodicBoundaryBase\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBTransformationType\fP { \fBFORWARD\fP =0, \fBINVERSE\fP =1 }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPeriodicBoundary\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~PeriodicBoundary\fP ()"
+.br
+.ti -1c
+.RI "\fBPeriodicBoundary\fP (const \fBPeriodicBoundary\fP &o, \fBTransformationType\fP t=\fBFORWARD\fP)"
+.br
+.ti -1c
+.RI "\fBPeriodicBoundary\fP (const \fBRealVectorValue\fP &vector)"
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP \fBget_corresponding_pos\fP (const \fBPoint\fP &pt) const "
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP
+.br
+< \fBPeriodicBoundaryBase\fP > \fBclone\fP (\fBTransformationType\fP t=\fBFORWARD\fP) const "
+.br
+.ti -1c
+.RI "void \fBset_variable\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "void \fBmerge\fP (const \fBPeriodicBoundaryBase\fP &pb)"
+.br
+.ti -1c
+.RI "bool \fBis_my_variable\fP (unsigned int var_num) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBboundary_id_type\fP \fBmyboundary\fP"
+.br
+.ti -1c
+.RI "\fBboundary_id_type\fP \fBpairedboundary\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBRealVectorValue\fP \fBtranslation_vector\fP"
+.br
+.ti -1c
+.RI "std::set< unsigned int > \fBvariables\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The definition of a periodic boundary\&. 
+.PP
+Definition at line 40 of file periodic_boundary\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::PeriodicBoundaryBase::TransformationType\fP\fC [inherited]\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIFORWARD \fP\fP
+.TP
+\fB\fIINVERSE \fP\fP
+.PP
+Definition at line 46 of file periodic_boundary_base\&.h\&.
+.PP
+.nf
+47     { FORWARD=0,
+48       INVERSE=1 };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PeriodicBoundary::PeriodicBoundary ()"
+Constructor 
+.PP
+Definition at line 32 of file periodic_boundary\&.C\&.
+.PP
+Referenced by clone()\&.
+.PP
+.nf
+32                                    :
+33   PeriodicBoundaryBase(),
+34   translation_vector()
+35 {
+36 }
+.fi
+.SS "virtual libMesh::PeriodicBoundary::~PeriodicBoundary ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor 
+.PP
+Definition at line 51 of file periodic_boundary\&.h\&.
+.PP
+.nf
+51 {}
+.fi
+.SS "libMesh::PeriodicBoundary::PeriodicBoundary (const \fBPeriodicBoundary\fP &o, \fBTransformationType\fPt = \fC\fBFORWARD\fP\fP)"
+Copy constructor, with option for the copy to represent an inverse transformation\&. 
+.PP
+Definition at line 41 of file periodic_boundary\&.C\&.
+.PP
+References libMesh::PeriodicBoundaryBase::INVERSE, libMesh::PeriodicBoundaryBase::myboundary, libMesh::PeriodicBoundaryBase::pairedboundary, libMesh::swap(), and translation_vector\&.
+.PP
+.nf
+41                                                                                   :
+42   PeriodicBoundaryBase(o),
+43   translation_vector(o\&.translation_vector)
+44 {
+45   if (t == INVERSE)
+46     {
+47       std::swap(myboundary, pairedboundary);
+48       translation_vector *= -1\&.0;
+49     }
+50 }
+.fi
+.SS "libMesh::PeriodicBoundary::PeriodicBoundary (const \fBRealVectorValue\fP &vector)"
+Constructor taking a reference to the translation vector\&. 
+.PP
+Definition at line 54 of file periodic_boundary\&.C\&.
+.PP
+.nf
+54                                                                 :
+55   PeriodicBoundaryBase(),
+56   translation_vector(vector)
+57 {
+58 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBAutoPtr\fP< \fBPeriodicBoundaryBase\fP > libMesh::PeriodicBoundary::clone (\fBTransformationType\fPt = \fC\fBFORWARD\fP\fP) const\fC [virtual]\fP"
+If we want the \fBDofMap\fP to be able to make copies of references and store them in the underlying map, this class must be clone'able, i\&.e\&. have a kind of virtual construction mechanism\&. 
+.PP
+Implements \fBlibMesh::PeriodicBoundaryBase\fP\&.
+.PP
+Definition at line 69 of file periodic_boundary\&.C\&.
+.PP
+References PeriodicBoundary()\&.
+.PP
+.nf
+70 {
+71   return AutoPtr<PeriodicBoundaryBase>(new PeriodicBoundary(*this, t));
+72 }
+.fi
+.SS "\fBPoint\fP libMesh::PeriodicBoundary::get_corresponding_pos (const \fBPoint\fP &pt) const\fC [virtual]\fP"
+This function should be overloaded by derived classes to define how one finds corresponding nodes on the periodic boundary pair\&. 
+.PP
+Implements \fBlibMesh::PeriodicBoundaryBase\fP\&.
+.PP
+Definition at line 62 of file periodic_boundary\&.C\&.
+.PP
+References translation_vector\&.
+.PP
+.nf
+63 {
+64   return pt + translation_vector;
+65 }
+.fi
+.SS "bool libMesh::PeriodicBoundaryBase::is_my_variable (unsigned intvar_num) const\fC [inherited]\fP"
+
+.PP
+Definition at line 63 of file periodic_boundary_base\&.C\&.
+.PP
+References libMesh::PeriodicBoundaryBase::variables\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::compute_periodic_constraints()\&.
+.PP
+.nf
+64 {
+65   bool a = variables\&.empty() || (!variables\&.empty() && variables\&.find(var_num) != variables\&.end());
+66   return a;
+67 }
+.fi
+.SS "void libMesh::PeriodicBoundaryBase::merge (const \fBPeriodicBoundaryBase\fP &pb)\fC [inherited]\fP"
+
+.PP
+Definition at line 56 of file periodic_boundary_base\&.C\&.
+.PP
+References libMesh::PeriodicBoundaryBase::variables\&.
+.PP
+Referenced by libMesh::DofMap::add_periodic_boundary()\&.
+.PP
+.nf
+57 {
+58   variables\&.insert(pb\&.variables\&.begin(), pb\&.variables\&.end());
+59 }
+.fi
+.SS "void libMesh::PeriodicBoundaryBase::set_variable (unsigned intvar)\fC [inherited]\fP"
+
+.PP
+Definition at line 49 of file periodic_boundary_base\&.C\&.
+.PP
+References libMesh::PeriodicBoundaryBase::variables\&.
+.PP
+.nf
+50 {
+51   variables\&.insert(var);
+52 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBboundary_id_type\fP libMesh::PeriodicBoundaryBase::myboundary\fC [inherited]\fP"
+The boundary ID of this boundary and its counterpart 
+.PP
+Definition at line 53 of file periodic_boundary_base\&.h\&.
+.PP
+Referenced by libMesh::DofMap::add_periodic_boundary(), and PeriodicBoundary()\&.
+.SS "\fBboundary_id_type\fP libMesh::PeriodicBoundaryBase::pairedboundary\fC [inherited]\fP"
+
+.PP
+Definition at line 53 of file periodic_boundary_base\&.h\&.
+.PP
+Referenced by libMesh::DofMap::add_periodic_boundary(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), and PeriodicBoundary()\&.
+.SS "\fBRealVectorValue\fP libMesh::PeriodicBoundary::translation_vector\fC [protected]\fP"
+
+.PP
+Definition at line 83 of file periodic_boundary\&.h\&.
+.PP
+Referenced by get_corresponding_pos(), and PeriodicBoundary()\&.
+.SS "std::set<unsigned int> libMesh::PeriodicBoundaryBase::variables\fC [protected]\fP, \fC [inherited]\fP"
+Set of variables for this periodic boundary, empty means all variables possible 
+.PP
+Definition at line 101 of file periodic_boundary_base\&.h\&.
+.PP
+Referenced by libMesh::PeriodicBoundaryBase::is_my_variable(), libMesh::PeriodicBoundaryBase::merge(), and libMesh::PeriodicBoundaryBase::set_variable()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

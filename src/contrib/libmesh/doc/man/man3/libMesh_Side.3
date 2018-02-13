@@ -1,0 +1,211 @@
+.TH "libMesh::Side< SideType, ParentType >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Side< SideType, ParentType > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <side\&.h>\fP
+.PP
+Inherits SideType\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSide\fP (const \fBElem\fP *parent_in, const unsigned int side_in)"
+.br
+.ti -1c
+.RI "virtual const \fBPoint\fP & \fBpoint\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual \fBPoint\fP & \fBpoint\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "virtual \fBdof_id_type\fP \fBnode\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual \fBNode\fP * \fBget_node\fP (const unsigned int i) const "
+.br
+.ti -1c
+.RI "virtual \fBNode\fP *& \fBset_node\fP (const unsigned int i)"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBn_sides\fP () const "
+.br
+.ti -1c
+.RI "virtual bool \fBis_child_on_side\fP (const unsigned int, const unsigned int) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const unsigned int \fB_side_number\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class SideType, class ParentType>class libMesh::Side< SideType, ParentType >"
+This defines the \fC\fBSide\fP\fP class\&. A \fC\fBSide\fP\fP is basically a proxy (or stand-in replacement) class for an element's side\&. It acts like a standard \fC\fBElem\fP\fP, but allocates no additional memory for storing connectivity\&. Instead, its nodes are mapped directly from the parent element (the element for which the side is created)\&. Similarly, you cannot access the neighbors of a side since it does not store any\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file side\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class SideType , class ParentType > \fBlibMesh::Side\fP< SideType, ParentType >::\fBSide\fP (const \fBElem\fP *parent_in, const unsigned intside_in)\fC [inline]\fP"
+Constructor\&. Creates a side from an element\&. 
+.PP
+Definition at line 60 of file side\&.h\&.
+.PP
+References libMesh::dim, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+61                                     :
+62     SideType(const_cast<Elem*>(parent_in)),
+63     _side_number(side_in)
+64   {
+65     libmesh_assert(parent_in);
+66     // may not be true when building infinite element sides
+67     // libmesh_assert_less (_side_number, this->parent()->n_sides());
+68     libmesh_assert_equal_to ((this->dim()+1), this->parent()->dim());
+69   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class SideType , class ParentType > virtual \fBNode\fP* \fBlibMesh::Side\fP< SideType, ParentType >::get_node (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the pointer to local \fC\fBNode\fP\fP \fCi\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 102 of file side\&.h\&.
+.PP
+References libMesh::Side< SideType, ParentType >::_side_number, and n_nodes\&.
+.PP
+.nf
+103   {
+104     libmesh_assert_less (i, this->n_nodes());
+105     return this->parent()->get_node (ParentType::side_nodes_map[_side_number][i]);
+106   }
+.fi
+.SS "template<class SideType , class ParentType > virtual bool \fBlibMesh::Side\fP< SideType, ParentType >::is_child_on_side (const unsignedint, const unsignedint) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Definition at line 123 of file side\&.h\&.
+.PP
+.nf
+125   { libmesh_error(); return false; }
+.fi
+.SS "template<class SideType , class ParentType > virtual unsigned int \fBlibMesh::Side\fP< SideType, ParentType >::n_sides () const\fC [inline]\fP, \fC [virtual]\fP"
+Sides effectively do not have sides 
+.PP
+Definition at line 120 of file side\&.h\&.
+.PP
+.nf
+121   { return 0; }
+.fi
+.SS "template<class SideType , class ParentType > virtual \fBdof_id_type\fP \fBlibMesh::Side\fP< SideType, ParentType >::node (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the global id number of local \fC\fBNode\fP\fP \fCi\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 93 of file side\&.h\&.
+.PP
+References libMesh::Side< SideType, ParentType >::_side_number, and n_nodes\&.
+.PP
+.nf
+94   {
+95     libmesh_assert_less (i, this->n_nodes());
+96     return this->parent()->node (ParentType::side_nodes_map[_side_number][i]);
+97   }
+.fi
+.SS "template<class SideType , class ParentType > virtual const \fBPoint\fP& \fBlibMesh::Side\fP< SideType, ParentType >::point (const unsigned inti) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBPoint\fP\fP associated with local \fC\fBNode\fP\fP \fCi\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 74 of file side\&.h\&.
+.PP
+References libMesh::Side< SideType, ParentType >::_side_number, and n_nodes\&.
+.PP
+.nf
+75   {
+76     libmesh_assert_less (i, this->n_nodes());
+77     return this->parent()->point (ParentType::side_nodes_map[_side_number][i]);
+78   }
+.fi
+.SS "template<class SideType , class ParentType > virtual \fBPoint\fP& \fBlibMesh::Side\fP< SideType, ParentType >::point (const unsigned inti)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the \fC\fBPoint\fP\fP associated with local \fC\fBNode\fP\fP \fCi\fP as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 84 of file side\&.h\&.
+.PP
+References libMesh::Side< SideType, ParentType >::_side_number, and n_nodes\&.
+.PP
+.nf
+85   {
+86     libmesh_assert_less (i, this->n_nodes());
+87     return this->parent()->point (ParentType::side_nodes_map[_side_number][i]);
+88   }
+.fi
+.SS "template<class SideType , class ParentType > virtual \fBNode\fP* & \fBlibMesh::Side\fP< SideType, ParentType >::set_node (const unsigned inti)\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the pointer to local \fC\fBNode\fP\fP \fCi\fP as a writeable reference\&. 
+.RE
+.PP
+
+.PP
+Definition at line 111 of file side\&.h\&.
+.PP
+References libMesh::Side< SideType, ParentType >::_side_number, and n_nodes\&.
+.PP
+.nf
+112   {
+113     libmesh_assert_less (i, this->n_nodes());
+114     return this->parent()->set_node (ParentType::side_nodes_map[_side_number][i]);
+115   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class SideType , class ParentType > const unsigned int \fBlibMesh::Side\fP< SideType, ParentType >::_side_number\fC [private]\fP"
+The side on the parent element 
+.PP
+Definition at line 134 of file side\&.h\&.
+.PP
+Referenced by libMesh::Side< SideType, ParentType >::get_node(), libMesh::Side< SideType, ParentType >::node(), libMesh::Side< SideType, ParentType >::point(), and libMesh::Side< SideType, ParentType >::set_node()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

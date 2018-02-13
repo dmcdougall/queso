@@ -1,0 +1,401 @@
+.TH "libMesh::Patch" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Patch \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <patch\&.h>\fP
+.PP
+Inherits set< const Elem * >\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef void(Patch::* \fBPMF\fP )()"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPatch\fP (const \fBprocessor_id_type\fP my_procid=static_cast< \fBprocessor_id_type\fP >(-1))"
+.br
+.ti -1c
+.RI "\fB~Patch\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_face_neighbors\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_local_face_neighbors\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_semilocal_face_neighbors\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_point_neighbors\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_local_point_neighbors\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_semilocal_point_neighbors\fP ()"
+.br
+.ti -1c
+.RI "void \fBbuild_around_element\fP (const \fBElem\fP *elem, const unsigned int target_patch_size=10, \fBPMF\fP patchtype=&\fBPatch::add_local_face_neighbors\fP)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBfind_face_neighbors\fP (std::set< const \fBElem\fP * > &neighbor_set)"
+.br
+.ti -1c
+.RI "void \fBfind_point_neighbors\fP (std::set< const \fBElem\fP * > &neighbor_set)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBprocessor_id_type\fP \fB_my_procid\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements useful utility functions for a patch of elements
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner, 2007\&. based on code by Varis Carey, Benjamin S\&. Kirk, 2004\&. 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file patch\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef void(Patch::* libMesh::Patch::PMF)()"
+Pointer to Member Function typedef 
+.PP
+Definition at line 104 of file patch\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Patch::Patch (const \fBprocessor_id_type\fPmy_procid = \fCstatic_cast<\fBprocessor_id_type\fP>(-1)\fP)\fC [inline]\fP"
+Constructor\&. Requires the processor ID to be interpreted as 'local'\&. 
+.PP
+Definition at line 54 of file patch\&.h\&.
+.PP
+.nf
+54                                                                                 :
+55     _my_procid(my_procid)
+56   {}
+.fi
+.SS "libMesh::Patch::~Patch ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 61 of file patch\&.h\&.
+.PP
+.nf
+61 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Patch::add_face_neighbors ()"
+This function finds all elements which touch the current patch at a face, and adds them to the patch\&. 
+.PP
+Definition at line 77 of file patch\&.C\&.
+.PP
+References find_face_neighbors()\&.
+.PP
+.nf
+78 {
+79   std::set<const Elem *> new_neighbors;
+80 
+81   this->find_face_neighbors(new_neighbors);
+82 
+83   this->insert(new_neighbors\&.begin(), new_neighbors\&.end());
+84 }
+.fi
+.SS "void libMesh::Patch::add_local_face_neighbors ()"
+This function finds all elements on the current processor which touch the current patch at a face, and adds them to the patch\&. 
+.PP
+Definition at line 88 of file patch\&.C\&.
+.PP
+References _my_procid, find_face_neighbors(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by build_around_element()\&.
+.PP
+.nf
+89 {
+90   std::set<const Elem *> new_neighbors;
+91 
+92   this->find_face_neighbors(new_neighbors);
+93 
+94   std::set<const Elem*>::const_iterator       it  = new_neighbors\&.begin();
+95   const std::set<const Elem*>::const_iterator end_it = new_neighbors\&.end();
+96 
+97   for (; it != end_it; ++it)
+98     {
+99       const Elem* neighbor = *it;
+100       if (neighbor->processor_id() ==
+101           _my_procid) // \&.\&.\&. if the neighbor belongs to this processor
+102         this->insert (neighbor);   // \&.\&.\&. then add it to the patch
+103     }
+104 }
+.fi
+.SS "void libMesh::Patch::add_local_point_neighbors ()"
+This function finds all elements on the current processor which touch the current patch at any point, and adds them to the patch\&. 
+.PP
+Definition at line 158 of file patch\&.C\&.
+.PP
+References _my_procid, find_point_neighbors(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by build_around_element()\&.
+.PP
+.nf
+159 {
+160   std::set<const Elem *> new_neighbors;
+161 
+162   this->find_point_neighbors(new_neighbors);
+163 
+164   std::set<const Elem*>::const_iterator       it  = new_neighbors\&.begin();
+165   const std::set<const Elem*>::const_iterator end_it = new_neighbors\&.end();
+166 
+167   for (; it != end_it; ++it)
+168     {
+169       const Elem* neighbor = *it;
+170       if (neighbor->processor_id() ==
+171           _my_procid) // \&.\&.\&. if the neighbor belongs to this processor
+172         this->insert (neighbor);   // \&.\&.\&. then add it to the patch
+173     }
+174 }
+.fi
+.SS "void libMesh::Patch::add_point_neighbors ()"
+This function finds all elements which touch the current patch at any point, and adds them to the patch\&. 
+.PP
+Definition at line 147 of file patch\&.C\&.
+.PP
+References find_point_neighbors()\&.
+.PP
+.nf
+148 {
+149   std::set<const Elem *> new_neighbors;
+150 
+151   this->find_point_neighbors(new_neighbors);
+152 
+153   this->insert(new_neighbors\&.begin(), new_neighbors\&.end());
+154 }
+.fi
+.SS "void libMesh::Patch::add_semilocal_face_neighbors ()"
+This function finds all elements which touch the current patch at a face and which touch one of our processor's elements at any point, and it adds them to the patch\&. 
+.PP
+Definition at line 108 of file patch\&.C\&.
+.PP
+References _my_procid, find_face_neighbors(), and libMesh::Elem::is_semilocal()\&.
+.PP
+.nf
+109 {
+110   std::set<const Elem *> new_neighbors;
+111 
+112   this->find_face_neighbors(new_neighbors);
+113 
+114   std::set<const Elem*>::const_iterator       it  = new_neighbors\&.begin();
+115   const std::set<const Elem*>::const_iterator end_it = new_neighbors\&.end();
+116 
+117   for (; it != end_it; ++it)
+118     {
+119       const Elem* neighbor = *it;
+120       if (neighbor->is_semilocal(_my_procid))
+121         this->insert (neighbor);
+122     }
+123 }
+.fi
+.SS "void libMesh::Patch::add_semilocal_point_neighbors ()"
+This function finds all elements which touch the current patch at any point and which touch one of our processor's elements at any point, and it adds them to the patch\&. 
+.PP
+Definition at line 178 of file patch\&.C\&.
+.PP
+References _my_procid, find_point_neighbors(), and libMesh::Elem::is_semilocal()\&.
+.PP
+.nf
+179 {
+180   std::set<const Elem *> new_neighbors;
+181 
+182   this->find_point_neighbors(new_neighbors);
+183 
+184   std::set<const Elem*>::const_iterator       it  = new_neighbors\&.begin();
+185   const std::set<const Elem*>::const_iterator end_it = new_neighbors\&.end();
+186 
+187   for (; it != end_it; ++it)
+188     {
+189       const Elem* neighbor = *it;
+190       if (neighbor->is_semilocal(_my_procid))
+191         this->insert (neighbor);
+192     }
+193 }
+.fi
+.SS "void libMesh::Patch::build_around_element (const \fBElem\fP *elem, const unsigned inttarget_patch_size = \fC10\fP, \fBPMF\fPpatchtype = \fC&\fBPatch::add_local_face_neighbors\fP\fP)"
+Erases any elements in the current patch, then builds a new patch containing element \fCelem\fP by repeated addition of neighbors on the current processor\&. This procedure is repeated until the number of elements meets or exceeds \fCtarget_patch_size\fP, or until the patch has no more local neighbors\&. 
+.PP
+Definition at line 197 of file patch\&.C\&.
+.PP
+References _my_procid, libMesh::Elem::active(), add_local_face_neighbors(), add_local_point_neighbors(), end, libMesh::err, libMesh::libmesh_assert(), and libMesh::DofObject::processor_id()\&.
+.PP
+Referenced by libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), and libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()()\&.
+.PP
+.nf
+200 {
+201 
+202   // Make sure we are building a patch for an active element\&.
+203   libmesh_assert(e0);
+204   libmesh_assert (e0->active());
+205   // Make sure we are either starting with a local element or
+206   // requesting a nonlocal patch
+207   libmesh_assert ((patchtype != &Patch::add_local_face_neighbors &&
+208                    patchtype != &Patch::add_local_point_neighbors) ||
+209                   e0->processor_id() == _my_procid);
+210 
+211   // First clear the current set, then add the element of interest\&.
+212   this->clear();
+213   this->insert (e0);
+214 
+215   // Repeatedly add the neighbors of the elements in the patch until
+216   // the target patch size is met
+217   while (this->size() < target_patch_size)
+218     {
+219       // It is possible that the target patch size is larger than the number
+220       // of elements that can be added to the patch\&.  Since we don't
+221       // have access to the Mesh object here, the only way we can
+222       // detect this case is by detecting a "stagnant patch," i\&.e\&. a
+223       // patch whose size does not increase after adding face neighbors
+224       const std::size_t old_patch_size = this->size();
+225 
+226       // We profile the patch-extending functions separately
+227       (this->*patchtype)();
+228 
+229       // Check for a "stagnant" patch
+230       if (this->size() == old_patch_size)
+231         {
+232           libmesh_do_once(libMesh::err <<
+233                           "WARNING: stagnant patch of " << this->size() << " elements\&."
+234                           << std::endl <<
+235                           "Does the target patch size exceed the number of local elements?"
+236                           << std::endl;
+237                           libmesh_here(););
+238           break;
+239         }
+240     } // end while loop
+241 
+242 
+243   // make sure all the elements in the patch are active and local
+244   // if we are in debug mode
+245 #ifdef DEBUG
+246   {
+247     std::set<const Elem*>::const_iterator       it  = this->begin();
+248     const std::set<const Elem*>::const_iterator end_it = this->end();
+249 
+250     for (; it != end_it; ++it)
+251       {
+252         // Convenience\&.  Keep the syntax simple\&.
+253         const Elem* elem = *it;
+254 
+255         libmesh_assert (elem->active());
+256         if ((patchtype == &Patch::add_local_face_neighbors ||
+257              patchtype == &Patch::add_local_point_neighbors))
+258           libmesh_assert_equal_to (elem->processor_id(), _my_procid);
+259       }
+260   }
+261 #endif
+262 
+263 }
+.fi
+.SS "void libMesh::Patch::find_face_neighbors (std::set< const \fBElem\fP * > &neighbor_set)\fC [protected]\fP"
+This function finds all elements which touch the current patch at a face 
+.PP
+Definition at line 38 of file patch\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::active_family_tree_by_neighbor(), end, libMesh::Elem::n_sides(), and libMesh::Elem::neighbor()\&.
+.PP
+Referenced by add_face_neighbors(), add_local_face_neighbors(), and add_semilocal_face_neighbors()\&.
+.PP
+.nf
+39 {
+40   // Loop over all the elements in the patch
+41   std::set<const Elem*>::const_iterator       it  = this->begin();
+42   const std::set<const Elem*>::const_iterator end_it = this->end();
+43 
+44   for (; it != end_it; ++it)
+45     {
+46       const Elem* elem = *it;
+47       for (unsigned int s=0; s<elem->n_sides(); s++)
+48         if (elem->neighbor(s) != NULL)        // we have a neighbor on this side
+49           {
+50             const Elem* neighbor = elem->neighbor(s);
+51 
+52 #ifdef LIBMESH_ENABLE_AMR
+53             if (!neighbor->active())          // the neighbor is *not* active,
+54               {                               // so add *all* neighboring
+55                                               // active children to the patch
+56                 std::vector<const Elem*> active_neighbor_children;
+57 
+58                 neighbor->active_family_tree_by_neighbor
+59                   (active_neighbor_children, elem);
+60 
+61                 std::vector<const Elem*>::const_iterator
+62                   child_it  = active_neighbor_children\&.begin();
+63                 const std::vector<const Elem*>::const_iterator
+64                   child_end = active_neighbor_children\&.end();
+65                 for (; child_it != child_end; ++child_it)
+66                   new_neighbors\&.insert(*child_it);
+67               }
+68             else
+69 #endif // #ifdef LIBMESH_ENABLE_AMR
+70               new_neighbors\&.insert (neighbor); // add active neighbors
+71           }
+72     }
+73 }
+.fi
+.SS "void libMesh::Patch::find_point_neighbors (std::set< const \fBElem\fP * > &neighbor_set)\fC [protected]\fP"
+This function finds all elements which touch the current patch at any point 
+.PP
+Definition at line 127 of file patch\&.C\&.
+.PP
+References end, and libMesh::Elem::find_point_neighbors()\&.
+.PP
+Referenced by add_local_point_neighbors(), add_point_neighbors(), and add_semilocal_point_neighbors()\&.
+.PP
+.nf
+128 {
+129   // Loop over all the elements in the patch
+130   std::set<const Elem*>::const_iterator       it  = this->begin();
+131   const std::set<const Elem*>::const_iterator end_it = this->end();
+132 
+133   for (; it != end_it; ++it)
+134     {
+135       std::set<const Elem*> elem_point_neighbors;
+136 
+137       const Elem* elem = *it;
+138       elem->find_point_neighbors(elem_point_neighbors);
+139 
+140       new_neighbors\&.insert(elem_point_neighbors\&.begin(),
+141                            elem_point_neighbors\&.end());
+142     }
+143 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBprocessor_id_type\fP libMesh::Patch::_my_procid\fC [protected]\fP"
+
+.PP
+Definition at line 131 of file patch\&.h\&.
+.PP
+Referenced by add_local_face_neighbors(), add_local_point_neighbors(), add_semilocal_face_neighbors(), add_semilocal_point_neighbors(), and build_around_element()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

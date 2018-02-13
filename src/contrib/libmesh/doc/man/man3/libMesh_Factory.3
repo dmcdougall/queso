@@ -1,0 +1,144 @@
+.TH "libMesh::Factory< Base >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Factory< Base > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <factory\&.h>\fP
+.PP
+Inherited by \fBlibMesh::FactoryImp< Derived, Base >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~Factory\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBAutoPtr\fP< Base > \fBcreate\fP ()=0"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< Base > \fBbuild\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFactory\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "template<> std::map< std::string, \fBFactory\fP
+.br
+< \fBPartitioner\fP > * > & \fBfactory_map\fP ()"
+.br
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::map< std::string, 
+.br
+\fBFactory\fP< Base > * > & \fBfactory_map\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Base>class libMesh::Factory< Base >"
+\fBFactory\fP class defintion\&. 
+.PP
+Definition at line 42 of file factory\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Base > \fBlibMesh::Factory\fP< Base >::\fBFactory\fP (const std::string &name)\fC [inline]\fP, \fC [protected]\fP"
+Constructor\&. Takes the name to be mapped\&. 
+.PP
+Definition at line 113 of file factory\&.h\&.
+.PP
+References libMesh::libmesh_assert(), and libMesh::Quality::name()\&.
+.PP
+.nf
+114 {
+115   // Make sure we haven't already added this name
+116   // to the map
+117   libmesh_assert (!factory_map()\&.count(name));
+118 
+119   factory_map()[name] = this;
+120 }
+.fi
+.SS "template<class Base> virtual \fBlibMesh::Factory\fP< Base >::~\fBFactory\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. (Empty\&.) 
+.PP
+Definition at line 56 of file factory\&.h\&.
+.PP
+.nf
+56 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Base > \fBAutoPtr\fP< Base > \fBlibMesh::Factory\fP< Base >::build (const std::string &name)\fC [inline]\fP, \fC [static]\fP"
+Builds an object of type Base identified by name\&. 
+.PP
+Definition at line 126 of file factory\&.h\&.
+.PP
+References libMesh::Factory< Base >::create(), libMesh::err, and libMesh::Quality::name()\&.
+.PP
+.nf
+127 {
+128   // name not found in the map
+129   if (!factory_map()\&.count(name))
+130     {
+131       libMesh::err << "Tried to build an unknown type: " << name << std::endl;
+132 
+133       libMesh::err << "valid options are:" << std::endl;
+134 
+135       for (typename std::map<std::string,Factory<Base>*>::const_iterator
+136              it = factory_map()\&.begin(); it != factory_map()\&.end(); ++it)
+137         libMesh::err << "  " << it->first << std::endl;
+138 
+139       libmesh_error();
+140 
+141       // Do this the stoopid way for IBM xlC
+142       AutoPtr<Base> ret_val (NULL);
+143 
+144       return ret_val;
+145     }
+146 
+147   // Do this the stoopid way for IBM xlC
+148   Factory<Base> *f = factory_map()[name];
+149 
+150   AutoPtr<Base> ret_val (f->create());
+151 
+152   return ret_val;
+153 }
+.fi
+.SS "template<class Base> virtual \fBAutoPtr\fP<Base> \fBlibMesh::Factory\fP< Base >::create ()\fC [pure virtual]\fP"
+Create a Base class\&. Force this to be implemented later\&. 
+.PP
+Implemented in \fBlibMesh::FactoryImp< Derived, Base >\fP\&.
+.PP
+Referenced by libMesh::Factory< Base >::build()\&.
+.SS "template<> std::map< std::string, \fBFactory\fP< \fBPartitioner\fP > * > & \fBlibMesh::Factory\fP< \fBPartitioner\fP >::factory_map ()\fC [protected]\fP"
+
+.PP
+Definition at line 40 of file partitioner_factory\&.C\&.
+.PP
+.nf
+41 {
+42   static std::map<std::string, Factory<Partitioner>*> _map;
+43   return _map;
+44 }
+.fi
+.SS "template<class Base> static std::map<std::string, \fBFactory\fP<Base>*>& \fBlibMesh::Factory\fP< Base >::factory_map ()\fC [static]\fP, \fC [protected]\fP"
+Map from a name to a Factory<Base>* pointer\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

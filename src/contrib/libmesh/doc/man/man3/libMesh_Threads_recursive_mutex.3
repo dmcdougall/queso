@@ -1,0 +1,129 @@
+.TH "libMesh::Threads::recursive_mutex" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Threads::recursive_mutex \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <threads\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBscoped_lock\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBrecursive_mutex\fP ()"
+.br
+.ti -1c
+.RI "\fB~recursive_mutex\fP ()"
+.br
+.ti -1c
+.RI "void \fBlock\fP ()"
+.br
+.ti -1c
+.RI "void \fBunlock\fP ()"
+.br
+.ti -1c
+.RI "\fBrecursive_mutex\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "pthread_mutex_t \fBmutex\fP"
+.br
+.ti -1c
+.RI "pthread_mutexattr_t \fBattr\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Recursive mutex\&. Implements mutual exclusion by busy-waiting in user space for the lock to be acquired\&. 
+.PP
+Definition at line 397 of file threads\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Threads::recursive_mutex::recursive_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 401 of file threads\&.h\&.
+.PP
+References attr, and mutex\&.
+.PP
+.nf
+402   {
+403     pthread_mutexattr_init(&attr);
+404     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+405     pthread_mutex_init(&mutex, &attr);
+406   }
+.fi
+.SS "libMesh::Threads::recursive_mutex::~recursive_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 407 of file threads\&.h\&.
+.PP
+References mutex\&.
+.PP
+.nf
+407 { pthread_mutex_destroy(&mutex); }
+.fi
+.SS "libMesh::Threads::recursive_mutex::recursive_mutex ()\fC [inline]\fP"
+
+.PP
+Definition at line 871 of file threads\&.h\&.
+.PP
+.nf
+871 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Threads::recursive_mutex::lock ()\fC [inline]\fP"
+
+.PP
+Definition at line 409 of file threads\&.h\&.
+.PP
+References mutex\&.
+.PP
+Referenced by libMesh::Threads::recursive_mutex::scoped_lock::acquire(), and libMesh::Threads::recursive_mutex::scoped_lock::scoped_lock()\&.
+.PP
+.nf
+409 { pthread_mutex_lock(&mutex); }
+.fi
+.SS "void libMesh::Threads::recursive_mutex::unlock ()\fC [inline]\fP"
+
+.PP
+Definition at line 410 of file threads\&.h\&.
+.PP
+References mutex\&.
+.PP
+Referenced by libMesh::Threads::recursive_mutex::scoped_lock::release()\&.
+.PP
+.nf
+410 { pthread_mutex_unlock(&mutex); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "pthread_mutexattr_t libMesh::Threads::recursive_mutex::attr\fC [private]\fP"
+
+.PP
+Definition at line 429 of file threads\&.h\&.
+.PP
+Referenced by recursive_mutex()\&.
+.SS "pthread_mutex_t libMesh::Threads::recursive_mutex::mutex\fC [private]\fP"
+
+.PP
+Definition at line 428 of file threads\&.h\&.
+.PP
+Referenced by lock(), recursive_mutex(), unlock(), and ~recursive_mutex()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

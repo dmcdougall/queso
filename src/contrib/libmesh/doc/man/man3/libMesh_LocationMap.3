@@ -1,0 +1,357 @@
+.TH "libMesh::LocationMap< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LocationMap< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <location_maps\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinit\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinsert\fP (T &)"
+.br
+.ti -1c
+.RI "bool \fBempty\fP () const "
+.br
+.ti -1c
+.RI "T * \fBfind\fP (const \fBPoint\fP &, const \fBReal\fP tol=\fBTOLERANCE\fP)"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBpoint_of\fP (const T &) const "
+.br
+.ti -1c
+.RI "template<> \fBPoint\fP \fBpoint_of\fP (const \fBNode\fP &node) const"
+.br
+.ti -1c
+.RI "template<> \fBPoint\fP \fBpoint_of\fP (const \fBElem\fP &elem) const"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fBkey\fP (const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "void \fBfill\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "template<> void \fBfill\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "template<> void \fBfill\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef 
+.br
+LIBMESH_BEST_UNORDERED_MULTIMAP
+.br
+< unsigned int, T * > \fBmap_type\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBmap_type\fP \fB_map\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fB_lower_bound\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fB_upper_bound\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::LocationMap< T >"
+Data structures that enable location-based lookups The key is a hash of the \fBPoint\fP location\&. For efficiency we will use a hashed multimap if it is available, otherwise a regular multimap\&. 
+.PP
+Definition at line 49 of file location_maps\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename T> typedef LIBMESH_BEST_UNORDERED_MULTIMAP<unsigned int, T*> \fBlibMesh::LocationMap\fP< T >::\fBmap_type\fP\fC [private]\fP"
+
+.PP
+Definition at line 51 of file location_maps\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> void \fBlibMesh::LocationMap\fP< T >::clear ()\fC [inline]\fP"
+
+.PP
+Definition at line 55 of file location_maps\&.h\&.
+.PP
+.nf
+55 { _map\&.clear(); }
+.fi
+.SS "template<typename T> bool \fBlibMesh::LocationMap\fP< T >::empty () const\fC [inline]\fP"
+
+.PP
+Definition at line 59 of file location_maps\&.h\&.
+.PP
+Referenced by libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), and libMesh::Parallel::sync_dofobject_data_by_xyz()\&.
+.PP
+.nf
+59 { return _map\&.empty(); }
+.fi
+.SS "template<typename T> void \fBlibMesh::LocationMap\fP< T >::fill (\fBMeshBase\fP &)\fC [protected]\fP"
+
+.SS "template<> void \fBlibMesh::LocationMap\fP< \fBNode\fP >::fill (\fBMeshBase\fP &mesh)\fC [protected]\fP"
+
+.PP
+Definition at line 215 of file location_maps\&.C\&.
+.PP
+References end, libMesh::MeshBase::nodes_begin(), and libMesh::MeshBase::nodes_end()\&.
+.PP
+.nf
+216 {
+217   // Populate the nodes map
+218   MeshBase::node_iterator  it = mesh\&.nodes_begin(),
+219     end = mesh\&.nodes_end();
+220   for (; it != end; ++it)
+221     this->insert(**it);
+222 }
+.fi
+.SS "template<> void \fBlibMesh::LocationMap\fP< \fBElem\fP >::fill (\fBMeshBase\fP &mesh)\fC [protected]\fP"
+
+.PP
+Definition at line 227 of file location_maps\&.C\&.
+.PP
+References libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), and end\&.
+.PP
+.nf
+228 {
+229   // Populate the elem map
+230   MeshBase::element_iterator       it  = mesh\&.active_elements_begin(),
+231     end = mesh\&.active_elements_end();
+232   for (; it != end; ++it)
+233     this->insert(**it);
+234 }
+.fi
+.SS "template<typename T > T * \fBlibMesh::LocationMap\fP< T >::find (const \fBPoint\fP &p, const \fBReal\fPtol = \fC\fBTOLERANCE\fP\fP)"
+
+.PP
+Definition at line 124 of file location_maps\&.C\&.
+.PP
+References libMesh::TypeVector< T >::absolute_fuzzy_equals(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::Parallel::sync_dofobject_data_by_xyz()\&.
+.PP
+.nf
+126 {
+127   START_LOG("find()","LocationMap");
+128 
+129   // Look for a likely key in the multimap
+130   unsigned int pointkey = this->key(p);
+131 
+132   // Look for the exact key first
+133   std::pair<typename map_type::iterator,
+134     typename map_type::iterator>
+135     pos = _map\&.equal_range(pointkey);
+136 
+137   while (pos\&.first != pos\&.second)
+138     if (p\&.absolute_fuzzy_equals
+139         (this->point_of(*(pos\&.first->second)), tol))
+140       {
+141         STOP_LOG("find()","LocationMap");
+142         return pos\&.first->second;
+143       }
+144     else
+145       ++pos\&.first;
+146 
+147   // Look for neighboring bins' keys next
+148   for (int xoffset = -1; xoffset != 2; ++xoffset)
+149     {
+150       for (int yoffset = -1; yoffset != 2; ++yoffset)
+151         {
+152           for (int zoffset = -1; zoffset != 2; ++zoffset)
+153             {
+154               std::pair<typename map_type::iterator,
+155                 typename map_type::iterator>
+156                 key_pos = _map\&.equal_range(pointkey +
+157                                            xoffset*chunkmax*chunkmax +
+158                                            yoffset*chunkmax +
+159                                            zoffset);
+160               while (key_pos\&.first != key_pos\&.second)
+161                 if (p\&.absolute_fuzzy_equals
+162                     (this->point_of(*(key_pos\&.first->second)), tol))
+163                   {
+164                     STOP_LOG("find()","LocationMap");
+165                     return key_pos\&.first->second;
+166                   }
+167                 else
+168                   ++key_pos\&.first;
+169             }
+170         }
+171     }
+172 
+173   STOP_LOG("find()","LocationMap");
+174   return NULL;
+175 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LocationMap\fP< T >::init (\fBMeshBase\fP &mesh)"
+
+.PP
+Definition at line 50 of file location_maps\&.C\&.
+.PP
+References libMesh::ParallelObject::comm(), end, libMesh::MeshBase::is_serial(), libMesh::libmesh_parallel_only(), std::max(), libMesh::Parallel::Communicator::max(), std::min(), libMesh::Parallel::Communicator::min(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::MeshCommunication::make_nodes_parallel_consistent()\&.
+.PP
+.nf
+51 {
+52   // This function must be run on all processors at once
+53   // for non-serial meshes
+54   if (!mesh\&.is_serial())
+55     libmesh_parallel_only(mesh\&.comm());
+56 
+57   START_LOG("init()", "LocationMap");
+58 
+59   // Clear the old map
+60   _map\&.clear();
+61 
+62   // Cache a bounding box
+63   _lower_bound\&.clear();
+64   _lower_bound\&.resize(LIBMESH_DIM, std::numeric_limits<Real>::max());
+65   _upper_bound\&.clear();
+66   _upper_bound\&.resize(LIBMESH_DIM, -std::numeric_limits<Real>::max());
+67 
+68   MeshBase::node_iterator       it  = mesh\&.nodes_begin();
+69   const MeshBase::node_iterator end = mesh\&.nodes_end();
+70 
+71   for (; it != end; ++it)
+72     {
+73       Node* node = *it;
+74 
+75       for (unsigned int i=0; i != LIBMESH_DIM; ++i)
+76         {
+77           // Expand the bounding box if necessary
+78           _lower_bound[i] = std::min(_lower_bound[i],
+79                                      (*node)(i));
+80           _upper_bound[i] = std::max(_upper_bound[i],
+81                                      (*node)(i));
+82         }
+83     }
+84 
+85   // On a parallel mesh we might not yet have a full bounding box
+86   if (!mesh\&.is_serial())
+87     {
+88       mesh\&.comm()\&.min(_lower_bound);
+89       mesh\&.comm()\&.max(_upper_bound);
+90     }
+91 
+92   this->fill(mesh);
+93 
+94   STOP_LOG("init()", "LocationMap");
+95 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LocationMap\fP< T >::insert (T &t)"
+
+.PP
+Definition at line 100 of file location_maps\&.C\&.
+.PP
+.nf
+101 {
+102   this->_map\&.insert(std::make_pair(this->key(this->point_of(t)), &t));
+103 }
+.fi
+.SS "template<typename T > unsigned int \fBlibMesh::LocationMap\fP< T >::key (const \fBPoint\fP &p)\fC [protected]\fP"
+
+.PP
+Definition at line 180 of file location_maps\&.C\&.
+.PP
+References std::abs(), libMesh::Real, and libMesh::TOLERANCE\&.
+.PP
+.nf
+181 {
+182   Real xscaled = 0\&., yscaled = 0\&., zscaled = 0\&.;
+183 
+184   Real deltax = _upper_bound[0] - _lower_bound[0];
+185 
+186   if (std::abs(deltax) > TOLERANCE)
+187     xscaled = (p(0) - _lower_bound[0])/deltax;
+188 
+189   // Only check y-coords if libmesh is compiled with LIBMESH_DIM>1
+190 #if LIBMESH_DIM > 1
+191   Real deltay = _upper_bound[1] - _lower_bound[1];
+192 
+193   if (std::abs(deltay) > TOLERANCE)
+194     yscaled = (p(1) - _lower_bound[1])/deltay;
+195 #endif
+196 
+197   // Only check z-coords if libmesh is compiled with LIBMESH_DIM>2
+198 #if LIBMESH_DIM > 2
+199   Real deltaz = _upper_bound[2] - _lower_bound[2];
+200 
+201   if (std::abs(deltaz) > TOLERANCE)
+202     zscaled = (p(2) - _lower_bound[2])/deltaz;
+203 #endif
+204 
+205   unsigned int n0 = static_cast<unsigned int> (chunkfloat * xscaled),
+206     n1 = static_cast<unsigned int> (chunkfloat * yscaled),
+207     n2 = static_cast<unsigned int> (chunkfloat * zscaled);
+208 
+209   return chunkmax*chunkmax*n0 + chunkmax*n1 + n2;
+210 }
+.fi
+.SS "template<typename T> \fBPoint\fP \fBlibMesh::LocationMap\fP< T >::point_of (const T &) const"
+
+.PP
+Referenced by libMesh::Parallel::sync_dofobject_data_by_xyz()\&.
+.SS "template<> \fBPoint\fP \fBlibMesh::LocationMap\fP< \fBNode\fP >::point_of (const \fBNode\fP &node) const"
+
+.PP
+Definition at line 108 of file location_maps\&.C\&.
+.PP
+.nf
+109 {
+110   return node;
+111 }
+.fi
+.SS "template<> \fBPoint\fP \fBlibMesh::LocationMap\fP< \fBElem\fP >::point_of (const \fBElem\fP &elem) const"
+
+.PP
+Definition at line 116 of file location_maps\&.C\&.
+.PP
+References libMesh::Elem::centroid()\&.
+.PP
+.nf
+117 {
+118   return elem\&.centroid();
+119 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> std::vector<\fBReal\fP> \fBlibMesh::LocationMap\fP< T >::_lower_bound\fC [private]\fP"
+
+.PP
+Definition at line 73 of file location_maps\&.h\&.
+.SS "template<typename T> \fBmap_type\fP \fBlibMesh::LocationMap\fP< T >::_map\fC [private]\fP"
+
+.PP
+Definition at line 72 of file location_maps\&.h\&.
+.PP
+Referenced by libMesh::LocationMap< libMesh::Node >::clear(), and libMesh::LocationMap< libMesh::Node >::empty()\&.
+.SS "template<typename T> std::vector<\fBReal\fP> \fBlibMesh::LocationMap\fP< T >::_upper_bound\fC [private]\fP"
+
+.PP
+Definition at line 74 of file location_maps\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

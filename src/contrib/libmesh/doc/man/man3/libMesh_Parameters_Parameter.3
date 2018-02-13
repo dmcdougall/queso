@@ -1,0 +1,357 @@
+.TH "libMesh::Parameters::Parameter< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parameters::Parameter< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parameters\&.h>\fP
+.PP
+Inherits \fBlibMesh::Parameters::Value\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const T & \fBget\fP () const "
+.br
+.ti -1c
+.RI "T & \fBset\fP ()"
+.br
+.ti -1c
+.RI "virtual std::string \fBtype\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBprint\fP (std::ostream &) const "
+.br
+.ti -1c
+.RI "virtual \fBValue\fP * \fBclone\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "T \fB_value\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::Parameters::Parameter< T >"
+Concrete definition of a parameter value for a specified type\&. 
+.PP
+Definition at line 204 of file parameters\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > \fBParameters::Value\fP * \fBlibMesh::Parameters::Parameter\fP< T >::clone () const\fC [inline]\fP, \fC [virtual]\fP"
+Clone this value\&. Useful in copy-construction\&. 
+.PP
+Implements \fBlibMesh::Parameters::Value\fP\&.
+.PP
+Definition at line 305 of file parameters\&.h\&.
+.PP
+References libMesh::Parameters::Parameter< T >::_value, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+306 {
+307   // No good for Solaris C++! - BSK
+308   //  Parameters::Parameter<T>
+309   //    *copy = new Parameters::Parameter<T>;
+310   Parameter<T>
+311     *copy = new Parameter<T>;
+312 
+313   libmesh_assert(copy);
+314 
+315   copy->_value = _value;
+316 
+317   return copy;
+318 }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T> const T& \fBlibMesh::Parameters::Parameter\fP< T >::get () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a read-only reference to the parameter value\&. 
+.RE
+.PP
+
+.PP
+Definition at line 211 of file parameters\&.h\&.
+.PP
+References libMesh::Parameters::Parameter< T >::_value\&.
+.PP
+.nf
+211 { return _value; }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "template<typename T > void \fBlibMesh::Parameters::Parameter\fP< T >::print (std::ostream &os) const\fC [inline]\fP, \fC [virtual]\fP"
+Prints the parameter value to the specified stream\&. 
+.PP
+Implements \fBlibMesh::Parameters::Value\fP\&.
+.PP
+Definition at line 297 of file parameters\&.h\&.
+.PP
+References libMesh::print_helper()\&.
+.PP
+.nf
+298 {
+299   // Call helper function overloaded for basic scalar and vector types
+300   print_helper(os, static_cast<const T*>(&_value));
+301 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "template<typename T> T& \fBlibMesh::Parameters::Parameter\fP< T >::set ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the parameter value\&. 
+.RE
+.PP
+
+.PP
+Definition at line 216 of file parameters\&.h\&.
+.PP
+References libMesh::Parameters::Parameter< T >::_value\&.
+.PP
+.nf
+216 { return _value; }
+.fi
+.SS "template<typename T > std::string \fBlibMesh::Parameters::Parameter\fP< T >::type () const\fC [inline]\fP, \fC [virtual]\fP"
+String identifying the type of parameter stored\&. 
+.PP
+Implements \fBlibMesh::Parameters::Value\fP\&.
+.PP
+Definition at line 289 of file parameters\&.h\&.
+.PP
+References libMesh::demangle(), and libMesh::Quality::name()\&.
+.PP
+.nf
+290 {
+291   return demangle(typeid(T)\&.name());
+292 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T> T \fBlibMesh::Parameters::Parameter\fP< T >::_value\fC [private]\fP"
+Stored parameter value\&. 
+.PP
+Definition at line 239 of file parameters\&.h\&.
+.PP
+Referenced by libMesh::Parameters::Parameter< T >::clone(), libMesh::Parameters::Parameter< T >::get(), and libMesh::Parameters::Parameter< T >::set()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

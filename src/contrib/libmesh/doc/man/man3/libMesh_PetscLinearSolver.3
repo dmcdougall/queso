@@ -1,0 +1,2783 @@
+.TH "libMesh::PetscLinearSolver< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PetscLinearSolver< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <petsc_linear_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::LinearSolver< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPetscLinearSolver\fP (const \fBlibMesh::Parallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "\fB~PetscLinearSolver\fP ()"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit\fP (const char *name=NULL)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (\fBPetscMatrix\fP< T > *matrix, const char *name=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBinit_names\fP (const \fBSystem\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBrestrict_solve_to\fP (const std::vector< unsigned int > *const dofs, const \fBSubsetSolveMode\fP subset_solve_mode=\fBSUBSET_ZERO\fP)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &matrix_in, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBadjoint_solve\fP (\fBSparseMatrix\fP< T > &matrix_in, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > &preconditioner, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (const \fBShellMatrix\fP< T > &shell_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "virtual std::pair< unsigned 
+.br
+int, \fBReal\fP > \fBsolve\fP (const \fBShellMatrix\fP< T > &shell_matrix, const \fBSparseMatrix\fP< T > &precond_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const double tol, const unsigned int m_its)"
+.br
+.ti -1c
+.RI "\fBPC\fP \fBpc\fP ()"
+.br
+.ti -1c
+.RI "KSP \fBksp\fP ()"
+.br
+.ti -1c
+.RI "void \fBget_residual_history\fP (std::vector< double > &hist)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_initial_residual\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBLinearConvergenceReason\fP \fBget_converged_reason\fP () const "
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "\fBSolverType\fP \fBsolver_type\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_solver_type\fP (const \fBSolverType\fP st)"
+.br
+.ti -1c
+.RI "\fBPreconditionerType\fP \fBpreconditioner_type\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_preconditioner_type\fP (const \fBPreconditionerType\fP pct)"
+.br
+.ti -1c
+.RI "void \fBattach_preconditioner\fP (\fBPreconditioner\fP< T > *preconditioner)"
+.br
+.ti -1c
+.RI "virtual void \fBreuse_preconditioner\fP (bool)"
+.br
+.ti -1c
+.RI "bool \fBget_same_preconditioner\fP ()"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &, \fBNumericVector\fP< T > &, const double, const unsigned int)"
+.br
+.ti -1c
+.RI "std::pair< unsigned int, \fBReal\fP > \fBsolve\fP (const \fBShellMatrix\fP< T > &matrix, const \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &, \fBNumericVector\fP< T > &, const double, const unsigned int)"
+.br
+.ti -1c
+.RI "virtual void \fBprint_converged_reason\fP () const "
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< \fBLinearSolver\fP< T > > \fBbuild\fP (const \fBlibMesh::Parallel::Communicator\fP &comm_in, const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSolverType\fP \fB_solver_type\fP"
+.br
+.ti -1c
+.RI "\fBPreconditionerType\fP \fB_preconditioner_type\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "\fBPreconditioner\fP< T > * \fB_preconditioner\fP"
+.br
+.ti -1c
+.RI "bool \fBsame_preconditioner\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBset_petsc_solver_type\fP ()"
+.br
+.ti -1c
+.RI "size_t \fB_restrict_solve_to_is_local_size\fP (void) const "
+.br
+.ti -1c
+.RI "void \fB_create_complement_is\fP (const \fBNumericVector\fP< T > &vec_in)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fB_petsc_shell_matrix_mult\fP (Mat mat, Vec arg, Vec dest)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fB_petsc_shell_matrix_mult_add\fP (Mat mat, Vec arg, Vec add, Vec dest)"
+.br
+.ti -1c
+.RI "static \fBPetscErrorCode\fP \fB_petsc_shell_matrix_get_diagonal\fP (Mat mat, Vec dest)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "SLES \fB_sles\fP"
+.br
+.ti -1c
+.RI "\fBPC\fP \fB_pc\fP"
+.br
+.ti -1c
+.RI "KSP \fB_ksp\fP"
+.br
+.ti -1c
+.RI "IS \fB_restrict_solve_to_is\fP"
+.br
+.ti -1c
+.RI "IS \fB_restrict_solve_to_is_complement\fP"
+.br
+.ti -1c
+.RI "\fBSubsetSolveMode\fP \fB_subset_solve_mode\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::PetscLinearSolver< T >"
+This class provides an interface to PETSc iterative solvers that is compatible with the \fC\fBlibMesh\fP\fP \fCLinearSolver<>\fP 
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin Kirk, 2002-2007 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file petsc_linear_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::PetscLinearSolver\fP< T >::\fBPetscLinearSolver\fP (const \fBlibMesh::Parallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)\fC [inline]\fP"
+Constructor\&. Initializes Petsc data structures 
+.PP
+Definition at line 336 of file petsc_linear_solver\&.h\&.
+.PP
+References libMesh::LinearSolver< T >::_preconditioner_type, libMesh::BLOCK_JACOBI_PRECOND, libMesh::ILU_PRECOND, and libMesh::ParallelObject::n_processors()\&.
+.PP
+.nf
+336                                                                                :
+337   LinearSolver<T>(comm),
+338   _restrict_solve_to_is(NULL),
+339   _restrict_solve_to_is_complement(NULL),
+340   _subset_solve_mode(SUBSET_ZERO)
+341 {
+342   if (this->n_processors() == 1)
+343     this->_preconditioner_type = ILU_PRECOND;
+344   else
+345     this->_preconditioner_type = BLOCK_JACOBI_PRECOND;
+346 }
+.fi
+.SS "template<typename T > \fBlibMesh::PetscLinearSolver\fP< T >::~\fBPetscLinearSolver\fP ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 352 of file petsc_linear_solver\&.h\&.
+.PP
+.nf
+353 {
+354   this->clear ();
+355 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::_create_complement_is (const \fBNumericVector\fP< T > &vec_in)\fC [private]\fP"
+Creates \fC_restrict_solve_to_is_complement\fP to contain all indices that are local in \fCvec_in\fP, except those that are contained in \fC_restrict_solve_to_is\fP\&. 
+.PP
+Definition at line 377 of file petsc_linear_solver\&.h\&.
+.PP
+References libMesh::ierr, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+384 {
+385   libmesh_assert(_restrict_solve_to_is);
+386 #if PETSC_VERSION_LESS_THAN(3,0,0)
+387   // No ISComplement in PETSc 2\&.3\&.3
+388   libmesh_not_implemented();
+389 #else
+390   if(_restrict_solve_to_is_complement==NULL)
+391     {
+392       int ierr = ISComplement(_restrict_solve_to_is,
+393                               vec_in\&.first_local_index(),
+394                               vec_in\&.last_local_index(),
+395                               &_restrict_solve_to_is_complement);
+396       LIBMESH_CHKERRABORT(ierr);
+397     }
+398 #endif
+399 }
+.fi
+.SS "template<typename T > \fBPetscErrorCode\fP \fBlibMesh::PetscLinearSolver\fP< T >::_petsc_shell_matrix_get_diagonal (Matmat, Vecdest)\fC [static]\fP, \fC [private]\fP"
+Internal function if shell matrix mode is used\&. 
+.PP
+Definition at line 1962 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::CHKERRABORT(), libMesh::ParallelObject::comm(), libMesh::Parallel::Communicator::get(), libMesh::ShellMatrix< T >::get_diagonal(), and libMesh::ierr\&.
+.PP
+.nf
+1963 {
+1964   /* Get the matrix context\&.  */
+1965   PetscErrorCode ierr=0;
+1966   void* ctx;
+1967   ierr = MatShellGetContext(mat,&ctx);
+1968 
+1969   /* Get user shell matrix object\&.  */
+1970   const ShellMatrix<T>& shell_matrix = *static_cast<const ShellMatrix<T>*>(ctx);
+1971   CHKERRABORT(shell_matrix\&.comm()\&.get(), ierr);
+1972 
+1973   /* Make \p NumericVector instances around the vector\&.  */
+1974   PetscVector<T> dest_global(dest, shell_matrix\&.comm());
+1975 
+1976   /* Call the user function\&.  */
+1977   shell_matrix\&.get_diagonal(dest_global);
+1978 
+1979   return ierr;
+1980 }
+.fi
+.SS "template<typename T > \fBPetscErrorCode\fP \fBlibMesh::PetscLinearSolver\fP< T >::_petsc_shell_matrix_mult (Matmat, Vecarg, Vecdest)\fC [static]\fP, \fC [private]\fP"
+Internal function if shell matrix mode is used\&. 
+.PP
+Definition at line 1908 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::CHKERRABORT(), libMesh::ParallelObject::comm(), libMesh::Parallel::Communicator::get(), libMesh::ierr, and libMesh::ShellMatrix< T >::vector_mult()\&.
+.PP
+.nf
+1909 {
+1910   /* Get the matrix context\&.  */
+1911   PetscErrorCode ierr=0;
+1912   void* ctx;
+1913   ierr = MatShellGetContext(mat,&ctx);
+1914 
+1915   /* Get user shell matrix object\&.  */
+1916   const ShellMatrix<T>& shell_matrix = *static_cast<const ShellMatrix<T>*>(ctx);
+1917   CHKERRABORT(shell_matrix\&.comm()\&.get(), ierr);
+1918 
+1919   /* Make \p NumericVector instances around the vectors\&.  */
+1920   PetscVector<T> arg_global(arg, shell_matrix\&.comm());
+1921   PetscVector<T> dest_global(dest, shell_matrix\&.comm());
+1922 
+1923   /* Call the user function\&.  */
+1924   shell_matrix\&.vector_mult(dest_global,arg_global);
+1925 
+1926   return ierr;
+1927 }
+.fi
+.SS "template<typename T > \fBPetscErrorCode\fP \fBlibMesh::PetscLinearSolver\fP< T >::_petsc_shell_matrix_mult_add (Matmat, Vecarg, Vecadd, Vecdest)\fC [static]\fP, \fC [private]\fP"
+Internal function if shell matrix mode is used\&. 
+.PP
+Definition at line 1932 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::CHKERRABORT(), libMesh::ParallelObject::comm(), libMesh::Parallel::Communicator::get(), libMesh::ierr, and libMesh::ShellMatrix< T >::vector_mult_add()\&.
+.PP
+.nf
+1933 {
+1934   /* Get the matrix context\&.  */
+1935   PetscErrorCode ierr=0;
+1936   void* ctx;
+1937   ierr = MatShellGetContext(mat,&ctx);
+1938 
+1939   /* Get user shell matrix object\&.  */
+1940   const ShellMatrix<T>& shell_matrix = *static_cast<const ShellMatrix<T>*>(ctx);
+1941   CHKERRABORT(shell_matrix\&.comm()\&.get(), ierr);
+1942 
+1943   /* Make \p NumericVector instances around the vectors\&.  */
+1944   PetscVector<T> arg_global(arg, shell_matrix\&.comm());
+1945   PetscVector<T> dest_global(dest, shell_matrix\&.comm());
+1946   PetscVector<T> add_global(add, shell_matrix\&.comm());
+1947 
+1948   if(add!=arg)
+1949     {
+1950       arg_global = add_global;
+1951     }
+1952 
+1953   /* Call the user function\&.  */
+1954   shell_matrix\&.vector_mult_add(dest_global,arg_global);
+1955 
+1956   return ierr;
+1957 }
+.fi
+.SS "template<typename T > size_t \fBlibMesh::PetscLinearSolver\fP< T >::_restrict_solve_to_is_local_size (void) const\fC [inline]\fP, \fC [private]\fP"
+Internal method that returns the local size of \fC_restrict_solve_to_is\fP\&. 
+.PP
+Definition at line 362 of file petsc_linear_solver\&.h\&.
+.PP
+References libMesh::ierr, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+363 {
+364   libmesh_assert(_restrict_solve_to_is);
+365 
+366   PetscInt s;
+367   int ierr = ISGetLocalSize(_restrict_solve_to_is,&s);
+368   LIBMESH_CHKERRABORT(ierr);
+369 
+370   return static_cast<size_t>(s);
+371 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::PetscLinearSolver\fP< T >::adjoint_solve (\fBSparseMatrix\fP< T > &matrix_in, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+Call the Petsc solver\&. It calls the method below, using the same matrix for the system and preconditioner matrices\&. 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 802 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::PetscMatrix< T >::init(), libMesh::NumericVector< T >::local_size(), libMesh::PetscMatrix< T >::mat(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::SUBSET_COPY_RHS, libMesh::SUBSET_DONT_TOUCH, and libMesh::SUBSET_ZERO\&.
+.PP
+.nf
+807 {
+808   START_LOG("solve()", "PetscLinearSolver");
+809 
+810   // Make sure the data passed in are really of Petsc types
+811   PetscMatrix<T>* matrix   = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_in);
+812   // Note that the matrix and precond matrix are the same
+813   PetscMatrix<T>* precond  = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_in);
+814   PetscVector<T>* solution = libmesh_cast_ptr<PetscVector<T>*>(&solution_in);
+815   PetscVector<T>* rhs      = libmesh_cast_ptr<PetscVector<T>*>(&rhs_in);
+816 
+817   this->init (matrix);
+818 
+819   PetscErrorCode ierr=0;
+820   PetscInt its=0, max_its = static_cast<PetscInt>(m_its);
+821   PetscReal final_resid=0\&.;
+822 
+823   // Close the matrices and vectors in case this wasn't already done\&.
+824   matrix->close ();
+825   precond->close ();
+826   solution->close ();
+827   rhs->close ();
+828 
+829   //   // If matrix != precond, then this means we have specified a
+830   //   // special preconditioner, so reset preconditioner type to PCMAT\&.
+831   //   if (matrix != precond)
+832   //     {
+833   //       this->_preconditioner_type = USER_PRECOND;
+834   //       this->set_petsc_preconditioner_type ();
+835   //     }
+836 
+837   // 2\&.1\&.x & earlier style
+838 #if PETSC_VERSION_LESS_THAN(2,2,0)
+839 
+840   if(_restrict_solve_to_is!=NULL)
+841     {
+842       libmesh_not_implemented();
+843     }
+844 
+845   // Based on http://wolfgang\&.math\&.tamu\&.edu/svn/public/deal\&.II/branches/MATH676/2008/deal\&.II/lac/source/petsc_solver\&.cc, http://tccc\&.iesl\&.forth\&.gr/AMS_EPEAEK/Elements/doc/in_html/petsc/SLES/index\&.html
+846 
+847   SLES sles;
+848   ierr = SLESCreate (this->comm()\&.get(), &sles);
+849   LIBMESH_CHKERRABORT(ierr);
+850 
+851   ierr = SLESSetOperators (sles, matrix->mat(), precond->mat(), this->same_preconditioner ? SAME_PRECONDITIONER : DIFFERENT_NONZERO_PATTERN);
+852   LIBMESH_CHKERRABORT(ierr);
+853 
+854   KSP ksp;
+855   ierr = SLESGetKSP (sles, &ksp);
+856   LIBMESH_CHKERRABORT(ierr);
+857 
+858   ierr = SLESSetUp (sles, rhs->vec(), solution->vec());
+859   LIBMESH_CHKERRABORT(ierr);
+860 
+861   // See http://tccc\&.iesl\&.forth\&.gr/AMS_EPEAEK/Elements/doc/in_html/petsc/KSP/KSPSolveTrans\&.html#KSPSolveTrans
+862   ierr = SLESSolveTrans (ksp, &its);
+863   LIBMESH_CHKERRABORT(ierr);
+864 
+865   // 2\&.2\&.0
+866 #elif PETSC_VERSION_LESS_THAN(2,2,1)
+867 
+868   if(_restrict_solve_to_is!=NULL)
+869     {
+870       libmesh_not_implemented();
+871     }
+872 
+873   // Set operators\&. The input matrix works as the preconditioning matrix
+874   // This was commented earlier but it looks like KSPSetOperators is supported
+875   // after PETSc 2\&.2\&.0
+876   ierr = KSPSetOperators(_ksp, matrix->mat(), precond->mat(),
+877                          this->same_preconditioner ? SAME_PRECONDITIONER : DIFFERENT_NONZERO_PATTERN);
+878   LIBMESH_CHKERRABORT(ierr);
+879 
+880 
+881   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+882   // tolerance for the relative residual & leave the others at default values\&.
+883   // Convergence is detected at iteration k if
+884   // ||r_k||_2 < max(rtol*||b||_2 , abstol)
+885   // where r_k is the residual vector and b is the right-hand side\&.  Note that
+886   // it is the *maximum* of the two values, the larger of which will almost
+887   // always be rtol*||b||_2\&.
+888   ierr = KSPSetTolerances (_ksp,
+889                            tol,           // rtol   = relative decrease in residual  (1\&.e-5)
+890                            PETSC_DEFAULT, // abstol = absolute convergence tolerance (1\&.e-50)
+891                            PETSC_DEFAULT, // dtol   = divergence tolerance           (1\&.e+5)
+892                            max_its);
+893   LIBMESH_CHKERRABORT(ierr);
+894 
+895 
+896   // Set the solution vector to use
+897   ierr = KSPSetSolution (_ksp, solution->vec());
+898   LIBMESH_CHKERRABORT(ierr);
+899 
+900   // Set the RHS vector to use
+901   ierr = KSPSetRhs (_ksp, rhs->vec());
+902   LIBMESH_CHKERRABORT(ierr);
+903 
+904   // Solve the linear system
+905   ierr = KSPSolveTranspose (_ksp);
+906   LIBMESH_CHKERRABORT(ierr);
+907 
+908   // Get the number of iterations required for convergence
+909   ierr = KSPGetIterationNumber (_ksp, &its);
+910   LIBMESH_CHKERRABORT(ierr);
+911 
+912   // Get the norm of the final residual to return to the user\&.
+913   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+914   LIBMESH_CHKERRABORT(ierr);
+915 
+916   // 2\&.2\&.1 & newer style
+917 #else
+918 
+919   Mat submat = NULL;
+920   Mat subprecond = NULL;
+921   Vec subrhs = NULL;
+922   Vec subsolution = NULL;
+923   VecScatter scatter = NULL;
+924   PetscMatrix<Number>* subprecond_matrix = NULL;
+925 
+926   // Set operators\&.  Also restrict rhs and solution vector to
+927   // subdomain if neccessary\&.
+928   if(_restrict_solve_to_is!=NULL)
+929     {
+930       size_t is_local_size = this->_restrict_solve_to_is_local_size();
+931 
+932       ierr = VecCreate(this->comm()\&.get(),&subrhs);
+933       LIBMESH_CHKERRABORT(ierr);
+934       ierr = VecSetSizes(subrhs,is_local_size,PETSC_DECIDE);
+935       LIBMESH_CHKERRABORT(ierr);
+936       ierr = VecSetFromOptions(subrhs);
+937       LIBMESH_CHKERRABORT(ierr);
+938 
+939       ierr = VecCreate(this->comm()\&.get(),&subsolution);
+940       LIBMESH_CHKERRABORT(ierr);
+941       ierr = VecSetSizes(subsolution,is_local_size,PETSC_DECIDE);
+942       LIBMESH_CHKERRABORT(ierr);
+943       ierr = VecSetFromOptions(subsolution);
+944       LIBMESH_CHKERRABORT(ierr);
+945 
+946       ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is, subrhs,NULL, &scatter);
+947       LIBMESH_CHKERRABORT(ierr);
+948 
+949       ierr = VecScatterBegin(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+950       LIBMESH_CHKERRABORT(ierr);
+951       ierr = VecScatterEnd(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+952       LIBMESH_CHKERRABORT(ierr);
+953 
+954       ierr = VecScatterBegin(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+955       LIBMESH_CHKERRABORT(ierr);
+956       ierr = VecScatterEnd(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+957       LIBMESH_CHKERRABORT(ierr);
+958 
+959 #if PETSC_VERSION_LESS_THAN(3,1,0)
+960       ierr = MatGetSubMatrix(matrix->mat(),
+961                              _restrict_solve_to_is,_restrict_solve_to_is,
+962                              PETSC_DECIDE,MAT_INITIAL_MATRIX,&submat);
+963       LIBMESH_CHKERRABORT(ierr);
+964       ierr = MatGetSubMatrix(precond->mat(),
+965                              _restrict_solve_to_is,_restrict_solve_to_is,
+966                              PETSC_DECIDE,MAT_INITIAL_MATRIX,&subprecond);
+967       LIBMESH_CHKERRABORT(ierr);
+968 #else
+969       ierr = MatGetSubMatrix(matrix->mat(),
+970                              _restrict_solve_to_is,_restrict_solve_to_is,
+971                              MAT_INITIAL_MATRIX,&submat);
+972       LIBMESH_CHKERRABORT(ierr);
+973       ierr = MatGetSubMatrix(precond->mat(),
+974                              _restrict_solve_to_is,_restrict_solve_to_is,
+975                              MAT_INITIAL_MATRIX,&subprecond);
+976       LIBMESH_CHKERRABORT(ierr);
+977 #endif
+978 
+979       /* Since removing columns of the matrix changes the equation
+980          system, we will now change the right hand side to compensate
+981          for this\&.  Note that this is not necessary if \p SUBSET_ZERO
+982          has been selected\&.  */
+983       if(_subset_solve_mode!=SUBSET_ZERO)
+984         {
+985           _create_complement_is(rhs_in);
+986           size_t is_complement_local_size = rhs_in\&.local_size()-is_local_size;
+987 
+988           Vec subvec1 = NULL;
+989           Mat submat1 = NULL;
+990           VecScatter scatter1 = NULL;
+991 
+992           ierr = VecCreate(this->comm()\&.get(),&subvec1);
+993           LIBMESH_CHKERRABORT(ierr);
+994           ierr = VecSetSizes(subvec1,is_complement_local_size,PETSC_DECIDE);
+995           LIBMESH_CHKERRABORT(ierr);
+996           ierr = VecSetFromOptions(subvec1);
+997           LIBMESH_CHKERRABORT(ierr);
+998 
+999           ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is_complement, subvec1,NULL, &scatter1);
+1000           LIBMESH_CHKERRABORT(ierr);
+1001 
+1002           ierr = VecScatterBegin(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+1003           LIBMESH_CHKERRABORT(ierr);
+1004           ierr = VecScatterEnd(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+1005           LIBMESH_CHKERRABORT(ierr);
+1006 
+1007           ierr = VecScale(subvec1,-1\&.0);
+1008           LIBMESH_CHKERRABORT(ierr);
+1009 
+1010 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1011           ierr = MatGetSubMatrix(matrix->mat(),
+1012                                  _restrict_solve_to_is,_restrict_solve_to_is_complement,
+1013                                  PETSC_DECIDE,MAT_INITIAL_MATRIX,&submat1);
+1014           LIBMESH_CHKERRABORT(ierr);
+1015 #else
+1016           ierr = MatGetSubMatrix(matrix->mat(),
+1017                                  _restrict_solve_to_is,_restrict_solve_to_is_complement,
+1018                                  MAT_INITIAL_MATRIX,&submat1);
+1019           LIBMESH_CHKERRABORT(ierr);
+1020 #endif
+1021 
+1022           ierr = MatMultAdd(submat1,subvec1,subrhs,subrhs);
+1023           LIBMESH_CHKERRABORT(ierr);
+1024 
+1025           ierr = LibMeshVecScatterDestroy(&scatter1);
+1026           LIBMESH_CHKERRABORT(ierr);
+1027           ierr = LibMeshVecDestroy(&subvec1);
+1028           LIBMESH_CHKERRABORT(ierr);
+1029           ierr = LibMeshMatDestroy(&submat1);
+1030           LIBMESH_CHKERRABORT(ierr);
+1031         }
+1032 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1033       ierr = KSPSetOperators(_ksp, submat, subprecond,
+1034                              this->same_preconditioner ? SAME_PRECONDITIONER : DIFFERENT_NONZERO_PATTERN);
+1035 #else
+1036       ierr = KSPSetOperators(_ksp, submat, subprecond);
+1037 #endif
+1038       LIBMESH_CHKERRABORT(ierr);
+1039 
+1040       if(this->_preconditioner)
+1041         {
+1042           subprecond_matrix = new PetscMatrix<Number>(subprecond,
+1043                                                       this->comm());
+1044           this->_preconditioner->set_matrix(*subprecond_matrix);
+1045           this->_preconditioner->init();
+1046         }
+1047     }
+1048   else
+1049     {
+1050 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1051       ierr = KSPSetOperators(_ksp, matrix->mat(), precond->mat(),
+1052                              this->same_preconditioner ? SAME_PRECONDITIONER : DIFFERENT_NONZERO_PATTERN);
+1053 #else
+1054       ierr = KSPSetOperators(_ksp, matrix->mat(), precond->mat());
+1055 #endif
+1056       LIBMESH_CHKERRABORT(ierr);
+1057 
+1058       if(this->_preconditioner)
+1059         {
+1060           this->_preconditioner->set_matrix(matrix_in);
+1061           this->_preconditioner->init();
+1062         }
+1063     }
+1064 
+1065   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+1066   // tolerance for the relative residual & leave the others at default values\&.
+1067   ierr = KSPSetTolerances (_ksp, tol, PETSC_DEFAULT,
+1068                            PETSC_DEFAULT, max_its);
+1069   LIBMESH_CHKERRABORT(ierr);
+1070 
+1071   // Solve the linear system
+1072   if(_restrict_solve_to_is!=NULL)
+1073     {
+1074       ierr = KSPSolveTranspose (_ksp, subrhs, subsolution);
+1075       LIBMESH_CHKERRABORT(ierr);
+1076     }
+1077   else
+1078     {
+1079       ierr = KSPSolveTranspose (_ksp, rhs->vec(), solution->vec());
+1080       LIBMESH_CHKERRABORT(ierr);
+1081     }
+1082 
+1083   // Get the number of iterations required for convergence
+1084   ierr = KSPGetIterationNumber (_ksp, &its);
+1085   LIBMESH_CHKERRABORT(ierr);
+1086 
+1087   // Get the norm of the final residual to return to the user\&.
+1088   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+1089   LIBMESH_CHKERRABORT(ierr);
+1090 
+1091   if(_restrict_solve_to_is!=NULL)
+1092     {
+1093       switch(_subset_solve_mode)
+1094         {
+1095         case SUBSET_ZERO:
+1096           ierr = VecZeroEntries(solution->vec());
+1097           LIBMESH_CHKERRABORT(ierr);
+1098           break;
+1099 
+1100         case SUBSET_COPY_RHS:
+1101           ierr = VecCopy(rhs->vec(),solution->vec());
+1102           LIBMESH_CHKERRABORT(ierr);
+1103           break;
+1104 
+1105         case SUBSET_DONT_TOUCH:
+1106           /* Nothing to do here\&.  */
+1107           break;
+1108 
+1109         }
+1110       ierr = VecScatterBegin(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+1111       LIBMESH_CHKERRABORT(ierr);
+1112       ierr = VecScatterEnd(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+1113       LIBMESH_CHKERRABORT(ierr);
+1114 
+1115       ierr = LibMeshVecScatterDestroy(&scatter);
+1116       LIBMESH_CHKERRABORT(ierr);
+1117 
+1118       if(this->_preconditioner)
+1119         {
+1120           /* Before we delete subprecond_matrix, we should give the
+1121              _preconditioner a different matrix\&.  */
+1122           this->_preconditioner->set_matrix(matrix_in);
+1123           this->_preconditioner->init();
+1124           delete subprecond_matrix;
+1125           subprecond_matrix = NULL;
+1126         }
+1127 
+1128       ierr = LibMeshVecDestroy(&subsolution);
+1129       LIBMESH_CHKERRABORT(ierr);
+1130       ierr = LibMeshVecDestroy(&subrhs);
+1131       LIBMESH_CHKERRABORT(ierr);
+1132       ierr = LibMeshMatDestroy(&submat);
+1133       LIBMESH_CHKERRABORT(ierr);
+1134       ierr = LibMeshMatDestroy(&subprecond);
+1135       LIBMESH_CHKERRABORT(ierr);
+1136     }
+1137 
+1138 #endif
+1139 
+1140   STOP_LOG("solve()", "PetscLinearSolver");
+1141   // return the # of its\&. and the final residual norm\&.
+1142   return std::make_pair(its, final_resid);
+1143 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LinearSolver\fP< T >::attach_preconditioner (\fBPreconditioner\fP< T > *preconditioner)\fC [inherited]\fP"
+Attaches a \fBPreconditioner\fP object to be used 
+.PP
+Definition at line 117 of file linear_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::err, and libMesh::SHELL_PRECOND\&.
+.PP
+.nf
+118 {
+119   if(this->_is_initialized)
+120     {
+121       libMesh::err<<"Preconditioner must be attached before the solver is initialized!"<<std::endl;
+122       libmesh_error();
+123     }
+124 
+125   _preconditioner_type = SHELL_PRECOND;
+126   _preconditioner = preconditioner;
+127 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBLinearSolver\fP< T > > \fBlibMesh::LinearSolver\fP< T >::build (const \fBlibMesh::Parallel::Communicator\fP &comm_in, const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fC\fBLinearSolver\fP\fP using the linear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 41 of file linear_solver\&.C\&.
+.PP
+References libMesh::EIGEN_SOLVERS, libMesh::err, libMesh::LASPACK_SOLVERS, libMesh::PETSC_SOLVERS, and libMesh::TRILINOS_SOLVERS\&.
+.PP
+Referenced by libMesh::ImplicitSystem::get_linear_solver()\&.
+.PP
+.nf
+43 {
+44   // Build the appropriate solver
+45   switch (solver_package)
+46     {
+47 
+48 
+49 #ifdef LIBMESH_HAVE_LASPACK
+50     case LASPACK_SOLVERS:
+51       {
+52         AutoPtr<LinearSolver<T> > ap(new LaspackLinearSolver<T>(comm));
+53         return ap;
+54       }
+55 #endif
+56 
+57 
+58 #ifdef LIBMESH_HAVE_PETSC
+59     case PETSC_SOLVERS:
+60       {
+61         AutoPtr<LinearSolver<T> > ap(new PetscLinearSolver<T>(comm));
+62         return ap;
+63       }
+64 #endif
+65 
+66 
+67 #ifdef LIBMESH_HAVE_TRILINOS
+68     case TRILINOS_SOLVERS:
+69       {
+70         AutoPtr<LinearSolver<T> > ap(new AztecLinearSolver<T>(comm));
+71         return ap;
+72       }
+73 #endif
+74 
+75 
+76 #ifdef LIBMESH_HAVE_EIGEN
+77     case EIGEN_SOLVERS:
+78       {
+79         AutoPtr<LinearSolver<T> > ap(new EigenSparseLinearSolver<T>(comm));
+80         return ap;
+81       }
+82 #endif
+83 
+84     default:
+85       libMesh::err << "ERROR:  Unrecognized solver package: "
+86                    << solver_package
+87                    << std::endl;
+88       libmesh_error();
+89     }
+90 
+91   AutoPtr<LinearSolver<T> > ap(NULL);
+92   return ap;
+93 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::clear ()\fC [virtual]\fP"
+Release all memory and clear data structures\&. 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 113 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, libMesh::BLOCK_JACOBI_PRECOND, libMesh::GMRES, libMesh::ierr, libMesh::ILU_PRECOND, libMesh::initialized(), and libMesh::n_processors()\&.
+.PP
+.nf
+114 {
+115   if (this->initialized())
+116     {
+117       /* If we were restricted to some subset, this restriction must
+118          be removed and the subset index set destroyed\&.  */
+119       if(_restrict_solve_to_is!=NULL)
+120         {
+121           PetscErrorCode ierr = LibMeshISDestroy(&_restrict_solve_to_is);
+122           LIBMESH_CHKERRABORT(ierr);
+123           _restrict_solve_to_is = NULL;
+124         }
+125 
+126       if(_restrict_solve_to_is_complement!=NULL)
+127         {
+128           PetscErrorCode ierr = LibMeshISDestroy(&_restrict_solve_to_is_complement);
+129           LIBMESH_CHKERRABORT(ierr);
+130           _restrict_solve_to_is_complement = NULL;
+131         }
+132 
+133       this->_is_initialized = false;
+134 
+135       PetscErrorCode ierr=0;
+136 
+137 #if PETSC_VERSION_LESS_THAN(2,2,0)
+138 
+139       // 2\&.1\&.x & earlier style
+140       ierr = SLESDestroy(_sles);
+141       LIBMESH_CHKERRABORT(ierr);
+142 
+143 #else
+144 
+145       // 2\&.2\&.0 & newer style
+146       ierr = LibMeshKSPDestroy(&_ksp);
+147       LIBMESH_CHKERRABORT(ierr);
+148 
+149 #endif
+150 
+151 
+152       // Mimic PETSc default solver and preconditioner
+153       this->_solver_type           = GMRES;
+154 
+155       if(!this->_preconditioner)
+156         {
+157           if (this->n_processors() == 1)
+158             this->_preconditioner_type = ILU_PRECOND;
+159           else
+160             this->_preconditioner_type = BLOCK_JACOBI_PRECOND;
+161         }
+162     }
+163 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T > \fBLinearConvergenceReason\fP \fBlibMesh::PetscLinearSolver\fP< T >::get_converged_reason () const\fC [virtual]\fP"
+Returns the solver's convergence flag 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 1868 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::CONVERGED_ATOL, libMesh::CONVERGED_ATOL_NORMAL, libMesh::CONVERGED_CG_CONSTRAINED, libMesh::CONVERGED_CG_NEG_CURVE, libMesh::CONVERGED_HAPPY_BREAKDOWN, libMesh::CONVERGED_ITERATING, libMesh::CONVERGED_ITS, libMesh::CONVERGED_RTOL, libMesh::CONVERGED_RTOL_NORMAL, libMesh::CONVERGED_STEP_LENGTH, libMesh::DIVERGED_BREAKDOWN, libMesh::DIVERGED_BREAKDOWN_BICG, libMesh::DIVERGED_DTOL, libMesh::DIVERGED_INDEFINITE_MAT, libMesh::DIVERGED_INDEFINITE_PC, libMesh::DIVERGED_ITS, libMesh::DIVERGED_NAN, libMesh::DIVERGED_NONSYMMETRIC, libMesh::DIVERGED_NULL, libMesh::err, and libMesh::UNKNOWN_FLAG\&.
+.PP
+.nf
+1869 {
+1870   KSPConvergedReason reason;
+1871   KSPGetConvergedReason(_ksp, &reason);
+1872 
+1873   switch(reason)
+1874     {
+1875 #if !PETSC_VERSION_LESS_THAN(3,2,0)
+1876     case KSP_CONVERGED_RTOL_NORMAL     : return CONVERGED_RTOL_NORMAL;
+1877     case KSP_CONVERGED_ATOL_NORMAL     : return CONVERGED_ATOL_NORMAL;
+1878 #endif
+1879     case KSP_CONVERGED_RTOL            : return CONVERGED_RTOL;
+1880     case KSP_CONVERGED_ATOL            : return CONVERGED_ATOL;
+1881     case KSP_CONVERGED_ITS             : return CONVERGED_ITS;
+1882     case KSP_CONVERGED_CG_NEG_CURVE    : return CONVERGED_CG_NEG_CURVE;
+1883     case KSP_CONVERGED_CG_CONSTRAINED  : return CONVERGED_CG_CONSTRAINED;
+1884     case KSP_CONVERGED_STEP_LENGTH     : return CONVERGED_STEP_LENGTH;
+1885     case KSP_CONVERGED_HAPPY_BREAKDOWN : return CONVERGED_HAPPY_BREAKDOWN;
+1886     case KSP_DIVERGED_NULL             : return DIVERGED_NULL;
+1887     case KSP_DIVERGED_ITS              : return DIVERGED_ITS;
+1888     case KSP_DIVERGED_DTOL             : return DIVERGED_DTOL;
+1889     case KSP_DIVERGED_BREAKDOWN        : return DIVERGED_BREAKDOWN;
+1890     case KSP_DIVERGED_BREAKDOWN_BICG   : return DIVERGED_BREAKDOWN_BICG;
+1891     case KSP_DIVERGED_NONSYMMETRIC     : return DIVERGED_NONSYMMETRIC;
+1892     case KSP_DIVERGED_INDEFINITE_PC    : return DIVERGED_INDEFINITE_PC;
+1893 #if PETSC_VERSION_LESS_THAN(3,4,0)
+1894     case KSP_DIVERGED_NAN              : return DIVERGED_NAN;
+1895 #else
+1896     case KSP_DIVERGED_NANORINF         : return DIVERGED_NAN;
+1897 #endif
+1898     case KSP_DIVERGED_INDEFINITE_MAT   : return DIVERGED_INDEFINITE_MAT;
+1899     case KSP_CONVERGED_ITERATING       : return CONVERGED_ITERATING;
+1900     default :
+1901       libMesh::err << "Unknown convergence flag!" << std::endl;
+1902       return UNKNOWN_FLAG;
+1903     }
+1904 }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::PetscLinearSolver\fP< T >::get_initial_residual ()"
+Returns just the initial residual for the solve just completed with this interface\&. Use this method instead of the one above if you just want the starting residual and not the entire history\&. 
+.PP
+Definition at line 1780 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::err, and libMesh::ierr\&.
+.PP
+.nf
+1781 {
+1782   PetscErrorCode ierr = 0;
+1783   PetscInt its  = 0;
+1784 
+1785   // Fill the residual history vector with the residual norms
+1786   // Note that GetResidualHistory() does not copy any values, it
+1787   // simply sets the pointer p\&.  Note that for some Krylov subspace
+1788   // methods, the number of residuals returned in the history
+1789   // vector may be different from what you are expecting\&.  For
+1790   // example, TFQMR returns two residual values per iteration step\&.
+1791   PetscReal* p;
+1792   ierr = KSPGetResidualHistory(_ksp, &p, &its);
+1793   LIBMESH_CHKERRABORT(ierr);
+1794 
+1795   // Check no residual history
+1796   if (its == 0)
+1797     {
+1798       libMesh::err << "No iterations have been performed, returning 0\&." << std::endl;
+1799       return 0\&.;
+1800     }
+1801 
+1802   // Otherwise, return the value pointed to by p\&.
+1803   return *p;
+1804 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::get_residual_history (std::vector< double > &hist)"
+Fills the input vector with the sequence of residual norms from the latest iterative solve\&. 
+.PP
+Definition at line 1747 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::ierr\&.
+.PP
+.nf
+1748 {
+1749   PetscErrorCode ierr = 0;
+1750   PetscInt its  = 0;
+1751 
+1752   // Fill the residual history vector with the residual norms
+1753   // Note that GetResidualHistory() does not copy any values, it
+1754   // simply sets the pointer p\&.  Note that for some Krylov subspace
+1755   // methods, the number of residuals returned in the history
+1756   // vector may be different from what you are expecting\&.  For
+1757   // example, TFQMR returns two residual values per iteration step\&.
+1758   PetscReal* p;
+1759   ierr = KSPGetResidualHistory(_ksp, &p, &its);
+1760   LIBMESH_CHKERRABORT(ierr);
+1761 
+1762   // Check for early return
+1763   if (its == 0) return;
+1764 
+1765   // Create space to store the result
+1766   hist\&.resize(its);
+1767 
+1768   // Copy history into the vector provided by the user\&.
+1769   for (PetscInt i=0; i<its; ++i)
+1770     {
+1771       hist[i] = *p;
+1772       p++;
+1773     }
+1774 }
+.fi
+.SS "template<typename T > bool \fBlibMesh::LinearSolver\fP< T >::get_same_preconditioner ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 306 of file linear_solver\&.h\&.
+.PP
+.nf
+307 {
+308   return same_preconditioner;
+309 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::init (const char *name = \fCNULL\fP)\fC [virtual]\fP"
+Initialize data structures if not done so already\&. Assigns a name, which is turned into an underscore-separated prefix for the underlying KSP object\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 168 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::__libmesh_petsc_preconditioner_apply(), libMesh::__libmesh_petsc_preconditioner_setup(), libMesh::libMeshPrivateData::_is_initialized, libMesh::comm, libMesh::ierr, libMesh::initialized(), and libMesh::PetscPreconditioner< T >::set_petsc_preconditioner_type()\&.
+.PP
+Referenced by libMesh::PetscLinearSolver< T >::ksp(), and libMesh::PetscLinearSolver< T >::pc()\&.
+.PP
+.nf
+169 {
+170   // Initialize the data structures if not done so already\&.
+171   if (!this->initialized())
+172     {
+173       this->_is_initialized = true;
+174 
+175       PetscErrorCode ierr=0;
+176 
+177       // 2\&.1\&.x & earlier style
+178 #if PETSC_VERSION_LESS_THAN(2,2,0)
+179 
+180       // Create the linear solver context
+181       ierr = SLESCreate (this->comm()\&.get(), &_sles);
+182       LIBMESH_CHKERRABORT(ierr);
+183 
+184       // Create the Krylov subspace & preconditioner contexts
+185       ierr = SLESGetKSP       (_sles, &_ksp);
+186       LIBMESH_CHKERRABORT(ierr);
+187       ierr = SLESGetPC        (_sles, &_pc);
+188       LIBMESH_CHKERRABORT(ierr);
+189 
+190       // Set user-specified  solver and preconditioner types
+191       this->set_petsc_solver_type();
+192 
+193       // Set the options from user-input
+194       // Set runtime options, e\&.g\&.,
+195       //      -ksp_type <type> -pc_type <type> -ksp_monitor -ksp_rtol <rtol>
+196       //  These options will override those specified above as long as
+197       //  SLESSetFromOptions() is called _after_ any other customization
+198       //  routines\&.
+199 
+200       ierr = SLESSetFromOptions (_sles);
+201       LIBMESH_CHKERRABORT(ierr);
+202 
+203       // 2\&.2\&.0 & newer style
+204 #else
+205 
+206       // Create the linear solver context
+207       ierr = KSPCreate (this->comm()\&.get(), &_ksp);
+208       LIBMESH_CHKERRABORT(ierr);
+209 
+210       if (name)
+211         {
+212           ierr = KSPSetOptionsPrefix(_ksp, name);
+213           LIBMESH_CHKERRABORT(ierr);
+214         }
+215 
+216       // Create the preconditioner context
+217       ierr = KSPGetPC        (_ksp, &_pc);
+218       LIBMESH_CHKERRABORT(ierr);
+219 
+220       // Set user-specified  solver and preconditioner types
+221       this->set_petsc_solver_type();
+222 
+223       // Set the options from user-input
+224       // Set runtime options, e\&.g\&.,
+225       //      -ksp_type <type> -pc_type <type> -ksp_monitor -ksp_rtol <rtol>
+226       //  These options will override those specified above as long as
+227       //  KSPSetFromOptions() is called _after_ any other customization
+228       //  routines\&.
+229 
+230       ierr = KSPSetFromOptions (_ksp);
+231       LIBMESH_CHKERRABORT(ierr);
+232 
+233       // Not sure if this is necessary, or if it is already handled by KSPSetFromOptions?
+234       // NOT NECESSARY!!!!
+235       //ierr = PCSetFromOptions (_pc);
+236       //LIBMESH_CHKERRABORT(ierr);
+237 
+238 
+239 #endif
+240 
+241       // Have the Krylov subspace method use our good initial guess
+242       // rather than 0, unless the user requested a KSPType of
+243       // preonly, which complains if asked to use initial guesses\&.
+244 #if PETSC_VERSION_LESS_THAN(3,0,0) || !PETSC_RELEASE_LESS_THAN(3,4,0)
+245       // Pre-3\&.0 and petsc-dev (as of October 2012) use non-const versions
+246       KSPType ksp_type;
+247 #else
+248       const KSPType ksp_type;
+249 #endif
+250 
+251       ierr = KSPGetType (_ksp, &ksp_type);
+252       LIBMESH_CHKERRABORT(ierr);
+253 
+254       if (strcmp(ksp_type, "preonly"))
+255         {
+256           ierr = KSPSetInitialGuessNonzero (_ksp, PETSC_TRUE);
+257           LIBMESH_CHKERRABORT(ierr);
+258         }
+259 
+260       // Notify PETSc of location to store residual history\&.
+261       // This needs to be called before any solves, since
+262       // it sets the residual history length to zero\&.  The default
+263       // behavior is for PETSc to allocate (internally) an array
+264       // of size 1000 to hold the residual norm history\&.
+265       ierr = KSPSetResidualHistory(_ksp,
+266                                    PETSC_NULL,   // pointer to the array which holds the history
+267                                    PETSC_DECIDE, // size of the array holding the history
+268                                    PETSC_TRUE);  // Whether or not to reset the history for each solve\&.
+269       LIBMESH_CHKERRABORT(ierr);
+270 
+271       PetscPreconditioner<T>::set_petsc_preconditioner_type(this->_preconditioner_type,_pc);
+272 
+273       //If there is a preconditioner object we need to set the internal setup and apply routines
+274       if(this->_preconditioner)
+275         {
+276           this->_preconditioner->init();
+277           PCShellSetContext(_pc,(void*)this->_preconditioner);
+278           PCShellSetSetUp(_pc,__libmesh_petsc_preconditioner_setup);
+279           PCShellSetApply(_pc,__libmesh_petsc_preconditioner_apply);
+280         }
+281     }
+282 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::init (\fBPetscMatrix\fP< T > *matrix, const char *name = \fCNULL\fP)"
+Initialize data structures if not done so already plus much more 
+.PP
+Definition at line 286 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::__libmesh_petsc_preconditioner_apply(), libMesh::__libmesh_petsc_preconditioner_setup(), libMesh::libMeshPrivateData::_is_initialized, libMesh::comm, libMesh::ierr, libMesh::initialized(), libMesh::PetscMatrix< T >::mat(), and libMesh::PetscPreconditioner< T >::set_petsc_preconditioner_type()\&.
+.PP
+.nf
+288 {
+289   // Initialize the data structures if not done so already\&.
+290   if (!this->initialized())
+291     {
+292       this->_is_initialized = true;
+293 
+294       PetscErrorCode ierr=0;
+295 
+296       // 2\&.1\&.x & earlier style
+297 #if PETSC_VERSION_LESS_THAN(2,2,0)
+298 
+299       // Create the linear solver context
+300       ierr = SLESCreate (this->comm()\&.get(), &_sles);
+301       LIBMESH_CHKERRABORT(ierr);
+302 
+303       // Create the Krylov subspace & preconditioner contexts
+304       ierr = SLESGetKSP       (_sles, &_ksp);
+305       LIBMESH_CHKERRABORT(ierr);
+306       ierr = SLESGetPC        (_sles, &_pc);
+307       LIBMESH_CHKERRABORT(ierr);
+308 
+309       // Set user-specified  solver and preconditioner types
+310       this->set_petsc_solver_type();
+311 
+312       // Set the options from user-input
+313       // Set runtime options, e\&.g\&.,
+314       //      -ksp_type <type> -pc_type <type> -ksp_monitor -ksp_rtol <rtol>
+315       //  These options will override those specified above as long as
+316       //  SLESSetFromOptions() is called _after_ any other customization
+317       //  routines\&.
+318 
+319       ierr = SLESSetFromOptions (_sles);
+320       LIBMESH_CHKERRABORT(ierr);
+321 
+322       // 2\&.2\&.0 & newer style
+323 #else
+324 
+325       // Create the linear solver context
+326       ierr = KSPCreate (this->comm()\&.get(), &_ksp);
+327       LIBMESH_CHKERRABORT(ierr);
+328 
+329       if (name)
+330         {
+331           ierr = KSPSetOptionsPrefix(_ksp, name);
+332           LIBMESH_CHKERRABORT(ierr);
+333         }
+334 
+335       //ierr = PCCreate (this->comm()\&.get(), &_pc);
+336       //     LIBMESH_CHKERRABORT(ierr);
+337 
+338       // Create the preconditioner context
+339       ierr = KSPGetPC        (_ksp, &_pc);
+340       LIBMESH_CHKERRABORT(ierr);
+341 
+342       // Set operators\&. The input matrix works as the preconditioning matrix
+343 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+344       ierr = KSPSetOperators(_ksp, matrix->mat(), matrix->mat(),DIFFERENT_NONZERO_PATTERN);
+345 #else
+346       ierr = KSPSetOperators(_ksp, matrix->mat(), matrix->mat());
+347 #endif
+348       LIBMESH_CHKERRABORT(ierr);
+349 
+350       // Set user-specified  solver and preconditioner types
+351       this->set_petsc_solver_type();
+352 
+353       // Set the options from user-input
+354       // Set runtime options, e\&.g\&.,
+355       //      -ksp_type <type> -pc_type <type> -ksp_monitor -ksp_rtol <rtol>
+356       //  These options will override those specified above as long as
+357       //  KSPSetFromOptions() is called _after_ any other customization
+358       //  routines\&.
+359 
+360       ierr = KSPSetFromOptions (_ksp);
+361       LIBMESH_CHKERRABORT(ierr);
+362 
+363       // Not sure if this is necessary, or if it is already handled by KSPSetFromOptions?
+364       // NOT NECESSARY!!!!
+365       //ierr = PCSetFromOptions (_pc);
+366       //LIBMESH_CHKERRABORT(ierr);
+367 
+368 
+369 #endif
+370 
+371       // Have the Krylov subspace method use our good initial guess
+372       // rather than 0, unless the user requested a KSPType of
+373       // preonly, which complains if asked to use initial guesses\&.
+374 #if PETSC_VERSION_LESS_THAN(3,0,0) || !PETSC_RELEASE_LESS_THAN(3,4,0)
+375       KSPType ksp_type;
+376 #else
+377       const KSPType ksp_type;
+378 #endif
+379 
+380       ierr = KSPGetType (_ksp, &ksp_type);
+381       LIBMESH_CHKERRABORT(ierr);
+382 
+383       if (strcmp(ksp_type, "preonly"))
+384         {
+385           ierr = KSPSetInitialGuessNonzero (_ksp, PETSC_TRUE);
+386           LIBMESH_CHKERRABORT(ierr);
+387         }
+388 
+389       // Notify PETSc of location to store residual history\&.
+390       // This needs to be called before any solves, since
+391       // it sets the residual history length to zero\&.  The default
+392       // behavior is for PETSc to allocate (internally) an array
+393       // of size 1000 to hold the residual norm history\&.
+394       ierr = KSPSetResidualHistory(_ksp,
+395                                    PETSC_NULL,   // pointer to the array which holds the history
+396                                    PETSC_DECIDE, // size of the array holding the history
+397                                    PETSC_TRUE);  // Whether or not to reset the history for each solve\&.
+398       LIBMESH_CHKERRABORT(ierr);
+399 
+400       PetscPreconditioner<T>::set_petsc_preconditioner_type(this->_preconditioner_type,_pc);
+401       if(this->_preconditioner)
+402         {
+403           this->_preconditioner->set_matrix(*matrix);
+404           this->_preconditioner->init();
+405           PCShellSetContext(_pc,(void*)this->_preconditioner);
+406           PCShellSetSetUp(_pc,__libmesh_petsc_preconditioner_setup);
+407           PCShellSetApply(_pc,__libmesh_petsc_preconditioner_apply);
+408         }
+409     }
+410 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::init_names (const \fBSystem\fP &sys)\fC [virtual]\fP"
+Apply names to the system to be solved\&. This sets an option prefix from the system name and sets field names from the system's variable names\&.
+.PP
+Since field names are applied to DoF numberings, this method must be called again after any \fBSystem\fP reinit\&. 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 416 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::pc, and libMesh::petsc_auto_fieldsplit()\&.
+.PP
+.nf
+417 {
+418   petsc_auto_fieldsplit(this->pc(), sys);
+419 }
+.fi
+.SS "template<typename T> bool \fBlibMesh::LinearSolver\fP< T >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the data structures are initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file linear_solver\&.h\&.
+.PP
+.nf
+86 { return _is_initialized; }
+.fi
+.SS "template<typename T > KSP \fBlibMesh::PetscLinearSolver\fP< T >::ksp ()\fC [inline]\fP"
+Returns the raw PETSc ksp context pointer\&. This is useful if you are for example setting a custom convergence test with KSPSetConvergenceTest()\&. 
+.PP
+Definition at line 234 of file petsc_linear_solver\&.h\&.
+.PP
+References libMesh::PetscLinearSolver< T >::_ksp, and libMesh::PetscLinearSolver< T >::init()\&.
+.PP
+.nf
+234 { this->init(); return _ksp; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T > \fBPC\fP \fBlibMesh::PetscLinearSolver\fP< T >::pc ()\fC [inline]\fP"
+Returns the raw PETSc preconditioner context pointer\&. This allows you to specify the PCShellSetApply() and PCShellSetSetUp() functions if you desire\&. Just don't do anything crazy like calling PCDestroy()! 
+.PP
+Definition at line 227 of file petsc_linear_solver\&.h\&.
+.PP
+References libMesh::PetscLinearSolver< T >::_pc, and libMesh::PetscLinearSolver< T >::init()\&.
+.PP
+.nf
+227 { this->init(); return _pc; }
+.fi
+.SS "template<typename T > \fBPreconditionerType\fP \fBlibMesh::LinearSolver\fP< T >::preconditioner_type () const\fC [inherited]\fP"
+Returns the type of preconditioner to use\&. 
+.PP
+Definition at line 97 of file linear_solver\&.C\&.
+.PP
+.nf
+98 {
+99   if(_preconditioner)
+100     return _preconditioner->type();
+101 
+102   return _preconditioner_type;
+103 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LinearSolver\fP< T >::print_converged_reason () const\fC [virtual]\fP, \fC [inherited]\fP"
+Prints a useful message about why the latest linear solve con(di)verged\&. 
+.PP
+Reimplemented in \fBlibMesh::LaspackLinearSolver< T >\fP, and \fBlibMesh::EigenSparseLinearSolver< T >\fP\&.
+.PP
+Definition at line 178 of file linear_solver\&.C\&.
+.PP
+References libMesh::Utility::enum_to_string(), and libMesh::out\&.
+.PP
+.nf
+179 {
+180   LinearConvergenceReason reason = this->get_converged_reason();
+181   libMesh::out << "Linear solver convergence/divergence reason: " << Utility::enum_to_string(reason) << std::endl;
+182 }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::restrict_solve_to (const std::vector< unsigned int > *constdofs, const \fBSubsetSolveMode\fPsubset_solve_mode = \fC\fBSUBSET_ZERO\fP\fP)\fC [virtual]\fP"
+After calling this method, all successive solves will be restricted to the given set of dofs, which must contain local dofs on each processor only and not contain any duplicates\&. This mode can be disabled by calling this method with \fCdofs\fP being a \fCNULL\fP pointer\&. 
+.PP
+Reimplemented from \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 425 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::comm, libMesh::ierr, and PETSC_OWN_POINTER\&.
+.PP
+.nf
+427 {
+428   PetscErrorCode ierr=0;
+429 
+430   /* The preconditioner (in particular if a default preconditioner)
+431      will have to be reset\&.  We call this->clear() to do that\&.  This
+432      call will also remove and free any previous subset that may have
+433      been set before\&.  */
+434   this->clear();
+435 
+436   _subset_solve_mode = subset_solve_mode;
+437 
+438   if(dofs!=NULL)
+439     {
+440       PetscInt* petsc_dofs = NULL;
+441       ierr = PetscMalloc(dofs->size()*sizeof(PetscInt), &petsc_dofs);
+442       LIBMESH_CHKERRABORT(ierr);
+443 
+444       for(size_t i=0; i<dofs->size(); i++)
+445         {
+446           petsc_dofs[i] = (*dofs)[i];
+447         }
+448 
+449       ierr = ISCreateLibMesh(this->comm()\&.get(),dofs->size(),petsc_dofs,PETSC_OWN_POINTER,&_restrict_solve_to_is);
+450       LIBMESH_CHKERRABORT(ierr);
+451     }
+452 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LinearSolver\fP< T >::reuse_preconditioner (boolreuse_flag)\fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 131 of file linear_solver\&.C\&.
+.PP
+Referenced by libMesh::ImplicitSystem::disable_cache()\&.
+.PP
+.nf
+132 {
+133   same_preconditioner = reuse_flag;
+134 }
+.fi
+.SS "template<typename T > void \fBlibMesh::PetscLinearSolver\fP< T >::set_petsc_solver_type ()\fC [private]\fP"
+Tells PETSC to use the user-specified solver stored in \fC_solver_type\fP 
+.PP
+Definition at line 1810 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::BICG, libMesh::BICGSTAB, libMesh::CG, libMesh::CGS, libMesh::CHEBYSHEV, libMesh::CR, libMesh::Utility::enum_to_string(), libMesh::err, libMesh::GMRES, libMesh::ierr, libMesh::LSQR, libMesh::MINRES, libMesh::RICHARDSON, libMesh::TCQMR, and libMesh::TFQMR\&.
+.PP
+.nf
+1811 {
+1812   PetscErrorCode ierr = 0;
+1813 
+1814   switch (this->_solver_type)
+1815     {
+1816 
+1817     case CG:
+1818       ierr = KSPSetType (_ksp, (char*) KSPCG);         LIBMESH_CHKERRABORT(ierr); return;
+1819 
+1820     case CR:
+1821       ierr = KSPSetType (_ksp, (char*) KSPCR);         LIBMESH_CHKERRABORT(ierr); return;
+1822 
+1823     case CGS:
+1824       ierr = KSPSetType (_ksp, (char*) KSPCGS);        LIBMESH_CHKERRABORT(ierr); return;
+1825 
+1826     case BICG:
+1827       ierr = KSPSetType (_ksp, (char*) KSPBICG);       LIBMESH_CHKERRABORT(ierr); return;
+1828 
+1829     case TCQMR:
+1830       ierr = KSPSetType (_ksp, (char*) KSPTCQMR);      LIBMESH_CHKERRABORT(ierr); return;
+1831 
+1832     case TFQMR:
+1833       ierr = KSPSetType (_ksp, (char*) KSPTFQMR);      LIBMESH_CHKERRABORT(ierr); return;
+1834 
+1835     case LSQR:
+1836       ierr = KSPSetType (_ksp, (char*) KSPLSQR);       LIBMESH_CHKERRABORT(ierr); return;
+1837 
+1838     case BICGSTAB:
+1839       ierr = KSPSetType (_ksp, (char*) KSPBCGS);       LIBMESH_CHKERRABORT(ierr); return;
+1840 
+1841     case MINRES:
+1842       ierr = KSPSetType (_ksp, (char*) KSPMINRES);     LIBMESH_CHKERRABORT(ierr); return;
+1843 
+1844     case GMRES:
+1845       ierr = KSPSetType (_ksp, (char*) KSPGMRES);      LIBMESH_CHKERRABORT(ierr); return;
+1846 
+1847     case RICHARDSON:
+1848       ierr = KSPSetType (_ksp, (char*) KSPRICHARDSON); LIBMESH_CHKERRABORT(ierr); return;
+1849 
+1850     case CHEBYSHEV:
+1851 #if defined(LIBMESH_HAVE_PETSC) && PETSC_VERSION_LESS_THAN(3,3,0)
+1852       ierr = KSPSetType (_ksp, (char*) KSPCHEBYCHEV);  LIBMESH_CHKERRABORT(ierr); return;
+1853 #else
+1854       ierr = KSPSetType (_ksp, (char*) KSPCHEBYSHEV);  LIBMESH_CHKERRABORT(ierr); return;
+1855 #endif
+1856 
+1857 
+1858     default:
+1859       libMesh::err << "ERROR:  Unsupported PETSC Solver: "
+1860                    << Utility::enum_to_string(this->_solver_type) << std::endl
+1861                    << "Continuing with PETSC defaults" << std::endl;
+1862     }
+1863 }
+.fi
+.SS "template<typename T > void \fBlibMesh::LinearSolver\fP< T >::set_preconditioner_type (const \fBPreconditionerType\fPpct)\fC [inherited]\fP"
+Sets the type of preconditioner to use\&. 
+.PP
+Definition at line 107 of file linear_solver\&.C\&.
+.PP
+.nf
+108 {
+109   if(_preconditioner)
+110     _preconditioner->set_type(pct);
+111   else
+112     _preconditioner_type = pct;
+113 }
+.fi
+.SS "template<typename T> void \fBlibMesh::LinearSolver\fP< T >::set_solver_type (const \fBSolverType\fPst)\fC [inline]\fP, \fC [inherited]\fP"
+Sets the type of solver to use\&. 
+.PP
+Definition at line 117 of file linear_solver\&.h\&.
+.PP
+.nf
+118   { _solver_type = st; }
+.fi
+.SS "template<typename T > std::pair<unsigned int, \fBReal\fP> \fBlibMesh::PetscLinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &matrix_in, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const doubletol, const unsigned intm_its)\fC [inline]\fP, \fC [virtual]\fP"
+Call the Petsc solver\&. It calls the method below, using the same matrix for the system and preconditioner matrices\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 154 of file petsc_linear_solver\&.h\&.
+.PP
+.nf
+159   {
+160     return this->solve(matrix_in, matrix_in, solution_in, rhs_in, tol, m_its);
+161   }
+.fi
+.SS "template<typename T> std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &sol, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intn_iter)\fC [inline]\fP, \fC [inherited]\fP"
+This function calls the solver '_solver_type' preconditioned with the '_preconditioner_type' preconditioner\&. The preconditioning matrix is used if it is provided, or the system matrix is used if \fCprecond_matrix\fP is null 
+.PP
+Definition at line 314 of file linear_solver\&.h\&.
+.PP
+.nf
+320 {
+321   if (pc_mat)
+322     return this->solve(mat, *pc_mat, sol, rhs, tol, n_iter);
+323   else
+324     return this->solve(mat, sol, rhs, tol, n_iter);
+325 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::PetscLinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &matrix, \fBSparseMatrix\fP< T > &preconditioner, \fBNumericVector\fP< T > &solution, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This method allows you to call a linear solver while specifying the matrix to use as the (left) preconditioning matrix\&. Note that the linear solver will not compute a preconditioner in this case, and will instead premultiply by the matrix you provide\&.
+.PP
+In PETSc, this is accomplished by calling
+.PP
+PCSetType(_pc, PCMAT);
+.PP
+before invoking KSPSolve()\&. Note: this functionality is not implemented in the \fBLinearSolver\fP class since there is not a built-in analog to this method for LasPack -- You could probably implement it by hand if you wanted\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 458 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::PetscMatrix< T >::init(), libMesh::NumericVector< T >::local_size(), libMesh::PetscMatrix< T >::mat(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::SUBSET_COPY_RHS, libMesh::SUBSET_DONT_TOUCH, and libMesh::SUBSET_ZERO\&.
+.PP
+.nf
+464 {
+465   START_LOG("solve()", "PetscLinearSolver");
+466 
+467   // Make sure the data passed in are really of Petsc types
+468   PetscMatrix<T>* matrix   = libmesh_cast_ptr<PetscMatrix<T>*>(&matrix_in);
+469   PetscMatrix<T>* precond  = libmesh_cast_ptr<PetscMatrix<T>*>(&precond_in);
+470   PetscVector<T>* solution = libmesh_cast_ptr<PetscVector<T>*>(&solution_in);
+471   PetscVector<T>* rhs      = libmesh_cast_ptr<PetscVector<T>*>(&rhs_in);
+472 
+473   this->init (matrix);
+474 
+475   PetscErrorCode ierr=0;
+476   PetscInt its=0, max_its = static_cast<PetscInt>(m_its);
+477   PetscReal final_resid=0\&.;
+478 
+479   // Close the matrices and vectors in case this wasn't already done\&.
+480   matrix->close ();
+481   precond->close ();
+482   solution->close ();
+483   rhs->close ();
+484 
+485   //   // If matrix != precond, then this means we have specified a
+486   //   // special preconditioner, so reset preconditioner type to PCMAT\&.
+487   //   if (matrix != precond)
+488   //     {
+489   //       this->_preconditioner_type = USER_PRECOND;
+490   //       this->set_petsc_preconditioner_type ();
+491   //     }
+492 
+493   // 2\&.1\&.x & earlier style
+494 #if PETSC_VERSION_LESS_THAN(2,2,0)
+495 
+496   if(_restrict_solve_to_is!=NULL)
+497     {
+498       libmesh_not_implemented();
+499     }
+500 
+501   // Set operators\&. The input matrix works as the preconditioning matrix
+502   ierr = SLESSetOperators(_sles, matrix->mat(), precond->mat(),
+503                           DIFFERENT_NONZERO_PATTERN);
+504   LIBMESH_CHKERRABORT(ierr);
+505 
+506   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+507   // tolerance for the relative residual & leave the others at default values\&.
+508   ierr = KSPSetTolerances (_ksp, tol, PETSC_DEFAULT,
+509                            PETSC_DEFAULT, max_its);
+510   LIBMESH_CHKERRABORT(ierr);
+511 
+512 
+513   // Solve the linear system
+514   ierr = SLESSolve (_sles, rhs->vec(), solution->vec(), &its);
+515   LIBMESH_CHKERRABORT(ierr);
+516 
+517 
+518   // Get the norm of the final residual to return to the user\&.
+519   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+520   LIBMESH_CHKERRABORT(ierr);
+521 
+522   // 2\&.2\&.0
+523 #elif PETSC_VERSION_LESS_THAN(2,2,1)
+524 
+525   if(_restrict_solve_to_is!=NULL)
+526     {
+527       libmesh_not_implemented();
+528     }
+529 
+530   // Set operators\&. The input matrix works as the preconditioning matrix
+531   //ierr = KSPSetOperators(_ksp, matrix->mat(), precond->mat(),
+532   // SAME_NONZERO_PATTERN);
+533   //       LIBMESH_CHKERRABORT(ierr);
+534 
+535 
+536   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+537   // tolerance for the relative residual & leave the others at default values\&.
+538   // Convergence is detected at iteration k if
+539   // ||r_k||_2 < max(rtol*||b||_2 , abstol)
+540   // where r_k is the residual vector and b is the right-hand side\&.  Note that
+541   // it is the *maximum* of the two values, the larger of which will almost
+542   // always be rtol*||b||_2\&.
+543   ierr = KSPSetTolerances (_ksp,
+544                            tol,           // rtol   = relative decrease in residual  (1\&.e-5)
+545                            PETSC_DEFAULT, // abstol = absolute convergence tolerance (1\&.e-50)
+546                            PETSC_DEFAULT, // dtol   = divergence tolerance           (1\&.e+5)
+547                            max_its);
+548   LIBMESH_CHKERRABORT(ierr);
+549 
+550 
+551   // Set the solution vector to use
+552   ierr = KSPSetSolution (_ksp, solution->vec());
+553   LIBMESH_CHKERRABORT(ierr);
+554 
+555   // Set the RHS vector to use
+556   ierr = KSPSetRhs (_ksp, rhs->vec());
+557   LIBMESH_CHKERRABORT(ierr);
+558 
+559   // Solve the linear system
+560   ierr = KSPSolve (_ksp);
+561   LIBMESH_CHKERRABORT(ierr);
+562 
+563   // Get the number of iterations required for convergence
+564   ierr = KSPGetIterationNumber (_ksp, &its);
+565   LIBMESH_CHKERRABORT(ierr);
+566 
+567   // Get the norm of the final residual to return to the user\&.
+568   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+569   LIBMESH_CHKERRABORT(ierr);
+570 
+571   // 2\&.2\&.1 & newer style
+572 #else
+573 
+574   Mat submat = NULL;
+575   Mat subprecond = NULL;
+576   Vec subrhs = NULL;
+577   Vec subsolution = NULL;
+578   VecScatter scatter = NULL;
+579   PetscMatrix<Number>* subprecond_matrix = NULL;
+580 
+581   // Set operators\&.  Also restrict rhs and solution vector to
+582   // subdomain if neccessary\&.
+583   if(_restrict_solve_to_is!=NULL)
+584     {
+585       size_t is_local_size = this->_restrict_solve_to_is_local_size();
+586 
+587       ierr = VecCreate(this->comm()\&.get(),&subrhs);
+588       LIBMESH_CHKERRABORT(ierr);
+589       ierr = VecSetSizes(subrhs,is_local_size,PETSC_DECIDE);
+590       LIBMESH_CHKERRABORT(ierr);
+591       ierr = VecSetFromOptions(subrhs);
+592       LIBMESH_CHKERRABORT(ierr);
+593 
+594       ierr = VecCreate(this->comm()\&.get(),&subsolution);
+595       LIBMESH_CHKERRABORT(ierr);
+596       ierr = VecSetSizes(subsolution,is_local_size,PETSC_DECIDE);
+597       LIBMESH_CHKERRABORT(ierr);
+598       ierr = VecSetFromOptions(subsolution);
+599       LIBMESH_CHKERRABORT(ierr);
+600 
+601       ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is, subrhs,NULL, &scatter);
+602       LIBMESH_CHKERRABORT(ierr);
+603 
+604       ierr = VecScatterBegin(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+605       LIBMESH_CHKERRABORT(ierr);
+606       ierr = VecScatterEnd(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+607       LIBMESH_CHKERRABORT(ierr);
+608 
+609       ierr = VecScatterBegin(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+610       LIBMESH_CHKERRABORT(ierr);
+611       ierr = VecScatterEnd(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+612       LIBMESH_CHKERRABORT(ierr);
+613 
+614 #if PETSC_VERSION_LESS_THAN(3,1,0)
+615       ierr = MatGetSubMatrix(matrix->mat(),
+616                              _restrict_solve_to_is,_restrict_solve_to_is,
+617                              PETSC_DECIDE,MAT_INITIAL_MATRIX,&submat);
+618       LIBMESH_CHKERRABORT(ierr);
+619       ierr = MatGetSubMatrix(precond->mat(),
+620                              _restrict_solve_to_is,_restrict_solve_to_is,
+621                              PETSC_DECIDE,MAT_INITIAL_MATRIX,&subprecond);
+622       LIBMESH_CHKERRABORT(ierr);
+623 #else
+624       ierr = MatGetSubMatrix(matrix->mat(),
+625                              _restrict_solve_to_is,_restrict_solve_to_is,
+626                              MAT_INITIAL_MATRIX,&submat);
+627       LIBMESH_CHKERRABORT(ierr);
+628       ierr = MatGetSubMatrix(precond->mat(),
+629                              _restrict_solve_to_is,_restrict_solve_to_is,
+630                              MAT_INITIAL_MATRIX,&subprecond);
+631       LIBMESH_CHKERRABORT(ierr);
+632 #endif
+633 
+634       /* Since removing columns of the matrix changes the equation
+635          system, we will now change the right hand side to compensate
+636          for this\&.  Note that this is not necessary if \p SUBSET_ZERO
+637          has been selected\&.  */
+638       if(_subset_solve_mode!=SUBSET_ZERO)
+639         {
+640           _create_complement_is(rhs_in);
+641           size_t is_complement_local_size = rhs_in\&.local_size()-is_local_size;
+642 
+643           Vec subvec1 = NULL;
+644           Mat submat1 = NULL;
+645           VecScatter scatter1 = NULL;
+646 
+647           ierr = VecCreate(this->comm()\&.get(),&subvec1);
+648           LIBMESH_CHKERRABORT(ierr);
+649           ierr = VecSetSizes(subvec1,is_complement_local_size,PETSC_DECIDE);
+650           LIBMESH_CHKERRABORT(ierr);
+651           ierr = VecSetFromOptions(subvec1);
+652           LIBMESH_CHKERRABORT(ierr);
+653 
+654           ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is_complement, subvec1,NULL, &scatter1);
+655           LIBMESH_CHKERRABORT(ierr);
+656 
+657           ierr = VecScatterBegin(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+658           LIBMESH_CHKERRABORT(ierr);
+659           ierr = VecScatterEnd(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+660           LIBMESH_CHKERRABORT(ierr);
+661 
+662           ierr = VecScale(subvec1,-1\&.0);
+663           LIBMESH_CHKERRABORT(ierr);
+664 
+665 #if PETSC_VERSION_LESS_THAN(3,1,0)
+666           ierr = MatGetSubMatrix(matrix->mat(),
+667                                  _restrict_solve_to_is,_restrict_solve_to_is_complement,
+668                                  PETSC_DECIDE,MAT_INITIAL_MATRIX,&submat1);
+669           LIBMESH_CHKERRABORT(ierr);
+670 #else
+671           ierr = MatGetSubMatrix(matrix->mat(),
+672                                  _restrict_solve_to_is,_restrict_solve_to_is_complement,
+673                                  MAT_INITIAL_MATRIX,&submat1);
+674           LIBMESH_CHKERRABORT(ierr);
+675 #endif
+676 
+677           ierr = MatMultAdd(submat1,subvec1,subrhs,subrhs);
+678           LIBMESH_CHKERRABORT(ierr);
+679 
+680           ierr = LibMeshVecScatterDestroy(&scatter1);
+681           LIBMESH_CHKERRABORT(ierr);
+682           ierr = LibMeshVecDestroy(&subvec1);
+683           LIBMESH_CHKERRABORT(ierr);
+684           ierr = LibMeshMatDestroy(&submat1);
+685           LIBMESH_CHKERRABORT(ierr);
+686         }
+687 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+688       ierr = KSPSetOperators(_ksp, submat, subprecond,
+689                              this->same_preconditioner ? SAME_PRECONDITIONER : DIFFERENT_NONZERO_PATTERN);
+690 #else
+691       ierr = KSPSetOperators(_ksp, submat, subprecond);
+692 #endif
+693       LIBMESH_CHKERRABORT(ierr);
+694 
+695       if(this->_preconditioner)
+696         {
+697           subprecond_matrix = new PetscMatrix<Number>(subprecond,
+698                                                       this->comm());
+699           this->_preconditioner->set_matrix(*subprecond_matrix);
+700           this->_preconditioner->init();
+701         }
+702     }
+703   else
+704     {
+705  #if PETSC_RELEASE_LESS_THAN(3,5,0)
+706       ierr = KSPSetOperators(_ksp, matrix->mat(), precond->mat(),
+707                              this->same_preconditioner ? SAME_PRECONDITIONER : DIFFERENT_NONZERO_PATTERN);
+708 #else
+709       ierr = KSPSetOperators(_ksp, matrix->mat(), precond->mat());
+710 #endif
+711       LIBMESH_CHKERRABORT(ierr);
+712 
+713       if(this->_preconditioner)
+714         {
+715           this->_preconditioner->set_matrix(matrix_in);
+716           this->_preconditioner->init();
+717         }
+718     }
+719 
+720   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+721   // tolerance for the relative residual & leave the others at default values\&.
+722   ierr = KSPSetTolerances (_ksp, tol, PETSC_DEFAULT,
+723                            PETSC_DEFAULT, max_its);
+724   LIBMESH_CHKERRABORT(ierr);
+725 
+726   // Solve the linear system
+727   if(_restrict_solve_to_is!=NULL)
+728     {
+729       ierr = KSPSolve (_ksp, subrhs, subsolution);
+730       LIBMESH_CHKERRABORT(ierr);
+731     }
+732   else
+733     {
+734       ierr = KSPSolve (_ksp, rhs->vec(), solution->vec());
+735       LIBMESH_CHKERRABORT(ierr);
+736     }
+737 
+738   // Get the number of iterations required for convergence
+739   ierr = KSPGetIterationNumber (_ksp, &its);
+740   LIBMESH_CHKERRABORT(ierr);
+741 
+742   // Get the norm of the final residual to return to the user\&.
+743   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+744   LIBMESH_CHKERRABORT(ierr);
+745 
+746   if(_restrict_solve_to_is!=NULL)
+747     {
+748       switch(_subset_solve_mode)
+749         {
+750         case SUBSET_ZERO:
+751           ierr = VecZeroEntries(solution->vec());
+752           LIBMESH_CHKERRABORT(ierr);
+753           break;
+754 
+755         case SUBSET_COPY_RHS:
+756           ierr = VecCopy(rhs->vec(),solution->vec());
+757           LIBMESH_CHKERRABORT(ierr);
+758           break;
+759 
+760         case SUBSET_DONT_TOUCH:
+761           /* Nothing to do here\&.  */
+762           break;
+763 
+764         }
+765       ierr = VecScatterBegin(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+766       LIBMESH_CHKERRABORT(ierr);
+767       ierr = VecScatterEnd(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+768       LIBMESH_CHKERRABORT(ierr);
+769 
+770       ierr = LibMeshVecScatterDestroy(&scatter);
+771       LIBMESH_CHKERRABORT(ierr);
+772 
+773       if(this->_preconditioner)
+774         {
+775           /* Before we delete subprecond_matrix, we should give the
+776              _preconditioner a different matrix\&.  */
+777           this->_preconditioner->set_matrix(matrix_in);
+778           this->_preconditioner->init();
+779           delete subprecond_matrix;
+780           subprecond_matrix = NULL;
+781         }
+782 
+783       ierr = LibMeshVecDestroy(&subsolution);
+784       LIBMESH_CHKERRABORT(ierr);
+785       ierr = LibMeshVecDestroy(&subrhs);
+786       LIBMESH_CHKERRABORT(ierr);
+787       ierr = LibMeshMatDestroy(&submat);
+788       LIBMESH_CHKERRABORT(ierr);
+789       ierr = LibMeshMatDestroy(&subprecond);
+790       LIBMESH_CHKERRABORT(ierr);
+791     }
+792 
+793 #endif
+794 
+795   STOP_LOG("solve()", "PetscLinearSolver");
+796   // return the # of its\&. and the final residual norm\&.
+797   return std::make_pair(its, final_resid);
+798 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::PetscLinearSolver\fP< T >::solve (const \fBShellMatrix\fP< T > &shell_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This function solves a system whose matrix is a shell matrix\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 1148 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::PetscVector< T >::close(), libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::libmesh_assert(), libMesh::NumericVector< T >::local_size(), libMesh::out, libMesh::NumericVector< T >::size(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::SUBSET_COPY_RHS, libMesh::SUBSET_DONT_TOUCH, libMesh::SUBSET_ZERO, and libMesh::PetscVector< T >::vec()\&.
+.PP
+.nf
+1153 {
+1154 
+1155 #if PETSC_VERSION_LESS_THAN(2,3,1)
+1156   // FIXME[JWP]: There will be a bunch of unused variable warnings
+1157   // for older PETScs here\&.
+1158   libMesh::out << "This method has been developed with PETSc 2\&.3\&.1\&.  "
+1159                << "No one has made it backwards compatible with older "
+1160                << "versions of PETSc so far; however, it might work "
+1161                << "without any change with some older version\&." << std::endl;
+1162   libmesh_error();
+1163   return std::make_pair(0,0\&.0);
+1164 
+1165 #else
+1166 
+1167 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1168   if(_restrict_solve_to_is!=NULL)
+1169     {
+1170       libMesh::out << "The current implementation of subset solves with "
+1171                    << "shell matrices requires PETSc version 3\&.1 or above\&.  "
+1172                    << "Older PETSc version do not support automatic "
+1173                    << "submatrix generation of shell matrices\&."
+1174                    << std::endl;
+1175       libmesh_error();
+1176     }
+1177 #endif
+1178 
+1179   START_LOG("solve()", "PetscLinearSolver");
+1180 
+1181   // Make sure the data passed in are really of Petsc types
+1182   PetscVector<T>* solution = libmesh_cast_ptr<PetscVector<T>*>(&solution_in);
+1183   PetscVector<T>* rhs      = libmesh_cast_ptr<PetscVector<T>*>(&rhs_in);
+1184 
+1185   this->init ();
+1186 
+1187   PetscErrorCode ierr=0;
+1188   PetscInt its=0, max_its = static_cast<PetscInt>(m_its);
+1189   PetscReal final_resid=0\&.;
+1190 
+1191   Mat submat = NULL;
+1192   Vec subrhs = NULL;
+1193   Vec subsolution = NULL;
+1194   VecScatter scatter = NULL;
+1195 
+1196   // Close the matrices and vectors in case this wasn't already done\&.
+1197   solution->close ();
+1198   rhs->close ();
+1199 
+1200   // Prepare the matrix\&.
+1201   Mat mat;
+1202   ierr = MatCreateShell(this->comm()\&.get(),
+1203                         rhs_in\&.local_size(),
+1204                         solution_in\&.local_size(),
+1205                         rhs_in\&.size(),
+1206                         solution_in\&.size(),
+1207                         const_cast<void*>(static_cast<const void*>(&shell_matrix)),
+1208                         &mat);
+1209   /* Note that the const_cast above is only necessary because PETSc
+1210      does not accept a const void*\&.  Inside the member function
+1211      _petsc_shell_matrix() below, the pointer is casted back to a
+1212      const ShellMatrix<T>*\&.  */
+1213 
+1214   LIBMESH_CHKERRABORT(ierr);
+1215   ierr = MatShellSetOperation(mat,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+1216   LIBMESH_CHKERRABORT(ierr);
+1217   ierr = MatShellSetOperation(mat,MATOP_MULT_ADD,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult_add));
+1218   LIBMESH_CHKERRABORT(ierr);
+1219   ierr = MatShellSetOperation(mat,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+1220   LIBMESH_CHKERRABORT(ierr);
+1221 
+1222   // Restrict rhs and solution vectors and set operators\&.  The input
+1223   // matrix works as the preconditioning matrix\&.
+1224   if(_restrict_solve_to_is!=NULL)
+1225     {
+1226       size_t is_local_size = this->_restrict_solve_to_is_local_size();
+1227 
+1228       ierr = VecCreate(this->comm()\&.get(),&subrhs);
+1229       LIBMESH_CHKERRABORT(ierr);
+1230       ierr = VecSetSizes(subrhs,is_local_size,PETSC_DECIDE);
+1231       LIBMESH_CHKERRABORT(ierr);
+1232       ierr = VecSetFromOptions(subrhs);
+1233       LIBMESH_CHKERRABORT(ierr);
+1234 
+1235       ierr = VecCreate(this->comm()\&.get(),&subsolution);
+1236       LIBMESH_CHKERRABORT(ierr);
+1237       ierr = VecSetSizes(subsolution,is_local_size,PETSC_DECIDE);
+1238       LIBMESH_CHKERRABORT(ierr);
+1239       ierr = VecSetFromOptions(subsolution);
+1240       LIBMESH_CHKERRABORT(ierr);
+1241 
+1242       ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is, subrhs,NULL, &scatter);
+1243       LIBMESH_CHKERRABORT(ierr);
+1244 
+1245       ierr = VecScatterBegin(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+1246       LIBMESH_CHKERRABORT(ierr);
+1247       ierr = VecScatterEnd(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+1248       LIBMESH_CHKERRABORT(ierr);
+1249 
+1250       ierr = VecScatterBegin(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+1251       LIBMESH_CHKERRABORT(ierr);
+1252       ierr = VecScatterEnd(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+1253       LIBMESH_CHKERRABORT(ierr);
+1254 
+1255 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1256       /* This point can't be reached, see above\&.  */
+1257       libmesh_assert(false);
+1258 #else
+1259       ierr = MatGetSubMatrix(mat,
+1260                              _restrict_solve_to_is,_restrict_solve_to_is,
+1261                              MAT_INITIAL_MATRIX,&submat);
+1262       LIBMESH_CHKERRABORT(ierr);
+1263 #endif
+1264 
+1265       /* Since removing columns of the matrix changes the equation
+1266          system, we will now change the right hand side to compensate
+1267          for this\&.  Note that this is not necessary if \p SUBSET_ZERO
+1268          has been selected\&.  */
+1269       if(_subset_solve_mode!=SUBSET_ZERO)
+1270         {
+1271           _create_complement_is(rhs_in);
+1272           size_t is_complement_local_size = rhs_in\&.local_size()-is_local_size;
+1273 
+1274           Vec subvec1 = NULL;
+1275           Mat submat1 = NULL;
+1276           VecScatter scatter1 = NULL;
+1277 
+1278           ierr = VecCreate(this->comm()\&.get(),&subvec1);
+1279           LIBMESH_CHKERRABORT(ierr);
+1280           ierr = VecSetSizes(subvec1,is_complement_local_size,PETSC_DECIDE);
+1281           LIBMESH_CHKERRABORT(ierr);
+1282           ierr = VecSetFromOptions(subvec1);
+1283           LIBMESH_CHKERRABORT(ierr);
+1284 
+1285           ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is_complement, subvec1,NULL, &scatter1);
+1286           LIBMESH_CHKERRABORT(ierr);
+1287 
+1288           ierr = VecScatterBegin(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+1289           LIBMESH_CHKERRABORT(ierr);
+1290           ierr = VecScatterEnd(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+1291           LIBMESH_CHKERRABORT(ierr);
+1292 
+1293           ierr = VecScale(subvec1,-1\&.0);
+1294           LIBMESH_CHKERRABORT(ierr);
+1295 
+1296 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1297           /* This point can't be reached, see above\&.  */
+1298           libmesh_assert(false);
+1299 #else
+1300           ierr = MatGetSubMatrix(mat,
+1301                                  _restrict_solve_to_is,_restrict_solve_to_is_complement,
+1302                                  MAT_INITIAL_MATRIX,&submat1);
+1303           LIBMESH_CHKERRABORT(ierr);
+1304 #endif
+1305 
+1306           // The following lines would be correct, but don't work
+1307           // correctly in PETSc up to 3\&.1\&.0-p5\&.  See discussion in
+1308           // petsc-users of Nov 9, 2010\&.
+1309           //
+1310           // ierr = MatMultAdd(submat1,subvec1,subrhs,subrhs);
+1311           // LIBMESH_CHKERRABORT(ierr);
+1312           //
+1313           // We workaround by using a temporary vector\&.  Note that the
+1314           // fix in PETsc 3\&.1\&.0-p6 uses a temporary vector internally,
+1315           // so this is no effective performance loss\&.
+1316           Vec subvec2 = NULL;
+1317           ierr = VecCreate(this->comm()\&.get(),&subvec2);
+1318           LIBMESH_CHKERRABORT(ierr);
+1319           ierr = VecSetSizes(subvec2,is_local_size,PETSC_DECIDE);
+1320           LIBMESH_CHKERRABORT(ierr);
+1321           ierr = VecSetFromOptions(subvec2);
+1322           LIBMESH_CHKERRABORT(ierr);
+1323           ierr = MatMult(submat1,subvec1,subvec2);
+1324           LIBMESH_CHKERRABORT(ierr);
+1325           ierr = VecAXPY(subrhs,1\&.0,subvec2);
+1326 
+1327           ierr = LibMeshVecScatterDestroy(&scatter1);
+1328           LIBMESH_CHKERRABORT(ierr);
+1329           ierr = LibMeshVecDestroy(&subvec1);
+1330           LIBMESH_CHKERRABORT(ierr);
+1331           ierr = LibMeshMatDestroy(&submat1);
+1332           LIBMESH_CHKERRABORT(ierr);
+1333         }
+1334 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1335       ierr = KSPSetOperators(_ksp, submat, submat,
+1336                              DIFFERENT_NONZERO_PATTERN);
+1337 #else
+1338       ierr = KSPSetOperators(_ksp, submat, submat);
+1339 #endif
+1340       LIBMESH_CHKERRABORT(ierr);
+1341     }
+1342   else
+1343     {
+1344 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1345       ierr = KSPSetOperators(_ksp, mat, mat,
+1346                              DIFFERENT_NONZERO_PATTERN);
+1347 #else
+1348       ierr = KSPSetOperators(_ksp, mat, mat);
+1349 #endif
+1350       LIBMESH_CHKERRABORT(ierr);
+1351     }
+1352 
+1353   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+1354   // tolerance for the relative residual & leave the others at default values\&.
+1355   ierr = KSPSetTolerances (_ksp, tol, PETSC_DEFAULT,
+1356                            PETSC_DEFAULT, max_its);
+1357   LIBMESH_CHKERRABORT(ierr);
+1358 
+1359   // Solve the linear system
+1360   if(_restrict_solve_to_is!=NULL)
+1361     {
+1362       ierr = KSPSolve (_ksp, subrhs, subsolution);
+1363       LIBMESH_CHKERRABORT(ierr);
+1364     }
+1365   else
+1366     {
+1367       ierr = KSPSolve (_ksp, rhs->vec(), solution->vec());
+1368       LIBMESH_CHKERRABORT(ierr);
+1369     }
+1370 
+1371   // Get the number of iterations required for convergence
+1372   ierr = KSPGetIterationNumber (_ksp, &its);
+1373   LIBMESH_CHKERRABORT(ierr);
+1374 
+1375   // Get the norm of the final residual to return to the user\&.
+1376   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+1377   LIBMESH_CHKERRABORT(ierr);
+1378 
+1379   if(_restrict_solve_to_is!=NULL)
+1380     {
+1381       switch(_subset_solve_mode)
+1382         {
+1383         case SUBSET_ZERO:
+1384           ierr = VecZeroEntries(solution->vec());
+1385           LIBMESH_CHKERRABORT(ierr);
+1386           break;
+1387 
+1388         case SUBSET_COPY_RHS:
+1389           ierr = VecCopy(rhs->vec(),solution->vec());
+1390           LIBMESH_CHKERRABORT(ierr);
+1391           break;
+1392 
+1393         case SUBSET_DONT_TOUCH:
+1394           /* Nothing to do here\&.  */
+1395           break;
+1396 
+1397         }
+1398       ierr = VecScatterBegin(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+1399       LIBMESH_CHKERRABORT(ierr);
+1400       ierr = VecScatterEnd(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+1401       LIBMESH_CHKERRABORT(ierr);
+1402 
+1403       ierr = LibMeshVecScatterDestroy(&scatter);
+1404       LIBMESH_CHKERRABORT(ierr);
+1405 
+1406       ierr = LibMeshVecDestroy(&subsolution);
+1407       LIBMESH_CHKERRABORT(ierr);
+1408       ierr = LibMeshVecDestroy(&subrhs);
+1409       LIBMESH_CHKERRABORT(ierr);
+1410       ierr = LibMeshMatDestroy(&submat);
+1411       LIBMESH_CHKERRABORT(ierr);
+1412     }
+1413 
+1414   // Destroy the matrix\&.
+1415   ierr = LibMeshMatDestroy(&mat);
+1416   LIBMESH_CHKERRABORT(ierr);
+1417 
+1418   STOP_LOG("solve()", "PetscLinearSolver");
+1419   // return the # of its\&. and the final residual norm\&.
+1420   return std::make_pair(its, final_resid);
+1421 
+1422 #endif
+1423 
+1424 }
+.fi
+.SS "template<typename T > std::pair< unsigned int, \fBReal\fP > \fBlibMesh::PetscLinearSolver\fP< T >::solve (const \fBShellMatrix\fP< T > &shell_matrix, const \fBSparseMatrix\fP< T > &precond_matrix, \fBNumericVector\fP< T > &solution_in, \fBNumericVector\fP< T > &rhs_in, const doubletol, const unsigned intm_its)\fC [virtual]\fP"
+This function solves a system whose matrix is a shell matrix, but a sparse matrix is used as preconditioning matrix, this allowing other preconditioners than JACOBI\&. 
+.PP
+Implements \fBlibMesh::LinearSolver< T >\fP\&.
+.PP
+Definition at line 1430 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::PetscMatrix< T >::close(), libMesh::comm, libMesh::ierr, libMesh::TriangleWrapper::init(), libMesh::PetscMatrix< T >::init(), libMesh::libmesh_assert(), libMesh::NumericVector< T >::local_size(), libMesh::out, libMesh::NumericVector< T >::size(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::SUBSET_COPY_RHS, libMesh::SUBSET_DONT_TOUCH, and libMesh::SUBSET_ZERO\&.
+.PP
+.nf
+1436 {
+1437 
+1438 #if PETSC_VERSION_LESS_THAN(2,3,1)
+1439   // FIXME[JWP]: There will be a bunch of unused variable warnings
+1440   // for older PETScs here\&.
+1441   libMesh::out << "This method has been developed with PETSc 2\&.3\&.1\&.  "
+1442                << "No one has made it backwards compatible with older "
+1443                << "versions of PETSc so far; however, it might work "
+1444                << "without any change with some older version\&." << std::endl;
+1445   libmesh_error();
+1446   return std::make_pair(0,0\&.0);
+1447 
+1448 #else
+1449 
+1450 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1451   if(_restrict_solve_to_is!=NULL)
+1452     {
+1453       libMesh::out << "The current implementation of subset solves with "
+1454                    << "shell matrices requires PETSc version 3\&.1 or above\&.  "
+1455                    << "Older PETSc version do not support automatic "
+1456                    << "submatrix generation of shell matrices\&."
+1457                    << std::endl;
+1458       libmesh_error();
+1459     }
+1460 #endif
+1461 
+1462   START_LOG("solve()", "PetscLinearSolver");
+1463 
+1464   // Make sure the data passed in are really of Petsc types
+1465   const PetscMatrix<T>* precond  = libmesh_cast_ptr<const PetscMatrix<T>*>(&precond_matrix);
+1466   PetscVector<T>* solution = libmesh_cast_ptr<PetscVector<T>*>(&solution_in);
+1467   PetscVector<T>* rhs      = libmesh_cast_ptr<PetscVector<T>*>(&rhs_in);
+1468 
+1469   this->init ();
+1470 
+1471   PetscErrorCode ierr=0;
+1472   PetscInt its=0, max_its = static_cast<PetscInt>(m_its);
+1473   PetscReal final_resid=0\&.;
+1474 
+1475   Mat submat = NULL;
+1476   Mat subprecond = NULL;
+1477   Vec subrhs = NULL;
+1478   Vec subsolution = NULL;
+1479   VecScatter scatter = NULL;
+1480   PetscMatrix<Number>* subprecond_matrix = NULL;
+1481 
+1482   // Close the matrices and vectors in case this wasn't already done\&.
+1483   solution->close ();
+1484   rhs->close ();
+1485 
+1486   // Prepare the matrix\&.
+1487   Mat mat;
+1488   ierr = MatCreateShell(this->comm()\&.get(),
+1489                         rhs_in\&.local_size(),
+1490                         solution_in\&.local_size(),
+1491                         rhs_in\&.size(),
+1492                         solution_in\&.size(),
+1493                         const_cast<void*>(static_cast<const void*>(&shell_matrix)),
+1494                         &mat);
+1495   /* Note that the const_cast above is only necessary because PETSc
+1496      does not accept a const void*\&.  Inside the member function
+1497      _petsc_shell_matrix() below, the pointer is casted back to a
+1498      const ShellMatrix<T>*\&.  */
+1499 
+1500   LIBMESH_CHKERRABORT(ierr);
+1501   ierr = MatShellSetOperation(mat,MATOP_MULT,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult));
+1502   LIBMESH_CHKERRABORT(ierr);
+1503   ierr = MatShellSetOperation(mat,MATOP_MULT_ADD,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_mult_add));
+1504   LIBMESH_CHKERRABORT(ierr);
+1505   ierr = MatShellSetOperation(mat,MATOP_GET_DIAGONAL,reinterpret_cast<void(*)(void)>(_petsc_shell_matrix_get_diagonal));
+1506   LIBMESH_CHKERRABORT(ierr);
+1507 
+1508   // Restrict rhs and solution vectors and set operators\&.  The input
+1509   // matrix works as the preconditioning matrix\&.
+1510   if(_restrict_solve_to_is!=NULL)
+1511     {
+1512       size_t is_local_size = this->_restrict_solve_to_is_local_size();
+1513 
+1514       ierr = VecCreate(this->comm()\&.get(),&subrhs);
+1515       LIBMESH_CHKERRABORT(ierr);
+1516       ierr = VecSetSizes(subrhs,is_local_size,PETSC_DECIDE);
+1517       LIBMESH_CHKERRABORT(ierr);
+1518       ierr = VecSetFromOptions(subrhs);
+1519       LIBMESH_CHKERRABORT(ierr);
+1520 
+1521       ierr = VecCreate(this->comm()\&.get(),&subsolution);
+1522       LIBMESH_CHKERRABORT(ierr);
+1523       ierr = VecSetSizes(subsolution,is_local_size,PETSC_DECIDE);
+1524       LIBMESH_CHKERRABORT(ierr);
+1525       ierr = VecSetFromOptions(subsolution);
+1526       LIBMESH_CHKERRABORT(ierr);
+1527 
+1528       ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is, subrhs,NULL, &scatter);
+1529       LIBMESH_CHKERRABORT(ierr);
+1530 
+1531       ierr = VecScatterBegin(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+1532       LIBMESH_CHKERRABORT(ierr);
+1533       ierr = VecScatterEnd(scatter,rhs->vec(),subrhs,INSERT_VALUES,SCATTER_FORWARD);
+1534       LIBMESH_CHKERRABORT(ierr);
+1535 
+1536       ierr = VecScatterBegin(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+1537       LIBMESH_CHKERRABORT(ierr);
+1538       ierr = VecScatterEnd(scatter,solution->vec(),subsolution,INSERT_VALUES,SCATTER_FORWARD);
+1539       LIBMESH_CHKERRABORT(ierr);
+1540 
+1541 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1542       /* This point can't be reached, see above\&.  */
+1543       libmesh_assert(false);
+1544 #else
+1545       ierr = MatGetSubMatrix(mat,
+1546                              _restrict_solve_to_is,_restrict_solve_to_is,
+1547                              MAT_INITIAL_MATRIX,&submat);
+1548       LIBMESH_CHKERRABORT(ierr);
+1549       ierr = MatGetSubMatrix(const_cast<PetscMatrix<T>*>(precond)->mat(),
+1550                              _restrict_solve_to_is,_restrict_solve_to_is,
+1551                              MAT_INITIAL_MATRIX,&subprecond);
+1552       LIBMESH_CHKERRABORT(ierr);
+1553 #endif
+1554 
+1555       /* Since removing columns of the matrix changes the equation
+1556          system, we will now change the right hand side to compensate
+1557          for this\&.  Note that this is not necessary if \p SUBSET_ZERO
+1558          has been selected\&.  */
+1559       if(_subset_solve_mode!=SUBSET_ZERO)
+1560         {
+1561           _create_complement_is(rhs_in);
+1562           size_t is_complement_local_size = rhs_in\&.local_size()-is_local_size;
+1563 
+1564           Vec subvec1 = NULL;
+1565           Mat submat1 = NULL;
+1566           VecScatter scatter1 = NULL;
+1567 
+1568           ierr = VecCreate(this->comm()\&.get(),&subvec1);
+1569           LIBMESH_CHKERRABORT(ierr);
+1570           ierr = VecSetSizes(subvec1,is_complement_local_size,PETSC_DECIDE);
+1571           LIBMESH_CHKERRABORT(ierr);
+1572           ierr = VecSetFromOptions(subvec1);
+1573           LIBMESH_CHKERRABORT(ierr);
+1574 
+1575           ierr = VecScatterCreate(rhs->vec(),_restrict_solve_to_is_complement, subvec1,NULL, &scatter1);
+1576           LIBMESH_CHKERRABORT(ierr);
+1577 
+1578           ierr = VecScatterBegin(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+1579           LIBMESH_CHKERRABORT(ierr);
+1580           ierr = VecScatterEnd(scatter1,_subset_solve_mode==SUBSET_COPY_RHS ? rhs->vec() : solution->vec(),subvec1,INSERT_VALUES,SCATTER_FORWARD);
+1581           LIBMESH_CHKERRABORT(ierr);
+1582 
+1583           ierr = VecScale(subvec1,-1\&.0);
+1584           LIBMESH_CHKERRABORT(ierr);
+1585 
+1586 #if PETSC_VERSION_LESS_THAN(3,1,0)
+1587           /* This point can't be reached, see above\&.  */
+1588           libmesh_assert(false);
+1589 #else
+1590           ierr = MatGetSubMatrix(mat,
+1591                                  _restrict_solve_to_is,_restrict_solve_to_is_complement,
+1592                                  MAT_INITIAL_MATRIX,&submat1);
+1593           LIBMESH_CHKERRABORT(ierr);
+1594 #endif
+1595 
+1596           // The following lines would be correct, but don't work
+1597           // correctly in PETSc up to 3\&.1\&.0-p5\&.  See discussion in
+1598           // petsc-users of Nov 9, 2010\&.
+1599           //
+1600           // ierr = MatMultAdd(submat1,subvec1,subrhs,subrhs);
+1601           // LIBMESH_CHKERRABORT(ierr);
+1602           //
+1603           // We workaround by using a temporary vector\&.  Note that the
+1604           // fix in PETsc 3\&.1\&.0-p6 uses a temporary vector internally,
+1605           // so this is no effective performance loss\&.
+1606           Vec subvec2 = NULL;
+1607           ierr = VecCreate(this->comm()\&.get(),&subvec2);
+1608           LIBMESH_CHKERRABORT(ierr);
+1609           ierr = VecSetSizes(subvec2,is_local_size,PETSC_DECIDE);
+1610           LIBMESH_CHKERRABORT(ierr);
+1611           ierr = VecSetFromOptions(subvec2);
+1612           LIBMESH_CHKERRABORT(ierr);
+1613           ierr = MatMult(submat1,subvec1,subvec2);
+1614           LIBMESH_CHKERRABORT(ierr);
+1615           ierr = VecAXPY(subrhs,1\&.0,subvec2);
+1616           LIBMESH_CHKERRABORT(ierr);
+1617 
+1618           ierr = LibMeshVecScatterDestroy(&scatter1);
+1619           LIBMESH_CHKERRABORT(ierr);
+1620           ierr = LibMeshVecDestroy(&subvec1);
+1621           LIBMESH_CHKERRABORT(ierr);
+1622           ierr = LibMeshMatDestroy(&submat1);
+1623           LIBMESH_CHKERRABORT(ierr);
+1624         }
+1625 
+1626 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1627       ierr = KSPSetOperators(_ksp, submat, subprecond,
+1628                              DIFFERENT_NONZERO_PATTERN);
+1629 #else
+1630       ierr = KSPSetOperators(_ksp, submat, subprecond);
+1631 #endif
+1632       LIBMESH_CHKERRABORT(ierr);
+1633 
+1634       if(this->_preconditioner)
+1635         {
+1636           subprecond_matrix = new PetscMatrix<Number>(subprecond,
+1637                                                       this->comm());
+1638           this->_preconditioner->set_matrix(*subprecond_matrix);
+1639           this->_preconditioner->init();
+1640         }
+1641     }
+1642   else
+1643     {
+1644 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1645       ierr = KSPSetOperators(_ksp, mat, const_cast<PetscMatrix<T>*>(precond)->mat(),
+1646                              DIFFERENT_NONZERO_PATTERN);
+1647 #else
+1648       ierr = KSPSetOperators(_ksp, mat, const_cast<PetscMatrix<T>*>(precond)->mat());
+1649 #endif
+1650       LIBMESH_CHKERRABORT(ierr);
+1651 
+1652       if(this->_preconditioner)
+1653         {
+1654           this->_preconditioner->set_matrix(const_cast<SparseMatrix<Number>&>(precond_matrix));
+1655           this->_preconditioner->init();
+1656         }
+1657     }
+1658 
+1659   // Set the tolerances for the iterative solver\&.  Use the user-supplied
+1660   // tolerance for the relative residual & leave the others at default values\&.
+1661   ierr = KSPSetTolerances (_ksp, tol, PETSC_DEFAULT,
+1662                            PETSC_DEFAULT, max_its);
+1663   LIBMESH_CHKERRABORT(ierr);
+1664 
+1665   // Solve the linear system
+1666   if(_restrict_solve_to_is!=NULL)
+1667     {
+1668       ierr = KSPSolve (_ksp, subrhs, subsolution);
+1669       LIBMESH_CHKERRABORT(ierr);
+1670     }
+1671   else
+1672     {
+1673       ierr = KSPSolve (_ksp, rhs->vec(), solution->vec());
+1674       LIBMESH_CHKERRABORT(ierr);
+1675     }
+1676 
+1677   // Get the number of iterations required for convergence
+1678   ierr = KSPGetIterationNumber (_ksp, &its);
+1679   LIBMESH_CHKERRABORT(ierr);
+1680 
+1681   // Get the norm of the final residual to return to the user\&.
+1682   ierr = KSPGetResidualNorm (_ksp, &final_resid);
+1683   LIBMESH_CHKERRABORT(ierr);
+1684 
+1685   if(_restrict_solve_to_is!=NULL)
+1686     {
+1687       switch(_subset_solve_mode)
+1688         {
+1689         case SUBSET_ZERO:
+1690           ierr = VecZeroEntries(solution->vec());
+1691           LIBMESH_CHKERRABORT(ierr);
+1692           break;
+1693 
+1694         case SUBSET_COPY_RHS:
+1695           ierr = VecCopy(rhs->vec(),solution->vec());
+1696           LIBMESH_CHKERRABORT(ierr);
+1697           break;
+1698 
+1699         case SUBSET_DONT_TOUCH:
+1700           /* Nothing to do here\&.  */
+1701           break;
+1702 
+1703         }
+1704       ierr = VecScatterBegin(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+1705       LIBMESH_CHKERRABORT(ierr);
+1706       ierr = VecScatterEnd(scatter,subsolution,solution->vec(),INSERT_VALUES,SCATTER_REVERSE);
+1707       LIBMESH_CHKERRABORT(ierr);
+1708 
+1709       ierr = LibMeshVecScatterDestroy(&scatter);
+1710       LIBMESH_CHKERRABORT(ierr);
+1711 
+1712       if(this->_preconditioner)
+1713         {
+1714           /* Before we delete subprecond_matrix, we should give the
+1715              _preconditioner a different matrix\&.  */
+1716           this->_preconditioner->set_matrix(const_cast<SparseMatrix<Number>&>(precond_matrix));
+1717           this->_preconditioner->init();
+1718           delete subprecond_matrix;
+1719           subprecond_matrix = NULL;
+1720         }
+1721 
+1722       ierr = LibMeshVecDestroy(&subsolution);
+1723       LIBMESH_CHKERRABORT(ierr);
+1724       ierr = LibMeshVecDestroy(&subrhs);
+1725       LIBMESH_CHKERRABORT(ierr);
+1726       ierr = LibMeshMatDestroy(&submat);
+1727       LIBMESH_CHKERRABORT(ierr);
+1728       ierr = LibMeshMatDestroy(&subprecond);
+1729       LIBMESH_CHKERRABORT(ierr);
+1730     }
+1731 
+1732   // Destroy the matrix\&.
+1733   ierr = LibMeshMatDestroy(&mat);
+1734   LIBMESH_CHKERRABORT(ierr);
+1735 
+1736   STOP_LOG("solve()", "PetscLinearSolver");
+1737   // return the # of its\&. and the final residual norm\&.
+1738   return std::make_pair(its, final_resid);
+1739 
+1740 #endif
+1741 
+1742 }
+.fi
+.SS "template<typename T> std::pair< unsigned int, \fBReal\fP > \fBlibMesh::LinearSolver\fP< T >::solve (const \fBShellMatrix\fP< T > &matrix, const \fBSparseMatrix\fP< T > *precond_matrix, \fBNumericVector\fP< T > &sol, \fBNumericVector\fP< T > &rhs, const doubletol, const unsigned intn_iter)\fC [inline]\fP, \fC [inherited]\fP"
+This function solves a system whose matrix is a shell matrix, but an optional sparse matrix may be used as preconditioning matrix\&. 
+.PP
+Definition at line 331 of file linear_solver\&.h\&.
+.PP
+.nf
+337 {
+338   if (pc_mat)
+339     return this->solve(mat, *pc_mat, sol, rhs, tol, n_iter);
+340   else
+341     return this->solve(mat, sol, rhs, tol, n_iter);
+342 }
+.fi
+.SS "template<typename T> \fBSolverType\fP \fBlibMesh::LinearSolver\fP< T >::solver_type () const\fC [inline]\fP, \fC [inherited]\fP"
+Returns the type of solver to use\&. 
+.PP
+Definition at line 112 of file linear_solver\&.h\&.
+.PP
+.nf
+112 { return _solver_type; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T> bool \fBlibMesh::LinearSolver\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating if the data structures have been initialized\&. 
+.PP
+Definition at line 262 of file linear_solver\&.h\&.
+.PP
+Referenced by libMesh::LinearSolver< Number >::initialized()\&.
+.SS "template<typename T > KSP \fBlibMesh::PetscLinearSolver\fP< T >::_ksp\fC [private]\fP"
+Krylov subspace context 
+.PP
+Definition at line 296 of file petsc_linear_solver\&.h\&.
+.PP
+Referenced by libMesh::PetscLinearSolver< T >::ksp()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T > \fBPC\fP \fBlibMesh::PetscLinearSolver\fP< T >::_pc\fC [private]\fP"
+\fBPreconditioner\fP context 
+.PP
+Definition at line 291 of file petsc_linear_solver\&.h\&.
+.PP
+Referenced by libMesh::PetscLinearSolver< T >::pc()\&.
+.SS "template<typename T> \fBPreconditioner\fP<T>* \fBlibMesh::LinearSolver\fP< T >::_preconditioner\fC [protected]\fP, \fC [inherited]\fP"
+Holds the \fBPreconditioner\fP object to be used for the linear solves\&. 
+.PP
+Definition at line 267 of file linear_solver\&.h\&.
+.SS "template<typename T> \fBPreconditionerType\fP \fBlibMesh::LinearSolver\fP< T >::_preconditioner_type\fC [protected]\fP, \fC [inherited]\fP"
+Enum statitng with type of preconditioner to use\&. 
+.PP
+Definition at line 257 of file linear_solver\&.h\&.
+.PP
+Referenced by libMesh::AztecLinearSolver< T >::AztecLinearSolver(), and libMesh::PetscLinearSolver< T >::PetscLinearSolver()\&.
+.SS "template<typename T > IS \fBlibMesh::PetscLinearSolver\fP< T >::_restrict_solve_to_is\fC [private]\fP"
+PETSc index set containing the dofs on which to solve (\fCNULL\fP means solve on all dofs)\&. 
+.PP
+Definition at line 302 of file petsc_linear_solver\&.h\&.
+.SS "template<typename T > IS \fBlibMesh::PetscLinearSolver\fP< T >::_restrict_solve_to_is_complement\fC [private]\fP"
+PETSc index set, complement to \fC_restrict_solve_to_is\fP\&. This will be created on demand by the method \fC\fB_create_complement_is()\fP\fP\&. 
+.PP
+Definition at line 309 of file petsc_linear_solver\&.h\&.
+.SS "template<typename T > SLES \fBlibMesh::PetscLinearSolver\fP< T >::_sles\fC [private]\fP"
+\fBLinear\fP solver context 
+.PP
+Definition at line 284 of file petsc_linear_solver\&.h\&.
+.SS "template<typename T> \fBSolverType\fP \fBlibMesh::LinearSolver\fP< T >::_solver_type\fC [protected]\fP, \fC [inherited]\fP"
+Enum stating which type of iterative solver to use\&. 
+.PP
+Definition at line 252 of file linear_solver\&.h\&.
+.PP
+Referenced by libMesh::EigenSparseLinearSolver< T >::EigenSparseLinearSolver(), libMesh::LinearSolver< Number >::set_solver_type(), and libMesh::LinearSolver< Number >::solver_type()\&.
+.SS "template<typename T > \fBSubsetSolveMode\fP \fBlibMesh::PetscLinearSolver\fP< T >::_subset_solve_mode\fC [private]\fP"
+If restrict-solve-to-subset mode is active, this member decides what happens with the dofs outside the subset\&. 
+.PP
+Definition at line 328 of file petsc_linear_solver\&.h\&.
+.SS "template<typename T> bool \fBlibMesh::LinearSolver\fP< T >::same_preconditioner\fC [protected]\fP, \fC [inherited]\fP"
+Boolean flag to indicate whether we want to use an identical preconditioner to the previous solve\&. This can save substantial work in the cases where the system matrix is the same for successive solves\&. 
+.PP
+Definition at line 275 of file linear_solver\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,788 @@
+.TH "libMesh::H1FETransformation< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::H1FETransformation< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fe_transformation_base\&.h>\fP
+.PP
+Inherits \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBH1FETransformation\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~H1FETransformation\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBmap_phi\fP (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< OutputShape > &, std::vector< std::vector< OutputShape > > &) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_dphi\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputGradient > > &dphi, std::vector< std::vector< OutputShape > > &dphidx, std::vector< std::vector< OutputShape > > &dphidy, std::vector< std::vector< OutputShape > > &dphidz) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_d2phi\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputTensor > > &d2phi, std::vector< std::vector< OutputShape > > &d2phidx2, std::vector< std::vector< OutputShape > > &d2phidxdy, std::vector< std::vector< OutputShape > > &d2phidxdz, std::vector< std::vector< OutputShape > > &d2phidy2, std::vector< std::vector< OutputShape > > &d2phidydz, std::vector< std::vector< OutputShape > > &d2phidz2) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_curl\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &curl_phi) const "
+.br
+.ti -1c
+.RI "virtual void \fBmap_div\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const elem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputDivergence > > &div_phi) const "
+.br
+.ti -1c
+.RI "template<> void \fBmap_curl\fP (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBReal\fP > > &) const"
+.br
+.ti -1c
+.RI "template<> void \fBmap_curl\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBRealGradient\fP > &fe, std::vector< std::vector< \fBRealGradient\fP > > &curl_phi) const"
+.br
+.ti -1c
+.RI "template<> void \fBmap_div\fP (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBFEGenericBase\fP< \fBReal\fP >::OutputDivergence > > &) const"
+.br
+.ti -1c
+.RI "template<> void \fBmap_div\fP (const unsigned int \fBdim\fP, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBRealGradient\fP > &fe, std::vector< std::vector< \fBFEGenericBase\fP< \fBRealGradient\fP >::OutputDivergence > > &div_phi) const"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP
+.br
+< \fBFETransformationBase\fP
+.br
+< OutputShape > > \fBbuild\fP (const \fBFEType\fP &type)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::H1FETransformation< T >"
+This class handles the computation of the shape functions in the physical domain for H1 conforming elements\&. This class assumes the \fC\fBFEGenericBase\fP\fP object has been initialized in the reference domain (i\&.e\&. \fCinit_shape_functions\fP has been called)\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Paul T\&. Bauman, 2012 
+.RE
+.PP
+
+.PP
+Definition at line 29 of file fe_transformation_base\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::H1FETransformation\fP< T >::\fBH1FETransformation\fP ()\fC [inline]\fP"
+
+.PP
+Definition at line 39 of file h1_fe_transformation\&.h\&.
+.PP
+.nf
+40     : FETransformationBase<OutputShape>(){}
+.fi
+.SS "template<typename T > virtual \fBlibMesh::H1FETransformation\fP< T >::~\fBH1FETransformation\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+Definition at line 42 of file h1_fe_transformation\&.h\&.
+.PP
+.nf
+42 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "static \fBAutoPtr\fP<\fBFETransformationBase\fP<OutputShape> > \fBlibMesh::FETransformationBase\fP< OutputShape  >::build (const \fBFEType\fP &type)\fC [static]\fP, \fC [inherited]\fP"
+Builds an FETransformation object based on the finite element type 
+.SS "template<typename T > virtual void \fBlibMesh::H1FETransformation\fP< T >::map_curl (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &curl_phi) const\fC [virtual]\fP"
+Evaluates the shape function curl in physical coordinates based on H1 conforming finite element transformation\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.SS "template<> void \fBlibMesh::H1FETransformation\fP< \fBReal\fP >::map_curl (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBReal\fP > > &) const"
+
+.PP
+Definition at line 456 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+461 {
+462   libMesh::err << "Computing the curl of a shape function only\n"
+463                << "makes sense for vector-valued elements\&." << std::endl;
+464   libmesh_error();
+465 }
+.fi
+.SS "template<> void \fBlibMesh::H1FETransformation\fP< \fBRealGradient\fP >::map_curl (const unsigned intdim, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBRealGradient\fP > &fe, std::vector< std::vector< \fBRealGradient\fP > > &curl_phi) const"
+
+.PP
+Definition at line 468 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::FEMap::get_detadx(), libMesh::FEMap::get_detady(), libMesh::FEMap::get_detadz(), libMesh::FEGenericBase< T >::get_dphideta(), libMesh::FEGenericBase< T >::get_dphidxi(), libMesh::FEGenericBase< T >::get_dphidzeta(), libMesh::FEMap::get_dxidx(), libMesh::FEMap::get_dxidy(), libMesh::FEMap::get_dxidz(), libMesh::FEMap::get_dzetadx(), libMesh::FEMap::get_dzetady(), libMesh::FEMap::get_dzetadz(), libMesh::FEAbstract::get_fe_map(), and libMesh::Real\&.
+.PP
+.nf
+473 {
+474   switch(dim)
+475     {
+476       // The curl only make sense in 2D and 3D
+477     case 0:
+478     case 1:
+479       {
+480         libmesh_error();
+481       }
+482     case 2:
+483       {
+484         const std::vector<std::vector<RealGradient> >& dphidxi = fe\&.get_dphidxi();
+485         const std::vector<std::vector<RealGradient> >& dphideta = fe\&.get_dphideta();
+486 
+487         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+488         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+489 #if LIBMESH_DIM > 2
+490         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+491 #endif
+492 
+493         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+494         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+495 #if LIBMESH_DIM > 2
+496         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+497 #endif
+498 
+499         /*
+500           For 2D elements in 3D space:
+501 
+502           curl = ( -dphi_y/dz, dphi_x/dz, dphi_y/dx - dphi_x/dy )
+503         */
+504         for (unsigned int i=0; i<curl_phi\&.size(); i++)
+505           for (unsigned int p=0; p<curl_phi[i]\&.size(); p++)
+506             {
+507 
+508               Real dphiy_dx = (dphidxi[i][p]\&.slice(1))*dxidx_map[p]
+509                 + (dphideta[i][p]\&.slice(1))*detadx_map[p];
+510 
+511               Real dphix_dy = (dphidxi[i][p]\&.slice(0))*dxidy_map[p]
+512                 + (dphideta[i][p]\&.slice(0))*detady_map[p];
+513 
+514               curl_phi[i][p]\&.slice(2) = dphiy_dx - dphix_dy;
+515 
+516 #if LIBMESH_DIM > 2
+517               Real dphiy_dz = (dphidxi[i][p]\&.slice(1))*dxidz_map[p]
+518                 + (dphideta[i][p]\&.slice(1))*detadz_map[p];
+519 
+520               Real dphix_dz = (dphidxi[i][p]\&.slice(0))*dxidz_map[p]
+521                 + (dphideta[i][p]\&.slice(0))*detadz_map[p];
+522 
+523               curl_phi[i][p]\&.slice(0) = -dphiy_dz;
+524               curl_phi[i][p]\&.slice(1) = dphix_dz;
+525 #endif
+526             }
+527 
+528         break;
+529       }
+530     case 3:
+531       {
+532         const std::vector<std::vector<RealGradient> >& dphidxi = fe\&.get_dphidxi();
+533         const std::vector<std::vector<RealGradient> >& dphideta = fe\&.get_dphideta();
+534         const std::vector<std::vector<RealGradient> >& dphidzeta = fe\&.get_dphidzeta();
+535 
+536         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+537         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+538         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+539 
+540         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+541         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+542         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+543 
+544         const std::vector<Real>& dzetadx_map = fe\&.get_fe_map()\&.get_dzetadx();
+545         const std::vector<Real>& dzetady_map = fe\&.get_fe_map()\&.get_dzetady();
+546         const std::vector<Real>& dzetadz_map = fe\&.get_fe_map()\&.get_dzetadz();
+547 
+548         /*
+549           In 3D: curl = ( dphi_z/dy - dphi_y/dz, dphi_x/dz - dphi_z/dx, dphi_y/dx - dphi_x/dy )
+550         */
+551         for (unsigned int i=0; i<curl_phi\&.size(); i++)
+552           for (unsigned int p=0; p<curl_phi[i]\&.size(); p++)
+553             {
+554               Real dphiz_dy = (dphidxi[i][p]\&.slice(2))*dxidy_map[p]
+555                 + (dphideta[i][p]\&.slice(2))*detady_map[p]
+556                 + (dphidzeta[i][p]\&.slice(2))*dzetady_map[p];
+557 
+558               Real dphiy_dz = (dphidxi[i][p]\&.slice(1))*dxidz_map[p]
+559                 + (dphideta[i][p]\&.slice(1))*detadz_map[p]
+560                 + (dphidzeta[i][p]\&.slice(1))*dzetadz_map[p];
+561 
+562               Real dphix_dz = (dphidxi[i][p]\&.slice(0))*dxidz_map[p]
+563                 + (dphideta[i][p]\&.slice(0))*detadz_map[p]
+564                 + (dphidzeta[i][p]\&.slice(0))*dzetadz_map[p];
+565 
+566               Real dphiz_dx = (dphidxi[i][p]\&.slice(2))*dxidx_map[p]
+567                 + (dphideta[i][p]\&.slice(2))*detadx_map[p]
+568                 + (dphidzeta[i][p]\&.slice(2))*dzetadx_map[p];
+569 
+570               Real dphiy_dx = (dphidxi[i][p]\&.slice(1))*dxidx_map[p]
+571                 + (dphideta[i][p]\&.slice(1))*detadx_map[p]
+572                 + (dphidzeta[i][p]\&.slice(1))*dzetadx_map[p];
+573 
+574               Real dphix_dy = (dphidxi[i][p]\&.slice(0))*dxidy_map[p]
+575                 + (dphideta[i][p]\&.slice(0))*detady_map[p]
+576                 + (dphidzeta[i][p]\&.slice(0))*dzetady_map[p];
+577 
+578               curl_phi[i][p]\&.slice(0) = dphiz_dy - dphiy_dz;
+579 
+580               curl_phi[i][p]\&.slice(1) = dphix_dz - dphiz_dx;
+581 
+582               curl_phi[i][p]\&.slice(2) = dphiy_dx - dphix_dy;
+583             }
+584 
+585         break;
+586       }
+587     default:
+588       libmesh_error();
+589     }
+590 
+591   return;
+592 }
+.fi
+.SS "template<typename OutputShape > void \fBlibMesh::H1FETransformation\fP< OutputShape >::map_d2phi (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputTensor > > &d2phi, std::vector< std::vector< OutputShape > > &d2phidx2, std::vector< std::vector< OutputShape > > &d2phidxdy, std::vector< std::vector< OutputShape > > &d2phidxdz, std::vector< std::vector< OutputShape > > &d2phidy2, std::vector< std::vector< OutputShape > > &d2phidydz, std::vector< std::vector< OutputShape > > &d2phidz2) const\fC [virtual]\fP"
+Evaluates shape function Hessians in physical coordinates based on H1 conforming finite element transformation\&. FIXME: These are currently not calculated correctly for non-affine elements\&. The second derivative terms of the \fBFEMap\fP are not implemented\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 219 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::err, libMesh::FEGenericBase< T >::get_d2phideta2(), libMesh::FEGenericBase< T >::get_d2phidetadzeta(), libMesh::FEGenericBase< T >::get_d2phidxi2(), libMesh::FEGenericBase< T >::get_d2phidxideta(), libMesh::FEGenericBase< T >::get_d2phidxidzeta(), libMesh::FEGenericBase< T >::get_d2phidzeta2(), libMesh::FEMap::get_detadx(), libMesh::FEMap::get_detady(), libMesh::FEMap::get_detadz(), libMesh::FEMap::get_dxidx(), libMesh::FEMap::get_dxidy(), libMesh::FEMap::get_dxidz(), libMesh::FEMap::get_dzetadx(), libMesh::FEMap::get_dzetady(), libMesh::FEMap::get_dzetadz(), libMesh::FEAbstract::get_fe_map(), and libMesh::Elem::has_affine_map()\&.
+.PP
+.nf
+230 {
+231   libmesh_do_once(
+232                   if (!elem->has_affine_map())
+233                     {
+234                       libMesh::err << "WARNING: Second derivatives are not currently "
+235                                    << "correctly calculated on non-affine elements!"
+236                                    << std::endl;
+237                     }
+238                   );
+239 
+240 
+241   switch(dim)
+242     {
+243     case 0: // No derivatives in 0D
+244       {
+245         for (unsigned int i=0; i<d2phi\&.size(); i++)
+246           for (unsigned int p=0; p<d2phi[i]\&.size(); p++)
+247             {
+248               d2phi[i][p] = 0\&.;
+249             }
+250 
+251         break;
+252       }
+253 
+254     case 1:
+255       {
+256         const std::vector<std::vector<OutputShape> >& d2phidxi2 = fe\&.get_d2phidxi2();
+257 
+258         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+259 #if LIBMESH_DIM>1
+260         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+261 #endif
+262 #if LIBMESH_DIM>2
+263         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+264 #endif
+265 
+266         for (unsigned int i=0; i<d2phi\&.size(); i++)
+267           for (unsigned int p=0; p<d2phi[i]\&.size(); p++)
+268             {
+269               d2phi[i][p]\&.slice(0)\&.slice(0) = d2phidx2[i][p] =
+270                 d2phidxi2[i][p]*dxidx_map[p]*dxidx_map[p];
+271 #if LIBMESH_DIM>1
+272               d2phi[i][p]\&.slice(0)\&.slice(1) =
+273                 d2phi[i][p]\&.slice(1)\&.slice(0) = d2phidxdy[i][p] =
+274                 d2phidxi2[i][p]*dxidx_map[p]*dxidy_map[p];
+275 
+276               d2phi[i][p]\&.slice(1)\&.slice(1) = d2phidy2[i][p] =
+277                 d2phidxi2[i][p]*dxidy_map[p]*dxidy_map[p];
+278 #endif
+279 #if LIBMESH_DIM>2
+280               d2phi[i][p]\&.slice(0)\&.slice(2) =
+281                 d2phi[i][p]\&.slice(2)\&.slice(0) = d2phidxdz[i][p] =
+282                 d2phidxi2[i][p]*dxidx_map[p]*dxidz_map[p];
+283 
+284               d2phi[i][p]\&.slice(1)\&.slice(2) =
+285                 d2phi[i][p]\&.slice(2)\&.slice(1) = d2phidydz[i][p] =
+286                 d2phidxi2[i][p]*dxidy_map[p]*dxidz_map[p];
+287 
+288               d2phi[i][p]\&.slice(2)\&.slice(2) = d2phidz2[i][p] =
+289                 d2phidxi2[i][p]*dxidz_map[p]*dxidz_map[p];
+290 #endif
+291             }
+292         break;
+293       }
+294 
+295     case 2:
+296       {
+297         const std::vector<std::vector<OutputShape> >& d2phidxi2 = fe\&.get_d2phidxi2();
+298         const std::vector<std::vector<OutputShape> >& d2phidxideta = fe\&.get_d2phidxideta();
+299         const std::vector<std::vector<OutputShape> >& d2phideta2 = fe\&.get_d2phideta2();
+300 
+301         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+302         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+303 #if LIBMESH_DIM > 2
+304         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+305 #endif
+306 
+307         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+308         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+309 #if LIBMESH_DIM > 2
+310         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+311 #endif
+312 
+313         for (unsigned int i=0; i<d2phi\&.size(); i++)
+314           for (unsigned int p=0; p<d2phi[i]\&.size(); p++)
+315             {
+316               d2phi[i][p]\&.slice(0)\&.slice(0) = d2phidx2[i][p] =
+317                 d2phidxi2[i][p]*dxidx_map[p]*dxidx_map[p] +
+318                 2*d2phidxideta[i][p]*dxidx_map[p]*detadx_map[p] +
+319                 d2phideta2[i][p]*detadx_map[p]*detadx_map[p];
+320 
+321               d2phi[i][p]\&.slice(0)\&.slice(1) =
+322                 d2phi[i][p]\&.slice(1)\&.slice(0) = d2phidxdy[i][p] =
+323                 d2phidxi2[i][p]*dxidx_map[p]*dxidy_map[p] +
+324                 d2phidxideta[i][p]*dxidx_map[p]*detady_map[p] +
+325                 d2phideta2[i][p]*detadx_map[p]*detady_map[p] +
+326                 d2phidxideta[i][p]*detadx_map[p]*dxidy_map[p];
+327 
+328               d2phi[i][p]\&.slice(1)\&.slice(1) = d2phidy2[i][p] =
+329                 d2phidxi2[i][p]*dxidy_map[p]*dxidy_map[p] +
+330                 2*d2phidxideta[i][p]*dxidy_map[p]*detady_map[p] +
+331                 d2phideta2[i][p]*detady_map[p]*detady_map[p];
+332 
+333 #if LIBMESH_DIM > 2
+334               d2phi[i][p]\&.slice(0)\&.slice(2) =
+335                 d2phi[i][p]\&.slice(2)\&.slice(0) = d2phidxdz[i][p] =
+336                 d2phidxi2[i][p]*dxidx_map[p]*dxidz_map[p] +
+337                 d2phidxideta[i][p]*dxidx_map[p]*detadz_map[p] +
+338                 d2phideta2[i][p]*detadx_map[p]*detadz_map[p] +
+339                 d2phidxideta[i][p]*detadx_map[p]*dxidz_map[p];
+340 
+341               d2phi[i][p]\&.slice(1)\&.slice(2) =
+342                 d2phi[i][p]\&.slice(2)\&.slice(1) = d2phidydz[i][p] =
+343                 d2phidxi2[i][p]*dxidy_map[p]*dxidz_map[p] +
+344                 d2phidxideta[i][p]*dxidy_map[p]*detadz_map[p] +
+345                 d2phideta2[i][p]*detady_map[p]*detadz_map[p] +
+346                 d2phidxideta[i][p]*detady_map[p]*dxidz_map[p];
+347 
+348               d2phi[i][p]\&.slice(2)\&.slice(2) = d2phidz2[i][p] =
+349                 d2phidxi2[i][p]*dxidz_map[p]*dxidz_map[p] +
+350                 2*d2phidxideta[i][p]*dxidz_map[p]*detadz_map[p] +
+351                 d2phideta2[i][p]*detadz_map[p]*detadz_map[p];
+352 #endif
+353             }
+354 
+355         break;
+356       }
+357 
+358     case 3:
+359       {
+360         const std::vector<std::vector<OutputShape> >& d2phidxi2 = fe\&.get_d2phidxi2();
+361         const std::vector<std::vector<OutputShape> >& d2phidxideta = fe\&.get_d2phidxideta();
+362         const std::vector<std::vector<OutputShape> >& d2phideta2 = fe\&.get_d2phideta2();
+363         const std::vector<std::vector<OutputShape> >& d2phidxidzeta = fe\&.get_d2phidxidzeta();
+364         const std::vector<std::vector<OutputShape> >& d2phidetadzeta = fe\&.get_d2phidetadzeta();
+365         const std::vector<std::vector<OutputShape> >& d2phidzeta2 = fe\&.get_d2phidzeta2();
+366 
+367         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+368         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+369         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+370 
+371         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+372         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+373         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+374 
+375         const std::vector<Real>& dzetadx_map = fe\&.get_fe_map()\&.get_dzetadx();
+376         const std::vector<Real>& dzetady_map = fe\&.get_fe_map()\&.get_dzetady();
+377         const std::vector<Real>& dzetadz_map = fe\&.get_fe_map()\&.get_dzetadz();
+378 
+379         for (unsigned int i=0; i<d2phi\&.size(); i++)
+380           for (unsigned int p=0; p<d2phi[i]\&.size(); p++)
+381             {
+382               d2phi[i][p]\&.slice(0)\&.slice(0) = d2phidx2[i][p] =
+383                 d2phidxi2[i][p]*dxidx_map[p]*dxidx_map[p] +
+384                 2*d2phidxideta[i][p]*dxidx_map[p]*detadx_map[p] +
+385                 2*d2phidxidzeta[i][p]*dxidx_map[p]*dzetadx_map[p] +
+386                 2*d2phidetadzeta[i][p]*detadx_map[p]*dzetadx_map[p] +
+387                 d2phideta2[i][p]*detadx_map[p]*detadx_map[p] +
+388                 d2phidzeta2[i][p]*dzetadx_map[p]*dzetadx_map[p];
+389 
+390               d2phi[i][p]\&.slice(0)\&.slice(1) =
+391                 d2phi[i][p]\&.slice(1)\&.slice(0) = d2phidxdy[i][p] =
+392                 d2phidxi2[i][p]*dxidx_map[p]*dxidy_map[p] +
+393                 d2phidxideta[i][p]*dxidx_map[p]*detady_map[p] +
+394                 d2phidxidzeta[i][p]*dxidx_map[p]*dzetady_map[p] +
+395                 d2phideta2[i][p]*detadx_map[p]*detady_map[p] +
+396                 d2phidxideta[i][p]*detadx_map[p]*dxidy_map[p] +
+397                 d2phidetadzeta[i][p]*detadx_map[p]*dzetady_map[p] +
+398                 d2phidzeta2[i][p]*dzetadx_map[p]*dzetady_map[p] +
+399                 d2phidxidzeta[i][p]*dzetadx_map[p]*dxidy_map[p] +
+400                 d2phidetadzeta[i][p]*dzetadx_map[p]*detady_map[p];
+401 
+402               d2phi[i][p]\&.slice(0)\&.slice(2) =
+403                 d2phi[i][p]\&.slice(2)\&.slice(0) = d2phidy2[i][p] =
+404                 d2phidxi2[i][p]*dxidx_map[p]*dxidz_map[p] +
+405                 d2phidxideta[i][p]*dxidx_map[p]*detadz_map[p] +
+406                 d2phidxidzeta[i][p]*dxidx_map[p]*dzetadz_map[p] +
+407                 d2phideta2[i][p]*detadx_map[p]*detadz_map[p] +
+408                 d2phidxideta[i][p]*detadx_map[p]*dxidz_map[p] +
+409                 d2phidetadzeta[i][p]*detadx_map[p]*dzetadz_map[p] +
+410                 d2phidzeta2[i][p]*dzetadx_map[p]*dzetadz_map[p] +
+411                 d2phidxidzeta[i][p]*dzetadx_map[p]*dxidz_map[p] +
+412                 d2phidetadzeta[i][p]*dzetadx_map[p]*detadz_map[p];
+413 
+414               d2phi[i][p]\&.slice(1)\&.slice(1) = d2phidxdz[i][p] =
+415                 d2phidxi2[i][p]*dxidy_map[p]*dxidy_map[p] +
+416                 2*d2phidxideta[i][p]*dxidy_map[p]*detady_map[p] +
+417                 2*d2phidxidzeta[i][p]*dxidy_map[p]*dzetady_map[p] +
+418                 2*d2phidetadzeta[i][p]*detady_map[p]*dzetady_map[p] +
+419                 d2phideta2[i][p]*detady_map[p]*detady_map[p] +
+420                 d2phidzeta2[i][p]*dzetady_map[p]*dzetady_map[p];
+421 
+422               d2phi[i][p]\&.slice(1)\&.slice(2) =
+423                 d2phi[i][p]\&.slice(2)\&.slice(1) = d2phidydz[i][p] =
+424                 d2phidxi2[i][p]*dxidy_map[p]*dxidz_map[p] +
+425                 d2phidxideta[i][p]*dxidy_map[p]*detadz_map[p] +
+426                 d2phidxidzeta[i][p]*dxidy_map[p]*dzetadz_map[p] +
+427                 d2phideta2[i][p]*detady_map[p]*detadz_map[p] +
+428                 d2phidxideta[i][p]*detady_map[p]*dxidz_map[p] +
+429                 d2phidetadzeta[i][p]*detady_map[p]*dzetadz_map[p] +
+430                 d2phidzeta2[i][p]*dzetady_map[p]*dzetadz_map[p] +
+431                 d2phidxidzeta[i][p]*dzetady_map[p]*dxidz_map[p] +
+432                 d2phidetadzeta[i][p]*dzetady_map[p]*detadz_map[p];
+433 
+434               d2phi[i][p]\&.slice(2)\&.slice(2) = d2phidz2[i][p] =
+435                 d2phidxi2[i][p]*dxidz_map[p]*dxidz_map[p] +
+436                 2*d2phidxideta[i][p]*dxidz_map[p]*detadz_map[p] +
+437                 2*d2phidxidzeta[i][p]*dxidz_map[p]*dzetadz_map[p] +
+438                 2*d2phidetadzeta[i][p]*detadz_map[p]*dzetadz_map[p] +
+439                 d2phideta2[i][p]*detadz_map[p]*detadz_map[p] +
+440                 d2phidzeta2[i][p]*dzetadz_map[p]*dzetadz_map[p];
+441             }
+442 
+443         break;
+444       }
+445 
+446     default:
+447       libmesh_error();
+448 
+449     } // switch(dim)
+450 
+451   return;
+452 }
+.fi
+.SS "template<typename T > virtual void \fBlibMesh::H1FETransformation\fP< T >::map_div (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputDivergence > > &div_phi) const\fC [virtual]\fP"
+Evaluates the shape function divergence in physical coordinates based on H1 conforming finite element transformation\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.SS "template<> void \fBlibMesh::H1FETransformation\fP< \fBReal\fP >::map_div (const unsigned int, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBReal\fP > &, std::vector< std::vector< \fBFEGenericBase\fP< \fBReal\fP >::OutputDivergence > > &) const"
+
+.PP
+Definition at line 597 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+602 {
+603   libMesh::err << "Computing the divergence of a shape function only\n"
+604                << "makes sense for vector-valued elements\&." << std::endl;
+605   libmesh_error();
+606 }
+.fi
+.SS "template<> void \fBlibMesh::H1FETransformation\fP< \fBRealGradient\fP >::map_div (const unsigned intdim, const \fBElem\fP *const, const std::vector< \fBPoint\fP > &, const \fBFEGenericBase\fP< \fBRealGradient\fP > &fe, std::vector< std::vector< \fBFEGenericBase\fP< \fBRealGradient\fP >::OutputDivergence > > &div_phi) const"
+
+.PP
+Definition at line 611 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::FEMap::get_detadx(), libMesh::FEMap::get_detady(), libMesh::FEMap::get_detadz(), libMesh::FEGenericBase< T >::get_dphideta(), libMesh::FEGenericBase< T >::get_dphidxi(), libMesh::FEGenericBase< T >::get_dphidzeta(), libMesh::FEMap::get_dxidx(), libMesh::FEMap::get_dxidy(), libMesh::FEMap::get_dxidz(), libMesh::FEMap::get_dzetadx(), libMesh::FEMap::get_dzetady(), libMesh::FEMap::get_dzetadz(), libMesh::FEAbstract::get_fe_map(), and libMesh::Real\&.
+.PP
+.nf
+616 {
+617   switch(dim)
+618     {
+619       // The divergence only make sense in 2D and 3D
+620     case 0:
+621     case 1:
+622       {
+623         libmesh_error();
+624       }
+625     case 2:
+626       {
+627         const std::vector<std::vector<RealGradient> >& dphidxi = fe\&.get_dphidxi();
+628         const std::vector<std::vector<RealGradient> >& dphideta = fe\&.get_dphideta();
+629 
+630         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+631         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+632 
+633         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+634         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+635 
+636         /*
+637           In 2D: div = dphi_x/dx + dphi_y/dy
+638         */
+639         for (unsigned int i=0; i<div_phi\&.size(); i++)
+640           for (unsigned int p=0; p<div_phi[i]\&.size(); p++)
+641             {
+642 
+643               Real dphix_dx = (dphidxi[i][p]\&.slice(0))*dxidx_map[p]
+644                 + (dphideta[i][p]\&.slice(0))*detadx_map[p];
+645 
+646               Real dphiy_dy = (dphidxi[i][p]\&.slice(1))*dxidy_map[p]
+647                 + (dphideta[i][p]\&.slice(1))*detady_map[p];
+648 
+649               div_phi[i][p] = dphix_dx + dphiy_dy;
+650             }
+651         break;
+652       }
+653     case 3:
+654       {
+655         const std::vector<std::vector<RealGradient> >& dphidxi = fe\&.get_dphidxi();
+656         const std::vector<std::vector<RealGradient> >& dphideta = fe\&.get_dphideta();
+657         const std::vector<std::vector<RealGradient> >& dphidzeta = fe\&.get_dphidzeta();
+658 
+659         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+660         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+661         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+662 
+663         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+664         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+665         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+666 
+667         const std::vector<Real>& dzetadx_map = fe\&.get_fe_map()\&.get_dzetadx();
+668         const std::vector<Real>& dzetady_map = fe\&.get_fe_map()\&.get_dzetady();
+669         const std::vector<Real>& dzetadz_map = fe\&.get_fe_map()\&.get_dzetadz();
+670 
+671         /*
+672           In 3D: div = dphi_x/dx + dphi_y/dy + dphi_z/dz
+673         */
+674         for (unsigned int i=0; i<div_phi\&.size(); i++)
+675           for (unsigned int p=0; p<div_phi[i]\&.size(); p++)
+676             {
+677               Real dphix_dx = (dphidxi[i][p]\&.slice(0))*dxidx_map[p]
+678                 + (dphideta[i][p]\&.slice(0))*detadx_map[p]
+679                 + (dphidzeta[i][p]\&.slice(0))*dzetadx_map[p];
+680 
+681               Real dphiy_dy = (dphidxi[i][p]\&.slice(1))*dxidy_map[p]
+682                 + (dphideta[i][p]\&.slice(1))*detady_map[p]
+683                 + (dphidzeta[i][p]\&.slice(1))*dzetady_map[p];
+684 
+685               Real dphiz_dz = (dphidxi[i][p]\&.slice(2))*dxidz_map[p]
+686                 + (dphideta[i][p]\&.slice(2))*detadz_map[p]
+687                 + (dphidzeta[i][p]\&.slice(2))*dzetadz_map[p];
+688 
+689               div_phi[i][p] = dphix_dx + dphiy_dy + dphiz_dz;
+690             }
+691 
+692         break;
+693       }
+694     } // switch(dim)
+695 
+696   return;
+697 }
+.fi
+.SS "template<typename OutputShape > void \fBlibMesh::H1FETransformation\fP< OutputShape >::map_dphi (const unsigned intdim, const \fBElem\fP *constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< typename \fBFEGenericBase\fP< OutputShape >::OutputGradient > > &dphi, std::vector< std::vector< OutputShape > > &dphidx, std::vector< std::vector< OutputShape > > &dphidy, std::vector< std::vector< OutputShape > > &dphidz) const\fC [virtual]\fP"
+Evaluates shape function gradients in physical coordinates for H1 conforming elements\&. dphi/dx = dphi/dxi * dxi/dx, etc\&. 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 82 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::FEMap::get_detadx(), libMesh::FEMap::get_detady(), libMesh::FEMap::get_detadz(), libMesh::FEGenericBase< T >::get_dphideta(), libMesh::FEGenericBase< T >::get_dphidxi(), libMesh::FEGenericBase< T >::get_dphidzeta(), libMesh::FEMap::get_dxidx(), libMesh::FEMap::get_dxidy(), libMesh::FEMap::get_dxidz(), libMesh::FEMap::get_dzetadx(), libMesh::FEMap::get_dzetady(), libMesh::FEMap::get_dzetadz(), and libMesh::FEAbstract::get_fe_map()\&.
+.PP
+.nf
+90 {
+91   switch(dim)
+92     {
+93     case 0: // No derivatives in 0D
+94       {
+95         for (unsigned int i=0; i<dphi\&.size(); i++)
+96           for (unsigned int p=0; p<dphi[i]\&.size(); p++)
+97             {
+98               dphi[i][p] = 0\&.;
+99             }
+100         break;
+101       }
+102 
+103     case 1:
+104       {
+105         const std::vector<std::vector<OutputShape> >& dphidxi = fe\&.get_dphidxi();
+106 
+107         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+108 #if LIBMESH_DIM>1
+109         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+110 #endif
+111 #if LIBMESH_DIM>2
+112         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+113 #endif
+114 
+115         for (unsigned int i=0; i<dphi\&.size(); i++)
+116           for (unsigned int p=0; p<dphi[i]\&.size(); p++)
+117             {
+118               // dphi/dx    = (dphi/dxi)*(dxi/dx)
+119               dphi[i][p]\&.slice(0) = dphidx[i][p] = dphidxi[i][p]*dxidx_map[p];
+120 
+121 #if LIBMESH_DIM>1
+122               dphi[i][p]\&.slice(1)  = dphidy[i][p] = dphidxi[i][p]*dxidy_map[p];
+123 #endif
+124 #if LIBMESH_DIM>2
+125               dphi[i][p]\&.slice(2) = dphidz[i][p] = dphidxi[i][p]*dxidz_map[p];
+126 #endif
+127             }
+128 
+129         break;
+130       }
+131 
+132     case 2:
+133       {
+134         const std::vector<std::vector<OutputShape> >& dphidxi = fe\&.get_dphidxi();
+135         const std::vector<std::vector<OutputShape> >& dphideta = fe\&.get_dphideta();
+136 
+137         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+138         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+139 #if LIBMESH_DIM > 2
+140         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+141 #endif
+142 
+143         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+144         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+145 #if LIBMESH_DIM > 2
+146         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+147 #endif
+148 
+149         for (unsigned int i=0; i<dphi\&.size(); i++)
+150           for (unsigned int p=0; p<dphi[i]\&.size(); p++)
+151             {
+152               // dphi/dx    = (dphi/dxi)*(dxi/dx) + (dphi/deta)*(deta/dx)
+153               dphi[i][p]\&.slice(0) = dphidx[i][p] = (dphidxi[i][p]*dxidx_map[p] +
+154                                                     dphideta[i][p]*detadx_map[p]);
+155 
+156               // dphi/dy    = (dphi/dxi)*(dxi/dy) + (dphi/deta)*(deta/dy)
+157               dphi[i][p]\&.slice(1) = dphidy[i][p] = (dphidxi[i][p]*dxidy_map[p] +
+158                                                     dphideta[i][p]*detady_map[p]);
+159 
+160 #if LIBMESH_DIM > 2
+161               // dphi/dz    = (dphi/dxi)*(dxi/dz) + (dphi/deta)*(deta/dz)
+162               dphi[i][p]\&.slice(2) = dphidz[i][p] = (dphidxi[i][p]*dxidz_map[p] +
+163                                                     dphideta[i][p]*detadz_map[p]);
+164 #endif
+165             }
+166 
+167         break;
+168       }
+169 
+170     case 3:
+171       {
+172         const std::vector<std::vector<OutputShape> >& dphidxi = fe\&.get_dphidxi();
+173         const std::vector<std::vector<OutputShape> >& dphideta = fe\&.get_dphideta();
+174         const std::vector<std::vector<OutputShape> >& dphidzeta = fe\&.get_dphidzeta();
+175 
+176         const std::vector<Real>& dxidx_map = fe\&.get_fe_map()\&.get_dxidx();
+177         const std::vector<Real>& dxidy_map = fe\&.get_fe_map()\&.get_dxidy();
+178         const std::vector<Real>& dxidz_map = fe\&.get_fe_map()\&.get_dxidz();
+179 
+180         const std::vector<Real>& detadx_map = fe\&.get_fe_map()\&.get_detadx();
+181         const std::vector<Real>& detady_map = fe\&.get_fe_map()\&.get_detady();
+182         const std::vector<Real>& detadz_map = fe\&.get_fe_map()\&.get_detadz();
+183 
+184         const std::vector<Real>& dzetadx_map = fe\&.get_fe_map()\&.get_dzetadx();
+185         const std::vector<Real>& dzetady_map = fe\&.get_fe_map()\&.get_dzetady();
+186         const std::vector<Real>& dzetadz_map = fe\&.get_fe_map()\&.get_dzetadz();
+187 
+188         for (unsigned int i=0; i<dphi\&.size(); i++)
+189           for (unsigned int p=0; p<dphi[i]\&.size(); p++)
+190             {
+191               // dphi/dx    = (dphi/dxi)*(dxi/dx) + (dphi/deta)*(deta/dx) + (dphi/dzeta)*(dzeta/dx);
+192               dphi[i][p]\&.slice(0) = dphidx[i][p] = (dphidxi[i][p]*dxidx_map[p] +
+193                                                     dphideta[i][p]*detadx_map[p] +
+194                                                     dphidzeta[i][p]*dzetadx_map[p]);
+195 
+196               // dphi/dy    = (dphi/dxi)*(dxi/dy) + (dphi/deta)*(deta/dy) + (dphi/dzeta)*(dzeta/dy);
+197               dphi[i][p]\&.slice(1) = dphidy[i][p] = (dphidxi[i][p]*dxidy_map[p] +
+198                                                     dphideta[i][p]*detady_map[p] +
+199                                                     dphidzeta[i][p]*dzetady_map[p]);
+200 
+201               // dphi/dz    = (dphi/dxi)*(dxi/dz) + (dphi/deta)*(deta/dz) + (dphi/dzeta)*(dzeta/dz);
+202               dphi[i][p]\&.slice(2) = dphidz[i][p] = (dphidxi[i][p]*dxidz_map[p] +
+203                                                     dphideta[i][p]*detadz_map[p] +
+204                                                     dphidzeta[i][p]*dzetadz_map[p]);
+205             }
+206         break;
+207       }
+208 
+209     default:
+210       libmesh_error();
+211 
+212     } // switch(dim)
+213 
+214   return;
+215 }
+.fi
+.SS "template<typename OutputShape > void \fBlibMesh::H1FETransformation\fP< OutputShape >::map_phi (const unsigned intdim, const \fBElem\fP * constelem, const std::vector< \fBPoint\fP > &qp, const \fBFEGenericBase\fP< OutputShape > &fe, std::vector< std::vector< OutputShape > > &phi) const\fC [virtual]\fP"
+Evaluates shape functions in physical coordinates for H1 conforming elements\&. In this case $ \phi(x) = \phi(\xi) $ 
+.PP
+Implements \fBlibMesh::FETransformationBase< OutputShape >\fP\&.
+.PP
+Definition at line 25 of file h1_fe_transformation\&.C\&.
+.PP
+References libMesh::FEAbstract::get_fe_type()\&.
+.PP
+.nf
+30 {
+31   switch(dim)
+32     {
+33     case 0:
+34       {
+35         for (unsigned int i=0; i<phi\&.size(); i++)
+36           {
+37             libmesh_assert_equal_to ( qp\&.size(), phi[i]\&.size() );
+38             for (unsigned int p=0; p<phi[i]\&.size(); p++)
+39               FEInterface::shape<OutputShape>(0, fe\&.get_fe_type(), elem, i, qp[p], phi[i][p]);
+40           }
+41         break;
+42       }
+43     case 1:
+44       {
+45         for (unsigned int i=0; i<phi\&.size(); i++)
+46           {
+47             libmesh_assert_equal_to ( qp\&.size(), phi[i]\&.size() );
+48             for (unsigned int p=0; p<phi[i]\&.size(); p++)
+49               FEInterface::shape<OutputShape>(1, fe\&.get_fe_type(), elem, i, qp[p], phi[i][p]);
+50           }
+51         break;
+52       }
+53     case 2:
+54       {
+55         for (unsigned int i=0; i<phi\&.size(); i++)
+56           {
+57             libmesh_assert_equal_to ( qp\&.size(), phi[i]\&.size() );
+58             for (unsigned int p=0; p<phi[i]\&.size(); p++)
+59               FEInterface::shape<OutputShape>(2, fe\&.get_fe_type(), elem, i, qp[p], phi[i][p]);
+60           }
+61         break;
+62       }
+63     case 3:
+64       {
+65         for (unsigned int i=0; i<phi\&.size(); i++)
+66           {
+67             libmesh_assert_equal_to ( qp\&.size(), phi[i]\&.size() );
+68             for (unsigned int p=0; p<phi[i]\&.size(); p++)
+69               FEInterface::shape<OutputShape>(3, fe\&.get_fe_type(), elem, i, qp[p], phi[i][p]);
+70           }
+71         break;
+72       }
+73     default:
+74       libmesh_error();
+75     }
+76 
+77   return;
+78 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,1731 @@
+.TH "netcdf.h" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBnc_vlen_t\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef int \fBnc_type\fP"
+.br
+.ti -1c
+.RI "typedef int \fBnclong\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "EXTERNL const char * \fBnc_inq_libvers\fP (void)"
+.br
+.ti -1c
+.RI "EXTERNL const char * \fBnc_strerror\fP (int \fBncerr\fP)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc__create\fP (const char *path, int cmode, size_t initialsz, size_t *chunksizehintp, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_create\fP (const char *path, int cmode, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc__open\fP (const char *path, int mode, size_t *chunksizehintp, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_open\fP (const char *path, int mode, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_path\fP (int ncid, size_t *pathlen, char *path)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_ncid\fP (int ncid, const char *name, int *grp_ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grps\fP (int ncid, int *numgrps, int *ncids)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grpname\fP (int ncid, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grpname_full\fP (int ncid, size_t *lenp, char *full_name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grpname_len\fP (int ncid, size_t *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grp_parent\fP (int ncid, int *parent_ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grp_ncid\fP (int ncid, const char *grp_name, int *grp_ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_grp_full_ncid\fP (int ncid, const char *full_name, int *grp_ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varids\fP (int ncid, int *nvars, int *varids)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dimids\fP (int ncid, int *ndims, int *dimids, int include_parents)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_typeids\fP (int ncid, int *ntypes, int *typeids)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_type_equal\fP (int ncid1, \fBnc_type\fP typeid1, int ncid2, \fBnc_type\fP typeid2, int *\fBequal\fP)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_grp\fP (int parent_ncid, const char *name, int *new_ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_rename_grp\fP (int grpid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_compound\fP (int ncid, size_t size, const char *name, \fBnc_type\fP *typeidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_insert_compound\fP (int ncid, \fBnc_type\fP xtype, const char *name, size_t offset, \fBnc_type\fP field_typeid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_insert_array_compound\fP (int ncid, \fBnc_type\fP xtype, const char *name, size_t offset, \fBnc_type\fP field_typeid, int ndims, const int *dim_sizes)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_type\fP (int ncid, \fBnc_type\fP xtype, char *name, size_t *size)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_typeid\fP (int ncid, const char *name, \fBnc_type\fP *typeidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound\fP (int ncid, \fBnc_type\fP xtype, char *name, size_t *sizep, size_t *nfieldsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_name\fP (int ncid, \fBnc_type\fP xtype, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_size\fP (int ncid, \fBnc_type\fP xtype, size_t *sizep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_nfields\fP (int ncid, \fBnc_type\fP xtype, size_t *nfieldsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_field\fP (int ncid, \fBnc_type\fP xtype, int fieldid, char *name, size_t *offsetp, \fBnc_type\fP *field_typeidp, int *ndimsp, int *dim_sizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_fieldname\fP (int ncid, \fBnc_type\fP xtype, int fieldid, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_fieldindex\fP (int ncid, \fBnc_type\fP xtype, const char *name, int *fieldidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_fieldoffset\fP (int ncid, \fBnc_type\fP xtype, int fieldid, size_t *offsetp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_fieldtype\fP (int ncid, \fBnc_type\fP xtype, int fieldid, \fBnc_type\fP *field_typeidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_fieldndims\fP (int ncid, \fBnc_type\fP xtype, int fieldid, int *ndimsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_fielddim_sizes\fP (int ncid, \fBnc_type\fP xtype, int fieldid, int *dim_sizes)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_vlen\fP (int ncid, const char *name, \fBnc_type\fP base_typeid, \fBnc_type\fP *xtypep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_vlen\fP (int ncid, \fBnc_type\fP xtype, char *name, size_t *datum_sizep, \fBnc_type\fP *base_nc_typep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_free_vlen\fP (\fBnc_vlen_t\fP *vl)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_free_vlens\fP (size_t len, \fBnc_vlen_t\fP vlens[])"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vlen_element\fP (int ncid, int typeid1, void *vlen_element, size_t len, const void *\fBdata\fP)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vlen_element\fP (int ncid, int typeid1, const void *vlen_element, size_t *len, void *\fBdata\fP)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_free_string\fP (size_t len, char **\fBdata\fP)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_user_type\fP (int ncid, \fBnc_type\fP xtype, char *name, size_t *size, \fBnc_type\fP *base_nc_typep, size_t *nfieldsp, int *classp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att\fP (int ncid, int varid, const char *name, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_enum\fP (int ncid, \fBnc_type\fP base_typeid, const char *name, \fBnc_type\fP *typeidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_insert_enum\fP (int ncid, \fBnc_type\fP xtype, const char *name, const void *value)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_enum\fP (int ncid, \fBnc_type\fP xtype, char *name, \fBnc_type\fP *base_nc_typep, size_t *base_sizep, size_t *num_membersp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_enum_member\fP (int ncid, \fBnc_type\fP xtype, int idx, char *name, void *value)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_enum_ident\fP (int ncid, \fBnc_type\fP xtype, long long value, char *identifier)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_opaque\fP (int ncid, size_t size, const char *name, \fBnc_type\fP *xtypep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_opaque\fP (int ncid, \fBnc_type\fP xtype, char *name, size_t *sizep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var\fP (int ncid, int varid, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var\fP (int ncid, int varid, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1\fP (int ncid, int varid, const size_t *indexp, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1\fP (int ncid, int varid, const size_t *indexp, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara\fP (int ncid, int varid, const size_t *startp, const size_t *countp, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var_deflate\fP (int ncid, int varid, int shuffle, int deflate, int deflate_level)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_deflate\fP (int ncid, int varid, int *shufflep, int *deflatep, int *deflate_levelp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_szip\fP (int ncid, int varid, int *options_maskp, int *pixels_per_blockp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var_fletcher32\fP (int ncid, int varid, int fletcher32)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_fletcher32\fP (int ncid, int varid, int *fletcher32p)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var_chunking\fP (int ncid, int varid, int storage, const size_t *chunksizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_chunking\fP (int ncid, int varid, int *storagep, size_t *chunksizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var_fill\fP (int ncid, int varid, int no_fill, const void *fill_value)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_fill\fP (int ncid, int varid, int *no_fill, void *fill_valuep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var_endian\fP (int ncid, int varid, int endian)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_endian\fP (int ncid, int varid, int *endianp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_fill\fP (int ncid, int fillmode, int *old_modep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_default_format\fP (int format, int *old_formatp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_chunk_cache\fP (size_t size, size_t nelems, float preemption)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_chunk_cache\fP (size_t *sizep, size_t *nelemsp, float *preemptionp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_var_chunk_cache\fP (int ncid, int varid, size_t size, size_t nelems, float preemption)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_chunk_cache\fP (int ncid, int varid, size_t *sizep, size_t *nelemsp, float *preemptionp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_redef\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc__enddef\fP (int ncid, size_t h_minfree, size_t v_align, size_t v_minfree, size_t r_align)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_enddef\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_sync\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_abort\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_close\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq\fP (int ncid, int *ndimsp, int *nvarsp, int *nattsp, int *unlimdimidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_ndims\fP (int ncid, int *ndimsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_nvars\fP (int ncid, int *nvarsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_natts\fP (int ncid, int *nattsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_unlimdim\fP (int ncid, int *unlimdimidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_unlimdims\fP (int ncid, int *nunlimdimsp, int *unlimdimidsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_format\fP (int ncid, int *formatp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_format_extended\fP (int ncid, int *formatp, int *modep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_dim\fP (int ncid, const char *name, size_t len, int *idp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dimid\fP (int ncid, const char *name, int *idp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dim\fP (int ncid, int dimid, char *name, size_t *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dimname\fP (int ncid, int dimid, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dimlen\fP (int ncid, int dimid, size_t *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_rename_dim\fP (int ncid, int dimid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_att\fP (int ncid, int varid, const char *name, \fBnc_type\fP *xtypep, size_t *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_attid\fP (int ncid, int varid, const char *name, int *idp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_atttype\fP (int ncid, int varid, const char *name, \fBnc_type\fP *xtypep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_attlen\fP (int ncid, int varid, const char *name, size_t *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_attname\fP (int ncid, int varid, int attnum, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_copy_att\fP (int ncid_in, int varid_in, const char *name, int ncid_out, int varid_out)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_rename_att\fP (int ncid, int varid, const char *name, const char *newname)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_del_att\fP (int ncid, int varid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_text\fP (int ncid, int varid, const char *name, size_t len, const char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_text\fP (int ncid, int varid, const char *name, char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_uchar\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_uchar\fP (int ncid, int varid, const char *name, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_schar\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const signed char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_schar\fP (int ncid, int varid, const char *name, signed char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_short\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_short\fP (int ncid, int varid, const char *name, short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_int\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_int\fP (int ncid, int varid, const char *name, int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_long\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_long\fP (int ncid, int varid, const char *name, long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_float\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const float *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_float\fP (int ncid, int varid, const char *name, float *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_double\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const double *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_double\fP (int ncid, int varid, const char *name, double *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_ushort\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const unsigned short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_ushort\fP (int ncid, int varid, const char *name, unsigned short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_uint\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const unsigned int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_uint\fP (int ncid, int varid, const char *name, unsigned int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_longlong\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_longlong\fP (int ncid, int varid, const char *name, long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_ulonglong\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const unsigned long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_ulonglong\fP (int ncid, int varid, const char *name, unsigned long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_string\fP (int ncid, int varid, const char *name, size_t len, const char **op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_string\fP (int ncid, int varid, const char *name, char **ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var\fP (int ncid, const char *name, \fBnc_type\fP xtype, int ndims, const int *dimidsp, int *varidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var\fP (int ncid, int varid, char *name, \fBnc_type\fP *xtypep, int *ndimsp, int *dimidsp, int *nattsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varid\fP (int ncid, const char *name, int *varidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varname\fP (int ncid, int varid, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_vartype\fP (int ncid, int varid, \fBnc_type\fP *xtypep)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varndims\fP (int ncid, int varid, int *ndimsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_vardimid\fP (int ncid, int varid, int *dimidsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varnatts\fP (int ncid, int varid, int *nattsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_rename_var\fP (int ncid, int varid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_copy_var\fP (int ncid_in, int varid, int ncid_out)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_text\fP (int ncid, int varid, const size_t *indexp, const char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_text\fP (int ncid, int varid, const size_t *indexp, char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_uchar\fP (int ncid, int varid, const size_t *indexp, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_uchar\fP (int ncid, int varid, const size_t *indexp, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_schar\fP (int ncid, int varid, const size_t *indexp, const signed char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_schar\fP (int ncid, int varid, const size_t *indexp, signed char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_short\fP (int ncid, int varid, const size_t *indexp, const short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_short\fP (int ncid, int varid, const size_t *indexp, short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_int\fP (int ncid, int varid, const size_t *indexp, const int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_int\fP (int ncid, int varid, const size_t *indexp, int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_long\fP (int ncid, int varid, const size_t *indexp, const long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_long\fP (int ncid, int varid, const size_t *indexp, long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_float\fP (int ncid, int varid, const size_t *indexp, const float *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_float\fP (int ncid, int varid, const size_t *indexp, float *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_double\fP (int ncid, int varid, const size_t *indexp, const double *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_double\fP (int ncid, int varid, const size_t *indexp, double *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_ushort\fP (int ncid, int varid, const size_t *indexp, const unsigned short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_ushort\fP (int ncid, int varid, const size_t *indexp, unsigned short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_uint\fP (int ncid, int varid, const size_t *indexp, const unsigned int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_uint\fP (int ncid, int varid, const size_t *indexp, unsigned int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_longlong\fP (int ncid, int varid, const size_t *indexp, const long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_longlong\fP (int ncid, int varid, const size_t *indexp, long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_ulonglong\fP (int ncid, int varid, const size_t *indexp, const unsigned long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_ulonglong\fP (int ncid, int varid, const size_t *indexp, unsigned long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_string\fP (int ncid, int varid, const size_t *indexp, const char **op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_string\fP (int ncid, int varid, const size_t *indexp, char **ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_text\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_text\fP (int ncid, int varid, const size_t *startp, const size_t *countp, char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_uchar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_uchar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_schar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const signed char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_schar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, signed char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_short\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_short\fP (int ncid, int varid, const size_t *startp, const size_t *countp, short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_int\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_int\fP (int ncid, int varid, const size_t *startp, const size_t *countp, int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_long\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_long\fP (int ncid, int varid, const size_t *startp, const size_t *countp, long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_float\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const float *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_float\fP (int ncid, int varid, const size_t *startp, const size_t *countp, float *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_double\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const double *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_double\fP (int ncid, int varid, const size_t *startp, const size_t *countp, double *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_ushort\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const unsigned short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_ushort\fP (int ncid, int varid, const size_t *startp, const size_t *countp, unsigned short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_uint\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const unsigned int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_uint\fP (int ncid, int varid, const size_t *startp, const size_t *countp, unsigned int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_longlong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_longlong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_ulonglong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const unsigned long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_ulonglong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, unsigned long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_string\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const char **op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_string\fP (int ncid, int varid, const size_t *startp, const size_t *countp, char **ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_text\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_text\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_uchar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_uchar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_schar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const signed char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_schar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, signed char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_short\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_short\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_int\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_int\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_long\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_long\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_float\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const float *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_float\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, float *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_double\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const double *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_double\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, double *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_ushort\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_ushort\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_uint\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_uint\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_longlong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_longlong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_ulonglong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_ulonglong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_string\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const char **op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_string\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, char **ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_text\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_text\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_uchar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_uchar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_schar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const signed char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_schar\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, signed char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_short\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_short\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_int\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_int\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_long\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_long\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_float\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const float *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_float\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, float *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_double\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const double *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_double\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, double *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_ushort\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_ushort\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_uint\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_uint\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_longlong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_longlong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_ulonglong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_ulonglong\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_string\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const char **op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_string\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, char **ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_text\fP (int ncid, int varid, const char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_text\fP (int ncid, int varid, char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_uchar\fP (int ncid, int varid, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_uchar\fP (int ncid, int varid, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_schar\fP (int ncid, int varid, const signed char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_schar\fP (int ncid, int varid, signed char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_short\fP (int ncid, int varid, const short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_short\fP (int ncid, int varid, short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_int\fP (int ncid, int varid, const int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_int\fP (int ncid, int varid, int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_long\fP (int ncid, int varid, const long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_long\fP (int ncid, int varid, long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_float\fP (int ncid, int varid, const float *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_float\fP (int ncid, int varid, float *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_double\fP (int ncid, int varid, const double *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_double\fP (int ncid, int varid, double *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_ushort\fP (int ncid, int varid, const unsigned short *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_ushort\fP (int ncid, int varid, unsigned short *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_uint\fP (int ncid, int varid, const unsigned int *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_uint\fP (int ncid, int varid, unsigned int *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_longlong\fP (int ncid, int varid, const long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_longlong\fP (int ncid, int varid, long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_ulonglong\fP (int ncid, int varid, const unsigned long long *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_ulonglong\fP (int ncid, int varid, unsigned long long *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_string\fP (int ncid, int varid, const char **op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_string\fP (int ncid, int varid, char **ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_att_ubyte\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, size_t len, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_att_ubyte\fP (int ncid, int varid, const char *name, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var1_ubyte\fP (int ncid, int varid, const size_t *indexp, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var1_ubyte\fP (int ncid, int varid, const size_t *indexp, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vara_ubyte\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vara_ubyte\fP (int ncid, int varid, const size_t *startp, const size_t *countp, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_vars_ubyte\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_vars_ubyte\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_varm_ubyte\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_varm_ubyte\fP (int ncid, int varid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_put_var_ubyte\fP (int ncid, int varid, const unsigned char *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_ubyte\fP (int ncid, int varid, unsigned char *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_log_level\fP (int new_level)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_show_metadata\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc__create_mp\fP (const char *path, int cmode, size_t initialsz, int basepe, size_t *chunksizehintp, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc__open_mp\fP (const char *path, int mode, int basepe, size_t *chunksizehintp, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_delete\fP (const char *path)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_delete_mp\fP (const char *path, int basepe)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_base_pe\fP (int ncid, int pe)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_base_pe\fP (int ncid, int *pe)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnctypelen\fP (\fBnc_type\fP datatype)"
+.br
+.ti -1c
+.RI "EXTERNL void \fBnc_advise\fP (const char *cdf_routine_name, int err, const char *fmt,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnccreate\fP (const char *path, int cmode)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncopen\fP (const char *path, int mode)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncsetfill\fP (int ncid, int fillmode)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncredef\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncendef\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncsync\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncabort\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncclose\fP (int ncid)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncinquire\fP (int ncid, int *ndimsp, int *nvarsp, int *nattsp, int *unlimdimp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncdimdef\fP (int ncid, const char *name, long len)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncdimid\fP (int ncid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncdiminq\fP (int ncid, int dimid, char *name, long *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncdimrename\fP (int ncid, int dimid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattput\fP (int ncid, int varid, const char *name, \fBnc_type\fP xtype, int len, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattinq\fP (int ncid, int varid, const char *name, \fBnc_type\fP *xtypep, int *lenp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattget\fP (int ncid, int varid, const char *name, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattcopy\fP (int ncid_in, int varid_in, const char *name, int ncid_out, int varid_out)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattname\fP (int ncid, int varid, int attnum, char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattrename\fP (int ncid, int varid, const char *name, const char *newname)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncattdel\fP (int ncid, int varid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvardef\fP (int ncid, const char *name, \fBnc_type\fP xtype, int ndims, const int *dimidsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarid\fP (int ncid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarinq\fP (int ncid, int varid, char *name, \fBnc_type\fP *xtypep, int *ndimsp, int *dimidsp, int *nattsp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarput1\fP (int ncid, int varid, const long *indexp, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarget1\fP (int ncid, int varid, const long *indexp, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarput\fP (int ncid, int varid, const long *startp, const long *countp, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarget\fP (int ncid, int varid, const long *startp, const long *countp, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarputs\fP (int ncid, int varid, const long *startp, const long *countp, const long *stridep, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvargets\fP (int ncid, int varid, const long *startp, const long *countp, const long *stridep, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarputg\fP (int ncid, int varid, const long *startp, const long *countp, const long *stridep, const long *imapp, const void *op)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvargetg\fP (int ncid, int varid, const long *startp, const long *countp, const long *stridep, const long *imapp, void *ip)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncvarrename\fP (int ncid, int varid, const char *name)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncrecinq\fP (int ncid, int *nrecvarsp, int *recvaridsp, long *recsizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncrecget\fP (int ncid, long recnum, void **datap)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncrecput\fP (int ncid, long recnum, void *const *datap)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "EXTERNL int \fBncerr\fP"
+.br
+.ti -1c
+.RI "EXTERNL int \fBncopts\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Main header file for the C API\&.
+.PP
+Copyright 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 University Corporation for Atmospheric Research/Unidata\&. See \fBcopyright\fP file for more info\&. 
+.PP
+Definition in file \fBnetcdf\&.h\fP\&.
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef int \fBnc_type\fP"
+The nc_type type is just an int\&. 
+.PP
+Definition at line 27 of file netcdf\&.h\&.
+.SS "typedef int \fBnclong\fP"
+
+.PP
+Definition at line 1786 of file netcdf\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "EXTERNL int nc__create (const char *path, intcmode, size_tinitialsz, size_t *chunksizehintp, int *ncidp)"
+
+.SS "EXTERNL int nc__create_mp (const char *path, intcmode, size_tinitialsz, intbasepe, size_t *chunksizehintp, int *ncidp)"
+
+.SS "EXTERNL int nc__enddef (intncid, size_th_minfree, size_tv_align, size_tv_minfree, size_tr_align)"
+
+.SS "EXTERNL int nc__open (const char *path, intmode, size_t *chunksizehintp, int *ncidp)"
+
+.SS "EXTERNL int nc__open_mp (const char *path, intmode, intbasepe, size_t *chunksizehintp, int *ncidp)"
+
+.SS "EXTERNL int nc_abort (intncid)"
+
+.SS "EXTERNL void nc_advise (const char *cdf_routine_name, interr, const char *fmt, \&.\&.\&.)"
+
+.SS "EXTERNL int nc_close (intncid)"
+
+.SS "EXTERNL int nc_copy_att (intncid_in, intvarid_in, const char *name, intncid_out, intvarid_out)"
+
+.SS "EXTERNL int nc_copy_var (intncid_in, intvarid, intncid_out)"
+
+.SS "EXTERNL int nc_create (const char *path, intcmode, int *ncidp)"
+
+.SS "EXTERNL int nc_def_compound (intncid, size_tsize, const char *name, \fBnc_type\fP *typeidp)"
+
+.SS "EXTERNL int nc_def_dim (intncid, const char *name, size_tlen, int *idp)"
+
+.SS "EXTERNL int nc_def_enum (intncid, \fBnc_type\fPbase_typeid, const char *name, \fBnc_type\fP *typeidp)"
+
+.SS "EXTERNL int nc_def_grp (intparent_ncid, const char *name, int *new_ncid)"
+
+.SS "EXTERNL int nc_def_opaque (intncid, size_tsize, const char *name, \fBnc_type\fP *xtypep)"
+
+.SS "EXTERNL int nc_def_var (intncid, const char *name, \fBnc_type\fPxtype, intndims, const int *dimidsp, int *varidp)"
+
+.SS "EXTERNL int nc_def_var_chunking (intncid, intvarid, intstorage, const size_t *chunksizesp)"
+
+.SS "EXTERNL int nc_def_var_deflate (intncid, intvarid, intshuffle, intdeflate, intdeflate_level)"
+
+.SS "EXTERNL int nc_def_var_endian (intncid, intvarid, intendian)"
+
+.SS "EXTERNL int nc_def_var_fill (intncid, intvarid, intno_fill, const void *fill_value)"
+
+.SS "EXTERNL int nc_def_var_fletcher32 (intncid, intvarid, intfletcher32)"
+
+.SS "EXTERNL int nc_def_vlen (intncid, const char *name, \fBnc_type\fPbase_typeid, \fBnc_type\fP *xtypep)"
+
+.SS "EXTERNL int nc_del_att (intncid, intvarid, const char *name)"
+
+.SS "EXTERNL int nc_delete (const char *path)"
+
+.SS "EXTERNL int nc_delete_mp (const char *path, intbasepe)"
+
+.SS "EXTERNL int nc_enddef (intncid)"
+
+.SS "EXTERNL int nc_free_string (size_tlen, char **data)"
+
+.SS "EXTERNL int nc_free_vlen (\fBnc_vlen_t\fP *vl)"
+
+.SS "EXTERNL int nc_free_vlens (size_tlen, \fBnc_vlen_t\fPvlens[])"
+
+.SS "EXTERNL int nc_get_att (intncid, intvarid, const char *name, void *ip)"
+
+.SS "EXTERNL int nc_get_att_double (intncid, intvarid, const char *name, double *ip)"
+
+.SS "EXTERNL int nc_get_att_float (intncid, intvarid, const char *name, float *ip)"
+
+.SS "EXTERNL int nc_get_att_int (intncid, intvarid, const char *name, int *ip)"
+
+.SS "EXTERNL int nc_get_att_long (intncid, intvarid, const char *name, long *ip)"
+
+.SS "EXTERNL int nc_get_att_longlong (intncid, intvarid, const char *name, long long *ip)"
+
+.SS "EXTERNL int nc_get_att_schar (intncid, intvarid, const char *name, signed char *ip)"
+
+.SS "EXTERNL int nc_get_att_short (intncid, intvarid, const char *name, short *ip)"
+
+.SS "EXTERNL int nc_get_att_string (intncid, intvarid, const char *name, char **ip)"
+
+.SS "EXTERNL int nc_get_att_text (intncid, intvarid, const char *name, char *ip)"
+
+.SS "EXTERNL int nc_get_att_ubyte (intncid, intvarid, const char *name, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_att_uchar (intncid, intvarid, const char *name, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_att_uint (intncid, intvarid, const char *name, unsigned int *ip)"
+
+.SS "EXTERNL int nc_get_att_ulonglong (intncid, intvarid, const char *name, unsigned long long *ip)"
+
+.SS "EXTERNL int nc_get_att_ushort (intncid, intvarid, const char *name, unsigned short *ip)"
+
+.SS "EXTERNL int nc_get_chunk_cache (size_t *sizep, size_t *nelemsp, float *preemptionp)"
+
+.SS "EXTERNL int nc_get_var (intncid, intvarid, void *ip)"
+
+.SS "EXTERNL int nc_get_var1 (intncid, intvarid, const size_t *indexp, void *ip)"
+
+.SS "EXTERNL int nc_get_var1_double (intncid, intvarid, const size_t *indexp, double *ip)"
+
+.SS "EXTERNL int nc_get_var1_float (intncid, intvarid, const size_t *indexp, float *ip)"
+
+.SS "EXTERNL int nc_get_var1_int (intncid, intvarid, const size_t *indexp, int *ip)"
+
+.SS "EXTERNL int nc_get_var1_long (intncid, intvarid, const size_t *indexp, long *ip)"
+
+.SS "EXTERNL int nc_get_var1_longlong (intncid, intvarid, const size_t *indexp, long long *ip)"
+
+.SS "EXTERNL int nc_get_var1_schar (intncid, intvarid, const size_t *indexp, signed char *ip)"
+
+.SS "EXTERNL int nc_get_var1_short (intncid, intvarid, const size_t *indexp, short *ip)"
+
+.SS "EXTERNL int nc_get_var1_string (intncid, intvarid, const size_t *indexp, char **ip)"
+
+.SS "EXTERNL int nc_get_var1_text (intncid, intvarid, const size_t *indexp, char *ip)"
+
+.SS "EXTERNL int nc_get_var1_ubyte (intncid, intvarid, const size_t *indexp, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_var1_uchar (intncid, intvarid, const size_t *indexp, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_var1_uint (intncid, intvarid, const size_t *indexp, unsigned int *ip)"
+
+.SS "EXTERNL int nc_get_var1_ulonglong (intncid, intvarid, const size_t *indexp, unsigned long long *ip)"
+
+.SS "EXTERNL int nc_get_var1_ushort (intncid, intvarid, const size_t *indexp, unsigned short *ip)"
+
+.SS "EXTERNL int nc_get_var_chunk_cache (intncid, intvarid, size_t *sizep, size_t *nelemsp, float *preemptionp)"
+
+.SS "EXTERNL int nc_get_var_double (intncid, intvarid, double *ip)"
+
+.SS "EXTERNL int nc_get_var_float (intncid, intvarid, float *ip)"
+
+.SS "EXTERNL int nc_get_var_int (intncid, intvarid, int *ip)"
+
+.SS "EXTERNL int nc_get_var_long (intncid, intvarid, long *ip)"
+
+.SS "EXTERNL int nc_get_var_longlong (intncid, intvarid, long long *ip)"
+
+.SS "EXTERNL int nc_get_var_schar (intncid, intvarid, signed char *ip)"
+
+.SS "EXTERNL int nc_get_var_short (intncid, intvarid, short *ip)"
+
+.SS "EXTERNL int nc_get_var_string (intncid, intvarid, char **ip)"
+
+.SS "EXTERNL int nc_get_var_text (intncid, intvarid, char *ip)"
+
+.SS "EXTERNL int nc_get_var_ubyte (intncid, intvarid, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_var_uchar (intncid, intvarid, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_var_uint (intncid, intvarid, unsigned int *ip)"
+
+.SS "EXTERNL int nc_get_var_ulonglong (intncid, intvarid, unsigned long long *ip)"
+
+.SS "EXTERNL int nc_get_var_ushort (intncid, intvarid, unsigned short *ip)"
+
+.SS "EXTERNL int nc_get_vara (intncid, intvarid, const size_t *startp, const size_t *countp, void *ip)"
+
+.SS "EXTERNL int nc_get_vara_double (intncid, intvarid, const size_t *startp, const size_t *countp, double *ip)"
+
+.SS "EXTERNL int nc_get_vara_float (intncid, intvarid, const size_t *startp, const size_t *countp, float *ip)"
+
+.SS "EXTERNL int nc_get_vara_int (intncid, intvarid, const size_t *startp, const size_t *countp, int *ip)"
+
+.SS "EXTERNL int nc_get_vara_long (intncid, intvarid, const size_t *startp, const size_t *countp, long *ip)"
+
+.SS "EXTERNL int nc_get_vara_longlong (intncid, intvarid, const size_t *startp, const size_t *countp, long long *ip)"
+
+.SS "EXTERNL int nc_get_vara_schar (intncid, intvarid, const size_t *startp, const size_t *countp, signed char *ip)"
+
+.SS "EXTERNL int nc_get_vara_short (intncid, intvarid, const size_t *startp, const size_t *countp, short *ip)"
+
+.SS "EXTERNL int nc_get_vara_string (intncid, intvarid, const size_t *startp, const size_t *countp, char **ip)"
+
+.SS "EXTERNL int nc_get_vara_text (intncid, intvarid, const size_t *startp, const size_t *countp, char *ip)"
+
+.SS "EXTERNL int nc_get_vara_ubyte (intncid, intvarid, const size_t *startp, const size_t *countp, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_vara_uchar (intncid, intvarid, const size_t *startp, const size_t *countp, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_vara_uint (intncid, intvarid, const size_t *startp, const size_t *countp, unsigned int *ip)"
+
+.SS "EXTERNL int nc_get_vara_ulonglong (intncid, intvarid, const size_t *startp, const size_t *countp, unsigned long long *ip)"
+
+.SS "EXTERNL int nc_get_vara_ushort (intncid, intvarid, const size_t *startp, const size_t *countp, unsigned short *ip)"
+
+.SS "EXTERNL int nc_get_varm (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, void *ip)"
+
+.SS "EXTERNL int nc_get_varm_double (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, double *ip)"
+
+.SS "EXTERNL int nc_get_varm_float (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, float *ip)"
+
+.SS "EXTERNL int nc_get_varm_int (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, int *ip)"
+
+.SS "EXTERNL int nc_get_varm_long (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, long *ip)"
+
+.SS "EXTERNL int nc_get_varm_longlong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, long long *ip)"
+
+.SS "EXTERNL int nc_get_varm_schar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, signed char *ip)"
+
+.SS "EXTERNL int nc_get_varm_short (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, short *ip)"
+
+.SS "EXTERNL int nc_get_varm_string (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, char **ip)"
+
+.SS "EXTERNL int nc_get_varm_text (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, char *ip)"
+
+.SS "EXTERNL int nc_get_varm_ubyte (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_varm_uchar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_varm_uint (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned int *ip)"
+
+.SS "EXTERNL int nc_get_varm_ulonglong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned long long *ip)"
+
+.SS "EXTERNL int nc_get_varm_ushort (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, unsigned short *ip)"
+
+.SS "EXTERNL int nc_get_vars (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, void *ip)"
+
+.SS "EXTERNL int nc_get_vars_double (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, double *ip)"
+
+.SS "EXTERNL int nc_get_vars_float (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, float *ip)"
+
+.SS "EXTERNL int nc_get_vars_int (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, int *ip)"
+
+.SS "EXTERNL int nc_get_vars_long (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, long *ip)"
+
+.SS "EXTERNL int nc_get_vars_longlong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, long long *ip)"
+
+.SS "EXTERNL int nc_get_vars_schar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, signed char *ip)"
+
+.SS "EXTERNL int nc_get_vars_short (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, short *ip)"
+
+.SS "EXTERNL int nc_get_vars_string (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, char **ip)"
+
+.SS "EXTERNL int nc_get_vars_text (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, char *ip)"
+
+.SS "EXTERNL int nc_get_vars_ubyte (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_vars_uchar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned char *ip)"
+
+.SS "EXTERNL int nc_get_vars_uint (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned int *ip)"
+
+.SS "EXTERNL int nc_get_vars_ulonglong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned long long *ip)"
+
+.SS "EXTERNL int nc_get_vars_ushort (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, unsigned short *ip)"
+
+.SS "EXTERNL int nc_get_vlen_element (intncid, inttypeid1, const void *vlen_element, size_t *len, void *data)"
+
+.SS "EXTERNL int nc_inq (intncid, int *ndimsp, int *nvarsp, int *nattsp, int *unlimdimidp)"
+
+.SS "EXTERNL int nc_inq_att (intncid, intvarid, const char *name, \fBnc_type\fP *xtypep, size_t *lenp)"
+
+.SS "EXTERNL int nc_inq_attid (intncid, intvarid, const char *name, int *idp)"
+
+.SS "EXTERNL int nc_inq_attlen (intncid, intvarid, const char *name, size_t *lenp)"
+
+.SS "EXTERNL int nc_inq_attname (intncid, intvarid, intattnum, char *name)"
+
+.SS "EXTERNL int nc_inq_atttype (intncid, intvarid, const char *name, \fBnc_type\fP *xtypep)"
+
+.SS "EXTERNL int nc_inq_base_pe (intncid, int *pe)"
+
+.SS "EXTERNL int nc_inq_compound (intncid, \fBnc_type\fPxtype, char *name, size_t *sizep, size_t *nfieldsp)"
+
+.SS "EXTERNL int nc_inq_compound_field (intncid, \fBnc_type\fPxtype, intfieldid, char *name, size_t *offsetp, \fBnc_type\fP *field_typeidp, int *ndimsp, int *dim_sizesp)"
+
+.SS "EXTERNL int nc_inq_compound_fielddim_sizes (intncid, \fBnc_type\fPxtype, intfieldid, int *dim_sizes)"
+
+.SS "EXTERNL int nc_inq_compound_fieldindex (intncid, \fBnc_type\fPxtype, const char *name, int *fieldidp)"
+
+.SS "EXTERNL int nc_inq_compound_fieldname (intncid, \fBnc_type\fPxtype, intfieldid, char *name)"
+
+.SS "EXTERNL int nc_inq_compound_fieldndims (intncid, \fBnc_type\fPxtype, intfieldid, int *ndimsp)"
+
+.SS "EXTERNL int nc_inq_compound_fieldoffset (intncid, \fBnc_type\fPxtype, intfieldid, size_t *offsetp)"
+
+.SS "EXTERNL int nc_inq_compound_fieldtype (intncid, \fBnc_type\fPxtype, intfieldid, \fBnc_type\fP *field_typeidp)"
+
+.SS "EXTERNL int nc_inq_compound_name (intncid, \fBnc_type\fPxtype, char *name)"
+
+.SS "EXTERNL int nc_inq_compound_nfields (intncid, \fBnc_type\fPxtype, size_t *nfieldsp)"
+
+.SS "EXTERNL int nc_inq_compound_size (intncid, \fBnc_type\fPxtype, size_t *sizep)"
+
+.SS "EXTERNL int nc_inq_dim (intncid, intdimid, char *name, size_t *lenp)"
+
+.SS "EXTERNL int nc_inq_dimid (intncid, const char *name, int *idp)"
+
+.SS "EXTERNL int nc_inq_dimids (intncid, int *ndims, int *dimids, intinclude_parents)"
+
+.SS "EXTERNL int nc_inq_dimlen (intncid, intdimid, size_t *lenp)"
+
+.SS "EXTERNL int nc_inq_dimname (intncid, intdimid, char *name)"
+
+.SS "EXTERNL int nc_inq_enum (intncid, \fBnc_type\fPxtype, char *name, \fBnc_type\fP *base_nc_typep, size_t *base_sizep, size_t *num_membersp)"
+
+.SS "EXTERNL int nc_inq_enum_ident (intncid, \fBnc_type\fPxtype, long longvalue, char *identifier)"
+
+.SS "EXTERNL int nc_inq_enum_member (intncid, \fBnc_type\fPxtype, intidx, char *name, void *value)"
+
+.SS "EXTERNL int nc_inq_format (intncid, int *formatp)"
+
+.SS "EXTERNL int nc_inq_format_extended (intncid, int *formatp, int *modep)"
+
+.SS "EXTERNL int nc_inq_grp_full_ncid (intncid, const char *full_name, int *grp_ncid)"
+
+.SS "EXTERNL int nc_inq_grp_ncid (intncid, const char *grp_name, int *grp_ncid)"
+
+.SS "EXTERNL int nc_inq_grp_parent (intncid, int *parent_ncid)"
+
+.SS "EXTERNL int nc_inq_grpname (intncid, char *name)"
+
+.SS "EXTERNL int nc_inq_grpname_full (intncid, size_t *lenp, char *full_name)"
+
+.SS "EXTERNL int nc_inq_grpname_len (intncid, size_t *lenp)"
+
+.SS "EXTERNL int nc_inq_grps (intncid, int *numgrps, int *ncids)"
+
+.SS "EXTERNL const char* nc_inq_libvers (void)"
+
+.SS "EXTERNL int nc_inq_natts (intncid, int *nattsp)"
+
+.SS "EXTERNL int nc_inq_ncid (intncid, const char *name, int *grp_ncid)"
+
+.SS "EXTERNL int nc_inq_ndims (intncid, int *ndimsp)"
+
+.SS "EXTERNL int nc_inq_nvars (intncid, int *nvarsp)"
+
+.SS "EXTERNL int nc_inq_opaque (intncid, \fBnc_type\fPxtype, char *name, size_t *sizep)"
+
+.SS "EXTERNL int nc_inq_path (intncid, size_t *pathlen, char *path)"
+
+.SS "EXTERNL int nc_inq_type (intncid, \fBnc_type\fPxtype, char *name, size_t *size)"
+
+.SS "EXTERNL int nc_inq_type_equal (intncid1, \fBnc_type\fPtypeid1, intncid2, \fBnc_type\fPtypeid2, int *equal)"
+
+.SS "EXTERNL int nc_inq_typeid (intncid, const char *name, \fBnc_type\fP *typeidp)"
+
+.SS "EXTERNL int nc_inq_typeids (intncid, int *ntypes, int *typeids)"
+
+.SS "EXTERNL int nc_inq_unlimdim (intncid, int *unlimdimidp)"
+
+.SS "EXTERNL int nc_inq_unlimdims (intncid, int *nunlimdimsp, int *unlimdimidsp)"
+
+.SS "EXTERNL int nc_inq_user_type (intncid, \fBnc_type\fPxtype, char *name, size_t *size, \fBnc_type\fP *base_nc_typep, size_t *nfieldsp, int *classp)"
+
+.SS "EXTERNL int nc_inq_var (intncid, intvarid, char *name, \fBnc_type\fP *xtypep, int *ndimsp, int *dimidsp, int *nattsp)"
+
+.SS "EXTERNL int nc_inq_var_chunking (intncid, intvarid, int *storagep, size_t *chunksizesp)"
+
+.SS "EXTERNL int nc_inq_var_deflate (intncid, intvarid, int *shufflep, int *deflatep, int *deflate_levelp)"
+
+.SS "EXTERNL int nc_inq_var_endian (intncid, intvarid, int *endianp)"
+
+.SS "EXTERNL int nc_inq_var_fill (intncid, intvarid, int *no_fill, void *fill_valuep)"
+
+.SS "EXTERNL int nc_inq_var_fletcher32 (intncid, intvarid, int *fletcher32p)"
+
+.SS "EXTERNL int nc_inq_var_szip (intncid, intvarid, int *options_maskp, int *pixels_per_blockp)"
+
+.SS "EXTERNL int nc_inq_vardimid (intncid, intvarid, int *dimidsp)"
+
+.SS "EXTERNL int nc_inq_varid (intncid, const char *name, int *varidp)"
+
+.SS "EXTERNL int nc_inq_varids (intncid, int *nvars, int *varids)"
+
+.SS "EXTERNL int nc_inq_varname (intncid, intvarid, char *name)"
+
+.SS "EXTERNL int nc_inq_varnatts (intncid, intvarid, int *nattsp)"
+
+.SS "EXTERNL int nc_inq_varndims (intncid, intvarid, int *ndimsp)"
+
+.SS "EXTERNL int nc_inq_vartype (intncid, intvarid, \fBnc_type\fP *xtypep)"
+
+.SS "EXTERNL int nc_inq_vlen (intncid, \fBnc_type\fPxtype, char *name, size_t *datum_sizep, \fBnc_type\fP *base_nc_typep)"
+
+.SS "EXTERNL int nc_insert_array_compound (intncid, \fBnc_type\fPxtype, const char *name, size_toffset, \fBnc_type\fPfield_typeid, intndims, const int *dim_sizes)"
+
+.SS "EXTERNL int nc_insert_compound (intncid, \fBnc_type\fPxtype, const char *name, size_toffset, \fBnc_type\fPfield_typeid)"
+
+.SS "EXTERNL int nc_insert_enum (intncid, \fBnc_type\fPxtype, const char *name, const void *value)"
+
+.SS "EXTERNL int nc_open (const char *path, intmode, int *ncidp)"
+
+.SS "EXTERNL int nc_put_att (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const void *op)"
+
+.SS "EXTERNL int nc_put_att_double (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const double *op)"
+
+.SS "EXTERNL int nc_put_att_float (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const float *op)"
+
+.SS "EXTERNL int nc_put_att_int (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const int *op)"
+
+.SS "EXTERNL int nc_put_att_long (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const long *op)"
+
+.SS "EXTERNL int nc_put_att_longlong (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const long long *op)"
+
+.SS "EXTERNL int nc_put_att_schar (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const signed char *op)"
+
+.SS "EXTERNL int nc_put_att_short (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const short *op)"
+
+.SS "EXTERNL int nc_put_att_string (intncid, intvarid, const char *name, size_tlen, const char **op)"
+
+.SS "EXTERNL int nc_put_att_text (intncid, intvarid, const char *name, size_tlen, const char *op)"
+
+.SS "EXTERNL int nc_put_att_ubyte (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_att_uchar (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_att_uint (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const unsigned int *op)"
+
+.SS "EXTERNL int nc_put_att_ulonglong (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const unsigned long long *op)"
+
+.SS "EXTERNL int nc_put_att_ushort (intncid, intvarid, const char *name, \fBnc_type\fPxtype, size_tlen, const unsigned short *op)"
+
+.SS "EXTERNL int nc_put_var (intncid, intvarid, const void *op)"
+
+.SS "EXTERNL int nc_put_var1 (intncid, intvarid, const size_t *indexp, const void *op)"
+
+.SS "EXTERNL int nc_put_var1_double (intncid, intvarid, const size_t *indexp, const double *op)"
+
+.SS "EXTERNL int nc_put_var1_float (intncid, intvarid, const size_t *indexp, const float *op)"
+
+.SS "EXTERNL int nc_put_var1_int (intncid, intvarid, const size_t *indexp, const int *op)"
+
+.SS "EXTERNL int nc_put_var1_long (intncid, intvarid, const size_t *indexp, const long *op)"
+
+.SS "EXTERNL int nc_put_var1_longlong (intncid, intvarid, const size_t *indexp, const long long *op)"
+
+.SS "EXTERNL int nc_put_var1_schar (intncid, intvarid, const size_t *indexp, const signed char *op)"
+
+.SS "EXTERNL int nc_put_var1_short (intncid, intvarid, const size_t *indexp, const short *op)"
+
+.SS "EXTERNL int nc_put_var1_string (intncid, intvarid, const size_t *indexp, const char **op)"
+
+.SS "EXTERNL int nc_put_var1_text (intncid, intvarid, const size_t *indexp, const char *op)"
+
+.SS "EXTERNL int nc_put_var1_ubyte (intncid, intvarid, const size_t *indexp, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_var1_uchar (intncid, intvarid, const size_t *indexp, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_var1_uint (intncid, intvarid, const size_t *indexp, const unsigned int *op)"
+
+.SS "EXTERNL int nc_put_var1_ulonglong (intncid, intvarid, const size_t *indexp, const unsigned long long *op)"
+
+.SS "EXTERNL int nc_put_var1_ushort (intncid, intvarid, const size_t *indexp, const unsigned short *op)"
+
+.SS "EXTERNL int nc_put_var_double (intncid, intvarid, const double *op)"
+
+.SS "EXTERNL int nc_put_var_float (intncid, intvarid, const float *op)"
+
+.SS "EXTERNL int nc_put_var_int (intncid, intvarid, const int *op)"
+
+.SS "EXTERNL int nc_put_var_long (intncid, intvarid, const long *op)"
+
+.SS "EXTERNL int nc_put_var_longlong (intncid, intvarid, const long long *op)"
+
+.SS "EXTERNL int nc_put_var_schar (intncid, intvarid, const signed char *op)"
+
+.SS "EXTERNL int nc_put_var_short (intncid, intvarid, const short *op)"
+
+.SS "EXTERNL int nc_put_var_string (intncid, intvarid, const char **op)"
+
+.SS "EXTERNL int nc_put_var_text (intncid, intvarid, const char *op)"
+
+.SS "EXTERNL int nc_put_var_ubyte (intncid, intvarid, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_var_uchar (intncid, intvarid, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_var_uint (intncid, intvarid, const unsigned int *op)"
+
+.SS "EXTERNL int nc_put_var_ulonglong (intncid, intvarid, const unsigned long long *op)"
+
+.SS "EXTERNL int nc_put_var_ushort (intncid, intvarid, const unsigned short *op)"
+
+.SS "EXTERNL int nc_put_vara (intncid, intvarid, const size_t *startp, const size_t *countp, const void *op)"
+
+.SS "EXTERNL int nc_put_vara_double (intncid, intvarid, const size_t *startp, const size_t *countp, const double *op)"
+
+.SS "EXTERNL int nc_put_vara_float (intncid, intvarid, const size_t *startp, const size_t *countp, const float *op)"
+
+.SS "EXTERNL int nc_put_vara_int (intncid, intvarid, const size_t *startp, const size_t *countp, const int *op)"
+
+.SS "EXTERNL int nc_put_vara_long (intncid, intvarid, const size_t *startp, const size_t *countp, const long *op)"
+
+.SS "EXTERNL int nc_put_vara_longlong (intncid, intvarid, const size_t *startp, const size_t *countp, const long long *op)"
+
+.SS "EXTERNL int nc_put_vara_schar (intncid, intvarid, const size_t *startp, const size_t *countp, const signed char *op)"
+
+.SS "EXTERNL int nc_put_vara_short (intncid, intvarid, const size_t *startp, const size_t *countp, const short *op)"
+
+.SS "EXTERNL int nc_put_vara_string (intncid, intvarid, const size_t *startp, const size_t *countp, const char **op)"
+
+.SS "EXTERNL int nc_put_vara_text (intncid, intvarid, const size_t *startp, const size_t *countp, const char *op)"
+
+.SS "EXTERNL int nc_put_vara_ubyte (intncid, intvarid, const size_t *startp, const size_t *countp, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_vara_uchar (intncid, intvarid, const size_t *startp, const size_t *countp, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_vara_uint (intncid, intvarid, const size_t *startp, const size_t *countp, const unsigned int *op)"
+
+.SS "EXTERNL int nc_put_vara_ulonglong (intncid, intvarid, const size_t *startp, const size_t *countp, const unsigned long long *op)"
+
+.SS "EXTERNL int nc_put_vara_ushort (intncid, intvarid, const size_t *startp, const size_t *countp, const unsigned short *op)"
+
+.SS "EXTERNL int nc_put_varm (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const void *op)"
+
+.SS "EXTERNL int nc_put_varm_double (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const double *op)"
+
+.SS "EXTERNL int nc_put_varm_float (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const float *op)"
+
+.SS "EXTERNL int nc_put_varm_int (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const int *op)"
+
+.SS "EXTERNL int nc_put_varm_long (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const long *op)"
+
+.SS "EXTERNL int nc_put_varm_longlong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const long long *op)"
+
+.SS "EXTERNL int nc_put_varm_schar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const signed char *op)"
+
+.SS "EXTERNL int nc_put_varm_short (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const short *op)"
+
+.SS "EXTERNL int nc_put_varm_string (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const char **op)"
+
+.SS "EXTERNL int nc_put_varm_text (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const char *op)"
+
+.SS "EXTERNL int nc_put_varm_ubyte (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_varm_uchar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_varm_uint (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned int *op)"
+
+.SS "EXTERNL int nc_put_varm_ulonglong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned long long *op)"
+
+.SS "EXTERNL int nc_put_varm_ushort (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const ptrdiff_t *imapp, const unsigned short *op)"
+
+.SS "EXTERNL int nc_put_vars (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const void *op)"
+
+.SS "EXTERNL int nc_put_vars_double (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const double *op)"
+
+.SS "EXTERNL int nc_put_vars_float (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const float *op)"
+
+.SS "EXTERNL int nc_put_vars_int (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const int *op)"
+
+.SS "EXTERNL int nc_put_vars_long (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const long *op)"
+
+.SS "EXTERNL int nc_put_vars_longlong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const long long *op)"
+
+.SS "EXTERNL int nc_put_vars_schar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const signed char *op)"
+
+.SS "EXTERNL int nc_put_vars_short (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const short *op)"
+
+.SS "EXTERNL int nc_put_vars_string (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const char **op)"
+
+.SS "EXTERNL int nc_put_vars_text (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const char *op)"
+
+.SS "EXTERNL int nc_put_vars_ubyte (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_vars_uchar (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned char *op)"
+
+.SS "EXTERNL int nc_put_vars_uint (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned int *op)"
+
+.SS "EXTERNL int nc_put_vars_ulonglong (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned long long *op)"
+
+.SS "EXTERNL int nc_put_vars_ushort (intncid, intvarid, const size_t *startp, const size_t *countp, const ptrdiff_t *stridep, const unsigned short *op)"
+
+.SS "EXTERNL int nc_put_vlen_element (intncid, inttypeid1, void *vlen_element, size_tlen, const void *data)"
+
+.SS "EXTERNL int nc_redef (intncid)"
+
+.SS "EXTERNL int nc_rename_att (intncid, intvarid, const char *name, const char *newname)"
+
+.SS "EXTERNL int nc_rename_dim (intncid, intdimid, const char *name)"
+
+.SS "EXTERNL int nc_rename_grp (intgrpid, const char *name)"
+
+.SS "EXTERNL int nc_rename_var (intncid, intvarid, const char *name)"
+
+.SS "EXTERNL int nc_set_base_pe (intncid, intpe)"
+
+.SS "EXTERNL int nc_set_chunk_cache (size_tsize, size_tnelems, floatpreemption)"
+
+.SS "EXTERNL int nc_set_default_format (intformat, int *old_formatp)"
+
+.SS "EXTERNL int nc_set_fill (intncid, intfillmode, int *old_modep)"
+
+.SS "EXTERNL int nc_set_log_level (intnew_level)"
+
+.SS "EXTERNL int nc_set_var_chunk_cache (intncid, intvarid, size_tsize, size_tnelems, floatpreemption)"
+
+.SS "EXTERNL int nc_show_metadata (intncid)"
+
+.SS "EXTERNL const char* nc_strerror (intncerr)"
+
+.SS "EXTERNL int nc_sync (intncid)"
+
+.SS "EXTERNL int ncabort (intncid)"
+
+.SS "EXTERNL int ncattcopy (intncid_in, intvarid_in, const char *name, intncid_out, intvarid_out)"
+
+.SS "EXTERNL int ncattdel (intncid, intvarid, const char *name)"
+
+.SS "EXTERNL int ncattget (intncid, intvarid, const char *name, void *ip)"
+
+.SS "EXTERNL int ncattinq (intncid, intvarid, const char *name, \fBnc_type\fP *xtypep, int *lenp)"
+
+.SS "EXTERNL int ncattname (intncid, intvarid, intattnum, char *name)"
+
+.SS "EXTERNL int ncattput (intncid, intvarid, const char *name, \fBnc_type\fPxtype, intlen, const void *op)"
+
+.SS "EXTERNL int ncattrename (intncid, intvarid, const char *name, const char *newname)"
+
+.SS "EXTERNL int ncclose (intncid)"
+
+.SS "EXTERNL int nccreate (const char *path, intcmode)"
+
+.SS "EXTERNL int ncdimdef (intncid, const char *name, longlen)"
+
+.SS "EXTERNL int ncdimid (intncid, const char *name)"
+
+.SS "EXTERNL int ncdiminq (intncid, intdimid, char *name, long *lenp)"
+
+.SS "EXTERNL int ncdimrename (intncid, intdimid, const char *name)"
+
+.SS "EXTERNL int ncendef (intncid)"
+
+.SS "EXTERNL int ncinquire (intncid, int *ndimsp, int *nvarsp, int *nattsp, int *unlimdimp)"
+
+.SS "EXTERNL int ncopen (const char *path, intmode)"
+
+.SS "EXTERNL int ncrecget (intncid, longrecnum, void **datap)"
+
+.SS "EXTERNL int ncrecinq (intncid, int *nrecvarsp, int *recvaridsp, long *recsizesp)"
+
+.SS "EXTERNL int ncrecput (intncid, longrecnum, void *const *datap)"
+
+.SS "EXTERNL int ncredef (intncid)"
+
+.SS "EXTERNL int ncsetfill (intncid, intfillmode)"
+
+.SS "EXTERNL int ncsync (intncid)"
+
+.SS "EXTERNL int nctypelen (\fBnc_type\fPdatatype)"
+
+.SS "EXTERNL int ncvardef (intncid, const char *name, \fBnc_type\fPxtype, intndims, const int *dimidsp)"
+
+.SS "EXTERNL int ncvarget (intncid, intvarid, const long *startp, const long *countp, void *ip)"
+
+.SS "EXTERNL int ncvarget1 (intncid, intvarid, const long *indexp, void *ip)"
+
+.SS "EXTERNL int ncvargetg (intncid, intvarid, const long *startp, const long *countp, const long *stridep, const long *imapp, void *ip)"
+
+.SS "EXTERNL int ncvargets (intncid, intvarid, const long *startp, const long *countp, const long *stridep, void *ip)"
+
+.SS "EXTERNL int ncvarid (intncid, const char *name)"
+
+.SS "EXTERNL int ncvarinq (intncid, intvarid, char *name, \fBnc_type\fP *xtypep, int *ndimsp, int *dimidsp, int *nattsp)"
+
+.SS "EXTERNL int ncvarput (intncid, intvarid, const long *startp, const long *countp, const void *op)"
+
+.SS "EXTERNL int ncvarput1 (intncid, intvarid, const long *indexp, const void *op)"
+
+.SS "EXTERNL int ncvarputg (intncid, intvarid, const long *startp, const long *countp, const long *stridep, const long *imapp, const void *op)"
+
+.SS "EXTERNL int ncvarputs (intncid, intvarid, const long *startp, const long *countp, const long *stridep, const void *op)"
+
+.SS "EXTERNL int ncvarrename (intncid, intvarid, const char *name)"
+
+.SH "Variable Documentation"
+.PP 
+.SS "EXTERNL int ncerr"
+
+.PP
+Definition at line 447 of file netcdf\&.h\&.
+.SS "EXTERNL int ncopts"
+
+.PP
+Definition at line 448 of file netcdf\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

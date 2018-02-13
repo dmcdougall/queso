@@ -1,0 +1,109 @@
+.TH "libMesh::Predicates::PID< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Predicates::PID< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <multi_predicates\&.h>\fP
+.PP
+Inherits \fBlibMesh::Predicates::abstract_multi_predicate< T >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPID\fP (const \fBprocessor_id_type\fP proc_id)"
+.br
+.ti -1c
+.RI "virtual bool \fBoperator()\fP (const T &it) const "
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBdeep_copy\fP (const \fBabstract_multi_predicate\fP &rhs)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBpredicate\fP< T > * > \fB_predicates\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>struct libMesh::Predicates::PID< T >"
+
+.PP
+Definition at line 335 of file multi_predicates\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::Predicates::PID\fP< T >::\fBPID\fP (const \fBprocessor_id_type\fPproc_id)\fC [inline]\fP"
+
+.PP
+Definition at line 337 of file multi_predicates\&.h\&.
+.PP
+References libMesh::Predicates::abstract_multi_predicate< T >::_predicates\&.
+.PP
+.nf
+338   {
+339     this->_predicates\&.push_back(new not_null<T>);
+340     this->_predicates\&.push_back(new pid<T>(proc_id));
+341   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > void \fBlibMesh::Predicates::abstract_multi_predicate\fP< T >::deep_copy (const \fBabstract_multi_predicate\fP< T > &rhs)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 99 of file multi_predicates\&.h\&.
+.PP
+References libMesh::Predicates::abstract_multi_predicate< T >::_predicates\&.
+.PP
+Referenced by libMesh::Predicates::abstract_multi_predicate< T >::abstract_multi_predicate(), and libMesh::Predicates::abstract_multi_predicate< T >::operator=()\&.
+.PP
+.nf
+100   {
+101     for (unsigned int i=0; i<rhs\&._predicates\&.size(); ++i)
+102       _predicates\&.push_back(rhs\&._predicates[i]->clone());
+103   }
+.fi
+.SS "template<typename T > virtual bool \fBlibMesh::Predicates::abstract_multi_predicate\fP< T >::operator() (const T &it) const\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 71 of file multi_predicates\&.h\&.
+.PP
+References libMesh::Predicates::abstract_multi_predicate< T >::_predicates, libMesh::libmesh_assert(), and pred\&.
+.PP
+.nf
+72   {
+73     for (unsigned int i=0; i<_predicates\&.size(); ++i)
+74       {
+75         const predicate<T>* pred = _predicates[i];
+76 
+77         libmesh_assert (pred);
+78 
+79         if ( ! (*pred)(it) )
+80           return false;
+81       }
+82 
+83     return true;
+84   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T > std::vector<\fBpredicate\fP<T>*> \fBlibMesh::Predicates::abstract_multi_predicate\fP< T >::_predicates\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file multi_predicates\&.h\&.
+.PP
+Referenced by libMesh::Predicates::Active< T >::Active(), libMesh::Predicates::ActiveLocal< T >::ActiveLocal(), libMesh::Predicates::ActiveLocalSubdomain< T >::ActiveLocalSubdomain(), libMesh::Predicates::ActiveNotLocal< T >::ActiveNotLocal(), libMesh::Predicates::ActiveOnBoundary< T >::ActiveOnBoundary(), libMesh::Predicates::ActivePID< T >::ActivePID(), libMesh::Predicates::ActiveSubdomain< T >::ActiveSubdomain(), libMesh::Predicates::ActiveType< T >::ActiveType(), libMesh::Predicates::Ancestor< T >::Ancestor(), libMesh::Predicates::BoundarySide< T >::BoundarySide(), libMesh::Predicates::abstract_multi_predicate< T >::deep_copy(), libMesh::Predicates::IsNull< T >::IsNull(), libMesh::Predicates::Level< T >::Level(), libMesh::Predicates::Local< T >::Local(), libMesh::Predicates::LocalLevel< T >::LocalLevel(), libMesh::Predicates::LocalNotLevel< T >::LocalNotLevel(), libMesh::Predicates::NotActive< T >::NotActive(), libMesh::Predicates::NotAncestor< T >::NotAncestor(), libMesh::Predicates::NotLevel< T >::NotLevel(), libMesh::Predicates::NotLocal< T >::NotLocal(), libMesh::Predicates::NotNull< T >::NotNull(), libMesh::Predicates::NotPID< T >::NotPID(), libMesh::Predicates::NotSubActive< T >::NotSubActive(), libMesh::Predicates::abstract_multi_predicate< T >::operator()(), libMesh::Predicates::abstract_multi_predicate< T >::operator=(), libMesh::Predicates::PID< T >::PID(), libMesh::Predicates::SubActive< T >::SubActive(), libMesh::Predicates::Type< T >::Type(), and libMesh::Predicates::abstract_multi_predicate< T >::~abstract_multi_predicate()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

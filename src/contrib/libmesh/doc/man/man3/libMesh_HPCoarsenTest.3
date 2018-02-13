@@ -1,0 +1,836 @@
+.TH "libMesh::HPCoarsenTest" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::HPCoarsenTest \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <hp_coarsentest\&.h>\fP
+.PP
+Inherits \fBlibMesh::HPSelector\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBHPCoarsenTest\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~HPCoarsenTest\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBselect_refinement\fP (\fBSystem\fP &system)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBp_weight\fP"
+.br
+.ti -1c
+.RI "std::vector< float > \fBcomponent_scale\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBadd_projection\fP (const \fBSystem\fP &, const \fBElem\fP *, unsigned int var)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBElem\fP * \fBcoarse\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > \fBdof_indices\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFEBase\fP > \fBfe\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBFEBase\fP > \fBfe_coarse\fP"
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< \fBReal\fP > > * \fBphi\fP"
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< \fBReal\fP > > * \fBphi_coarse\fP"
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< \fBRealGradient\fP > > * \fBdphi\fP"
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< \fBRealGradient\fP > > * \fBdphi_coarse\fP"
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< \fBRealTensor\fP > > * \fBd2phi\fP"
+.br
+.ti -1c
+.RI "const std::vector< std::vector
+.br
+< \fBRealTensor\fP > > * \fBd2phi_coarse\fP"
+.br
+.ti -1c
+.RI "const std::vector< \fBReal\fP > * \fBJxW\fP"
+.br
+.ti -1c
+.RI "const std::vector< \fBPoint\fP > * \fBxyz_values\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBPoint\fP > \fBcoarse_qpoints\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBQBase\fP > \fBqrule\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< \fBNumber\fP > \fBKe\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBFe\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBUc\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBUp\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class uses the error estimate given by different types of derefinement (h coarsening or p reduction) to choose between h refining and p elevation\&. Currently we assume that a set of elements has already been flagged for h refinement, and we may want to change some of those elements to be flagged for p refinement\&.
+.PP
+This code is currently experimental and will not produce optimal hp meshes without significant improvement\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner, 2006\&. 
+.RE
+.PP
+
+.PP
+Definition at line 67 of file hp_coarsentest\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::HPCoarsenTest::HPCoarsenTest ()\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 74 of file hp_coarsentest\&.h\&.
+.PP
+.nf
+74                   : p_weight(1\&.0)
+75   {
+76     libmesh_experimental();
+77   }
+.fi
+.SS "virtual libMesh::HPCoarsenTest::~HPCoarsenTest ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 82 of file hp_coarsentest\&.h\&.
+.PP
+.nf
+82 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::HPCoarsenTest::add_projection (const \fBSystem\fP &system, const \fBElem\fP *elem, unsigned intvar)\fC [protected]\fP"
+The helper function which adds individual fine element data to the coarse element projection 
+.PP
+Definition at line 46 of file hp_coarsentest\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::TypeVector< T >::add_scaled(), libMesh::TypeTensor< T >::add_scaled(), libMesh::C_ONE, libMesh::C_ZERO, libMesh::Elem::child(), coarse, coarse_qpoints, libMesh::TypeTensor< T >::contract(), libMesh::System::current_solution(), d2phi, d2phi_coarse, dof_indices, libMesh::DofMap::dof_indices(), libMesh::dof_map, dphi, fe, Fe, fe_coarse, libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::FEInterface::inverse_map(), Ke, libMesh::libmesh_assert(), libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_children(), phi_coarse, qrule, libMesh::DenseVector< T >::resize(), libMesh::DenseMatrix< T >::resize(), libMesh::DenseVector< T >::size(), libMesh::Elem::subactive(), Uc, libMesh::DofMap::variable_type(), xyz_values, libMesh::DenseMatrix< T >::zero(), libMesh::DenseVector< T >::zero(), and libMesh::zero\&.
+.PP
+Referenced by select_refinement()\&.
+.PP
+.nf
+49 {
+50   // If we have children, we need to add their projections instead
+51   if (!elem->active())
+52     {
+53       libmesh_assert(!elem->subactive());
+54       for (unsigned int c = 0; c != elem->n_children(); ++c)
+55         this->add_projection(system, elem->child(c), var);
+56       return;
+57     }
+58 
+59   // The DofMap for this system
+60   const DofMap& dof_map = system\&.get_dof_map();
+61 
+62   // The type of finite element to use for this variable
+63   const FEType& fe_type = dof_map\&.variable_type (var);
+64 
+65   const FEContinuity cont = fe->get_continuity();
+66 
+67   fe->reinit(elem);
+68 
+69   dof_map\&.dof_indices(elem, dof_indices, var);
+70 
+71   const unsigned int n_dofs =
+72     libmesh_cast_int<unsigned int>(dof_indices\&.size());
+73 
+74   FEInterface::inverse_map (system\&.get_mesh()\&.mesh_dimension(),
+75                             fe_type, coarse, *xyz_values, coarse_qpoints);
+76 
+77   fe_coarse->reinit(coarse, &coarse_qpoints);
+78 
+79   const unsigned int n_coarse_dofs =
+80     libmesh_cast_int<unsigned int>(phi_coarse->size());
+81 
+82   if (Uc\&.size() == 0)
+83     {
+84       Ke\&.resize(n_coarse_dofs, n_coarse_dofs);
+85       Ke\&.zero();
+86       Fe\&.resize(n_coarse_dofs);
+87       Fe\&.zero();
+88       Uc\&.resize(n_coarse_dofs);
+89       Uc\&.zero();
+90     }
+91   libmesh_assert_equal_to (Uc\&.size(), phi_coarse->size());
+92 
+93   // Loop over the quadrature points
+94   for (unsigned int qp=0; qp<qrule->n_points(); qp++)
+95     {
+96       // The solution value at the quadrature point
+97       Number val = libMesh::zero;
+98       Gradient grad;
+99       Tensor hess;
+100 
+101       for (unsigned int i=0; i != n_dofs; i++)
+102         {
+103           dof_id_type dof_num = dof_indices[i];
+104           val += (*phi)[i][qp] *
+105             system\&.current_solution(dof_num);
+106           if (cont == C_ZERO || cont == C_ONE)
+107             grad\&.add_scaled((*dphi)[i][qp],system\&.current_solution(dof_num));
+108           // grad += (*dphi)[i][qp] *
+109           //  system\&.current_solution(dof_num);
+110           if (cont == C_ONE)
+111             hess\&.add_scaled((*d2phi)[i][qp], system\&.current_solution(dof_num));
+112           // hess += (*d2phi)[i][qp] *
+113           //  system\&.current_solution(dof_num);
+114         }
+115 
+116       // The projection matrix and vector
+117       for (unsigned int i=0; i != Fe\&.size(); ++i)
+118         {
+119           Fe(i) += (*JxW)[qp] *
+120             (*phi_coarse)[i][qp]*val;
+121           if (cont == C_ZERO || cont == C_ONE)
+122             Fe(i) += (*JxW)[qp] *
+123               (grad*(*dphi_coarse)[i][qp]);
+124           if (cont == C_ONE)
+125             Fe(i) += (*JxW)[qp] *
+126               hess\&.contract((*d2phi_coarse)[i][qp]);
+127           // Fe(i) += (*JxW)[qp] *
+128           //  (*d2phi_coarse)[i][qp]\&.contract(hess);
+129 
+130           for (unsigned int j=0; j != Fe\&.size(); ++j)
+131             {
+132               Ke(i,j) += (*JxW)[qp] *
+133                 (*phi_coarse)[i][qp]*(*phi_coarse)[j][qp];
+134               if (cont == C_ZERO || cont == C_ONE)
+135                 Ke(i,j) += (*JxW)[qp] *
+136                   (*dphi_coarse)[i][qp]*(*dphi_coarse)[j][qp];
+137               if (cont == C_ONE)
+138                 Ke(i,j) += (*JxW)[qp] *
+139                   ((*d2phi_coarse)[i][qp]\&.contract((*d2phi_coarse)[j][qp]));
+140             }
+141         }
+142     }
+143 }
+.fi
+.SS "void libMesh::HPCoarsenTest::select_refinement (\fBSystem\fP &system)\fC [virtual]\fP"
+This pure virtual function must be redefined in derived classes to take a mesh flagged for h refinement and potentially change the desired refinement type\&. 
+.PP
+Implements \fBlibMesh::HPSelector\fP\&.
+.PP
+Definition at line 145 of file hp_coarsentest\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), add_projection(), libMesh::TypeVector< T >::add_scaled(), libMesh::TypeTensor< T >::add_scaled(), libMesh::FEGenericBase< T >::build(), libMesh::C_ONE, libMesh::C_ZERO, libMesh::DenseMatrix< T >::cholesky_solve(), coarse, coarse_qpoints, libMesh::HPSelector::component_scale, libMesh::TypeTensor< T >::contract(), libMesh::System::current_solution(), d2phi, d2phi_coarse, libMesh::FEType::default_quadrature_rule(), libMesh::dim, libMesh::DISCONTINUOUS, libMesh::Elem::DO_NOTHING, dof_indices, libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::DofObject::dof_number(), dphi, dphi_coarse, libMesh::err, libMesh::ErrorVectorReal, fe, Fe, fe_coarse, libMesh::System::get_dof_map(), libMesh::System::get_mesh(), libMesh::Elem::get_node(), libMesh::DofObject::id(), libMesh::FEInterface::inverse_map(), libMesh::Elem::is_vertex(), JxW, Ke, libMesh::libmesh_assert(), std::max(), mesh, libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_children(), libMesh::FEInterface::n_dofs(), libMesh::MeshBase::n_elem(), n_nodes, libMesh::Elem::n_nodes(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::TensorTools::norm_sq(), libMesh::System::number(), libMesh::FEType::order, libMesh::Elem::p_level(), p_weight, libMesh::Elem::parent(), phi, phi_coarse, qrule, libMesh::Real, libMesh::Elem::REFINE, libMesh::Elem::refinement_flag(), libMesh::DenseVector< T >::resize(), libMesh::DenseMatrix< T >::resize(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), libMesh::DenseVector< T >::size(), libMesh::TypeVector< T >::size_sq(), libMesh::TypeTensor< T >::size_sq(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::TypeVector< T >::subtract_scaled(), libMesh::TypeTensor< T >::subtract_scaled(), libMesh::Elem::type(), Uc, Up, libMesh::DofMap::variable_type(), xyz_values, libMesh::DenseMatrix< T >::zero(), libMesh::DenseVector< T >::zero(), and libMesh::zero\&.
+.PP
+.nf
+146 {
+147   START_LOG("select_refinement()", "HPCoarsenTest");
+148 
+149   // The current mesh
+150   MeshBase& mesh = system\&.get_mesh();
+151 
+152   // The dimensionality of the mesh
+153   const unsigned int dim = mesh\&.mesh_dimension();
+154 
+155   // The number of variables in the system
+156   const unsigned int n_vars = system\&.n_vars();
+157 
+158   // The DofMap for this system
+159   const DofMap& dof_map = system\&.get_dof_map();
+160 
+161   // The system number (for doing bad hackery)
+162   const unsigned int sys_num = system\&.number();
+163 
+164   // Check for a valid component_scale
+165   if (!component_scale\&.empty())
+166     {
+167       if (component_scale\&.size() != n_vars)
+168         {
+169           libMesh::err << "ERROR: component_scale is the wrong size:"
+170                        << std::endl
+171                        << " component_scale\&.size()=" << component_scale\&.size()
+172                        << std::endl
+173                        << " n_vars=" << n_vars
+174                        << std::endl;
+175           libmesh_error();
+176         }
+177     }
+178   else
+179     {
+180       // No specified scaling\&.  Scale all variables by one\&.
+181       component_scale\&.resize (n_vars, 1\&.0);
+182     }
+183 
+184   // Resize the error_per_cell vectors to handle
+185   // the number of elements, initialize them to 0\&.
+186   std::vector<ErrorVectorReal> h_error_per_cell(mesh\&.n_elem(), 0\&.);
+187   std::vector<ErrorVectorReal> p_error_per_cell(mesh\&.n_elem(), 0\&.);
+188 
+189   // Loop over all the variables in the system
+190   for (unsigned int var=0; var<n_vars; var++)
+191     {
+192       // Possibly skip this variable
+193       if (!component_scale\&.empty())
+194         if (component_scale[var] == 0\&.0) continue;
+195 
+196       // The type of finite element to use for this variable
+197       const FEType& fe_type = dof_map\&.variable_type (var);
+198 
+199       // Finite element objects for a fine (and probably a coarse)
+200       // element will be needed
+201       fe = FEBase::build (dim, fe_type);
+202       fe_coarse = FEBase::build (dim, fe_type);
+203 
+204       // Any cached coarse element results have expired
+205       coarse = NULL;
+206       unsigned int cached_coarse_p_level = 0;
+207 
+208       const FEContinuity cont = fe->get_continuity();
+209       libmesh_assert (cont == DISCONTINUOUS || cont == C_ZERO ||
+210                       cont == C_ONE);
+211 
+212       // Build an appropriate quadrature rule
+213       qrule = fe_type\&.default_quadrature_rule(dim);
+214 
+215       // Tell the refined finite element about the quadrature
+216       // rule\&.  The coarse finite element need not know about it
+217       fe->attach_quadrature_rule (qrule\&.get());
+218 
+219       // We will always do the integration
+220       // on the fine elements\&.  Get their Jacobian values, etc\&.\&.
+221       JxW = &(fe->get_JxW());
+222       xyz_values = &(fe->get_xyz());
+223 
+224       // The shape functions
+225       phi = &(fe->get_phi());
+226       phi_coarse = &(fe_coarse->get_phi());
+227 
+228       // The shape function derivatives
+229       if (cont == C_ZERO || cont == C_ONE)
+230         {
+231           dphi = &(fe->get_dphi());
+232           dphi_coarse = &(fe_coarse->get_dphi());
+233         }
+234 
+235 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+236       // The shape function second derivatives
+237       if (cont == C_ONE)
+238         {
+239           d2phi = &(fe->get_d2phi());
+240           d2phi_coarse = &(fe_coarse->get_d2phi());
+241         }
+242 #endif // defined (LIBMESH_ENABLE_SECOND_DERIVATIVES)
+243 
+244       // Iterate over all the active elements in the mesh
+245       // that live on this processor\&.
+246 
+247       MeshBase::const_element_iterator       elem_it  =
+248         mesh\&.active_local_elements_begin();
+249       const MeshBase::const_element_iterator elem_end =
+250         mesh\&.active_local_elements_end();
+251 
+252       for (; elem_it != elem_end; ++elem_it)
+253         {
+254           const Elem* elem = *elem_it;
+255 
+256           // We're only checking elements that are already flagged for h
+257           // refinement
+258           if (elem->refinement_flag() != Elem::REFINE)
+259             continue;
+260 
+261           const dof_id_type e_id = elem->id();
+262 
+263           // Find the projection onto the parent element,
+264           // if necessary
+265           if (elem->parent() &&
+266               (coarse != elem->parent() ||
+267                cached_coarse_p_level != elem->p_level()))
+268             {
+269               Uc\&.resize(0);
+270 
+271               coarse = elem->parent();
+272               cached_coarse_p_level = elem->p_level();
+273 
+274               unsigned int old_parent_level = coarse->p_level();
+275               (const_cast<Elem *>(coarse))->hack_p_level(elem->p_level());
+276 
+277               this->add_projection(system, coarse, var);
+278 
+279               (const_cast<Elem *>(coarse))->hack_p_level(old_parent_level);
+280 
+281               // Solve the h-coarsening projection problem
+282               Ke\&.cholesky_solve(Fe, Uc);
+283             }
+284 
+285           fe->reinit(elem);
+286 
+287           // Get the DOF indices for the fine element
+288           dof_map\&.dof_indices (elem, dof_indices, var);
+289 
+290           // The number of quadrature points
+291           const unsigned int n_qp = qrule->n_points();
+292 
+293           // The number of DOFS on the fine element
+294           const unsigned int n_dofs =
+295             libmesh_cast_int<unsigned int>(dof_indices\&.size());
+296 
+297           // The number of nodes on the fine element
+298           const unsigned int n_nodes = elem->n_nodes();
+299 
+300           // The average element value (used as an ugly hack
+301           // when we have nothing p-coarsened to compare to)
+302           // Real average_val = 0\&.;
+303           Number average_val = 0\&.;
+304 
+305           // Calculate this variable's contribution to the p
+306           // refinement error
+307 
+308           if (elem->p_level() == 0)
+309             {
+310               unsigned int n_vertices = 0;
+311               for (unsigned int n = 0; n != n_nodes; ++n)
+312                 if (elem->is_vertex(n))
+313                   {
+314                     n_vertices++;
+315                     const Node * const node = elem->get_node(n);
+316                     average_val += system\&.current_solution
+317                       (node->dof_number(sys_num,var,0));
+318                   }
+319               average_val /= n_vertices;
+320             }
+321           else
+322             {
+323               unsigned int old_elem_level = elem->p_level();
+324               (const_cast<Elem *>(elem))->hack_p_level(old_elem_level - 1);
+325 
+326               fe_coarse->reinit(elem, &(qrule->get_points()));
+327 
+328               const unsigned int n_coarse_dofs =
+329                 libmesh_cast_int<unsigned int>(phi_coarse->size());
+330 
+331               (const_cast<Elem *>(elem))->hack_p_level(old_elem_level);
+332 
+333               Ke\&.resize(n_coarse_dofs, n_coarse_dofs);
+334               Ke\&.zero();
+335               Fe\&.resize(n_coarse_dofs);
+336               Fe\&.zero();
+337 
+338               // Loop over the quadrature points
+339               for (unsigned int qp=0; qp<qrule->n_points(); qp++)
+340                 {
+341                   // The solution value at the quadrature point
+342                   Number val = libMesh::zero;
+343                   Gradient grad;
+344                   Tensor hess;
+345 
+346                   for (unsigned int i=0; i != n_dofs; i++)
+347                     {
+348                       dof_id_type dof_num = dof_indices[i];
+349                       val += (*phi)[i][qp] *
+350                         system\&.current_solution(dof_num);
+351                       if (cont == C_ZERO || cont == C_ONE)
+352                         grad\&.add_scaled((*dphi)[i][qp], system\&.current_solution(dof_num));
+353                       // grad += (*dphi)[i][qp] *
+354                       //  system\&.current_solution(dof_num);
+355                       if (cont == C_ONE)
+356                         hess\&.add_scaled((*d2phi)[i][qp], system\&.current_solution(dof_num));
+357                       // hess += (*d2phi)[i][qp] *
+358                       //  system\&.current_solution(dof_num);
+359                     }
+360 
+361                   // The projection matrix and vector
+362                   for (unsigned int i=0; i != Fe\&.size(); ++i)
+363                     {
+364                       Fe(i) += (*JxW)[qp] *
+365                         (*phi_coarse)[i][qp]*val;
+366                       if (cont == C_ZERO || cont == C_ONE)
+367                         Fe(i) += (*JxW)[qp] *
+368                           grad * (*dphi_coarse)[i][qp];
+369                       if (cont == C_ONE)
+370                         Fe(i) += (*JxW)[qp] *
+371                           hess\&.contract((*d2phi_coarse)[i][qp]);
+372 
+373                       for (unsigned int j=0; j != Fe\&.size(); ++j)
+374                         {
+375                           Ke(i,j) += (*JxW)[qp] *
+376                             (*phi_coarse)[i][qp]*(*phi_coarse)[j][qp];
+377                           if (cont == C_ZERO || cont == C_ONE)
+378                             Ke(i,j) += (*JxW)[qp] *
+379                               (*dphi_coarse)[i][qp]*(*dphi_coarse)[j][qp];
+380                           if (cont == C_ONE)
+381                             Ke(i,j) += (*JxW)[qp] *
+382                               ((*d2phi_coarse)[i][qp]\&.contract((*d2phi_coarse)[j][qp]));
+383                         }
+384                     }
+385                 }
+386 
+387               // Solve the p-coarsening projection problem
+388               Ke\&.cholesky_solve(Fe, Up);
+389             }
+390 
+391           // loop over the integration points on the fine element
+392           for (unsigned int qp=0; qp<n_qp; qp++)
+393             {
+394               Number value_error = 0\&.;
+395               Gradient grad_error;
+396               Tensor hessian_error;
+397               for (unsigned int i=0; i<n_dofs; i++)
+398                 {
+399                   const dof_id_type dof_num = dof_indices[i];
+400                   value_error += (*phi)[i][qp] *
+401                     system\&.current_solution(dof_num);
+402                   if (cont == C_ZERO || cont == C_ONE)
+403                     grad_error\&.add_scaled((*dphi)[i][qp], system\&.current_solution(dof_num));
+404                   // grad_error += (*dphi)[i][qp] *
+405                   //  system\&.current_solution(dof_num);
+406                   if (cont == C_ONE)
+407                     hessian_error\&.add_scaled((*d2phi)[i][qp], system\&.current_solution(dof_num));
+408                   // hessian_error += (*d2phi)[i][qp] *
+409                   //    system\&.current_solution(dof_num);
+410                 }
+411               if (elem->p_level() == 0)
+412                 {
+413                   value_error -= average_val;
+414                 }
+415               else
+416                 {
+417                   for (unsigned int i=0; i<Up\&.size(); i++)
+418                     {
+419                       value_error -= (*phi_coarse)[i][qp] * Up(i);
+420                       if (cont == C_ZERO || cont == C_ONE)
+421                         grad_error\&.subtract_scaled((*dphi_coarse)[i][qp], Up(i));
+422                       // grad_error -= (*dphi_coarse)[i][qp] * Up(i);
+423                       if (cont == C_ONE)
+424                         hessian_error\&.subtract_scaled((*d2phi_coarse)[i][qp], Up(i));
+425                       // hessian_error -= (*d2phi_coarse)[i][qp] * Up(i);
+426                     }
+427                 }
+428 
+429               p_error_per_cell[e_id] += static_cast<ErrorVectorReal>
+430                 (component_scale[var] *
+431                  (*JxW)[qp] * TensorTools::norm_sq(value_error));
+432               if (cont == C_ZERO || cont == C_ONE)
+433                 p_error_per_cell[e_id] += static_cast<ErrorVectorReal>
+434                   (component_scale[var] *
+435                    (*JxW)[qp] * grad_error\&.size_sq());
+436               if (cont == C_ONE)
+437                 p_error_per_cell[e_id] += static_cast<ErrorVectorReal>
+438                   (component_scale[var] *
+439                    (*JxW)[qp] * hessian_error\&.size_sq());
+440             }
+441 
+442           // Calculate this variable's contribution to the h
+443           // refinement error
+444 
+445           if (!elem->parent())
+446             {
+447               // For now, we'll always start with an h refinement
+448               h_error_per_cell[e_id] =
+449                 std::numeric_limits<ErrorVectorReal>::max() / 2;
+450             }
+451           else
+452             {
+453               FEInterface::inverse_map (dim, fe_type, coarse,
+454                                         *xyz_values, coarse_qpoints);
+455 
+456               unsigned int old_parent_level = coarse->p_level();
+457               (const_cast<Elem *>(coarse))->hack_p_level(elem->p_level());
+458 
+459               fe_coarse->reinit(coarse, &coarse_qpoints);
+460 
+461               (const_cast<Elem *>(coarse))->hack_p_level(old_parent_level);
+462 
+463               // The number of DOFS on the coarse element
+464               unsigned int n_coarse_dofs =
+465                 libmesh_cast_int<unsigned int>(phi_coarse->size());
+466 
+467               // Loop over the quadrature points
+468               for (unsigned int qp=0; qp<n_qp; qp++)
+469                 {
+470                   // The solution difference at the quadrature point
+471                   Number value_error = libMesh::zero;
+472                   Gradient grad_error;
+473                   Tensor hessian_error;
+474 
+475                   for (unsigned int i=0; i != n_dofs; ++i)
+476                     {
+477                       const dof_id_type dof_num = dof_indices[i];
+478                       value_error += (*phi)[i][qp] *
+479                         system\&.current_solution(dof_num);
+480                       if (cont == C_ZERO || cont == C_ONE)
+481                         grad_error\&.add_scaled((*dphi)[i][qp], system\&.current_solution(dof_num));
+482                       // grad_error += (*dphi)[i][qp] *
+483                       //  system\&.current_solution(dof_num);
+484                       if (cont == C_ONE)
+485                         hessian_error\&.add_scaled((*d2phi)[i][qp], system\&.current_solution(dof_num));
+486                       // hessian_error += (*d2phi)[i][qp] *
+487                       //  system\&.current_solution(dof_num);
+488                     }
+489 
+490                   for (unsigned int i=0; i != n_coarse_dofs; ++i)
+491                     {
+492                       value_error -= (*phi_coarse)[i][qp] * Uc(i);
+493                       if (cont == C_ZERO || cont == C_ONE)
+494                         // grad_error -= (*dphi_coarse)[i][qp] * Uc(i);
+495                         grad_error\&.subtract_scaled((*dphi_coarse)[i][qp], Uc(i));
+496                       if (cont == C_ONE)
+497                         hessian_error\&.subtract_scaled((*d2phi_coarse)[i][qp], Uc(i));
+498                       // hessian_error -= (*d2phi_coarse)[i][qp] * Uc(i);
+499                     }
+500 
+501                   h_error_per_cell[e_id] += static_cast<ErrorVectorReal>
+502                     (component_scale[var] *
+503                      (*JxW)[qp] * TensorTools::norm_sq(value_error));
+504                   if (cont == C_ZERO || cont == C_ONE)
+505                     h_error_per_cell[e_id] += static_cast<ErrorVectorReal>
+506                       (component_scale[var] *
+507                        (*JxW)[qp] * grad_error\&.size_sq());
+508                   if (cont == C_ONE)
+509                     h_error_per_cell[e_id] += static_cast<ErrorVectorReal>
+510                       (component_scale[var] *
+511                        (*JxW)[qp] * hessian_error\&.size_sq());
+512                 }
+513 
+514             }
+515         }
+516     }
+517 
+518   // Now that we've got our approximations for p_error and h_error, let's see
+519   // if we want to switch any h refinement flags to p refinement
+520 
+521   // Iterate over all the active elements in the mesh
+522   // that live on this processor\&.
+523 
+524   MeshBase::element_iterator       elem_it  =
+525     mesh\&.active_local_elements_begin();
+526   const MeshBase::element_iterator elem_end =
+527     mesh\&.active_local_elements_end();
+528 
+529   for (; elem_it != elem_end; ++elem_it)
+530     {
+531       Elem* elem = *elem_it;
+532 
+533       // We're only checking elements that are already flagged for h
+534       // refinement
+535       if (elem->refinement_flag() != Elem::REFINE)
+536         continue;
+537 
+538       const dof_id_type e_id = elem->id();
+539 
+540       unsigned int dofs_per_elem = 0, dofs_per_p_elem = 0;
+541 
+542       // Loop over all the variables in the system
+543       for (unsigned int var=0; var<n_vars; var++)
+544         {
+545           // The type of finite element to use for this variable
+546           const FEType& fe_type = dof_map\&.variable_type (var);
+547 
+548           // FIXME: we're overestimating the number of DOFs added by h
+549           // refinement
+550           FEType elem_fe_type = fe_type;
+551           elem_fe_type\&.order =
+552             static_cast<Order>(fe_type\&.order + elem->p_level());
+553           dofs_per_elem +=
+554             FEInterface::n_dofs(dim, elem_fe_type, elem->type());
+555 
+556           elem_fe_type\&.order =
+557             static_cast<Order>(fe_type\&.order + elem->p_level() + 1);
+558           dofs_per_p_elem +=
+559             FEInterface::n_dofs(dim, elem_fe_type, elem->type());
+560         }
+561 
+562       const unsigned int new_h_dofs = dofs_per_elem *
+563         (elem->n_children() - 1);
+564 
+565       const unsigned int new_p_dofs = dofs_per_p_elem -
+566         dofs_per_elem;
+567 
+568       /*
+569         libMesh::err << "Cell " << e_id << ": h = " << elem->hmax()
+570         << ", p = " << elem->p_level() + 1 << "," << std::endl
+571         << "     h_error = " << h_error_per_cell[e_id]
+572         << ", p_error = " << p_error_per_cell[e_id] << std::endl
+573         << "     new_h_dofs = " << new_h_dofs
+574         << ", new_p_dofs = " << new_p_dofs << std::endl;
+575       */
+576       const Real p_value =
+577         std::sqrt(p_error_per_cell[e_id]) * p_weight / new_p_dofs;
+578       const Real h_value =
+579         std::sqrt(h_error_per_cell[e_id]) /
+580         static_cast<Real>(new_h_dofs);
+581       if (p_value > h_value)
+582         {
+583           elem->set_p_refinement_flag(Elem::REFINE);
+584           elem->set_refinement_flag(Elem::DO_NOTHING);
+585         }
+586     }
+587 
+588   STOP_LOG("select_refinement()", "HPCoarsenTest");
+589 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBElem\fP* libMesh::HPCoarsenTest::coarse\fC [protected]\fP"
+The coarse element on which a solution projection is cached 
+.PP
+Definition at line 109 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "std::vector<\fBPoint\fP> libMesh::HPCoarsenTest::coarse_qpoints\fC [protected]\fP"
+
+.PP
+Definition at line 137 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "std::vector<float> libMesh::HPSelector::component_scale\fC [inherited]\fP"
+This vector can be used to 'scale' certain variables in a system\&. If the mask is not empty, the consideration given to each component's h and p error estimates will be scaled by component_scale[c]\&. 
+.PP
+Definition at line 77 of file hp_selector\&.h\&.
+.PP
+Referenced by select_refinement()\&.
+.SS "const std::vector<std::vector<\fBRealTensor\fP> >* libMesh::HPCoarsenTest::d2phi\fC [protected]\fP"
+
+.PP
+Definition at line 126 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "const std::vector<std::vector<\fBRealTensor\fP> > * libMesh::HPCoarsenTest::d2phi_coarse\fC [protected]\fP"
+
+.PP
+Definition at line 126 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "std::vector<\fBdof_id_type\fP> libMesh::HPCoarsenTest::dof_indices\fC [protected]\fP"
+Global DOF indices for fine elements 
+.PP
+Definition at line 114 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "const std::vector<std::vector<\fBRealGradient\fP> >* libMesh::HPCoarsenTest::dphi\fC [protected]\fP"
+
+.PP
+Definition at line 125 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "const std::vector<std::vector<\fBRealGradient\fP> > * libMesh::HPCoarsenTest::dphi_coarse\fC [protected]\fP"
+
+.PP
+Definition at line 125 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by select_refinement()\&.
+.SS "\fBAutoPtr\fP<\fBFEBase\fP> libMesh::HPCoarsenTest::fe\fC [protected]\fP"
+The finite element objects for fine and coarse elements 
+.PP
+Definition at line 119 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::HPCoarsenTest::Fe\fC [protected]\fP"
+
+.PP
+Definition at line 148 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "\fBAutoPtr\fP<\fBFEBase\fP> libMesh::HPCoarsenTest::fe_coarse\fC [protected]\fP"
+
+.PP
+Definition at line 119 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "const std::vector<\fBReal\fP>* libMesh::HPCoarsenTest::JxW\fC [protected]\fP"
+Mapping jacobians 
+.PP
+Definition at line 131 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by select_refinement()\&.
+.SS "\fBDenseMatrix\fP<\fBNumber\fP> libMesh::HPCoarsenTest::Ke\fC [protected]\fP"
+\fBLinear\fP system for projections 
+.PP
+Definition at line 147 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "\fBReal\fP libMesh::HPCoarsenTest::p_weight"
+Because the coarsening test seems to always choose p refinement, we're providing an option to make h refinement more likely 
+.PP
+Definition at line 97 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by select_refinement()\&.
+.SS "const std::vector<std::vector<\fBReal\fP> >* libMesh::HPCoarsenTest::phi\fC [protected]\fP"
+The shape functions and their derivatives 
+.PP
+Definition at line 124 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by select_refinement()\&.
+.SS "const std::vector<std::vector<\fBReal\fP> > * libMesh::HPCoarsenTest::phi_coarse\fC [protected]\fP"
+
+.PP
+Definition at line 124 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "\fBAutoPtr\fP<\fBQBase\fP> libMesh::HPCoarsenTest::qrule\fC [protected]\fP"
+The quadrature rule for the fine element 
+.PP
+Definition at line 142 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::HPCoarsenTest::Uc\fC [protected]\fP"
+Coefficients for projected coarse and projected p-derefined solutions 
+.PP
+Definition at line 153 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::HPCoarsenTest::Up\fC [protected]\fP"
+
+.PP
+Definition at line 154 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by select_refinement()\&.
+.SS "const std::vector<\fBPoint\fP>* libMesh::HPCoarsenTest::xyz_values\fC [protected]\fP"
+Quadrature locations 
+.PP
+Definition at line 136 of file hp_coarsentest\&.h\&.
+.PP
+Referenced by add_projection(), and select_refinement()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

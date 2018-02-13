@@ -1,0 +1,236 @@
+.TH "libMesh::MeshTools::BoundingBox" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshTools::BoundingBox \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_tools\&.h>\fP
+.PP
+Inherits pair< Point, Point >\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBoundingBox\fP (const \fBPoint\fP &new_min, const \fBPoint\fP &new_max)"
+.br
+.ti -1c
+.RI "\fBBoundingBox\fP (const std::pair< \fBPoint\fP, \fBPoint\fP > &bbox)"
+.br
+.ti -1c
+.RI "\fBBoundingBox\fP ()"
+.br
+.ti -1c
+.RI "void \fBinvalidate\fP ()"
+.br
+.ti -1c
+.RI "const \fBPoint\fP & \fBmin\fP () const "
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBmin\fP ()"
+.br
+.ti -1c
+.RI "const \fBPoint\fP & \fBmax\fP () const "
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBmax\fP ()"
+.br
+.ti -1c
+.RI "\fBBoundingBox\fP & \fBexpand\fP ()"
+.br
+.ti -1c
+.RI "bool \fBintersect\fP (const \fBBoundingBox\fP &) const "
+.br
+.ti -1c
+.RI "bool \fBcontains_point\fP (const \fBPoint\fP &) const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Defines a Cartesian bounding box by the two corner extremum\&. 
+.PP
+Definition at line 67 of file mesh_tools\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshTools::BoundingBox::BoundingBox (const \fBPoint\fP &new_min, const \fBPoint\fP &new_max)\fC [inline]\fP"
+
+.PP
+Definition at line 71 of file mesh_tools\&.h\&.
+.PP
+.nf
+71                                                            :
+72     std::pair<Point, Point>(new_min, new_max)
+73   {}
+.fi
+.SS "libMesh::MeshTools::BoundingBox::BoundingBox (const std::pair< \fBPoint\fP, \fBPoint\fP > &bbox)\fC [inline]\fP"
+
+.PP
+Definition at line 75 of file mesh_tools\&.h\&.
+.PP
+.nf
+75                                                   :
+76     std::pair<Point, Point> (bbox)
+77   {}
+.fi
+.SS "libMesh::MeshTools::BoundingBox::BoundingBox ()\fC [inline]\fP"
+Default constructor sets invalid bounds\&. 
+.PP
+Definition at line 82 of file mesh_tools\&.h\&.
+.PP
+References invalidate()\&.
+.PP
+.nf
+83   {
+84     this->invalidate();
+85   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::MeshTools::BoundingBox::contains_point (const \fBPoint\fP &p) const"
+
+.PP
+Definition at line 284 of file mesh_tools\&.C\&.
+.PP
+References libMesh::is_between(), and libMesh::Real\&.
+.PP
+.nf
+285 {
+286   // Make local variables first to make thiings more clear in a moment
+287   Real my_min_x = this->first(0);
+288   Real my_max_x = this->second(0);
+289   bool x_int = is_between(my_min_x, p(0), my_max_x);
+290 
+291   bool intersection_true = x_int;
+292 
+293 #if LIBMESH_DIM > 1
+294   Real my_min_y = this->first(1);
+295   Real my_max_y = this->second(1);
+296   bool y_int = is_between(my_min_y, p(1), my_max_y);
+297 
+298   intersection_true = intersection_true && y_int;
+299 #endif
+300 
+301 
+302 #if LIBMESH_DIM > 2
+303   Real my_min_z = this->first(2);
+304   Real my_max_z = this->second(2);
+305   bool z_int = is_between(my_min_z, p(2), my_max_z);
+306 
+307   intersection_true = intersection_true && z_int;
+308 #endif
+309 
+310   return intersection_true;
+311 }
+.fi
+.SS "\fBBoundingBox\fP& libMesh::MeshTools::BoundingBox::expand ()\fC [inline]\fP"
+
+.PP
+Definition at line 108 of file mesh_tools\&.h\&.
+.PP
+.nf
+109   { return *this; }
+.fi
+.SS "bool libMesh::MeshTools::BoundingBox::intersect (const \fBBoundingBox\fP &other_box) const"
+
+.PP
+Definition at line 244 of file mesh_tools\&.C\&.
+.PP
+References libMesh::is_between(), and libMesh::Real\&.
+.PP
+.nf
+245 {
+246   // Make local variables first to make thiings more clear in a moment
+247   const Real& my_min_x = this->first(0);
+248   const Real& my_max_x = this->second(0);
+249   const Real& other_min_x = other_box\&.first(0);
+250   const Real& other_max_x = other_box\&.second(0);
+251 
+252   const bool x_int = is_between(my_min_x, other_min_x, my_max_x) || is_between(my_min_x, other_max_x, my_max_x) ||
+253     is_between(other_min_x, my_min_x, other_max_x) || is_between(other_min_x, my_max_x, other_max_x);
+254 
+255   bool intersection_true = x_int;
+256 
+257 #if LIBMESH_DIM > 1
+258   const Real& my_min_y = this->first(1);
+259   const Real& my_max_y = this->second(1);
+260   const Real& other_min_y = other_box\&.first(1);
+261   const Real& other_max_y = other_box\&.second(1);
+262 
+263   const bool y_int = is_between(my_min_y, other_min_y, my_max_y) || is_between(my_min_y, other_max_y, my_max_y) ||
+264     is_between(other_min_y, my_min_y, other_max_y) || is_between(other_min_y, my_max_y, other_max_y);
+265 
+266   intersection_true = intersection_true && y_int;
+267 #endif
+268 
+269 #if LIBMESH_DIM > 2
+270   const Real& my_min_z = this->first(2);
+271   const Real& my_max_z = this->second(2);
+272   const Real& other_min_z = other_box\&.first(2);
+273   const Real& other_max_z = other_box\&.second(2);
+274 
+275   const bool z_int = is_between(my_min_z, other_min_z, my_max_z) || is_between(my_min_z, other_max_z, my_max_z) ||
+276     is_between(other_min_z, my_min_z, other_max_z) || is_between(other_min_z, my_max_z, other_max_z);
+277 
+278   intersection_true = intersection_true && z_int;
+279 #endif
+280 
+281   return intersection_true;
+282 }
+.fi
+.SS "void libMesh::MeshTools::BoundingBox::invalidate ()\fC [inline]\fP"
+
+.PP
+Definition at line 87 of file mesh_tools\&.h\&.
+.PP
+References std::max()\&.
+.PP
+Referenced by BoundingBox()\&.
+.PP
+.nf
+88   {
+89     for (unsigned int i=0; i<LIBMESH_DIM; i++)
+90       {
+91         this->first(i)  =  std::numeric_limits<Real>::max();
+92         this->second(i) = -std::numeric_limits<Real>::max();
+93       }
+94   }
+.fi
+.SS "const \fBPoint\fP& libMesh::MeshTools::BoundingBox::max () const\fC [inline]\fP"
+
+.PP
+Definition at line 102 of file mesh_tools\&.h\&.
+.PP
+.nf
+103   { return this->second; }
+.fi
+.SS "\fBPoint\fP& libMesh::MeshTools::BoundingBox::max ()\fC [inline]\fP"
+
+.PP
+Definition at line 105 of file mesh_tools\&.h\&.
+.PP
+.nf
+106   { return this->second; }
+.fi
+.SS "const \fBPoint\fP& libMesh::MeshTools::BoundingBox::min () const\fC [inline]\fP"
+
+.PP
+Definition at line 96 of file mesh_tools\&.h\&.
+.PP
+.nf
+97   { return this->first; }
+.fi
+.SS "\fBPoint\fP& libMesh::MeshTools::BoundingBox::min ()\fC [inline]\fP"
+
+.PP
+Definition at line 99 of file mesh_tools\&.h\&.
+.PP
+.nf
+100   { return this->first; }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

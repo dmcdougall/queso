@@ -1,0 +1,624 @@
+.TH "libMesh::MeshDataUnvHeader" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshDataUnvHeader \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_data\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshDataUnvHeader\fP ()"
+.br
+.ti -1c
+.RI "\fB~MeshDataUnvHeader\fP ()"
+.br
+.ti -1c
+.RI "void \fBwhich_dataset\fP (const unsigned int ds_label)"
+.br
+.ti -1c
+.RI "void \fBoperator=\fP (const \fBMeshDataUnvHeader\fP &omduh)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBMeshDataUnvHeader\fP &omduh) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fBdataset_label\fP"
+.br
+.ti -1c
+.RI "std::string \fBdataset_name\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBdataset_location\fP"
+.br
+.ti -1c
+.RI "std::vector< std::string > \fBid_lines_1_to_5\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBmodel_type\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBanalysis_type\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBdata_characteristic\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBresult_type\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBdata_type\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBnvaldc\fP"
+.br
+.ti -1c
+.RI "std::vector< int > \fBrecord_10\fP"
+.br
+.ti -1c
+.RI "std::vector< int > \fBrecord_11\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fBrecord_12\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBReal\fP > \fBrecord_13\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "bool \fBread\fP (std::istream &in_file)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (std::ostream &out_file)"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBneed_D_to_e\fP (std::string &number)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned int \fB_desired_dataset_label\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBMeshData\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Class \fC\fBMeshDataUnvHeader\fP\fP handles the data specified at the \fIbeginning\fP of a dataset 2414 in a universal file\&. This header is structured in records 1 to 13\&. A typical header is described here\&. The text after the # are comments and are \fInot\fP part of such a dataset\&. The text in brackets after the # are the corresponding class members names\&.
+.PP
+.PP
+.nf
+-1                                                                              # beginning of dataset
+2414                                                                              # type of dataset: data at mesh entities
+1                                                                          # R.  1: unique number of dataset (dataset_label)
+STRUCTURAL MODE     1                                                               # R.  2: text describing content (dataset_name)
+1                                                                          # R.  3: data belongs to: nodes, elements,...
+#        (dataset_location)
+Default Model                                                                       # R.  4: user-specified text (id_lines_1_to_5[0])
+I-DEAS Master Series                                                                # R.  5: user-specified text (id_lines_1_to_5[1])
+18-AUG-2003 20:00:12    HPUX11_64     MAR2003                                       # R.  6: user-specified text (id_lines_1_to_5[2])
+MODE   1 FREQUENCY       501.25 Hz                                                  # R.  7: user-specified text (id_lines_1_to_5[3])
+STRUCTURAL MODE     1                                                               # R.  8: user-specified text (id_lines_1_to_5[4])
+0         2         3         8         2         6                        # R.  9: (model_type) (analysis_type)
+#        (data_characteristic) (result_type)
+#        (data_type) (nvaldc)
+0         0         0         0         0         1         0         0    # R. 10: analysis-specific data (record_10)
+0         0                                                                # R. 11: analysis-specific data (record_11)
+0.00000E+00  0.50125E+03  0.99192E+07  0.10000E+01  0.00000E+00  0.00000E+00      # R. 12: analysis-specific data (record_12)
+0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00  0.00000E+00      # R. 13: analysis-specific data (record_13)
+.fi
+.PP
+.PP
+For more details we refer to the general description of the I-DEAS universal file format\&.
+.PP
+An instance of this class may be attached to the \fC\fBMeshData\fP\fP of some mesh\&. Then the \fC\fBread()\fP\fP and \fC\fBwrite()\fP\fP methods of \fC\fBMeshData\fP\fP use this \fC\fBMeshDataUnvHeader\fP\fP instead of some empty default\&. Also files that contain multiple datasets of type \fC2414\fP may be handled through the \fC\fBwhich_dataset()\fP\fP method\&. Note that an instance of this class has to be attached to the \fC\fBMeshData\fP\fP \fIprior\fP to using the \fC\fBread()\fP\fP or \fC\fBwrite()\fP\fP methods of the \fC\fBMeshData\fP\fP\&. 
+.PP
+Definition at line 683 of file mesh_data\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MeshDataUnvHeader::MeshDataUnvHeader ()"
+Default Constructor\&. Initializes the respective data\&. 
+.PP
+Definition at line 618 of file mesh_data_unv_support\&.C\&.
+.PP
+References id_lines_1_to_5, record_10, record_11, record_12, and record_13\&.
+.PP
+.nf
+618                                      :
+619   dataset_label          (0),
+620   dataset_name           ("libMesh mesh data"),
+621   dataset_location       (1),  // default to nodal data
+622   model_type             (0),
+623   analysis_type          (0),
+624   data_characteristic    (0),
+625   result_type            (0),
+626 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+627   data_type              (5),  // default to single precision complex
+628 #else
+629   data_type              (2),  // default to single precision real
+630 #endif
+631   nvaldc                 (3),  // default to 3 (principle directions)
+632   _desired_dataset_label (libMesh::invalid_uint)
+633 {
+634   id_lines_1_to_5\&.resize(5);
+635   std::fill (id_lines_1_to_5\&.begin(), id_lines_1_to_5\&.end(), std::string("libMesh default"));
+636   /*
+637    * resize analysis specific data\&.
+638    */
+639   record_10\&.resize(8);
+640   record_11\&.resize(2);
+641   record_12\&.resize(6);
+642   record_13\&.resize(6);
+643 }
+.fi
+.SS "libMesh::MeshDataUnvHeader::~MeshDataUnvHeader ()"
+Destructor\&. 
+.PP
+Definition at line 649 of file mesh_data_unv_support\&.C\&.
+.PP
+.nf
+650 {
+651   // empty
+652 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::MeshDataUnvHeader::need_D_to_e (std::string &number)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when the string \fCnumber\fP has a 'D' that needs to be replaced by 'e', \fCfalse\fP otherwise\&. Also actually replaces the 'D' by an 'e'\&. 
+.RE
+.PP
+
+.PP
+Definition at line 815 of file mesh_data_unv_support\&.C\&.
+.PP
+Referenced by read(), and libMesh::MeshData::read_unv_implementation()\&.
+.PP
+.nf
+816 {
+817   // find "D" in string, start looking at 6th element, to improve speed\&.
+818   // We dont expect a "D" earlier
+819 
+820   // #ifdef __HP_aCC
+821   //   // Use an "int" instead of unsigned int,
+822   //   // otherwise HP aCC may crash!
+823   //   const int position = number\&.find("D",6);
+824   // #else
+825   //   const unsigned int position = number\&.find("D",6);
+826   // #endif
+827   std::string::size_type position = number\&.find("D",6);
+828 
+829   if(position!=std::string::npos)     // npos means no position
+830     {
+831       // replace "D" in string
+832       number\&.replace(position,1,"e");
+833       return true;
+834     }
+835   else
+836     // we assume that if this one number is written correctly, all numbers are
+837     return false;
+838 }
+.fi
+.SS "void libMesh::MeshDataUnvHeader::operator= (const \fBMeshDataUnvHeader\fP &omduh)"
+Assignment operator\&. Simply assigns all values from \fComduh\fP to \fCthis\fP\&. 
+.PP
+Definition at line 849 of file mesh_data_unv_support\&.C\&.
+.PP
+References _desired_dataset_label, analysis_type, data_characteristic, data_type, dataset_label, dataset_location, dataset_name, libMesh::err, id_lines_1_to_5, model_type, nvaldc, record_10, record_11, record_12, record_13, and result_type\&.
+.PP
+.nf
+850 {
+851   this->dataset_label          = omduh\&.dataset_label;
+852   this->dataset_name           = omduh\&.dataset_name;
+853   this->dataset_location       = omduh\&.dataset_location;
+854   this->id_lines_1_to_5        = omduh\&.id_lines_1_to_5;
+855 
+856   this->model_type             = omduh\&.model_type;
+857   this->analysis_type          = omduh\&.analysis_type;
+858   this->data_characteristic    = omduh\&.data_characteristic;
+859   this->result_type            = omduh\&.result_type;
+860 
+861 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+862   /*
+863    * in complex mode allow only
+864    * values 5 or 6 (complex) for data_type
+865    */
+866   if ((omduh\&.data_type == 5) ||
+867       (omduh\&.data_type == 6))
+868     this->data_type          = omduh\&.data_type;
+869   else
+870     {
+871 #  ifdef DEBUG
+872       libMesh::err << "WARNING: MeshDataUnvHeader::operator=(): Other object has data_type for" << std::endl
+873                    << "         real values\&.  Will use default data_type=5 during assignment\&." << std::endl
+874                    << std::endl;
+875 #  endif
+876       this->data_type          = 5;
+877     }
+878 
+879 #else
+880 
+881   /*
+882    * in real mode allow only
+883    * values 2 or 4 (real) for data_type
+884    */
+885   if ((omduh\&.data_type == 2) ||
+886       (omduh\&.data_type == 4))
+887     this->data_type          = omduh\&.data_type;
+888   else
+889     {
+890 #  ifdef DEBUG
+891       libMesh::err << "WARNING: Other MeshDataUnvHeader has data_type for complex values\&." << std::endl
+892                    << "         Data import will likely _not_ work and result in infinite loop," << std::endl
+893                    << "         provided the user forgot to re-size nvaldc to 2*nvaldc_old!" << std::endl
+894                    << std::endl;
+895 #  endif
+896       this->data_type          = 2;
+897     }
+898 
+899 #endif
+900 
+901   this->nvaldc                 = omduh\&.nvaldc;
+902 
+903   this->record_10              = omduh\&.record_10;
+904   this->record_11              = omduh\&.record_11;
+905   this->record_12              = omduh\&.record_12;
+906   this->record_13              = omduh\&.record_13;
+907 
+908   this->_desired_dataset_label = omduh\&._desired_dataset_label;
+909 }
+.fi
+.SS "bool libMesh::MeshDataUnvHeader::operator== (const \fBMeshDataUnvHeader\fP &omduh) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when \fCthis\fP and \fComduh\fP are equal, \fCfalse\fP otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 914 of file mesh_data_unv_support\&.C\&.
+.PP
+References _desired_dataset_label, analysis_type, data_characteristic, data_type, dataset_label, dataset_location, dataset_name, id_lines_1_to_5, model_type, nvaldc, record_10, record_11, record_12, record_13, and result_type\&.
+.PP
+.nf
+915 {
+916   return (this->dataset_label          == omduh\&.dataset_label       &&
+917           this->dataset_name           == omduh\&.dataset_name        &&
+918           this->dataset_location       == omduh\&.dataset_location    &&
+919           this->id_lines_1_to_5        == omduh\&.id_lines_1_to_5     &&
+920 
+921           this->model_type             == omduh\&.model_type          &&
+922           this->analysis_type          == omduh\&.analysis_type       &&
+923           this->data_characteristic    == omduh\&.data_characteristic &&
+924           this->result_type            == omduh\&.result_type         &&
+925 
+926           this->data_type              == omduh\&.data_type           &&
+927           this->nvaldc                 == omduh\&.nvaldc              &&
+928 
+929           this->record_10              == omduh\&.record_10           &&
+930           this->record_11              == omduh\&.record_11           &&
+931           this->record_12              == omduh\&.record_12           &&
+932           this->record_13              == omduh\&.record_13           &&
+933 
+934           this->_desired_dataset_label == omduh\&._desired_dataset_label);
+935 }
+.fi
+.SS "bool libMesh::MeshDataUnvHeader::read (std::istream &in_file)\fC [protected]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCtrue\fP when this dataset is the one that the user wants, \fCfalse\fP otherwise\&. When no desired dataset is given, always returns \fCtrue\fP\&. Aside from this return value, this method also reads the header information from the stream \fCin_file\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 657 of file mesh_data_unv_support\&.C\&.
+.PP
+References _desired_dataset_label, analysis_type, data_characteristic, data_type, dataset_label, dataset_location, dataset_name, id_lines_1_to_5, libMesh::invalid_uint, model_type, need_D_to_e(), nvaldc, record_10, record_11, record_12, record_13, and result_type\&.
+.PP
+Referenced by libMesh::MeshData::read_unv_implementation()\&.
+.PP
+.nf
+658 {
+659   in_file >> this->dataset_label;
+660 
+661   /*
+662    * currently, we compare only the
+663    * dataset_label with the _desired_dataset_label,
+664    * but it may be easy to also compare the
+665    * dataset_name\&.
+666    *
+667    * When the user provided a dataset label, and
+668    * the current label does _not_ match, then just
+669    * return false\&.
+670    *
+671    * Otherwise: when the current label matches,
+672    * or when there is no desired dataset label,
+673    * simply proceed\&.
+674    */
+675   if ((this->_desired_dataset_label != libMesh::invalid_uint) &&
+676       (this->dataset_label != this->_desired_dataset_label))
+677     return false;
+678 
+679 
+680   in_file\&.ignore(256,'\n');
+681   std::getline(in_file, dataset_name, '\n');
+682 
+683   in_file >> this->dataset_location;
+684   in_file\&.ignore(256,'\n');
+685 
+686 
+687   for (unsigned int n=0; n<5; n++)
+688     std::getline(in_file, this->id_lines_1_to_5[n], '\n');
+689 
+690 
+691   in_file >> this->model_type
+692           >> this->analysis_type
+693           >> this->data_characteristic
+694           >> this->result_type
+695           >> this->data_type
+696           >> this->nvaldc;
+697 
+698   for (unsigned int i=0; i<8; i++)
+699     in_file >> this->record_10[i];
+700 
+701   for (unsigned int i=0; i<2; i++)
+702     in_file >> this->record_11[i];
+703 
+704 
+705   /*
+706    * There are UNV-files where floats are
+707    * written with 'D' as the 10th-power
+708    * character\&. Replace this 'D' by 'e',
+709    * so that std::atof() can work fine\&.
+710    */
+711   std::string buf;
+712   in_file >> buf;
+713 
+714   if (need_D_to_e(buf))
+715     {
+716       // have to convert _all_ 'D' to 'e'
+717       this->record_12[0] = std::atof(buf\&.c_str());
+718 
+719       for (unsigned int i=1; i<6; i++)
+720         {
+721           in_file >> buf;
+722           need_D_to_e(buf);
+723           this->record_12[i] = std::atof(buf\&.c_str());
+724         }
+725 
+726       for (unsigned int i=0; i<6; i++)
+727         {
+728           in_file >> buf;
+729           need_D_to_e(buf);
+730           this->record_13[i] = std::atof(buf\&.c_str());
+731         }
+732     }
+733   else
+734     {
+735       // no 'D', the stream will recognize the floats
+736       this->record_12[0] = std::atof(buf\&.c_str());
+737 
+738       for (unsigned int i=1; i<6; i++)
+739         in_file >> this->record_12[i];
+740 
+741       for (unsigned int i=0; i<6; i++)
+742         in_file >> this->record_13[i];
+743     }
+744 
+745   /*
+746    * no matter whether the user provided a desired
+747    * dataset label or not: return true, b/c the
+748    * non-match was already caught before\&.
+749    */
+750   return true;
+751 }
+.fi
+.SS "void libMesh::MeshDataUnvHeader::which_dataset (const unsigned intds_label)"
+Universal files may contain multiple data sets of type \fC2414\fP\&. These sets are identified through their labels (not to be confused with the dataset label \fC2414!\fP)\&. The user may provide a label of the dataset that she wants\&. Then the file is scanned for this dataset, and datasets with a different label are skipped\&.
+.PP
+When this method is \fInot\fP called, then simply the first dataset in the file is used\&. Note that for this method to have any effect, this method has to be called prior to using the \fC\fBMeshData::read()\fP\fP or \fC\fBMeshData::write()\fP\fP methods\&. 
+.PP
+Definition at line 842 of file mesh_data_unv_support\&.C\&.
+.PP
+References _desired_dataset_label\&.
+.PP
+.nf
+843 {
+844   this->_desired_dataset_label = ds_label;
+845 }
+.fi
+.SS "void libMesh::MeshDataUnvHeader::write (std::ostream &out_file)\fC [protected]\fP"
+Write the header information to the stream \fCout_file\fP\&. 
+.PP
+Definition at line 756 of file mesh_data_unv_support\&.C\&.
+.PP
+References analysis_type, data_characteristic, data_type, dataset_label, dataset_location, dataset_name, id_lines_1_to_5, model_type, nvaldc, record_10, record_11, record_12, record_13, and result_type\&.
+.PP
+Referenced by libMesh::MeshData::write_unv_implementation()\&.
+.PP
+.nf
+757 {
+758 
+759 
+760   char buf[82];
+761 
+762   std::sprintf(buf, "%6i\n",this->dataset_label);
+763 
+764   out_file << buf;
+765 
+766   out_file << this->dataset_name << "\n";
+767 
+768   std::sprintf(buf, "%6i\n",this->dataset_location);
+769 
+770   out_file << buf;
+771 
+772   for (unsigned int n=0; n<5; n++)
+773     out_file << this->id_lines_1_to_5[n] << "\n";
+774 
+775   std::sprintf(buf, "%10i%10i%10i%10i%10i%10i\n",
+776                model_type,  analysis_type, data_characteristic,
+777                result_type, data_type,     nvaldc);
+778 
+779   out_file << buf;
+780 
+781   std::sprintf(buf, "%10i%10i%10i%10i%10i%10i%10i%10i\n",
+782                record_10[0], record_10[1], record_10[2], record_10[3],
+783                record_10[4], record_10[5], record_10[6], record_10[7]);
+784 
+785   out_file << buf;
+786 
+787   std::sprintf(buf, "%10i%10i\n", record_11[0], record_11[1]);
+788   out_file << buf;
+789 
+790   std::sprintf(buf, "%13\&.5E%13\&.5E%13\&.5E%13\&.5E%13\&.5E%13\&.5E\n",
+791                static_cast<double>(record_12[0]),
+792                static_cast<double>(record_12[1]),
+793                static_cast<double>(record_12[2]),
+794                static_cast<double>(record_12[3]),
+795                static_cast<double>(record_12[4]),
+796                static_cast<double>(record_12[5]));
+797 
+798   out_file << buf;
+799 
+800   std::sprintf(buf, "%13\&.5E%13\&.5E%13\&.5E%13\&.5E%13\&.5E%13\&.5E\n",
+801                static_cast<double>(record_13[0]),
+802                static_cast<double>(record_13[1]),
+803                static_cast<double>(record_13[2]),
+804                static_cast<double>(record_13[3]),
+805                static_cast<double>(record_13[4]),
+806                static_cast<double>(record_13[5]));
+807 
+808   out_file << buf;
+809 }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBMeshData\fP\fC [friend]\fP"
+Make the \fC\fBMeshData\fP\fP class a friend\&. 
+.PP
+Definition at line 826 of file mesh_data\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "unsigned int libMesh::MeshDataUnvHeader::_desired_dataset_label\fC [private]\fP"
+the desired dataset label\&. defaults to -1 if not given 
+.PP
+Definition at line 813 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and which_dataset()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::analysis_type"
+
+.PP
+Definition at line 756 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and write()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::data_characteristic"
+
+.PP
+Definition at line 756 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and write()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::data_type"
+Record 9, second part\&. See first part, then we have: the data type (currently supported: 2,4 for \fCReal\fP, and 5,6 for \fCComplex\fP\&. other possibilities: e\&.g\&. integer), 
+.PP
+Definition at line 766 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), libMesh::MeshData::read_unv_implementation(), write(), and libMesh::MeshData::write_unv_implementation()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::dataset_label"
+Record 1\&. User specified analysis dataset label\&. 
+.PP
+Definition at line 729 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and write()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::dataset_location"
+Record 3\&. The dataset location (e\&.g\&. data at nodes, data on elements, etc\&.)\&. 
+.PP
+Definition at line 740 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), libMesh::MeshData::read_unv_implementation(), and write()\&.
+.SS "std::string libMesh::MeshDataUnvHeader::dataset_name"
+Record 2\&. User specified analysis dataset name\&. 
+.PP
+Definition at line 734 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and write()\&.
+.SS "std::vector<std::string> libMesh::MeshDataUnvHeader::id_lines_1_to_5"
+Record 4 trough 8 are ID lines\&. 
+.PP
+Definition at line 745 of file mesh_data\&.h\&.
+.PP
+Referenced by MeshDataUnvHeader(), operator=(), operator==(), read(), and write()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::model_type"
+Record 9, first part\&. This record contains data specifying the model type (e\&.g\&. unknown, structural, etc\&.), the analysis type (e\&.g\&. unknown, static, transient, normal mode, etc\&.), the data characteristics (such as scalar, 3 dof global translation vector, etc\&.), the result type (e\&.g\&. stress, strain, velocity, etc\&.)\&. 
+.PP
+Definition at line 756 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and write()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::nvaldc"
+Record 9, third and last part\&. See first and second part, then we have: the number of data values for the mesh data\&. 
+.PP
+Definition at line 772 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), libMesh::MeshData::read_unv_implementation(), write(), and libMesh::MeshData::write_unv_implementation()\&.
+.SS "std::vector<int> libMesh::MeshDataUnvHeader::record_10"
+Record 10 and 11 are analysis specific data of type integer\&. 
+.PP
+Definition at line 778 of file mesh_data\&.h\&.
+.PP
+Referenced by MeshDataUnvHeader(), operator=(), operator==(), read(), and write()\&.
+.SS "std::vector<int> libMesh::MeshDataUnvHeader::record_11"
+
+.PP
+Definition at line 778 of file mesh_data\&.h\&.
+.PP
+Referenced by MeshDataUnvHeader(), operator=(), operator==(), read(), and write()\&.
+.SS "std::vector<\fBReal\fP> libMesh::MeshDataUnvHeader::record_12"
+Record 12 and 13 are analysis specific data of type Real\&. 
+.PP
+Definition at line 785 of file mesh_data\&.h\&.
+.PP
+Referenced by MeshDataUnvHeader(), operator=(), operator==(), read(), and write()\&.
+.SS "std::vector<\fBReal\fP> libMesh::MeshDataUnvHeader::record_13"
+
+.PP
+Definition at line 785 of file mesh_data\&.h\&.
+.PP
+Referenced by MeshDataUnvHeader(), operator=(), operator==(), read(), and write()\&.
+.SS "unsigned int libMesh::MeshDataUnvHeader::result_type"
+
+.PP
+Definition at line 756 of file mesh_data\&.h\&.
+.PP
+Referenced by operator=(), operator==(), read(), and write()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,341 @@
+.TH "libMesh::Threads" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Threads \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBBoolAcquire\fP"
+.br
+.ti -1c
+.RI "class \fBThread\fP"
+.br
+.ti -1c
+.RI "class \fBatomic\fP"
+.br
+.ti -1c
+.RI "class \fBspin_mutex\fP"
+.br
+.ti -1c
+.RI "class \fBrecursive_mutex\fP"
+.br
+.ti -1c
+.RI "class \fBRangeBody\fP"
+.br
+.ti -1c
+.RI "class \fBtask_scheduler_init\fP"
+.br
+.ti -1c
+.RI "class \fBsplit\fP"
+.br
+.ti -1c
+.RI "class \fBBlockedRange\fP"
+.br
+.ti -1c
+.RI "class \fBscalable_allocator\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef std::thread \fBThread\fP"
+.br
+.ti -1c
+.RI "typedef tbb::task_scheduler_init \fBtask_scheduler_init\fP"
+.br
+.ti -1c
+.RI "typedef tbb::split \fBsplit\fP"
+.br
+.ti -1c
+.RI "typedef tbb::spin_mutex \fBspin_mutex\fP"
+.br
+.ti -1c
+.RI "typedef tbb::recursive_mutex \fBrecursive_mutex\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename Range , typename Body > void \fBparallel_for\fP (const Range &range, const Body &body)"
+.br
+.ti -1c
+.RI "template<typename Range , typename Body , typename Partitioner > void \fBparallel_for\fP (const Range &range, const Body &body, const \fBPartitioner\fP &partitioner)"
+.br
+.ti -1c
+.RI "template<typename Range , typename Body > void \fBparallel_reduce\fP (const Range &range, Body &body)"
+.br
+.ti -1c
+.RI "template<typename Range , typename Body , typename Partitioner > void \fBparallel_reduce\fP (const Range &range, Body &body, const \fBPartitioner\fP &partitioner)"
+.br
+.ti -1c
+.RI "unsigned int \fBpthread_unique_id\fP ()"
+.br
+.ti -1c
+.RI "template<typename Range > unsigned int \fBnum_pthreads\fP (Range &range)"
+.br
+.ti -1c
+.RI "template<typename Range , typename Body > void * \fBrun_body\fP (void *args)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "bool \fBin_threads\fP = false"
+.br
+.ti -1c
+.RI "std::map< pthread_t, unsigned int > \fB_pthread_unique_ids\fP"
+.br
+.ti -1c
+.RI "\fBspin_mutex\fP \fB_pthread_unique_id_mutex\fP"
+.br
+.ti -1c
+.RI "\fBspin_mutex\fP \fBspin_mtx\fP"
+.br
+.ti -1c
+.RI "\fBrecursive_mutex\fP \fBrecursive_mtx\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fBThreads\fP namespace is for wrapper functions for common general multithreading algorithms and tasks\&. 
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef tbb::recursive_mutex \fBlibMesh::Threads::recursive_mutex\fP"
+Recursive mutex\&. Implements mutual exclusion by busy-waiting in user space for the lock to be acquired\&. The same thread can aquire the same lock multiple times 
+.PP
+Definition at line 314 of file threads\&.h\&.
+.SS "typedef tbb::spin_mutex \fBlibMesh::Threads::spin_mutex\fP"
+Spin mutex\&. Implements mutual exclusion by busy-waiting in user space for the lock to be acquired\&. 
+.PP
+Definition at line 306 of file threads\&.h\&.
+.SS "typedef tbb::split \fBlibMesh::Threads::split\fP"
+Dummy 'splitting object' used to distinguish splitting constructors from copy constructors\&. 
+.PP
+Definition at line 169 of file threads\&.h\&.
+.SS "typedef tbb::task_scheduler_init \fBlibMesh::Threads::task_scheduler_init\fP"
+Scheduler to manage threads\&. 
+.PP
+Definition at line 160 of file threads\&.h\&.
+.SS "typedef tbb::tbb_thread \fBlibMesh::Threads::Thread\fP"
+Use std::thread when available\&.
+.PP
+Fall back to tbb::tbb_thread when available\&. 
+.PP
+Definition at line 114 of file threads\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "template<typename Range > unsigned int libMesh::Threads::num_pthreads (Range &range)"
+
+.PP
+Definition at line 442 of file threads\&.h\&.
+.PP
+References std::min(), and libMesh::n_threads\&.
+.PP
+.nf
+443 {
+444   unsigned int min = std::min((std::size_t)libMesh::n_threads(), range\&.size());
+445   return min > 0 ? min : 1;
+446 }
+.fi
+.SS "template<typename Range , typename Body > void libMesh::Threads::parallel_for (const Range &range, const Body &body)\fC [inline]\fP"
+Exectue the provided function object in parallel on the specified range\&. 
+.PP
+Definition at line 180 of file threads\&.h\&.
+.PP
+References libMesh::PerfLog::disable_logging(), libMesh::PerfLog::enable_logging(), in_threads, libMesh::PerfLog::logging_enabled(), libMesh::n_threads, and libMesh::perflog\&.
+.PP
+Referenced by libMesh::FEMSystem::assemble_qoi_derivative(), libMesh::FEMSystem::assembly(), libMesh::MeshCommunication::assign_global_indices(), libMesh::System::boundary_project_vector(), libMesh::DofMap::create_dof_constraints(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), parallel_for(), libMesh::FEMSystem::postprocess(), and libMesh::System::project_vector()\&.
+.PP
+.nf
+181 {
+182   BoolAcquire b(in_threads);
+183 
+184 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+185   const bool logging_was_enabled = libMesh::perflog\&.logging_enabled();
+186 
+187   if (libMesh::n_threads() > 1)
+188     libMesh::perflog\&.disable_logging();
+189 #endif
+190 
+191   if (libMesh::n_threads() > 1)
+192     tbb::parallel_for (range, body, tbb::auto_partitioner());
+193 
+194   else
+195     body(range);
+196 
+197 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+198   if (libMesh::n_threads() > 1 && logging_was_enabled)
+199     libMesh::perflog\&.enable_logging();
+200 #endif
+201 }
+.fi
+.SS "template<typename Range , typename Body , typename Partitioner > void libMesh::Threads::parallel_for (const Range &range, const Body &body, const Partitioner &partitioner)\fC [inline]\fP"
+Exectue the provided function object in parallel on the specified range with the specified partitioner\&. 
+.PP
+Definition at line 212 of file threads\&.h\&.
+.PP
+References libMesh::PerfLog::disable_logging(), libMesh::PerfLog::enable_logging(), in_threads, libMesh::PerfLog::logging_enabled(), libMesh::n_threads, parallel_for(), and libMesh::perflog\&.
+.PP
+.nf
+213 {
+214   BoolAcquire b(in_threads);
+215 
+216 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+217   const bool logging_was_enabled = libMesh::perflog\&.logging_enabled();
+218 
+219   if (libMesh::n_threads() > 1)
+220     libMesh::perflog\&.disable_logging();
+221 #endif
+222 
+223   if (libMesh::n_threads() > 1)
+224     tbb::parallel_for (range, body, partitioner);
+225 
+226   else
+227     body(range);
+228 
+229 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+230   if (libMesh::n_threads() > 1 && logging_was_enabled)
+231     libMesh::perflog\&.enable_logging();
+232 #endif
+233 }
+.fi
+.SS "template<typename Range , typename Body > void libMesh::Threads::parallel_reduce (const Range &range, Body &body)\fC [inline]\fP"
+Exectue the provided reduction operation in parallel on the specified range\&. 
+.PP
+Definition at line 244 of file threads\&.h\&.
+.PP
+References libMesh::PerfLog::disable_logging(), libMesh::PerfLog::enable_logging(), in_threads, libMesh::PerfLog::logging_enabled(), libMesh::n_threads, and libMesh::perflog\&.
+.PP
+Referenced by libMesh::FEMSystem::assemble_qoi(), libMesh::MeshTools::bounding_box(), libMesh::DofMap::build_sparsity(), parallel_reduce(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::MeshTools::total_weight(), and libMesh::MeshTools::weight()\&.
+.PP
+.nf
+245 {
+246   BoolAcquire b(in_threads);
+247 
+248 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+249   const bool logging_was_enabled = libMesh::perflog\&.logging_enabled();
+250 
+251   if (libMesh::n_threads() > 1)
+252     libMesh::perflog\&.disable_logging();
+253 #endif
+254 
+255   if (libMesh::n_threads() > 1)
+256     tbb::parallel_reduce (range, body, tbb::auto_partitioner());
+257 
+258   else
+259     body(range);
+260 
+261 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+262   if (libMesh::n_threads() > 1 && logging_was_enabled)
+263     libMesh::perflog\&.enable_logging();
+264 #endif
+265 }
+.fi
+.SS "template<typename Range , typename Body , typename Partitioner > void libMesh::Threads::parallel_reduce (const Range &range, Body &body, const Partitioner &partitioner)\fC [inline]\fP"
+Exectue the provided reduction operation in parallel on the specified range with the specified partitioner\&. 
+.PP
+Definition at line 276 of file threads\&.h\&.
+.PP
+References libMesh::PerfLog::disable_logging(), libMesh::PerfLog::enable_logging(), in_threads, libMesh::PerfLog::logging_enabled(), libMesh::n_threads, parallel_reduce(), and libMesh::perflog\&.
+.PP
+.nf
+277 {
+278   BoolAcquire b(in_threads);
+279 
+280 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+281   const bool logging_was_enabled = libMesh::perflog\&.logging_enabled();
+282 
+283   if (libMesh::n_threads() > 1)
+284     libMesh::perflog\&.disable_logging();
+285 #endif
+286 
+287   if (libMesh::n_threads() > 1)
+288     tbb::parallel_reduce (range, body, partitioner);
+289 
+290   else
+291     body(range);
+292 
+293 #ifdef LIBMESH_ENABLE_PERFORMANCE_LOGGING
+294   if (libMesh::n_threads() > 1 && logging_was_enabled)
+295     libMesh::perflog\&.enable_logging();
+296 #endif
+297 }
+.fi
+.SS "unsigned int libMesh::Threads::pthread_unique_id ()"
+When called by a thread this will return a unique number from 0 to num_pthreads-1 Very useful for creating long-lived thread local storage 
+.PP
+Definition at line 35 of file threads\&.C\&.
+.PP
+References _pthread_unique_id_mutex, and _pthread_unique_ids\&.
+.PP
+.nf
+36 {
+37 #if LIBMESH_HAVE_OPENMP
+38   return omp_get_thread_num();
+39 #else
+40   spin_mutex::scoped_lock lock(_pthread_unique_id_mutex);
+41   return _pthread_unique_ids[pthread_self()];
+42 #endif
+43 }
+.fi
+.SS "template<typename Range , typename Body > void* libMesh::Threads::run_body (void *args)"
+
+.PP
+Definition at line 457 of file threads\&.h\&.
+.PP
+References libMesh::Threads::RangeBody< Range, Body >::body, and libMesh::Threads::RangeBody< Range, Body >::range\&.
+.PP
+.nf
+458 {
+459 
+460   RangeBody<Range, Body> * range_body = (RangeBody<Range, Body>*)args;
+461 
+462   Body & body = *range_body->body;
+463   Range & range = *range_body->range;
+464 
+465   body(range);
+466 
+467   return NULL;
+468 }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "\fBThreads::spin_mutex\fP libMesh::Threads::_pthread_unique_id_mutex"
+
+.PP
+Definition at line 33 of file threads\&.C\&.
+.PP
+Referenced by pthread_unique_id()\&.
+.SS "std::map< pthread_t, unsigned int > libMesh::Threads::_pthread_unique_ids"
+
+.PP
+Definition at line 32 of file threads\&.C\&.
+.PP
+Referenced by pthread_unique_id()\&.
+.SS "bool libMesh::Threads::in_threads = false"
+A boolean which is true iff we are in a \fBThreads\fP:: function It may be useful to assert(!Threads\fBin_threads\fP) in any code which is known to not be thread-safe\&. 
+.PP
+Definition at line 50 of file threads\&.C\&.
+.PP
+Referenced by parallel_for(), parallel_reduce(), libMesh::MeshBase::point_locator(), and libMesh::MeshBase::sub_point_locator()\&.
+.SS "\fBThreads::recursive_mutex\fP libMesh::Threads::recursive_mtx"
+A recursive mutex object which 
+.PP
+Definition at line 49 of file threads\&.C\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::Threads::spin_mtx"
+A spin mutex object which 
+.PP
+Definition at line 48 of file threads\&.C\&.
+.PP
+Referenced by libMesh::FEAbstract::compute_node_constraints(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), libMesh::DofMap::constrain_p_dofs(), libMesh::ReferenceCounter::increment_constructor_count(), libMesh::ReferenceCounter::increment_destructor_count(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

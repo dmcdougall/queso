@@ -1,0 +1,113 @@
+.TH "petsc_dm_nonlinear_solver.C" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+petsc_dm_nonlinear_solver.C \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBlibMesh\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef int \fBPetscErrorCode\fP"
+.br
+.ti -1c
+.RI "typedef int \fBPetscInt\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "EXTERN_C_BEGIN \fBPetscErrorCode\fP \fBDMCreate_libMesh\fP (DM)"
+.br
+.ti -1c
+.RI "void \fBlibMesh::PetscDMRegister\fP ()"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "\fBPetscBool\fP \fBlibMesh::PetscDMRegistered\fP = PETSC_FALSE"
+.br
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef int \fBPetscErrorCode\fP"
+
+.PP
+Definition at line 37 of file petsc_dm_nonlinear_solver\&.C\&.
+.SS "typedef int \fBPetscInt\fP"
+
+.PP
+Definition at line 38 of file petsc_dm_nonlinear_solver\&.C\&.
+.SH "Function Documentation"
+.PP 
+.SS "EXTERN_C_BEGIN \fBPetscErrorCode\fP DMCreate_libMesh (DM)"
+
+.PP
+Definition at line 1124 of file petscdmlibmesh\&.C\&.
+.PP
+References DM_libMesh::blockids, DM_libMesh::blocknames, CHKERRQ(), DM_libMesh::decomposition, DM_libMesh::decomposition_type, dlm, DMCreateDomainDecomposition_libMesh(), DMCreateDomainDecompositionDM_libMesh(), DMCreateFieldDecomposition_libMesh(), DMCreateFieldDecompositionDM_libMesh(), DMCreateGlobalVector_libMesh(), DMCreateMatrix_libMesh(), DMDestroy_libMesh(), DMSetUp_libMesh(), DMView_libMesh(), libMesh::ierr, PetscFunctionBegin, PetscFunctionReturn(), DM_libMesh::varids, and DM_libMesh::varnames\&.
+.PP
+Referenced by libMesh::PetscDMRegister()\&.
+.PP
+.nf
+1125 {
+1126   PetscErrorCode ierr;
+1127   DM_libMesh     *dlm;
+1128 
+1129   PetscFunctionBegin;
+1130   PetscValidHeaderSpecific(dm,DM_CLASSID,1);
+1131 #if PETSC_RELEASE_LESS_THAN(3,5,0)
+1132   ierr = PetscNewLog(dm,DM_libMesh,&dlm);CHKERRQ(ierr);
+1133 #else
+1134   ierr = PetscNewLog(dm,&dlm);CHKERRQ(ierr);
+1135 #endif
+1136   dm->data = dlm;
+1137 
+1138   dlm->varids     = new(std::map<std::string, unsigned int>);
+1139   dlm->blockids   = new(std::map<std::string, unsigned int>);
+1140   dlm->varnames   = new(std::map<unsigned int, std::string>);
+1141   dlm->blocknames = new(std::map<unsigned int, std::string>);
+1142   dlm->decomposition   = PETSC_NULL;
+1143   dlm->decomposition_type  = DMLIBMESH_NO_DECOMPOSITION;
+1144 
+1145   dm->ops->createglobalvector = DMCreateGlobalVector_libMesh;
+1146   dm->ops->createlocalvector  = 0; // DMCreateLocalVector_libMesh;
+1147   dm->ops->getcoloring        = 0; // DMGetColoring_libMesh;
+1148   dm->ops->creatematrix       = DMCreateMatrix_libMesh;
+1149   dm->ops->createinterpolation= 0; // DMCreateInterpolation_libMesh;
+1150 
+1151   dm->ops->refine             = 0; // DMRefine_libMesh;
+1152   dm->ops->coarsen            = 0; // DMCoarsen_libMesh;
+1153   dm->ops->getinjection       = 0; // DMGetInjection_libMesh;
+1154   dm->ops->getaggregates      = 0; // DMGetAggregates_libMesh;
+1155 
+1156 #if PETSC_RELEASE_LESS_THAN(3,3,1)
+1157   dm->ops->createfielddecompositiondm  = DMCreateFieldDecompositionDM_libMesh;
+1158   dm->ops->createdomaindecompositiondm = DMCreateDomainDecompositionDM_libMesh;
+1159 #endif
+1160   dm->ops->createfielddecomposition    = DMCreateFieldDecomposition_libMesh;
+1161   dm->ops->createdomaindecomposition   = DMCreateDomainDecomposition_libMesh;
+1162 
+1163   dm->ops->destroy            = DMDestroy_libMesh;
+1164   dm->ops->view               = DMView_libMesh;
+1165   dm->ops->setfromoptions     = 0; // DMSetFromOptions_libMesh;
+1166   dm->ops->setup              = DMSetUp_libMesh;
+1167 
+1168   PetscFunctionReturn(0);
+1169 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

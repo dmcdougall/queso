@@ -1,0 +1,164 @@
+.TH "petsc_linear_solver.h" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+petsc_linear_solver.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBlibMesh::PetscMatrix< T >\fP"
+.br
+.ti -1c
+.RI "class \fBlibMesh::PetscLinearSolver< T >\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBlibMesh\fP"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef int \fBPetscInt\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fB__libmesh_petsc_preconditioner_setup\fP (void *ctx)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fB__libmesh_petsc_preconditioner_apply\fP (void *ctx, Vec \fBx\fP, Vec y)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fB__libmesh_petsc_preconditioner_setup\fP (PC)"
+.br
+.ti -1c
+.RI "\fBPetscErrorCode\fP \fB__libmesh_petsc_preconditioner_apply\fP (PC, Vec \fBx\fP, Vec y)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "EXTERN_C_FOR_PETSC_BEGIN 
+.br
+EXTERN_C_FOR_PETSC_END typedef 
+.br
+int \fBPetscErrorCode\fP"
+.br
+.in -1c
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef int \fBPetscInt\fP"
+
+.PP
+Definition at line 61 of file petsc_linear_solver\&.h\&.
+.SH "Function Documentation"
+.PP 
+.SS "\fBPetscErrorCode\fP __libmesh_petsc_preconditioner_apply (void *ctx, Vecx, Vecy)"
+This function is called by PETSc to acctually apply the preconditioner\&. ctx will hold the Preconditioner\&. 
+.PP
+Definition at line 66 of file petsc_linear_solver\&.C\&.
+.PP
+Referenced by libMesh::PetscNonlinearSolver< T >::init(), and libMesh::PetscLinearSolver< T >::init()\&.
+.PP
+.nf
+67   {
+68     Preconditioner<Number> * preconditioner = static_cast<Preconditioner<Number>*>(ctx);
+69 
+70     PetscVector<Number> x_vec(x, preconditioner->comm());
+71     PetscVector<Number> y_vec(y, preconditioner->comm());
+72 
+73     preconditioner->apply(x_vec,y_vec);
+74 
+75     return 0;
+76   }
+.fi
+.SS "\fBPetscErrorCode\fP __libmesh_petsc_preconditioner_apply (PC, Vecx, Vecy)"
+
+.PP
+Definition at line 95 of file petsc_linear_solver\&.C\&.
+.PP
+References CHKERRQ(), and libMesh::ierr\&.
+.PP
+.nf
+96   {
+97     void *ctx;
+98     PetscErrorCode ierr = PCShellGetContext(pc,&ctx);CHKERRQ(ierr);
+99     Preconditioner<Number> * preconditioner = static_cast<Preconditioner<Number>*>(ctx);
+100 
+101     PetscVector<Number> x_vec(x, preconditioner->comm());
+102     PetscVector<Number> y_vec(y, preconditioner->comm());
+103 
+104     preconditioner->apply(x_vec,y_vec);
+105 
+106     return 0;
+107   }
+.fi
+.SS "\fBPetscErrorCode\fP __libmesh_petsc_preconditioner_setup (void *ctx)"
+This function is called by PETSc to initialize the preconditioner\&. ctx will hold the Preconditioner\&. 
+.PP
+Definition at line 50 of file petsc_linear_solver\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+Referenced by libMesh::PetscNonlinearSolver< T >::init(), and libMesh::PetscLinearSolver< T >::init()\&.
+.PP
+.nf
+51   {
+52     Preconditioner<Number> * preconditioner = static_cast<Preconditioner<Number>*>(ctx);
+53 
+54     if(!preconditioner->initialized())
+55       {
+56         err<<"Preconditioner not initialized!  Make sure you call init() before solve!"<<std::endl;
+57         libmesh_error();
+58       }
+59 
+60     preconditioner->setup();
+61 
+62     return 0;
+63   }
+.fi
+.SS "\fBPetscErrorCode\fP __libmesh_petsc_preconditioner_setup (PC)"
+
+.PP
+Definition at line 78 of file petsc_linear_solver\&.C\&.
+.PP
+References CHKERRQ(), libMesh::err, and libMesh::ierr\&.
+.PP
+.nf
+79   {
+80     void *ctx;
+81     PetscErrorCode ierr = PCShellGetContext(pc,&ctx);CHKERRQ(ierr);
+82     Preconditioner<Number> * preconditioner = static_cast<Preconditioner<Number>*>(ctx);
+83 
+84     if(!preconditioner->initialized())
+85       {
+86         err<<"Preconditioner not initialized!  Make sure you call init() before solve!"<<std::endl;
+87         libmesh_error();
+88       }
+89 
+90     preconditioner->setup();
+91 
+92     return 0;
+93   }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "EXTERN_C_FOR_PETSC_BEGIN EXTERN_C_FOR_PETSC_END typedef int \fBPetscErrorCode\fP"
+Petsc include files\&. 
+.PP
+Definition at line 60 of file petsc_linear_solver\&.h\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

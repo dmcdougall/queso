@@ -1,0 +1,741 @@
+.TH "libMesh::AdjointRefinementEstimator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::AdjointRefinementEstimator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <adjoint_refinement_estimator\&.h>\fP
+.PP
+Inherits \fBlibMesh::ErrorEstimator\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::pair
+.br
+< const \fBSystem\fP *, unsigned int >
+.br
+, \fBErrorVector\fP * > \fBErrorMap\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAdjointRefinementEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fB~AdjointRefinementEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fBQoISet\fP & \fBqoi_set\fP ()"
+.br
+.ti -1c
+.RI "const \fBQoISet\fP & \fBqoi_set\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBestimate_error\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "\fBNumber\fP & \fBget_global_QoI_error_estimate\fP (unsigned int qoi_index)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned char \fBnumber_h_refinements\fP"
+.br
+.ti -1c
+.RI "unsigned char \fBnumber_p_refinements\fP"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP \fBerror_norm\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBreduce_error\fP (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD) const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBNumber\fP > \fBcomputed_global_QoI_errors\fP"
+.br
+.ti -1c
+.RI "\fBQoISet\fP \fB_qoi_set\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements a ``brute force'' goal-oriented error estimator which computes an estimate of error in a quantity of interest based on the residual of the current coarse grid primal solution as weighted against an adjoint solution on a uniformly refined (in h and/or p, for an arbitrary number of levels) grid\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner, 2009\&. 
+.RE
+.PP
+
+.PP
+Definition at line 46 of file adjoint_refinement_estimator\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::pair<const \fBSystem\fP*, unsigned int>, \fBErrorVector\fP*> \fBlibMesh::ErrorEstimator::ErrorMap\fP\fC [inherited]\fP"
+When calculating many error vectors at once, we need a data structure to hold them all 
+.PP
+Definition at line 110 of file error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::AdjointRefinementEstimator::AdjointRefinementEstimator ()\fC [inline]\fP"
+Constructor\&. Sets the most common default parameter values\&. 
+.PP
+Definition at line 53 of file adjoint_refinement_estimator\&.h\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, and libMesh::INVALID_NORM\&.
+.PP
+.nf
+53                                :
+54     ErrorEstimator(),
+55     number_h_refinements(1),
+56     number_p_refinements(0),
+57     _qoi_set(QoISet())
+58   {
+59     // We're not actually going to use error_norm; our norms are
+60     // absolute values of QoI error\&.
+61     error_norm = INVALID_NORM;
+62   }
+.fi
+.SS "libMesh::AdjointRefinementEstimator::~AdjointRefinementEstimator ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 67 of file adjoint_refinement_estimator\&.h\&.
+.PP
+.nf
+67 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::AdjointRefinementEstimator::estimate_error (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+This function does uniform refinements and an adjoint solve to get an adjoint solution on each cell, then estimates the error by finding the weighted residual of the coarse solution with the fine adjoint solution\&.
+.PP
+system\&.solve() and system\&.assembly() must be called, and so should have no side effects\&.
+.PP
+Only the provided system is solved on the refined mesh; we don't support adjoint solves on loosely coupled collections of Systems\&.
+.PP
+The estimated error is output in the vector \fCerror_per_cell\fP 
+.PP
+Implements \fBlibMesh::ErrorEstimator\fP\&.
+.PP
+Definition at line 69 of file adjoint_refinement_estimator\&.C\&.
+.PP
+References _qoi_set, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::System::add_vector(), libMesh::System::adjoint_solve(), libMesh::MeshBase::allow_renumbering(), libMesh::NumericVector< T >::build(), libMesh::NumericVector< T >::clear(), libMesh::NumericVector< T >::close(), libMesh::ParallelObject::comm(), computed_global_QoI_errors, libMesh::System::current_local_solution, libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::NumericVector< T >::dot(), libMesh::DofMap::enforce_constraints_exactly(), libMesh::ErrorVectorReal, libMesh::Elem::find_point_neighbors(), libMesh::System::get_adjoint_solution(), libMesh::System::get_dof_map(), libMesh::System::get_equation_systems(), libMesh::EquationSystems::get_mesh(), libMesh::Elem::get_node(), libMesh::DofMap::get_send_list(), libMesh::System::get_vector(), libMesh::GHOSTED, libMesh::DofMap::has_adjoint_dirichlet_boundaries(), libMesh::QoISet::has_index(), libMesh::DofObject::id(), libMesh::NumericVector< T >::init(), libMesh::libmesh_assert(), libMesh::libmesh_real(), libMesh::NumericVector< T >::localize(), libMesh::MeshBase::max_elem_id(), mesh, libMesh::System::n_dofs(), libMesh::MeshBase::n_elem(), libMesh::System::n_local_dofs(), libMesh::Elem::n_nodes(), number_h_refinements, number_p_refinements, libMesh::Elem::parent(), libMesh::MeshBase::partitioner(), libMesh::System::project_solution_on_reinit(), libMesh::System::qoi, libMesh::Real, libMesh::ErrorEstimator::reduce_error(), libMesh::EquationSystems::reinit(), libMesh::System::remove_vector(), libMesh::SERIAL, libMesh::System::solution, libMesh::NumericVector< T >::swap(), libMesh::MeshRefinement::uniformly_coarsen(), libMesh::MeshRefinement::uniformly_p_coarsen(), libMesh::MeshRefinement::uniformly_p_refine(), libMesh::MeshRefinement::uniformly_refine(), libMesh::System::update(), libMesh::System::vectors_begin(), libMesh::System::vectors_end(), and libMesh::QoISet::weight()\&.
+.PP
+.nf
+73 {
+74   // We have to break the rules here, because we can't refine a const System
+75   System& system = const_cast<System&>(_system);
+76 
+77   // An EquationSystems reference will be convenient\&.
+78   EquationSystems& es = system\&.get_equation_systems();
+79 
+80   // The current mesh
+81   MeshBase& mesh = es\&.get_mesh();
+82 
+83   // Resize the error_per_cell vector to be
+84   // the number of elements, initialized to 0\&.
+85   error_per_cell\&.clear();
+86   error_per_cell\&.resize (mesh\&.max_elem_id(), 0\&.);
+87 
+88   // We'll want to back up all coarse grid vectors
+89   std::map<std::string, NumericVector<Number> *> coarse_vectors;
+90   for (System::vectors_iterator vec = system\&.vectors_begin(); vec !=
+91          system\&.vectors_end(); ++vec)
+92     {
+93       // The (string) name of this vector
+94       const std::string& var_name = vec->first;
+95 
+96       coarse_vectors[var_name] = vec->second->clone()\&.release();
+97     }
+98   // Back up the coarse solution and coarse local solution
+99   NumericVector<Number> * coarse_solution =
+100     system\&.solution->clone()\&.release();
+101   NumericVector<Number> * coarse_local_solution =
+102     system\&.current_local_solution->clone()\&.release();
+103   // And make copies of the projected solution
+104   NumericVector<Number> * projected_solution;
+105 
+106   // And we'll need to temporarily change solution projection settings
+107   bool old_projection_setting;
+108   old_projection_setting = system\&.project_solution_on_reinit();
+109 
+110   // Make sure the solution is projected when we refine the mesh
+111   system\&.project_solution_on_reinit() = true;
+112 
+113   // And it'll be best to avoid any repartitioning
+114   AutoPtr<Partitioner> old_partitioner = mesh\&.partitioner();
+115   mesh\&.partitioner()\&.reset(NULL);
+116 
+117   // And we can't allow any renumbering
+118   const bool old_renumbering_setting = mesh\&.allow_renumbering();
+119   mesh\&.allow_renumbering(false);
+120 
+121   // Use a non-standard solution vector if necessary
+122   if (solution_vector && solution_vector != system\&.solution\&.get())
+123     {
+124       NumericVector<Number> *newsol =
+125         const_cast<NumericVector<Number>*> (solution_vector);
+126       newsol->swap(*system\&.solution);
+127       system\&.update();
+128     }
+129 
+130   // Loop over all the adjoint problems and, if any have heterogenous
+131   // Dirichlet conditions, get the corresponding coarse lift
+132   // function(s)
+133   for (unsigned int j=0; j != system\&.qoi\&.size(); j++)
+134     {
+135       // Skip this QoI if it is not in the QoI Set or if there are no
+136       // heterogeneous Dirichlet boundaries for it
+137       if (_qoi_set\&.has_index(j) &&
+138           system\&.get_dof_map()\&.has_adjoint_dirichlet_boundaries(j))
+139         {
+140           std::ostringstream liftfunc_name;
+141           liftfunc_name << "adjoint_lift_function" << j;
+142           NumericVector<Number> &liftvec =
+143             system\&.add_vector(liftfunc_name\&.str());
+144 
+145           system\&.get_dof_map()\&.enforce_constraints_exactly
+146             (system, &liftvec, true);
+147         }
+148     }
+149 
+150 
+151 
+152 
+153 #ifndef NDEBUG
+154   // n_coarse_elem is only used in an assertion later so
+155   // avoid declaring it unless asserts are active\&.
+156   const dof_id_type n_coarse_elem = mesh\&.n_elem();
+157 #endif
+158 
+159   // Uniformly refine the mesh
+160   MeshRefinement mesh_refinement(mesh);
+161 
+162   libmesh_assert (number_h_refinements > 0 || number_p_refinements > 0);
+163 
+164   // FIXME: this may break if there is more than one System
+165   // on this mesh but estimate_error was still called instead of
+166   // estimate_errors
+167   for (unsigned int i = 0; i != number_h_refinements; ++i)
+168     {
+169       mesh_refinement\&.uniformly_refine(1);
+170       es\&.reinit();
+171     }
+172 
+173   for (unsigned int i = 0; i != number_p_refinements; ++i)
+174     {
+175       mesh_refinement\&.uniformly_p_refine(1);
+176       es\&.reinit();
+177     }
+178 
+179   // Copy the projected coarse grid solutions, which will be
+180   // overwritten by solve()
+181   projected_solution = NumericVector<Number>::build(mesh\&.comm())\&.release();
+182   projected_solution->init(system\&.solution->size(), true, SERIAL);
+183   system\&.solution->localize(*projected_solution,
+184                             system\&.get_dof_map()\&.get_send_list());
+185 
+186   // Rebuild the rhs with the projected primal solution
+187   (dynamic_cast<ImplicitSystem&>(system))\&.assembly(true, false);
+188   NumericVector<Number> & projected_residual = (dynamic_cast<ExplicitSystem&>(system))\&.get_vector("RHS Vector");
+189   projected_residual\&.close();
+190 
+191   // Solve the adjoint problem(s) on the refined FE space
+192   system\&.adjoint_solve(_qoi_set);
+193 
+194   // Now that we have the refined adjoint solution and the projected primal solution,
+195   // we first compute the global QoI error estimate
+196 
+197   // Resize the computed_global_QoI_errors vector to hold the error estimates for each QoI
+198   computed_global_QoI_errors\&.resize(system\&.qoi\&.size());
+199 
+200   // Loop over all the adjoint solutions and get the QoI error
+201   // contributions from all of them\&.  While we're looping anyway we'll
+202   // handle heterogenous adjoint BCs
+203   for (unsigned int j=0; j != system\&.qoi\&.size(); j++)
+204     {
+205       // Skip this QoI if not in the QoI Set
+206       if (_qoi_set\&.has_index(j))
+207         {
+208           // If the adjoint solution has heterogeneous dirichlet
+209           // values, then to get a proper error estimate here we need
+210           // to subtract off a coarse grid lift function\&.  We won't
+211           // need the lift function afterward\&.  We won't even need the
+212           // fine adjoint solution afterward, so we'll modify it here\&.
+213           if (system\&.get_dof_map()\&.has_adjoint_dirichlet_boundaries(j))
+214             {
+215               std::ostringstream liftfunc_name;
+216               liftfunc_name << "adjoint_lift_function" << j;
+217               system\&.get_adjoint_solution(j) -=
+218                 system\&.get_vector(liftfunc_name\&.str());
+219 
+220               system\&.remove_vector(liftfunc_name\&.str());
+221             }
+222 
+223           computed_global_QoI_errors[j] = projected_residual\&.dot(system\&.get_adjoint_solution(j));
+224         }
+225     }
+226 
+227   // Done with the global error estimates, now construct the element wise error indicators
+228 
+229   // We ought to account for 'spill-over' effects while computing the
+230   // element error indicators This happens because the same dof is
+231   // shared by multiple elements, one way of mitigating this is to
+232   // scale the contribution from each dof by the number of elements it
+233   // belongs to We first obtain the number of elements each node
+234   // belongs to
+235 
+236   // A map that relates a node id to an int that will tell us how many elements it is a node of
+237   LIBMESH_BEST_UNORDERED_MAP<dof_id_type, unsigned int>shared_element_count;
+238 
+239   // To fill this map, we will loop over elements, and then in each element, we will loop
+240   // over the nodes each element contains, and then query it for the number of coarse
+241   // grid elements it was a node of
+242 
+243   // We will be iterating over all the active elements in the fine mesh that live on
+244   // this processor
+245   MeshBase::const_element_iterator elem_it = mesh\&.active_local_elements_begin();
+246   const MeshBase::const_element_iterator elem_end = mesh\&.active_local_elements_end();
+247 
+248   // Keep track of which nodes we have already dealt with
+249   LIBMESH_BEST_UNORDERED_SET<dof_id_type> processed_node_ids;
+250 
+251   // Start loop over elems
+252   for(; elem_it != elem_end; ++elem_it)
+253     {
+254       // Pointer to this element
+255       const Elem* elem = *elem_it;
+256 
+257       // Loop over the nodes in the element
+258       for(unsigned int n=0; n != elem->n_nodes(); ++n)
+259         {
+260           // Get a pointer to the current node
+261           Node* node = elem->get_node(n);
+262 
+263           // Get the id of this node
+264           dof_id_type node_id = node->id();
+265 
+266           // If we havent already processed this node, do so now
+267           if(processed_node_ids\&.find(node_id) == processed_node_ids\&.end())
+268             {
+269               // Declare a neighbor_set to be filled by the find_point_neighbors
+270               std::set<const Elem *> fine_grid_neighbor_set;
+271 
+272               // Call find_point_neighbors to fill the neighbor_set
+273               elem->find_point_neighbors(*node, fine_grid_neighbor_set);
+274 
+275               // A vector to hold the coarse grid parents neighbors
+276               std::vector<dof_id_type> coarse_grid_neighbors;
+277 
+278               // Iterators over the fine grid neighbors set
+279               std::set<const Elem*>::iterator fine_neighbor_it = fine_grid_neighbor_set\&.begin();
+280               const std::set<const Elem*>::iterator fine_neighbor_end = fine_grid_neighbor_set\&.end();
+281 
+282               // Loop over all the fine neighbors of this node
+283               for(; fine_neighbor_it != fine_neighbor_end ; ++fine_neighbor_it)
+284                 {
+285                   // Pointer to the current fine neighbor element
+286                   const Elem* fine_elem = *fine_neighbor_it;
+287 
+288                   // Find the element id for the corresponding coarse grid element
+289                   const Elem* coarse_elem = fine_elem;
+290                   for (unsigned int j = 0; j != number_h_refinements; ++j)
+291                     {
+292                       libmesh_assert (coarse_elem->parent());
+293 
+294                       coarse_elem = coarse_elem->parent();
+295                     }
+296 
+297                   // Loop over the existing coarse neighbors and check if this one is
+298                   // already in there
+299                   const dof_id_type coarse_id = coarse_elem->id();
+300                   std::size_t j = 0;
+301                   for (; j != coarse_grid_neighbors\&.size(); j++)
+302                     {
+303                       // If the set already contains this element break out of the loop
+304                       if(coarse_grid_neighbors[j] == coarse_id)
+305                         {
+306                           break;
+307                         }
+308                     }
+309 
+310                   // If we didn't leave the loop even at the last element,
+311                   // this is a new neighbour, put in the coarse_grid_neighbor_set
+312                   if(j == coarse_grid_neighbors\&.size())
+313                     {
+314                       coarse_grid_neighbors\&.push_back(coarse_id);
+315                     }
+316 
+317                 } // End loop over fine neighbors
+318 
+319               // Set the shared_neighbour index for this node to the
+320               // size of the coarse grid neighbor set
+321               shared_element_count[node_id] =
+322                 libmesh_cast_int<unsigned int>(coarse_grid_neighbors\&.size());
+323 
+324               // Add this node to processed_node_ids vector
+325               processed_node_ids\&.insert(node_id);
+326 
+327             } // End if not processed node
+328 
+329         } // End loop over nodes
+330 
+331     }  // End loop over elems
+332 
+333   // Get a DoF map, will be used to get the nodal dof_indices for each element
+334   DofMap &dof_map = system\&.get_dof_map();
+335 
+336   // The global DOF indices, we will use these later on when we compute the element wise indicators
+337   std::vector<dof_id_type> dof_indices;
+338 
+339   // Localize the global rhs and adjoint solution vectors (which might be shared on multiple processsors) onto a
+340   // local ghosted vector, this ensures each processor has all the dof_indices to compute an error indicator for
+341   // an element it owns
+342   AutoPtr<NumericVector<Number> > localized_projected_residual = NumericVector<Number>::build(system\&.comm());
+343   localized_projected_residual->init(system\&.n_dofs(), system\&.n_local_dofs(), system\&.get_dof_map()\&.get_send_list(), false, GHOSTED);
+344   projected_residual\&.localize(*localized_projected_residual, system\&.get_dof_map()\&.get_send_list());
+345 
+346   // Each adjoint solution will also require ghosting; for efficiency we'll reuse the same memory
+347   AutoPtr<NumericVector<Number> > localized_adjoint_solution = NumericVector<Number>::build(system\&.comm());
+348   localized_adjoint_solution->init(system\&.n_dofs(), system\&.n_local_dofs(), system\&.get_dof_map()\&.get_send_list(), false, GHOSTED);
+349 
+350   // We will loop over each adjoint solution, localize that adjoint
+351   // solution and then loop over local elements
+352   for (unsigned int i=0; i != system\&.qoi\&.size(); i++)
+353     {
+354       // Skip this QoI if not in the QoI Set
+355       if (_qoi_set\&.has_index(i))
+356         {
+357           // Get the weight for the current QoI
+358           Real error_weight = _qoi_set\&.weight(i);
+359 
+360           (system\&.get_adjoint_solution(i))\&.localize(*localized_adjoint_solution, system\&.get_dof_map()\&.get_send_list());
+361 
+362           // Loop over elements
+363           MeshBase::const_element_iterator elem_it = mesh\&.active_local_elements_begin();
+364           const MeshBase::const_element_iterator elem_end = mesh\&.active_local_elements_end();
+365 
+366           for(; elem_it != elem_end; ++elem_it)
+367             {
+368               // Pointer to the element
+369               const Elem* elem = *elem_it;
+370 
+371               // Go up number_h_refinements levels up to find the coarse parent
+372               const Elem* coarse = elem;
+373 
+374               for (unsigned int j = 0; j != number_h_refinements; ++j)
+375                 {
+376                   libmesh_assert (coarse->parent());
+377 
+378                   coarse = coarse->parent();
+379                 }
+380 
+381               const dof_id_type e_id = coarse->id();
+382 
+383               // Get the local to global degree of freedom maps for this element
+384               dof_map\&.dof_indices (elem, dof_indices);
+385 
+386               // We will have to manually do the dot products\&.
+387               Number local_contribution = 0\&.;
+388 
+389               for (unsigned int j=0; j != dof_indices\&.size(); j++)
+390                 {
+391                   // The contribution to the error indicator for this element from the current QoI
+392                   local_contribution += (*localized_projected_residual)(dof_indices[j]) * (*localized_adjoint_solution)(dof_indices[j]);
+393                 }
+394 
+395               // Multiply by the error weight for this QoI
+396               local_contribution *= error_weight;
+397 
+398               // FIXME: we're throwing away information in the
+399               // --enable-complex case
+400               error_per_cell[e_id] += static_cast<ErrorVectorReal>
+401                 (libmesh_real(local_contribution));
+402 
+403             } // End loop over elements
+404 
+405         } // End if belong to QoI set
+406 
+407     } // End loop over QoIs
+408 
+409   // Don't bother projecting the solution; we'll restore from backup
+410   // after coarsening
+411   system\&.project_solution_on_reinit() = false;
+412 
+413   // Uniformly coarsen the mesh, without projecting the solution
+414   libmesh_assert (number_h_refinements > 0 || number_p_refinements > 0);
+415 
+416   for (unsigned int i = 0; i != number_h_refinements; ++i)
+417     {
+418       mesh_refinement\&.uniformly_coarsen(1);
+419       // FIXME - should the reinits here be necessary? - RHS
+420       es\&.reinit();
+421     }
+422 
+423   for (unsigned int i = 0; i != number_p_refinements; ++i)
+424     {
+425       mesh_refinement\&.uniformly_p_coarsen(1);
+426       es\&.reinit();
+427     }
+428 
+429   // We should be back where we started
+430   libmesh_assert_equal_to (n_coarse_elem, mesh\&.n_elem());
+431 
+432   // Restore old solutions and clean up the heap
+433   system\&.project_solution_on_reinit() = old_projection_setting;
+434 
+435   // Restore the coarse solution vectors and delete their copies
+436   *system\&.solution = *coarse_solution;
+437   delete coarse_solution;
+438   *system\&.current_local_solution = *coarse_local_solution;
+439   delete coarse_local_solution;
+440   delete projected_solution;
+441 
+442   for (System::vectors_iterator vec = system\&.vectors_begin(); vec !=
+443          system\&.vectors_end(); ++vec)
+444     {
+445       // The (string) name of this vector
+446       const std::string& var_name = vec->first;
+447 
+448       // If it's a vector we already had (and not a newly created
+449       // vector like an adjoint rhs), we need to restore it\&.
+450       std::map<std::string, NumericVector<Number> *>::iterator it =
+451         coarse_vectors\&.find(var_name);
+452       if (it != coarse_vectors\&.end())
+453         {
+454           NumericVector<Number> *coarsevec = it->second;
+455           system\&.get_vector(var_name) = *coarsevec;
+456 
+457           coarsevec->clear();
+458           delete coarsevec;
+459         }
+460     }
+461 
+462   // Restore old partitioner and renumbering settings
+463   mesh\&.partitioner() = old_partitioner;
+464   mesh\&.allow_renumbering(old_renumbering_setting);
+465 
+466   // Fiinally sum the vector of estimated error values\&.
+467   this->reduce_error(error_per_cell, system\&.comm());
+468 
+469   // We don't take a square root here; this is a goal-oriented
+470   // estimate not a Hilbert norm estimate\&.
+471 } // end estimate_error function
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default computes the sum of the error_per_cell for each system in the equation_systems\&.
+.PP
+Currently this function ignores the error_norm member variable, and uses the function argument error_norms instead\&.
+.PP
+This function is named estimate_errors instead of estimate_error because otherwise C++ can get confused\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 48 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), and libMesh::sys\&.
+.PP
+.nf
+53 {
+54   SystemNorm old_error_norm = this->error_norm;
+55 
+56   // Sum the error values from each system
+57   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+58     {
+59       ErrorVector system_error_per_cell;
+60       const System &sys = equation_systems\&.get_system(s);
+61       if (error_norms\&.find(&sys) == error_norms\&.end())
+62         this->error_norm = old_error_norm;
+63       else
+64         this->error_norm = error_norms\&.find(&sys)->second;
+65 
+66       const NumericVector<Number>* solution_vector = NULL;
+67       if (solution_vectors &&
+68           solution_vectors->find(&sys) != solution_vectors->end())
+69         solution_vector = solution_vectors->find(&sys)->second;
+70 
+71       this->estimate_error(sys, system_error_per_cell,
+72                            solution_vector, estimate_parent_error);
+73 
+74       if (s)
+75         {
+76           libmesh_assert_equal_to (error_per_cell\&.size(), system_error_per_cell\&.size());
+77           for (unsigned int i=0; i != error_per_cell\&.size(); ++i)
+78             error_per_cell[i] += system_error_per_cell[i];
+79         }
+80       else
+81         error_per_cell = system_error_per_cell;
+82     }
+83 
+84   // Restore our old state before returning
+85   this->error_norm = old_error_norm;
+86 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default it calls estimate_error repeatedly to calculate the requested error vectors\&.
+.PP
+Currently this function ignores the \fBerror_norm\&.weight()\fP values because it calculates each variable's error individually, unscaled\&.
+.PP
+The user selects which errors get computed by filling a map with error vectors: If errors_per_cell[&system][v] exists, it will be filled with the error values in variable \fCv\fP of \fCsystem\fP 
+.PP
+FIXME: This is a default implementation - derived classes should reimplement it for efficiency\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 94 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::sys, and libMesh::SystemNorm::type()\&.
+.PP
+.nf
+98 {
+99   SystemNorm old_error_norm = this->error_norm;
+100 
+101   // Find the requested error values from each system
+102   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+103     {
+104       const System &sys = equation_systems\&.get_system(s);
+105 
+106       unsigned int n_vars = sys\&.n_vars();
+107 
+108       for (unsigned int v = 0; v != n_vars; ++v)
+109         {
+110           // Only fill in ErrorVectors the user asks for
+111           if (errors_per_cell\&.find(std::make_pair(&sys, v)) ==
+112               errors_per_cell\&.end())
+113             continue;
+114 
+115           // Calculate error in only one variable
+116           std::vector<Real> weights(n_vars, 0\&.0);
+117           weights[v] = 1\&.0;
+118           this->error_norm =
+119             SystemNorm(std::vector<FEMNormType>(n_vars, old_error_norm\&.type(v)),
+120                        weights);
+121 
+122           const NumericVector<Number>* solution_vector = NULL;
+123           if (solution_vectors &&
+124               solution_vectors->find(&sys) != solution_vectors->end())
+125             solution_vector = solution_vectors->find(&sys)->second;
+126 
+127           this->estimate_error
+128             (sys, *errors_per_cell[std::make_pair(&sys, v)],
+129              solution_vector, estimate_parent_error);
+130         }
+131     }
+132 
+133   // Restore our old state before returning
+134   this->error_norm = old_error_norm;
+135 }
+.fi
+.SS "\fBNumber\fP& libMesh::AdjointRefinementEstimator::get_global_QoI_error_estimate (unsigned intqoi_index)\fC [inline]\fP"
+This is an accessor function to access the computed global QoI error estimates 
+.PP
+Definition at line 106 of file adjoint_refinement_estimator\&.h\&.
+.PP
+References computed_global_QoI_errors\&.
+.PP
+.nf
+107   {
+108     return computed_global_QoI_errors[qoi_index];
+109   }
+.fi
+.SS "\fBQoISet\fP& libMesh::AdjointRefinementEstimator::qoi_set ()\fC [inline]\fP"
+Access to the \fBQoISet\fP (default: weight all QoIs equally) to use when computing errors 
+.PP
+Definition at line 73 of file adjoint_refinement_estimator\&.h\&.
+.PP
+References _qoi_set\&.
+.PP
+.nf
+73 { return _qoi_set; }
+.fi
+.SS "const \fBQoISet\fP& libMesh::AdjointRefinementEstimator::qoi_set () const\fC [inline]\fP"
+Access to the \fBQoISet\fP (default: weight all QoIs equally) to use when computing errors 
+.PP
+Definition at line 79 of file adjoint_refinement_estimator\&.h\&.
+.PP
+References _qoi_set\&.
+.PP
+.nf
+79 { return _qoi_set; }
+.fi
+.SS "void libMesh::ErrorEstimator::reduce_error (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD) const\fC [protected]\fP, \fC [inherited]\fP"
+This method takes the local error contributions in \fCerror_per_cell\fP from each processor and combines them to get the global error vector\&. 
+.PP
+Definition at line 33 of file error_estimator\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), and estimate_error()\&.
+.PP
+.nf
+35 {
+36   // This function must be run on all processors at once
+37   // parallel_object_only();
+38 
+39   // Each processor has now computed the error contribuions
+40   // for its local elements\&.  We may need to sum the vector to
+41   // recover the error for each element\&.
+42 
+43   comm\&.sum(error_per_cell);
+44 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBQoISet\fP libMesh::AdjointRefinementEstimator::_qoi_set\fC [protected]\fP"
+A \fBQoISet\fP to handle cases with multiple QoIs available 
+.PP
+Definition at line 140 of file adjoint_refinement_estimator\&.h\&.
+.PP
+Referenced by estimate_error(), and qoi_set()\&.
+.SS "std::vector<\fBNumber\fP> libMesh::AdjointRefinementEstimator::computed_global_QoI_errors\fC [protected]\fP"
+
+.PP
+Definition at line 124 of file adjoint_refinement_estimator\&.h\&.
+.PP
+Referenced by estimate_error(), and get_global_QoI_error_estimate()\&.
+.SS "\fBSystemNorm\fP libMesh::ErrorEstimator::error_norm\fC [inherited]\fP"
+When estimating the error in a single system, the \fCerror_norm\fP is used to control the scaling and norm choice for each variable\&. Not all estimators will support all norm choices\&. The default scaling is for all variables to be weighted equally\&. The default norm choice depends on the error estimator\&.
+.PP
+Part of this functionality was supported via component_scale and sobolev_order in older \fBlibMesh\fP versions, and a small part was supported via component_mask in even older versions\&. Hopefully the encapsulation here will allow us to avoid changing this API again\&. 
+.PP
+Definition at line 142 of file error_estimator\&.h\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), AdjointRefinementEstimator(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DiscontinuityMeasure::DiscontinuityMeasure(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactErrorEstimator::ExactErrorEstimator(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::KellyErrorEstimator::KellyErrorEstimator(), libMesh::LaplacianErrorEstimator::LaplacianErrorEstimator(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::PatchRecoveryErrorEstimator(), and libMesh::UniformRefinementEstimator::UniformRefinementEstimator()\&.
+.SS "unsigned char libMesh::AdjointRefinementEstimator::number_h_refinements"
+How many h refinements to perform to get the fine grid 
+.PP
+Definition at line 114 of file adjoint_refinement_estimator\&.h\&.
+.PP
+Referenced by estimate_error()\&.
+.SS "unsigned char libMesh::AdjointRefinementEstimator::number_p_refinements"
+How many p refinements to perform to get the fine grid 
+.PP
+Definition at line 119 of file adjoint_refinement_estimator\&.h\&.
+.PP
+Referenced by estimate_error()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

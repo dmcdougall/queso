@@ -1,0 +1,551 @@
+.TH "libMesh::Elem::PackedElem" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Elem::PackedElem \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <elem\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPackedElem\fP (const std::vector< \fBlargest_id_type\fP >::const_iterator _buf_in)"
+.br
+.ti -1c
+.RI "\fBElem\fP * \fBunpack\fP (\fBMeshBase\fP &\fBmesh\fP, \fBElem\fP *\fBparent\fP=NULL) const "
+.br
+.ti -1c
+.RI "unsigned int \fBlevel\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBp_level\fP () const "
+.br
+.ti -1c
+.RI "\fBElem::RefinementState\fP \fBrefinement_flag\fP () const "
+.br
+.ti -1c
+.RI "\fBElem::RefinementState\fP \fBp_refinement_flag\fP () const "
+.br
+.ti -1c
+.RI "\fBElemType\fP \fBtype\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.ti -1c
+.RI "\fBsubdomain_id_type\fP \fBsubdomain_id\fP () const "
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fBid\fP () const "
+.br
+.ti -1c
+.RI "int \fBparent_id\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBwhich_child_am_i\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_nodes\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBnode\fP (const unsigned int n) const "
+.br
+.ti -1c
+.RI "unsigned int \fBn_neighbors\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBneighbor\fP (const unsigned int n) const "
+.br
+.ti -1c
+.RI "std::vector< \fBlargest_id_type\fP >
+.br
+::const_iterator \fBindices\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBpacked_size\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBpack\fP (std::vector< \fBlargest_id_type\fP > &conn, const \fBElem\fP *elem)"
+.br
+.in -1c
+.SS "Static Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const unsigned int \fBheader_size\fP = 10"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const std::vector
+.br
+< \fBlargest_id_type\fP >
+.br
+::const_iterator \fB_buf_begin\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Convenient way to communicate elements\&. This class packes up an element so that it can easily be communicated through an MPI array\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2008 
+.RE
+.PP
+
+.PP
+Definition at line 2025 of file elem\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Elem::PackedElem::PackedElem (const std::vector< \fBlargest_id_type\fP >::const_iterator_buf_in)\fC [inline]\fP"
+Constructor\&. Takes an input iterator pointing to the beginning of the connectivity block for this element\&. 
+.PP
+Definition at line 2040 of file elem\&.h\&.
+.PP
+.nf
+2040                                                                       :
+2041     _buf_begin(_buf_in)
+2042   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBdof_id_type\fP libMesh::Elem::PackedElem::id () const\fC [inline]\fP"
+\fCreturn\fP the id of this packed element\&. 
+.PP
+Definition at line 2137 of file elem\&.h\&.
+.PP
+References _buf_begin\&.
+.PP
+.nf
+2138   {
+2139     return static_cast<dof_id_type>(*(_buf_begin+7));
+2140   }
+.fi
+.SS "std::vector<\fBlargest_id_type\fP>::const_iterator libMesh::Elem::PackedElem::indices () const\fC [inline]\fP"
+
+.PP
+Definition at line 2192 of file elem\&.h\&.
+.PP
+References _buf_begin, header_size, n_neighbors(), and n_nodes()\&.
+.PP
+Referenced by packed_size()\&.
+.PP
+.nf
+2193   {
+2194     return _buf_begin + header_size + this->n_nodes() +
+2195       this->n_neighbors();
+2196   }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::level () const\fC [inline]\fP"
+\fCreturn\fP the level of this packed element\&. 
+.PP
+Definition at line 2069 of file elem\&.h\&.
+.PP
+.nf
+2070   {
+2071     return static_cast<unsigned int>(*_buf_begin);
+2072   }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::n_neighbors () const\fC [inline]\fP"
+\fCreturn\fP the number of neighbors of the packed element 
+.PP
+Definition at line 2177 of file elem\&.h\&.
+.PP
+References type(), and libMesh::Elem::type_to_n_sides_map\&.
+.PP
+Referenced by indices(), and packed_size()\&.
+.PP
+.nf
+2178   {
+2179     return Elem::type_to_n_sides_map[this->type()];
+2180   }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::n_nodes () const\fC [inline]\fP"
+\fCreturn\fP the number of nodes in this packed element 
+.PP
+Definition at line 2161 of file elem\&.h\&.
+.PP
+References type(), and libMesh::Elem::type_to_n_nodes_map\&.
+.PP
+Referenced by indices(), neighbor(), and packed_size()\&.
+.PP
+.nf
+2162   {
+2163     return Elem::type_to_n_nodes_map[this->type()];
+2164   }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::neighbor (const unsigned intn) const\fC [inline]\fP"
+\fCreturn\fP the global index of the packed element's nth neighbor 
+.PP
+Definition at line 2185 of file elem\&.h\&.
+.PP
+References _buf_begin, header_size, and n_nodes()\&.
+.PP
+.nf
+2186   {
+2187     return static_cast<unsigned int>
+2188       (*(_buf_begin + header_size + this->n_nodes() + n));
+2189   }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::node (const unsigned intn) const\fC [inline]\fP"
+\fCreturn\fP the global index of the packed element's nth node\&. 
+.PP
+Definition at line 2169 of file elem\&.h\&.
+.PP
+References _buf_begin, and header_size\&.
+.PP
+.nf
+2170   {
+2171     return static_cast<unsigned int>(*(_buf_begin+header_size+n));
+2172   }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::p_level () const\fC [inline]\fP"
+\fCreturn\fP the p-level of this packed element\&. 
+.PP
+Definition at line 2077 of file elem\&.h\&.
+.PP
+References _buf_begin\&.
+.PP
+.nf
+2078   {
+2079     return static_cast<unsigned int>(*(_buf_begin+1));
+2080   }
+.fi
+.SS "\fBElem::RefinementState\fP libMesh::Elem::PackedElem::p_refinement_flag () const\fC [inline]\fP"
+\fCreturn\fP the p-refinement state of this packed element\&. 
+.PP
+Definition at line 2096 of file elem\&.h\&.
+.PP
+References _buf_begin, and libMesh::Elem::INVALID_REFINEMENTSTATE\&.
+.PP
+.nf
+2097   {
+2098     // libmesh_assert_greater_equal (*(_buf_begin+3), 0);
+2099     libmesh_assert_less (*(_buf_begin+3), INVALID_REFINEMENTSTATE);
+2100     return static_cast<Elem::RefinementState>(*(_buf_begin+3));
+2101   }
+.fi
+.SS "void libMesh::Elem::PackedElem::pack (std::vector< \fBlargest_id_type\fP > &conn, const \fBElem\fP *elem)\fC [static]\fP"
+For each element the serialization is of the form [ level p_level r_flag p_r_flag etype processor_id subdomain_id self_ID parent_ID which_child node_0 node_1 \&.\&.\&. node_n dof_object_buffer_1 \&.\&.\&.] We cannot use unsigned int because parent_ID can be negative 
+.PP
+Definition at line 2245 of file elem\&.C\&.
+.PP
+References libMesh::DofObject::id(), libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::Elem::n_neighbors(), libMesh::Elem::n_nodes(), libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::DofObject::pack_indexing(), libMesh::Elem::packed_size(), libMesh::Elem::parent(), libMesh::DofObject::processor_id(), libMesh::Elem::refinement_flag(), libMesh::Elem::subdomain_id(), libMesh::Elem::type(), and libMesh::Elem::which_child_am_i()\&.
+.PP
+.nf
+2246 {
+2247   libmesh_assert(elem);
+2248 
+2249   // we can do at least this good\&. note that hopefully in general
+2250   // the user will already have reserved the full space, which will render
+2251   // this redundant
+2252   conn\&.reserve (conn\&.size() + elem->packed_size());
+2253 
+2254 #ifdef LIBMESH_ENABLE_AMR
+2255   conn\&.push_back (static_cast<largest_id_type>(elem->level()));
+2256   conn\&.push_back (static_cast<largest_id_type>(elem->p_level()));
+2257   conn\&.push_back (static_cast<largest_id_type>(elem->refinement_flag()));
+2258   conn\&.push_back (static_cast<largest_id_type>(elem->p_refinement_flag()));
+2259 #else
+2260   conn\&.push_back (0);
+2261   conn\&.push_back (0);
+2262   conn\&.push_back (0);
+2263   conn\&.push_back (0);
+2264 #endif
+2265   conn\&.push_back (static_cast<largest_id_type>(elem->type()));
+2266   conn\&.push_back (elem->processor_id());
+2267   conn\&.push_back (elem->subdomain_id());
+2268   conn\&.push_back (elem->id());
+2269 
+2270 #ifdef LIBMESH_ENABLE_AMR
+2271   // use parent_ID of -1 to indicate a level 0 element
+2272   if (elem->level() == 0)
+2273     {
+2274       conn\&.push_back(static_cast<largest_id_type>(-1));
+2275       conn\&.push_back(static_cast<largest_id_type>(-1));
+2276     }
+2277   else
+2278     {
+2279       conn\&.push_back(elem->parent()->id());
+2280       conn\&.push_back(elem->parent()->which_child_am_i(elem));
+2281     }
+2282 #else
+2283   conn\&.push_back(static_cast<largest_id_type>(-1));
+2284   conn\&.push_back(static_cast<largest_id_type>(-1));
+2285 #endif
+2286 
+2287   for (unsigned int n=0; n<elem->n_nodes(); n++)
+2288     conn\&.push_back (elem->node(n));
+2289 
+2290   for (unsigned int n=0; n<elem->n_neighbors(); n++)
+2291     {
+2292       Elem *neigh = elem->neighbor(n);
+2293       if (neigh)
+2294         conn\&.push_back (neigh->id());
+2295       else
+2296         conn\&.push_back(static_cast<largest_id_type>(-1));
+2297     }
+2298 
+2299   elem->pack_indexing(std::back_inserter(conn));
+2300 }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::packed_size () const\fC [inline]\fP"
+
+.PP
+Definition at line 2198 of file elem\&.h\&.
+.PP
+References header_size, indices(), n_neighbors(), n_nodes(), and libMesh::DofObject::unpackable_indexing_size()\&.
+.PP
+.nf
+2199   {
+2200     return this->header_size + this->n_nodes() +
+2201       this->n_neighbors() +
+2202       DofObject::unpackable_indexing_size(this->indices());
+2203   }
+.fi
+.SS "int libMesh::Elem::PackedElem::parent_id () const\fC [inline]\fP"
+\fCreturn\fP the parent id of this packed element\&. 
+.PP
+Definition at line 2145 of file elem\&.h\&.
+.PP
+References _buf_begin\&.
+.PP
+.nf
+2146   {
+2147     return *(_buf_begin+8);
+2148   }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::Elem::PackedElem::processor_id () const\fC [inline]\fP"
+\fCreturn\fP the processor id of this packed element\&. 
+.PP
+Definition at line 2117 of file elem\&.h\&.
+.PP
+References _buf_begin, libMesh::global_n_processors(), and libMesh::DofObject::invalid_processor_id\&.
+.PP
+.nf
+2118   {
+2119     // libmesh_assert_greater_equal (*(_buf_begin+5), 0);
+2120     libmesh_assert_less (static_cast<unsigned int>(*(_buf_begin+5)),
+2121                          libMesh::global_n_processors() ||
+2122                          static_cast<processor_id_type>(*(_buf_begin+5)) == DofObject::invalid_processor_id);
+2123     return static_cast<processor_id_type>(*(_buf_begin+5));
+2124   }
+.fi
+.SS "\fBElem::RefinementState\fP libMesh::Elem::PackedElem::refinement_flag () const\fC [inline]\fP"
+\fCreturn\fP the refinement state of this packed element\&. 
+.PP
+Definition at line 2086 of file elem\&.h\&.
+.PP
+References _buf_begin, and libMesh::Elem::INVALID_REFINEMENTSTATE\&.
+.PP
+.nf
+2087   {
+2088     // libmesh_assert_greater_equal (*(_buf_begin+2), 0);
+2089     libmesh_assert_less (*(_buf_begin+2), INVALID_REFINEMENTSTATE);
+2090     return static_cast<Elem::RefinementState>(*(_buf_begin+2));
+2091   }
+.fi
+.SS "\fBsubdomain_id_type\fP libMesh::Elem::PackedElem::subdomain_id () const\fC [inline]\fP"
+\fCreturn\fP the subdomain id of this packed element\&. 
+.PP
+Definition at line 2129 of file elem\&.h\&.
+.PP
+References _buf_begin\&.
+.PP
+.nf
+2130   {
+2131     return static_cast<subdomain_id_type>(*(_buf_begin+6));
+2132   }
+.fi
+.SS "\fBElemType\fP libMesh::Elem::PackedElem::type () const\fC [inline]\fP"
+\fCreturn\fP the element type of this packed element\&. 
+.PP
+Definition at line 2107 of file elem\&.h\&.
+.PP
+References _buf_begin, and libMesh::INVALID_ELEM\&.
+.PP
+Referenced by n_neighbors(), and n_nodes()\&.
+.PP
+.nf
+2108   {
+2109     // libmesh_assert_greater_equal (*(_buf_begin+4), 0);
+2110     libmesh_assert_less (*(_buf_begin+4), INVALID_ELEM);
+2111     return static_cast<ElemType>(*(_buf_begin+4));
+2112   }
+.fi
+.SS "\fBElem\fP * libMesh::Elem::PackedElem::unpack (\fBMeshBase\fP &mesh, \fBElem\fP *parent = \fCNULL\fP) const"
+Unpacks this packed element\&. Returns a pointer to the new element\&. Takes a pointer to the parent, which is required unless this packed element is at level 0\&. 
+.PP
+Definition at line 2304 of file elem\&.C\&.
+.PP
+References libMesh::Elem::active(), libMesh::Elem::add_child(), libMesh::Elem::build(), libMesh::Elem::child(), libMesh::Elem::family_tree_by_side(), libMesh::DofObject::id(), libMesh::DofObject::invalid_id, libMesh::Elem::level(), libMesh::libmesh_assert(), libMesh::Elem::n_children(), libMesh::Elem::n_neighbors(), libMesh::Elem::n_nodes(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::MeshBase::node_ptr(), libMesh::Elem::p_level(), libMesh::Elem::p_refinement_flag(), libMesh::DofObject::processor_id(), libMesh::MeshBase::query_elem(), libMesh::Elem::refinement_flag(), libMesh::remote_elem, libMesh::DofObject::set_id(), libMesh::Elem::set_neighbor(), libMesh::Elem::set_node(), libMesh::Elem::set_p_level(), libMesh::Elem::set_p_refinement_flag(), libMesh::Elem::set_refinement_flag(), libMesh::Elem::side(), libMesh::Elem::subactive(), libMesh::Elem::subdomain_id(), libMesh::Elem::type(), libMesh::DofObject::unpack_indexing(), and libMesh::Elem::which_child_am_i()\&.
+.PP
+.nf
+2305 {
+2306 
+2307   Elem *elem = Elem::build(this->type(),parent)\&.release();
+2308   libmesh_assert (elem);
+2309 
+2310 #ifdef LIBMESH_ENABLE_AMR
+2311   if (this->level() != 0)
+2312     {
+2313       libmesh_assert(parent);
+2314       parent->add_child(elem, this->which_child_am_i());
+2315       libmesh_assert_equal_to (parent->type(), elem->type());
+2316       libmesh_assert_equal_to (parent->child(this->which_child_am_i()), elem);
+2317     }
+2318 #endif
+2319 
+2320   // Assign the refinement flags and levels
+2321 #ifdef LIBMESH_ENABLE_AMR
+2322   elem->set_p_level(this->p_level());
+2323   elem->set_refinement_flag(this->refinement_flag());
+2324   elem->set_p_refinement_flag(this->p_refinement_flag());
+2325   libmesh_assert_equal_to (elem->level(), this->level());
+2326 
+2327   // If this element definitely should have children, assign
+2328   // remote_elem for now; later unpacked elements may overwrite that\&.
+2329   if (!elem->active())
+2330     for (unsigned int c=0; c != elem->n_children(); ++c)
+2331       elem->add_child(const_cast<RemoteElem*>(remote_elem), c);
+2332 #endif
+2333 
+2334   // Assign the IDs
+2335   elem->subdomain_id() = this->subdomain_id();
+2336   elem->processor_id() = this->processor_id();
+2337   elem->set_id()       = this->id();
+2338 
+2339   // Assign the connectivity
+2340   libmesh_assert_equal_to (elem->n_nodes(), this->n_nodes());
+2341 
+2342   for (unsigned int n=0; n<elem->n_nodes(); n++)
+2343     elem->set_node(n) = mesh\&.node_ptr (this->node(n));
+2344 
+2345   // Assign the connectivity
+2346   libmesh_assert_equal_to (elem->n_neighbors(), this->n_neighbors());
+2347 
+2348   for (unsigned int n=0; n<elem->n_neighbors(); n++)
+2349     {
+2350       dof_id_type neighbor_id = this->neighbor(n);
+2351 
+2352       // We should only be unpacking elements sent by their owners,
+2353       // and their owners should know all their neighbors
+2354       libmesh_assert_not_equal_to (neighbor_id, remote_elem->id());
+2355 
+2356       if (neighbor_id == DofObject::invalid_id)
+2357         continue;
+2358 
+2359       Elem *neigh = mesh\&.query_elem(neighbor_id);
+2360       if (!neigh)
+2361         {
+2362           elem->set_neighbor(n, const_cast<RemoteElem*>(remote_elem));
+2363           continue;
+2364         }
+2365 
+2366       // We never have neighbors more refined than us
+2367       libmesh_assert_less_equal (neigh->level(), elem->level());
+2368 
+2369       // We never have subactive neighbors of non subactive elements
+2370       libmesh_assert(!neigh->subactive() || elem->subactive());
+2371 
+2372       // If we have a neighbor less refined than us then it must not
+2373       // have any more refined active descendants we could have
+2374       // pointed to instead\&.
+2375       libmesh_assert(neigh->level() == elem->level() ||
+2376                      neigh->active());
+2377 
+2378       elem->set_neighbor(n, neigh);
+2379 
+2380       // If neigh is at elem's level, then its family might have
+2381       // remote_elem neighbor links which need to point to elem
+2382       // instead, but if not, then we're done\&.
+2383       if (neigh->level() != elem->level())
+2384         continue;
+2385 
+2386       // What side of neigh is elem on?  We can't use the usual Elem
+2387       // method because we haven't finished restoring topology
+2388       const AutoPtr<Elem> my_side = elem->side(n);
+2389       unsigned int nn = 0;
+2390       for (; nn != neigh->n_sides(); ++nn)
+2391         {
+2392           const AutoPtr<Elem> neigh_side = neigh->side(nn);
+2393           if (*my_side == *neigh_side)
+2394             break;
+2395         }
+2396 
+2397       // elem had better be on *some* side of neigh
+2398       libmesh_assert_less (nn, neigh->n_sides());
+2399 
+2400       // Find any elements that ought to point to elem
+2401       std::vector<const Elem*> neigh_family;
+2402 #ifdef LIBMESH_ENABLE_AMR
+2403       if (!neigh->subactive())
+2404         neigh->family_tree_by_side(neigh_family, nn);
+2405 #else
+2406       neigh_family\&.push_back(neigh);
+2407 #endif
+2408 
+2409       // And point them to elem
+2410       for (unsigned int i = 0; i != neigh_family\&.size(); ++i)
+2411         {
+2412           Elem* neigh_family_member = const_cast<Elem*>(neigh_family[i]);
+2413 
+2414           // The neighbor link ought to either be correct already or
+2415           // ought to be to remote_elem
+2416           libmesh_assert(neigh_family_member->neighbor(nn) == elem ||
+2417                          neigh_family_member->neighbor(nn) == remote_elem);
+2418 
+2419           neigh_family_member->set_neighbor(nn, elem);
+2420         }
+2421     }
+2422 
+2423   elem->unpack_indexing(this->indices());
+2424 
+2425   return elem;
+2426 }
+.fi
+.SS "unsigned int libMesh::Elem::PackedElem::which_child_am_i () const\fC [inline]\fP"
+\fCreturn\fP which child this packed element is\&. 
+.PP
+Definition at line 2153 of file elem\&.h\&.
+.PP
+References _buf_begin\&.
+.PP
+.nf
+2154   {
+2155     return static_cast<unsigned int>(*(_buf_begin+9));
+2156   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const std::vector<\fBlargest_id_type\fP>::const_iterator libMesh::Elem::PackedElem::_buf_begin\fC [private]\fP"
+Iterator pointing to the beginning of this packed element's index buffer\&. 
+.PP
+Definition at line 2032 of file elem\&.h\&.
+.PP
+Referenced by id(), indices(), neighbor(), node(), p_level(), p_refinement_flag(), parent_id(), processor_id(), refinement_flag(), subdomain_id(), type(), and which_child_am_i()\&.
+.SS "const unsigned int libMesh::Elem::PackedElem::header_size = 10\fC [static]\fP"
+An \fC\fBElem\fP\fP can be packed into an integer array which is \fCheader_size\fP + elem->\fBn_nodes()\fP in length\&. 
+.PP
+Definition at line 2048 of file elem\&.h\&.
+.PP
+Referenced by indices(), neighbor(), node(), libMesh::Elem::packed_size(), and packed_size()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

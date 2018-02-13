@@ -1,0 +1,245 @@
+.TH "libMesh::FEType" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::FEType \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fe_type\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFEType\fP (const \fBOrder\fP o=\fBFIRST\fP, const \fBFEFamily\fP f=\fBLAGRANGE\fP)"
+.br
+.ti -1c
+.RI "\fBFEType\fP (const \fBOrder\fP o=\fBFIRST\fP, const \fBFEFamily\fP f=\fBLAGRANGE\fP, const \fBOrder\fP ro=\fBTHIRD\fP, const \fBFEFamily\fP rf=\fBJACOBI_20_00\fP, const \fBInfMapType\fP im=\fBCARTESIAN\fP)"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBFEType\fP &f2) const "
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBFEType\fP &f2) const "
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBFEType\fP &f2) const "
+.br
+.ti -1c
+.RI "\fBOrder\fP \fBdefault_quadrature_order\fP () const "
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBQBase\fP > \fBdefault_quadrature_rule\fP (const unsigned int \fBdim\fP, const int extraorder=0) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBOrder\fP \fBorder\fP"
+.br
+.ti -1c
+.RI "\fBFEFamily\fP \fBfamily\fP"
+.br
+.ti -1c
+.RI "\fBOrder\fP \fBradial_order\fP"
+.br
+.ti -1c
+.RI "\fBFEFamily\fP \fBradial_family\fP"
+.br
+.ti -1c
+.RI "\fBInfMapType\fP \fBinf_map\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+class \fBFEType\fP hides (possibly multiple) FEFamily and approximation orders, thereby enabling specialized finite element families\&. 
+.PP
+Definition at line 43 of file fe_type\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::FEType::FEType (const \fBOrder\fPo = \fC\fBFIRST\fP\fP, const \fBFEFamily\fPf = \fC\fBLAGRANGE\fP\fP)\fC [inline]\fP"
+Constructor\&. Optionally takes the approximation \fCOrder\fP and the finite element family \fCFEFamily\fP 
+.PP
+Definition at line 53 of file fe_type\&.h\&.
+.PP
+.nf
+54                                       :
+55     order(o),
+56     family(f)
+57   {}
+.fi
+.SS "libMesh::FEType::FEType (const \fBOrder\fPo = \fC\fBFIRST\fP\fP, const \fBFEFamily\fPf = \fC\fBLAGRANGE\fP\fP, const \fBOrder\fPro = \fC\fBTHIRD\fP\fP, const \fBFEFamily\fPrf = \fC\fBJACOBI_20_00\fP\fP, const \fBInfMapType\fPim = \fC\fBCARTESIAN\fP\fP)\fC [inline]\fP"
+Constructor\&. Optionally takes the approximation \fCOrder\fP and the finite element family \fCFEFamily\fP\&. Note that for non-infinite elements the \fCorder\fP and \fCbase\fP order are the same, as with the \fCfamily\fP and \fCbase_family\fP\&. It must be so, otherwise what we switch on would change when infinite elements are not compiled in\&. 
+.PP
+Definition at line 83 of file fe_type\&.h\&.
+.PP
+.nf
+87                                           :
+88     order(o),
+89     radial_order(ro),
+90     family(f),
+91     radial_family(rf),
+92     inf_map(im)
+93   {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBOrder\fP libMesh::FEType::default_quadrature_order () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the default quadrature order for this \fC\fBFEType\fP\fP\&. The default quadrature order is calculated assuming a polynomial of degree \fCorder\fP and is based on integrating the mass matrix for such an element exactly\&. 
+.RE
+.PP
+
+.PP
+Definition at line 200 of file fe_type\&.h\&.
+.PP
+References order\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), default_quadrature_rule(), libMesh::JumpErrorEstimator::estimate_error(), and libMesh::Elem::volume()\&.
+.PP
+.nf
+201 {
+202   return static_cast<Order>(2*static_cast<unsigned int>(order) + 1);
+203 }
+.fi
+.SS "\fBAutoPtr\fP< \fBQBase\fP > libMesh::FEType::default_quadrature_rule (const unsigned intdim, const intextraorder = \fC0\fP) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a quadrature rule of appropriate type and order for this \fC\fBFEType\fP\fP\&. The default quadrature rule is based on integrating the mass matrix for such an element exactly\&. Higher or lower degree rules can be chosen by changing the extraorder parameter\&. 
+.RE
+.PP
+
+.PP
+Definition at line 31 of file fe_type\&.C\&.
+.PP
+References libMesh::CLOUGH, default_quadrature_order(), family, std::max(), and libMesh::SUBDIVISION\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::System::calculate_norm(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEMContext::FEMContext(), libMesh::for(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::ProjectSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), and libMesh::HPCoarsenTest::select_refinement()\&.
+.PP
+.nf
+33 {
+34 
+35   // Clough elements have at least piecewise cubic functions
+36   if (family == CLOUGH)
+37     {
+38       // this seems ridiculous but for some reason gcc 3\&.3\&.5 wants
+39       // this when using complex numbers (spetersen 04/20/06)
+40       const unsigned int seven = 7;
+41 
+42       return AutoPtr<QBase>
+43         (new QClough(dim,
+44                      static_cast<Order>
+45                      (std::max(static_cast<unsigned int>
+46                                (this->default_quadrature_order()), seven + extraorder))));
+47     }
+48 
+49   if (family == SUBDIVISION)
+50     return AutoPtr<QBase>
+51       (new QGauss(dim, static_cast<Order>(1 + extraorder)));
+52 
+53   return AutoPtr<QBase>
+54     (new QGauss(dim, static_cast<Order>(this->default_quadrature_order()
+55                                         + extraorder)));
+56 }
+.fi
+.SS "bool libMesh::FEType::operator!= (const \fBFEType\fP &f2) const\fC [inline]\fP"
+Tests inequality 
+.PP
+Definition at line 147 of file fe_type\&.h\&.
+.PP
+.nf
+148   {
+149     return !(*this == f2);
+150   }
+.fi
+.SS "bool libMesh::FEType::operator< (const \fBFEType\fP &f2) const\fC [inline]\fP"
+An ordering to make \fBFEType\fP useful as a std::map key 
+.PP
+Definition at line 155 of file fe_type\&.h\&.
+.PP
+References family, inf_map, order, radial_family, and radial_order\&.
+.PP
+.nf
+156   {
+157     if (order != f2\&.order)
+158       return (order < f2\&.order);
+159     if (family != f2\&.family)
+160       return (family < f2\&.family);
+161 
+162 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+163     if (radial_order != f2\&.radial_order)
+164       return (radial_order < f2\&.radial_order);
+165     if (radial_family != f2\&.radial_family)
+166       return (radial_family < f2\&.radial_family);
+167     if (inf_map != f2\&.inf_map)
+168       return (inf_map < f2\&.inf_map);
+169 #endif // ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+170     return false;
+171   }
+.fi
+.SS "bool libMesh::FEType::operator== (const \fBFEType\fP &f2) const\fC [inline]\fP"
+Tests equality 
+.PP
+Definition at line 132 of file fe_type\&.h\&.
+.PP
+References family, inf_map, order, radial_family, and radial_order\&.
+.PP
+.nf
+133   {
+134     return (order == f2\&.order
+135             && family == f2\&.family
+136 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+137             && radial_order == f2\&.radial_order
+138             && radial_family == f2\&.radial_family
+139             && inf_map == f2\&.inf_map
+140 #endif // ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+141             );
+142   }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBFEFamily\fP libMesh::FEType::family"
+The type of finite element\&. Valid types are \fCLAGRANGE\fP, \fCHIERARCHIC\fP, etc\&.\&.\&.
+.PP
+The type of approximation in radial direction\&. Valid types are \fCJACOBI_20_00\fP, \fCJACOBI_30_00\fP, etc\&.\&.\&. 
+.PP
+Definition at line 71 of file fe_type\&.h\&.
+.PP
+Referenced by libMesh::DofMap::_dof_indices(), libMesh::FEMap::build(), libMesh::FETransformationBase< T >::build(), libMesh::FEAbstract::build(), libMesh::FEGenericBase< T >::build(), libMesh::WrappedFunction< Output >::component(), libMesh::FEInterface::compute_constraints(), libMesh::GMVIO::copy_nodal_solution(), default_quadrature_rule(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::FEInterface::extra_hanging_dofs(), libMesh::FEInterface::field_type(), libMesh::FEAbstract::get_family(), libMesh::System::get_info(), libMesh::FEInterface::max_order(), libMesh::Variable::n_components(), libMesh::FEInterface::n_vec_dim(), libMesh::DofMap::old_dof_indices(), libMesh::WrappedFunction< Output >::operator()(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), operator<(), operator==(), libMesh::System::project_vector(), libMesh::System::read_header(), libMesh::System::read_parallel_data(), libMesh::System::read_serialized_vectors(), libMesh::DofMap::reinit(), libMesh::DofMap::SCALAR_dof_indices(), libMesh::System::write_header(), libMesh::System::write_parallel_data(), libMesh::System::write_serialized_vector(), and libMesh::System::write_serialized_vectors()\&.
+.SS "\fBInfMapType\fP libMesh::FEType::inf_map"
+The coordinate mapping type of the infinite element\&. When the infinite elements are defined over a surface with a separable coordinate system (sphere, spheroid, ellipsoid), the infinite elements may take advantage of this fact\&. 
+.PP
+Definition at line 125 of file fe_type\&.h\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::build_InfFE(), libMesh::System::get_info(), libMesh::FEInterface::ifem_inverse_map(), libMesh::FEInterface::ifem_nodal_soln(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::InfFE(), operator<(), operator==(), libMesh::System::read_header(), and libMesh::System::write_header()\&.
+.SS "\fBOrder\fP libMesh::FEType::order"
+The approximation order of the element\&.
+.PP
+The approximation order in radial direction of the infinite element\&. 
+.PP
+Definition at line 65 of file fe_type\&.h\&.
+.PP
+Referenced by libMesh::DofMap::_dof_indices(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEInterface::compute_data(), libMesh::DofMap::constrain_p_dofs(), libMesh::GMVIO::copy_nodal_solution(), default_quadrature_order(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::FEInterface::dofs_on_edge(), libMesh::FEInterface::dofs_on_side(), libMesh::FEMContext::FEMContext(), libMesh::System::get_info(), libMesh::FEAbstract::get_order(), libMesh::FESubdivision::init_shape_functions(), libMesh::Variable::n_components(), libMesh::FEInterface::n_dofs(), libMesh::FEInterface::n_dofs_at_node(), libMesh::FEInterface::n_dofs_per_elem(), libMesh::FEInterface::n_shape_functions(), libMesh::FEInterface::nodal_soln(), libMesh::DofMap::old_dof_indices(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), operator<(), operator==(), libMesh::System::read_header(), libMesh::System::read_SCALAR_dofs(), libMesh::DofMap::reinit(), libMesh::DofMap::SCALAR_dof_indices(), libMesh::HPCoarsenTest::select_refinement(), libMesh::FEInterface::shape(), and libMesh::System::write_header()\&.
+.SS "\fBFEFamily\fP libMesh::FEType::radial_family"
+For \fBInfFE\fP, \fCfamily\fP contains the radial shape family, while \fCbase_family\fP contains the approximation type in circumferential direction\&. Valid types are \fCLAGRANGE\fP, \fCHIERARCHIC\fP, etc\&.\&.\&. 
+.PP
+Definition at line 117 of file fe_type\&.h\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::build_InfFE(), libMesh::System::get_info(), libMesh::FEInterface::ifem_compute_data(), libMesh::FEInterface::ifem_nodal_soln(), libMesh::FEInterface::ifem_shape(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::InfFE(), operator<(), operator==(), libMesh::System::read_header(), and libMesh::System::write_header()\&.
+.SS "\fBOrder\fP libMesh::FEType::radial_order"
+The approximation order in the base of the infinite element\&. 
+.PP
+Definition at line 104 of file fe_type\&.h\&.
+.PP
+Referenced by libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_shape_indices(), libMesh::System::get_info(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs_at_node(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs_per_elem(), operator<(), operator==(), libMesh::System::read_header(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::shape(), and libMesh::System::write_header()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

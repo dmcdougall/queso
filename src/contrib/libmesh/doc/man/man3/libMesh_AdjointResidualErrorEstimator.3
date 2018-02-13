@@ -1,0 +1,570 @@
+.TH "libMesh::AdjointResidualErrorEstimator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::AdjointResidualErrorEstimator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <adjoint_residual_error_estimator\&.h>\fP
+.PP
+Inherits \fBlibMesh::ErrorEstimator\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::pair
+.br
+< const \fBSystem\fP *, unsigned int >
+.br
+, \fBErrorVector\fP * > \fBErrorMap\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAdjointResidualErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fB~AdjointResidualErrorEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBErrorEstimator\fP > & \fBprimal_error_estimator\fP ()"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBErrorEstimator\fP > & \fBdual_error_estimator\fP ()"
+.br
+.ti -1c
+.RI "\fBQoISet\fP & \fBqoi_set\fP ()"
+.br
+.ti -1c
+.RI "const \fBQoISet\fP & \fBqoi_set\fP () const "
+.br
+.ti -1c
+.RI "void \fBestimate_error\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBerror_plot_suffix\fP"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP \fBerror_norm\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBreduce_error\fP (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD) const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBErrorEstimator\fP > \fB_primal_error_estimator\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBErrorEstimator\fP > \fB_dual_error_estimator\fP"
+.br
+.ti -1c
+.RI "\fBQoISet\fP \fB_qoi_set\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements a goal oriented error indicator, by weighting residual-based estimates from the primal problem against estimates from the adjoint problem\&.
+.PP
+This is based on a trick suggested by Brian Carnes, (first proposed by Babuska and Miller in 1984) but if it doesn't actually work then the misunderstanding or misimplementation will be the fault of Roy Stogner\&. It's also Roy's fault there's no literature reference here yet\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner, 2009\&. 
+.RE
+.PP
+
+.PP
+Definition at line 55 of file adjoint_residual_error_estimator\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::pair<const \fBSystem\fP*, unsigned int>, \fBErrorVector\fP*> \fBlibMesh::ErrorEstimator::ErrorMap\fP\fC [inherited]\fP"
+When calculating many error vectors at once, we need a data structure to hold them all 
+.PP
+Definition at line 110 of file error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::AdjointResidualErrorEstimator::AdjointResidualErrorEstimator ()"
+Constructor\&. Responsible for picking default subestimators\&. 
+.PP
+Definition at line 40 of file adjoint_residual_error_estimator\&.C\&.
+.PP
+.nf
+40                                                               :
+41   ErrorEstimator(),
+42   error_plot_suffix(),
+43   _primal_error_estimator(new PatchRecoveryErrorEstimator()),
+44   _dual_error_estimator(new PatchRecoveryErrorEstimator()),
+45   _qoi_set(QoISet())
+46 {
+47 }
+.fi
+.SS "libMesh::AdjointResidualErrorEstimator::~AdjointResidualErrorEstimator ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 67 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+.nf
+67 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBAutoPtr\fP<\fBErrorEstimator\fP>& libMesh::AdjointResidualErrorEstimator::dual_error_estimator ()\fC [inline]\fP"
+Access to the 'subestimator' (default: PatchRecovery) to use on the dual/adjoint solution 
+.PP
+Definition at line 79 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+References _dual_error_estimator\&.
+.PP
+.nf
+79 { return _dual_error_estimator; }
+.fi
+.SS "void libMesh::AdjointResidualErrorEstimator::estimate_error (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+Compute the adjoint-weighted error on each element and place it in the \fCerror_per_cell\fP vector\&. Note that this->error_norm is ignored; the error estimate is in the seminorm given by the absolute value of the error in the quantity of interest functional\&. The primal and dual subestimator error_norm values are used, and should be chosen appropriately for your model\&. 
+.PP
+Implements \fBlibMesh::ErrorEstimator\fP\&.
+.PP
+Definition at line 51 of file adjoint_residual_error_estimator\&.C\&.
+.PP
+References _dual_error_estimator, _primal_error_estimator, _qoi_set, libMesh::System::adjoint_solve(), libMesh::SystemNorm::calculate_norm(), libMesh::ErrorEstimator::error_norm, error_plot_suffix, libMesh::ErrorVectorReal, libMesh::System::get_adjoint_solution(), libMesh::System::get_equation_systems(), libMesh::System::get_mesh(), libMesh::QoISet::has_index(), libMesh::System::is_adjoint_already_solved(), libMesh::SystemNorm::is_identity(), libMesh::libmesh_assert(), libMesh::MeshBase::max_elem_id(), mesh, libMesh::n_vars, libMesh::System::n_vars(), libMesh::ErrorVector::plot_error(), libMesh::System::qoi, libMesh::Real, libMesh::System::solution, libMesh::START_LOG(), libMesh::STOP_LOG(), and libMesh::QoISet::weight()\&.
+.PP
+.nf
+55 {
+56   START_LOG("estimate_error()", "AdjointResidualErrorEstimator");
+57 
+58   // The current mesh
+59   const MeshBase& mesh = _system\&.get_mesh();
+60 
+61   // Resize the error_per_cell vector to be
+62   // the number of elements, initialize it to 0\&.
+63   error_per_cell\&.resize (mesh\&.max_elem_id());
+64   std::fill (error_per_cell\&.begin(), error_per_cell\&.end(), 0\&.);
+65 
+66   // Get the number of variables in the system
+67   unsigned int n_vars = _system\&.n_vars();
+68 
+69   // We need to make a map of the pointer to the solution vector
+70   std::map<const System*, const NumericVector<Number>*>solutionvecs;
+71   solutionvecs[&_system] = _system\&.solution\&.get();
+72 
+73   // Solve the dual problem if we have to
+74   if (!_system\&.is_adjoint_already_solved())
+75     {
+76       // FIXME - we'll need to change a lot of APIs to make this trick
+77       // work with a const System\&.\&.\&.
+78       System&  system = const_cast<System&>(_system);
+79       system\&.adjoint_solve(_qoi_set);
+80     }
+81 
+82   // Flag to check whether we have not been asked to weight the variable error contributions in any specific manner
+83   bool error_norm_is_identity = error_norm\&.is_identity();
+84 
+85   // Create an ErrorMap/ErrorVector to store the primal, dual and total_dual variable errors
+86   ErrorMap primal_errors_per_cell;
+87   ErrorMap dual_errors_per_cell;
+88   ErrorMap total_dual_errors_per_cell;
+89   // Allocate ErrorVectors to this map if we're going to use it
+90   if (!error_norm_is_identity)
+91     for(unsigned int v = 0; v < n_vars; v++)
+92       {
+93         primal_errors_per_cell[std::make_pair(&_system, v)] = new ErrorVector;
+94         dual_errors_per_cell[std::make_pair(&_system, v)] = new ErrorVector;
+95         total_dual_errors_per_cell[std::make_pair(&_system, v)] = new ErrorVector;
+96       }
+97   ErrorVector primal_error_per_cell;
+98   ErrorVector dual_error_per_cell;
+99   ErrorVector total_dual_error_per_cell;
+100 
+101   // Have we been asked to weight the variable error contributions in any specific manner
+102   if(!error_norm_is_identity) // If we do
+103     {
+104       // Estimate the primal problem error for each variable
+105       _primal_error_estimator->estimate_errors
+106         (_system\&.get_equation_systems(), primal_errors_per_cell, &solutionvecs, estimate_parent_error);
+107     }
+108   else // If not
+109     {
+110       // Just get the combined error estimate
+111       _primal_error_estimator->estimate_error
+112         (_system, primal_error_per_cell, solution_vector, estimate_parent_error);
+113     }
+114 
+115   // Sum and weight the dual error estimate based on our QoISet
+116   for (unsigned int i = 0; i != _system\&.qoi\&.size(); ++i)
+117     {
+118       if (_qoi_set\&.has_index(i))
+119         {
+120           // Get the weight for the current QoI
+121           Real error_weight = _qoi_set\&.weight(i);
+122 
+123           // We need to make a map of the pointer to the adjoint solution vector
+124           std::map<const System*, const NumericVector<Number>*>adjointsolutionvecs;
+125           adjointsolutionvecs[&_system] = &_system\&.get_adjoint_solution(i);
+126 
+127           // Have we been asked to weight the variable error contributions in any specific manner
+128           if(!error_norm_is_identity) // If we have
+129             {
+130               _dual_error_estimator->estimate_errors
+131                 (_system\&.get_equation_systems(), dual_errors_per_cell, &adjointsolutionvecs,
+132                  estimate_parent_error);
+133             }
+134           else // If not
+135             {
+136               // Just get the combined error estimate
+137               _dual_error_estimator->estimate_error
+138                 (_system, dual_error_per_cell, &(_system\&.get_adjoint_solution(i)), estimate_parent_error);
+139             }
+140 
+141           std::size_t error_size;
+142 
+143           // Get the size of the first ErrorMap vector; this will give us the number of elements
+144           if(!error_norm_is_identity) // If in non default weights case
+145             {
+146               error_size = dual_errors_per_cell[std::make_pair(&_system, 0)]->size();
+147             }
+148           else // If in the standard default weights case
+149             {
+150               error_size = dual_error_per_cell\&.size();
+151             }
+152 
+153           // Resize the ErrorVector(s)
+154           if(!error_norm_is_identity)
+155             {
+156               // Loop over variables
+157               for(unsigned int v = 0; v < n_vars; v++)
+158                 {
+159                   libmesh_assert(!total_dual_errors_per_cell[std::make_pair(&_system, v)]->size() ||
+160                                  total_dual_errors_per_cell[std::make_pair(&_system, v)]->size() == error_size) ;
+161                   total_dual_errors_per_cell[std::make_pair(&_system, v)]->resize(error_size);
+162                 }
+163             }
+164           else
+165             {
+166               libmesh_assert(!total_dual_error_per_cell\&.size() ||
+167                              total_dual_error_per_cell\&.size() == error_size);
+168               total_dual_error_per_cell\&.resize(error_size);
+169             }
+170 
+171           for (std::size_t e = 0; e != error_size; ++e)
+172             {
+173               // Have we been asked to weight the variable error contributions in any specific manner
+174               if(!error_norm_is_identity) // If we have
+175                 {
+176                   // Loop over variables
+177                   for(unsigned int v = 0; v < n_vars; v++)
+178                     {
+179                       // Now fill in total_dual_error ErrorMap with the weight
+180                       (*total_dual_errors_per_cell[std::make_pair(&_system, v)])[e] +=
+181                         static_cast<ErrorVectorReal>
+182                         (error_weight *
+183                          (*dual_errors_per_cell[std::make_pair(&_system, v)])[e]);
+184                     }
+185                 }
+186               else // If not
+187                 {
+188                   total_dual_error_per_cell[e] +=
+189                     static_cast<ErrorVectorReal>(error_weight * dual_error_per_cell[e]);
+190                 }
+191             }
+192         }
+193     }
+194 
+195   // Do some debugging plots if requested
+196   if (!error_plot_suffix\&.empty())
+197     {
+198       if(!error_norm_is_identity) // If we have
+199         {
+200           // Loop over variables
+201           for(unsigned int v = 0; v < n_vars; v++)
+202             {
+203               std::ostringstream primal_out;
+204               std::ostringstream dual_out;
+205               primal_out << "primal_" << error_plot_suffix << "\&.";
+206               dual_out << "dual_" << error_plot_suffix << "\&.";
+207 
+208               primal_out << std::setw(1)
+209                          << std::setprecision(0)
+210                          << std::setfill('0')
+211                          << std::right
+212                          << v;
+213 
+214               dual_out << std::setw(1)
+215                        << std::setprecision(0)
+216                        << std::setfill('0')
+217                        << std::right
+218                        << v;
+219 
+220               (*primal_errors_per_cell[std::make_pair(&_system, v)])\&.plot_error(primal_out\&.str(), _system\&.get_mesh());
+221               (*total_dual_errors_per_cell[std::make_pair(&_system, v)])\&.plot_error(dual_out\&.str(), _system\&.get_mesh());
+222 
+223               primal_out\&.clear();
+224               dual_out\&.clear();
+225             }
+226         }
+227       else // If not
+228         {
+229           std::ostringstream primal_out;
+230           std::ostringstream dual_out;
+231           primal_out << "primal_" << error_plot_suffix ;
+232           dual_out << "dual_" << error_plot_suffix ;
+233 
+234           primal_error_per_cell\&.plot_error(primal_out\&.str(), _system\&.get_mesh());
+235           total_dual_error_per_cell\&.plot_error(dual_out\&.str(), _system\&.get_mesh());
+236 
+237           primal_out\&.clear();
+238           dual_out\&.clear();
+239         }
+240     }
+241 
+242   // Weight the primal error by the dual error using the system norm object
+243   // FIXME: we ought to thread this
+244   for (unsigned int i=0; i != error_per_cell\&.size(); ++i)
+245     {
+246       // Have we been asked to weight the variable error contributions in any specific manner
+247       if(!error_norm_is_identity) // If we do
+248         {
+249           // Create Error Vectors to pass to calculate_norm
+250           std::vector<Real> cell_primal_error;
+251           std::vector<Real> cell_dual_error;
+252 
+253           for(unsigned int v = 0; v < n_vars; v++)
+254             {
+255               cell_primal_error\&.push_back((*primal_errors_per_cell[std::make_pair(&_system, v)])[i]);
+256               cell_dual_error\&.push_back((*total_dual_errors_per_cell[std::make_pair(&_system, v)])[i]);
+257             }
+258 
+259           error_per_cell[i] =
+260             static_cast<ErrorVectorReal>
+261             (error_norm\&.calculate_norm(cell_primal_error, cell_dual_error));
+262         }
+263       else // If not
+264         {
+265           error_per_cell[i] = primal_error_per_cell[i]*total_dual_error_per_cell[i];
+266         }
+267     }
+268 
+269   // Deallocate the ErrorMap contents if we allocated them earlier
+270   if (!error_norm_is_identity)
+271     for(unsigned int v = 0; v < n_vars; v++)
+272       {
+273         delete primal_errors_per_cell[std::make_pair(&_system, v)];
+274         delete dual_errors_per_cell[std::make_pair(&_system, v)];
+275         delete total_dual_errors_per_cell[std::make_pair(&_system, v)];
+276       }
+277 
+278   STOP_LOG("estimate_error()", "AdjointResidualErrorEstimator");
+279 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default computes the sum of the error_per_cell for each system in the equation_systems\&.
+.PP
+Currently this function ignores the error_norm member variable, and uses the function argument error_norms instead\&.
+.PP
+This function is named estimate_errors instead of estimate_error because otherwise C++ can get confused\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 48 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), and libMesh::sys\&.
+.PP
+.nf
+53 {
+54   SystemNorm old_error_norm = this->error_norm;
+55 
+56   // Sum the error values from each system
+57   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+58     {
+59       ErrorVector system_error_per_cell;
+60       const System &sys = equation_systems\&.get_system(s);
+61       if (error_norms\&.find(&sys) == error_norms\&.end())
+62         this->error_norm = old_error_norm;
+63       else
+64         this->error_norm = error_norms\&.find(&sys)->second;
+65 
+66       const NumericVector<Number>* solution_vector = NULL;
+67       if (solution_vectors &&
+68           solution_vectors->find(&sys) != solution_vectors->end())
+69         solution_vector = solution_vectors->find(&sys)->second;
+70 
+71       this->estimate_error(sys, system_error_per_cell,
+72                            solution_vector, estimate_parent_error);
+73 
+74       if (s)
+75         {
+76           libmesh_assert_equal_to (error_per_cell\&.size(), system_error_per_cell\&.size());
+77           for (unsigned int i=0; i != error_per_cell\&.size(); ++i)
+78             error_per_cell[i] += system_error_per_cell[i];
+79         }
+80       else
+81         error_per_cell = system_error_per_cell;
+82     }
+83 
+84   // Restore our old state before returning
+85   this->error_norm = old_error_norm;
+86 }
+.fi
+.SS "void libMesh::ErrorEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This virtual function can be redefined in derived classes, but by default it calls estimate_error repeatedly to calculate the requested error vectors\&.
+.PP
+Currently this function ignores the \fBerror_norm\&.weight()\fP values because it calculates each variable's error individually, unscaled\&.
+.PP
+The user selects which errors get computed by filling a map with error vectors: If errors_per_cell[&system][v] exists, it will be filled with the error values in variable \fCv\fP of \fCsystem\fP 
+.PP
+FIXME: This is a default implementation - derived classes should reimplement it for efficiency\&. 
+.PP
+Reimplemented in \fBlibMesh::UniformRefinementEstimator\fP\&.
+.PP
+Definition at line 94 of file error_estimator\&.C\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, libMesh::ErrorEstimator::estimate_error(), libMesh::EquationSystems::get_system(), libMesh::EquationSystems::n_systems(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::sys, and libMesh::SystemNorm::type()\&.
+.PP
+.nf
+98 {
+99   SystemNorm old_error_norm = this->error_norm;
+100 
+101   // Find the requested error values from each system
+102   for (unsigned int s = 0; s != equation_systems\&.n_systems(); ++s)
+103     {
+104       const System &sys = equation_systems\&.get_system(s);
+105 
+106       unsigned int n_vars = sys\&.n_vars();
+107 
+108       for (unsigned int v = 0; v != n_vars; ++v)
+109         {
+110           // Only fill in ErrorVectors the user asks for
+111           if (errors_per_cell\&.find(std::make_pair(&sys, v)) ==
+112               errors_per_cell\&.end())
+113             continue;
+114 
+115           // Calculate error in only one variable
+116           std::vector<Real> weights(n_vars, 0\&.0);
+117           weights[v] = 1\&.0;
+118           this->error_norm =
+119             SystemNorm(std::vector<FEMNormType>(n_vars, old_error_norm\&.type(v)),
+120                        weights);
+121 
+122           const NumericVector<Number>* solution_vector = NULL;
+123           if (solution_vectors &&
+124               solution_vectors->find(&sys) != solution_vectors->end())
+125             solution_vector = solution_vectors->find(&sys)->second;
+126 
+127           this->estimate_error
+128             (sys, *errors_per_cell[std::make_pair(&sys, v)],
+129              solution_vector, estimate_parent_error);
+130         }
+131     }
+132 
+133   // Restore our old state before returning
+134   this->error_norm = old_error_norm;
+135 }
+.fi
+.SS "\fBAutoPtr\fP<\fBErrorEstimator\fP>& libMesh::AdjointResidualErrorEstimator::primal_error_estimator ()\fC [inline]\fP"
+Access to the 'subestimator' (default: PatchRecovery) to use on the primal/forward solution 
+.PP
+Definition at line 73 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+References _primal_error_estimator\&.
+.PP
+.nf
+73 { return _primal_error_estimator; }
+.fi
+.SS "\fBQoISet\fP& libMesh::AdjointResidualErrorEstimator::qoi_set ()\fC [inline]\fP"
+Access to the \fBQoISet\fP (default: weight all QoIs equally) to use when computing errors 
+.PP
+Definition at line 85 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+References _qoi_set\&.
+.PP
+.nf
+85 { return _qoi_set; }
+.fi
+.SS "const \fBQoISet\fP& libMesh::AdjointResidualErrorEstimator::qoi_set () const\fC [inline]\fP"
+Access to the \fBQoISet\fP (default: weight all QoIs equally) to use when computing errors 
+.PP
+Definition at line 91 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+References _qoi_set\&.
+.PP
+.nf
+91 { return _qoi_set; }
+.fi
+.SS "void libMesh::ErrorEstimator::reduce_error (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD) const\fC [protected]\fP, \fC [inherited]\fP"
+This method takes the local error contributions in \fCerror_per_cell\fP from each processor and combines them to get the global error vector\&. 
+.PP
+Definition at line 33 of file error_estimator\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+35 {
+36   // This function must be run on all processors at once
+37   // parallel_object_only();
+38 
+39   // Each processor has now computed the error contribuions
+40   // for its local elements\&.  We may need to sum the vector to
+41   // recover the error for each element\&.
+42 
+43   comm\&.sum(error_per_cell);
+44 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBAutoPtr\fP<\fBErrorEstimator\fP> libMesh::AdjointResidualErrorEstimator::_dual_error_estimator\fC [protected]\fP"
+An error estimator for the adjoint problem 
+.PP
+Definition at line 125 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+Referenced by dual_error_estimator(), and estimate_error()\&.
+.SS "\fBAutoPtr\fP<\fBErrorEstimator\fP> libMesh::AdjointResidualErrorEstimator::_primal_error_estimator\fC [protected]\fP"
+An error estimator for the forward problem 
+.PP
+Definition at line 120 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+Referenced by estimate_error(), and primal_error_estimator()\&.
+.SS "\fBQoISet\fP libMesh::AdjointResidualErrorEstimator::_qoi_set\fC [protected]\fP"
+A \fBQoISet\fP to handle cases with multiple QoIs available 
+.PP
+Definition at line 130 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+Referenced by estimate_error(), and qoi_set()\&.
+.SS "\fBSystemNorm\fP libMesh::ErrorEstimator::error_norm\fC [inherited]\fP"
+When estimating the error in a single system, the \fCerror_norm\fP is used to control the scaling and norm choice for each variable\&. Not all estimators will support all norm choices\&. The default scaling is for all variables to be weighted equally\&. The default norm choice depends on the error estimator\&.
+.PP
+Part of this functionality was supported via component_scale and sobolev_order in older \fBlibMesh\fP versions, and a small part was supported via component_mask in even older versions\&. Hopefully the encapsulation here will allow us to avoid changing this API again\&. 
+.PP
+Definition at line 142 of file error_estimator\&.h\&.
+.PP
+Referenced by libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::AdjointRefinementEstimator::AdjointRefinementEstimator(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DiscontinuityMeasure::DiscontinuityMeasure(), libMesh::JumpErrorEstimator::estimate_error(), estimate_error(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactErrorEstimator::ExactErrorEstimator(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::KellyErrorEstimator::KellyErrorEstimator(), libMesh::LaplacianErrorEstimator::LaplacianErrorEstimator(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::PatchRecoveryErrorEstimator(), and libMesh::UniformRefinementEstimator::UniformRefinementEstimator()\&.
+.SS "std::string libMesh::AdjointResidualErrorEstimator::error_plot_suffix"
+To aid in investigating error estimator behavior, set this string to a suffix with which to plot (prefixed by 'primal_' or 'dual_') the subestimator results\&. The suffix should end with a file extension (e\&.g\&. '\&.gmv') that the \fBErrorVector::plot_error\fP recognizes\&. 
+.PP
+Definition at line 100 of file adjoint_residual_error_estimator\&.h\&.
+.PP
+Referenced by estimate_error()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

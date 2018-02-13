@@ -1,0 +1,394 @@
+.TH "libMesh::BasicOStreamProxy< charT, traits >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::BasicOStreamProxy< charT, traits > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ostream_proxy\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::basic_ostream
+.br
+< charT, traits > \fBstreamT\fP"
+.br
+.ti -1c
+.RI "typedef std::basic_streambuf
+.br
+< charT, traits > \fBstreambufT\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP (\fBstreamT\fP &target)"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP (\fBBasicOStreamProxy\fP &old)"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP & \fBoperator=\fP (\fBstreamT\fP &target)"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP & \fBoperator=\fP (const \fBBasicOStreamProxy\fP &old)"
+.br
+.ti -1c
+.RI "\fB~BasicOStreamProxy\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator streamT &\fP ()"
+.br
+.ti -1c
+.RI "\fBoperator const streamT &\fP () const "
+.br
+.ti -1c
+.RI "template<typename T > \fBBasicOStreamProxy\fP & \fBoperator<<\fP (const T &in)"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP & \fBoperator<<\fP (\fBstreamT\fP &(*in)(\fBstreamT\fP &))"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP & \fBoperator<<\fP (std::basic_ios< charT, traits > &(*in)(std::basic_ios< charT, traits > &))"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP & \fBoperator<<\fP (std::ios_base &(*in)(std::ios_base &))"
+.br
+.ti -1c
+.RI "\fBstreambufT\fP * \fBrdbuf\fP () const "
+.br
+.ti -1c
+.RI "\fBstreambufT\fP * \fBrdbuf\fP (\fBstreambufT\fP *sb)"
+.br
+.ti -1c
+.RI "\fBBasicOStreamProxy\fP & \fBflush\fP ()"
+.br
+.ti -1c
+.RI "std::ios_base::fmtflags \fBflags\fP () const "
+.br
+.ti -1c
+.RI "std::ios_base::fmtflags \fBflags\fP (std::ios_base::fmtflags fmtfl)"
+.br
+.ti -1c
+.RI "std::ios_base::fmtflags \fBsetf\fP (std::ios_base::fmtflags fmtfl)"
+.br
+.ti -1c
+.RI "std::ios_base::fmtflags \fBsetf\fP (std::ios_base::fmtflags fmtfl, std::ios_base::fmtflags mask)"
+.br
+.ti -1c
+.RI "void \fBunsetf\fP (std::ios_base::fmtflags mask)"
+.br
+.ti -1c
+.RI "std::streamsize \fBprecision\fP () const "
+.br
+.ti -1c
+.RI "std::streamsize \fBprecision\fP (std::streamsize prec)"
+.br
+.ti -1c
+.RI "void \fBreset\fP (\fBstreamT\fP &target)"
+.br
+.ti -1c
+.RI "\fBstreamT\fP * \fBget\fP ()"
+.br
+.ti -1c
+.RI "const \fBstreamT\fP * \fBget\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBstreamT\fP * \fB_target\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename charT = char, typename traits = std::char_traits<charT>>class libMesh::BasicOStreamProxy< charT, traits >"
+
+.PP
+Definition at line 50 of file ostream_proxy\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> typedef std::basic_streambuf<charT,traits> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::\fBstreambufT\fP"
+This class is going to be used to proxy for ostream, but other character and traits types are possible 
+.PP
+Definition at line 63 of file ostream_proxy\&.h\&.
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> typedef std::basic_ostream<charT,traits> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::\fBstreamT\fP"
+This class is going to be used to proxy for ostream, but other character and traits types are possible 
+.PP
+Definition at line 57 of file ostream_proxy\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::\fBBasicOStreamProxy\fP (\fBstreamT\fP &target)\fC [inline]\fP"
+Default constructor\&. Takes a reference to the \fCtarget\fP ostream to which we pass output\&. The user is responsible for ensuring that this target exists for as long as the proxy does\&. 
+.PP
+Definition at line 70 of file ostream_proxy\&.h\&.
+.PP
+.nf
+70 : _target(&target) {}
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::\fBBasicOStreamProxy\fP (\fBBasicOStreamProxy\fP< charT, traits > &old)\fC [inline]\fP"
+Shallow copy constructor\&. Output in the new object is passed to the same target ostream as in the old object\&. The user is responsible for ensuring that this target exists for as long as the proxies do\&. 
+.PP
+Definition at line 78 of file ostream_proxy\&.h\&.
+.PP
+.nf
+78 : _target(old\&._target) {}
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::~\fBBasicOStreamProxy\fP ()\fC [inline]\fP"
+Default destructor\&. 
+.PP
+Definition at line 101 of file ostream_proxy\&.h\&.
+.PP
+.nf
+101 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> std::ios_base::fmtflags \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::flags () const\fC [inline]\fP"
+Get the associated format flags 
+.PP
+Definition at line 166 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+167   { return _target->flags(); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> std::ios_base::fmtflags \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::flags (std::ios_base::fmtflagsfmtfl)\fC [inline]\fP"
+Set/get the associated format flags 
+.PP
+Definition at line 172 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+173   { return _target->flags(fmtfl); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::flush ()\fC [inline]\fP"
+Flush the associated stream buffer 
+.PP
+Definition at line 161 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+Referenced by libMesh::PltLoader::read_data()\&.
+.PP
+.nf
+161 { _target->flush(); return *this; }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBstreamT\fP* \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::get ()\fC [inline]\fP"
+Rather than implement every ostream/ios/ios_base function, we'll be lazy and make esoteric uses go through a \fC\fBget()\fP\fP function\&. 
+.PP
+Definition at line 220 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+220                  {
+221     return _target;
+222   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> const \fBstreamT\fP* \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::get () const\fC [inline]\fP"
+Rather than implement every ostream/ios/ios_base function, we'll be lazy and make esoteric uses go through a \fC\fBget()\fP\fP function\&. 
+.PP
+Definition at line 228 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+228                              {
+229     return _target;
+230   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator const \fBstreamT\fP & () const\fC [inline]\fP"
+Conversion to const ostream&, for when we get passed to a function requesting one\&. 
+.PP
+Definition at line 117 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+117 { return *_target; }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator \fBstreamT\fP & ()\fC [inline]\fP"
+Conversion to ostream&, for when we get passed to a function requesting one\&. 
+.PP
+Definition at line 111 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+111 { return *_target; }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> template<typename T > \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator<< (const T &in)\fC [inline]\fP"
+Redirect any output to the target\&. 
+.PP
+Definition at line 123 of file ostream_proxy\&.h\&.
+.PP
+.nf
+123                                               {
+124     (*_target) << in; return *this;
+125   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator<< (\fBstreamT\fP &(*)(\fBstreamT\fP &)in)\fC [inline]\fP"
+Redirect any ostream manipulators to the target\&. 
+.PP
+Definition at line 130 of file ostream_proxy\&.h\&.
+.PP
+.nf
+130                                                            {
+131     (*_target) << in; return *this;
+132   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator<< (std::basic_ios< charT, traits > &(*)(std::basic_ios< charT, traits > &)in)\fC [inline]\fP"
+Redirect any ios manipulators to the target\&. 
+.PP
+Definition at line 137 of file ostream_proxy\&.h\&.
+.PP
+.nf
+137                                                                                                  {
+138     (*_target) << in; return *this;
+139   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator<< (std::ios_base &(*)(std::ios_base &)in)\fC [inline]\fP"
+Redirect any ios_base manipulators to the target\&. 
+.PP
+Definition at line 144 of file ostream_proxy\&.h\&.
+.PP
+.nf
+144                                                                    {
+145     (*_target) << in; return *this;
+146   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator= (\fBstreamT\fP &target)\fC [inline]\fP"
+Reset the internal target to a new \fCtarget\fP output stream\&. 
+.PP
+Definition at line 83 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+84   {
+85     _target = &target;
+86     return *this;
+87   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBBasicOStreamProxy\fP& \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::operator= (const \fBBasicOStreamProxy\fP< charT, traits > &old)\fC [inline]\fP"
+Reset the target to the same output stream as in \fCold\fP 
+.PP
+Definition at line 92 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+93   {
+94     _target = old\&._target;
+95     return *this;
+96   }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> std::streamsize \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::precision () const\fC [inline]\fP"
+Get the associated write precision 
+.PP
+Definition at line 197 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+Referenced by libMesh::FEMSystem::assembly(), libMesh::ContinuationSystem::continuation_solve(), and libMesh::ContinuationSystem::update_solution()\&.
+.PP
+.nf
+198   { return _target->precision(); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> std::streamsize \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::precision (std::streamsizeprec)\fC [inline]\fP"
+Set the associated write precision 
+.PP
+Definition at line 203 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+204   { return _target->precision(prec); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBstreambufT\fP* \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::rdbuf () const\fC [inline]\fP"
+Get the associated stream buffer 
+.PP
+Definition at line 151 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+Referenced by libMesh::if()\&.
+.PP
+.nf
+151 { return _target->rdbuf(); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBstreambufT\fP* \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::rdbuf (\fBstreambufT\fP *sb)\fC [inline]\fP"
+Set the associated stream buffer 
+.PP
+Definition at line 156 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+156 { return _target->rdbuf(sb); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> void \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::reset (\fBstreamT\fP &target)\fC [inline]\fP"
+Reset the proxy to point to a different \fCtarget\fP\&. Note that this does not delete the previous target\&. 
+.PP
+Definition at line 214 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+214 { _target = &target; }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> std::ios_base::fmtflags \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::setf (std::ios_base::fmtflagsfmtfl)\fC [inline]\fP"
+Set the associated flags 
+.PP
+Definition at line 178 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+Referenced by libMesh::ContinuationSystem::continuation_solve(), and libMesh::ContinuationSystem::update_solution()\&.
+.PP
+.nf
+179   { return _target->setf(fmtfl); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> std::ios_base::fmtflags \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::setf (std::ios_base::fmtflagsfmtfl, std::ios_base::fmtflagsmask)\fC [inline]\fP"
+Set the associated flags 
+.PP
+Definition at line 184 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+.nf
+186   { return _target->setf(fmtfl, mask); }
+.fi
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> void \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::unsetf (std::ios_base::fmtflagsmask)\fC [inline]\fP"
+Clear the associated flags 
+.PP
+Definition at line 191 of file ostream_proxy\&.h\&.
+.PP
+References libMesh::BasicOStreamProxy< charT, traits >::_target\&.
+.PP
+Referenced by libMesh::ContinuationSystem::continuation_solve(), and libMesh::ContinuationSystem::update_solution()\&.
+.PP
+.nf
+192   { _target->unsetf(mask); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename charT  = char, typename traits  = std::char_traits<charT>> \fBstreamT\fP* \fBlibMesh::BasicOStreamProxy\fP< charT, traits >::_target\fC [private]\fP"
+The pointer to the 'real' ostream we send everything to\&. 
+.PP
+Definition at line 236 of file ostream_proxy\&.h\&.
+.PP
+Referenced by libMesh::BasicOStreamProxy< charT, traits >::flags(), libMesh::BasicOStreamProxy< charT, traits >::flush(), libMesh::BasicOStreamProxy< charT, traits >::get(), libMesh::BasicOStreamProxy< charT, traits >::operator const streamT &(), libMesh::BasicOStreamProxy< charT, traits >::operator streamT &(), libMesh::BasicOStreamProxy< charT, traits >::operator=(), libMesh::BasicOStreamProxy< charT, traits >::precision(), libMesh::BasicOStreamProxy< charT, traits >::rdbuf(), libMesh::BasicOStreamProxy< charT, traits >::reset(), libMesh::BasicOStreamProxy< charT, traits >::setf(), and libMesh::BasicOStreamProxy< charT, traits >::unsetf()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

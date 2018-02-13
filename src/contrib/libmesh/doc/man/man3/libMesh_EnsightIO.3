@@ -1,0 +1,872 @@
+.TH "libMesh::EnsightIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::EnsightIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <ensight_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBScalars\fP"
+.br
+.ti -1c
+.RI "struct \fBSystemVars\fP"
+.br
+.ti -1c
+.RI "struct \fBVectors\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBEnsightIO\fP (const std::string &filename, const \fBEquationSystems\fP &\fBeq\fP)"
+.br
+.ti -1c
+.RI "\fB~EnsightIO\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const std::string &system, const std::string &vec_description, const std::string &u, const std::string &v)"
+.br
+.ti -1c
+.RI "void \fBadd_vector\fP (const std::string &system, const std::string &vec_description, const std::string &u, const std::string &v, const std::string &w)"
+.br
+.ti -1c
+.RI "void \fBadd_scalar\fP (const std::string &system, const std::string &scalar_description, const std::string &s)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBwrite\fP (const double time=0)"
+.br
+.ti -1c
+.RI "bool & \fBhas_mesh_refinement\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+\fBSystemVars\fP > \fBSystemsVarsMap\fP"
+.br
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+\fBSystemVars\fP >::iterator \fBSystemsVarsMapIterator\fP"
+.br
+.ti -1c
+.RI "typedef std::pair< std::string, 
+.br
+\fBSystemVars\fP > \fBSystemsVarsValue\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwrite_ascii\fP (const double time=0)"
+.br
+.ti -1c
+.RI "void \fBwrite_scalar_ascii\fP (const std::string &\fBsys\fP, const std::string &var)"
+.br
+.ti -1c
+.RI "void \fBwrite_vector_ascii\fP (const std::string &\fBsys\fP, const std::vector< std::string > &vec, const std::string &var_name)"
+.br
+.ti -1c
+.RI "void \fBwrite_solution_ascii\fP ()"
+.br
+.ti -1c
+.RI "void \fBwrite_geometry_ascii\fP ()"
+.br
+.ti -1c
+.RI "void \fBwrite_case\fP ()"
+.br
+.ti -1c
+.RI "void \fBelem_type_to_string\fP (\fBElemType\fP, char *)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fB_ensight_file_name\fP"
+.br
+.ti -1c
+.RI "std::vector< double > \fB_time_steps\fP"
+.br
+.ti -1c
+.RI "\fBSystemsVarsMap\fP \fB_systems_vars_map\fP"
+.br
+.ti -1c
+.RI "const \fBEquationSystems\fP & \fB_equation_systems\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes and solutions in Ensight's Gold format\&. \fCauthor\fP Camata 
+.PP
+Definition at line 43 of file ensight_io\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, \fBSystemVars\fP> \fBlibMesh::EnsightIO::SystemsVarsMap\fP\fC [private]\fP"
+
+.PP
+Definition at line 111 of file ensight_io\&.h\&.
+.SS "typedef std::map<std::string, \fBSystemVars\fP>::iterator \fBlibMesh::EnsightIO::SystemsVarsMapIterator\fP\fC [private]\fP"
+
+.PP
+Definition at line 112 of file ensight_io\&.h\&.
+.SS "typedef std::pair<std::string, \fBSystemVars\fP> \fBlibMesh::EnsightIO::SystemsVarsValue\fP\fC [private]\fP"
+
+.PP
+Definition at line 113 of file ensight_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::EnsightIO::EnsightIO (const std::string &filename, const \fBEquationSystems\fP &eq)"
+Constructor\&. 
+.PP
+Definition at line 39 of file ensight_io\&.C\&.
+.PP
+References _ensight_file_name, _equation_systems, libMesh::ParallelObject::n_processors(), and libMesh::ParallelObject::processor_id()\&.
+.PP
+.nf
+39                                                                           :
+40   MeshOutput<MeshBase> (eq\&.get_mesh()),
+41   _equation_systems(eq)
+42 {
+43 
+44   if (_equation_systems\&.n_processors() == 1)
+45     _ensight_file_name = filename;
+46   else
+47     {
+48       std::stringstream tmp_file;
+49       tmp_file << filename << "_rank" << _equation_systems\&.processor_id();
+50       _ensight_file_name = tmp_file\&.str();
+51     }
+52 }
+.fi
+.SS "libMesh::EnsightIO::~EnsightIO ()"
+
+.PP
+Definition at line 56 of file ensight_io\&.C\&.
+.PP
+.nf
+57 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::EnsightIO::add_scalar (const std::string &system, const std::string &scalar_description, const std::string &s)"
+add scalar: tell the \fBEnsightIO\fP interface that the variable s is a scalar 
+.PP
+Definition at line 96 of file ensight_io\&.C\&.
+.PP
+References _equation_systems, _systems_vars_map, libMesh::EnsightIO::Scalars::description, libMesh::EquationSystems::get_system(), libMesh::EquationSystems::has_system(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+98 {
+99   libmesh_assert(_equation_systems\&.has_system(system_name));
+100   libmesh_assert(_equation_systems\&.get_system(system_name)\&.has_variable(s));
+101 
+102   Scalars scl;
+103   scl\&.description = scl_description;
+104   scl\&.scalar_name = s;
+105 
+106   _systems_vars_map[system_name]\&.EnsightScalars\&.push_back(scl);
+107 }
+.fi
+.SS "void libMesh::EnsightIO::add_vector (const std::string &system, const std::string &vec_description, const std::string &u, const std::string &v)"
+add 2D vector: Tell the \fBEnsightIO\fP interface that the variables u and v are a vector\&. Note that u and v should be the same variables defined in the system\&. 
+.PP
+Definition at line 61 of file ensight_io\&.C\&.
+.PP
+References _equation_systems, _systems_vars_map, libMesh::EnsightIO::Vectors::description, libMesh::EquationSystems::get_system(), libMesh::EquationSystems::has_system(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+63 {
+64   libmesh_assert (_equation_systems\&.has_system(system_name));
+65   libmesh_assert (_equation_systems\&.get_system(system_name)\&.has_variable(u));
+66   libmesh_assert (_equation_systems\&.get_system(system_name)\&.has_variable(v));
+67 
+68   Vectors vec;
+69   vec\&.description = vec_description;
+70   vec\&.components\&.push_back(u);
+71   vec\&.components\&.push_back(v);
+72 
+73   _systems_vars_map[system_name]\&.EnsightVectors\&.push_back(vec);
+74 }
+.fi
+.SS "void libMesh::EnsightIO::add_vector (const std::string &system, const std::string &vec_description, const std::string &u, const std::string &v, const std::string &w)"
+add 3D vector: tell the \fBEnsightIO\fP interface that the variables u, v and w are vector components 
+.PP
+Definition at line 78 of file ensight_io\&.C\&.
+.PP
+References _equation_systems, _systems_vars_map, libMesh::EnsightIO::Vectors::description, libMesh::EquationSystems::get_system(), libMesh::EquationSystems::has_system(), and libMesh::libmesh_assert()\&.
+.PP
+.nf
+80 {
+81   libmesh_assert(_equation_systems\&.has_system(system_name));
+82   libmesh_assert(_equation_systems\&.get_system(system_name)\&.has_variable(u));
+83   libmesh_assert(_equation_systems\&.get_system(system_name)\&.has_variable(v));
+84   libmesh_assert(_equation_systems\&.get_system(system_name)\&.has_variable(w));
+85 
+86   Vectors vec;
+87   vec\&.description = vec_name;
+88   vec\&.components\&.push_back(u);
+89   vec\&.components\&.push_back(v);
+90   vec\&.components\&.push_back(w);
+91   _systems_vars_map[system_name]\&.EnsightVectors\&.push_back(vec);
+92 }
+.fi
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "void libMesh::EnsightIO::elem_type_to_string (\fBElemType\fPtype, char *buffer)\fC [private]\fP"
+
+.PP
+Definition at line 556 of file ensight_io\&.C\&.
+.PP
+References libMesh::EDGE2, libMesh::EDGE3, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::out, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by write_geometry_ascii()\&.
+.PP
+.nf
+557 {
+558   switch(type){
+559   case EDGE2:
+560     std::strcpy(buffer,"bar2");
+561     break;
+562   case EDGE3:
+563     std::strcpy(buffer,"bar3");
+564     break;
+565   case QUAD4:
+566     std::strcpy(buffer,"quad4");
+567     break;
+568   case QUAD8:
+569     std::strcpy(buffer,"quad8");
+570     break;
+571   case QUAD9:
+572     libMesh::out<<"QUAD9: element not supported!"<<std::endl;
+573     libmesh_error();
+574     break;
+575 
+576   case TRI3:
+577     std::strcpy(buffer,"tria3");
+578     break;
+579   case TRI6:
+580     std::strcpy(buffer,"tria6");
+581     break;
+582   case TET4:
+583     std::strcpy(buffer,"tetra4");
+584     break;
+585   case TET10:
+586     std::strcpy(buffer,"tetra10");
+587     break;
+588   case HEX8:
+589     std::strcpy(buffer,"hexa8");
+590     break;
+591   case HEX20:
+592     std::strcpy(buffer,"hexa20");
+593     break;
+594   case HEX27:
+595     libMesh::out<<"HEX27: element not supported!"<<std::endl;
+596     libmesh_error();
+597     break;
+598   case PYRAMID5:
+599     std::strcpy(buffer,"pyramid5");
+600     break;
+601   default:
+602     break;
+603   }
+604 }
+.fi
+.SS "bool& libMesh::EnsightIO::has_mesh_refinement ()"
+
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::EnsightIO::write (const std::string &name)\fC [virtual]\fP"
+write solution 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 113 of file ensight_io\&.C\&.
+.PP
+References _ensight_file_name, libMesh::MeshOutput< MeshBase >::_is_parallel_format, libMesh::MeshOutput< MeshBase >::mesh(), and libMesh::Quality::name()\&.
+.PP
+.nf
+114 {
+115   // We may need to gather a ParallelMesh to output it, making that
+116   // const qualifier in our constructor a dirty lie
+117   MeshSerializer serialize(const_cast<MeshBase&>(this->mesh()), !_is_parallel_format);
+118 
+119   _ensight_file_name = name;
+120   this->write();
+121 }
+.fi
+.SS "void libMesh::EnsightIO::write (const doubletime = \fC0\fP)"
+write solution 
+.PP
+Definition at line 125 of file ensight_io\&.C\&.
+.PP
+References write_ascii(), and write_case()\&.
+.PP
+.nf
+126 {
+127   this->write_ascii(time);
+128   this->write_case();
+129 }
+.fi
+.SS "void libMesh::EnsightIO::write_ascii (const doubletime = \fC0\fP)\fC [private]\fP"
+
+.PP
+Definition at line 133 of file ensight_io\&.C\&.
+.PP
+References _time_steps, write_geometry_ascii(), and write_solution_ascii()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+134 {
+135   _time_steps\&.push_back(time);
+136 
+137   this->write_geometry_ascii();
+138   this->write_solution_ascii();
+139 }
+.fi
+.SS "void libMesh::EnsightIO::write_case ()\fC [private]\fP"
+
+.PP
+Definition at line 269 of file ensight_io\&.C\&.
+.PP
+References _ensight_file_name, _systems_vars_map, _time_steps, libMesh::EnsightIO::Vectors::description, libMesh::EnsightIO::Scalars::description, libMesh::EnsightIO::Scalars::scalar_name, and libMesh::sys\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+270 {
+271   std::stringstream case_file, geo_file;
+272   case_file << _ensight_file_name << "\&.case";
+273 
+274   FILE* fout = fopen(case_file\&.str()\&.c_str(),"w");
+275   fprintf(fout,"FORMAT\n");
+276   fprintf(fout,"type:  ensight gold\n\n");
+277   fprintf(fout,"GEOMETRY\n");
+278 
+279   geo_file << _ensight_file_name << "\&.geo";
+280 
+281 
+282   fprintf(fout,"model:            1     %s***\n",geo_file\&.str()\&.c_str());
+283 
+284   SystemsVarsMapIterator       sys      = _systems_vars_map\&.begin();
+285   const SystemsVarsMapIterator sys_end  = _systems_vars_map\&.end();
+286 
+287   // Write Variable per node section
+288   if ( sys != sys_end )
+289     fprintf(fout,"\n\nVARIABLE\n");
+290 
+291   for (; sys != sys_end; ++sys)
+292     {
+293       SystemsVarsValue value = *sys;
+294 
+295       for (unsigned int i=0; i < value\&.second\&.EnsightScalars\&.size(); i++)
+296         {
+297           std::stringstream scl_file;
+298           Scalars scalar = value\&.second\&.EnsightScalars[i];
+299           scl_file << _ensight_file_name
+300                    << "_" << scalar\&.scalar_name
+301                    << "\&.scl";
+302 
+303           fprintf(fout,"scalar per node:   1  %s %s***\n",scalar\&.description\&.c_str(), scl_file\&.str()\&.c_str());
+304         }
+305 
+306       for (unsigned int i=0; i < value\&.second\&.EnsightVectors\&.size(); i++)
+307         {
+308           std::stringstream vec_file;
+309           Vectors vec = value\&.second\&.EnsightVectors[i];
+310           vec_file<<_ensight_file_name<<"_"<<vec\&.description<<"\&.vec";
+311 
+312           fprintf(fout,"vector per node:      1    %s %s***\n",vec\&.description\&.c_str(), vec_file\&.str()\&.c_str());
+313         }
+314 
+315       // Write time step section
+316       if( _time_steps\&.size() != 0)
+317         {
+318           fprintf(fout,"\n\nTIME\n");
+319           fprintf(fout,"time set:             1\n");
+320           fprintf(fout,"number of steps:   %10d\n", static_cast<int>(_time_steps\&.size()));
+321           fprintf(fout,"filename start number:   %10d\n", 0);
+322           fprintf(fout,"filename increment:  %10d\n", 1);
+323           fprintf(fout,"time values:\n");
+324           for (unsigned int i = 0; i < _time_steps\&.size(); i++)
+325             fprintf(fout,"%12\&.5e\n", _time_steps[i]);
+326         }
+327     }
+328   fclose(fout);
+329 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::EnsightIO::write_geometry_ascii ()\fC [private]\fP"
+
+.PP
+Definition at line 143 of file ensight_io\&.C\&.
+.PP
+References _ensight_file_name, _time_steps, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), elem_type_to_string(), libMesh::HEX27, libMesh::MeshOutput< MT >::mesh(), libMesh::Elem::n_nodes(), libMesh::Elem::node(), libMesh::Elem::point(), libMesh::QUAD9, and libMesh::Elem::type()\&.
+.PP
+Referenced by write_ascii()\&.
+.PP
+.nf
+144 {
+145   std::ostringstream file;
+146   file << _ensight_file_name << "\&.geo";
+147 
+148   file << std::setw(3)
+149        << std::setprecision(0)
+150        << std::setfill('0')
+151        << std::right
+152        << _time_steps\&.size()-1;
+153 
+154   FILE* fout = fopen(file\&.str()\&.c_str(),"w");
+155 
+156   char buffer[80];
+157 
+158   fprintf(fout,"EnSight Gold Geometry File Format\n");
+159   fprintf(fout,"Generated by \n");
+160   fprintf(fout,"node id off\n");
+161   fprintf(fout,"element id given\n");
+162   fprintf(fout,"part\n");
+163   fprintf(fout,"%10d\n",1);
+164   fprintf(fout,"uns-elements\n");
+165   fprintf(fout,"coordinates\n");
+166 
+167   // mapping between nodal index and your coordinates
+168   std::map<int, Point>                     mesh_nodes_map;
+169   typedef std::map <int, Point>::iterator  mesh_nodes_iterator;
+170   typedef std::pair<int, Point>            mesh_node_value;
+171 
+172   // Mapping between global and local indices
+173   std::map <int, int>       ensight_node_index;
+174 
+175   // Grouping elements of the same type
+176   std::map<ElemType, std::vector<const Elem*> >                    ensight_parts_map;
+177   typedef std::map<ElemType, std::vector<const Elem*> >::iterator  ensight_parts_iterator;
+178   typedef std::pair<ElemType, std::vector<const Elem*> >           ensight_parts_value;
+179 
+180   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+181 
+182   MeshBase::const_element_iterator       el     = the_mesh\&.active_local_elements_begin();
+183   const MeshBase::const_element_iterator end_el = the_mesh\&.active_local_elements_end();
+184 
+185   for ( ; el != end_el ; ++el)
+186     {
+187       const Elem* elem = *el;
+188       ensight_parts_map[elem->type()]\&.push_back(elem);
+189 
+190       for (unsigned int i = 0; i < elem->n_nodes(); i++)
+191         mesh_nodes_map[elem->node(i)] = elem->point(i);
+192     }
+193 
+194   // Write number of local points
+195   fprintf(fout,"%10d\n",static_cast<int>(mesh_nodes_map\&.size()));
+196 
+197   mesh_nodes_iterator           no_it = mesh_nodes_map\&.begin();
+198   const mesh_nodes_iterator no_end_it = mesh_nodes_map\&.end();
+199 
+200   // write x
+201   for(int i = 1; no_it != no_end_it; ++no_it, i++)
+202     {
+203       const mesh_node_value pn = *no_it;
+204       fprintf(fout,"%12\&.5e\n",static_cast<double>(pn\&.second(0)));
+205       ensight_node_index[pn\&.first] = i;
+206     }
+207 
+208   // write y
+209   no_it = mesh_nodes_map\&.begin();
+210   for(; no_it != no_end_it; ++no_it)
+211     {
+212       const mesh_node_value pn = *no_it;
+213       fprintf(fout,"%12\&.5e\n",static_cast<double>(pn\&.second(1)));
+214     }
+215 
+216   // write z
+217   no_it = mesh_nodes_map\&.begin();
+218   for(; no_it != no_end_it; ++no_it)
+219     {
+220       const mesh_node_value pn = *no_it;
+221       fprintf(fout,"%12\&.5e\n",static_cast<double>(pn\&.second(2)));
+222     }
+223 
+224   ensight_parts_iterator            parts_it  =  ensight_parts_map\&.begin();
+225   const ensight_parts_iterator  end_parts_it  =  ensight_parts_map\&.end();
+226 
+227   // Write parts
+228   for (; parts_it != end_parts_it; ++parts_it)
+229     {
+230       ensight_parts_value kvp = *parts_it;
+231 
+232       // Write element type
+233       elem_type_to_string(kvp\&.first,buffer);
+234       fprintf(fout,"\n%s\n", buffer);
+235 
+236       std::vector<const Elem*> elem_ref  = kvp\&.second;
+237 
+238       // Write number of element
+239       fprintf(fout,"%10d\n",static_cast<int>(elem_ref\&.size()));
+240 
+241       // Write element id
+242       for (unsigned int i = 0; i < elem_ref\&.size(); i++)
+243         fprintf(fout,"%10lu\n",static_cast<unsigned long>(elem_ref[i]->id()));
+244 
+245       // Write connectivity
+246       for (unsigned int i = 0; i < elem_ref\&.size(); i++)
+247         {
+248           for (unsigned int j = 0; j < elem_ref[i]->n_nodes(); j++) {
+249             // tests!
+250             if(kvp\&.first == QUAD9 && i==4)
+251               continue;
+252             // tests!
+253             if(kvp\&.first == HEX27 && (i==4    || i ==10 || i == 12 ||
+254                                       i == 13 || i ==14 || i == 16 || i == 22))
+255               continue;
+256 
+257             fprintf(fout,"%10d",ensight_node_index[elem_ref[i]->node(j)]);
+258           }
+259           fprintf(fout,"\n");
+260         }
+261     }
+262   fclose(fout);
+263 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SS "void libMesh::EnsightIO::write_scalar_ascii (const std::string &sys, const std::string &var)\fC [private]\fP"
+
+.PP
+Definition at line 355 of file ensight_io\&.C\&.
+.PP
+References _ensight_file_name, _equation_systems, _time_steps, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::System::current_solution(), libMesh::dim, libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::err, libMesh::System::get_dof_map(), libMesh::EquationSystems::get_system(), libMesh::libmesh_real(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_nodes(), libMesh::FEInterface::nodal_soln(), libMesh::Elem::node(), libMesh::System::variable_number(), and libMesh::System::variable_type()\&.
+.PP
+Referenced by write_solution_ascii()\&.
+.PP
+.nf
+356 {
+357   std::ostringstream scl_file;
+358   scl_file << _ensight_file_name << "_" << var_name << "\&.scl";
+359 
+360   scl_file << std::setw(3)
+361            << std::setprecision(0)
+362            << std::setfill('0')
+363            << std::right
+364            << _time_steps\&.size()-1;
+365 
+366   FILE * fout = fopen(scl_file\&.str()\&.c_str(),"w");
+367 
+368   fprintf(fout,"Per node scalar value\n");
+369   fprintf(fout,"part\n");
+370   fprintf(fout,"%10d\n",1);
+371   fprintf(fout,"coordinates\n");
+372 
+373   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+374 
+375   const unsigned int dim = the_mesh\&.mesh_dimension();
+376 
+377   const System &system = _equation_systems\&.get_system(sys);
+378 
+379   const DofMap& dof_map = system\&.get_dof_map();
+380 
+381 
+382   int var = system\&.variable_number(var_name);
+383 
+384 
+385   std::vector<dof_id_type> dof_indices;
+386   std::vector<dof_id_type> dof_indices_scl;
+387 
+388   // Now we will loop over all the elements in the mesh\&.
+389 
+390   MeshBase::const_element_iterator       el     = the_mesh\&.active_local_elements_begin();
+391   const MeshBase::const_element_iterator end_el = the_mesh\&.active_local_elements_end();
+392 
+393   typedef std::map<int,Real> map_local_soln;
+394   typedef map_local_soln::iterator local_soln_iterator;
+395 
+396   map_local_soln local_soln;
+397 
+398   std::vector<Number>       elem_soln;
+399   std::vector<Number>       nodal_soln;
+400 
+401   for ( ; el != end_el ; ++el){
+402 
+403     const Elem* elem = *el;
+404 
+405     const FEType& fe_type    = system\&.variable_type(var);
+406 
+407     dof_map\&.dof_indices (elem, dof_indices);
+408     dof_map\&.dof_indices (elem, dof_indices_scl, var);
+409 
+410     elem_soln\&.resize(dof_indices_scl\&.size());
+411 
+412     for (unsigned int i = 0; i < dof_indices_scl\&.size(); i++)
+413       elem_soln[i] = system\&.current_solution(dof_indices_scl[i]);
+414 
+415     FEInterface::nodal_soln (dim,fe_type, elem, elem_soln, nodal_soln);
+416 
+417     libmesh_assert_equal_to (nodal_soln\&.size(), elem->n_nodes());
+418 
+419 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+420     libMesh::err << "Complex-valued Ensight output not yet supported" << std::endl;
+421     libmesh_not_implemented();
+422 #endif
+423 
+424     for (unsigned int n=0; n<elem->n_nodes(); n++)
+425       local_soln[elem->node(n)] = libmesh_real(nodal_soln[n]);
+426 
+427   }
+428 
+429   local_soln_iterator sol = local_soln\&.begin();
+430   const local_soln_iterator sol_end = local_soln\&.end();
+431   for(; sol != sol_end; ++sol)
+432     fprintf(fout,"%12\&.5e\n",static_cast<double>((*sol)\&.second));
+433 
+434   fclose(fout);
+435 
+436 }
+.fi
+.SS "void libMesh::EnsightIO::write_solution_ascii ()\fC [private]\fP"
+
+.PP
+Definition at line 333 of file ensight_io\&.C\&.
+.PP
+References _systems_vars_map, libMesh::sys, write_scalar_ascii(), and write_vector_ascii()\&.
+.PP
+Referenced by write_ascii()\&.
+.PP
+.nf
+334 {
+335 
+336   SystemsVarsMapIterator       sys     = _systems_vars_map\&.begin();
+337   const SystemsVarsMapIterator sys_end = _systems_vars_map\&.end();
+338 
+339   for (; sys != sys_end; ++sys)
+340     {
+341       SystemsVarsValue value = *sys;
+342 
+343       for (unsigned int i = 0; i < value\&.second\&.EnsightScalars\&.size(); i++)
+344         this->write_scalar_ascii(value\&.first,
+345                                  value\&.second\&.EnsightScalars[i]\&.scalar_name);
+346 
+347       for (unsigned int i = 0; i < value\&.second\&.EnsightVectors\&.size(); i++)
+348         this->write_vector_ascii(value\&.first,
+349                                  value\&.second\&.EnsightVectors[i]\&.components,
+350                                  value\&.second\&.EnsightVectors[i]\&.description);
+351     }
+352 }
+.fi
+.SS "void libMesh::EnsightIO::write_vector_ascii (const std::string &sys, const std::vector< std::string > &vec, const std::string &var_name)\fC [private]\fP"
+
+.PP
+Definition at line 439 of file ensight_io\&.C\&.
+.PP
+References _ensight_file_name, _equation_systems, _time_steps, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::System::current_solution(), libMesh::dim, libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::err, libMesh::System::get_dof_map(), libMesh::EquationSystems::get_system(), libMesh::libmesh_real(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_nodes(), libMesh::FEInterface::nodal_soln(), libMesh::Elem::node(), libMesh::System::variable_number(), and libMesh::System::variable_type()\&.
+.PP
+Referenced by write_solution_ascii()\&.
+.PP
+.nf
+440 {
+441   std::ostringstream vec_file;
+442   vec_file<<_ensight_file_name<<"_"<<var_name<<"\&.vec";
+443 
+444   vec_file << std::setw(3)
+445            << std::setprecision(0)
+446            << std::setfill('0')
+447            << std::right
+448            << _time_steps\&.size()-1;
+449 
+450   FILE * fout = fopen(vec_file\&.str()\&.c_str(),"w");
+451   fprintf(fout,"Per vector per value\n");
+452   fprintf(fout,"part\n");
+453   fprintf(fout,"%10d\n",1);
+454   fprintf(fout,"coordinates\n");
+455 
+456   // Get a constant reference to the mesh object\&.
+457   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+458 
+459   // The dimension that we are running
+460   const unsigned int dim = the_mesh\&.mesh_dimension();
+461 
+462   const System &system = _equation_systems\&.get_system(sys);
+463 
+464   const DofMap& dof_map = system\&.get_dof_map();
+465 
+466   const unsigned int u_var = system\&.variable_number(vec[0]);
+467   const unsigned int v_var = system\&.variable_number(vec[1]);
+468   const unsigned int w_var = (dim==3) ? system\&.variable_number(vec[2]) : 0;
+469 
+470   std::vector<dof_id_type> dof_indices;
+471   std::vector<dof_id_type> dof_indices_u;
+472   std::vector<dof_id_type> dof_indices_v;
+473   std::vector<dof_id_type> dof_indices_w;
+474 
+475   // Now we will loop over all the elements in the mesh\&.
+476   MeshBase::const_element_iterator       el     = the_mesh\&.active_local_elements_begin();
+477   const MeshBase::const_element_iterator end_el = the_mesh\&.active_local_elements_end();
+478 
+479   typedef std::map<int,std::vector<Real> > map_local_soln;
+480   typedef map_local_soln::iterator  local_soln_iterator;
+481 
+482   map_local_soln local_soln;
+483 
+484   for ( ; el != end_el ; ++el){
+485 
+486     const Elem* elem = *el;
+487 
+488     const FEType& fe_type    = system\&.variable_type(u_var);
+489 
+490     dof_map\&.dof_indices (elem, dof_indices);
+491     dof_map\&.dof_indices (elem, dof_indices_u,u_var);
+492     dof_map\&.dof_indices (elem, dof_indices_v,v_var);
+493     if(dim==3)  dof_map\&.dof_indices (elem, dof_indices,w_var);
+494 
+495 
+496     std::vector<Number>       elem_soln_u;
+497     std::vector<Number>       elem_soln_v;
+498     std::vector<Number>       elem_soln_w;
+499 
+500     std::vector<Number>       nodal_soln_u;
+501     std::vector<Number>       nodal_soln_v;
+502     std::vector<Number>       nodal_soln_w;
+503 
+504     elem_soln_u\&.resize(dof_indices_u\&.size());
+505     elem_soln_v\&.resize(dof_indices_v\&.size());
+506     if(dim == 3) elem_soln_w\&.resize(dof_indices_w\&.size());
+507 
+508     for (unsigned int i = 0; i < dof_indices_u\&.size(); i++)
+509       {
+510         elem_soln_u[i] = system\&.current_solution(dof_indices_u[i]);
+511         elem_soln_v[i] = system\&.current_solution(dof_indices_v[i]);
+512         if(dim==3) elem_soln_w[i] = system\&.current_solution(dof_indices_w[i]);
+513       }
+514 
+515     FEInterface::nodal_soln (dim,fe_type,elem,elem_soln_u,nodal_soln_u);
+516     FEInterface::nodal_soln (dim,fe_type,elem,elem_soln_v,nodal_soln_v);
+517     if(dim == 3) FEInterface::nodal_soln (dim,fe_type,elem,elem_soln_w,nodal_soln_w);
+518 
+519 
+520     libmesh_assert_equal_to (nodal_soln_u\&.size(), elem->n_nodes());
+521     libmesh_assert_equal_to (nodal_soln_v\&.size(), elem->n_nodes());
+522 
+523 #ifdef LIBMESH_ENABLE_COMPLEX
+524     libMesh::err << "Complex-valued Ensight output not yet supported" << std::endl;
+525     libmesh_not_implemented()
+526 #endif
+527 
+528       for (unsigned int n=0; n<elem->n_nodes(); n++)
+529         {
+530           std::vector<Real> node_vec(3);
+531           node_vec[0]= libmesh_real(nodal_soln_u[n]);
+532           node_vec[1]= libmesh_real(nodal_soln_v[n]);
+533           node_vec[2]=0\&.0;
+534           if(dim==3) node_vec[2]= libmesh_real(nodal_soln_w[n]);
+535           local_soln[elem->node(n)] = node_vec;
+536         }
+537 
+538   }
+539 
+540   local_soln_iterator sol = local_soln\&.begin();
+541   const local_soln_iterator sol_end = local_soln\&.end();
+542 
+543   for(; sol != sol_end; ++sol)
+544     fprintf(fout,"%12\&.5e\n",static_cast<double>((*sol)\&.second[0]));
+545   sol = local_soln\&.begin();
+546   for(; sol != sol_end; ++sol)
+547     fprintf(fout,"%12\&.5e\n",static_cast<double>((*sol)\&.second[1]));
+548   sol = local_soln\&.begin();
+549   for(; sol != sol_end; ++sol)
+550     fprintf(fout,"%12\&.5e\n",static_cast<double>((*sol)\&.second[2]));
+551 
+552   fclose(fout);
+553 
+554 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::string libMesh::EnsightIO::_ensight_file_name\fC [private]\fP"
+
+.PP
+Definition at line 128 of file ensight_io\&.h\&.
+.PP
+Referenced by EnsightIO(), write(), write_case(), write_geometry_ascii(), write_scalar_ascii(), and write_vector_ascii()\&.
+.SS "const \fBEquationSystems\fP& libMesh::EnsightIO::_equation_systems\fC [private]\fP"
+
+.PP
+Definition at line 131 of file ensight_io\&.h\&.
+.PP
+Referenced by add_scalar(), add_vector(), EnsightIO(), write_scalar_ascii(), and write_vector_ascii()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and write()\&.
+.SS "\fBSystemsVarsMap\fP libMesh::EnsightIO::_systems_vars_map\fC [private]\fP"
+
+.PP
+Definition at line 130 of file ensight_io\&.h\&.
+.PP
+Referenced by add_scalar(), add_vector(), write_case(), and write_solution_ascii()\&.
+.SS "std::vector<double> libMesh::EnsightIO::_time_steps\fC [private]\fP"
+
+.PP
+Definition at line 129 of file ensight_io\&.h\&.
+.PP
+Referenced by write_ascii(), write_case(), write_geometry_ascii(), write_scalar_ascii(), and write_vector_ascii()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

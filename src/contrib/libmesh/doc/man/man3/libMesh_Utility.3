@@ -1,0 +1,548 @@
+.TH "libMesh::Utility" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Utility \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBdo_pow\fP"
+.br
+.ti -1c
+.RI "struct \fBdo_pow< 6, T >\fP"
+.br
+.ti -1c
+.RI "struct \fBdo_pow< 1, T >\fP"
+.br
+.ti -1c
+.RI "struct \fBdo_pow< 0, T >\fP"
+.br
+.ti -1c
+.RI "class \fBReverseBytes\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBget_timestamp\fP ()"
+.br
+.ti -1c
+.RI "uint32_t \fBhashword\fP (const uint32_t *k, size_t length, uint32_t initval=0)"
+.br
+.ti -1c
+.RI "uint32_t \fBhashword2\fP (const uint32_t &first, const uint32_t &second, uint32_t initval=0)"
+.br
+.ti -1c
+.RI "uint64_t \fBhashword2\fP (const uint64_t first, const uint64_t second)"
+.br
+.ti -1c
+.RI "uint16_t \fBhashword2\fP (const uint16_t first, const uint16_t second)"
+.br
+.ti -1c
+.RI "uint64_t \fBhashword\fP (const uint64_t *k, size_t length)"
+.br
+.ti -1c
+.RI "uint16_t \fBhashword\fP (const uint16_t *k, size_t length)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBstring_to_enum\fP (const std::string &s)"
+.br
+.ti -1c
+.RI "template<typename T > std::string \fBenum_to_string\fP (const T e)"
+.br
+.ti -1c
+.RI "void \fBprint_timestamp\fP (std::ostream &target=std::cout)"
+.br
+.ti -1c
+.RI "std::string \fBsystem_info\fP ()"
+.br
+.ti -1c
+.RI "template<typename ForwardIter , typename T > void \fBiota\fP (ForwardIter first, ForwardIter last, T value)"
+.br
+.ti -1c
+.RI "template<class InputIterator > bool \fBis_sorted\fP (InputIterator first, InputIterator last)"
+.br
+.ti -1c
+.RI "template<class ForwardIterator , class T > ForwardIterator \fBbinary_find\fP (ForwardIterator first, ForwardIterator last, const T &value)"
+.br
+.ti -1c
+.RI "template<class ForwardIterator , class T , class Compare > ForwardIterator \fBbinary_find\fP (ForwardIterator first, ForwardIterator last, const T &value, Compare comp)"
+.br
+.ti -1c
+.RI "template<int N, typename T > T \fBpow\fP (const T &\fBx\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBfactorial\fP (unsigned int n)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdeallocate\fP (std::vector< T > &vec)"
+.br
+.ti -1c
+.RI "std::string \fBcomplex_filename\fP (const std::string &basename, unsigned int r_o_c=0)"
+.br
+.ti -1c
+.RI "void \fBprepare_complex_data\fP (const std::vector< \fBComplex\fP > &source, std::vector< \fBReal\fP > &real_part, std::vector< \fBReal\fP > &imag_part)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "template<class ForwardIterator , class T > ForwardIterator libMesh::Utility::binary_find (ForwardIteratorfirst, ForwardIteratorlast, const T &value)"
+The STL provides binary_search() which returns true/false depending on whether the searched-for value is found\&. \fBUtility::binary_find()\fP uses a binary search on a sorted range to return an iterator to the searched-for element, or 'last' if the element is not found\&. 
+.PP
+Definition at line 130 of file utility\&.h\&.
+.PP
+Referenced by libMesh::SerialMesh::stitching_helper(), and libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+131 {
+132   ForwardIterator it = std::lower_bound(first, last, value);
+133   return (it == last || value < *it) ? last : it;
+134 }
+.fi
+.SS "template<class ForwardIterator , class T , class Compare > ForwardIterator libMesh::Utility::binary_find (ForwardIteratorfirst, ForwardIteratorlast, const T &value, Comparecomp)"
+As above, but takes a custom comparison object\&. 
+.PP
+Definition at line 140 of file utility\&.h\&.
+.PP
+.nf
+141 {
+142   ForwardIterator it = std::lower_bound(first, last, value, comp);
+143   return (it == last || comp(value,*it)) ? last : it;
+144 }
+.fi
+.SS "std::string libMesh::Utility::complex_filename (const std::string &basename, unsigned intr_o_c = \fC0\fP)"
+
+.PP
+\fBReturns:\fP
+.RS 4
+for \fCr_o_c\fP = 0 the filename for output of the real part of complex data, and for \fCr_o_c\fP = 1 the filename for the imaginary part\&. 
+.RE
+.PP
+
+.PP
+Definition at line 83 of file utility\&.C\&.
+.PP
+References libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mgf_soln(), and libMesh::LegacyXdrIO::write_mgf_soln()\&.
+.PP
+.nf
+85 {
+86   std::string name(basename);
+87 
+88   if (r_o_c == 0)
+89     name\&.append("\&.real");
+90 
+91   else
+92     name\&.append("\&.imag");
+93 
+94   return name;
+95 }
+.fi
+.SS "template<typename T > void libMesh::Utility::deallocate (std::vector< T > &vec)"
+A convenient method to truly empty a vector using the 'swap trick' 
+.PP
+Definition at line 224 of file utility\&.h\&.
+.PP
+References libMesh::swap()\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read()\&.
+.PP
+.nf
+225 {
+226   std::vector<T>()\&.swap(vec);
+227 }
+.fi
+.SS "template<typename T > std::string libMesh::Utility::enum_to_string (const Te)"
+Takes the enumeration \fCe\fP of type \fCT\fP and returns the matching string\&. 
+.PP
+Referenced by libMesh::LaspackLinearSolver< T >::adjoint_solve(), libMesh::AbaqusIO::assign_sideset_ids(), libMesh::Elem::get_info(), libMesh::LinearSolver< T >::print_converged_reason(), libMesh::Elem::quality(), libMesh::AbaqusIO::read_elements(), libMesh::DofMap::reinit(), libMesh::PetscLinearSolver< T >::set_petsc_solver_type(), libMesh::SlepcEigenSolver< T >::set_slepc_solver_type(), libMesh::AztecLinearSolver< T >::set_solver_type(), libMesh::EigenSparseLinearSolver< T >::solve(), libMesh::LaspackLinearSolver< T >::solve(), and libMesh::ExodusII_IO_Helper::write_elements()\&.
+.SS "unsigned int libMesh::Utility::factorial (unsigned intn)\fC [inline]\fP"
+A simple implementation of the factorial\&. 
+.PP
+Definition at line 204 of file utility\&.h\&.
+.PP
+Referenced by libMesh::FE< Dim, T >::shape(), and libMesh::FE< Dim, T >::shape_deriv()\&.
+.PP
+.nf
+205 {
+206 
+207   unsigned int factorial_n = 1;
+208 
+209   if (n==0)
+210     return factorial_n;
+211 
+212   for (unsigned int i=1; i<n; i++)
+213     factorial_n *= i+1;
+214 
+215   return factorial_n;
+216 }
+.fi
+.SS "std::string libMesh::Utility::get_timestamp ()"
+
+.PP
+Definition at line 37 of file timestamp\&.C\&.
+.PP
+References libMesh::out\&.
+.PP
+Referenced by libMesh::PerfLog::get_info_header(), print_timestamp(), and system_info()\&.
+.PP
+.nf
+38 {
+39 #ifdef LIBMESH_HAVE_LOCALE
+40   // Create time_put "facet"
+41   std::locale loc;
+42   const std::time_put<char>& tp = std::use_facet <std::time_put<char> > (loc);
+43 
+44   // Call C-style time getting functions
+45   time_t now    = time(NULL);
+46   tm* tm_struct = localtime(&now);
+47 
+48   // Date will eventually be stored in this ostringstream's string
+49   std::ostringstream date_stream;
+50 
+51   // See below for documentation on the use of the
+52   // std::time_put::put() function
+53   tp\&.put(date_stream,        /*s*/
+54          date_stream,        /*str*/
+55          date_stream\&.fill(), /*fill*/
+56          tm_struct,          /*tm*/
+57          'c');               /*format*/
+58 
+59   // Another way to use it is to totally customize the format\&.\&.\&.
+60   //    char pattern[]="%d %B %Y %I:%M:%S %p";
+61   //    tp\&.put(date_stream,                /*s*/
+62   //   date_stream,                /*str*/
+63   //   date_stream\&.fill(),         /*fill*/
+64   //   tm_struct,                  /*tm*/
+65   //   pattern,                    /*format begin*/
+66   //   pattern+sizeof(pattern)-1); /*format end  */
+67 
+68   return date_stream\&.str();
+69 #else
+70   // C-stye code originally found here:
+71   // http://people\&.sc\&.fsu\&.edu/~burkardt/cpp_src/timestamp/timestamp\&.C
+72   // Author: John Burkardt, 24 September 2003
+73   const unsigned int time_size = 40;
+74   char time_buffer[time_size];
+75 
+76   time_t now = time ( NULL );
+77   tm* tm_struct = localtime ( &now );
+78 
+79   // No more than time_size characters will be placed into the array\&.  If the
+80   // total number of resulting characters, including the terminating
+81   // NUL character, is not more than time_size, strftime() returns the
+82   // number of characters in the array, not counting the terminating
+83   // NUL\&.  Otherwise, zero is returned and the buffer contents are
+84   // indeterminate\&.
+85   size_t len = strftime ( time_buffer, time_size, "%c", tm_struct );
+86 
+87   if (len != 0)
+88     return std::string(time_buffer);
+89   else
+90     {
+91       libMesh::out << "Error formatting time buffer, returning empty string!" << std::endl;
+92       return std::string("");
+93     }
+94 
+95 #endif // LIBMESH_HAVE_LOCALE
+96 }
+.fi
+.SS "uint32_t libMesh::Utility::hashword (const uint32_t *k, size_tlength, uint32_tinitval = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 92 of file hashword\&.h\&.
+.PP
+Referenced by libMesh::Elem::compute_key()\&.
+.PP
+.nf
+93 {
+94   uint32_t a,b,c;
+95 
+96   // Set up the internal state
+97   a = b = c = 0xdeadbeef + ((static_cast<uint32_t>(length))<<2) + initval;
+98 
+99   //------------------------------------------------- handle most of the key
+100   while (length > 3)
+101     {
+102       a += k[0];
+103       b += k[1];
+104       c += k[2];
+105       mix(a,b,c);
+106       length -= 3;
+107       k += 3;
+108     }
+109 
+110   //------------------------------------------- handle the last 3 uint32_t's
+111   switch(length)                     // all the case statements fall through
+112     {
+113     case 3 : c+=k[2];
+114     case 2 : b+=k[1];
+115     case 1 : a+=k[0];
+116       final(a,b,c);
+117     default:     // case 0: nothing left to add
+118       break;
+119     }
+120 
+121   //------------------------------------------------------ report the result
+122   return c;
+123 }
+.fi
+.SS "uint64_t libMesh::Utility::hashword (const uint64_t *k, size_tlength)\fC [inline]\fP"
+
+.PP
+Definition at line 165 of file hashword\&.h\&.
+.PP
+.nf
+166 {
+167   // big prime number
+168   const unsigned int bp = 65449;
+169 
+170   uint64_t c = 0;
+171   unsigned int shift=0;
+172   for (size_t i=0; i != length; ++i)
+173     {
+174       c += (k[i] << shift) % bp;
+175       shift += 5;
+176     }
+177 
+178   return c;
+179 }
+.fi
+.SS "uint16_t libMesh::Utility::hashword (const uint16_t *k, size_tlength)\fC [inline]\fP"
+
+.PP
+Definition at line 183 of file hashword\&.h\&.
+.PP
+.nf
+184 {
+185   // "big" prime number
+186   const uint16_t bp = 257;
+187 
+188   uint16_t c = 0;
+189   uint16_t shift=0;
+190   for (size_t i=0; i != length; ++i)
+191     {
+192       c = static_cast<uint16_t>
+193         (c + static_cast<uint16_t>(k[i] << shift) % bp);
+194       shift = static_cast<uint16_t>(shift+3);
+195     }
+196 
+197   return c;
+198 }
+.fi
+.SS "uint32_t libMesh::Utility::hashword2 (const uint32_t &first, const uint32_t &second, uint32_tinitval = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 130 of file hashword\&.h\&.
+.PP
+Referenced by libMesh::Elem::compute_key()\&.
+.PP
+.nf
+131 {
+132   uint32_t a,b,c;
+133 
+134   // Set up the internal state
+135   a = b = c = 0xdeadbeef + 8 + initval;
+136 
+137   b+=second;
+138   a+=first;
+139   final(a,b,c);
+140 
+141   return c;
+142 }
+.fi
+.SS "uint64_t libMesh::Utility::hashword2 (const uint64_tfirst, const uint64_tsecond)\fC [inline]\fP"
+
+.PP
+Definition at line 146 of file hashword\&.h\&.
+.PP
+.nf
+147 {
+148   // big prime number
+149   const unsigned int bp = 65449;
+150 
+151   return (first%bp + (second<<5)%bp);
+152 }
+.fi
+.SS "uint16_t libMesh::Utility::hashword2 (const uint16_tfirst, const uint16_tsecond)\fC [inline]\fP"
+
+.PP
+Definition at line 155 of file hashword\&.h\&.
+.PP
+.nf
+156 {
+157   // "big" prime number
+158   const uint16_t bp = 257;
+159 
+160   return static_cast<uint16_t>(first%bp + (second<<3)%bp);
+161 }
+.fi
+.SS "template<typename ForwardIter , typename T > void libMesh::Utility::iota (ForwardIterfirst, ForwardIterlast, Tvalue)"
+\fC\fBUtility::iota\fP\fP is a duplication of the SGI STL extension \fCstd::iota\fP\&. It simply assigns sequentially increasing values to a range\&. That is, it assigns \fCvalue\fP to \fC*first\fP, \fCvalue\fP + 1 to \fC*\fP(first + 1) and so on\&. In general, each iterator \fCi\fP in the range [first, last) is assigned \fCvalue\fP + (i - \fCfirst\fP)\&. 
+.PP
+Definition at line 58 of file utility\&.h\&.
+.PP
+Referenced by libMesh::PetscVector< T >::create_subvector(), and libMesh::PetscVector< T >::localize()\&.
+.PP
+.nf
+59 {
+60   while (first != last)
+61     {
+62       *first = value++;
+63       ++first;
+64     }
+65 }
+.fi
+.SS "template<class InputIterator > bool libMesh::Utility::is_sorted (InputIteratorfirst, InputIteratorlast)"
+\fBUtility::is_sorted\fP mimics the behavior of the SGI STL extension std::is_sorted\&. Checks to see if the range [first,last) is sorted in non-decreasing order, ie\&. for each 'i' in [first,last) *i <= *(i+1)\&. 
+.PP
+Definition at line 75 of file utility\&.h\&.
+.PP
+References libMesh::MeshTools::Subdivision::prev\&.
+.PP
+.nf
+76 {
+77   if ( first == last )
+78     return true;
+79 
+80   // "prev" always points to the entry just to the left of "first"
+81   //  [-    -    -    -    -    -]
+82   //   ^    ^
+83   // prev first
+84   //
+85   //  [-    -    -    -    -    -]
+86   //        ^    ^
+87   //      prev first
+88   //
+89   //  [-    -    -    -    -    -]
+90   //             ^    ^
+91   //           prev first
+92   InputIterator prev( first );
+93   for ( ++first; first != last; ++prev, ++first )
+94     if ( *first < *prev  )    // Note: this is the same as *prev > *first,
+95       return false;        // but we only require op< to be defined\&.
+96 
+97   // If we haven't returned yet, it's sorted!
+98   return true;
+99 
+100 
+101   // A one-liner version using adjacent_find\&.  This doesn't work for
+102   // C-style arrays, since their pointers do not have a value_type\&.
+103   //
+104   // Works by checking to see if adjacent entries satisfy *i >
+105   // *(i+1) and returns the first one which does\&.  If "last" is
+106   // returned, no such pair was found, and therefore the range must
+107   // be in non-decreasing order\&.
+108   //
+109   // return (last ==
+110   // std::adjacent_find(first, last,
+111   // std::greater< typename InputIterator::value_type >()));
+112 
+113   // A second one-linear attempt\&.  This one checks for a **strictly
+114   // increasing** (no duplicate entries) range\&.  Also doesn't work
+115   // with C-style arrays\&.
+116   //
+117   // return (last ==
+118   // std::adjacent_find(first, last,
+119   // std::not2(std::less<typename InputIterator::value_type>())));
+120 }
+.fi
+.SS "template<int N, typename T > T libMesh::Utility::pow (const T &x)\fC [inline]\fP"
+
+.PP
+Definition at line 194 of file utility\&.h\&.
+.PP
+References libMesh::Utility::do_pow< N, T >::apply()\&.
+.PP
+Referenced by libMesh::FEHermite< Dim >::hermite_raw_shape_second_deriv(), libMesh::FESubdivision::regular_shape(), libMesh::FE< Dim, T >::shape(), libMesh::FE< Dim, T >::shape_deriv(), and libMesh::FE< Dim, T >::shape_second_deriv()\&.
+.PP
+.nf
+195 {
+196   return do_pow<N,T>::apply(x);
+197 }
+.fi
+.SS "void libMesh::Utility::prepare_complex_data (const std::vector< Complex > &source, std::vector< Real > &real_part, std::vector< Real > &imag_part)"
+Prepare complex data for writing\&. 
+.PP
+Definition at line 99 of file utility\&.C\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mgf_soln(), and libMesh::LegacyXdrIO::write_mgf_soln()\&.
+.PP
+.nf
+102 {
+103   const unsigned int len = source\&.size();
+104 
+105   real_part\&.resize(len);
+106   imag_part\&.resize(len);
+107 
+108   for (unsigned int i=0; i<len; i++)
+109     {
+110       real_part[i] = source[i]\&.real();
+111       imag_part[i] = source[i]\&.imag();
+112     }
+113 }
+.fi
+.SS "void libMesh::Utility::print_timestamp (std::ostream &target = \fCstd::cout\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 37 of file timestamp\&.h\&.
+.PP
+References get_timestamp()\&.
+.PP
+.nf
+38 {
+39   target << get_timestamp() << std::endl;
+40 }
+.fi
+.SS "template<typename T > T libMesh::Utility::string_to_enum (const std::string &s)"
+Takes the string \fCs\fP and returns the matching enumeration of type \fCT\fP\&. 
+.SS "std::string libMesh::Utility::system_info ()"
+The \fCsystem_info\fP function returns information about the system you are running on\&. 
+.PP
+Definition at line 45 of file utility\&.C\&.
+.PP
+References get_timestamp()\&.
+.PP
+.nf
+46 {
+47   std::ostringstream oss;
+48 
+49   std::string date = Utility::get_timestamp();
+50 
+51   // Get system information
+52   struct utsname sysInfo;
+53   uname(&sysInfo);
+54 
+55   // Get user information
+56 #ifdef LIBMESH_HAVE_GETPWUID
+57   struct passwd* p = getpwuid(getuid());
+58 #endif
+59 
+60 
+61   oss << '\n'
+62       << " ---------------------------------------------------------------------\n"
+63       << "| Time:           " << date             << '\n'
+64       << "| OS:             " << sysInfo\&.sysname  << '\n'
+65       << "| HostName:       " << sysInfo\&.nodename << '\n'
+66       << "| OS Release      " << sysInfo\&.release  << '\n'
+67       << "| OS Version:     " << sysInfo\&.version  << '\n'
+68       << "| Machine:        " << sysInfo\&.machine  << '\n'
+69 #ifdef LIBMESH_HAVE_GETPWUID
+70       << "| Username:       " << p->pw_name       << '\n'
+71 #else
+72       << "| Username:       " << "Unknown"        << '\n'
+73 #endif
+74       << " ---------------------------------------------------------------------\n";
+75 
+76   return oss\&.str();
+77 }
+.fi
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,523 @@
+.TH "libMesh::XdrSHEAD" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::XdrSHEAD \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <xdr_shead\&.h>\fP
+.PP
+Inherits \fBlibMesh::XdrHEAD\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXdrSHEAD\fP ()"
+.br
+.ti -1c
+.RI "\fB~XdrSHEAD\fP ()"
+.br
+.ti -1c
+.RI "void \fBsetNumVar\fP (int numvar)"
+.br
+.ti -1c
+.RI "void \fBsetWrtVar\fP (int wrtVar)"
+.br
+.ti -1c
+.RI "int \fBgetWrtVar\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetMeshCnt\fP (int meshCnt)"
+.br
+.ti -1c
+.RI "void \fBsetKstep\fP (int kstep)"
+.br
+.ti -1c
+.RI "void \fBsetTime\fP (\fBReal\fP time)"
+.br
+.ti -1c
+.RI "void \fBsetUserTitle\fP (const char *title)"
+.br
+.ti -1c
+.RI "const char * \fBgetUserTitle\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetVarTitle\fP (const char *titles, int len)"
+.br
+.ti -1c
+.RI "const char * \fBgetVarTitle\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetId\fP (const char *id)"
+.br
+.ti -1c
+.RI "const char * \fBgetId\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetTitle\fP (const char *title)"
+.br
+.ti -1c
+.RI "const char * \fBgetTitle\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetNumNodes\fP (int numNodes)"
+.br
+.ti -1c
+.RI "int \fBgetNumNodes\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetNumBCs\fP (int numBCs)"
+.br
+.ti -1c
+.RI "int \fBgetNumBCs\fP () const "
+.br
+.ti -1c
+.RI "void \fBsetStrSize\fP (int strSize)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "char * \fBcpyString\fP (const char *src, int len=-1)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "int \fBm_wrtVar\fP"
+.br
+.ti -1c
+.RI "int \fBm_numvar\fP"
+.br
+.ti -1c
+.RI "int \fBm_meshCnt\fP"
+.br
+.ti -1c
+.RI "int \fBm_kstep\fP"
+.br
+.ti -1c
+.RI "int \fBm_numel\fP"
+.br
+.ti -1c
+.RI "int \fBm_numNodes\fP"
+.br
+.ti -1c
+.RI "int \fBm_sumWghts\fP"
+.br
+.ti -1c
+.RI "int \fBm_numBCs\fP"
+.br
+.ti -1c
+.RI "int \fBm_strSize\fP"
+.br
+.ti -1c
+.RI "char * \fBmp_id\fP"
+.br
+.ti -1c
+.RI "char * \fBmp_title\fP"
+.br
+.ti -1c
+.RI "char * \fBmp_userTitle\fP"
+.br
+.ti -1c
+.RI "char * \fBmp_varTitle\fP"
+.br
+.ti -1c
+.RI "xdr_Real \fBm_time\fP"
+.br
+.in -1c
+.SS "Friends"
+
+.in +1c
+.ti -1c
+.RI "class \fBXdrSOLN\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBXdrSHEAD\fP\fP class\&. This class is responsible for reading/writing \fCxdr\fP solution file headers\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Bill Barth, Robert McLay\&. 
+.RE
+.PP
+
+.PP
+Definition at line 36 of file xdr_shead\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::XdrSHEAD::XdrSHEAD ()\fC [inline]\fP"
+Constructor\&. 
+.PP
+Definition at line 43 of file xdr_shead\&.h\&.
+.PP
+.nf
+43 {}
+.fi
+.SS "libMesh::XdrSHEAD::~XdrSHEAD ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 48 of file xdr_shead\&.h\&.
+.PP
+.nf
+48 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "char * libMesh::XdrHEAD::cpyString (const char *src, intlen = \fC-1\fP)\fC [protected]\fP, \fC [inherited]\fP"
+Uses std::memcpy to create an exact copy of \fCsrc\fP, then returns that copy\&. Note: I don't know where the memory allocated for this copy gets deleted!
+.PP
+\fBReturns:\fP
+.RS 4
+Copy of \fCsrc\fP 
+.RE
+.PP
+
+.PP
+Definition at line 59 of file xdr_head\&.C\&.
+.PP
+Referenced by libMesh::XdrMESH::header(), libMesh::XdrHEAD::setId(), libMesh::XdrHEAD::setTitle(), setUserTitle(), and setVarTitle()\&.
+.PP
+.nf
+60 {
+61   char* temp = NULL;
+62   int myLen = len;
+63   if(src)
+64     {
+65       if (myLen == -1)
+66         myLen = libmesh_cast_int<int>(std::strlen(src))+1;
+67       temp = new char[myLen];
+68       temp = (char *) std::memcpy(temp, src, (myLen)*sizeof(char));
+69     }
+70   return temp;
+71 }
+.fi
+.SS "const char* libMesh::XdrHEAD::getId () const\fC [inline]\fP, \fC [inherited]\fP"
+Get the mesh/solution file id\&. 
+.PP
+Definition at line 55 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::mp_id\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), and libMesh::XdrMESH::header()\&.
+.PP
+.nf
+55 { return mp_id; }
+.fi
+.SS "int libMesh::XdrHEAD::getNumBCs () const\fC [inline]\fP, \fC [inherited]\fP"
+Get the number of boundary conditions in them mesh/solution file\&. 
+.PP
+Definition at line 91 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_numBCs\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh()\&.
+.PP
+.nf
+91 { return m_numBCs; }
+.fi
+.SS "int libMesh::XdrHEAD::getNumNodes () const\fC [inline]\fP, \fC [inherited]\fP"
+Get the total number of nodes in the mesh/solution file\&. 
+.PP
+Definition at line 77 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_numNodes\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_mesh(), and libMesh::LegacyXdrIO::read_soln()\&.
+.PP
+.nf
+77 { return m_numNodes; }
+.fi
+.SS "const char* libMesh::XdrHEAD::getTitle () const\fC [inline]\fP, \fC [inherited]\fP"
+Get the mesh/solution file title\&. 
+.PP
+Definition at line 65 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::mp_title\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), and libMesh::XdrMESH::header()\&.
+.PP
+.nf
+65 { return mp_title; }
+.fi
+.SS "const char* libMesh::XdrSHEAD::getUserTitle () const\fC [inline]\fP"
+Get the user solution title\&. 
+.PP
+Definition at line 114 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::mp_userTitle\&.
+.PP
+Referenced by libMesh::XdrSOLN::header()\&.
+.PP
+.nf
+114 { return mp_userTitle; }
+.fi
+.SS "const char* libMesh::XdrSHEAD::getVarTitle () const\fC [inline]\fP"
+Get null-terminated list of variable names\&. 
+.PP
+Definition at line 126 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::mp_varTitle\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), and libMesh::LegacyXdrIO::read_soln()\&.
+.PP
+.nf
+126 { return mp_varTitle; }
+.fi
+.SS "int libMesh::XdrSHEAD::getWrtVar () const\fC [inline]\fP"
+Get the number of written solution variables\&. 
+.PP
+Definition at line 72 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_wrtVar\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::read_soln()\&.
+.PP
+.nf
+72 { return m_wrtVar; }
+.fi
+.SS "void libMesh::XdrHEAD::setId (const char *id)\fC [inline]\fP, \fC [inherited]\fP"
+Set the mesh/solution file id\&. 
+.PP
+Definition at line 50 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::cpyString(), and libMesh::XdrHEAD::mp_id\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), libMesh::XdrMESH::header(), libMesh::LegacyXdrIO::write_mesh(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+50 { delete [] mp_id; mp_id = cpyString(id); }
+.fi
+.SS "void libMesh::XdrSHEAD::setKstep (intkstep)\fC [inline]\fP"
+Get the mesh file number\&. Set the solution step number\&. 
+.PP
+Definition at line 88 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_kstep\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+88 { m_kstep = kstep; }
+.fi
+.SS "void libMesh::XdrSHEAD::setMeshCnt (intmeshCnt)\fC [inline]\fP"
+Set the mesh file number\&. 
+.PP
+Definition at line 77 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_meshCnt\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+77 { m_meshCnt = meshCnt; }
+.fi
+.SS "void libMesh::XdrHEAD::setNumBCs (intnumBCs)\fC [inline]\fP, \fC [inherited]\fP"
+Set the number of boundary conditions in the mesh/solution file\&. 
+.PP
+Definition at line 84 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_numBCs\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+84 { m_numBCs = numBCs; }
+.fi
+.SS "void libMesh::XdrHEAD::setNumNodes (intnumNodes)\fC [inline]\fP, \fC [inherited]\fP"
+Set the total number of nodes in the mesh/solution file\&. 
+.PP
+Definition at line 71 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_numNodes\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+71 { m_numNodes = numNodes; }
+.fi
+.SS "void libMesh::XdrSHEAD::setNumVar (intnumvar)\fC [inline]\fP"
+Set the total number of solution variables\&. 
+.PP
+Definition at line 54 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_numvar\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+54 { m_numvar = numvar; }
+.fi
+.SS "void libMesh::XdrHEAD::setStrSize (intstrSize)\fC [inline]\fP, \fC [inherited]\fP"
+Set the string size of the mesh/solution file\&. (?) 
+.PP
+Definition at line 97 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_strSize\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_mesh(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+97 { m_strSize = strSize; }
+.fi
+.SS "void libMesh::XdrSHEAD::setTime (\fBReal\fPtime)\fC [inline]\fP"
+Get the solution step number\&. Set the solution time\&. 
+.PP
+Definition at line 99 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_time\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+99 { m_time = time; }
+.fi
+.SS "void libMesh::XdrHEAD::setTitle (const char *title)\fC [inline]\fP, \fC [inherited]\fP"
+Set the mesh/solution file title\&. 
+.PP
+Definition at line 60 of file xdr_head\&.h\&.
+.PP
+References libMesh::XdrHEAD::cpyString(), and libMesh::XdrHEAD::mp_title\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), libMesh::XdrMESH::header(), libMesh::LegacyXdrIO::write_mesh(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+60 { delete [] mp_title; mp_title = cpyString(title); }
+.fi
+.SS "void libMesh::XdrSHEAD::setUserTitle (const char *title)\fC [inline]\fP"
+Get the solution time\&. Set the user solution title\&. 
+.PP
+Definition at line 109 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::cpyString(), and libMesh::XdrHEAD::mp_userTitle\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+109 { delete [] mp_userTitle; mp_userTitle = cpyString(title); }
+.fi
+.SS "void libMesh::XdrSHEAD::setVarTitle (const char *titles, intlen)\fC [inline]\fP"
+Set null-terminated list of variable names\&. 
+.PP
+Definition at line 120 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::cpyString(), and libMesh::XdrHEAD::mp_varTitle\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), and libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+120 { delete [] mp_varTitle; mp_varTitle = cpyString(titles, len); }
+.fi
+.SS "void libMesh::XdrSHEAD::setWrtVar (intwrtVar)\fC [inline]\fP"
+Get the total number of solution variables\&. Set the number of written solution variables\&. 
+.PP
+Definition at line 66 of file xdr_shead\&.h\&.
+.PP
+References libMesh::XdrHEAD::m_wrtVar\&.
+.PP
+Referenced by libMesh::LegacyXdrIO::write_soln()\&.
+.PP
+.nf
+66 { m_wrtVar = wrtVar; }
+.fi
+.SH "Friends And Related Function Documentation"
+.PP 
+.SS "friend class \fBXdrSOLN\fP\fC [friend]\fP"
+
+.PP
+Definition at line 38 of file xdr_shead\&.h\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "int libMesh::XdrHEAD::m_kstep\fC [protected]\fP, \fC [inherited]\fP"
+The internal solution number\&. 
+.PP
+Definition at line 131 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), setKstep(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_meshCnt\fC [protected]\fP, \fC [inherited]\fP"
+The mesh file number which corresponds to a given solution file\&. 
+.PP
+Definition at line 126 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), setMeshCnt(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_numBCs\fC [protected]\fP, \fC [inherited]\fP"
+Number of boundary conditions in the solution/mesh\&. 
+.PP
+Definition at line 156 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrHEAD::getNumBCs(), libMesh::XdrMESH::header(), libMesh::XdrHEAD::setNumBCs(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_numel\fC [protected]\fP, \fC [inherited]\fP"
+Number of elemetns in the solution/mesh\&. 
+.PP
+Definition at line 137 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrMHEAD::getNumEl(), libMesh::XdrMESH::header(), libMesh::XdrMHEAD::setNumEl(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_numNodes\fC [protected]\fP, \fC [inherited]\fP"
+Number of nodes in the solution/mesh\&. 
+.PP
+Definition at line 143 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrHEAD::getNumNodes(), libMesh::XdrSOLN::header(), libMesh::XdrMESH::header(), libMesh::XdrHEAD::setNumNodes(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_numvar\fC [protected]\fP, \fC [inherited]\fP"
+Total number of variables, may differ from the total number of variables actually written\&. 
+.PP
+Definition at line 119 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), setNumVar(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_strSize\fC [protected]\fP, \fC [inherited]\fP"
+String size (Not sure of what?) 
+.PP
+Definition at line 161 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), libMesh::XdrMESH::header(), libMesh::XdrHEAD::setStrSize(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_sumWghts\fC [protected]\fP, \fC [inherited]\fP"
+Total mesh weighting i\&.e\&. How many nodes are there and where are they? 
+.PP
+Definition at line 150 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrMHEAD::getSumWghts(), libMesh::XdrMESH::header(), libMesh::XdrMHEAD::setSumWghts(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "xdr_Real libMesh::XdrHEAD::m_time\fC [protected]\fP, \fC [inherited]\fP"
+Current solution time\&. 
+.PP
+Definition at line 186 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrSOLN::header(), setTime(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "int libMesh::XdrHEAD::m_wrtVar\fC [protected]\fP, \fC [inherited]\fP"
+Set the string size of the mesh /solutionfile\&. (?) Number of variables written to output, e\&.g\&. u,v,w,p,T = 5 
+.PP
+Definition at line 111 of file xdr_head\&.h\&.
+.PP
+Referenced by getWrtVar(), libMesh::XdrSOLN::header(), setWrtVar(), and libMesh::XdrHEAD::XdrHEAD()\&.
+.SS "char* libMesh::XdrHEAD::mp_id\fC [protected]\fP, \fC [inherited]\fP"
+An ID string for the file\&. 
+.PP
+Definition at line 166 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrHEAD::getId(), libMesh::XdrSOLN::header(), libMesh::XdrMESH::header(), libMesh::XdrHEAD::setId(), libMesh::XdrHEAD::XdrHEAD(), and libMesh::XdrHEAD::~XdrHEAD()\&.
+.SS "char* libMesh::XdrHEAD::mp_title\fC [protected]\fP, \fC [inherited]\fP"
+A title string for the file\&. 
+.PP
+Definition at line 171 of file xdr_head\&.h\&.
+.PP
+Referenced by libMesh::XdrHEAD::getTitle(), libMesh::XdrSOLN::header(), libMesh::XdrMESH::header(), libMesh::XdrHEAD::setTitle(), libMesh::XdrHEAD::XdrHEAD(), and libMesh::XdrHEAD::~XdrHEAD()\&.
+.SS "char* libMesh::XdrHEAD::mp_userTitle\fC [protected]\fP, \fC [inherited]\fP"
+User's simulation title 
+.PP
+Definition at line 176 of file xdr_head\&.h\&.
+.PP
+Referenced by getUserTitle(), libMesh::XdrSOLN::header(), setUserTitle(), libMesh::XdrHEAD::XdrHEAD(), and libMesh::XdrHEAD::~XdrHEAD()\&.
+.SS "char* libMesh::XdrHEAD::mp_varTitle\fC [protected]\fP, \fC [inherited]\fP"
+List of null-separated variable names\&. 
+.PP
+Definition at line 181 of file xdr_head\&.h\&.
+.PP
+Referenced by getVarTitle(), libMesh::XdrSOLN::header(), setVarTitle(), libMesh::XdrHEAD::XdrHEAD(), and libMesh::XdrHEAD::~XdrHEAD()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

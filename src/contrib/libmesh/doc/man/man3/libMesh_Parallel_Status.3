@@ -1,0 +1,265 @@
+.TH "libMesh::Parallel::Status" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Parallel::Status \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStatus\fP ()"
+.br
+.ti -1c
+.RI "\fBStatus\fP (const \fBdata_type\fP &type)"
+.br
+.ti -1c
+.RI "\fBStatus\fP (const \fBstatus\fP &\fBstatus\fP)"
+.br
+.ti -1c
+.RI "\fBStatus\fP (const \fBstatus\fP &\fBstatus\fP, const \fBdata_type\fP &type)"
+.br
+.ti -1c
+.RI "\fBStatus\fP (const \fBStatus\fP &\fBstatus\fP)"
+.br
+.ti -1c
+.RI "\fBStatus\fP (const \fBStatus\fP &\fBstatus\fP, const \fBdata_type\fP &type)"
+.br
+.ti -1c
+.RI "\fBstatus\fP * \fBget\fP ()"
+.br
+.ti -1c
+.RI "\fBstatus\fP const * \fBget\fP () const "
+.br
+.ti -1c
+.RI "int \fBsource\fP () const "
+.br
+.ti -1c
+.RI "int \fBtag\fP () const "
+.br
+.ti -1c
+.RI "\fBdata_type\fP & \fBdatatype\fP ()"
+.br
+.ti -1c
+.RI "const \fBdata_type\fP & \fBdatatype\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP (const \fBdata_type\fP &type) const "
+.br
+.ti -1c
+.RI "unsigned int \fBsize\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBstatus\fP \fB_status\fP"
+.br
+.ti -1c
+.RI "\fBdata_type\fP \fB_datatype\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Encapsulates the MPI_Status struct\&. Allows the source and size of the message to be determined\&. 
+.PP
+Definition at line 339 of file parallel\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Parallel::Status::Status ()\fC [inline]\fP"
+
+.PP
+Definition at line 554 of file parallel_implementation\&.h\&.
+.PP
+.nf
+554                        :
+555   _status(),
+556   _datatype()
+557 {}
+.fi
+.SS "libMesh::Parallel::Status::Status (const \fBdata_type\fP &type)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 559 of file parallel_implementation\&.h\&.
+.PP
+.nf
+559                                             :
+560   _status(),
+561   _datatype(type)
+562 {}
+.fi
+.SS "libMesh::Parallel::Status::Status (const \fBstatus\fP &status)\fC [inline]\fP, \fC [explicit]\fP"
+
+.PP
+Definition at line 564 of file parallel_implementation\&.h\&.
+.PP
+.nf
+564                                          :
+565   _status(stat),
+566   _datatype()
+567 {}
+.fi
+.SS "libMesh::Parallel::Status::Status (const \fBstatus\fP &status, const \fBdata_type\fP &type)\fC [inline]\fP"
+
+.PP
+Definition at line 569 of file parallel_implementation\&.h\&.
+.PP
+.nf
+570                                               :
+571   _status(stat),
+572   _datatype(type)
+573 {}
+.fi
+.SS "libMesh::Parallel::Status::Status (const \fBStatus\fP &status)\fC [inline]\fP"
+
+.PP
+Definition at line 575 of file parallel_implementation\&.h\&.
+.PP
+.nf
+575                                          :
+576   _status(stat\&._status),
+577   _datatype(stat\&._datatype)
+578 {}
+.fi
+.SS "libMesh::Parallel::Status::Status (const \fBStatus\fP &status, const \fBdata_type\fP &type)\fC [inline]\fP"
+
+.PP
+Definition at line 580 of file parallel_implementation\&.h\&.
+.PP
+.nf
+581                                               :
+582   _status(stat\&._status),
+583   _datatype(type)
+584 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBdata_type\fP& libMesh::Parallel::Status::datatype ()\fC [inline]\fP"
+
+.PP
+Definition at line 364 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+Referenced by size()\&.
+.PP
+.nf
+364 { return _datatype; }
+.fi
+.SS "const \fBdata_type\fP& libMesh::Parallel::Status::datatype () const\fC [inline]\fP"
+
+.PP
+Definition at line 366 of file parallel\&.h\&.
+.PP
+References _datatype\&.
+.PP
+.nf
+366 { return _datatype; }
+.fi
+.SS "\fBstatus\fP* libMesh::Parallel::Status::get ()\fC [inline]\fP"
+
+.PP
+Definition at line 356 of file parallel\&.h\&.
+.PP
+References _status\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::receive(), and libMesh::Parallel::Request::wait()\&.
+.PP
+.nf
+356 { return &_status; }
+.fi
+.SS "\fBstatus\fP const* libMesh::Parallel::Status::get () const\fC [inline]\fP"
+
+.PP
+Definition at line 358 of file parallel\&.h\&.
+.PP
+References _status\&.
+.PP
+.nf
+358 { return &_status; }
+.fi
+.SS "unsigned int libMesh::Parallel::Status::size (const \fBdata_type\fP &type) const\fC [inline]\fP"
+
+.PP
+Definition at line 606 of file parallel_implementation\&.h\&.
+.PP
+References _status\&.
+.PP
+Referenced by libMesh::Parallel::Communicator::receive()\&.
+.PP
+.nf
+607 {
+608   int msg_size;
+609   MPI_Get_count (const_cast<MPI_Status*>(&_status), type, &msg_size);
+610   libmesh_assert_greater_equal (msg_size, 0);
+611   return msg_size;
+612 }
+.fi
+.SS "unsigned int libMesh::Parallel::Status::size () const\fC [inline]\fP"
+
+.PP
+Definition at line 621 of file parallel_implementation\&.h\&.
+.PP
+References datatype()\&.
+.PP
+.nf
+622 { return this->size (this->datatype()); }
+.fi
+.SS "int libMesh::Parallel::Status::source () const\fC [inline]\fP"
+
+.PP
+Definition at line 586 of file parallel_implementation\&.h\&.
+.PP
+References _status\&.
+.PP
+Referenced by libMesh::Nemesis_IO::read(), libMesh::System::read_serialized_blocked_dof_objects(), and libMesh::System::write_serialized_blocked_dof_objects()\&.
+.PP
+.nf
+587 {
+588 #ifdef LIBMESH_HAVE_MPI
+589   return _status\&.MPI_SOURCE;
+590 #else
+591   return 0;
+592 #endif
+593 }
+.fi
+.SS "int libMesh::Parallel::Status::tag () const\fC [inline]\fP"
+
+.PP
+Definition at line 595 of file parallel_implementation\&.h\&.
+.PP
+References _status\&.
+.PP
+.nf
+596 {
+597 #ifdef LIBMESH_HAVE_MPI
+598   return _status\&.MPI_TAG;
+599 #else
+600   libmesh_error();
+601   return 0;
+602 #endif
+603 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBdata_type\fP libMesh::Parallel::Status::_datatype\fC [private]\fP"
+
+.PP
+Definition at line 375 of file parallel\&.h\&.
+.PP
+Referenced by datatype()\&.
+.SS "\fBstatus\fP libMesh::Parallel::Status::_status\fC [private]\fP"
+
+.PP
+Definition at line 374 of file parallel\&.h\&.
+.PP
+Referenced by get(), size(), source(), and tag()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

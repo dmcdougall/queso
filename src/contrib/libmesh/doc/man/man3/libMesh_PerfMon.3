@@ -1,0 +1,225 @@
+.TH "libMesh::PerfMon" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PerfMon \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <perfmon\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPerfMon\fP (std::string id, const unsigned int v=1, const unsigned int pid=0)"
+.br
+.ti -1c
+.RI "\fB~PerfMon\fP ()"
+.br
+.ti -1c
+.RI "void \fBreset\fP ()"
+.br
+.ti -1c
+.RI "double \fBprint\fP (std::string msg='NULL', std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const std::string \fBid_string\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBthe_time_start\fP"
+.br
+.ti -1c
+.RI "struct timeval \fBthe_time_stop\fP"
+.br
+.ti -1c
+.RI "const unsigned int \fBverbose\fP"
+.br
+.ti -1c
+.RI "const unsigned int \fBproc_id\fP"
+.br
+.ti -1c
+.RI "float \fBrtime\fP"
+.br
+.ti -1c
+.RI "float \fBptime\fP"
+.br
+.ti -1c
+.RI "float \fBmflops\fP"
+.br
+.ti -1c
+.RI "long long int \fBflpins\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 43 of file perfmon\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PerfMon::PerfMon (std::stringid, const unsigned intv = \fC1\fP, const unsigned intpid = \fC0\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 135 of file perfmon\&.h\&.
+.PP
+References reset()\&.
+.PP
+.nf
+137                                           :
+138   id_string(id),
+139   verbose(v),
+140   proc_id(pid)
+141 {
+142   reset ();
+143 }
+.fi
+.SS "libMesh::PerfMon::~PerfMon ()\fC [inline]\fP"
+
+.PP
+Definition at line 148 of file perfmon\&.h\&.
+.PP
+References print()\&.
+.PP
+.nf
+149 {
+150   print ();
+151 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "double libMesh::PerfMon::print (std::stringmsg = \fC'NULL'\fP, std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 87 of file perfmon\&.h\&.
+.PP
+References flpins, id_string, mflops, proc_id, ptime, rtime, the_time_start, the_time_stop, and verbose\&.
+.PP
+Referenced by ~PerfMon()\&.
+.PP
+.nf
+88 {
+89   gettimeofday (&the_time_stop, NULL);
+90 
+91 #ifdef HAVE_PAPI_H
+92   Papi::PAPI_flops (&rtime, &ptime, &flpins, &mflops);
+93 #endif
+94 
+95   const double elapsed_time = ((double) (the_time_stop\&.tv_sec - the_time_start\&.tv_sec)) +
+96     ((double) (the_time_stop\&.tv_usec - the_time_start\&.tv_usec))/1000000\&.;
+97 
+98   if (verbose)
+99     {
+100 
+101       if (proc_id == 0)
+102         {
+103           if (msg == "NULL")
+104             my_out << " " << id_string
+105                    << ": elapsed time: "
+106                    << elapsed_time << " (sec)"
+107                    << std::endl;
+108           else
+109             my_out << " " << msg
+110                    << ": elapsed time: "
+111                    << elapsed_time << " (sec)"
+112                    << std::endl;
+113 
+114 #ifdef HAVE_PAPI_H
+115           if (msg == "NULL")
+116             my_out << " " << id_string
+117                    << ": mflops: "
+118                    << mflops
+119                    << std::endl;
+120           else
+121             my_out << " " << msg
+122                    << ": mflops: "
+123                    << mflops
+124                    << std::endl;
+125 #endif
+126 
+127         }
+128     }
+129 
+130   return elapsed_time;
+131 }
+.fi
+.SS "void libMesh::PerfMon::reset ()\fC [inline]\fP"
+
+.PP
+Definition at line 74 of file perfmon\&.h\&.
+.PP
+References flpins, mflops, ptime, rtime, and the_time_start\&.
+.PP
+Referenced by PerfMon()\&.
+.PP
+.nf
+75 {
+76   gettimeofday (&the_time_start, NULL);
+77 
+78 #ifdef HAVE_PAPI_H
+79   Papi::PAPI_flops (&rtime, &ptime, &flpins, &mflops);
+80 #endif
+81 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "long long int libMesh::PerfMon::flpins\fC [private]\fP"
+
+.PP
+Definition at line 66 of file perfmon\&.h\&.
+.PP
+Referenced by print(), and reset()\&.
+.SS "const std::string libMesh::PerfMon::id_string\fC [private]\fP"
+
+.PP
+Definition at line 56 of file perfmon\&.h\&.
+.PP
+Referenced by print()\&.
+.SS "float libMesh::PerfMon::mflops\fC [private]\fP"
+
+.PP
+Definition at line 65 of file perfmon\&.h\&.
+.PP
+Referenced by print(), and reset()\&.
+.SS "const unsigned int libMesh::PerfMon::proc_id\fC [private]\fP"
+
+.PP
+Definition at line 62 of file perfmon\&.h\&.
+.PP
+Referenced by print()\&.
+.SS "float libMesh::PerfMon::ptime\fC [private]\fP"
+
+.PP
+Definition at line 65 of file perfmon\&.h\&.
+.PP
+Referenced by print(), and reset()\&.
+.SS "float libMesh::PerfMon::rtime\fC [private]\fP"
+
+.PP
+Definition at line 65 of file perfmon\&.h\&.
+.PP
+Referenced by print(), and reset()\&.
+.SS "struct timeval libMesh::PerfMon::the_time_start\fC [private]\fP"
+
+.PP
+Definition at line 58 of file perfmon\&.h\&.
+.PP
+Referenced by print(), and reset()\&.
+.SS "struct timeval libMesh::PerfMon::the_time_stop\fC [private]\fP"
+
+.PP
+Definition at line 59 of file perfmon\&.h\&.
+.PP
+Referenced by print()\&.
+.SS "const unsigned int libMesh::PerfMon::verbose\fC [private]\fP"
+
+.PP
+Definition at line 61 of file perfmon\&.h\&.
+.PP
+Referenced by print()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

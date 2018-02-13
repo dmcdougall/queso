@@ -1,0 +1,120 @@
+.TH "libMesh::PeriodicBoundaries" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::PeriodicBoundaries \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <periodic_boundaries\&.h>\fP
+.PP
+Inherits map< boundary_id_type, PeriodicBoundaryBase * >\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPeriodicBoundaryBase\fP * \fBboundary\fP (\fBboundary_id_type\fP id)"
+.br
+.ti -1c
+.RI "const \fBPeriodicBoundaryBase\fP * \fBboundary\fP (\fBboundary_id_type\fP id) const "
+.br
+.ti -1c
+.RI "\fBPeriodicBoundaries\fP ()"
+.br
+.ti -1c
+.RI "\fB~PeriodicBoundaries\fP ()"
+.br
+.ti -1c
+.RI "const \fBElem\fP * \fBneighbor\fP (\fBboundary_id_type\fP boundary_id, const \fBPointLocatorBase\fP &point_locator, const \fBElem\fP *e, unsigned int \fBside\fP) const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+We're using a class instead of a typedef to allow forward declarations and future flexibility\&. Note that std::map has no virtual destructor, so downcasting here would be dangerous\&. 
+.PP
+Definition at line 48 of file periodic_boundaries\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::PeriodicBoundaries::PeriodicBoundaries ()\fC [inline]\fP"
+
+.PP
+Definition at line 55 of file periodic_boundaries\&.h\&.
+.PP
+.nf
+55 {}
+.fi
+.SS "libMesh::PeriodicBoundaries::~PeriodicBoundaries ()"
+
+.PP
+Definition at line 34 of file periodic_boundaries\&.C\&.
+.PP
+References end\&.
+.PP
+.nf
+35 {
+36   for (std::map<boundary_id_type, PeriodicBoundaryBase*>::iterator it = begin(); it != end(); ++it)
+37     delete it->second;
+38 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBPeriodicBoundaryBase\fP * libMesh::PeriodicBoundaries::boundary (\fBboundary_id_type\fPid)"
+
+.PP
+Definition at line 42 of file periodic_boundaries\&.C\&.
+.PP
+References end\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), neighbor(), and libMesh::Elem::topological_neighbor()\&.
+.PP
+.nf
+43 {
+44   iterator i = this->find(id);
+45   if (i == this->end())
+46     return NULL;
+47   return i->second;
+48 }
+.fi
+.SS "const \fBPeriodicBoundaryBase\fP * libMesh::PeriodicBoundaries::boundary (\fBboundary_id_type\fPid) const"
+
+.PP
+Definition at line 52 of file periodic_boundaries\&.C\&.
+.PP
+References end\&.
+.PP
+.nf
+53 {
+54   const_iterator i = this->find(id);
+55   if (i == this->end())
+56     return NULL;
+57   return i->second;
+58 }
+.fi
+.SS "const \fBElem\fP * libMesh::PeriodicBoundaries::neighbor (\fBboundary_id_type\fPboundary_id, const \fBPointLocatorBase\fP &point_locator, const \fBElem\fP *e, unsigned intside) const"
+
+.PP
+Definition at line 63 of file periodic_boundaries\&.C\&.
+.PP
+References boundary(), libMesh::Elem::build_side(), libMesh::PeriodicBoundaryBase::get_corresponding_pos(), and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), and libMesh::Elem::topological_neighbor()\&.
+.PP
+.nf
+67 {
+68   // Find a point on that side (and only that side)
+69 
+70   Point p = e->build_side(side)->centroid();
+71 
+72   const PeriodicBoundaryBase *b = this->boundary(boundary_id);
+73   libmesh_assert (b);
+74   p = b->get_corresponding_pos(p);
+75 
+76   return point_locator\&.operator()(p);
+77 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

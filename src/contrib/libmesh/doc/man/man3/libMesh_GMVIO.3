@@ -1,0 +1,2765 @@
+.TH "libMesh::GMVIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::GMVIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gmv_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP, and \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGMVIO\fP (const \fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "\fBGMVIO\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &mesh_file)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "bool & \fBbinary\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBdiscontinuous\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBpartitioning\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBwrite_subdomain_id_as_material\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBsubdivide_second_order\fP ()"
+.br
+.ti -1c
+.RI "bool & \fBp_levels\fP ()"
+.br
+.ti -1c
+.RI "void \fBwrite_discontinuous_gmv\fP (const std::string &name, const \fBEquationSystems\fP &es, const bool write_partitioning, const std::set< std::string > *system_names=NULL) const "
+.br
+.ti -1c
+.RI "void \fBwrite_ascii_new_impl\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.ti -1c
+.RI "void \fBadd_cell_centered_data\fP (const std::string &cell_centered_data_name, const std::vector< \fBReal\fP > *cell_centered_data_vals)"
+.br
+.ti -1c
+.RI "void \fBcopy_nodal_solution\fP (\fBEquationSystems\fP &es)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwrite_ascii_old_impl\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.ti -1c
+.RI "void \fBwrite_binary\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBto_binary_stream\fP (std::ostream &\fBout\fP, const T i)"
+.br
+.ti -1c
+.RI "void \fB_read_nodes\fP ()"
+.br
+.ti -1c
+.RI "void \fB_read_one_cell\fP ()"
+.br
+.ti -1c
+.RI "\fBElemType\fP \fB_gmv_elem_to_libmesh_elem\fP (const char *elemname)"
+.br
+.ti -1c
+.RI "void \fB_read_materials\fP ()"
+.br
+.ti -1c
+.RI "void \fB_read_var\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_binary\fP"
+.br
+.ti -1c
+.RI "bool \fB_discontinuous\fP"
+.br
+.ti -1c
+.RI "bool \fB_partitioning\fP"
+.br
+.ti -1c
+.RI "bool \fB_write_subdomain_id_as_material\fP"
+.br
+.ti -1c
+.RI "bool \fB_subdivide_second_order\fP"
+.br
+.ti -1c
+.RI "bool \fB_p_levels\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, const 
+.br
+std::vector< \fBReal\fP > * > \fB_cell_centered_data\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_next_elem_id\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, 
+.br
+std::vector< \fBNumber\fP > > \fB_nodal_data\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes in the GMV format\&. For a full description of the GMV format and to obtain the GMV software see \fCthe GMV home page\fP
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 53 of file gmv_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::GMVIO::GMVIO (const \fBMeshBase\fP &mesh)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. 
+.PP
+Definition at line 272 of file gmv_io\&.h\&.
+.PP
+.nf
+272                                   :
+273   MeshOutput<MeshBase>    (mesh),
+274   _binary                 (false),
+275   _discontinuous          (false),
+276   _partitioning           (true),
+277   _write_subdomain_id_as_material (false),
+278   _subdivide_second_order (true),
+279   _p_levels               (true),
+280   _next_elem_id           (0)
+281 {
+282 }
+.fi
+.SS "libMesh::GMVIO::GMVIO (\fBMeshBase\fP &mesh)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a writeable reference to a mesh object\&. This constructor is required to let us read in a mesh\&. 
+.PP
+Definition at line 285 of file gmv_io\&.h\&.
+.PP
+.nf
+285                             :
+286   MeshInput<MeshBase> (mesh),
+287   MeshOutput<MeshBase>(mesh),
+288   _binary (false),
+289   _discontinuous          (false),
+290   _partitioning           (true),
+291   _write_subdomain_id_as_material (false),
+292   _subdivide_second_order (true),
+293   _p_levels               (true),
+294   _next_elem_id           (0)
+295 {
+296 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBElemType\fP libMesh::GMVIO::_gmv_elem_to_libmesh_elem (const char *elemname)\fC [private]\fP"
+
+.PP
+Definition at line 2320 of file gmv_io\&.C\&.
+.PP
+References libMesh::EDGE2, libMesh::EDGE3, libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::PRISM15, libMesh::PRISM6, libMesh::QUAD4, libMesh::QUAD8, libMesh::TET10, libMesh::TET4, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by _read_one_cell()\&.
+.PP
+.nf
+2321 {
+2322   //
+2323   // Linear Elements
+2324   //
+2325   if (!std::strncmp(elemname,"line",4))
+2326     return EDGE2;
+2327 
+2328   if (!std::strncmp(elemname,"tri",3))
+2329     return TRI3;
+2330 
+2331   if (!std::strncmp(elemname,"quad",4))
+2332     return QUAD4;
+2333 
+2334   // FIXME: tet or ptet4?
+2335   if ((!std::strncmp(elemname,"tet",3)) ||
+2336       (!std::strncmp(elemname,"ptet4",5)))
+2337     return TET4;
+2338 
+2339   // FIXME: hex or phex8?
+2340   if ((!std::strncmp(elemname,"hex",3)) ||
+2341       (!std::strncmp(elemname,"phex8",5)))
+2342     return HEX8;
+2343 
+2344   // FIXME: prism or pprism6?
+2345   if ((!std::strncmp(elemname,"prism",5)) ||
+2346       (!std::strncmp(elemname,"pprism6",7)))
+2347     return PRISM6;
+2348 
+2349   //
+2350   // Quadratic Elements
+2351   //
+2352   if (!std::strncmp(elemname,"phex20",6))
+2353     return HEX20;
+2354 
+2355   if (!std::strncmp(elemname,"phex27",6))
+2356     return HEX27;
+2357 
+2358   if (!std::strncmp(elemname,"pprism15",8))
+2359     return PRISM15;
+2360 
+2361   if (!std::strncmp(elemname,"ptet10",6))
+2362     return TET10;
+2363 
+2364   if (!std::strncmp(elemname,"6tri",4))
+2365     return TRI6;
+2366 
+2367   if (!std::strncmp(elemname,"8quad",5))
+2368     return QUAD8;
+2369 
+2370   if (!std::strncmp(elemname,"3line",5))
+2371     return EDGE3;
+2372 
+2373   // Unsupported/Unused types
+2374   // if (!std::strncmp(elemname,"vface2d",7))
+2375   // if (!std::strncmp(elemname,"vface3d",7))
+2376   // if (!std::strncmp(elemname,"pyramid",7))
+2377   // if (!std::strncmp(elemname,"ppyrmd5",7))
+2378   // if (!std::strncmp(elemname,"ppyrmd13",8))
+2379 
+2380   // If we didn't return yet, then we didn't find the right cell!
+2381   libMesh::err << "Uknown/unsupported element: "
+2382                << elemname
+2383                << " was read\&."
+2384                << std::endl;
+2385   libmesh_error();
+2386 }
+.fi
+.SS "void libMesh::GMVIO::_read_materials ()\fC [private]\fP"
+
+.PP
+Definition at line 2164 of file gmv_io\&.C\&.
+.PP
+References libMesh::MeshInput< MT >::mesh()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+2165 {
+2166 #ifdef LIBMESH_HAVE_GMV
+2167 
+2168   // LibMesh assigns materials on a per-cell basis
+2169   libmesh_assert_equal_to (GMVLib::gmv_data\&.datatype, CELL);
+2170 
+2171   //   // Material names: LibMesh has no use for these currently\&.\&.\&.
+2172   //   libMesh::out << "Number of material names="
+2173   //     << GMVLib::gmv_data\&.num
+2174   //     << std::endl;
+2175 
+2176   //   for (int i = 0; i < GMVLib::gmv_data\&.num; i++)
+2177   //     {
+2178   //       // Build a 32-char string from the appropriate entries
+2179   //       std::string mat_string(&GMVLib::gmv_data\&.chardata1[i*33], 32);
+2180 
+2181   //       libMesh::out << "Material name " << i << ": " << mat_string << std::endl;
+2182   //     }
+2183 
+2184   //   // Material labels: These correspond to (1-based) CPU IDs, and
+2185   //   // there should be 1 of these for each element\&.
+2186   //   libMesh::out << "Number of material labels = "
+2187   //     << GMVLib::gmv_data\&.nlongdata1
+2188   //     << std::endl;
+2189 
+2190   for (int i = 0; i < GMVLib::gmv_data\&.nlongdata1; i++)
+2191     {
+2192       // Debugging Info
+2193       // libMesh::out << "Material ID " << i << ": "
+2194       // << GMVLib::gmv_data\&.longdata1[i]
+2195       // << std::endl;
+2196 
+2197       MeshInput<MeshBase>::mesh()\&.elem(i)->processor_id() =
+2198         GMVLib::gmv_data\&.longdata1[i]-1;
+2199     }
+2200 
+2201 #endif
+2202 }
+.fi
+.SS "void libMesh::GMVIO::_read_nodes ()\fC [private]\fP"
+Helper functions for reading nodes/cells from a GMV file 
+.PP
+Definition at line 2207 of file gmv_io\&.C\&.
+.PP
+References libMesh::MeshInput< MT >::mesh()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+2208 {
+2209 #ifdef LIBMESH_HAVE_GMV
+2210   //   // Debug Info
+2211   //   libMesh::out << "gmv_data\&.datatype="
+2212   //     <<  GMVLib::gmv_data\&.datatype
+2213   //     << std::endl;
+2214 
+2215   // LibMesh writes UNSTRUCT=100 node data
+2216   libmesh_assert_equal_to (GMVLib::gmv_data\&.datatype, UNSTRUCT);
+2217 
+2218   // The nodal data is stored in gmv_data\&.doubledata{1,2,3}
+2219   // and is nnodes long
+2220   for (int i = 0; i < GMVLib::gmv_data\&.num; i++)
+2221     {
+2222       //       libMesh::out << "(x,y,z)="
+2223       // << "("
+2224       // << GMVLib::gmv_data\&.doubledata1[i]
+2225       // << ","
+2226       // << GMVLib::gmv_data\&.doubledata2[i]
+2227       // << ","
+2228       // << GMVLib::gmv_data\&.doubledata3[i]
+2229       // << ")"
+2230       // << std::endl;
+2231 
+2232       // Add the point to the Mesh
+2233       MeshInput<MeshBase>::mesh()\&.add_point
+2234         ( Point(GMVLib::gmv_data\&.doubledata1[i],
+2235                 GMVLib::gmv_data\&.doubledata2[i],
+2236                 GMVLib::gmv_data\&.doubledata3[i]), i);
+2237     }
+2238 #endif
+2239 }
+.fi
+.SS "void libMesh::GMVIO::_read_one_cell ()\fC [private]\fP"
+
+.PP
+Definition at line 2242 of file gmv_io\&.C\&.
+.PP
+References _gmv_elem_to_libmesh_elem(), _next_elem_id, libMesh::MeshBase::add_elem(), libMesh::Elem::build(), libMesh::Elem::dim(), libMesh::MeshInput< MeshBase >::elems_of_dimension, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshBase::node_ptr(), libMesh::DofObject::set_id(), and libMesh::Elem::set_node()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+2243 {
+2244 #ifdef LIBMESH_HAVE_GMV
+2245   //   // Debug Info
+2246   //   libMesh::out << "gmv_data\&.datatype="
+2247   //     <<  GMVLib::gmv_data\&.datatype
+2248   //     << std::endl;
+2249 
+2250   // This is either a REGULAR=111 cell or
+2251   // the ENDKEYWORD=207 of the cells
+2252 #ifndef NDEBUG
+2253   bool recognized =
+2254     (GMVLib::gmv_data\&.datatype==REGULAR) ||
+2255     (GMVLib::gmv_data\&.datatype==ENDKEYWORD);
+2256 #endif
+2257   libmesh_assert (recognized);
+2258 
+2259   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+2260 
+2261   if (GMVLib::gmv_data\&.datatype == REGULAR)
+2262     {
+2263       //       libMesh::out << "Name of the cell is: "
+2264       // << GMVLib::gmv_data\&.name1
+2265       // << std::endl;
+2266 
+2267       //       libMesh::out << "Cell has "
+2268       // << GMVLib::gmv_data\&.num2
+2269       // << " vertices\&."
+2270       // << std::endl;
+2271 
+2272       // We need a mapping from GMV element types to LibMesh
+2273       // ElemTypes\&.  Basically the reverse of the eletypes
+2274       // std::map above\&.
+2275       //
+2276       // FIXME: Since Quad9's apparently don't exist for GMV, and since
+2277       // In general we write linear sub-elements to GMV files, we need
+2278       // to be careful to read back in exactly what we wrote out\&.\&.\&.
+2279       ElemType type = this->_gmv_elem_to_libmesh_elem(GMVLib::gmv_data\&.name1);
+2280 
+2281       Elem* elem = Elem::build(type)\&.release();
+2282       elem->set_id(_next_elem_id++);
+2283 
+2284       // Get the ElementDefinition object for this element type
+2285       const ElementDefinition& eledef = eletypes[type];
+2286 
+2287       // Print out the connectivity information for
+2288       // this cell\&.
+2289       for (int i=0; i<GMVLib::gmv_data\&.num2; i++)
+2290         {
+2291           //   // Debugging info
+2292           //   libMesh::out << "Vertex " << i << " is node "
+2293           //     << GMVLib::gmv_data\&.longdata1[i]
+2294           //     << std::endl;
+2295 
+2296           // Map index i to GMV's numbering scheme
+2297           unsigned mapped_i = eledef\&.node_map[i];
+2298 
+2299           // Note: Node numbers (as stored in libmesh) are 1-based
+2300           elem->set_node(i) = mesh\&.node_ptr(GMVLib::gmv_data\&.longdata1[mapped_i]-1);
+2301         }
+2302 
+2303       elems_of_dimension[elem->dim()] = true;
+2304 
+2305       // Add the newly-created element to the mesh
+2306       mesh\&.add_elem(elem);
+2307     }
+2308 
+2309 
+2310   if (GMVLib::gmv_data\&.datatype == ENDKEYWORD)
+2311     {
+2312       // There isn't a cell to read, so we just return
+2313       return;
+2314     }
+2315 
+2316 #endif
+2317 }
+.fi
+.SS "void libMesh::GMVIO::_read_var ()\fC [private]\fP"
+
+.PP
+Definition at line 2152 of file gmv_io\&.C\&.
+.PP
+References _nodal_data\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+2153 {
+2154 #ifdef LIBMESH_HAVE_GMV
+2155 
+2156   // Copy all the variable's values into a local storage vector\&.
+2157   _nodal_data\&.insert ( std::make_pair(std::string(GMVLib::gmv_data\&.name1),
+2158                                       std::vector<Number>(GMVLib::gmv_data\&.doubledata1, GMVLib::gmv_data\&.doubledata1+GMVLib::gmv_data\&.num) ) );
+2159 #endif
+2160 }
+.fi
+.SS "void libMesh::GMVIO::add_cell_centered_data (const std::string &cell_centered_data_name, const std::vector< \fBReal\fP > *cell_centered_data_vals)"
+Takes a vector of cell-centered data to be plotted\&. You must ensure that for every active element e, v[e->id()] is a valid number\&. You can add an arbitrary number of different cell-centered data sets by calling this function multiple times\&.
+.PP
+\&.) GMV does not like spaces in the cell_centered_data_name \&.) No matter what order you add cell-centered data, it will be output alphabetically\&. 
+.PP
+Definition at line 1967 of file gmv_io\&.C\&.
+.PP
+References _cell_centered_data, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+1969 {
+1970   libmesh_assert(cell_centered_data_vals);
+1971 
+1972   // Make sure there are *at least* enough entries for all the active elements\&.
+1973   // There can also be entries for inactive elements, they will be ignored\&.
+1974   // libmesh_assert_greater_equal (cell_centered_data_vals->size(),
+1975   //                           MeshOutput<MeshBase>::mesh()\&.n_active_elem());
+1976   this->_cell_centered_data[cell_centered_data_name] = cell_centered_data_vals;
+1977 }
+.fi
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), write_ascii_new_impl(), and write_ascii_old_impl()\&.
+.SS "bool & libMesh::GMVIO::binary ()\fC [inline]\fP"
+Flag indicating whether or not to write a binary file\&. While binary files may end up being smaller than equivalent ASCII files, they will almost certainly take longer to write\&. The reason for this is that the ostream::write() function which is used to write 'binary' data to streams, only takes a pointer to char as its first argument\&. This means if you want to write anything other than a buffer of chars, you first have to use a strange memcpy hack to get the data into the desired format\&. See the templated \fBto_binary_stream()\fP function below\&. 
+.PP
+Definition at line 301 of file gmv_io\&.h\&.
+.PP
+References _binary\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+302 {
+303   return _binary;
+304 }
+.fi
+.SS "void libMesh::GMVIO::copy_nodal_solution (\fBEquationSystems\fP &es)"
+If we read in a nodal solution while reading in a mesh, we can attempt to copy that nodal solution into an \fBEquationSystems\fP object\&. 
+.PP
+Definition at line 2391 of file gmv_io\&.C\&.
+.PP
+References _nodal_data, end, libMesh::err, libMesh::FEType::family, libMesh::FIRST, libMesh::EquationSystems::get_system(), libMesh::System::has_variable(), libMesh::LAGRANGE, libMesh::libmesh_assert(), libMesh::MeshInput< MT >::mesh(), libMesh::EquationSystems::n_systems(), libMesh::FEType::order, libMesh::System::solution, libMesh::sys, libMesh::System::update(), libMesh::System::variable_number(), and libMesh::System::variable_type()\&.
+.PP
+.nf
+2392 {
+2393   // Check for easy return if there isn't any nodal data
+2394   if (_nodal_data\&.empty())
+2395     {
+2396       libMesh::err << "Unable to copy nodal solution: No nodal "
+2397                    << "solution has been read in from file\&." << std::endl;
+2398       return;
+2399     }
+2400 
+2401   // Be sure there is at least one system
+2402   libmesh_assert (es\&.n_systems());
+2403 
+2404   // Keep track of variable names which have been found and
+2405   // copied already\&.  This could be used to prevent us from
+2406   // e\&.g\&. copying the same var into 2 different systems \&.\&.\&.
+2407   // but this seems unlikely\&.  Also, it is used to tell if
+2408   // any variables which were read in were not successfully
+2409   // copied to the EquationSystems\&.
+2410   std::set<std::string> vars_copied;
+2411 
+2412   // For each entry in the nodal data map, try to find a system
+2413   // that has the same variable key name\&.
+2414   for (unsigned int sys=0; sys<es\&.n_systems(); ++sys)
+2415     {
+2416       // Get a generic refernence to the current System
+2417       System& system = es\&.get_system(sys);
+2418 
+2419       // And a reference to that system's dof_map
+2420       // const DofMap & dof_map = system\&.get_dof_map();
+2421 
+2422       // For each var entry in the _nodal_data map, try to find
+2423       // that var in the system
+2424       std::map<std::string, std::vector<Number> >::iterator it = _nodal_data\&.begin();
+2425       const std::map<std::string, std::vector<Number> >::iterator end = _nodal_data\&.end();
+2426       for (; it != end; ++it)
+2427         {
+2428           std::string var_name = (*it)\&.first;
+2429           // libMesh::out << "Searching for var " << var_name << " in system " << sys << std::endl;
+2430 
+2431           if (system\&.has_variable(var_name))
+2432             {
+2433               // Check if there are as many nodes in the mesh as there are entries
+2434               // in the stored nodal data vector
+2435               libmesh_assert_equal_to ( (*it)\&.second\&.size(), MeshInput<MeshBase>::mesh()\&.n_nodes() );
+2436 
+2437               const unsigned int var_num = system\&.variable_number(var_name);
+2438 
+2439               // libMesh::out << "Variable "
+2440               // << var_name
+2441               // << " is variable "
+2442               // << var_num
+2443               // << " in system " << sys << std::endl;
+2444 
+2445               // The only type of nodal data we can read in from GMV is for
+2446               // linear LAGRANGE type elements\&.
+2447               const FEType& fe_type = system\&.variable_type(var_num);
+2448               if ((fe_type\&.order != FIRST) || (fe_type\&.family != LAGRANGE))
+2449                 {
+2450                   libMesh::err << "Only FIRST-order LAGRANGE variables can be read from GMV files\&. "
+2451                                << "Skipping variable " << var_name << std::endl;
+2452                   //libmesh_error();
+2453                   break;
+2454                 }
+2455 
+2456 
+2457               // Loop over the stored vector's entries, inserting them into
+2458               // the System's solution if appropriate\&.
+2459               for (unsigned int i=0; i<(*it)\&.second\&.size(); ++i)
+2460                 {
+2461                   // Since this var came from a GMV file, the index i corresponds to
+2462                   // the (single) DOF value of the current variable for node i\&.
+2463                   const unsigned int dof_index =
+2464                     MeshInput<MeshBase>::mesh()\&.node_ptr(i)->dof_number(sys,      /*system #*/
+2465                                                                         var_num,  /*var # */
+2466                                                                         0);       /*component #, always zero for LAGRANGE */
+2467 
+2468                   // libMesh::out << "Value " << i << ": "
+2469                   //     << (*it)\&.second [i]
+2470                   //     << ", dof index="
+2471                   //     << dof_index << std::endl;
+2472 
+2473                   // If the dof_index is local to this processor, set the value
+2474                   if ((dof_index >= system\&.solution->first_local_index()) &&
+2475                       (dof_index <  system\&.solution->last_local_index()))
+2476                     system\&.solution->set (dof_index, (*it)\&.second [i]);
+2477                 } // end loop over my GMVIO's copy of the solution
+2478 
+2479               // Add the most recently copied var to the set of copied vars
+2480               vars_copied\&.insert (var_name);
+2481             } // end if (system\&.has_variable)
+2482         } // end for loop over _nodal_data
+2483 
+2484       // Communicate parallel values before going to the next system\&.
+2485       system\&.solution->close();
+2486       system\&.update();
+2487 
+2488     } // end loop over all systems
+2489 
+2490 
+2491 
+2492   // Warn the user if any GMV variables were not successfully copied over to the EquationSystems object
+2493   {
+2494     std::map<std::string, std::vector<Number> >::iterator it = _nodal_data\&.begin();
+2495     const std::map<std::string, std::vector<Number> >::iterator end = _nodal_data\&.end();
+2496 
+2497     for (; it != end; ++it)
+2498       {
+2499         if (vars_copied\&.find( (*it)\&.first ) == vars_copied\&.end())
+2500           {
+2501             libMesh::err << "Warning: Variable "
+2502                          << (*it)\&.first
+2503                          << " was not copied to the EquationSystems object\&."
+2504                          << std::endl;
+2505           }
+2506       }
+2507   }
+2508 
+2509 }
+.fi
+.SS "bool & libMesh::GMVIO::discontinuous ()\fC [inline]\fP"
+Flag indicating whether or not to write the mesh as discontinuous cell patches 
+.PP
+Definition at line 309 of file gmv_io\&.h\&.
+.PP
+References _discontinuous\&.
+.PP
+.nf
+310 {
+311   return _discontinuous;
+312 }
+.fi
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by _read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), write_ascii_new_impl(), write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), write_binary(), libMesh::CheckpointIO::write_connectivity(), write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "bool & libMesh::GMVIO::p_levels ()\fC [inline]\fP"
+Flag indicating whether or not to write p level information for p refined meshes 
+.PP
+Definition at line 340 of file gmv_io\&.h\&.
+.PP
+References _p_levels\&.
+.PP
+Referenced by write_ascii_new_impl(), write_ascii_old_impl(), and write_binary()\&.
+.PP
+.nf
+341 {
+342   return _p_levels;
+343 }
+.fi
+.SS "bool & libMesh::GMVIO::partitioning ()\fC [inline]\fP"
+Flag indicating whether or not to write the partitioning information for the mesh\&. 
+.PP
+Definition at line 317 of file gmv_io\&.h\&.
+.PP
+References _partitioning\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write(), write_ascii_new_impl(), write_ascii_old_impl(), and write_binary()\&.
+.PP
+.nf
+318 {
+319   return _partitioning;
+320 }
+.fi
+.SS "void libMesh::GMVIO::read (const std::string &mesh_file)\fC [virtual]\fP"
+This method implements reading a mesh from a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 1984 of file gmv_io\&.C\&.
+.PP
+References _next_elem_id, _read_materials(), _read_nodes(), _read_one_cell(), _read_var(), libMesh::MeshBase::clear(), libMesh::MeshInput< MeshBase >::elems_of_dimension, libMesh::err, libMesh::ierr, libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::Trees::NODES, libMesh::MeshBase::prepare_for_use(), libMesh::processor_id(), and libMesh::MeshBase::set_mesh_dimension()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+1985 {
+1986   // This is a serial-only process for now;
+1987   // the Mesh should be read on processor 0 and
+1988   // broadcast later
+1989   libmesh_assert_equal_to (MeshOutput<MeshBase>::mesh()\&.processor_id(), 0);
+1990 
+1991   _next_elem_id = 0;
+1992 
+1993   libmesh_experimental();
+1994 
+1995 #ifndef LIBMESH_HAVE_GMV
+1996 
+1997   libMesh::err << "Cannot read GMV file " << name << " without the GMV API\&." << std::endl;
+1998   libmesh_error();
+1999 
+2000 #else
+2001   // We use the file-scope global variable eletypes for mapping nodes
+2002   // from GMV to libmesh indices, so initialize that data now\&.
+2003   init_eletypes();
+2004 
+2005   // Clear the mesh so we are sure to start from a pristeen state\&.
+2006   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+2007   mesh\&.clear();
+2008 
+2009   // Keep track of what kinds of elements this file contains
+2010   elems_of_dimension\&.clear();
+2011   elems_of_dimension\&.resize(4, false);
+2012 
+2013   // It is apparently possible for gmv files to contain
+2014   // a "fromfile" directive (?) But we currently don't make
+2015   // any use of this feature in LibMesh\&.  Nonzero return val
+2016   // from any function usually means an error has occurred\&.
+2017   int ierr = GMVLib::gmvread_open_fromfileskip(const_cast<char*>(name\&.c_str()));
+2018   if (ierr != 0)
+2019     {
+2020       libMesh::err << "GMVLib::gmvread_open_fromfileskip failed!" << std::endl;
+2021       libmesh_error();
+2022     }
+2023 
+2024 
+2025   // Loop through file until GMVEND\&.
+2026   int iend = 0;
+2027   while (iend == 0)
+2028     {
+2029       GMVLib::gmvread_data();
+2030 
+2031       /*  Check for GMVEND\&.  */
+2032       if (GMVLib::gmv_data\&.keyword == GMVEND)
+2033         {
+2034           iend = 1;
+2035           GMVLib::gmvread_close();
+2036           break;
+2037         }
+2038 
+2039       /*  Check for GMVERROR\&.  */
+2040       if (GMVLib::gmv_data\&.keyword == GMVERROR)
+2041         {
+2042           libMesh::err << "Encountered GMVERROR while reading!" << std::endl;
+2043           libmesh_error();
+2044         }
+2045 
+2046       /*  Process the data\&.  */
+2047       switch (GMVLib::gmv_data\&.keyword)
+2048         {
+2049         case NODES:
+2050           {
+2051             //libMesh::out << "Reading nodes\&." << std::endl;
+2052 
+2053             if (GMVLib::gmv_data\&.num2 == NODES)
+2054               this->_read_nodes();
+2055 
+2056             else if (GMVLib::gmv_data\&.num2 == NODE_V)
+2057               {
+2058                 libMesh::err << "Unsupported GMV data type NODE_V!" << std::endl;
+2059                 libmesh_error();
+2060               }
+2061             break;
+2062           }
+2063 
+2064         case CELLS:
+2065           {
+2066             // Read 1 cell at a time
+2067             // libMesh::out << "\nReading one cell\&." << std::endl;
+2068             this->_read_one_cell();
+2069             break;
+2070           }
+2071 
+2072         case MATERIAL:
+2073           {
+2074             // keyword == 6
+2075             // These are the materials, which we use to specify the mesh
+2076             // partitioning\&.
+2077             this->_read_materials();
+2078             break;
+2079           }
+2080 
+2081         case VARIABLE:
+2082           {
+2083             // keyword == 8
+2084             // This is a field variable\&.
+2085 
+2086             // Check to see if we're done reading variables and break out\&.
+2087             if (GMVLib::gmv_data\&.datatype == ENDKEYWORD)
+2088               {
+2089                 // libMesh::out << "Done reading GMV variables\&." << std::endl;
+2090                 break;
+2091               }
+2092 
+2093             if (GMVLib::gmv_data\&.datatype == NODE)
+2094               {
+2095                 // libMesh::out << "Reading node field data for variable "
+2096                 //   << GMVLib::gmv_data\&.name1 << std::endl;
+2097                 this->_read_var();
+2098                 break;
+2099               }
+2100 
+2101             else
+2102               {
+2103                 libMesh::err << "Warning: Skipping variable: "
+2104                              << GMVLib::gmv_data\&.name1
+2105                              << " which is of unsupported GMV datatype "
+2106                              << GMVLib::gmv_data\&.datatype
+2107                              << "\&.  Nodal field data is currently the only type currently supported\&."
+2108                              << std::endl;
+2109                 break;
+2110               }
+2111 
+2112           }
+2113 
+2114         default:
+2115           {
+2116             libMesh::err << "Encountered unknown GMV keyword "
+2117                          << GMVLib::gmv_data\&.keyword
+2118                          << std::endl;
+2119             libmesh_error();
+2120           }
+2121         } // end switch
+2122     } // end while
+2123 
+2124   // Set the mesh dimension to the largest encountered for an element
+2125   for (unsigned int i=0; i!=4; ++i)
+2126     if (elems_of_dimension[i])
+2127       mesh\&.set_mesh_dimension(i);
+2128 
+2129 #if LIBMESH_DIM < 3
+2130   if (mesh\&.mesh_dimension() > LIBMESH_DIM)
+2131     {
+2132       libMesh::err << "Cannot open dimension " <<
+2133         mesh\&.mesh_dimension() <<
+2134         " mesh file when configured without " <<
+2135         mesh\&.mesh_dimension() << "D support\&." <<
+2136         std::endl;
+2137       libmesh_error();
+2138     }
+2139 #endif
+2140 
+2141   // Done reading in the mesh, now call find_neighbors, etc\&.
+2142   // mesh\&.find_neighbors();
+2143 
+2144   // Pass true flag to skip renumbering nodes and elements
+2145   mesh\&.prepare_for_use(true);
+2146 #endif
+2147 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and libMesh::UCDIO::read_implementation()\&.
+.SS "bool & libMesh::GMVIO::subdivide_second_order ()\fC [inline]\fP"
+Flag indicating whether or not to subdivide second order elements 
+.PP
+Definition at line 332 of file gmv_io\&.h\&.
+.PP
+References _subdivide_second_order\&.
+.PP
+Referenced by write_ascii_new_impl(), and write_ascii_old_impl()\&.
+.PP
+.nf
+333 {
+334   return _subdivide_second_order;
+335 }
+.fi
+.SS "template<typename T > void libMesh::GMVIO::to_binary_stream (std::ostream &out, const Ti)\fC [private]\fP"
+Helper function for writing unsigned ints to an ostream in binary format\&. Implemented via memcpy as suggested in the standard\&. 
+.PP
+Definition at line 348 of file gmv_io\&.h\&.
+.PP
+.nf
+350 {
+351   static char buf[sizeof(T)];
+352   memcpy(buf, &i, sizeof(T));
+353   out_str\&.write(buf, sizeof(T));
+354 }
+.fi
+.SS "void libMesh::GMVIO::write (const std::string &fname)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 205 of file gmv_io\&.C\&.
+.PP
+References binary(), write_ascii_old_impl(), and write_binary()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::find_neighbors(), and libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+206 {
+207   if (this->binary())
+208     this->write_binary (fname);
+209   else
+210     this->write_ascii_old_impl  (fname);
+211 }
+.fi
+.SS "void libMesh::GMVIO::write_ascii_new_impl (const std::string &fname, const std::vector< \fBNumber\fP > *v = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write an ASCII file\&. This is the new implementation (without subcells)\&. 
+.PP
+Definition at line 231 of file gmv_io\&.C\&.
+.PP
+References _cell_centered_data, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshOutput< MeshBase >::ascii_precision(), end, libMesh::err, libMesh::DofObject::id(), libMesh::libmesh_assert(), std::max(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::n_active_elem(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), libMesh::MeshBase::n_partitions(), libMesh::Elem::n_sub_elem(), libMesh::n_vars, libMesh::Elem::node(), libMesh::out, libMesh::Elem::p_level(), p_levels(), partitioning(), libMesh::MeshBase::point(), libMesh::processor_id(), libMesh::Real, subdivide_second_order(), libMesh::Elem::type(), write_ascii_old_impl(), and write_subdomain_id_as_material()\&.
+.PP
+.nf
+234 {
+235 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+236 
+237   libMesh::err << "WARNING:  GMVIO::write_ascii_new_impl() not infinite-element aware!"
+238                << std::endl;
+239   libmesh_here();
+240 
+241   // Set it to our current precision
+242   this->write_ascii_old_impl (fname, v, solution_names);
+243 
+244 #else
+245 
+246   // Get a reference to the mesh
+247   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+248 
+249   // This is a parallel_only function
+250   const unsigned int n_active_elem = mesh\&.n_active_elem();
+251 
+252   if (MeshOutput<MeshBase>::mesh()\&.processor_id() != 0)
+253     return;
+254 
+255   // Open the output file stream
+256   std::ofstream out_stream (fname\&.c_str());
+257 
+258   out_stream << std::setprecision(this->ascii_precision());
+259 
+260   // Make sure it opened correctly
+261   if (!out_stream\&.good())
+262     libmesh_file_error(fname\&.c_str());
+263 
+264   unsigned int mesh_max_p_level = 0;
+265 
+266   // Begin interfacing with the GMV data file
+267   {
+268     out_stream << "gmvinput ascii\n\n";
+269 
+270     // write the nodes
+271     out_stream << "nodes " << mesh\&.n_nodes() << "\n";
+272     for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+273       out_stream << mesh\&.point(n)(0) << " ";
+274     out_stream << "\n";
+275 
+276     for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+277 #if LIBMESH_DIM > 1
+278       out_stream << mesh\&.point(n)(1) << " ";
+279 #else
+280     out_stream << 0\&. << " ";
+281 #endif
+282     out_stream << "\n";
+283 
+284     for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+285 #if LIBMESH_DIM > 2
+286       out_stream << mesh\&.point(n)(2) << " ";
+287 #else
+288     out_stream << 0\&. << " ";
+289 #endif
+290     out_stream << "\n\n";
+291   }
+292 
+293   {
+294     // write the connectivity
+295     out_stream << "cells " << n_active_elem << "\n";
+296 
+297     // initialize the eletypes map (eletypes is a file-global variable)
+298     init_eletypes();
+299 
+300     MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+301     const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+302 
+303     for ( ; it != end; ++it)
+304       {
+305         const Elem* elem = *it;
+306 
+307         mesh_max_p_level = std::max(mesh_max_p_level,
+308                                     elem->p_level());
+309 
+310         // Make sure we have a valid entry for
+311         // the current element type\&.
+312         libmesh_assert (eletypes\&.count(elem->type()));
+313 
+314         const ElementDefinition& ele = eletypes[elem->type()];
+315 
+316         // The element mapper better not require any more nodes
+317         // than are present in the current element!
+318         libmesh_assert_less_equal (ele\&.node_map\&.size(), elem->n_nodes());
+319 
+320         out_stream << ele\&.label << "\n";
+321         for (unsigned int i=0; i < ele\&.node_map\&.size(); i++)
+322           out_stream << elem->node(ele\&.node_map[i])+1 << " ";
+323         out_stream << "\n";
+324       }
+325     out_stream << "\n";
+326   }
+327 
+328   // optionally write the partition information
+329   if (this->partitioning())
+330     {
+331       if (this->write_subdomain_id_as_material())
+332         {
+333           libMesh::out << "Not yet supported in GMVIO::write_ascii_new_impl" << std::endl;
+334           libmesh_error();
+335         }
+336       else // write processor IDs as materials\&.  This is the default
+337         {
+338           out_stream << "material "
+339                      << mesh\&.n_partitions()
+340             // Note: GMV may give you errors like
+341             // Error, material for cell 1 is greater than 1
+342             // Error, material for cell 2 is greater than 1
+343             // Error, material for cell 3 is greater than 1
+344             // \&.\&.\&. because you put the wrong number of partitions here\&.
+345             // To ensure you write the correct number of materials, call
+346             // mesh\&.recalculate_n_partitions() before writing out the
+347             // mesh\&.
+348             // Note: we can't call it now because the Mesh is const here and
+349             // it is a non-const function\&.
+350                      << " 0\n";
+351 
+352           for (unsigned int proc=0; proc<mesh\&.n_partitions(); proc++)
+353             out_stream << "proc_" << proc << "\n";
+354 
+355           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+356           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+357 
+358           // FIXME - don't we need to use an ElementDefinition here? - RHS
+359           for ( ; it != end; ++it)
+360             out_stream << (*it)->processor_id()+1 << "\n";
+361           out_stream << "\n";
+362         }
+363     }
+364 
+365   // If there are *any* variables at all in the system (including
+366   // p level, or arbitrary cell-based data)
+367   // to write, the gmv file needs to contain the word "variable"
+368   // on a line by itself\&.
+369   bool write_variable = false;
+370 
+371   // 1\&.) p-levels
+372   if (this->p_levels() && mesh_max_p_level)
+373     write_variable = true;
+374 
+375   // 2\&.) solution data
+376   if ((solution_names != NULL) && (v != NULL))
+377     write_variable = true;
+378 
+379   // 3\&.) cell-centered data
+380   if ( !(this->_cell_centered_data\&.empty()) )
+381     write_variable = true;
+382 
+383   if (write_variable)
+384     out_stream << "variable\n";
+385 
+386   //   if ((this->p_levels() && mesh_max_p_level) ||
+387   //     ((solution_names != NULL) && (v != NULL)))
+388   //     out_stream << "variable\n";
+389 
+390   // optionally write the polynomial degree information
+391   if (this->p_levels() && mesh_max_p_level)
+392     {
+393       out_stream << "p_level 0\n";
+394 
+395       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+396       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+397 
+398       for ( ; it != end; ++it)
+399         {
+400           const Elem* elem = *it;
+401 
+402           const ElementDefinition& ele = eletypes[elem->type()];
+403 
+404           // The element mapper better not require any more nodes
+405           // than are present in the current element!
+406           libmesh_assert_less_equal (ele\&.node_map\&.size(), elem->n_nodes());
+407 
+408           for (unsigned int i=0; i < ele\&.node_map\&.size(); i++)
+409             out_stream << elem->p_level() << " ";
+410         }
+411       out_stream << "\n\n";
+412     }
+413 
+414 
+415   // optionally write cell-centered data
+416   if ( !(this->_cell_centered_data\&.empty()) )
+417     {
+418       std::map<std::string, const std::vector<Real>* >::iterator       it  = this->_cell_centered_data\&.begin();
+419       const std::map<std::string, const std::vector<Real>* >::iterator end = this->_cell_centered_data\&.end();
+420 
+421       for (; it != end; ++it)
+422         {
+423           // write out the variable name, followed by a zero\&.
+424           out_stream << (*it)\&.first << " 0\n";
+425 
+426           const std::vector<Real>* the_array = (*it)\&.second;
+427 
+428           // Loop over active elements, write out cell data\&.  If second-order cells
+429           // are split into sub-elements, the sub-elements inherit their parent's
+430           // cell-centered data\&.
+431           MeshBase::const_element_iterator       elem_it  = mesh\&.active_elements_begin();
+432           const MeshBase::const_element_iterator elem_end = mesh\&.active_elements_end();
+433 
+434           for (; elem_it != elem_end; ++elem_it)
+435             {
+436               const Elem* e = *elem_it;
+437 
+438               // Use the element's ID to find the value\&.
+439               libmesh_assert_less (e->id(), the_array->size());
+440               const Real the_value = the_array->operator[](e->id());
+441 
+442               if (this->subdivide_second_order())
+443                 for (unsigned int se=0; se < e->n_sub_elem(); se++)
+444                   out_stream << the_value << " ";
+445               else
+446                 out_stream << the_value << " ";
+447             }
+448 
+449           out_stream << "\n\n";
+450         }
+451     }
+452 
+453 
+454   // optionally write the data
+455   if ((solution_names != NULL) && (v != NULL))
+456     {
+457       const unsigned int n_vars = solution_names->size();
+458 
+459       if (!(v->size() == mesh\&.n_nodes()*n_vars))
+460         libMesh::err << "ERROR: v->size()=" << v->size()
+461                      << ", mesh\&.n_nodes()=" << mesh\&.n_nodes()
+462                      << ", n_vars=" << n_vars
+463                      << ", mesh\&.n_nodes()*n_vars=" << mesh\&.n_nodes()*n_vars
+464                      << "\n";
+465 
+466       libmesh_assert_equal_to (v->size(), mesh\&.n_nodes()*n_vars);
+467 
+468       for (unsigned int c=0; c<n_vars; c++)
+469         {
+470 
+471 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+472 
+473           // in case of complex data, write _three_ data sets
+474           // for each component
+475 
+476           // this is the real part
+477           out_stream << "r_" << (*solution_names)[c] << " 1\n";
+478 
+479           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+480             out_stream << (*v)[n*n_vars + c]\&.real() << " ";
+481 
+482           out_stream << "\n\n";
+483 
+484           // this is the imaginary part
+485           out_stream << "i_" << (*solution_names)[c] << " 1\n";
+486 
+487           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+488             out_stream << (*v)[n*n_vars + c]\&.imag() << " ";
+489 
+490           out_stream << "\n\n";
+491 
+492           // this is the magnitude
+493           out_stream << "a_" << (*solution_names)[c] << " 1\n";
+494           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+495             out_stream << std::abs((*v)[n*n_vars + c]) << " ";
+496 
+497           out_stream << "\n\n";
+498 
+499 #else
+500 
+501           out_stream << (*solution_names)[c] << " 1\n";
+502 
+503           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+504             out_stream << (*v)[n*n_vars + c] << " ";
+505 
+506           out_stream << "\n\n";
+507 
+508 #endif
+509         }
+510 
+511     }
+512 
+513   // If we wrote any variables, we have to close the variable section now
+514   if (write_variable)
+515     out_stream << "endvars\n";
+516 
+517 
+518   // end of the file
+519   out_stream << "\nendgmv\n";
+520 
+521 #endif
+522 }
+.fi
+.SS "void libMesh::GMVIO::write_ascii_old_impl (const std::string &fname, const std::vector< \fBNumber\fP > *v = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)\fC [private]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write an ASCII file\&. This is the old implementation (using subcells) which was the default in libMesh-0\&.4\&.3-rc2\&. Note that the prisms are treated as degenerated phex8's\&.
+.PP
+Note that the prisms are treated as degenerated phex8's\&.
+.PP
+Definition at line 529 of file gmv_io\&.C\&.
+.PP
+References _cell_centered_data, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::MeshOutput< MeshBase >::ascii_precision(), libMesh::Elem::build(), end, libMesh::err, libMesh::FIRST, libMesh::Elem::first_order_equivalent_type(), libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::DofObject::id(), libMesh::INFHEX16, libMesh::INFHEX18, libMesh::INFHEX8, libMesh::INFPRISM12, libMesh::INFPRISM6, libMesh::INFQUAD4, libMesh::INFQUAD6, std::max(), libMesh::MeshBase::max_node_id(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_active_elem(), libMesh::MeshBase::n_active_sub_elem(), libMesh::MeshBase::n_nodes(), libMesh::MeshBase::n_partitions(), libMesh::Elem::n_sub_elem(), libMesh::n_vars, libMesh::out, p_levels(), partitioning(), libMesh::MeshBase::point(), libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::processor_id(), libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::Real, subdivide_second_order(), libMesh::TECPLOT, libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI6, and write_subdomain_id_as_material()\&.
+.PP
+Referenced by write(), write_ascii_new_impl(), and write_nodal_data()\&.
+.PP
+.nf
+532 {
+533   // Get a reference to the mesh
+534   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+535 
+536   // Use a MeshSerializer object to gather a parallel mesh before outputting it\&.
+537   // Note that we cast away constness here (which is bad), but the destructor of
+538   // the MeshSerializer object reparallelizes the Mesh, hopefully keeping it
+539   // "logically const" outside the context of this function\&.\&.\&.
+540   MeshSerializer serialize(const_cast<MeshBase&>(mesh),
+541                            !MeshOutput<MeshBase>::_is_parallel_format);
+542 
+543   // These are parallel_only functions
+544   const dof_id_type n_active_elem = mesh\&.n_active_elem(),
+545     n_active_sub_elem = mesh\&.n_active_sub_elem();
+546 
+547   if (MeshOutput<MeshBase>::mesh()\&.processor_id() != 0)
+548     return;
+549 
+550   // Open the output file stream
+551   std::ofstream out_stream (fname\&.c_str());
+552 
+553   // Set it to our current precision
+554   out_stream << std::setprecision(this->ascii_precision());
+555 
+556   // Make sure it opened correctly
+557   if (!out_stream\&.good())
+558     libmesh_file_error(fname\&.c_str());
+559 
+560   // Make sure our nodes are contiguous and serialized
+561   libmesh_assert_equal_to (mesh\&.n_nodes(), mesh\&.max_node_id());
+562 
+563   // libmesh_assert (mesh\&.is_serial());
+564   // if (!mesh\&.is_serial())
+565   //   {
+566   //     if (MeshOutput<MeshBase>::mesh()\&.processor_id() == 0)
+567   //       libMesh::err << "Error: GMVIO cannot yet write a ParallelMesh solution"
+568   //                     << std::endl;
+569   //     return;
+570   //   }
+571 
+572   unsigned int mesh_max_p_level = 0;
+573 
+574   // Begin interfacing with the GMV data file
+575 
+576   // FIXME - if subdivide_second_order() is off,
+577   // we probably should only be writing the
+578   // vertex nodes - RHS
+579   {
+580     // write the nodes
+581 
+582     out_stream << "gmvinput ascii\n\n";
+583     out_stream << "nodes " << mesh\&.n_nodes() << '\n';
+584     for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+585       out_stream << mesh\&.point(n)(0) << " ";
+586 
+587     out_stream << '\n';
+588 
+589     for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+590 #if LIBMESH_DIM > 1
+591       out_stream << mesh\&.point(n)(1) << " ";
+592 #else
+593     out_stream << 0\&. << " ";
+594 #endif
+595 
+596     out_stream << '\n';
+597 
+598     for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+599 #if LIBMESH_DIM > 2
+600       out_stream << mesh\&.point(n)(2) << " ";
+601 #else
+602     out_stream << 0\&. << " ";
+603 #endif
+604 
+605     out_stream << '\n' << '\n';
+606   }
+607 
+608 
+609 
+610   {
+611     // write the connectivity
+612 
+613     out_stream << "cells ";
+614     if (this->subdivide_second_order())
+615       out_stream << n_active_sub_elem;
+616     else
+617       out_stream << n_active_elem;
+618     out_stream << '\n';
+619 
+620     MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+621     const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+622 
+623     switch (mesh\&.mesh_dimension())
+624       {
+625       case 1:
+626         {
+627           // The same temporary storage will be used for each element
+628           std::vector<dof_id_type> conn;
+629 
+630           for ( ; it != end; ++it)
+631             {
+632               mesh_max_p_level = std::max(mesh_max_p_level,
+633                                           (*it)->p_level());
+634 
+635               if (this->subdivide_second_order())
+636                 for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+637                   {
+638                     out_stream << "line 2\n";
+639                     (*it)->connectivity(se, TECPLOT, conn);
+640                     for (unsigned int i=0; i<conn\&.size(); i++)
+641                       out_stream << conn[i] << " ";
+642 
+643                     out_stream << '\n';
+644                   }
+645               else
+646                 {
+647                   out_stream << "line 2\n";
+648                   if ((*it)->default_order() == FIRST)
+649                     (*it)->connectivity(0, TECPLOT, conn);
+650                   else
+651                     {
+652                       AutoPtr<Elem> lo_elem = Elem::build(
+653                                                           Elem::first_order_equivalent_type((*it)->type()));
+654                       for (unsigned int i = 0; i != lo_elem->n_nodes(); ++i)
+655                         lo_elem->set_node(i) = (*it)->get_node(i);
+656                       lo_elem->connectivity(0, TECPLOT, conn);
+657                     }
+658                   for (unsigned int i=0; i<conn\&.size(); i++)
+659                     out_stream << conn[i] << " ";
+660 
+661                   out_stream << '\n';
+662                 }
+663             }
+664           break;
+665         }
+666 
+667       case 2:
+668         {
+669           // The same temporary storage will be used for each element
+670           std::vector<dof_id_type> conn;
+671 
+672           for ( ; it != end; ++it)
+673             {
+674               mesh_max_p_level = std::max(mesh_max_p_level,
+675                                           (*it)->p_level());
+676 
+677               if (this->subdivide_second_order())
+678                 for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+679                   {
+680                     // Quad elements
+681                     if (((*it)->type() == QUAD4) ||
+682                         ((*it)->type() == QUAD8) || // Note: QUAD8 will be output as one central quad and
+683                         // four surrounding triangles (though they will be written
+684                         // to GMV as QUAD4s)\&.
+685                         ((*it)->type() == QUAD9)
+686 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+687                         || ((*it)->type() == INFQUAD4)
+688                         || ((*it)->type() == INFQUAD6)
+689 #endif
+690                         )
+691                       {
+692                         out_stream << "quad 4\n";
+693                         (*it)->connectivity(se, TECPLOT, conn);
+694                         for (unsigned int i=0; i<conn\&.size(); i++)
+695                           out_stream << conn[i] << " ";
+696                       }
+697 
+698                     // Triangle elements
+699                     else if (((*it)->type() == TRI3) ||
+700                              ((*it)->type() == TRI6))
+701                       {
+702                         out_stream << "tri 3\n";
+703                         (*it)->connectivity(se, TECPLOT, conn);
+704                         for (unsigned int i=0; i<3; i++)
+705                           out_stream << conn[i] << " ";
+706                       }
+707                     else
+708                       libmesh_error();
+709                   }
+710               else // !this->subdivide_second_order()
+711                 {
+712                   // Quad elements
+713                   if (((*it)->type() == QUAD4)
+714 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+715                       || ((*it)->type() == INFQUAD4)
+716 #endif
+717                       )
+718                     {
+719                       (*it)->connectivity(0, TECPLOT, conn);
+720                       out_stream << "quad 4\n";
+721                       for (unsigned int i=0; i<conn\&.size(); i++)
+722                         out_stream << conn[i] << " ";
+723                     }
+724                   else if (((*it)->type() == QUAD8) ||
+725                            ((*it)->type() == QUAD9)
+726 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+727                            || ((*it)->type() == INFQUAD6)
+728 #endif
+729                            )
+730                     {
+731                       AutoPtr<Elem> lo_elem = Elem::build(
+732                                                           Elem::first_order_equivalent_type((*it)->type()));
+733                       for (unsigned int i = 0; i != lo_elem->n_nodes(); ++i)
+734                         lo_elem->set_node(i) = (*it)->get_node(i);
+735                       lo_elem->connectivity(0, TECPLOT, conn);
+736                       out_stream << "quad 4\n";
+737                       for (unsigned int i=0; i<conn\&.size(); i++)
+738                         out_stream << conn[i] << " ";
+739                     }
+740                   else if ((*it)->type() == TRI3)
+741                     {
+742                       (*it)->connectivity(0, TECPLOT, conn);
+743                       out_stream << "tri 3\n";
+744                       for (unsigned int i=0; i<3; i++)
+745                         out_stream << conn[i] << " ";
+746                     }
+747                   else if ((*it)->type() == TRI6)
+748                     {
+749                       AutoPtr<Elem> lo_elem = Elem::build(
+750                                                           Elem::first_order_equivalent_type((*it)->type()));
+751                       for (unsigned int i = 0; i != lo_elem->n_nodes(); ++i)
+752                         lo_elem->set_node(i) = (*it)->get_node(i);
+753                       lo_elem->connectivity(0, TECPLOT, conn);
+754                       out_stream << "tri 3\n";
+755                       for (unsigned int i=0; i<3; i++)
+756                         out_stream << conn[i] << " ";
+757                     }
+758 
+759                   out_stream << '\n';
+760                 }
+761             }
+762 
+763           break;
+764         }
+765 
+766 
+767       case 3:
+768         {
+769           // The same temporary storage will be used for each element
+770           std::vector<dof_id_type> conn;
+771 
+772           for ( ; it != end; ++it)
+773             {
+774               mesh_max_p_level = std::max(mesh_max_p_level,
+775                                           (*it)->p_level());
+776 
+777               if (this->subdivide_second_order())
+778                 for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+779                   {
+780 
+781 #ifndef  LIBMESH_ENABLE_INFINITE_ELEMENTS
+782                     if (((*it)->type() == HEX8)   ||
+783                         ((*it)->type() == HEX27))
+784                       {
+785                         out_stream << "phex8 8\n";
+786                         (*it)->connectivity(se, TECPLOT, conn);
+787                         for (unsigned int i=0; i<conn\&.size(); i++)
+788                           out_stream << conn[i] << " ";
+789                       }
+790 
+791                     else if ((*it)->type() == HEX20)
+792                       {
+793                         out_stream << "phex20 20\n";
+794                         out_stream << (*it)->node(0)+1  << " "
+795                                    << (*it)->node(1)+1  << " "
+796                                    << (*it)->node(2)+1  << " "
+797                                    << (*it)->node(3)+1  << " "
+798                                    << (*it)->node(4)+1  << " "
+799                                    << (*it)->node(5)+1  << " "
+800                                    << (*it)->node(6)+1  << " "
+801                                    << (*it)->node(7)+1  << " "
+802                                    << (*it)->node(8)+1  << " "
+803                                    << (*it)->node(9)+1  << " "
+804                                    << (*it)->node(10)+1 << " "
+805                                    << (*it)->node(11)+1 << " "
+806                                    << (*it)->node(16)+1 << " "
+807                                    << (*it)->node(17)+1 << " "
+808                                    << (*it)->node(18)+1 << " "
+809                                    << (*it)->node(19)+1 << " "
+810                                    << (*it)->node(12)+1 << " "
+811                                    << (*it)->node(13)+1 << " "
+812                                    << (*it)->node(14)+1 << " "
+813                                    << (*it)->node(15)+1 << " ";
+814                       }
+815 #else
+816                     /*
+817                      * In case of infinite elements, HEX20
+818                      * should be handled just like the
+819                      * INFHEX16, since these connect to each other
+820                      */
+821                     if (((*it)->type() == HEX8)     ||
+822                         ((*it)->type() == HEX27)    ||
+823                         ((*it)->type() == INFHEX8)  ||
+824                         ((*it)->type() == INFHEX16) ||
+825                         ((*it)->type() == INFHEX18) ||
+826                         ((*it)->type() == HEX20))
+827                       {
+828                         out_stream << "phex8 8\n";
+829                         (*it)->connectivity(se, TECPLOT, conn);
+830                         for (unsigned int i=0; i<conn\&.size(); i++)
+831                           out_stream << conn[i] << " ";
+832                       }
+833 #endif
+834 
+835                     else if (((*it)->type() == TET4)  ||
+836                              ((*it)->type() == TET10))
+837                       {
+838                         out_stream << "tet 4\n";
+839                         // Tecplot connectivity returns 8 entries for
+840                         // the Tet, enough to store it as a degenerate Hex\&.
+841                         // For GMV we only pick out the four relevant node
+842                         // indices\&.
+843                         (*it)->connectivity(se, TECPLOT, conn);
+844                         out_stream << conn[0] << " "  // libmesh tet node 0
+845                                    << conn[2] << " "  // libmesh tet node 2
+846                                    << conn[1] << " "  // libmesh tet node 1
+847                                    << conn[4] << " "; // libmesh tet node 3
+848                       }
+849 #ifndef  LIBMESH_ENABLE_INFINITE_ELEMENTS
+850                     else if (((*it)->type() == PRISM6)  ||
+851                              ((*it)->type() == PRISM15) ||
+852                              ((*it)->type() == PRISM18) ||
+853                              ((*it)->type() == PYRAMID5))
+854 #else
+855                     else if (((*it)->type() == PRISM6)     ||
+856                              ((*it)->type() == PRISM15)    ||
+857                              ((*it)->type() == PRISM18)    ||
+858                              ((*it)->type() == PYRAMID5)   ||
+859                              ((*it)->type() == INFPRISM6)  ||
+860                              ((*it)->type() == INFPRISM12))
+861 #endif
+862                       {
+867                         out_stream << "phex8 8\n";
+868                         (*it)->connectivity(se, TECPLOT, conn);
+869                         for (unsigned int i=0; i<conn\&.size(); i++)
+870                           out_stream << conn[i] << " ";
+871                       }
+872 
+873                     else
+874                       {
+875                         libMesh::out << "Encountered an unrecognized element "
+876                                      << "type: " << (*it)->type()
+877                                      << "\nPossibly a dim-1 dimensional "
+878                                      << "element?  Aborting\&.\&.\&."
+879                                      << std::endl;
+880                         libmesh_error();
+881                       }
+882 
+883                     out_stream << '\n';
+884                   }
+885               else // !this->subdivide_second_order()
+886                 {
+887                   AutoPtr<Elem> lo_elem = Elem::build(
+888                                                       Elem::first_order_equivalent_type((*it)->type()));
+889                   for (unsigned int i = 0; i != lo_elem->n_nodes(); ++i)
+890                     lo_elem->set_node(i) = (*it)->get_node(i);
+891                   if ((lo_elem->type() == HEX8)
+892 #ifdef  LIBMESH_ENABLE_INFINITE_ELEMENTS
+893                       || (lo_elem->type() == HEX27)
+894 #endif
+895                       )
+896                     {
+897                       out_stream << "phex8 8\n";
+898                       lo_elem->connectivity(0, TECPLOT, conn);
+899                       for (unsigned int i=0; i<conn\&.size(); i++)
+900                         out_stream << conn[i] << " ";
+901                     }
+902 
+903                   else if (lo_elem->type() == TET4)
+904                     {
+905                       out_stream << "tet 4\n";
+906                       lo_elem->connectivity(0, TECPLOT, conn);
+907                       out_stream << conn[0] << " "
+908                                  << conn[2] << " "
+909                                  << conn[1] << " "
+910                                  << conn[4] << " ";
+911                     }
+912                   else if ((lo_elem->type() == PRISM6)
+913 #ifdef  LIBMESH_ENABLE_INFINITE_ELEMENTS
+914                            || (lo_elem->type() == INFPRISM6)
+915 #endif
+916                            )
+917                     {
+922                       out_stream << "phex8 8\n";
+923                       lo_elem->connectivity(0, TECPLOT, conn);
+924                       for (unsigned int i=0; i<conn\&.size(); i++)
+925                         out_stream << conn[i] << " ";
+926                     }
+927 
+928                   else
+929                     {
+930                       libMesh::out << "Encountered an unrecognized element "
+931                                    << "type\&.  Possibly a dim-1 dimensional "
+932                                    << "element?  Aborting\&.\&.\&."
+933                                    << std::endl;
+934                       libmesh_error();
+935                     }
+936 
+937                   out_stream << '\n';
+938                 }
+939             }
+940 
+941           break;
+942         }
+943 
+944       default:
+945         libmesh_error();
+946       }
+947 
+948     out_stream << '\n';
+949   }
+950 
+951 
+952 
+953   // optionally write the partition information
+954   if (this->partitioning())
+955     {
+956       if (this->write_subdomain_id_as_material())
+957         {
+958           // Subdomain IDs can be non-contiguous and need not
+959           // necessarily start at 0\&.  Furthermore, since the user is
+960           // free to define subdomain_id_type to be a signed type, we
+961           // can't even assume max(subdomain_id) >= # unique subdomain ids\&.
+962 
+963           // We build a map<subdomain_id, unsigned> to associate to each
+964           // user-selected subdomain ID a unique, contiguous unsigned value
+965           // which we can write to file\&.
+966           std::map<subdomain_id_type, unsigned> sbdid_map;
+967           typedef std::map<subdomain_id_type, unsigned>::iterator sbdid_map_iter;
+968           {
+969             MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+970             const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+971 
+972             for ( ; it != end; ++it)
+973               {
+974                 // Try to insert with dummy value
+975                 sbdid_map\&.insert( std::make_pair((*it)->subdomain_id(), 0) );
+976               }
+977           }
+978 
+979           // Map is created, iterate through it to set indices\&.  They will be
+980           // used repeatedly below\&.
+981           {
+982             unsigned ctr=0;
+983             for (sbdid_map_iter it=sbdid_map\&.begin(); it != sbdid_map\&.end(); ++it)
+984               (*it)\&.second = ctr++;
+985           }
+986 
+987           out_stream << "material "
+988                      << sbdid_map\&.size()
+989                      << " 0\n";
+990 
+991           for (unsigned int sbdid=0; sbdid<sbdid_map\&.size(); sbdid++)
+992             out_stream << "proc_" << sbdid << "\n";
+993 
+994           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+995           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+996 
+997           for ( ; it != end; ++it)
+998             {
+999               // Find the unique index for (*it)->subdomain_id(), print that to file
+1000               sbdid_map_iter map_iter = sbdid_map\&.find( (*it)->subdomain_id() );
+1001               unsigned gmv_mat_number = (*map_iter)\&.second;
+1002 
+1003               if (this->subdivide_second_order())
+1004                 for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1005                   out_stream << gmv_mat_number+1 << '\n';
+1006               else
+1007                 out_stream << gmv_mat_number+1 << "\n";
+1008             }
+1009           out_stream << '\n';
+1010 
+1011         }
+1012       else // write processor IDs as materials\&.  This is the default
+1013         {
+1014           out_stream << "material "
+1015                      << mesh\&.n_partitions()
+1016                      << " 0"<< '\n';
+1017 
+1018           for (unsigned int proc=0; proc<mesh\&.n_partitions(); proc++)
+1019             out_stream << "proc_" << proc << '\n';
+1020 
+1021           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1022           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1023 
+1024           for ( ; it != end; ++it)
+1025             if (this->subdivide_second_order())
+1026               for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1027                 out_stream << (*it)->processor_id()+1 << '\n';
+1028             else
+1029               out_stream << (*it)->processor_id()+1 << '\n';
+1030 
+1031           out_stream << '\n';
+1032         }
+1033     }
+1034 
+1035 
+1036   // If there are *any* variables at all in the system (including
+1037   // p level, or arbitrary cell-based data)
+1038   // to write, the gmv file needs to contain the word "variable"
+1039   // on a line by itself\&.
+1040   bool write_variable = false;
+1041 
+1042   // 1\&.) p-levels
+1043   if (this->p_levels() && mesh_max_p_level)
+1044     write_variable = true;
+1045 
+1046   // 2\&.) solution data
+1047   if ((solution_names != NULL) && (v != NULL))
+1048     write_variable = true;
+1049 
+1050   // 3\&.) cell-centered data
+1051   if ( !(this->_cell_centered_data\&.empty()) )
+1052     write_variable = true;
+1053 
+1054   if (write_variable)
+1055     out_stream << "variable\n";
+1056 
+1057 
+1058   // optionally write the p-level information
+1059   if (this->p_levels() && mesh_max_p_level)
+1060     {
+1061       out_stream << "p_level 0\n";
+1062 
+1063       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1064       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1065 
+1066       for ( ; it != end; ++it)
+1067         if (this->subdivide_second_order())
+1068           for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1069             out_stream << (*it)->p_level() << " ";
+1070         else
+1071           out_stream << (*it)->p_level() << " ";
+1072       out_stream << "\n\n";
+1073     }
+1074 
+1075 
+1076 
+1077 
+1078   // optionally write cell-centered data
+1079   if ( !(this->_cell_centered_data\&.empty()) )
+1080     {
+1081       std::map<std::string, const std::vector<Real>* >::iterator       it  = this->_cell_centered_data\&.begin();
+1082       const std::map<std::string, const std::vector<Real>* >::iterator end = this->_cell_centered_data\&.end();
+1083 
+1084       for (; it != end; ++it)
+1085         {
+1086           // write out the variable name, followed by a zero\&.
+1087           out_stream << (*it)\&.first << " 0\n";
+1088 
+1089           const std::vector<Real>* the_array = (*it)\&.second;
+1090 
+1091           // Loop over active elements, write out cell data\&.  If second-order cells
+1092           // are split into sub-elements, the sub-elements inherit their parent's
+1093           // cell-centered data\&.
+1094           MeshBase::const_element_iterator       elem_it  = mesh\&.active_elements_begin();
+1095           const MeshBase::const_element_iterator elem_end = mesh\&.active_elements_end();
+1096 
+1097           for (; elem_it != elem_end; ++elem_it)
+1098             {
+1099               const Elem* e = *elem_it;
+1100 
+1101               // Use the element's ID to find the value\&.\&.\&.
+1102               libmesh_assert_less (e->id(), the_array->size());
+1103               const Real the_value = the_array->operator[](e->id());
+1104 
+1105               if (this->subdivide_second_order())
+1106                 for (unsigned int se=0; se < e->n_sub_elem(); se++)
+1107                   out_stream << the_value << " ";
+1108               else
+1109                 out_stream << the_value << " ";
+1110             }
+1111 
+1112           out_stream << "\n\n";
+1113         }
+1114     }
+1115 
+1116 
+1117 
+1118 
+1119   // optionally write the data
+1120   if ((solution_names != NULL) &&
+1121       (v != NULL))
+1122     {
+1123       const unsigned int n_vars =
+1124         libmesh_cast_int<unsigned int>(solution_names->size());
+1125 
+1126       if (!(v->size() == mesh\&.n_nodes()*n_vars))
+1127         libMesh::err << "ERROR: v->size()=" << v->size()
+1128                      << ", mesh\&.n_nodes()=" << mesh\&.n_nodes()
+1129                      << ", n_vars=" << n_vars
+1130                      << ", mesh\&.n_nodes()*n_vars=" << mesh\&.n_nodes()*n_vars
+1131                      << std::endl;
+1132 
+1133       libmesh_assert_equal_to (v->size(), mesh\&.n_nodes()*n_vars);
+1134 
+1135       for (unsigned int c=0; c<n_vars; c++)
+1136         {
+1137 
+1138 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+1139 
+1140           // in case of complex data, write _tree_ data sets
+1141           // for each component
+1142 
+1143           // this is the real part
+1144           out_stream << "r_" << (*solution_names)[c] << " 1\n";
+1145 
+1146           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1147             out_stream << (*v)[n*n_vars + c]\&.real() << " ";
+1148 
+1149           out_stream << '\n' << '\n';
+1150 
+1151 
+1152           // this is the imaginary part
+1153           out_stream << "i_" << (*solution_names)[c] << " 1\n";
+1154 
+1155           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1156             out_stream << (*v)[n*n_vars + c]\&.imag() << " ";
+1157 
+1158           out_stream << '\n' << '\n';
+1159 
+1160           // this is the magnitude
+1161           out_stream << "a_" << (*solution_names)[c] << " 1\n";
+1162           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1163             out_stream << std::abs((*v)[n*n_vars + c]) << " ";
+1164 
+1165           out_stream << '\n' << '\n';
+1166 
+1167 #else
+1168 
+1169           out_stream << (*solution_names)[c] << " 1\n";
+1170 
+1171           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1172             out_stream << (*v)[n*n_vars + c] << " ";
+1173 
+1174           out_stream << '\n' << '\n';
+1175 
+1176 #endif
+1177         }
+1178 
+1179     }
+1180 
+1181   // If we wrote any variables, we have to close the variable section now
+1182   if (write_variable)
+1183     out_stream << "endvars\n";
+1184 
+1185 
+1186   // end of the file
+1187   out_stream << "\nendgmv\n";
+1188 }
+.fi
+.SS "void libMesh::GMVIO::write_binary (const std::string &fname, const std::vector< \fBNumber\fP > *vec = \fCNULL\fP, const std::vector< std::string > *solution_names = \fCNULL\fP)\fC [private]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. 
+.PP
+Definition at line 1196 of file gmv_io\&.C\&.
+.PP
+References _cell_centered_data, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), end, libMesh::err, libMesh::libmesh_assert(), std::max(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_active_elem(), libMesh::MeshBase::n_nodes(), libMesh::ParallelObject::n_processors(), libMesh::n_vars, libMesh::out, p_levels(), partitioning(), libMesh::MeshBase::point(), libMesh::processor_id(), libMesh::TECPLOT, and write_subdomain_id_as_material()\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+1199 {
+1200   // Get a reference to the mesh
+1201   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+1202 
+1203   // This is a parallel_only function
+1204   const dof_id_type n_active_elem = mesh\&.n_active_elem();
+1205 
+1206   if (MeshOutput<MeshBase>::mesh()\&.processor_id() != 0)
+1207     return;
+1208 
+1209   std::ofstream out_stream (fname\&.c_str());
+1210 
+1211   libmesh_assert (out_stream\&.good());
+1212 
+1213   unsigned int mesh_max_p_level = 0;
+1214 
+1215   char buf[80];
+1216 
+1217   // Begin interfacing with the GMV data file
+1218   {
+1219     // write the nodes
+1220     std::strcpy(buf, "gmvinput");
+1221     out_stream\&.write(buf, std::strlen(buf));
+1222 
+1223     std::strcpy(buf, "ieeei4r4");
+1224     out_stream\&.write(buf, std::strlen(buf));
+1225   }
+1226 
+1227 
+1228 
+1229   // write the nodes
+1230   {
+1231     std::strcpy(buf, "nodes   ");
+1232     out_stream\&.write(buf, std::strlen(buf));
+1233 
+1234     unsigned int tempint = mesh\&.n_nodes();
+1235 
+1236     std::memcpy(buf, &tempint, sizeof(unsigned int));
+1237 
+1238     out_stream\&.write(buf, sizeof(unsigned int));
+1239 
+1240     // write the x coordinate
+1241     float *temp = new float[mesh\&.n_nodes()];
+1242     for (unsigned int v=0; v<mesh\&.n_nodes(); v++)
+1243       temp[v] = static_cast<float>(mesh\&.point(v)(0));
+1244     out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1245 
+1246     // write the y coordinate
+1247     for (unsigned int v=0; v<mesh\&.n_nodes(); v++)
+1248 #if LIBMESH_DIM > 1
+1249       temp[v] = static_cast<float>(mesh\&.point(v)(1));
+1250 #else
+1251     temp[v] = 0\&.;
+1252 #endif
+1253     out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1254 
+1255     // write the z coordinate
+1256     for (unsigned int v=0; v<mesh\&.n_nodes(); v++)
+1257 #if LIBMESH_DIM > 2
+1258       temp[v] = static_cast<float>(mesh\&.point(v)(2));
+1259 #else
+1260     temp[v] = 0\&.;
+1261 #endif
+1262     out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1263 
+1264     delete [] temp;
+1265   }
+1266 
+1267 
+1268   // write the connectivity
+1269   {
+1270     std::strcpy(buf, "cells   ");
+1271     out_stream\&.write(buf, std::strlen(buf));
+1272 
+1273     unsigned int tempint = n_active_elem;
+1274 
+1275     std::memcpy(buf, &tempint, sizeof(unsigned int));
+1276 
+1277     out_stream\&.write(buf, sizeof(unsigned int));
+1278 
+1279     MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1280     const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1281 
+1282     switch (mesh\&.mesh_dimension())
+1283       {
+1284 
+1285       case 1:
+1286         for ( ; it != end; ++it)
+1287           {
+1288             mesh_max_p_level = std::max(mesh_max_p_level,
+1289                                         (*it)->p_level());
+1290 
+1291             for(unsigned se = 0; se < (*it)->n_sub_elem(); ++se)
+1292               {
+1293                 std::strcpy(buf, "line    ");
+1294                 out_stream\&.write(buf, std::strlen(buf));
+1295 
+1296                 tempint = 2;
+1297                 std::memcpy(buf, &tempint, sizeof(unsigned int));
+1298                 out_stream\&.write(buf, sizeof(unsigned int));
+1299 
+1300                 std::vector<dof_id_type> conn;
+1301                 (*it)->connectivity(se,TECPLOT,conn);
+1302 
+1303                 out_stream\&.write(reinterpret_cast<char*>(&conn[0]), sizeof(unsigned int)*tempint);
+1304               }
+1305           }
+1306         break;
+1307 
+1308       case 2:
+1309         for ( ; it != end; ++it)
+1310           {
+1311             mesh_max_p_level = std::max(mesh_max_p_level,
+1312                                         (*it)->p_level());
+1313 
+1314             for(unsigned se = 0; se < (*it)->n_sub_elem(); ++se)
+1315               {
+1316                 std::strcpy(buf, "quad    ");
+1317                 out_stream\&.write(buf, std::strlen(buf));
+1318                 tempint = 4;
+1319                 std::memcpy(buf, &tempint, sizeof(unsigned int));
+1320                 out_stream\&.write(buf, sizeof(unsigned int));
+1321                 std::vector<dof_id_type> conn;
+1322                 (*it)->connectivity(se,TECPLOT,conn);
+1323                 out_stream\&.write(reinterpret_cast<char*>(&conn[0]), sizeof(unsigned int)*tempint);
+1324               }
+1325           }
+1326         break;
+1327       case 3:
+1328         for ( ; it != end; ++it)
+1329           {
+1330             mesh_max_p_level = std::max(mesh_max_p_level,
+1331                                         (*it)->p_level());
+1332 
+1333             for(unsigned se = 0; se < (*it)->n_sub_elem(); ++se)
+1334               {
+1335                 std::strcpy(buf, "phex8   ");
+1336                 out_stream\&.write(buf, std::strlen(buf));
+1337                 tempint = 8;
+1338                 std::memcpy(buf, &tempint, sizeof(unsigned int));
+1339                 out_stream\&.write(buf, sizeof(unsigned int));
+1340                 std::vector<dof_id_type> conn;
+1341                 (*it)->connectivity(se,TECPLOT,conn);
+1342                 out_stream\&.write(reinterpret_cast<char*>(&conn[0]), sizeof(unsigned int)*tempint);
+1343               }
+1344           }
+1345         break;
+1346       default:
+1347         libmesh_error();
+1348 
+1349       }
+1350   }
+1351 
+1352 
+1353 
+1354   // optionally write the partition information
+1355   if (this->partitioning())
+1356     {
+1357       if (this->write_subdomain_id_as_material())
+1358         {
+1359           libMesh::out << "Not yet supported in GMVIO::write_binary" << std::endl;
+1360           libmesh_error();
+1361         }
+1362       else
+1363         {
+1364           std::strcpy(buf, "material");
+1365           out_stream\&.write(buf, std::strlen(buf));
+1366 
+1367           unsigned int tmpint = mesh\&.n_processors();
+1368           std::memcpy(buf, &tmpint, sizeof(unsigned int));
+1369           out_stream\&.write(buf, sizeof(unsigned int));
+1370 
+1371           tmpint = 0; // IDs are cell based
+1372           std::memcpy(buf, &tmpint, sizeof(unsigned int));
+1373           out_stream\&.write(buf, sizeof(unsigned int));
+1374 
+1375 
+1376           for (unsigned int proc=0; proc<mesh\&.n_processors(); proc++)
+1377             {
+1378               std::sprintf(buf, "proc_%u", proc);
+1379               out_stream\&.write(buf, 8);
+1380             }
+1381 
+1382           std::vector<unsigned int> proc_id (n_active_elem);
+1383 
+1384           unsigned int n=0;
+1385 
+1386           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1387           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1388 
+1389           for ( ; it != end; ++it)
+1390             for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1391               proc_id[n++] = (*it)->processor_id()+1;
+1392 
+1393 
+1394           out_stream\&.write(reinterpret_cast<char *>(&proc_id[0]),
+1395                            sizeof(unsigned int)*proc_id\&.size());
+1396         }
+1397     }
+1398 
+1399   // If there are *any* variables at all in the system (including
+1400   // p level, or arbitrary cell-based data)
+1401   // to write, the gmv file needs to contain the word "variable"
+1402   // on a line by itself\&.
+1403   bool write_variable = false;
+1404 
+1405   // 1\&.) p-levels
+1406   if (this->p_levels() && mesh_max_p_level)
+1407     write_variable = true;
+1408 
+1409   // 2\&.) solution data
+1410   if ((solution_names != NULL) && (vec != NULL))
+1411     write_variable = true;
+1412 
+1413   //   // 3\&.) cell-centered data - unsupported
+1414   //   if ( !(this->_cell_centered_data\&.empty()) )
+1415   //     write_variable = true;
+1416 
+1417   if (write_variable)
+1418     {
+1419       std::strcpy(buf, "variable");
+1420       out_stream\&.write(buf, std::strlen(buf));
+1421     }
+1422 
+1423   // optionally write the partition information
+1424   if (this->p_levels() && mesh_max_p_level)
+1425     {
+1426       unsigned int n_floats = n_active_elem;
+1427       for (unsigned int i=0; i != mesh\&.mesh_dimension(); ++i)
+1428         n_floats *= 2;
+1429 
+1430       float *temp = new float[n_floats];
+1431 
+1432       std::strcpy(buf, "p_level");
+1433       out_stream\&.write(buf, std::strlen(buf));
+1434 
+1435       unsigned int tempint = 0; // p levels are cell data
+1436 
+1437       std::memcpy(buf, &tempint, sizeof(unsigned int));
+1438       out_stream\&.write(buf, sizeof(unsigned int));
+1439 
+1440       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1441       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1442       unsigned int n=0;
+1443 
+1444       for (; it != end; ++it)
+1445         for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1446           temp[n++] = static_cast<float>( (*it)->p_level() );
+1447 
+1448       out_stream\&.write(reinterpret_cast<char *>(temp),
+1449                        sizeof(float)*n_floats);
+1450 
+1451       delete [] temp;
+1452     }
+1453 
+1454 
+1455   // optionally write cell-centered data
+1456   if ( !(this->_cell_centered_data\&.empty()) )
+1457     {
+1458       libMesh::err << "Cell-centered data not (yet) supported in binary I/O mode!" << std::endl;
+1459 
+1460       //        std::map<std::string, const std::vector<Real>* >::iterator       it  = this->_cell_centered_data\&.begin();
+1461       //        const std::map<std::string, const std::vector<Real>* >::iterator end = this->_cell_centered_data\&.end();
+1462 
+1463       //        for (; it != end; ++it)
+1464       //  {
+1465       //    // Write out the variable name \&.\&.\&.
+1466       //    std::strcpy(buf, (*it)\&.first\&.c_str());
+1467       //    out_stream\&.write(buf, std::strlen(buf));
+1468 
+1469       //    // \&.\&.\&. followed by a zero\&.
+1470       //    unsigned int tempint = 0; // 0 signifies cell data
+1471       //    std::memcpy(buf, &tempint, sizeof(unsigned int));
+1472       //    out_stream\&.write(buf, sizeof(unsigned int));
+1473 
+1474       //    // Get a pointer to the array of cell-centered data values
+1475       //    const std::vector<Real>* the_array = (*it)\&.second;
+1476 
+1477       //   // Since the_array might contain zeros (for inactive elements) we need to
+1478       //   // make a copy of it containing just values for active elements\&.
+1479       //   const unsigned int n_floats = n_active_elem * (1<<mesh\&.mesh_dimension());
+1480       //   float *temp = new float[n_floats];
+1481 
+1482       //   MeshBase::const_element_iterator       elem_it  = mesh\&.active_elements_begin();
+1483       //   const MeshBase::const_element_iterator elem_end = mesh\&.active_elements_end();
+1484       //   unsigned int n=0;
+1485 
+1486       //   for (; elem_it != elem_end; ++elem_it)
+1487       //     {
+1488       //       // If there's a seg-fault, it will probably be here!
+1489       //       const float the_value = static_cast<float>(the_array->operator[]((*elem_it)->id()));
+1490 
+1491       //       for (unsigned int se=0; se<(*elem_it)->n_sub_elem(); se++)
+1492       // temp[n++] = the_value;
+1493       //     }
+1494 
+1495 
+1496       //    // Write "the_array" directly to the file
+1497       //    out_stream\&.write(reinterpret_cast<char *>(temp),
+1498       //      sizeof(float)*n_floats);
+1499 
+1500       //   delete [] temp;
+1501       //  }
+1502     }
+1503 
+1504 
+1505 
+1506 
+1507   // optionally write the data
+1508   if ((solution_names != NULL) &&
+1509       (vec != NULL))
+1510     {
+1511       float *temp = new float[mesh\&.n_nodes()];
+1512 
+1513       const unsigned int n_vars = solution_names->size();
+1514 
+1515       for (unsigned int c=0; c<n_vars; c++)
+1516         {
+1517 
+1518 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+1519           // for complex data, write three datasets
+1520 
+1521 
+1522           // Real part
+1523           std::strcpy(buf, "r_");
+1524           out_stream\&.write(buf, 2);
+1525           std::strcpy(buf, (*solution_names)[c]\&.c_str());
+1526           out_stream\&.write(buf, 6);
+1527 
+1528           unsigned int tempint = 1; // always do nodal data
+1529           std::memcpy(buf, &tempint, sizeof(unsigned int));
+1530           out_stream\&.write(buf, sizeof(unsigned int));
+1531 
+1532           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1533             temp[n] = static_cast<float>( (*vec)[n*n_vars + c]\&.real() );
+1534 
+1535           out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1536 
+1537 
+1538           // imaginary part
+1539           std::strcpy(buf, "i_");
+1540           out_stream\&.write(buf, 2);
+1541           std::strcpy(buf, (*solution_names)[c]\&.c_str());
+1542           out_stream\&.write(buf, 6);
+1543 
+1544           std::memcpy(buf, &tempint, sizeof(unsigned int));
+1545           out_stream\&.write(buf, sizeof(unsigned int));
+1546 
+1547           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1548             temp[n] = static_cast<float>( (*vec)[n*n_vars + c]\&.imag() );
+1549 
+1550           out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1551 
+1552           // magnitude
+1553           std::strcpy(buf, "a_");
+1554           out_stream\&.write(buf, 2);
+1555           std::strcpy(buf, (*solution_names)[c]\&.c_str());
+1556           out_stream\&.write(buf, 6);
+1557 
+1558           std::memcpy(buf, &tempint, sizeof(unsigned int));
+1559           out_stream\&.write(buf, sizeof(unsigned int));
+1560 
+1561           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1562             temp[n] = static_cast<float>(std::abs((*vec)[n*n_vars + c]));
+1563 
+1564           out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1565 
+1566 #else
+1567 
+1568 
+1569           std::strcpy(buf, (*solution_names)[c]\&.c_str());
+1570           out_stream\&.write(buf, 8);
+1571 
+1572           unsigned int tempint = 1; // always do nodal data
+1573           std::memcpy(buf, &tempint, sizeof(unsigned int));
+1574           out_stream\&.write(buf, sizeof(unsigned int));
+1575 
+1576           for (unsigned int n=0; n<mesh\&.n_nodes(); n++)
+1577             temp[n] = static_cast<float>((*vec)[n*n_vars + c]);
+1578 
+1579           out_stream\&.write(reinterpret_cast<char *>(temp), sizeof(float)*mesh\&.n_nodes());
+1580 
+1581 
+1582 #endif
+1583 
+1584 
+1585         }
+1586 
+1587       delete [] temp;
+1588 
+1589     }
+1590 
+1591   // If we wrote any variables, we have to close the variable section now
+1592   if (write_variable)
+1593     {
+1594       std::strcpy(buf, "endvars ");
+1595       out_stream\&.write(buf, std::strlen(buf));
+1596     }
+1597 
+1598   // end the file
+1599   std::strcpy(buf, "endgmv  ");
+1600   out_stream\&.write(buf, std::strlen(buf));
+1601 }
+.fi
+.SS "void libMesh::GMVIO::write_discontinuous_gmv (const std::string &name, const \fBEquationSystems\fP &es, const boolwrite_partitioning, const std::set< std::string > *system_names = \fCNULL\fP) const"
+Writes a GMV file with discontinuous data 
+.PP
+Definition at line 1611 of file gmv_io\&.C\&.
+.PP
+References _cell_centered_data, _write_subdomain_id_as_material, std::abs(), libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::EquationSystems::build_variable_names(), libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, end, libMesh::err, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::INFEDGE2, libMesh::INFHEX16, libMesh::INFHEX18, libMesh::INFHEX8, libMesh::INFPRISM12, libMesh::INFPRISM6, libMesh::INFQUAD4, libMesh::INFQUAD6, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_active_elem(), libMesh::ParallelObject::n_processors(), libMesh::n_vars, libMesh::out, libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::ParallelObject::processor_id(), libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by libMesh::ErrorVector::plot_error()\&.
+.PP
+.nf
+1615 {
+1616   std::vector<std::string> solution_names;
+1617   std::vector<Number>      v;
+1618 
+1619   // Get a reference to the mesh
+1620   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+1621 
+1622   es\&.build_variable_names  (solution_names, NULL, system_names);
+1623   es\&.build_discontinuous_solution_vector (v, system_names);
+1624 
+1625   // These are parallel_only functions
+1626   const unsigned int n_active_elem = mesh\&.n_active_elem();
+1627 
+1628   if (mesh\&.processor_id() != 0)
+1629     return;
+1630 
+1631   std::ofstream out_stream(name\&.c_str());
+1632 
+1633   libmesh_assert (out_stream\&.good());
+1634 
+1635   // Begin interfacing with the GMV data file
+1636   {
+1637 
+1638     // write the nodes
+1639     out_stream << "gmvinput ascii" << std::endl << std::endl;
+1640 
+1641     // Compute the total weight
+1642     {
+1643       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1644       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1645 
+1646       unsigned int tw=0;
+1647 
+1648       for ( ; it != end; ++it)
+1649         tw += (*it)->n_nodes();
+1650 
+1651       out_stream << "nodes " << tw << std::endl;
+1652     }
+1653 
+1654 
+1655 
+1656     // Write all the x values
+1657     {
+1658       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1659       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1660 
+1661       for ( ; it != end; ++it)
+1662         for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1663           out_stream << (*it)->point(n)(0) << " ";
+1664 
+1665       out_stream << std::endl;
+1666     }
+1667 
+1668 
+1669     // Write all the y values
+1670     {
+1671       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1672       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1673 
+1674       for ( ; it != end; ++it)
+1675         for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1676 #if LIBMESH_DIM > 1
+1677           out_stream << (*it)->point(n)(1) << " ";
+1678 #else
+1679       out_stream << 0\&. << " ";
+1680 #endif
+1681 
+1682       out_stream << std::endl;
+1683     }
+1684 
+1685 
+1686     // Write all the z values
+1687     {
+1688       MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1689       const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1690 
+1691       for ( ; it != end; ++it)
+1692         for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1693 #if LIBMESH_DIM > 2
+1694           out_stream << (*it)->point(n)(2) << " ";
+1695 #else
+1696       out_stream << 0\&. << " ";
+1697 #endif
+1698 
+1699       out_stream << std::endl << std::endl;
+1700     }
+1701   }
+1702 
+1703 
+1704 
+1705   {
+1706     // write the connectivity
+1707 
+1708     out_stream << "cells " << n_active_elem << std::endl;
+1709 
+1710     MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1711     const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1712 
+1713     unsigned int nn=1;
+1714 
+1715     switch (mesh\&.mesh_dimension())
+1716       {
+1717       case 1:
+1718         {
+1719           for ( ; it != end; ++it)
+1720             for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1721               {
+1722                 if (((*it)->type() == EDGE2) ||
+1723                     ((*it)->type() == EDGE3) ||
+1724                     ((*it)->type() == EDGE4)
+1725 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+1726                     || ((*it)->type() == INFEDGE2)
+1727 #endif
+1728                     )
+1729                   {
+1730                     out_stream << "line 2" << std::endl;
+1731                     for (unsigned int i=0; i<(*it)->n_nodes(); i++)
+1732                       out_stream << nn++ << " ";
+1733 
+1734                   }
+1735                 else
+1736                   {
+1737                     libmesh_error();
+1738                   }
+1739 
+1740                 out_stream << std::endl;
+1741               }
+1742 
+1743           break;
+1744         }
+1745 
+1746       case 2:
+1747         {
+1748           for ( ; it != end; ++it)
+1749             for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1750               {
+1751                 if (((*it)->type() == QUAD4) ||
+1752                     ((*it)->type() == QUAD8) || // Note: QUAD8 will be output as one central quad and
+1753                     // four surrounding triangles (though they will be written
+1754                     // to GMV as QUAD4s)\&.
+1755                     ((*it)->type() == QUAD9)
+1756 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+1757                     || ((*it)->type() == INFQUAD4)
+1758                     || ((*it)->type() == INFQUAD6)
+1759 #endif
+1760                     )
+1761                   {
+1762                     out_stream << "quad 4" << std::endl;
+1763                     for (unsigned int i=0; i<(*it)->n_nodes(); i++)
+1764                       out_stream << nn++ << " ";
+1765 
+1766                   }
+1767                 else if (((*it)->type() == TRI3) ||
+1768                          ((*it)->type() == TRI6))
+1769                   {
+1770                     out_stream << "tri 3" << std::endl;
+1771                     for (unsigned int i=0; i<(*it)->n_nodes(); i++)
+1772                       out_stream << nn++ << " ";
+1773 
+1774                   }
+1775                 else
+1776                   {
+1777                     libmesh_error();
+1778                   }
+1779 
+1780                 out_stream << std::endl;
+1781               }
+1782 
+1783           break;
+1784         }
+1785 
+1786 
+1787       case 3:
+1788         {
+1789           for ( ; it != end; ++it)
+1790             for (unsigned int se=0; se<(*it)->n_sub_elem(); se++)
+1791               {
+1792                 if (((*it)->type() == HEX8) ||
+1793                     ((*it)->type() == HEX20) ||
+1794                     ((*it)->type() == HEX27)
+1795 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+1796                     || ((*it)->type() == INFHEX8)
+1797                     || ((*it)->type() == INFHEX16)
+1798                     || ((*it)->type() == INFHEX18)
+1799 #endif
+1800                     )
+1801                   {
+1802                     out_stream << "phex8 8" << std::endl;
+1803                     for (unsigned int i=0; i<(*it)->n_nodes(); i++)
+1804                       out_stream << nn++ << " ";
+1805                   }
+1806                 else if (((*it)->type() == PRISM6) ||
+1807                          ((*it)->type() == PRISM15) ||
+1808                          ((*it)->type() == PRISM18)
+1809 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+1810                          || ((*it)->type() == INFPRISM6)
+1811                          || ((*it)->type() == INFPRISM12)
+1812 #endif
+1813                          )
+1814                   {
+1815                     out_stream << "pprism6 6" << std::endl;
+1816                     for (unsigned int i=0; i<(*it)->n_nodes(); i++)
+1817                       out_stream << nn++ << " ";
+1818                   }
+1819                 else if (((*it)->type() == TET4) ||
+1820                          ((*it)->type() == TET10))
+1821                   {
+1822                     out_stream << "tet 4" << std::endl;
+1823                     for (unsigned int i=0; i<(*it)->n_nodes(); i++)
+1824                       out_stream << nn++ << " ";
+1825                   }
+1826                 else
+1827                   {
+1828                     libmesh_error();
+1829                   }
+1830 
+1831                 out_stream << std::endl;
+1832               }
+1833 
+1834           break;
+1835         }
+1836 
+1837       default:
+1838         libmesh_error();
+1839       }
+1840 
+1841     out_stream << std::endl;
+1842   }
+1843 
+1844 
+1845 
+1846   // optionally write the partition information
+1847   if (write_partitioning)
+1848     {
+1849       if (_write_subdomain_id_as_material)
+1850         {
+1851           libMesh::out << "Not yet supported in GMVIO::write_discontinuous_gmv" << std::endl;
+1852           libmesh_error();
+1853         }
+1854       else
+1855         {
+1856           out_stream << "material "
+1857                      << mesh\&.n_processors()
+1858                      << " 0"<< std::endl;
+1859 
+1860           for (unsigned int proc=0; proc<mesh\&.n_processors(); proc++)
+1861             out_stream << "proc_" << proc << std::endl;
+1862 
+1863           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1864           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1865 
+1866           for ( ; it != end; ++it)
+1867             out_stream << (*it)->processor_id()+1 << std::endl;
+1868 
+1869           out_stream << std::endl;
+1870         }
+1871     }
+1872 
+1873 
+1874   // Writing cell-centered data is not yet supported in discontinuous GMV files\&.
+1875   if ( !(this->_cell_centered_data\&.empty()) )
+1876     {
+1877       libMesh::err << "Cell-centered data not (yet) supported for discontinuous GMV files!" << std::endl;
+1878     }
+1879 
+1880 
+1881 
+1882   // write the data
+1883   {
+1884     const unsigned int n_vars = solution_names\&.size();
+1885 
+1886     //    libmesh_assert_equal_to (v\&.size(), tw*n_vars);
+1887 
+1888     out_stream << "variable" << std::endl;
+1889 
+1890 
+1891     for (unsigned int c=0; c<n_vars; c++)
+1892       {
+1893 
+1894 #ifdef LIBMESH_USE_COMPLEX_NUMBERS
+1895 
+1896         // in case of complex data, write _tree_ data sets
+1897         // for each component
+1898 
+1899         // this is the real part
+1900         out_stream << "r_" << solution_names[c] << " 1" << std::endl;
+1901         {
+1902           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1903           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1904 
+1905           for ( ; it != end; ++it)
+1906             for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1907               out_stream << v[(n++)*n_vars + c]\&.real() << " ";
+1908         }
+1909         out_stream << std::endl << std::endl;
+1910 
+1911 
+1912         // this is the imaginary part
+1913         out_stream << "i_" << solution_names[c] << " 1" << std::endl;
+1914         {
+1915           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1916           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1917 
+1918           for ( ; it != end; ++it)
+1919             for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1920               out_stream << v[(n++)*n_vars + c]\&.imag() << " ";
+1921         }
+1922         out_stream << std::endl << std::endl;
+1923 
+1924         // this is the magnitude
+1925         out_stream << "a_" << solution_names[c] << " 1" << std::endl;
+1926         {
+1927           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1928           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1929 
+1930           for ( ; it != end; ++it)
+1931             for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1932               out_stream << std::abs(v[(n++)*n_vars + c]) << " ";
+1933         }
+1934         out_stream << std::endl << std::endl;
+1935 
+1936 #else
+1937 
+1938         out_stream << solution_names[c] << " 1" << std::endl;
+1939         {
+1940           MeshBase::const_element_iterator       it  = mesh\&.active_elements_begin();
+1941           const MeshBase::const_element_iterator end = mesh\&.active_elements_end();
+1942 
+1943           unsigned int nn=0;
+1944 
+1945           for ( ; it != end; ++it)
+1946             for (unsigned int n=0; n<(*it)->n_nodes(); n++)
+1947               out_stream << v[(nn++)*n_vars + c] << " ";
+1948         }
+1949         out_stream << std::endl << std::endl;
+1950 
+1951 #endif
+1952 
+1953       }
+1954 
+1955     out_stream << "endvars" << std::endl;
+1956   }
+1957 
+1958 
+1959   // end of the file
+1960   out_stream << std::endl << "endgmv" << std::endl;
+1961 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::GMVIO::write_nodal_data (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)\fC [virtual]\fP"
+This method implements reading a mesh from a specified file\&. Extension of the \fBMeshInput::read()\fP routine which also takes an optional \fBEquationSystems\fP pointer and tries to read field variables from the GMV file into the \fBEquationSystems\fP object\&. This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented from \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 215 of file gmv_io\&.C\&.
+.PP
+References binary(), libMesh::START_LOG(), libMesh::STOP_LOG(), write_ascii_old_impl(), and write_binary()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+218 {
+219   START_LOG("write_nodal_data()", "GMVIO");
+220 
+221   if (this->binary())
+222     this->write_binary (fname, &soln, &names);
+223   else
+224     this->write_ascii_old_impl  (fname, &soln, &names);
+225 
+226   STOP_LOG("write_nodal_data()", "GMVIO");
+227 }
+.fi
+.SS "bool & libMesh::GMVIO::write_subdomain_id_as_material ()\fC [inline]\fP"
+Flag to write element subdomain_id's as GMV 'materials' instead of element processor_id's\&. Allows you to generate exploded views on user-defined subdomains, potentially creating a pretty picture\&. 
+.PP
+Definition at line 324 of file gmv_io\&.h\&.
+.PP
+References _write_subdomain_id_as_material\&.
+.PP
+Referenced by write_ascii_new_impl(), write_ascii_old_impl(), and write_binary()\&.
+.PP
+.nf
+325 {
+326   return _write_subdomain_id_as_material;
+327 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::GMVIO::_binary\fC [private]\fP"
+Flag to write binary data\&. 
+.PP
+Definition at line 219 of file gmv_io\&.h\&.
+.PP
+Referenced by binary()\&.
+.SS "std::map<std::string, const std::vector<\fBReal\fP>* > libMesh::GMVIO::_cell_centered_data\fC [private]\fP"
+Storage for arbitrary cell-centered data\&. Ex: You can use this to plot the effectivity index for a given cell\&. The map is between the string representing the variable name and a pointer to a vector containing the data\&. 
+.PP
+Definition at line 253 of file gmv_io\&.h\&.
+.PP
+Referenced by add_cell_centered_data(), write_ascii_new_impl(), write_ascii_old_impl(), write_binary(), and write_discontinuous_gmv()\&.
+.SS "bool libMesh::GMVIO::_discontinuous\fC [private]\fP"
+Flag to write the mesh as discontinuous patches\&. 
+.PP
+Definition at line 224 of file gmv_io\&.h\&.
+.PP
+Referenced by discontinuous()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "unsigned int libMesh::GMVIO::_next_elem_id\fC [private]\fP"
+
+.PP
+Definition at line 259 of file gmv_io\&.h\&.
+.PP
+Referenced by _read_one_cell(), and read()\&.
+.SS "std::map<std::string, std::vector<\fBNumber\fP> > libMesh::GMVIO::_nodal_data\fC [private]\fP"
+
+.PP
+Definition at line 264 of file gmv_io\&.h\&.
+.PP
+Referenced by _read_var(), and copy_nodal_solution()\&.
+.SS "bool libMesh::GMVIO::_p_levels\fC [private]\fP"
+Flag to write the mesh p refinement levels\&. 
+.PP
+Definition at line 245 of file gmv_io\&.h\&.
+.PP
+Referenced by p_levels()\&.
+.SS "bool libMesh::GMVIO::_partitioning\fC [private]\fP"
+Flag to write the mesh partitioning\&. 
+.PP
+Definition at line 229 of file gmv_io\&.h\&.
+.PP
+Referenced by partitioning()\&.
+.SS "bool libMesh::GMVIO::_subdivide_second_order\fC [private]\fP"
+Flag to subdivide second order elements 
+.PP
+Definition at line 240 of file gmv_io\&.h\&.
+.PP
+Referenced by subdivide_second_order()\&.
+.SS "bool libMesh::GMVIO::_write_subdomain_id_as_material\fC [private]\fP"
+Flag to write element subdomain_id's as GMV 'materials' instead of element processor_id's\&. 
+.PP
+Definition at line 235 of file gmv_io\&.h\&.
+.PP
+Referenced by write_discontinuous_gmv(), and write_subdomain_id_as_material()\&.
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by _read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

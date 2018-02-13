@@ -1,0 +1,126 @@
+.TH "libMesh::SyncNodalPositions" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SyncNodalPositions \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parallel_ghost_sync\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBPoint\fP \fBdatum\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSyncNodalPositions\fP (\fBMeshBase\fP &m)"
+.br
+.ti -1c
+.RI "void \fBgather_data\fP (const std::vector< \fBdof_id_type\fP > &ids, std::vector< \fBdatum\fP > &\fBdata\fP)"
+.br
+.ti -1c
+.RI "void \fBact_on_data\fP (const std::vector< \fBdof_id_type\fP > &ids, std::vector< \fBdatum\fP > &\fBdata\fP)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 440 of file parallel_ghost_sync\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef \fBPoint\fP \fBlibMesh::SyncNodalPositions::datum\fP"
+
+.PP
+Definition at line 450 of file parallel_ghost_sync\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "SyncNodalPositions::SyncNodalPositions (\fBMeshBase\fP &m)\fC [explicit]\fP"
+
+.PP
+Definition at line 4 of file parallel_ghost_sync\&.C\&.
+.PP
+.nf
+5   : mesh(m)
+6 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void SyncNodalPositions::act_on_data (const std::vector< \fBdof_id_type\fP > &ids, std::vector< \fBdatum\fP > &data)"
+
+.PP
+Definition at line 34 of file parallel_ghost_sync\&.C\&.
+.PP
+References libMesh::err, mesh, and libMesh::MeshBase::node_ptr()\&.
+.PP
+.nf
+35 {
+36   for (std::size_t i=0; i<ids\&.size(); ++i)
+37     {
+38 
+39       // Get a pointer to the node whose position is to be updated\&.
+40       Node* node = mesh\&.node_ptr(ids[i]);
+41 
+42       if (node == NULL)
+43         {
+44           libMesh::err << "Error! Mesh returned a NULL node pointer in SyncNodalPosition::act_on_data()\&." << std::endl;
+45           libmesh_error();
+46         }
+47 
+48       // Update this node's position\&.  Should call Point::op=
+49       *node = data[i];
+50     } // end for
+51 } // act_on_data()
+.fi
+.SS "void SyncNodalPositions::gather_data (const std::vector< \fBdof_id_type\fP > &ids, std::vector< \fBdatum\fP > &data)"
+
+.PP
+Definition at line 10 of file parallel_ghost_sync\&.C\&.
+.PP
+References libMesh::err, mesh, and libMesh::MeshBase::node_ptr()\&.
+.PP
+.nf
+11 {
+12   data\&.resize(ids\&.size());
+13 
+14   // Gather (x,y,z) data for all node IDs in the ids vector
+15   for (std::size_t i=0; i<ids\&.size(); ++i)
+16     {
+17       // Look for this node in the mesh
+18       Node *node = mesh\&.node_ptr(ids[i]);
+19 
+20       if (node == NULL)
+21         {
+22           libMesh::err << "Error! Mesh returned a NULL node pointer in SyncNodalPosition::gather_data()\&." << std::endl;
+23           libmesh_error();
+24         }
+25 
+26       // Store this node's position in the data array\&.
+27       // This should call Point::op=
+28       data[i] = *node;
+29     } // end for
+30 } // gather_data()
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBMeshBase\fP& libMesh::SyncNodalPositions::mesh"
+
+.PP
+Definition at line 460 of file parallel_ghost_sync\&.h\&.
+.PP
+Referenced by act_on_data(), and gather_data()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

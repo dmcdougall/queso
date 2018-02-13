@@ -1,0 +1,566 @@
+.TH "libMesh::StatisticsVector< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::StatisticsVector< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <statistics\&.h>\fP
+.PP
+Inherits vector< T >\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBStatisticsVector\fP (\fBdof_id_type\fP i=0)"
+.br
+.ti -1c
+.RI "\fBStatisticsVector\fP (\fBdof_id_type\fP i, T val)"
+.br
+.ti -1c
+.RI "virtual \fB~StatisticsVector\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBl2_norm\fP () const "
+.br
+.ti -1c
+.RI "virtual T \fBminimum\fP () const "
+.br
+.ti -1c
+.RI "virtual T \fBmaximum\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBmean\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBmedian\fP ()"
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBmedian\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBvariance\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBvariance\fP (const \fBReal\fP known_mean) const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBstddev\fP () const "
+.br
+.ti -1c
+.RI "virtual \fBReal\fP \fBstddev\fP (const \fBReal\fP known_mean) const "
+.br
+.ti -1c
+.RI "void \fBnormalize\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBhistogram\fP (std::vector< \fBdof_id_type\fP > &bin_members, unsigned int n_bins=10)"
+.br
+.ti -1c
+.RI "void \fBplot_histogram\fP (const \fBprocessor_id_type\fP my_procid, const std::string &filename, unsigned int n_bins)"
+.br
+.ti -1c
+.RI "virtual void \fBhistogram\fP (std::vector< \fBdof_id_type\fP > &bin_members, unsigned int n_bins=10) const "
+.br
+.ti -1c
+.RI "virtual std::vector< \fBdof_id_type\fP > \fBcut_below\fP (\fBReal\fP cut) const "
+.br
+.ti -1c
+.RI "virtual std::vector< \fBdof_id_type\fP > \fBcut_above\fP (\fBReal\fP cut) const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::StatisticsVector< T >"
+The \fBStatisticsVector\fP class is derived from the std::vector<> and therefore has all of its useful features\&. It was designed to not have any internal state, i\&.e\&. no public or private data members\&. Also, it was only designed for classes and types for which the operators +,*,/ have meaining, specifically floats, doubles, ints, etc\&. The main reason for this design decision was to allow a std::vector<> to be successfully cast to a \fBStatisticsVector\fP, thereby enabling its additional functionality\&. We do not anticipate any problems with deriving from an stl container which lacks a virtual destructor in this case\&.
+.PP
+Where manipulation of the data set was necessary (for example sorting) two versions of member functions have been implemented\&. The non-const versions perform sorting directly in the data set, invalidating pointers and changing the entries\&. const versions of the same functions are generally available, and will be automatically invoked on const \fBStatisticsVector\fP objects\&. A draw-back to the const versions is that they simply make a copy of the original object and therefore double the original memory requirement for the data set\&.
+.PP
+Most of the actual code was copied or adapted from the GNU Scientific Library (GSL)\&. More precisely, the recursion relations for computing the mean were implemented in order to avoid possible problems with buffer overruns\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2002 
+.RE
+.PP
+
+.PP
+Definition at line 77 of file statistics\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::StatisticsVector\fP< T >::\fBStatisticsVector\fP (\fBdof_id_type\fPi = \fC0\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Call the std::vector constructor\&. 
+.PP
+Definition at line 85 of file statistics\&.h\&.
+.PP
+.nf
+85 : std::vector<T> (i) {}
+.fi
+.SS "template<typename T> \fBlibMesh::StatisticsVector\fP< T >::\fBStatisticsVector\fP (\fBdof_id_type\fPi, Tval)\fC [inline]\fP"
+Call the std::vector constructor, fill each entry with \fCval\fP 
+.PP
+Definition at line 90 of file statistics\&.h\&.
+.PP
+.nf
+90 : std::vector<T> (i,val) {}
+.fi
+.SS "template<typename T> virtual \fBlibMesh::StatisticsVector\fP< T >::~\fBStatisticsVector\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. Virtual so we can derive from the \fC\fBStatisticsVector\fP\fP 
+.PP
+Definition at line 95 of file statistics\&.h\&.
+.PP
+.nf
+95 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T > std::vector< \fBdof_id_type\fP > \fBlibMesh::StatisticsVector\fP< T >::cut_above (\fBReal\fPcut) const\fC [virtual]\fP"
+Returns a vector of dof_id_types which correspond to the indices of every member of the data set above the cutoff value cut\&. I chose not to combine these two functions since the interface is cleaner with one passed parameter instead of two\&. 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 366 of file statistics\&.C\&.
+.PP
+References libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+367 {
+368   START_LOG ("cut_above()", "StatisticsVector");
+369 
+370   const dof_id_type n   = this->size();
+371 
+372   std::vector<dof_id_type> cut_indices;
+373   cut_indices\&.reserve(n/2);  // Arbitrary
+374 
+375   for (dof_id_type i=0; i<n; i++)
+376     {
+377       if ((*this)[i] > cut)
+378         {
+379           cut_indices\&.push_back(i);
+380         }
+381     }
+382 
+383   STOP_LOG ("cut_above()", "StatisticsVector");
+384 
+385   return cut_indices;
+386 }
+.fi
+.SS "template<typename T > std::vector< \fBdof_id_type\fP > \fBlibMesh::StatisticsVector\fP< T >::cut_below (\fBReal\fPcut) const\fC [virtual]\fP"
+Returns a vector of dof_id_types which correspond to the indices of every member of the data set below the cutoff value 'cut'\&. 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 340 of file statistics\&.C\&.
+.PP
+References libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+341 {
+342   START_LOG ("cut_below()", "StatisticsVector");
+343 
+344   const dof_id_type n   = this->size();
+345 
+346   std::vector<dof_id_type> cut_indices;
+347   cut_indices\&.reserve(n/2);  // Arbitrary
+348 
+349   for (dof_id_type i=0; i<n; i++)
+350     {
+351       if ((*this)[i] < cut)
+352         {
+353           cut_indices\&.push_back(i);
+354         }
+355     }
+356 
+357   STOP_LOG ("cut_below()", "StatisticsVector");
+358 
+359   return cut_indices;
+360 }
+.fi
+.SS "template<typename T > void \fBlibMesh::StatisticsVector\fP< T >::histogram (std::vector< \fBdof_id_type\fP > &bin_members, unsigned intn_bins = \fC10\fP)\fC [virtual]\fP"
+Computes and returns a histogram with n_bins bins for the data set\&. For simplicity, the bins are assumed to be of uniform size\&. Upon return, the bin_members vector will contain unsigned integers which give the number of members in each bin\&. WARNING: This non-const function sorts the vector, changing its order\&. Source: GNU Scientific Library 
+.PP
+Definition at line 189 of file statistics\&.C\&.
+.PP
+References end, libMesh::libmesh_assert(), std::max(), std::min(), libMesh::out, libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::StatisticsVector< T >::histogram()\&.
+.PP
+.nf
+191 {
+192   // Must have at least 1 bin
+193   libmesh_assert (n_bins>0);
+194 
+195   const dof_id_type n   = this->size();
+196 
+197   std::sort(this->begin(), this->end());
+198 
+199   // The StatisticsVector can hold both integer and float types\&.
+200   // We will define all the bins, etc\&. using Reals\&.
+201   Real min      = static_cast<Real>(this->minimum());
+202   Real max      = static_cast<Real>(this->maximum());
+203   Real bin_size = (max - min) / static_cast<Real>(n_bins);
+204 
+205   START_LOG ("histogram()", "StatisticsVector");
+206 
+207   std::vector<Real> bin_bounds(n_bins+1);
+208   for (unsigned int i=0; i<bin_bounds\&.size(); i++)
+209     bin_bounds[i] = min + i * bin_size;
+210 
+211   // Give the last bin boundary a little wiggle room: we don't want
+212   // it to be just barely less than the max, otherwise our bin test below
+213   // may fail\&.
+214   bin_bounds\&.back() += 1\&.e-6 * bin_size;
+215 
+216   // This vector will store the number of members each bin has\&.
+217   bin_members\&.resize(n_bins);
+218 
+219   dof_id_type data_index = 0;
+220   for (unsigned int j=0; j<bin_members\&.size(); j++) // bin vector indexing
+221     {
+222       // libMesh::out << "(debug) Filling bin " << j << std::endl;
+223 
+224       for (dof_id_type i=data_index; i<n; i++) // data vector indexing
+225         {
+226           //libMesh::out << "(debug) Processing index=" << i << std::endl;
+227           Real current_val = static_cast<Real>( (*this)[i] );
+228 
+229           // There may be entries in the vector smaller than the value
+230           // reported by this->minimum()\&.  (e\&.g\&. inactive elements in an
+231           // ErrorVector\&.)  We just skip entries like that\&.
+232           if ( current_val < min )
+233             {
+234               //     libMesh::out << "(debug) Skipping entry v[" << i << "]="
+235               //       << (*this)[i]
+236               //       << " which is less than the min value: min="
+237               //       << min << std::endl;
+238               continue;
+239             }
+240 
+241           if ( current_val > bin_bounds[j+1] ) // if outside the current bin (bin[j] is bounded
+242             // by bin_bounds[j] and bin_bounds[j+1])
+243             {
+244               // libMesh::out\&.precision(16);
+245               //     libMesh::out\&.setf(std::ios_base::fixed);
+246               //     libMesh::out << "(debug) (*this)[i]= " << (*this)[i]
+247               //       << " is greater than bin_bounds[j+1]="
+248               //      << bin_bounds[j+1] << std::endl;
+249               data_index = i; // start searching here for next bin
+250               break; // go to next bin
+251             }
+252 
+253           // Otherwise, increment current bin's count
+254           bin_members[j]++;
+255           // libMesh::out << "(debug) Binned index=" << i << std::endl;
+256         }
+257     }
+258 
+259 #ifdef DEBUG
+260   // Check the number of binned entries
+261   const dof_id_type n_binned = std::accumulate(bin_members\&.begin(),
+262                                                bin_members\&.end(),
+263                                                static_cast<dof_id_type>(0),
+264                                                std::plus<dof_id_type>());
+265 
+266   if (n != n_binned)
+267     {
+268       libMesh::out << "Warning: The number of binned entries, n_binned="
+269                    << n_binned
+270                    << ", did not match the total number of entries, n="
+271                    << n << "\&." << std::endl;
+272       //libmesh_error();
+273     }
+274 #endif
+275 
+276 
+277   STOP_LOG ("histogram()", "StatisticsVector");
+278 }
+.fi
+.SS "template<typename T > void \fBlibMesh::StatisticsVector\fP< T >::histogram (std::vector< \fBdof_id_type\fP > &bin_members, unsigned intn_bins = \fC10\fP) const\fC [virtual]\fP"
+A const version of the histogram function\&. 
+.PP
+Definition at line 328 of file statistics\&.C\&.
+.PP
+References libMesh::StatisticsVector< T >::histogram()\&.
+.PP
+.nf
+330 {
+331   StatisticsVector<T> sv = (*this);
+332 
+333   return sv\&.histogram(bin_members, n_bins);
+334 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::l2_norm () const\fC [virtual]\fP"
+Returns the l2 norm of the data set\&. 
+.PP
+Definition at line 36 of file statistics\&.C\&.
+.PP
+References libMesh::Real\&.
+.PP
+.nf
+37 {
+38   Real normsq = 0\&.;
+39   for (dof_id_type i = 0; i != this->size(); ++i)
+40     normsq += ((*this)[i] * (*this)[i]);
+41 
+42   return std::sqrt(normsq);
+43 }
+.fi
+.SS "template<typename T > T \fBlibMesh::StatisticsVector\fP< T >::maximum () const\fC [virtual]\fP"
+Returns the maximum value in the data set\&. 
+.PP
+Definition at line 62 of file statistics\&.C\&.
+.PP
+References end, std::max(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+63 {
+64   START_LOG ("maximum()", "StatisticsVector");
+65 
+66   const T max = *(std::max_element(this->begin(), this->end()));
+67 
+68   STOP_LOG ("maximum()", "StatisticsVector");
+69 
+70   return max;
+71 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::mean () const\fC [virtual]\fP"
+Returns the mean value of the data set using a recurrence relation\&. Source: GNU Scientific Library 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 77 of file statistics\&.C\&.
+.PP
+References libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::StatisticsVector< ErrorVectorReal >::variance()\&.
+.PP
+.nf
+78 {
+79   START_LOG ("mean()", "StatisticsVector");
+80 
+81   const dof_id_type n = this->size();
+82 
+83   Real the_mean = 0;
+84 
+85   for (dof_id_type i=0; i<n; i++)
+86     {
+87       the_mean += ( static_cast<Real>((*this)[i]) - the_mean ) /
+88         static_cast<Real>(i + 1);
+89     }
+90 
+91   STOP_LOG ("mean()", "StatisticsVector");
+92 
+93   return the_mean;
+94 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::median ()\fC [virtual]\fP"
+Returns the median (e\&.g\&. the middle) value of the data set\&. This function modifies the original data by sorting, so it can't be called on const objects\&. Source: GNU Scientific Library 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 100 of file statistics\&.C\&.
+.PP
+References end, libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+Referenced by libMesh::ErrorVector::median(), and libMesh::StatisticsVector< T >::median()\&.
+.PP
+.nf
+101 {
+102   const dof_id_type n   = this->size();
+103 
+104   if (n == 0)
+105     return 0\&.;
+106 
+107   START_LOG ("median()", "StatisticsVector");
+108 
+109   std::sort(this->begin(), this->end());
+110 
+111   const dof_id_type lhs = (n-1) / 2;
+112   const dof_id_type rhs = n / 2;
+113 
+114   Real the_median = 0;
+115 
+116 
+117   if (lhs == rhs)
+118     {
+119       the_median = static_cast<Real>((*this)[lhs]);
+120     }
+121 
+122   else
+123     {
+124       the_median = ( static_cast<Real>((*this)[lhs]) +
+125                      static_cast<Real>((*this)[rhs]) ) / 2\&.0;
+126     }
+127 
+128   STOP_LOG ("median()", "StatisticsVector");
+129 
+130   return the_median;
+131 }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::median () const\fC [virtual]\fP"
+A const version of the median funtion\&. Requires twice the memory of original data set but does not change the original\&. 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 137 of file statistics\&.C\&.
+.PP
+References libMesh::StatisticsVector< T >::median()\&.
+.PP
+.nf
+138 {
+139   StatisticsVector<T> sv = (*this);
+140 
+141   return sv\&.median();
+142 }
+.fi
+.SS "template<typename T > T \fBlibMesh::StatisticsVector\fP< T >::minimum () const\fC [virtual]\fP"
+Returns the minimum value in the data set\&. 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 47 of file statistics\&.C\&.
+.PP
+References end, std::min(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+48 {
+49   START_LOG ("minimum()", "StatisticsVector");
+50 
+51   const T min = *(std::min_element(this->begin(), this->end()));
+52 
+53   STOP_LOG ("minimum()", "StatisticsVector");
+54 
+55   return min;
+56 }
+.fi
+.SS "template<typename T > void \fBlibMesh::StatisticsVector\fP< T >::normalize ()"
+Divides all entries by the largest entry and stores the result 
+.PP
+Definition at line 173 of file statistics\&.C\&.
+.PP
+References std::max(), and libMesh::Real\&.
+.PP
+.nf
+174 {
+175   const dof_id_type n   = this->size();
+176   const Real max = this->maximum();
+177 
+178   for (dof_id_type i=0; i<n; i++)
+179     {
+180       (*this)[i] = static_cast<T>((*this)[i] / max);
+181     }
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::StatisticsVector\fP< T >::plot_histogram (const \fBprocessor_id_type\fPmy_procid, const std::string &filename, unsigned intn_bins)"
+Generates a Matlab/Octave style file which can be used to make a plot of the histogram having the desired number of bins\&. Uses the histogram(\&.\&.\&.) function in this class WARNING: The histogram(\&.\&.\&.) function is non-const, and changes the order of the vector\&. 
+.PP
+Definition at line 285 of file statistics\&.C\&.
+.PP
+References std::max(), and std::min()\&.
+.PP
+.nf
+288 {
+289   // First generate the histogram with the desired number of bins
+290   std::vector<dof_id_type> bin_members;
+291   this->histogram(bin_members, n_bins);
+292 
+293   // The max, min and bin size are used to generate x-axis values\&.
+294   T min      = this->minimum();
+295   T max      = this->maximum();
+296   T bin_size = (max - min) / static_cast<T>(n_bins);
+297 
+298   // On processor 0: Write histogram to file
+299   if (my_procid==0)
+300     {
+301       std::ofstream out_stream (filename\&.c_str());
+302 
+303       out_stream << "clear all\n";
+304       out_stream << "clf\n";
+305       //out_stream << "x=linspace(" << min << "," << max << "," << n_bins+1 << ");\n";
+306 
+307       // abscissa values are located at the center of each bin\&.
+308       out_stream << "x=[";
+309       for (unsigned int i=0; i<bin_members\&.size(); ++i)
+310         {
+311           out_stream << min + (i+0\&.5)*bin_size << " ";
+312         }
+313       out_stream << "];\n";
+314 
+315       out_stream << "y=[";
+316       for (unsigned int i=0; i<bin_members\&.size(); ++i)
+317         {
+318           out_stream << bin_members[i] << " ";
+319         }
+320       out_stream << "];\n";
+321       out_stream << "bar(x,y);\n";
+322     }
+323 }
+.fi
+.SS "template<typename T> virtual \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::stddev () const\fC [inline]\fP, \fC [virtual]\fP"
+Computes the standard deviation of the data set, which is simply the square-root of the variance\&. 
+.PP
+Definition at line 165 of file statistics\&.h\&.
+.PP
+.nf
+166   { return std::sqrt(this->variance()); }
+.fi
+.SS "template<typename T> virtual \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::stddev (const \fBReal\fPknown_mean) const\fC [inline]\fP, \fC [virtual]\fP"
+Computes the standard deviation of the data set, which is simply the square-root of the variance\&. This method can be used for efficiency when the \fCmean\fP has already been computed\&. 
+.PP
+Definition at line 174 of file statistics\&.h\&.
+.PP
+.nf
+175   { return std::sqrt(this->variance(known_mean)); }
+.fi
+.SS "template<typename T> virtual \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::variance () const\fC [inline]\fP, \fC [virtual]\fP"
+Computes the variance of the data set\&. Uses a recurrence relation to prevent data overflow for large sums\&. Note: The variance is equal to the standard deviation squared\&. Source: GNU Scientific Library 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 145 of file statistics\&.h\&.
+.PP
+Referenced by libMesh::StatisticsVector< ErrorVectorReal >::stddev(), and libMesh::StatisticsVector< ErrorVectorReal >::variance()\&.
+.PP
+.nf
+146   { return this->variance(this->mean()); }
+.fi
+.SS "template<typename T > \fBReal\fP \fBlibMesh::StatisticsVector\fP< T >::variance (const \fBReal\fPknown_mean) const\fC [virtual]\fP"
+Computes the variance of the data set where the \fCmean\fP is provided\&. This is useful for efficiency when you have already calculated the mean\&. Uses a recurrence relation to prevent data overflow for large sums\&. Note: The variance is equal to the standard deviation squared\&. Source: GNU Scientific Library 
+.PP
+Reimplemented in \fBlibMesh::ErrorVector\fP\&.
+.PP
+Definition at line 148 of file statistics\&.C\&.
+.PP
+References libMesh::Real, libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+149 {
+150   const dof_id_type n   = this->size();
+151 
+152   START_LOG ("variance()", "StatisticsVector");
+153 
+154   Real the_variance = 0;
+155 
+156   for (dof_id_type i=0; i<n; i++)
+157     {
+158       const Real delta = ( static_cast<Real>((*this)[i]) - mean_in );
+159       the_variance += (delta * delta - the_variance) /
+160         static_cast<Real>(i + 1);
+161     }
+162 
+163   if (n > 1)
+164     the_variance *= static_cast<Real>(n) / static_cast<Real>(n - 1);
+165 
+166   STOP_LOG ("variance()", "StatisticsVector");
+167 
+168   return the_variance;
+169 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

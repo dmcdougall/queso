@@ -1,0 +1,225 @@
+.TH "parallel_implementation.h" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+parallel_implementation.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBlibMesh::Parallel::StandardType< std::pair< T1, T2 > >\fP"
+.br
+.ti -1c
+.RI "class \fBlibMesh::Parallel::StandardType< std::complex< T > >\fP"
+.br
+.in -1c
+.SS "Namespaces"
+
+.in +1c
+.ti -1c
+.RI "\fBlibMesh\fP"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (char, MPI_CHAR)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (signed char, MPI_SIGNED_CHAR)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (unsigned char, MPI_UNSIGNED_CHAR)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (short int, MPI_SHORT)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (unsigned short int, MPI_UNSIGNED_SHORT)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (int, MPI_INT)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (unsigned int, MPI_UNSIGNED)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (long, MPI_LONG)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (unsigned long, MPI_UNSIGNED_LONG)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::INT_TYPE\fP (unsigned long long, MPI_LONG_LONG_INT)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::FLOAT_TYPE\fP (float, MPI_FLOAT)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::FLOAT_TYPE\fP (double, MPI_DOUBLE)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::FLOAT_TYPE\fP (long double, MPI_LONG_DOUBLE)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::CONTAINER_TYPE\fP (std::set)"
+.br
+.ti -1c
+.RI "\fBlibMesh::Parallel::CONTAINER_TYPE\fP (std::vector)"
+.br
+.ti -1c
+.RI "template<typename Context , typename buffertype , typename Iter > void \fBlibMesh::Parallel::pack_range\fP (const Context *context, Iter range_begin, const Iter range_end, typename std::vector< buffertype > &buffer)"
+.br
+.ti -1c
+.RI "template<typename Context , typename buffertype , typename OutputIter > void \fBlibMesh::Parallel::unpack_range\fP (const std::vector< buffertype > &buffer, Context *context, OutputIter out)"
+.br
+.ti -1c
+.RI "void \fBlibMesh::Parallel::barrier\fP (const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBlibMesh::Parallel::verify\fP (const T &r, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::min\fP (T &r, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T , typename U > void \fBlibMesh::Parallel::minloc\fP (T &r, U &min_id, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::max\fP (T &r, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T , typename U > void \fBlibMesh::Parallel::maxloc\fP (T &r, U &max_id, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::sum\fP (T &r, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::set_union\fP (T &\fBdata\fP, const unsigned int root_id, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::set_union\fP (T &\fBdata\fP, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "status \fBlibMesh::Parallel::probe\fP (const unsigned int src_processor_id, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::send\fP (const unsigned int dest_processor_id, T &\fBdata\fP, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::send\fP (const unsigned int dest_processor_id, T &\fBdata\fP, Request &req, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::send\fP (const unsigned int dest_processor_id, T &\fBdata\fP, const DataType &type, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::send\fP (const unsigned int dest_processor_id, T &\fBdata\fP, const DataType &type, Request &req, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter > void \fBlibMesh::Parallel::send_packed_range\fP (const unsigned int dest_processor_id, const Context *context, Iter range_begin, const Iter range_end, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter > void \fBlibMesh::Parallel::send_packed_range\fP (const unsigned int dest_processor_id, const Context *context, Iter range_begin, const Iter range_end, Request &req, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::nonblocking_send\fP (const unsigned int dest_processor_id, T &buf, const DataType &type, Request &r, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::nonblocking_send\fP (const unsigned int dest_processor_id, T &buf, Request &r, const MessageTag &tag=no_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > Status \fBlibMesh::Parallel::receive\fP (const unsigned int src_processor_id, T &buf, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::receive\fP (const unsigned int src_processor_id, T &buf, Request &req, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > Status \fBlibMesh::Parallel::receive\fP (const unsigned int src_processor_id, T &buf, const DataType &type, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::receive\fP (const unsigned int src_processor_id, T &buf, const DataType &type, Request &req, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputIter > void \fBlibMesh::Parallel::receive_packed_range\fP (const unsigned int src_processor_id, Context *context, OutputIter out, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputIter > void \fBlibMesh::Parallel::receive_packed_range\fP (const unsigned int src_processor_id, Context *context, OutputIter out, Request &req, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::nonblocking_receive\fP (const unsigned int src_processor_id, T &buf, const DataType &type, Request &r, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::nonblocking_receive\fP (const unsigned int src_processor_id, T &buf, Request &r, const MessageTag &tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBlibMesh::Parallel::send_receive\fP (const unsigned int dest_processor_id, T1 &send, const unsigned int source_processor_id, T2 &recv, const MessageTag &send_tag=no_tag, const MessageTag &recv_tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context1 , typename RangeIter , typename Context2 , typename OutputIter > void \fBlibMesh::Parallel::send_receive_packed_range\fP (const unsigned int dest_processor_id, const Context1 *context1, RangeIter send_begin, const RangeIter send_end, const unsigned int source_processor_id, Context2 *context2, OutputIter out, const MessageTag &send_tag=no_tag, const MessageTag &recv_tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T1 , typename T2 > void \fBlibMesh::Parallel::send_receive\fP (const unsigned int dest_processor_id, T1 &send, const DataType &type1, const unsigned int source_processor_id, T2 &recv, const DataType &type2, const MessageTag &send_tag=no_tag, const MessageTag &recv_tag=any_tag, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::gather\fP (const unsigned int root_id, T send, std::vector< T > &recv, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::gather\fP (const unsigned int root_id, std::vector< T > &r, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::allgather\fP (T send, std::vector< T > &recv, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::allgather\fP (std::vector< T > &r, const bool identical_buffer_sizes=false, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter , typename OutputIter > void \fBlibMesh::Parallel::gather_packed_range\fP (const unsigned int root_id, Context *context, Iter range_begin, const Iter range_end, OutputIter out, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename Iter , typename OutputIter > void \fBlibMesh::Parallel::allgather_packed_range\fP (Context *context, Iter range_begin, const Iter range_end, OutputIter out, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::alltoall\fP (std::vector< T > &r, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBlibMesh::Parallel::broadcast\fP (T &\fBdata\fP, const unsigned int root_id=0, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<typename Context , typename OutputContext , typename Iter , typename OutputIter > void \fBlibMesh::Parallel::broadcast_packed_range\fP (const Context *context1, Iter range_begin, const Iter range_end, OutputContext *context2, OutputIter out, const unsigned int root_id=0, const Communicator &comm=Communicator_World)"
+.br
+.ti -1c
+.RI "template<> data_type \fBlibMesh::Parallel::dataplusint_type< short int >\fP ()"
+.br
+.ti -1c
+.RI "template<> data_type \fBlibMesh::Parallel::dataplusint_type< int >\fP ()"
+.br
+.ti -1c
+.RI "template<> data_type \fBlibMesh::Parallel::dataplusint_type< long >\fP ()"
+.br
+.ti -1c
+.RI "template<> data_type \fBlibMesh::Parallel::dataplusint_type< float >\fP ()"
+.br
+.ti -1c
+.RI "template<> data_type \fBlibMesh::Parallel::dataplusint_type< double >\fP ()"
+.br
+.ti -1c
+.RI "template<> data_type \fBlibMesh::Parallel::dataplusint_type< long double >\fP ()"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "FakeCommunicator & \fBlibMesh::Parallel::Communicator_World\fP = CommWorld"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

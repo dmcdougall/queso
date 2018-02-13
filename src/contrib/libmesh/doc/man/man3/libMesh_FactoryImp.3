@@ -1,0 +1,156 @@
+.TH "libMesh::FactoryImp< Derived, Base >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::FactoryImp< Derived, Base > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <factory\&.h>\fP
+.PP
+Inherits \fBlibMesh::Factory< Base >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFactoryImp\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "\fB~FactoryImp\fP ()"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP< Base > \fBbuild\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<> std::map< std::string, \fBFactory\fP
+.br
+< \fBPartitioner\fP > * > & \fBfactory_map\fP ()"
+.br
+.in -1c
+.SS "Static Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::map< std::string, 
+.br
+\fBFactory\fP< Base > * > & \fBfactory_map\fP ()"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBAutoPtr\fP< Base > \fBcreate\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Derived, class Base>class libMesh::FactoryImp< Derived, Base >"
+\fBFactory\fP implementation class\&. 
+.PP
+Definition at line 84 of file factory\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Derived, class Base> \fBlibMesh::FactoryImp\fP< Derived, Base >::\fBFactoryImp\fP (const std::string &name)\fC [inline]\fP"
+Constructor\&. Takes a name as input\&. 
+.PP
+Definition at line 91 of file factory\&.h\&.
+.PP
+.nf
+91 : Factory<Base>(name) { }
+.fi
+.SS "template<class Derived, class Base> \fBlibMesh::FactoryImp\fP< Derived, Base >::~\fBFactoryImp\fP ()\fC [inline]\fP"
+Destructor\&. Empty\&. 
+.PP
+Definition at line 96 of file factory\&.h\&.
+.PP
+.nf
+96 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Base > \fBAutoPtr\fP< Base > \fBlibMesh::Factory\fP< Base >::build (const std::string &name)\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Builds an object of type Base identified by name\&. 
+.PP
+Definition at line 126 of file factory\&.h\&.
+.PP
+References libMesh::Factory< Base >::create(), libMesh::err, and libMesh::Quality::name()\&.
+.PP
+.nf
+127 {
+128   // name not found in the map
+129   if (!factory_map()\&.count(name))
+130     {
+131       libMesh::err << "Tried to build an unknown type: " << name << std::endl;
+132 
+133       libMesh::err << "valid options are:" << std::endl;
+134 
+135       for (typename std::map<std::string,Factory<Base>*>::const_iterator
+136              it = factory_map()\&.begin(); it != factory_map()\&.end(); ++it)
+137         libMesh::err << "  " << it->first << std::endl;
+138 
+139       libmesh_error();
+140 
+141       // Do this the stoopid way for IBM xlC
+142       AutoPtr<Base> ret_val (NULL);
+143 
+144       return ret_val;
+145     }
+146 
+147   // Do this the stoopid way for IBM xlC
+148   Factory<Base> *f = factory_map()[name];
+149 
+150   AutoPtr<Base> ret_val (f->create());
+151 
+152   return ret_val;
+153 }
+.fi
+.SS "template<class Derived , class Base > \fBAutoPtr\fP< Base > \fBlibMesh::FactoryImp\fP< Derived, Base >::create ()\fC [inline]\fP, \fC [private]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a new object of type Derived\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Factory< Base >\fP\&.
+.PP
+Definition at line 170 of file factory\&.h\&.
+.PP
+.nf
+171 {
+172   // Do this the stoopid way for IBM xlC
+173   AutoPtr<Base> ret_val (new Derived);
+174 
+175   return ret_val;
+176 }
+.fi
+.SS "template<> std::map< std::string, \fBFactory\fP< \fBPartitioner\fP > * > & \fBlibMesh::Factory\fP< \fBPartitioner\fP >::factory_map ()\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 40 of file partitioner_factory\&.C\&.
+.PP
+.nf
+41 {
+42   static std::map<std::string, Factory<Partitioner>*> _map;
+43   return _map;
+44 }
+.fi
+.SS "template<class Base> static std::map<std::string, \fBFactory\fP<Base>*>& \fBlibMesh::Factory\fP< Base >::factory_map ()\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Map from a name to a Factory<Base>* pointer\&. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

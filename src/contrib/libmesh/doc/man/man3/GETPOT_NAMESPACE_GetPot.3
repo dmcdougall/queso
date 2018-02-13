@@ -1,0 +1,4097 @@
+.TH "GETPOT_NAMESPACE::GetPot" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GETPOT_NAMESPACE::GetPot \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <getpot\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBltstr\fP"
+.br
+.ti -1c
+.RI "struct \fBvariable\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGetPot\fP ()"
+.br
+.ti -1c
+.RI "\fBGetPot\fP (const \fBGetPot\fP &)"
+.br
+.ti -1c
+.RI "\fBGetPot\fP (const int argc_, const char *const *argv_, const char *FieldSeparator=0x0)"
+.br
+.ti -1c
+.RI "\fBGetPot\fP (const char *FileName, const char *CommentStart=0x0, const char *CommentEnd=0x0, const char *FieldSeparator=0x0)"
+.br
+.ti -1c
+.RI "\fBGetPot\fP (const std::string &FileName, const std::string &CommentStart=std::string('#'), const std::string &CommentEnd=std::string('\\n'), const std::string &FieldSeparator=std::string(' \\t\\n'))"
+.br
+.ti -1c
+.RI "\fB~GetPot\fP ()"
+.br
+.ti -1c
+.RI "\fBGetPot\fP & \fBoperator=\fP (const \fBGetPot\fP &)"
+.br
+.ti -1c
+.RI "void \fBparse_command_line\fP (const int argc_, const char *const *argv_, const char *FieldSeparator=0x0)"
+.br
+.ti -1c
+.RI "void \fBparse_input_file\fP (const std::string &FileName, const std::string &CommentStart=std::string('#'), const std::string &CommentEnd=std::string('\\n'), const std::string &FieldSeparator=std::string(' \\t\\n'))"
+.br
+.ti -1c
+.RI "void \fBabsorb\fP (const \fBGetPot\fP &Other)"
+.br
+.ti -1c
+.RI "void \fBclear_requests\fP ()"
+.br
+.ti -1c
+.RI "void \fBdisable_request_recording\fP ()"
+.br
+.ti -1c
+.RI "void \fBenable_request_recording\fP ()"
+.br
+.ti -1c
+.RI "const char * \fBoperator[]\fP (unsigned Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget\fP (unsigned Idx, const T &Default) const "
+.br
+.ti -1c
+.RI "const char * \fBget\fP (unsigned Idx, const char *Default) const "
+.br
+.ti -1c
+.RI "unsigned \fBsize\fP () const "
+.br
+.ti -1c
+.RI "bool \fBoptions_contain\fP (const char *FlagList) const "
+.br
+.ti -1c
+.RI "bool \fBargument_contains\fP (unsigned Idx, const char *FlagList) const "
+.br
+.ti -1c
+.RI "bool \fBhave_variable\fP (const char *VarName) const "
+.br
+.ti -1c
+.RI "bool \fBhave_variable\fP (const std::string &VarName) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (const char *VarName, const T &Default) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (const std::string &VarName, const T &Default) const "
+.br
+.ti -1c
+.RI "const char * \fBoperator()\fP (const char *VarName, const char *Default) const "
+.br
+.ti -1c
+.RI "const char * \fBoperator()\fP (const std::string &VarName, const char *Default) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (const char *VarName, const T &Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (const std::string &VarName, const T &Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "const char * \fBoperator()\fP (const char *VarName, const char *Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "const char * \fBoperator()\fP (const std::string &VarName, const char *Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget_value_no_default\fP (const char *VarName, const T &Default) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget_value_no_default\fP (const std::string &VarName, const T &Default) const "
+.br
+.ti -1c
+.RI "const char * \fBget_value_no_default\fP (const char *VarName, const char *Default) const "
+.br
+.ti -1c
+.RI "const char * \fBget_value_no_default\fP (const std::string &VarName, const char *Default) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget_value_no_default\fP (const char *VarName, const T &Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget_value_no_default\fP (const std::string &VarName, const T &Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "const char * \fBget_value_no_default\fP (const char *VarName, const char *Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "const char * \fBget_value_no_default\fP (const std::string &VarName, const char *Default, unsigned Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBset\fP (const char *VarName, const T &Value, const bool Requested=true)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBset\fP (const std::string &VarName, const T &Value, const bool Requested=true)"
+.br
+.ti -1c
+.RI "void \fBset\fP (const char *VarName, const char *Value, const bool Requested=true)"
+.br
+.ti -1c
+.RI "void \fBset\fP (const std::string &VarName, const char *Value, const bool Requested=true)"
+.br
+.ti -1c
+.RI "unsigned \fBvector_variable_size\fP (const char *VarName) const "
+.br
+.ti -1c
+.RI "unsigned \fBvector_variable_size\fP (const std::string &VarName) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBget_variable_names\fP () const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBget_section_names\fP () const "
+.br
+.ti -1c
+.RI "std::set< std::string > \fBget_overridden_variables\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_prefix\fP (const char *Prefix)"
+.br
+.ti -1c
+.RI "bool \fBsearch_failed\fP () const "
+.br
+.ti -1c
+.RI "void \fBdisable_loop\fP ()"
+.br
+.ti -1c
+.RI "void \fBenable_loop\fP ()"
+.br
+.ti -1c
+.RI "void \fBreset_cursor\fP ()"
+.br
+.ti -1c
+.RI "void \fBinit_multiple_occurrence\fP ()"
+.br
+.ti -1c
+.RI "bool \fBsearch\fP (const char *option)"
+.br
+.ti -1c
+.RI "bool \fBsearch\fP (const std::string &option)"
+.br
+.ti -1c
+.RI "bool \fBsearch\fP (unsigned No, const char *P,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBnext\fP (const T &Default)"
+.br
+.ti -1c
+.RI "const char * \fBnext\fP (const char *Default)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBfollow\fP (const T &Default, const char *Option)"
+.br
+.ti -1c
+.RI "const char * \fBfollow\fP (const char *Default, const char *Option)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBfollow\fP (const T &Default, unsigned No, const char *Option,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "const char * \fBfollow\fP (const char *Default, unsigned No, const char *Option,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBdirect_follow\fP (const T &Default, const char *Option)"
+.br
+.ti -1c
+.RI "const char * \fBdirect_follow\fP (const char *Default, const char *Option)"
+.br
+.ti -1c
+.RI "void \fBreset_nominus_cursor\fP ()"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBnominus_vector\fP () const "
+.br
+.ti -1c
+.RI "unsigned \fBnominus_size\fP () const "
+.br
+.ti -1c
+.RI "const char * \fBnext_nominus\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBnext_nominus_string\fP ()"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_arguments\fP (unsigned Number, const char *Known,\&.\&.\&.) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_arguments\fP (const std::set< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_arguments\fP (const std::vector< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_arguments\fP () const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_options\fP (unsigned Number, const char *Known,\&.\&.\&.) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_options\fP (const std::set< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_options\fP (const std::vector< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_options\fP () const "
+.br
+.ti -1c
+.RI "std::string \fBunidentified_flags\fP (const char *Known, int ArgumentNumber) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_variables\fP (unsigned Number, const char *Known,\&.\&.\&.) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_variables\fP (const std::set< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_variables\fP (const std::vector< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_variables\fP () const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_sections\fP (unsigned Number, const char *Known,\&.\&.\&.) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_sections\fP (const std::set< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_sections\fP (const std::vector< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_sections\fP () const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_nominuses\fP (unsigned Number, const char *Known,\&.\&.\&.) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_nominuses\fP (const std::set< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_nominuses\fP (const std::vector< std::string > &Knowns) const "
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBunidentified_nominuses\fP () const "
+.br
+.ti -1c
+.RI "int \fBprint\fP (std::ostream &out_stream=std::cout) const "
+.br
+.ti -1c
+.RI "int \fBprint\fP (const char *custom_prefix, std::ostream &out_stream=std::cout, unsigned int skip_count=1) const "
+.br
+.ti -1c
+.RI "template<> std::string \fB_convert_to_type\fP (const std::string &String, const std::string &) const "
+.br
+.ti -1c
+.RI "template<> std::string \fB_convert_to_type_no_default\fP (const char *, const std::string &String, const std::string &) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget\fP (unsigned int Idx, const T &Default) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBfollow\fP (const T &Default, unsigned int No, const char *P,\&.\&.\&.)"
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (const char *VarName, const T &Default, unsigned int Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBoperator()\fP (const std::string &VarName, const T &Default, unsigned int Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget_value_no_default\fP (const char *VarName, const T &Default, unsigned int Idx) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fBget_value_no_default\fP (const std::string &VarName, const T &Default, unsigned int Idx) const "
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fB_basic_initialization\fP ()"
+.br
+.ti -1c
+.RI "const char * \fB_internal_managed_copy\fP (const std::string &Arg) const "
+.br
+.ti -1c
+.RI "void \fB_record_argument_request\fP (const std::string &Arg) const "
+.br
+.ti -1c
+.RI "void \fB_record_variable_request\fP (const std::string &Arg) const "
+.br
+.ti -1c
+.RI "void \fB_set_variable\fP (const std::string &VarName, const std::string &Value, const bool Requested)"
+.br
+.ti -1c
+.RI "void \fB_parse_argument_vector\fP (const \fBSTRING_VECTOR\fP &ARGV)"
+.br
+.ti -1c
+.RI "const \fBvariable\fP * \fB_find_variable\fP (const char *) const "
+.br
+.ti -1c
+.RI "const \fBvariable\fP * \fB_request_variable\fP (const char *) const "
+.br
+.ti -1c
+.RI "const char * \fB_match_starting_string\fP (const char *StartString)"
+.br
+.ti -1c
+.RI "bool \fB_check_flags\fP (const std::string &Str, const char *FlagList) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fB_convert_to_type\fP (const std::string &String, const T &Default) const "
+.br
+.ti -1c
+.RI "std::string \fB_convert_to_type\fP (const std::string &String, const char *Default) const "
+.br
+.ti -1c
+.RI "template<typename T > T \fB_convert_to_type_no_default\fP (const char *VarName, const std::string &String, const T &Default) const "
+.br
+.ti -1c
+.RI "std::string \fB_convert_to_type_no_default\fP (const char *VarName, const std::string &String, const char *Default) const "
+.br
+.ti -1c
+.RI "const std::string \fB_get_remaining_string\fP (const std::string &String, const std::string &Start) const "
+.br
+.ti -1c
+.RI "bool \fB_search_string_vector\fP (const \fBSTRING_VECTOR\fP &Vec, const std::string &Str) const "
+.br
+.ti -1c
+.RI "void \fB_skip_whitespace\fP (std::istream &istr)"
+.br
+.ti -1c
+.RI "const std::string \fB_get_next_token\fP (std::istream &istr)"
+.br
+.ti -1c
+.RI "const std::string \fB_get_string\fP (std::istream &istr)"
+.br
+.ti -1c
+.RI "const std::string \fB_get_until_closing_bracket\fP (std::istream &istr)"
+.br
+.ti -1c
+.RI "const std::string \fB_get_until_closing_square_bracket\fP (std::istream &istr)"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fB_read_in_stream\fP (std::istream &istr)"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fB_read_in_file\fP (const std::string &FileName)"
+.br
+.ti -1c
+.RI "std::string \fB_process_section_label\fP (const std::string &Section, \fBSTRING_VECTOR\fP &section_stack)"
+.br
+.ti -1c
+.RI "std::string \fB_DBE_expand_string\fP (const std::string &str)"
+.br
+.ti -1c
+.RI "std::string \fB_DBE_expand\fP (const std::string &str)"
+.br
+.ti -1c
+.RI "const \fBGetPot::variable\fP * \fB_DBE_get_variable\fP (const std::string &str)"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fB_DBE_get_expr_list\fP (const std::string &str, const unsigned ExpectedNumber)"
+.br
+.ti -1c
+.RI "template<> bool \fB_convert_to_type\fP (const std::string &String, const bool &Default) const "
+.br
+.ti -1c
+.RI "template<> bool \fB_convert_to_type_no_default\fP (const char *VarName, const std::string &String, const bool &) const "
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename T > static std::string \fB_convert_from_type\fP (const T &Value)"
+.br
+.ti -1c
+.RI "static \fBSTRING_VECTOR\fP \fB_get_section_tree\fP (const std::string &FullPath)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBprefix\fP"
+.br
+.ti -1c
+.RI "std::string \fBsection\fP"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBsection_list\fP"
+.br
+.ti -1c
+.RI "\fBSTRING_VECTOR\fP \fBargv\fP"
+.br
+.ti -1c
+.RI "unsigned \fBcursor\fP"
+.br
+.ti -1c
+.RI "bool \fBsearch_loop_f\fP"
+.br
+.ti -1c
+.RI "bool \fBsearch_failed_f\fP"
+.br
+.ti -1c
+.RI "std::set< std::string > \fBoverridden_vars\fP"
+.br
+.ti -1c
+.RI "int \fBnominus_cursor\fP"
+.br
+.ti -1c
+.RI "std::vector< unsigned > \fBidx_nominus\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBvariable\fP > \fBvariables\fP"
+.br
+.ti -1c
+.RI "std::string \fB_comment_start\fP"
+.br
+.ti -1c
+.RI "std::string \fB_comment_end\fP"
+.br
+.ti -1c
+.RI "std::string \fB_field_separator\fP"
+.br
+.ti -1c
+.RI "\fBlibMesh::Threads::spin_mutex\fP \fB_getpot_mtx\fP"
+.br
+.ti -1c
+.RI "std::set< const char *, \fBltstr\fP > \fB_internal_string_container\fP"
+.br
+.ti -1c
+.RI "std::set< std::string > \fB_requested_arguments\fP"
+.br
+.ti -1c
+.RI "std::set< std::string > \fB_requested_variables\fP"
+.br
+.ti -1c
+.RI "std::set< std::string > \fB_requested_sections\fP"
+.br
+.ti -1c
+.RI "bool \fBrequest_recording_f\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBGetPot\fP - A class for parsing comand line arguments and configuration files\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+(C) 2001-2002 Frank R\&. Schaefer 
+.RE
+.PP
+
+.PP
+Definition at line 114 of file getpot\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "GETPOT_NAMESPACE::GetPot::GetPot ()\fC [inline]\fP"
+constructors, destructor, assignment operator 
+.PP
+Definition at line 642 of file getpot\&.h\&.
+.PP
+References _basic_initialization()\&.
+.PP
+.nf
+642                :
+643   prefix(),
+644   section(),
+645   section_list(),
+646   argv(),
+647   cursor(),
+648   search_loop_f(),
+649   search_failed_f(),
+650   nominus_cursor(),
+651   idx_nominus(),
+652   variables(),
+653   _comment_start(),
+654   _comment_end(),
+655   _field_separator(),
+656 #if !defined(GETPOT_DISABLE_MUTEX)
+657   _getpot_mtx(),
+658 #endif
+659   _internal_string_container(),
+660   _requested_arguments(),
+661   _requested_variables(),
+662   _requested_sections(),
+663   request_recording_f()
+664 {
+665   _basic_initialization();
+666 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::GetPot (const \fBGetPot\fP &Other)\fC [inline]\fP"
+
+.PP
+Definition at line 827 of file getpot\&.h\&.
+.PP
+References _internal_string_container, and end\&.
+.PP
+.nf
+827                                   :
+828   prefix(Other\&.prefix),
+829   section(Other\&.section),
+830   section_list(Other\&.section_list),
+831   argv(Other\&.argv),
+832   cursor(Other\&.cursor),
+833   search_loop_f(Other\&.search_loop_f),
+834   search_failed_f(Other\&.search_failed_f),
+835   overridden_vars(),
+836   nominus_cursor(Other\&.nominus_cursor),
+837   idx_nominus(Other\&.idx_nominus),
+838   variables(Other\&.variables),
+839   _comment_start(Other\&._comment_start),
+840   _comment_end(Other\&._comment_end),
+841   _field_separator(Other\&._field_separator),
+842 #if !defined(GETPOT_DISABLE_MUTEX)
+843   _getpot_mtx(Other\&._getpot_mtx),
+844 #endif
+845   _internal_string_container(),
+846   _requested_arguments(Other\&._requested_arguments),
+847   _requested_variables(Other\&._requested_variables),
+848   _requested_sections(Other\&._requested_sections),
+849   request_recording_f(Other\&.request_recording_f)
+850 {
+851   std::set<const char*,ltstr>::const_iterator it =
+852     Other\&._internal_string_container\&.begin();
+853 
+854   const std::set<const char*,ltstr>::const_iterator end =
+855     Other\&._internal_string_container\&.end();
+856 
+857   for (; it != end; ++it)
+858     {
+859       const char* otherstr = *it;
+860       char* newcopy = new char[strlen(otherstr)+1];
+861       strncpy(newcopy, otherstr, strlen(otherstr)+1);
+862       this->_internal_string_container\&.insert(newcopy);
+863     }
+864 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::GetPot (const intargc_, const char *const *argv_, const char *FieldSeparator = \fC0x0\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 671 of file getpot\&.h\&.
+.PP
+References parse_command_line()\&.
+.PP
+.nf
+672                                              :
+673   // leave 'char**' non-const to honor less capable compilers \&.\&.\&.
+674   prefix(),
+675   section(),
+676   section_list(),
+677   argv(),
+678   cursor(),
+679   search_loop_f(),
+680   search_failed_f(),
+681   nominus_cursor(),
+682   idx_nominus(),
+683   variables(),
+684   _comment_start(),
+685   _comment_end(),
+686   _field_separator(),
+687 #if !defined(GETPOT_DISABLE_MUTEX)
+688   _getpot_mtx(),
+689 #endif
+690   _internal_string_container(),
+691   _requested_arguments(),
+692   _requested_variables(),
+693   _requested_sections(),
+694   request_recording_f()
+695 {
+696   this->parse_command_line(argc_, argv_, FieldSeparator);
+697 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::GetPot (const char *FileName, const char *CommentStart = \fC0x0\fP, const char *CommentEnd = \fC0x0\fP, const char *FieldSeparator = \fC0x0\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 732 of file getpot\&.h\&.
+.PP
+References parse_input_file()\&.
+.PP
+.nf
+734                                             :
+735   prefix(),
+736   section(),
+737   section_list(),
+738   argv(),
+739   cursor(),
+740   search_loop_f(),
+741   search_failed_f(),
+742   nominus_cursor(),
+743   idx_nominus(),
+744   variables(),
+745   _comment_start(),
+746   _comment_end(),
+747   _field_separator(),
+748 #if !defined(GETPOT_DISABLE_MUTEX)
+749   _getpot_mtx(),
+750 #endif
+751   _internal_string_container(),
+752   _requested_arguments(),
+753   _requested_variables(),
+754   _requested_sections(),
+755   request_recording_f()
+756 {
+757   const std::string& StrCommentStart   = CommentStart   ? CommentStart   : std::string("#");
+758   const std::string& StrCommentEnd     = CommentEnd     ? CommentEnd     : std::string("\n");
+759   const std::string& StrFieldSeparator = FieldSeparator ? FieldSeparator : std::string(" \t\n");
+760   this->parse_input_file(FileName, StrCommentStart, StrCommentEnd, StrFieldSeparator);
+761 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::GetPot (const std::string &FileName, const std::string &CommentStart = \fCstd::string('#')\fP, const std::string &CommentEnd = \fCstd::string('\\n')\fP, const std::string &FieldSeparator = \fCstd::string(' \\t\\n')\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 766 of file getpot\&.h\&.
+.PP
+References parse_input_file()\&.
+.PP
+.nf
+769                                                 :
+770   prefix(),
+771   section(),
+772   section_list(),
+773   argv(),
+774   cursor(),
+775   search_loop_f(),
+776   search_failed_f(),
+777   nominus_cursor(),
+778   idx_nominus(),
+779   variables(),
+780   _comment_start(),
+781   _comment_end(),
+782   _field_separator(),
+783 #if !defined(GETPOT_DISABLE_MUTEX)
+784   _getpot_mtx(),
+785 #endif
+786   _internal_string_container(),
+787   _requested_arguments(),
+788   _requested_variables(),
+789   _requested_sections(),
+790   request_recording_f()
+791 {
+792   this->parse_input_file(FileName, CommentStart, CommentEnd, FieldSeparator);
+793 }
+.fi
+.SS "GETPOT_NAMESPACE::GetPot::~GetPot ()\fC [inline]\fP"
+
+.PP
+Definition at line 869 of file getpot\&.h\&.
+.PP
+References _internal_string_container, and end\&.
+.PP
+.nf
+870 {
+871   // may be some return strings had to be created, delete now !
+872   std::set<const char*, ltstr>::const_iterator        it = _internal_string_container\&.begin();
+873   const std::set<const char*, ltstr>::const_iterator end = _internal_string_container\&.end();
+874   for (; it != end; ++it)
+875     delete [] *it;
+876 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void GETPOT_NAMESPACE::GetPot::_basic_initialization ()\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 619 of file getpot\&.h\&.
+.PP
+References _comment_end, _comment_start, _field_separator, cursor, nominus_cursor, prefix, request_recording_f, search_failed_f, search_loop_f, and section\&.
+.PP
+Referenced by GetPot(), parse_command_line(), and parse_input_file()\&.
+.PP
+.nf
+620 {
+621   cursor = 0;
+622   nominus_cursor = -1;
+623   search_failed_f = true;
+624   search_loop_f = true;
+625   prefix = "";
+626   section = "";
+627 
+628   // automatic request recording for later ufo detection
+629   request_recording_f = true;
+630 
+631   // comment start and end strings
+632   _comment_start = std::string("#");
+633   _comment_end   = std::string("\n");
+634 
+635   // default: separate vector elements by whitespaces
+636   _field_separator = " \t\n";
+637 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::_check_flags (const std::string &Str, const char *FlagList) const\fC [inline]\fP, \fC [private]\fP"
+support search for flags in a specific argument 
+.PP
+Definition at line 2022 of file getpot\&.h\&.
+.PP
+Referenced by argument_contains(), and options_contain()\&.
+.PP
+.nf
+2023 {
+2024   for (const char* p=FlagList; *p != '\0' ; p++)
+2025     if (Str\&.find(*p) != std::string::npos)
+2026       return true; // found something
+2027   return false;
+2028 }
+.fi
+.SS "template<typename T > static std::string GETPOT_NAMESPACE::GetPot::_convert_from_type (const T &Value)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 589 of file getpot\&.h\&.
+.PP
+Referenced by _DBE_expand()\&.
+.PP
+.nf
+590   {
+591     std::ostringstream out_string;
+592     out_string << Value;
+593     return out_string\&.str();
+594   }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::_convert_to_type (const std::string &String, const T &Default) const\fC [inline]\fP, \fC [private]\fP"
+type conversion if possible 
+.PP
+Definition at line 1434 of file getpot\&.h\&.
+.PP
+Referenced by _DBE_expand(), direct_follow(), get(), next(), and operator()()\&.
+.PP
+.nf
+1435 {
+1436   std::istringstream in_string(String);
+1437   T retval;
+1438   in_string >> retval;
+1439   if (in_string\&.fail())
+1440     retval = Default;
+1441   return retval;
+1442 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::_convert_to_type (const std::string &String, const char *Default) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1458 of file getpot\&.h\&.
+.PP
+.nf
+1459 {
+1460   return String;
+1461 }
+.fi
+.SS "template<> std::string GETPOT_NAMESPACE::GetPot::_convert_to_type (const std::string &String, const std::string &) const\fC [inline]\fP"
+
+.PP
+Definition at line 1449 of file getpot\&.h\&.
+.PP
+.nf
+1450 {
+1451   return String;
+1452 }
+.fi
+.SS "template<> bool GETPOT_NAMESPACE::GetPot::_convert_to_type (const std::string &String, const bool &Default) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1468 of file getpot\&.h\&.
+.PP
+.nf
+1469 {
+1470   std::string newstring(String);
+1471   //std::transform(newstring\&.begin(), newstring\&.end(), newstring\&.begin(), std::toupper);
+1472   for (unsigned int i=0; i<newstring\&.length(); ++i)
+1473     newstring[i] = getpot_cast_int<char>(toupper(newstring[i]));
+1474 
+1475   // "true"/"True"/"TRUE" should work
+1476   if (newstring\&.find("TRUE")!=std::string::npos)
+1477     return true;
+1478 
+1479   if (newstring\&.find("FALSE")!=std::string::npos)
+1480     return false;
+1481 
+1482   // And if we don't find that, let's search for an integer and use C unsigned
+1483   // int->bool conversion before giving up; i\&.e\&. a user could specify "0" for
+1484   // false or "1" for true
+1485   std::istringstream in_string(String);
+1486   unsigned int retval;
+1487   in_string >> retval;
+1488   if (in_string\&.fail())
+1489     return Default;
+1490 
+1491   return retval;
+1492 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::_convert_to_type_no_default (const char *VarName, const std::string &String, const T &Default) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1499 of file getpot\&.h\&.
+.PP
+References libMesh::Quality::name()\&.
+.PP
+Referenced by get_value_no_default()\&.
+.PP
+.nf
+1500 {
+1501   std::istringstream in_string(String);
+1502   T retval;
+1503   in_string >> retval;
+1504   if (in_string\&.fail())
+1505     {
+1506       getpot_cerr <<"ERROR: Input value for variable "<<VarName<<" is of the wrong type\&."<<std::endl;
+1507       getpot_cerr <<"       value = "<<String<<" expected type = "<<typeid(T)\&.name()<<std::endl;
+1508       getpot_error();
+1509     }
+1510   return retval;
+1511 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::_convert_to_type_no_default (const char *VarName, const std::string &String, const char *Default) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1527 of file getpot\&.h\&.
+.PP
+.nf
+1528 {
+1529   return String;
+1530 }
+.fi
+.SS "template<> std::string GETPOT_NAMESPACE::GetPot::_convert_to_type_no_default (const char *, const std::string &String, const std::string &) const\fC [inline]\fP"
+
+.PP
+Definition at line 1518 of file getpot\&.h\&.
+.PP
+.nf
+1519 {
+1520   return String;
+1521 }
+.fi
+.SS "template<> bool GETPOT_NAMESPACE::GetPot::_convert_to_type_no_default (const char *VarName, const std::string &String, const bool &) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1537 of file getpot\&.h\&.
+.PP
+References libMesh::Quality::name()\&.
+.PP
+.nf
+1538 {
+1539   std::string newstring(String);
+1540   //std::transform(newstring\&.begin(), newstring\&.end(), newstring\&.begin(), std::toupper);
+1541   for (unsigned int i=0; i<newstring\&.length(); ++i)
+1542     {
+1543       newstring[i]=getpot_cast_int<char>(toupper(newstring[i]));
+1544     }
+1545 
+1546   // "true"/"True"/"TRUE" should work
+1547   if (newstring\&.find("TRUE")!=std::string::npos)
+1548     return true;
+1549 
+1550   if (newstring\&.find("FALSE")!=std::string::npos)
+1551     return false;
+1552 
+1553   // And if we don't find that, let's search for an integer and use C unsigned
+1554   // int->bool conversion before giving up; i\&.e\&. a user could specify "0" for
+1555   // false or "1" for true
+1556   std::istringstream in_string(String);
+1557   unsigned int retval;
+1558   in_string >> retval;
+1559   if (in_string\&.fail())
+1560     {
+1561       getpot_cerr <<"ERROR: Input value for variable "<<VarName<<" is of the wrong type\&."<<std::endl;
+1562       getpot_cerr <<"       value = "<<String<<" expected type = "<<typeid(bool)\&.name()<<std::endl;
+1563       getpot_error();
+1564     }
+1565 
+1566   return retval;
+1567 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::_DBE_expand (const std::string &str)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 2717 of file getpot\&.h\&.
+.PP
+References _convert_from_type(), _convert_to_type(), _DBE_get_expr_list(), _DBE_get_variable(), A, std::abs(), end, std::max(), std::min(), GETPOT_NAMESPACE::GetPot::variable::name, GETPOT_NAMESPACE::GetPot::variable::original, std::pow(), size(), and x\&.
+.PP
+Referenced by _DBE_expand_string(), and _DBE_get_expr_list()\&.
+.PP
+.nf
+2718 {
+2719   // ${: } pure text
+2720   if (expr[0] == ':')
+2721     return expr\&.substr(1);
+2722 
+2723   // ${& expr expr \&.\&.\&. } text concatination
+2724   else if (expr[0] == '&')
+2725     {
+2726       const STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(1), 1);
+2727 
+2728       STRING_VECTOR::const_iterator it = A\&.begin();
+2729       std::string result = *it++;
+2730       for (; it != A\&.end(); ++it) result += *it;
+2731 
+2732       return result;
+2733     }
+2734 
+2735   // ${<-> expr expr expr} text replacement
+2736   else if (expr\&.length() >= 3 && expr\&.substr(0, 3) == "<->")
+2737     {
+2738       STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(3), 3);
+2739       size_t tmp = 0;
+2740       const size_t L = A[1]\&.length();
+2741 
+2742       while ((tmp = A[0]\&.find(A[1])) != std::string::npos)
+2743         A[0]\&.replace(tmp, L, A[2]);
+2744 
+2745       return A[0];
+2746     }
+2747 
+2748   // ${=func [expr\&.\&.\&.] } function evaluation
+2749   else if (expr\&.length() >= 2 &&
+2750            expr\&.substr(0, 1) == "=" &&
+2751            expr\&.substr(0, 2) != "==")
+2752     {
+2753       size_t funcnamestart = expr\&.find_first_not_of(" \t", 1);
+2754       if (funcnamestart != std::string::npos)
+2755         {
+2756           size_t funcnameend = expr\&.find_first_of(" \t",funcnamestart);
+2757           std::string funcname = expr\&.substr(funcnamestart,
+2758                                              funcnameend-funcnamestart);
+2759           if (funcname == "log")
+2760             {
+2761               STRING_VECTOR A =
+2762                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2763               double arg = _convert_to_type(A[0], 0\&.0);
+2764               return _convert_from_type(std::log(arg));
+2765             }
+2766           else if (funcname == "log10")
+2767             {
+2768               STRING_VECTOR A =
+2769                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2770               double arg = _convert_to_type(A[0], 0\&.0);
+2771               return _convert_from_type(std::log10(arg));
+2772             }
+2773           else if (funcname == "sin")
+2774             {
+2775               STRING_VECTOR A =
+2776                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2777               double arg = _convert_to_type(A[0], 0\&.0);
+2778               return _convert_from_type(std::sin(arg));
+2779             }
+2780           else if (funcname == "cos")
+2781             {
+2782               STRING_VECTOR A =
+2783                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2784               double arg = _convert_to_type(A[0], 0\&.0);
+2785               return _convert_from_type(std::cos(arg));
+2786             }
+2787           else if (funcname == "tan")
+2788             {
+2789               STRING_VECTOR A =
+2790                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2791               double arg = _convert_to_type(A[0], 0\&.0);
+2792               return _convert_from_type(std::tan(arg));
+2793             }
+2794           else if (funcname == "asin")
+2795             {
+2796               STRING_VECTOR A =
+2797                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2798               double arg = _convert_to_type(A[0], 0\&.0);
+2799               return _convert_from_type(std::asin(arg));
+2800             }
+2801           else if (funcname == "acos")
+2802             {
+2803               STRING_VECTOR A =
+2804                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2805               double arg = _convert_to_type(A[0], 0\&.0);
+2806               return _convert_from_type(std::acos(arg));
+2807             }
+2808           else if (funcname == "atan")
+2809             {
+2810               STRING_VECTOR A =
+2811                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2812               double arg = _convert_to_type(A[0], 0\&.0);
+2813               return _convert_from_type(std::atan(arg));
+2814             }
+2815           else if (funcname == "atan2")
+2816             {
+2817               STRING_VECTOR A =
+2818                 _DBE_get_expr_list(expr\&.substr(funcnameend), 2);
+2819               double arg1 = _convert_to_type(A[0], 0\&.0);
+2820               double arg2 = _convert_to_type(A[1], 0\&.0);
+2821               return _convert_from_type(std::atan2(arg1, arg2));
+2822             }
+2823           else if (funcname == "sinh")
+2824             {
+2825               STRING_VECTOR A =
+2826                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2827               double arg = _convert_to_type(A[0], 0\&.0);
+2828               return _convert_from_type(std::sinh(arg));
+2829             }
+2830           else if (funcname == "cosh")
+2831             {
+2832               STRING_VECTOR A =
+2833                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2834               double arg = _convert_to_type(A[0], 0\&.0);
+2835               return _convert_from_type(std::cosh(arg));
+2836             }
+2837           else if (funcname == "tanh")
+2838             {
+2839               STRING_VECTOR A =
+2840                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2841               double arg = _convert_to_type(A[0], 0\&.0);
+2842               return _convert_from_type(std::tanh(arg));
+2843             }
+2844           else if (funcname == "sqrt")
+2845             {
+2846               STRING_VECTOR A =
+2847                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2848               double arg = _convert_to_type(A[0], 0\&.0);
+2849               return _convert_from_type(std::sqrt(arg));
+2850             }
+2851           else if (funcname == "abs")
+2852             {
+2853               STRING_VECTOR A =
+2854                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2855               double arg = _convert_to_type(A[0], 0\&.0);
+2856               return _convert_from_type(std::abs(arg));
+2857             }
+2858           else if (funcname == "max")
+2859             {
+2860               STRING_VECTOR A =
+2861                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2862               STRING_VECTOR::const_iterator it = A\&.begin();
+2863               double result = _convert_to_type(*it++, 0\&.0);
+2864               for (; it != A\&.end(); ++it)
+2865                 result = std::max(result, _convert_to_type(*it, 0\&.0));
+2866               return _convert_from_type(result);
+2867             }
+2868           else if (funcname == "min")
+2869             {
+2870               STRING_VECTOR A =
+2871                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2872               STRING_VECTOR::const_iterator it = A\&.begin();
+2873               double result = _convert_to_type(*it++, 0\&.0);
+2874               for (; it != A\&.end(); ++it)
+2875                 result = std::min(result, _convert_to_type(*it, 0\&.0));
+2876               return _convert_from_type(result);
+2877             }
+2878           else if (funcname == "ceil")
+2879             {
+2880               STRING_VECTOR A =
+2881                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2882               double arg = _convert_to_type(A[0], 0\&.0);
+2883               return _convert_from_type(std::ceil(arg));
+2884             }
+2885           else if (funcname == "floor")
+2886             {
+2887               STRING_VECTOR A =
+2888                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2889               double arg = _convert_to_type(A[0], 0\&.0);
+2890               return _convert_from_type(std::floor(arg));
+2891             }
+2892           else if (funcname == "fmod")
+2893             {
+2894               STRING_VECTOR A =
+2895                 _DBE_get_expr_list(expr\&.substr(funcnameend), 2);
+2896               double arg1 = _convert_to_type(A[0], 0\&.0);
+2897               double arg2 = _convert_to_type(A[1], 0\&.0);
+2898               return _convert_from_type(std::fmod(arg1, arg2));
+2899             }
+2900           else if (funcname == "srand")
+2901             {
+2902               STRING_VECTOR A =
+2903                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2904               unsigned int arg = _convert_to_type(A[0], 0u);
+2905               std::srand(arg);
+2906               return A[0];
+2907             }
+2908           // ${=rand range} with default range==RAND_MAX
+2909           else if (funcname == "rand")
+2910             {
+2911               if (funcnameend >= expr\&.length() ||
+2912                   expr\&.find_first_not_of(" \t", funcnameend) == std::string::npos)
+2913                 return _convert_from_type(std::rand());
+2914 
+2915               STRING_VECTOR A =
+2916                 _DBE_get_expr_list(expr\&.substr(funcnameend), 1);
+2917               unsigned int range = _convert_to_type(A[0],0u);
+2918               if (!range)
+2919                 return _convert_from_type(0);
+2920               const unsigned int x = (RAND_MAX + 1u) / range;
+2921               const unsigned int y = x * range;
+2922               unsigned int returnval;
+2923               do
+2924                 {
+2925                   returnval = rand();
+2926                 } while (returnval >= y);
+2927               return _convert_from_type(returnval / x);
+2928             }
+2929 
+2930           else if (funcname == "time")
+2931             return _convert_from_type(std::time(NULL));
+2932         }
+2933     }
+2934 
+2935   // ${+ \&.\&.\&.}, ${- \&.\&.\&.}, ${* \&.\&.\&.}, ${/ \&.\&.\&.} expressions
+2936   else if (expr[0] == '+')
+2937     {
+2938       STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(1), 2);
+2939       STRING_VECTOR::const_iterator it = A\&.begin();
+2940       double result = _convert_to_type(*it++, 0\&.0);
+2941       for (; it != A\&.end(); ++it)
+2942         result += _convert_to_type(*it, 0\&.0);
+2943 
+2944       return _convert_from_type(result);
+2945     }
+2946   else if (expr[0] == '-')
+2947     {
+2948       STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(1), 2);
+2949       STRING_VECTOR::const_iterator it = A\&.begin();
+2950       double result = _convert_to_type(*it++, 0\&.0);
+2951       for (; it != A\&.end(); ++it)
+2952         result -= _convert_to_type(*it, 0\&.0);
+2953 
+2954       return _convert_from_type(result);
+2955     }
+2956   else if (expr[0] == '*')
+2957     {
+2958       STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(1), 2);
+2959       STRING_VECTOR::const_iterator it = A\&.begin();
+2960       double result = _convert_to_type(*it++, 0\&.0);
+2961       for (; it != A\&.end(); ++it)
+2962         result *= _convert_to_type(*it, 0\&.0);
+2963 
+2964       return _convert_from_type(result);
+2965     }
+2966   else if (expr[0] == '/')
+2967     {
+2968       STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(1), 2);
+2969       STRING_VECTOR::const_iterator it = A\&.begin();
+2970       double result = _convert_to_type(*it++, 0\&.0);
+2971       if (result == 0)
+2972         return "0\&.0";
+2973 
+2974       for (; it != A\&.end(); ++it)
+2975         {
+2976           const double Q = _convert_to_type(*it, 0\&.0);
+2977           result /= Q;
+2978         }
+2979       return _convert_from_type(result);
+2980     }
+2981 
+2982   // ${^ \&.\&.\&. } power expressions
+2983   else if (expr[0] == '^')
+2984     {
+2985       STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(1), 2);
+2986       STRING_VECTOR::const_iterator it = A\&.begin();
+2987       double result = _convert_to_type(*it++, 0\&.0);
+2988       for (; it != A\&.end(); ++it)
+2989         result = pow(result, _convert_to_type(*it, 0\&.0));
+2990       return _convert_from_type(result);
+2991     }
+2992 
+2993   // ${==  } ${<=  } ${>= } comparisons (return the number of the first 'match'
+2994   else if (expr\&.length() >= 2 &&
+2995            (expr\&.substr(0,2) == "==" || expr\&.substr(0,2) == ">=" ||
+2996             expr\&.substr(0,2) == "<=" || expr[0] == '>'           || expr[0] == '<'))
+2997     {
+2998       // differentiate between two and one sign operators
+2999       unsigned op = 0;
+3000       enum { EQ, GEQ, LEQ, GT, LT };
+3001 
+3002       if (expr\&.substr(0, 2) == "==")
+3003         op = EQ;
+3004 
+3005       else if (expr\&.substr(0, 2) == ">=")
+3006         op = GEQ;
+3007 
+3008       else if (expr\&.substr(0, 2) == "<=")
+3009         op = LEQ;
+3010 
+3011       else if (expr[0] == '>')
+3012         op = GT;
+3013 
+3014       else
+3015         op = LT;
+3016 
+3017       STRING_VECTOR a;
+3018       if (op == GT || op == LT)
+3019         a = _DBE_get_expr_list(expr\&.substr(1), 2);
+3020 
+3021       else
+3022         a = _DBE_get_expr_list(expr\&.substr(2), 2);
+3023 
+3024       std::string   x_orig = a[0];
+3025       double   x = _convert_to_type(x_orig, 1e37);
+3026       unsigned i = 1;
+3027 
+3028       STRING_VECTOR::const_iterator y_orig = a\&.begin();
+3029       for (y_orig++; y_orig != a\&.end(); ++y_orig)
+3030         {
+3031           double y = _convert_to_type(*y_orig, 1e37);
+3032 
+3033           // set the strings as reference if one wasn't a number
+3034           if (x == 1e37 || y == 1e37)
+3035             {
+3036               // it's a string comparison
+3037               if ((op == EQ  && x_orig == *y_orig) || (op == GEQ && x_orig >= *y_orig) ||
+3038                   (op == LEQ && x_orig <= *y_orig) || (op == GT  && x_orig >  *y_orig) ||
+3039                   (op == LT  && x_orig <  *y_orig))
+3040                 return _convert_from_type(i);
+3041             }
+3042           else
+3043             {
+3044               // it's a number comparison
+3045               if ((op == EQ  && x == y) || (op == GEQ && x >= y) ||
+3046                   (op == LEQ && x <= y) || (op == GT  && x >  y) ||
+3047                   (op == LT  && x <  y))
+3048                 return _convert_from_type(i);
+3049             }
+3050           i++;
+3051         }
+3052 
+3053       // nothing fulfills the condition => return 0
+3054       return "0";
+3055     }
+3056 
+3057   // ${?? expr expr} select
+3058   else if (expr\&.length() >= 2 && expr\&.substr(0, 2) == "??")
+3059     {
+3060       STRING_VECTOR a = _DBE_get_expr_list(expr\&.substr(2), 2);
+3061       double x = _convert_to_type(a[0], 1e37);
+3062 
+3063       // last element is always the default argument
+3064       if (x == 1e37 || x < 0 || x >= a\&.size() - 1)
+3065         return a[a\&.size()-1];
+3066 
+3067       // round x to closest integer
+3068       return a[int(x+0\&.5)];
+3069     }
+3070 
+3071   // ${? expr expr expr} if then else conditions
+3072   else if (expr[0] == '?')
+3073     {
+3074       STRING_VECTOR a = _DBE_get_expr_list(expr\&.substr(1), 2);
+3075 
+3076       if (_convert_to_type(a[0], 0\&.0) == 1\&.0)
+3077         return a[1];
+3078 
+3079       else if (a\&.size() > 2)
+3080         return a[2];
+3081     }
+3082   // ${! expr} maxro expansion
+3083   else if (expr[0] == '!')
+3084     {
+3085       const GetPot::variable* Var = _DBE_get_variable(expr\&.substr(1));
+3086       // error
+3087       if (Var->name == "")
+3088         return std::string(Var->original);
+3089 
+3090       const STRING_VECTOR A = _DBE_get_expr_list(Var->original, 2);
+3091       return A[0];
+3092     }
+3093   // ${@: } - string subscription
+3094   else if (expr\&.length() >= 2 && expr\&.substr(0,2) == "@:")
+3095     {
+3096       const STRING_VECTOR A = _DBE_get_expr_list(expr\&.substr(2), 2);
+3097       double x = _convert_to_type(A[1], 1e37);
+3098 
+3099       // last element is always the default argument
+3100       if (x == 1e37 || x < 0 || x >= A[0]\&.size() - 1)
+3101         return "<<1st index out of range>>";
+3102 
+3103       if (A\&.size() > 2)
+3104         {
+3105           double y = _convert_to_type(A[2], 1e37);
+3106           if (y != 1e37 && y > 0 && y <= A[0]\&.size() - 1 && y > x)
+3107             return A[0]\&.substr(int(x+0\&.5), int(y+1\&.5) - int(x+0\&.5));
+3108 
+3109           else if (y == -1)
+3110             return A[0]\&.substr(int(x+0\&.5));
+3111 
+3112           return "<<2nd index out of range>>";
+3113         }
+3114       else
+3115         {
+3116           char* tmp = new char[2];
+3117           tmp[0] = A[0][int(x+0\&.5)]; tmp[1] = '\0';
+3118           std::string result(tmp);
+3119           delete [] tmp;
+3120           return result;
+3121         }
+3122     }
+3123   // ${@ } - vector subscription
+3124   else if (expr[0] == '@')
+3125     {
+3126       STRING_VECTOR          A   = _DBE_get_expr_list(expr\&.substr(1), 2);
+3127       const GetPot::variable* Var = _DBE_get_variable(A[0]);
+3128       // error
+3129       if (Var->name == "")
+3130         {
+3131           // make a copy of the string if an error occured
+3132           // (since the error variable is a static variable inside get_variable())
+3133           return std::string(Var->original);
+3134         }
+3135 
+3136       double x = _convert_to_type(A[1], 1e37);
+3137 
+3138       // last element is always the default argument
+3139       if (x == 1e37 || x < 0 || x >= Var->value\&.size())
+3140         return "<<1st index out of range>>";
+3141 
+3142       if (A\&.size() > 2)
+3143         {
+3144           double y = _convert_to_type(A[2], 1e37);
+3145           int    begin = int(x+0\&.5);
+3146           int    end = 0;
+3147           if (y != 1e37 && y > 0 && y <= Var->value\&.size() && y > x)
+3148             end = int(y+1\&.5);
+3149           else if (y == -1)
+3150             end = int(Var->value\&.size());
+3151           else
+3152             return "<<2nd index out of range>>";
+3153 
+3154           std::string result = *(Var->get_element(begin));
+3155           for (int i = begin+1; i < end; i++)
+3156             result += std::string(" ") + *(Var->get_element(i));
+3157           return result;
+3158         }
+3159       else
+3160         return *(Var->get_element(int(x+0\&.5)));
+3161     }
+3162 
+3163   const STRING_VECTOR    A = _DBE_get_expr_list(expr, 1);
+3164   const GetPot::variable* B = _DBE_get_variable(A[0]);
+3165 
+3166   // make a copy of the string if an error occured
+3167   // (since the error variable is a static variable inside get_variable())
+3168   if (B->name == "")
+3169     return std::string(B->original);
+3170 
+3171   // (psuggs@pobox\&.com mentioned to me the warning MSVC++6\&.0 produces
+3172   //  with:  else return B->original (thanks))
+3173   return B->original;
+3174 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::_DBE_expand_string (const std::string &str)\fC [inline]\fP, \fC [private]\fP"
+dollar bracket expressions 
+.PP
+Definition at line 2559 of file getpot\&.h\&.
+.PP
+References _DBE_expand()\&.
+.PP
+Referenced by _parse_argument_vector()\&.
+.PP
+.nf
+2560 {
+2561   // Parses for closing operators '${ }' and expands them letting
+2562   // white spaces and other letters as they are\&.
+2563   std::string   new_string = "";
+2564   unsigned open_brackets = 0;
+2565   unsigned first = 0;
+2566   for (unsigned i = 0;  i<str\&.size(); i++)
+2567     {
+2568       if (i < str\&.size() - 2 && str\&.substr(i, 2) == "${")
+2569         {
+2570           if (open_brackets == 0)
+2571             first = i+2;
+2572           open_brackets++;
+2573         }
+2574       else if (str[i] == '}' && open_brackets > 0)
+2575         {
+2576           open_brackets -= 1;
+2577           if (open_brackets == 0)
+2578             {
+2579               const std::string Replacement = _DBE_expand(str\&.substr(first, i - first));
+2580               new_string += Replacement;
+2581             }
+2582         }
+2583       else if (open_brackets == 0)
+2584         new_string += str[i];
+2585     }
+2586   return new_string;
+2587 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::_DBE_get_expr_list (const std::string &str, const unsignedExpectedNumber)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 2592 of file getpot\&.h\&.
+.PP
+References _DBE_expand()\&.
+.PP
+Referenced by _DBE_expand()\&.
+.PP
+.nf
+2593 {
+2594   // ensures that the resulting vector has the expected number
+2595   // of arguments, but they may contain an error message
+2596   std::string str = str_;
+2597   // Separates expressions by non-bracketed whitespaces, expands them
+2598   // and puts them into a list\&.
+2599 
+2600   unsigned i=0;
+2601   // (1) eat initial whitespaces
+2602   for (; i < str\&.size(); i++)
+2603     if (!isspace(str[i]))
+2604       break;
+2605 
+2606   STRING_VECTOR   expr_list;
+2607   unsigned         open_brackets = 0;
+2608   std::vector<unsigned> start_idx;
+2609   unsigned         start_new_string = i;
+2610   unsigned         l = (unsigned)(str\&.size());
+2611 
+2612   // (2) search for ${ } expressions \&.\&.\&.
+2613   while (i < l)
+2614     {
+2615       const char letter = str[i];
+2616       // whitespace -> end of expression
+2617       if (isspace(letter) && open_brackets == 0)
+2618         {
+2619           expr_list\&.push_back(str\&.substr(start_new_string, i - start_new_string));
+2620           bool no_breakout_f = true;
+2621           for (i++; i < l ; i++)
+2622             {
+2623               if (!isspace(str[i]))
+2624                 {
+2625                   no_breakout_f = false;
+2626                   start_new_string = i;
+2627                   break;
+2628                 }
+2629             }
+2630 
+2631           if (no_breakout_f)
+2632             {
+2633               // end of expression list
+2634               if (expr_list\&.size() < ExpectedNumber)
+2635                 {
+2636                   const std::string   pre_tmp("<< ${ }: missing arguments>>");
+2637                   STRING_VECTOR tmp(ExpectedNumber - expr_list\&.size(), pre_tmp);
+2638                   expr_list\&.insert(expr_list\&.end(), tmp\&.begin(), tmp\&.end());
+2639                 }
+2640               return expr_list;
+2641             }
+2642         }
+2643 
+2644       // dollar-bracket expression
+2645       if (str\&.length() >= i+2 && str\&.substr(i, 2) == "${")
+2646         {
+2647           open_brackets++;
+2648           start_idx\&.push_back(i+2);
+2649         }
+2650 
+2651       else if (letter == '}' && open_brackets > 0)
+2652         {
+2653           int start = start_idx[start_idx\&.size()-1];
+2654           start_idx\&.pop_back();
+2655           const std::string Replacement = _DBE_expand(str\&.substr(start, i-start));
+2656           if (start - 3 < (int)0)
+2657             str = Replacement + str\&.substr(i+1);
+2658           else
+2659             str = str\&.substr(0, start-2) + Replacement + str\&.substr(i+1);
+2660           l = (int)(str\&.size());
+2661           i = start + (int)(Replacement\&.size()) - 3;
+2662           open_brackets--;
+2663         }
+2664       i++;
+2665     }
+2666 
+2667   // end of expression list
+2668   expr_list\&.push_back(str\&.substr(start_new_string, i-start_new_string));
+2669 
+2670   if (expr_list\&.size() < ExpectedNumber)
+2671     {
+2672       const std::string   pre_tmp("<< ${ }: missing arguments>>");
+2673       STRING_VECTOR tmp(ExpectedNumber - expr_list\&.size(), pre_tmp);
+2674       expr_list\&.insert(expr_list\&.end(), tmp\&.begin(), tmp\&.end());
+2675     }
+2676 
+2677   return expr_list;
+2678 }
+.fi
+.SS "const \fBGetPot::variable\fP * GETPOT_NAMESPACE::GetPot::_DBE_get_variable (const std::string &str)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 2683 of file getpot\&.h\&.
+.PP
+References _request_variable(), GETPOT_NAMESPACE::GetPot::variable::original, prefix, and section\&.
+.PP
+Referenced by _DBE_expand()\&.
+.PP
+.nf
+2684 {
+2685   static GetPot::variable ev;
+2686   std::string secure_Prefix = prefix;
+2687 
+2688   prefix = section;
+2689   // (1) first search in currently active section
+2690   const GetPot::variable* var = _request_variable(VarName\&.c_str());
+2691   if (var != 0)
+2692     {
+2693       prefix = secure_Prefix;
+2694       return var;
+2695     }
+2696 
+2697   // (2) search in root name space
+2698   prefix = "";
+2699   var = _request_variable(VarName\&.c_str());
+2700   if (var != 0)
+2701     {
+2702       prefix = secure_Prefix;
+2703       return var;
+2704     }
+2705 
+2706   prefix = secure_Prefix;
+2707 
+2708   // error occured => variable name == ""
+2709   ev\&.original = "<<${ } variable '";
+2710   ev\&.original += VarName + "' undefined>>";
+2711   return &ev;
+2712 }
+.fi
+.SS "const \fBGetPot::variable\fP * GETPOT_NAMESPACE::GetPot::_find_variable (const char *VarName) const\fC [inline]\fP, \fC [private]\fP"
+helpers for argument list processing search for a variable in 'variables' array 
+.PP
+Definition at line 2446 of file getpot\&.h\&.
+.PP
+References prefix, and variables\&.
+.PP
+Referenced by _request_variable(), and _set_variable()\&.
+.PP
+.nf
+2447 {
+2448   const std::string Name = prefix + VarName;
+2449 
+2450   std::vector<variable>::const_iterator it = variables\&.begin();
+2451   for (; it != variables\&.end(); ++it)
+2452     {
+2453       if ((*it)\&.name == Name)
+2454         return &(*it);
+2455     }
+2456   return 0;
+2457 }
+.fi
+.SS "const std::string GETPOT_NAMESPACE::GetPot::_get_next_token (std::istream &istr)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1233 of file getpot\&.h\&.
+.PP
+References _get_string(), _get_until_closing_bracket(), and _get_until_closing_square_bracket()\&.
+.PP
+Referenced by _read_in_stream()\&.
+.PP
+.nf
+1234 {
+1235   // get next concatenates string token\&. consider quotes that embrace
+1236   // whitespaces
+1237   std::string token;
+1238   int    tmp = 0;
+1239   while (true)
+1240     {
+1241       int last_letter = tmp;
+1242       tmp = istr\&.get();
+1243 
+1244       if (tmp == '=')
+1245         {
+1246           // Always break at '='\&.
+1247           // This separates '=' at the beginning of a word into its own word\&.
+1248           token += getpot_cast_int<char>(tmp);
+1249           return token;
+1250         }
+1251 
+1252       else if (tmp == EOF || ((tmp == ' ' || tmp == '\t' || tmp == '\n') && last_letter != '\\'))
+1253         return token;
+1254 
+1255       else if (tmp == '\'' && last_letter != '\\')
+1256         {
+1257           // QUOTES: un-backslashed quotes => it's a string
+1258           token += _get_string(istr);
+1259           continue;
+1260         }
+1261 
+1262       else if (tmp == '{' && last_letter == '$')
+1263         {
+1264           token += '{' + _get_until_closing_bracket(istr);
+1265           continue;
+1266         }
+1267 
+1268       else if (tmp == '[')
+1269         {
+1270           token += '[' + _get_until_closing_square_bracket(istr);
+1271           continue;
+1272         }
+1273 
+1274       else if (tmp == '$' && last_letter == '\\')
+1275         {
+1276           token += getpot_cast_int<char>(tmp); tmp = 0;  //  so that last_letter will become = 0, not '$';
+1277           continue;
+1278         }
+1279 
+1280       else if (tmp == '\\' && last_letter != '\\')
+1281         continue;              // don't append un-backslashed backslashes
+1282 
+1283       token += getpot_cast_int<char>(tmp);
+1284     }
+1285 }
+.fi
+.SS "const std::string GETPOT_NAMESPACE::GetPot::_get_remaining_string (const std::string &String, const std::string &Start) const\fC [inline]\fP, \fC [private]\fP"
+prefix extraction 
+.PP
+Definition at line 1603 of file getpot\&.h\&.
+.PP
+Referenced by argument_contains(), get_variable_names(), next(), options_contain(), unidentified_arguments(), unidentified_flags(), unidentified_nominuses(), unidentified_options(), unidentified_sections(), and unidentified_variables()\&.
+.PP
+.nf
+1604 {
+1605   if (Start == "")
+1606     return String;
+1607 
+1608   // note: java\&.lang\&.String: substring(a,b) = from a to b-1
+1609   //        C++ string:      substr(a,b)    = from a to a + b
+1610   if (String\&.find(Start) == 0)
+1611     return String\&.substr(Start\&.length());
+1612 
+1613   else
+1614     return "";
+1615 }
+.fi
+.SS "static \fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::_get_section_tree (const std::string &FullPath)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+cuts a variable name into a tree of sub-sections\&. this is requested for recording requested sections when dealing with 'ufo' detection\&. 
+.PP
+Definition at line 600 of file getpot\&.h\&.
+.PP
+Referenced by _record_argument_request(), and _record_variable_request()\&.
+.PP
+.nf
+601   {
+602     STRING_VECTOR   result;
+603     for (std::size_t pos = 0; pos != FullPath\&.size(); ++pos)
+604       {
+605         if (FullPath[pos] == '/')
+606           result\&.push_back(FullPath\&.substr(0,pos));
+607       }
+608 
+609     return result;
+610   }
+.fi
+.SS "const std::string GETPOT_NAMESPACE::GetPot::_get_string (std::istream &istr)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1290 of file getpot\&.h\&.
+.PP
+Referenced by _get_next_token()\&.
+.PP
+.nf
+1291 {
+1292   // parse input until next matching '
+1293   std::string str;
+1294   int    tmp = 0;
+1295   while (true)
+1296     {
+1297       int last_letter = tmp;
+1298       tmp = istr\&.get();
+1299       if (tmp == EOF)
+1300         return str;
+1301 
+1302       // un-backslashed quotes => it's the end of the string
+1303       else if (tmp == '\'' && last_letter != '\\')
+1304         return str;
+1305 
+1306       else if (tmp == '\\' && last_letter != '\\')
+1307         continue; // don't append
+1308 
+1309       str += getpot_cast_int<char>(tmp);
+1310     }
+1311 }
+.fi
+.SS "const std::string GETPOT_NAMESPACE::GetPot::_get_until_closing_bracket (std::istream &istr)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1316 of file getpot\&.h\&.
+.PP
+Referenced by _get_next_token()\&.
+.PP
+.nf
+1317 {
+1318   // parse input until next matching }
+1319   std::string str = "";
+1320   int    tmp = 0;
+1321   int    brackets = 1;
+1322   while (true)
+1323     {
+1324       int last_letter = tmp;
+1325       tmp = istr\&.get();
+1326       if (tmp == EOF)
+1327         return str;
+1328 
+1329       else if (tmp == '{' && last_letter == '$')
+1330         brackets += 1;
+1331 
+1332       else if (tmp == '}')
+1333         {
+1334           brackets -= 1;
+1335           // un-backslashed brackets => it's the end of the string
+1336           if (brackets == 0)
+1337             return str + '}';
+1338 
+1339           else if (tmp == '\\' && last_letter != '\\')
+1340             continue;  // do not append an unbackslashed backslash
+1341         }
+1342       str += getpot_cast_int<char>(tmp);
+1343     }
+1344 }
+.fi
+.SS "const std::string GETPOT_NAMESPACE::GetPot::_get_until_closing_square_bracket (std::istream &istr)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1349 of file getpot\&.h\&.
+.PP
+Referenced by _get_next_token()\&.
+.PP
+.nf
+1350 {
+1351   // parse input until next matching ]
+1352   std::string str = "";
+1353   int    brackets = 1;
+1354   while (true)
+1355     {
+1356       int tmp = istr\&.get();
+1357       if (tmp == EOF)
+1358         return str;
+1359 
+1360       else if (tmp == '[')
+1361         brackets += 1;
+1362 
+1363       else if (tmp == ']')
+1364         {
+1365           brackets -= 1;
+1366           if (brackets == 0)
+1367             return str + ']';
+1368         }
+1369 
+1370       str += getpot_cast_int<char>(tmp);
+1371     }
+1372 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::_internal_managed_copy (const std::string &Arg) const\fC [inline]\fP, \fC [private]\fP"
+some functions return a char pointer to a temporarily existing string this function adds them to our container 
+.PP
+Definition at line 1572 of file getpot\&.h\&.
+.PP
+References _internal_string_container\&.
+.PP
+Referenced by direct_follow(), follow(), get_value_no_default(), next(), next_nominus(), and operator()()\&.
+.PP
+.nf
+1573 {
+1574   const char* arg = Arg\&.c_str();
+1575 
+1576   // Get a lock before touching anything mutable
+1577   SCOPED_MUTEX;
+1578 
+1579   // See if there's already an identical string saved
+1580   std::set<const char*,ltstr>::const_iterator it =
+1581     _internal_string_container\&.find(arg);
+1582 
+1583   // If so, return it
+1584   if (it != _internal_string_container\&.end())
+1585     return *it;
+1586 
+1587   // Otherwise, create a new one
+1588   char* newcopy = new char[strlen(arg)+1];
+1589   strncpy(newcopy, arg, strlen(arg)+1);
+1590   _internal_string_container\&.insert(newcopy);
+1591   return newcopy;
+1592 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::_match_starting_string (const char *StartString)\fC [inline]\fP, \fC [private]\fP"
+support finding directly followed arguments 
+.PP
+Definition at line 1924 of file getpot\&.h\&.
+.PP
+References argv, cursor, search_failed_f, and search_loop_f\&.
+.PP
+Referenced by direct_follow()\&.
+.PP
+.nf
+1925 {
+1926   const unsigned N =
+1927     getpot_cast_int<unsigned>(strlen(StartString));
+1928   unsigned       OldCursor = cursor;
+1929 
+1930   if (OldCursor >= argv\&.size())
+1931     OldCursor = getpot_cast_int<unsigned>(argv\&.size() - 1);
+1932   search_failed_f = true;
+1933 
+1934   // (*) first loop from cursor position until end
+1935   for (unsigned c = cursor; c < argv\&.size(); c++)
+1936     {
+1937       if (strncmp(StartString, argv[c]\&.c_str(), N) == 0)
+1938         {
+1939           cursor = c;
+1940           search_failed_f = false;
+1941           return &(argv[c]\&.c_str()[N]);
+1942         }
+1943     }
+1944 
+1945   if (!search_loop_f)
+1946     return NULL;
+1947 
+1948   // (*) second loop from 0 to old cursor position
+1949   for (unsigned c = 1; c < OldCursor; c++)
+1950     {
+1951       if (strncmp(StartString, argv[c]\&.c_str(), N) == 0)
+1952         {
+1953           cursor = c;
+1954           search_failed_f = false;
+1955           return &(argv[c]\&.c_str()[N]);
+1956         }
+1957     }
+1958   return 0;
+1959 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::_parse_argument_vector (const \fBSTRING_VECTOR\fP &ARGV)\fC [inline]\fP, \fC [private]\fP"
+produce three basic data vectors:
+.IP "\(bu" 2
+argument vector
+.IP "\(bu" 2
+nominus vector
+.IP "\(bu" 2
+variable dictionary 
+.PP
+
+.PP
+Definition at line 980 of file getpot\&.h\&.
+.PP
+References _comment_end, _comment_start, _DBE_expand_string(), _field_separator, _process_section_label(), _requested_arguments, _set_variable(), argv, idx_nominus, parse_input_file(), request_recording_f, section, and section_list\&.
+.PP
+Referenced by parse_command_line(), and parse_input_file()\&.
+.PP
+.nf
+981 {
+982   if (ARGV\&.empty())
+983     return;
+984 
+985   // build internal databases:
+986   //   1) array with no-minus arguments (usually used as filenames)
+987   //   2) variable assignments:
+988   //             'variable name' '=' number | string
+989   STRING_VECTOR                 section_stack;
+990   STRING_VECTOR::const_iterator it = ARGV\&.begin();
+991 
+992 
+993   section = "";
+994 
+995   // -- do not parse the first argument, so that this parsing source
+996   // name is not interpreted a s a nominus or so\&.  If we already
+997   // have parsed arguments, don't bother adding another parsing
+998   // source name
+999   if (argv\&.empty())
+1000     argv\&.push_back(*it);
+1001   ++it;
+1002 
+1003   // -- loop over remaining arguments
+1004   for (; it != ARGV\&.end(); ++it)
+1005     {
+1006       std::string arg = *it;
+1007 
+1008       if (arg\&.length() == 0)
+1009         continue;
+1010 
+1011       // -- [section] labels and [include file] directives
+1012       if (arg\&.length() > 1 && arg[0] == '[' && arg[arg\&.length()-1] == ']')
+1013         {
+1014 
+1015           // Is this an include file directive?
+1016           std::size_t include_pos = arg\&.find("include ", 1);
+1017           if (include_pos != std::string::npos)
+1018             {
+1019 
+1020               const std::string includefile =
+1021                 _DBE_expand_string(arg\&.substr(9, arg\&.length()-9-include_pos));
+1022 
+1023               this->parse_input_file
+1024                 (includefile, _comment_start, _comment_end, _field_separator);
+1025             }
+1026 
+1027           else
+1028             {
+1029               // (*) sections are considered 'requested arguments'
+1030               if (request_recording_f)
+1031                 {
+1032                   // Get a lock before touching anything mutable
+1033                   SCOPED_MUTEX;
+1034 
+1035                   _requested_arguments\&.insert(arg);
+1036                 }
+1037 
+1038               const std::string Name = _DBE_expand_string(arg\&.substr(1, arg\&.length()-2));
+1039               section = _process_section_label(Name, section_stack);
+1040               // new section --> append to list of sections
+1041               if (find(section_list\&.begin(), section_list\&.end(), section) == section_list\&.end())
+1042                 if (section\&.length() != 0) section_list\&.push_back(section);
+1043               argv\&.push_back(arg);
+1044             }
+1045         }
+1046       else
+1047         {
+1048           arg = section + _DBE_expand_string(arg);
+1049           argv\&.push_back(arg);
+1050         }
+1051 
+1052       // -- separate array for nominus arguments
+1053       if (arg[0] != '-')
+1054         idx_nominus\&.push_back(getpot_cast_int<unsigned>(argv\&.size()-1));
+1055 
+1056       // -- variables: does arg contain a '=' operator ?
+1057       const std::size_t equals_pos = arg\&.find_first_of('=');
+1058       if (equals_pos != std::string::npos)
+1059         {
+1060           // (*) record for later ufo detection
+1061           //     arguments carriying variables are always treated as 'requested' arguments\&.
+1062           //     unrequested variables have to be detected with the ufo-variable
+1063           //     detection routine\&.
+1064           if (request_recording_f)
+1065             {
+1066               // Get a lock before touching anything mutable
+1067               SCOPED_MUTEX;
+1068 
+1069               _requested_arguments\&.insert(arg);
+1070             }
+1071 
+1072           // => arg (from start to '=') = Name of variable
+1073           //        (from '=' to end)   = value of variable
+1074           _set_variable(arg\&.substr(0,equals_pos),
+1075                         arg\&.substr(equals_pos+1), false);
+1076         }
+1077     }
+1078 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::_process_section_label (const std::string &Section, \fBSTRING_VECTOR\fP &section_stack)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1377 of file getpot\&.h\&.
+.PP
+Referenced by _parse_argument_vector()\&.
+.PP
+.nf
+1379 {
+1380   std::string sname = Section;
+1381   //  1) subsection of actual section ('\&./' prefix)
+1382   if (sname\&.length() >= 2 && sname\&.substr(0, 2) == "\&./")
+1383     sname = sname\&.substr(2);
+1384 
+1385   //  2) subsection of parent section ('\&.\&./' prefix)
+1386   else if (sname\&.length() >= 3 && sname\&.substr(0, 3) == "\&.\&./")
+1387     {
+1388       do
+1389         {
+1390           if (section_stack\&.end() != section_stack\&.begin())
+1391             section_stack\&.pop_back();
+1392           sname = sname\&.substr(3);
+1393         } while (sname\&.substr(0, 3) == "\&.\&./");
+1394     }
+1395 
+1396   // 3) subsection of the root-section
+1397   else
+1398     // [] => back to root section
+1399     section_stack\&.erase(section_stack\&.begin(), section_stack\&.end());
+1400 
+1401   if (sname != "")
+1402     {
+1403       // parse section name for 'slashes'
+1404       unsigned i=0;
+1405       while (i < sname\&.length())
+1406         {
+1407           if (sname[i] == '/')
+1408             {
+1409               section_stack\&.push_back(sname\&.substr(0,i));
+1410               if (i+1 < sname\&.length()-1)
+1411                 sname = sname\&.substr(i+1);
+1412               i = 0;
+1413             }
+1414           else
+1415             i++;
+1416         }
+1417       section_stack\&.push_back(sname);
+1418     }
+1419 
+1420   std::string section_label = "";
+1421   if (!section_stack\&.empty())
+1422     {
+1423       victorate(std::string, section_stack, it)
+1424         section_label += *it + "/";
+1425     }
+1426   return section_label;
+1427 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::_read_in_file (const std::string &FileName)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1083 of file getpot\&.h\&.
+.PP
+References _read_in_stream()\&.
+.PP
+Referenced by parse_input_file()\&.
+.PP
+.nf
+1084 {
+1085   std::ifstream  i(FileName\&.c_str());
+1086 
+1087   // if (!i) return STRING_VECTOR();
+1088 
+1089   if (!i)
+1090     libmesh_file_error(FileName);
+1091 
+1092   // argv[0] == the filename of the file that was read in
+1093   return _read_in_stream(i);
+1094 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::_read_in_stream (std::istream &istr)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 1099 of file getpot\&.h\&.
+.PP
+References _comment_start, _get_next_token(), and _skip_whitespace()\&.
+.PP
+Referenced by _read_in_file()\&.
+.PP
+.nf
+1100 {
+1101   STRING_VECTOR  brute_tokens;
+1102   while (istr)
+1103     {
+1104       _skip_whitespace(istr);
+1105       const std::string Token = _get_next_token(istr);
+1106       // Allow 'keyword =' to parse with an empty string as value\&.
+1107       // Only break at EOF\&.
+1108       // if (Token\&.length() == 0 || Token[0] == EOF) break;
+1109       if (Token[0] == EOF)
+1110         break;
+1111       brute_tokens\&.push_back(Token);
+1112     }
+1113 
+1114   // -- reduce expressions of token1'='token2 to a single
+1115   //    string 'token1=token2'
+1116   // -- copy everything into 'argv'
+1117   // -- arguments preceded by something like '[' name ']' (section)
+1118   //    produce a second copy of each argument with a prefix '[name]argument'
+1119   unsigned i1 = 0;
+1120   unsigned i2 = 1;
+1121   unsigned i3 = 2;
+1122 
+1123   STRING_VECTOR  arglist;
+1124   while (i1 < brute_tokens\&.size())
+1125     {
+1126       // 1) concatenate 'abcdef' '=' 'efgasdef' to 'abcdef=efgasdef'
+1127       // note: java\&.lang\&.String: substring(a,b) = from a to b-1
+1128       //        C++ string:      substr(a,b)    = from a to a + b
+1129       std::string result;
+1130       if (i2 < brute_tokens\&.size() && brute_tokens[i2] == "=")
+1131         {
+1132           if (i3 >= brute_tokens\&.size())
+1133             result = brute_tokens[i1] + brute_tokens[i2];
+1134           else
+1135             result = brute_tokens[i1] + brute_tokens[i2] + brute_tokens[i3];
+1136           i1 = i3+1; i2 = i3+2; i3 = i3+3;
+1137         }
+1138       else if (i2 < brute_tokens\&.size() &&
+1139                brute_tokens[i2]\&.length() > 0 &&
+1140                brute_tokens[i2][0] == '=')
+1141         {
+1142           // This case should not be hit if '=' at the beginning of a word
+1143           //   is always separated into its own word
+1144           result = brute_tokens[i1] + brute_tokens[i2];
+1145           i1 = i3; i2 = i3+1; i3 = i3+2;
+1146         }
+1147       else if (i2 < brute_tokens\&.size() && brute_tokens[i1][brute_tokens[i1]\&.size()-1] == '=')
+1148         {
+1149           result = brute_tokens[i1] + brute_tokens[i2];
+1150           i1 = i3; i2 = i3+1; i3 = i3+2;
+1151         }
+1152       else
+1153         {
+1154           result = brute_tokens[i1];
+1155           i1=i2; i2=i3; i3++;
+1156         }
+1157 
+1158       // Now strip out any comment
+1159       size_t comment_start_loc = result\&.find(_comment_start, 0);
+1160       if (comment_start_loc != std::string::npos)
+1161         result = result\&.substr(0, comment_start_loc);
+1162 
+1163       arglist\&.push_back(result);
+1164     }
+1165   return arglist;
+1166 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::_record_argument_request (const std::string &Arg) const\fC [inline]\fP, \fC [private]\fP"
+if an argument is requested record it and the 'tag' the section branch to which it belongs\&. Caution: both functions mark the sections as 'tagged'\&. These are 'const' functions but they do modify the mutable \fIrequested\fP* members 
+.PP
+Definition at line 2295 of file getpot\&.h\&.
+.PP
+References _get_section_tree(), _requested_arguments, _requested_sections, request_recording_f, and section\&.
+.PP
+Referenced by argument_contains(), direct_follow(), next(), next_nominus(), next_nominus_string(), nominus_vector(), and search()\&.
+.PP
+.nf
+2296 {
+2297   if (!request_recording_f)
+2298     return;
+2299 
+2300   // Get a lock before touching anything mutable
+2301   SCOPED_MUTEX;
+2302 
+2303   // (*) record requested variable for later ufo detection
+2304   _requested_arguments\&.insert(Name);
+2305 
+2306   // (*) record considered section for ufo detection
+2307   STRING_VECTOR      STree = _get_section_tree(Name);
+2308   victorate(std::string, STree, it)
+2309     if (_requested_sections\&.find(*it) == _requested_sections\&.end())
+2310       if (section\&.length() != 0)
+2311         _requested_sections\&.insert(*it);
+2312 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::_record_variable_request (const std::string &Arg) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 2317 of file getpot\&.h\&.
+.PP
+References _get_section_tree(), _requested_sections, _requested_variables, request_recording_f, and section\&.
+.PP
+Referenced by _request_variable()\&.
+.PP
+.nf
+2318 {
+2319   if (!request_recording_f)
+2320     return;
+2321 
+2322   // Get a lock before touching anything mutable
+2323   SCOPED_MUTEX;
+2324 
+2325   // (*) record requested variable for later ufo detection
+2326   _requested_variables\&.insert(Name);
+2327 
+2328   // (*) record considered section for ufo detection
+2329   STRING_VECTOR      STree = _get_section_tree(Name);
+2330   victorate(std::string, STree, it)
+2331     if (_requested_sections\&.find(*it) == _requested_sections\&.end())
+2332       if (section\&.length() != 0)
+2333         _requested_sections\&.insert(*it);
+2334 }
+.fi
+.SS "const \fBGetPot::variable\fP * GETPOT_NAMESPACE::GetPot::_request_variable (const char *VarName) const\fC [inline]\fP, \fC [private]\fP"
+search (and record request) for a variable in 'variables' array 
+.PP
+Definition at line 2462 of file getpot\&.h\&.
+.PP
+References _find_variable(), and _record_variable_request()\&.
+.PP
+Referenced by _DBE_get_variable(), _set_variable(), get_value_no_default(), have_variable(), operator()(), and vector_variable_size()\&.
+.PP
+.nf
+2463 {
+2464   // (*) record requested variable for later ufo detection
+2465   this->_record_variable_request(VarName);
+2466 
+2467   return this->_find_variable(VarName);
+2468 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::_search_string_vector (const \fBSTRING_VECTOR\fP &Vec, const std::string &Str) const\fC [inline]\fP, \fC [private]\fP"
+search for a specific string 
+.PP
+Definition at line 3183 of file getpot\&.h\&.
+.PP
+.nf
+3184 {
+3185   victorate(std::string, VecStr, itk)
+3186     {
+3187       if (*itk == Str)
+3188         return true;
+3189     }
+3190   return false;
+3191 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::_set_variable (const std::string &VarName, const std::string &Value, const boolRequested)\fC [inline]\fP, \fC [private]\fP"
+helper functions set variable from inside \fBGetPot\fP (no prefix considered) 
+.PP
+Definition at line 2341 of file getpot\&.h\&.
+.PP
+References _field_separator, _find_variable(), _request_variable(), overridden_vars, and variables\&.
+.PP
+Referenced by _parse_argument_vector(), and set()\&.
+.PP
+.nf
+2343 {
+2344   const GetPot::variable* Var = Requested ?
+2345     _request_variable(VarName\&.c_str()) :
+2346     _find_variable(VarName\&.c_str());
+2347   if (Var == 0)
+2348     variables\&.push_back(variable(VarName\&.c_str(), Value\&.c_str(), _field_separator\&.c_str()));
+2349   else
+2350     {
+2351       overridden_vars\&.insert(VarName\&.c_str());
+2352       (const_cast<GetPot::variable*>(Var))->take(Value\&.c_str(), _field_separator\&.c_str());
+2353     }
+2354 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::_skip_whitespace (std::istream &istr)\fC [inline]\fP, \fC [private]\fP"
+helpers to parse input file create an argument vector based on data found in an input file, i\&.e\&.: 1) delete comments (in between '_comment_start' '_comment_end') 2) contract assignment expressions, such as my-variable = '007 J\&. B\&.' into my-variable='007 J\&. B\&.' 3) interprete sections like '[\&.\&./my-section]' etc\&. 
+.PP
+Definition at line 1171 of file getpot\&.h\&.
+.PP
+References _comment_end, and _comment_start\&.
+.PP
+Referenced by _read_in_stream()\&.
+.PP
+.nf
+1172 {
+1173   // find next non-whitespace while deleting comments
+1174   int tmp = istr\&.get();
+1175   do {
+1176     // -- search a non whitespace
+1177     while (isspace(tmp))
+1178       {
+1179         tmp = istr\&.get();
+1180         if (!istr)
+1181           return;
+1182       }
+1183 
+1184     // -- look if characters match the comment starter string
+1185     for (unsigned i=0; i<_comment_start\&.length() ; i++)
+1186       {
+1187         if (tmp != _comment_start[i])
+1188           {
+1189             // -- one step more backwards, since 'tmp' already at non-whitespace
+1190             istr\&.unget();
+1191             return;
+1192           }
+1193 
+1194         // RHS: Why is this here?  It breaks on empty comments
+1195         //    tmp = istr\&.get();
+1196         //    if (!istr) { istr\&.unget(); return; }
+1197       }
+1198     // 'tmp' contains last character of _comment_starter
+1199 
+1200     // -- comment starter found -> search for comment ender
+1201     unsigned match_no=0;
+1202     while (true)
+1203       {
+1204         tmp = istr\&.get();
+1205         if (!istr)
+1206           {
+1207             istr\&.unget();
+1208             return;
+1209           }
+1210 
+1211         if (tmp == _comment_end[match_no])
+1212           {
+1213             match_no++;
+1214             if (match_no == _comment_end\&.length())
+1215               {
+1216                 istr\&.unget();
+1217                 break; // shuffle more whitespace, end of comment found
+1218               }
+1219           }
+1220         else
+1221           match_no = 0;
+1222       }
+1223 
+1224     tmp = istr\&.get();
+1225 
+1226   } while (istr);
+1227   istr\&.unget();
+1228 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::absorb (const \fBGetPot\fP &Other)\fC [inline]\fP"
+absorbing contents of another \fBGetPot\fP object 
+.PP
+Definition at line 937 of file getpot\&.h\&.
+.PP
+References _requested_arguments, _requested_sections, _requested_variables, argv, request_recording_f, and variables\&.
+.PP
+.nf
+938 {
+939   if (&Other == this)
+940     return;
+941 
+942   // variables that are not influenced by absorption:
+943   //               _comment_start
+944   //               _comment_end
+945   //               cursor
+946   //               nominus_cursor
+947   //               search_failed
+948   //               idx_nominus
+949   //               search_loop_f
+950   argv      = Other\&.argv;
+951   variables = Other\&.variables;
+952 
+953   if (request_recording_f)
+954     {
+955       // Get a lock before touching anything mutable
+956       SCOPED_MUTEX;
+957 
+958       _requested_arguments\&.insert(Other\&._requested_arguments\&.begin(), Other\&._requested_arguments\&.end());
+959       _requested_variables\&.insert(Other\&._requested_variables\&.begin(), Other\&._requested_variables\&.end());
+960       _requested_sections\&.insert(Other\&._requested_sections\&.begin(), Other\&._requested_sections\&.end());
+961     }
+962 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::argument_contains (unsignedIdx, const char *FlagList) const\fC [inline]\fP"
+
+.PP
+Definition at line 1987 of file getpot\&.h\&.
+.PP
+References _check_flags(), _get_remaining_string(), _record_argument_request(), argv, and prefix\&.
+.PP
+.nf
+1988 {
+1989   if (Idx >= argv\&.size())
+1990     return false;
+1991 
+1992   // (*) record requested of argument for later ufo-detection
+1993   //     an argument that is checked for flags is considered to be 'requested'
+1994   _record_argument_request(argv[Idx]);
+1995 
+1996   if (prefix == "")
+1997     // search argument for any flag in flag list
+1998     return _check_flags(argv[Idx], FlagList);
+1999 
+2000   // if a prefix is set, then the argument index is the index
+2001   //   inside the 'namespace'
+2002   // => only check list of arguments that start with prefix
+2003   unsigned no_matches = 0;
+2004   for (unsigned i=0; i<argv\&.size(); i++)
+2005     {
+2006       const std::string Remain = _get_remaining_string(argv[i], prefix);
+2007       if (Remain != "")
+2008         {
+2009           no_matches += 1;
+2010           if (no_matches == Idx)
+2011             return _check_flags(Remain, FlagList);
+2012         }
+2013     }
+2014 
+2015   // no argument in this namespace
+2016   return false;
+2017 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::clear_requests ()\fC [inline]\fP"
+for ufo detection: recording requested arguments, options etc\&. 
+.PP
+Definition at line 967 of file getpot\&.h\&.
+.PP
+References _requested_arguments, _requested_sections, and _requested_variables\&.
+.PP
+.nf
+968 {
+969   // Get a lock before touching anything mutable
+970   SCOPED_MUTEX;
+971 
+972   _requested_arguments\&.clear();
+973   _requested_variables\&.clear();
+974   _requested_sections\&.clear();
+975 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::direct_follow (const T &Default, const char *Option)\fC [inline]\fP"
+directly followed arguments 
+.PP
+Definition at line 1895 of file getpot\&.h\&.
+.PP
+References _convert_to_type(), _match_starting_string(), _record_argument_request(), argv, and cursor\&.
+.PP
+Referenced by direct_follow()\&.
+.PP
+.nf
+1896 {
+1897   const char* FollowStr = _match_starting_string(Option);
+1898 
+1899   // (*) record requested of argument for later ufo-detection
+1900   _record_argument_request(std::string(Option) + FollowStr);
+1901 
+1902   if (FollowStr == 0)
+1903     return Default;
+1904 
+1905   if (++cursor >= argv\&.size())
+1906     cursor = getpot_cast_int<unsigned>(argv\&.size());
+1907   return _convert_to_type(FollowStr, Default);
+1908 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::direct_follow (const char *Default, const char *Option)\fC [inline]\fP"
+
+.PP
+Definition at line 1913 of file getpot\&.h\&.
+.PP
+References _internal_managed_copy(), and direct_follow()\&.
+.PP
+.nf
+1914 {
+1915   return _internal_managed_copy(direct_follow(std::string(Default), Option));
+1916 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::disable_loop ()\fC [inline]\fP"
+enable/disable search for an option in loop 
+.PP
+Definition at line 263 of file getpot\&.h\&.
+.PP
+References search_loop_f\&.
+.PP
+Referenced by init_multiple_occurrence()\&.
+.PP
+.nf
+263 { search_loop_f = false; }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::disable_request_recording ()\fC [inline]\fP"
+
+.PP
+Definition at line 155 of file getpot\&.h\&.
+.PP
+References request_recording_f\&.
+.PP
+.nf
+155 { request_recording_f = false; }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::enable_loop ()\fC [inline]\fP"
+
+.PP
+Definition at line 264 of file getpot\&.h\&.
+.PP
+References search_loop_f\&.
+.PP
+.nf
+264 { search_loop_f = true; }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::enable_request_recording ()\fC [inline]\fP"
+
+.PP
+Definition at line 156 of file getpot\&.h\&.
+.PP
+References request_recording_f\&.
+.PP
+.nf
+156 { request_recording_f = true; }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::follow (const T &Default, const char *Option)\fC [inline]\fP"
+search for option and get argument at cursor++ 
+.PP
+Definition at line 1813 of file getpot\&.h\&.
+.PP
+References next(), and search()\&.
+.PP
+Referenced by follow()\&.
+.PP
+.nf
+1814 {
+1815   // (*) record requested of argument is entirely handled in 'search()' and 'next()'
+1816   if (search(Option) == false)
+1817     return Default;
+1818 
+1819   return next(Default);
+1820 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::follow (const char *Default, const char *Option)\fC [inline]\fP"
+
+.PP
+Definition at line 1825 of file getpot\&.h\&.
+.PP
+References _internal_managed_copy(), and follow()\&.
+.PP
+.nf
+1826 {
+1827   return _internal_managed_copy(follow(std::string(Default), Option));
+1828 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::follow (const T &Default, unsignedNo, const char *Option, \&.\&.\&.)\fC [inline]\fP"
+search for one of the given options and get argument that follows it 
+.SS "const char * GETPOT_NAMESPACE::GetPot::follow (const char *Default, unsignedNo, const char *Option, \&.\&.\&.)\fC [inline]\fP"
+
+.PP
+Definition at line 1863 of file getpot\&.h\&.
+.PP
+References next(), and search()\&.
+.PP
+.nf
+1864 {
+1865   // (*) record requested of argument is entirely handled in 'search()' and 'next()'
+1866   if (No == 0)
+1867     return Default;
+1868 
+1869   if (search(P) == true)
+1870     return next(Default);
+1871 
+1872   va_list ap;
+1873   va_start(ap, P);
+1874   for (unsigned i=1; i<No; i++)
+1875     {
+1876       char* Opt = va_arg(ap, char *);
+1877       if (search(Opt) == true)
+1878         {
+1879           va_end(ap);
+1880           return next(Default);
+1881         }
+1882     }
+1883   va_end(ap);
+1884   return Default;
+1885 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::follow (const T &Default, unsigned intNo, const char *P, \&.\&.\&.)\fC [inline]\fP"
+
+.PP
+Definition at line 1836 of file getpot\&.h\&.
+.PP
+References next(), and search()\&.
+.PP
+.nf
+1837 {
+1838   // (*) record requested of argument is entirely handled in 'search()' and 'next()'
+1839   if (No == 0)
+1840     return Default;
+1841 
+1842   if (search(P) == true)
+1843     return next(Default);
+1844 
+1845   va_list ap;
+1846   va_start(ap, P);
+1847   for (unsigned i=1; i<No; i++)
+1848     {
+1849       char* Opt = va_arg(ap, char *);
+1850       if (search(Opt) == true)
+1851         {
+1852           va_end(ap);
+1853           return next(Default);
+1854         }
+1855     }
+1856   va_end(ap);
+1857   return Default;
+1858 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get (unsignedIdx, const T &Default) const\fC [inline]\fP"
+
+.SS "const char* GETPOT_NAMESPACE::GetPot::get (unsignedIdx, const char *Default) const\fC [inline]\fP"
+
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get (unsigned intIdx, const T &Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 1750 of file getpot\&.h\&.
+.PP
+References _convert_to_type(), and argv\&.
+.PP
+.nf
+1751 {
+1752   if (Idx >= argv\&.size())
+1753     return Default;
+1754   return _convert_to_type(argv[Idx], Default);
+1755 }
+.fi
+.SS "std::set< std::string > GETPOT_NAMESPACE::GetPot::get_overridden_variables () const\fC [inline]\fP"
+
+.PP
+Definition at line 2438 of file getpot\&.h\&.
+.PP
+References overridden_vars\&.
+.PP
+.nf
+2439 {
+2440   return overridden_vars;
+2441 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::get_section_names () const\fC [inline]\fP"
+
+.PP
+Definition at line 2430 of file getpot\&.h\&.
+.PP
+References section_list\&.
+.PP
+.nf
+2431 {
+2432   return section_list;
+2433 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get_value_no_default (const char *VarName, const T &Default) const\fC [inline]\fP"
+access varibles, but error out if not present scalar values 
+.PP
+Definition at line 2207 of file getpot\&.h\&.
+.PP
+References _convert_to_type_no_default(), _request_variable(), and GETPOT_NAMESPACE::GetPot::variable::original\&.
+.PP
+Referenced by get_value_no_default()\&.
+.PP
+.nf
+2208 {
+2209   // (*) recording of requested variables happens in '_request_variable()'
+2210   const variable*  sv = _request_variable(VarName);
+2211   if (sv == 0)
+2212     {
+2213       getpot_cerr << "ERROR: cannot find variable "<<VarName<<std::endl;
+2214       getpot_error();
+2215     }
+2216   return _convert_to_type_no_default(VarName, sv->original, Default);
+2217 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get_value_no_default (const std::string &VarName, const T &Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 2223 of file getpot\&.h\&.
+.PP
+References get_value_no_default()\&.
+.PP
+.nf
+2224 {
+2225   return get_value_no_default(VarName\&.c_str(),Default);
+2226 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::get_value_no_default (const char *VarName, const char *Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 2231 of file getpot\&.h\&.
+.PP
+References _internal_managed_copy(), and get_value_no_default()\&.
+.PP
+.nf
+2232 {
+2233   return _internal_managed_copy(get_value_no_default(VarName, Default));
+2234 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::get_value_no_default (const std::string &VarName, const char *Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 2239 of file getpot\&.h\&.
+.PP
+References get_value_no_default()\&.
+.PP
+.nf
+2240 {
+2241   return get_value_no_default(VarName\&.c_str(),Default);
+2242 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get_value_no_default (const char *VarName, const T &Default, unsignedIdx) const\fC [inline]\fP"
+vectors 
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get_value_no_default (const std::string &VarName, const T &Default, unsignedIdx) const\fC [inline]\fP"
+
+.SS "const char* GETPOT_NAMESPACE::GetPot::get_value_no_default (const char *VarName, const char *Default, unsignedIdx) const\fC [inline]\fP"
+
+.SS "const char* GETPOT_NAMESPACE::GetPot::get_value_no_default (const std::string &VarName, const char *Default, unsignedIdx) const\fC [inline]\fP"
+
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get_value_no_default (const char *VarName, const T &Default, unsigned intIdx) const\fC [inline]\fP"
+
+.PP
+Definition at line 2248 of file getpot\&.h\&.
+.PP
+References _convert_to_type_no_default(), _request_variable(), and GETPOT_NAMESPACE::GetPot::variable::get_element()\&.
+.PP
+.nf
+2249 {
+2250   // (*) recording of requested variables happens in '_request_variable()'
+2251   const variable* sv = _request_variable(VarName);
+2252   if (sv == 0)
+2253     {
+2254       getpot_cerr << "ERROR: cannot find variable "<<VarName<<std::endl;
+2255       getpot_error();
+2256     }
+2257 
+2258   const std::string*  element = sv->get_element(Idx);
+2259   if (element == 0)
+2260     {
+2261       getpot_cerr << "ERROR: cannot find index "<<Idx<<" of variable "<<VarName<<std::endl;
+2262       getpot_error();
+2263     }
+2264   return _convert_to_type_no_default(VarName, *element, Default);
+2265 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::get_value_no_default (const std::string &VarName, const T &Default, unsigned intIdx) const\fC [inline]\fP"
+
+.PP
+Definition at line 2271 of file getpot\&.h\&.
+.PP
+References get_value_no_default()\&.
+.PP
+.nf
+2272 {
+2273   return get_value_no_default(VarName\&.c_str(), Default, Idx);
+2274 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::get_variable_names () const\fC [inline]\fP"
+
+.PP
+Definition at line 2414 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), prefix, and variables\&.
+.PP
+.nf
+2415 {
+2416   STRING_VECTOR  result;
+2417   std::vector<GetPot::variable>::const_iterator it = variables\&.begin();
+2418   for (; it != variables\&.end(); ++it)
+2419     {
+2420       const std::string Tmp = _get_remaining_string((*it)\&.name, prefix);
+2421       if (Tmp != "")
+2422         result\&.push_back(Tmp);
+2423     }
+2424   return result;
+2425 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::have_variable (const char *VarName) const\fC [inline]\fP"
+variables check for a variable 
+.PP
+Definition at line 2103 of file getpot\&.h\&.
+.PP
+References _request_variable()\&.
+.PP
+Referenced by have_variable()\&.
+.PP
+.nf
+2104 {
+2105   const variable* sv = _request_variable(VarName);
+2106 
+2107   if (sv == 0)
+2108     return false;
+2109 
+2110   return true;
+2111 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::have_variable (const std::string &VarName) const\fC [inline]\fP"
+
+.PP
+Definition at line 2116 of file getpot\&.h\&.
+.PP
+References have_variable()\&.
+.PP
+.nf
+2117 {
+2118   return have_variable(VarName\&.c_str());
+2119 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::init_multiple_occurrence ()\fC [inline]\fP"
+
+.PP
+Definition at line 1728 of file getpot\&.h\&.
+.PP
+References disable_loop(), and reset_cursor()\&.
+.PP
+.nf
+1729 {
+1730   disable_loop();
+1731   reset_cursor();
+1732 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::next (const T &Default)\fC [inline]\fP"
+get argument at cursor++ 
+.PP
+Definition at line 1780 of file getpot\&.h\&.
+.PP
+References _convert_to_type(), _get_remaining_string(), _record_argument_request(), argv, cursor, prefix, and search_failed_f\&.
+.PP
+Referenced by follow(), and next()\&.
+.PP
+.nf
+1781 {
+1782   if (search_failed_f)
+1783     return Default;
+1784   cursor++;
+1785   if (cursor >= argv\&.size())
+1786     {
+1787       cursor = getpot_cast_int<unsigned>(argv\&.size());
+1788       return Default;
+1789     }
+1790 
+1791   // (*) record requested argument for later ufo detection
+1792   _record_argument_request(argv[cursor]);
+1793 
+1794   const std::string Remain = _get_remaining_string(argv[cursor], prefix);
+1795 
+1796   return Remain != "" ? _convert_to_type(Remain, Default) : Default;
+1797 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::next (const char *Default)\fC [inline]\fP"
+
+.PP
+Definition at line 1802 of file getpot\&.h\&.
+.PP
+References _internal_managed_copy(), and next()\&.
+.PP
+.nf
+1803 {
+1804   return _internal_managed_copy(next(std::string(Default)));
+1805 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::next_nominus ()\fC [inline]\fP"
+
+.PP
+Definition at line 2056 of file getpot\&.h\&.
+.PP
+References _internal_managed_copy(), _record_argument_request(), argv, idx_nominus, and nominus_cursor\&.
+.PP
+.nf
+2057 {
+2058   if (nominus_cursor < int(idx_nominus\&.size()) - 1)
+2059     {
+2060       const std::string Tmp = argv[idx_nominus[++nominus_cursor]];
+2061 
+2062       // (*) record for later ufo-detection
+2063       _record_argument_request(Tmp);
+2064 
+2065       return _internal_managed_copy(Tmp);
+2066     }
+2067 
+2068   return 0;
+2069 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::next_nominus_string ()\fC [inline]\fP"
+
+.PP
+Definition at line 2073 of file getpot\&.h\&.
+.PP
+References _record_argument_request(), argv, idx_nominus, and nominus_cursor\&.
+.PP
+.nf
+2074 {
+2075   if (nominus_cursor < int(idx_nominus\&.size()) - 1)
+2076     {
+2077       const std::string Tmp = argv[idx_nominus[++nominus_cursor]];
+2078 
+2079       // (*) record for later ufo-detection
+2080       _record_argument_request(Tmp);
+2081 
+2082       return Tmp;
+2083     }
+2084 
+2085   return "";
+2086 }
+.fi
+.SS "unsigned GETPOT_NAMESPACE::GetPot::nominus_size () const\fC [inline]\fP"
+
+.PP
+Definition at line 316 of file getpot\&.h\&.
+.PP
+References idx_nominus\&.
+.PP
+.nf
+316 { return getpot_cast_int<unsigned>(idx_nominus\&.size()); }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::nominus_vector () const\fC [inline]\fP"
+
+.PP
+Definition at line 2037 of file getpot\&.h\&.
+.PP
+References _record_argument_request(), argv, and idx_nominus\&.
+.PP
+.nf
+2038 {
+2039   STRING_VECTOR nv;
+2040   std::vector<unsigned>::const_iterator it = idx_nominus\&.begin();
+2041   for (; it != idx_nominus\&.end(); ++it)
+2042     {
+2043       nv\&.push_back(argv[*it]);
+2044 
+2045       // (*) record for later ufo-detection
+2046       //     when a nominus vector is requested, the entire set of nominus arguments are
+2047       //     tagged as 'requested'
+2048       _record_argument_request(argv[*it]);
+2049     }
+2050   return nv;
+2051 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::operator() (const char *VarName, const T &Default) const\fC [inline]\fP"
+scalar values 
+.PP
+Definition at line 2125 of file getpot\&.h\&.
+.PP
+References _convert_to_type(), _request_variable(), and GETPOT_NAMESPACE::GetPot::variable::original\&.
+.PP
+Referenced by operator()()\&.
+.PP
+.nf
+2126 {
+2127   // (*) recording of requested variables happens in '_request_variable()'
+2128   const variable*  sv = _request_variable(VarName);
+2129 
+2130   if (sv == 0)
+2131     return Default;
+2132 
+2133   return _convert_to_type(sv->original, Default);
+2134 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::operator() (const std::string &VarName, const T &Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 2140 of file getpot\&.h\&.
+.PP
+References operator()()\&.
+.PP
+.nf
+2141 {
+2142   return operator()(VarName\&.c_str(), Default);
+2143 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::operator() (const char *VarName, const char *Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 2148 of file getpot\&.h\&.
+.PP
+References _internal_managed_copy()\&.
+.PP
+.nf
+2149 {
+2150   return _internal_managed_copy(operator()(VarName, std::string(Default)));
+2151 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::operator() (const std::string &VarName, const char *Default) const\fC [inline]\fP"
+
+.PP
+Definition at line 2156 of file getpot\&.h\&.
+.PP
+References operator()()\&.
+.PP
+.nf
+2157 {
+2158   return operator()(VarName\&.c_str(), Default);
+2159 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::operator() (const char *VarName, const T &Default, unsignedIdx) const\fC [inline]\fP"
+vectors 
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::operator() (const std::string &VarName, const T &Default, unsignedIdx) const\fC [inline]\fP"
+
+.SS "const char* GETPOT_NAMESPACE::GetPot::operator() (const char *VarName, const char *Default, unsignedIdx) const\fC [inline]\fP"
+
+.SS "const char* GETPOT_NAMESPACE::GetPot::operator() (const std::string &VarName, const char *Default, unsignedIdx) const\fC [inline]\fP"
+
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::operator() (const char *VarName, const T &Default, unsigned intIdx) const\fC [inline]\fP"
+
+.PP
+Definition at line 2165 of file getpot\&.h\&.
+.PP
+References _convert_to_type(), _request_variable(), and GETPOT_NAMESPACE::GetPot::variable::get_element()\&.
+.PP
+.nf
+2166 {
+2167   // (*) recording of requested variables happens in '_request_variable()'
+2168   const variable* sv = _request_variable(VarName);
+2169   if (sv == 0)
+2170     return Default;
+2171 
+2172   const std::string*  element = sv->get_element(Idx);
+2173   if (element == 0)
+2174     return Default;
+2175   return _convert_to_type(*element, Default);
+2176 }
+.fi
+.SS "template<typename T > T GETPOT_NAMESPACE::GetPot::operator() (const std::string &VarName, const T &Default, unsigned intIdx) const\fC [inline]\fP"
+
+.PP
+Definition at line 2182 of file getpot\&.h\&.
+.PP
+References operator()()\&.
+.PP
+.nf
+2183 {
+2184   return operator()(VarName\&.c_str(), Default, Idx);
+2185 }
+.fi
+.SS "\fBGetPot\fP & GETPOT_NAMESPACE::GetPot::operator= (const \fBGetPot\fP &Other)\fC [inline]\fP"
+
+.PP
+Definition at line 881 of file getpot\&.h\&.
+.PP
+References _comment_end, _comment_start, _field_separator, _getpot_mtx, _internal_string_container, _requested_arguments, _requested_sections, _requested_variables, argv, cursor, end, idx_nominus, nominus_cursor, overridden_vars, prefix, request_recording_f, search_failed_f, search_loop_f, section, section_list, and variables\&.
+.PP
+Referenced by GETPOT_NAMESPACE::GetPot::variable::variable()\&.
+.PP
+.nf
+882 {
+883   if (&Other == this)
+884     return *this;
+885 
+886   prefix               = Other\&.prefix;
+887   section              = Other\&.section;
+888   section_list         = Other\&.section_list;
+889   argv                 = Other\&.argv;
+890   cursor               = Other\&.cursor;
+891   search_loop_f        = Other\&.search_loop_f;
+892   search_failed_f      = Other\&.search_failed_f;
+893   nominus_cursor       = Other\&.nominus_cursor;
+894   overridden_vars      = Other\&.overridden_vars;
+895   idx_nominus          = Other\&.idx_nominus;
+896   variables            = Other\&.variables;
+897   _comment_start       = Other\&._comment_start;
+898   _comment_end         = Other\&._comment_end;
+899   _field_separator     = Other\&._field_separator;
+900 #if !defined(GETPOT_DISABLE_MUTEX)
+901   _getpot_mtx          = Other\&._getpot_mtx;
+902 #endif
+903   _requested_arguments = Other\&._requested_arguments;
+904   _requested_variables = Other\&._requested_variables;
+905   _requested_sections  = Other\&._requested_sections;
+906   request_recording_f  = Other\&.request_recording_f;
+907 
+908   std::set<const char*, ltstr>::const_iterator        my_it =
+909     _internal_string_container\&.begin();
+910   const std::set<const char*, ltstr>::const_iterator my_end =
+911     _internal_string_container\&.end();
+912 
+913   for (; my_it != my_end; ++my_it)
+914     delete [] *my_it;
+915 
+916   _internal_string_container\&.clear();
+917 
+918   std::set<const char*,ltstr>::const_iterator it =
+919     Other\&._internal_string_container\&.begin();
+920   const std::set<const char*,ltstr>::const_iterator end =
+921     Other\&._internal_string_container\&.end();
+922 
+923   for (; it != end; ++it)
+924     {
+925       const char* otherstr = *it;
+926       char* newcopy = new char[strlen(otherstr)+1];
+927       strncpy(newcopy, otherstr, strlen(otherstr)+1);
+928       this->_internal_string_container\&.insert(newcopy);
+929     }
+930 
+931   return *this;
+932 }
+.fi
+.SS "const char * GETPOT_NAMESPACE::GetPot::operator[] (unsignedIdx) const\fC [inline]\fP"
+direct access to command line arguments 
+.PP
+Definition at line 1741 of file getpot\&.h\&.
+.PP
+References argv, and libMesh::MeshTools::Generation::Private::idx()\&.
+.PP
+.nf
+1742 {
+1743   return idx<argv\&.size() ? argv[idx]\&.c_str() : 0;
+1744 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::options_contain (const char *FlagList) const\fC [inline]\fP"
+flags 
+.PP
+Definition at line 1968 of file getpot\&.h\&.
+.PP
+References _check_flags(), _get_remaining_string(), argv, and prefix\&.
+.PP
+.nf
+1969 {
+1970   // go through all arguments that start with a '-' (but not '--')
+1971   std::string str;
+1972   STRING_VECTOR::const_iterator it = argv\&.begin();
+1973   for (; it != argv\&.end(); ++it)
+1974     {
+1975       str = _get_remaining_string(*it, prefix);
+1976 
+1977       if (str\&.length() >= 2 && str[0] == '-' && str[1] != '-')
+1978         if (_check_flags(str, FlagList))
+1979           return true;
+1980     }
+1981   return false;
+1982 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::parse_command_line (const intargc_, const char *const *argv_, const char *FieldSeparator = \fC0x0\fP)\fC [inline]\fP"
+Re-initialization methods 
+.PP
+Definition at line 703 of file getpot\&.h\&.
+.PP
+References _basic_initialization(), _field_separator, and _parse_argument_vector()\&.
+.PP
+Referenced by GetPot()\&.
+.PP
+.nf
+705 {
+706   _basic_initialization();
+707 
+708   // if specified -> overwrite default string
+709   if (FieldSeparator)
+710     _field_separator = std::string(FieldSeparator);
+711 
+712   // -- make an internal copy of the argument list:
+713   STRING_VECTOR _apriori_argv;
+714   // -- for the sake of clarity: we do want to include the first
+715   //    argument of the first parsing source in the argument vector!
+716   //    it will not be a nominus argument, though\&. This gives us a
+717   //    minimum vector size of one which facilitates error checking
+718   //    in many functions\&. Also the user will be able to retrieve
+719   //    the name of his application or input file by "get[0]"
+720   _apriori_argv\&.push_back(std::string(argv_[0]));
+721   for (int i=1; i<argc_; i++)
+722     {
+723       std::string tmp(argv_[i]);   // recall the problem with temporaries,
+724       _apriori_argv\&.push_back(tmp);       // reference counting in arguement lists \&.\&.\&.
+725     }
+726   _parse_argument_vector(_apriori_argv);
+727 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::parse_input_file (const std::string &FileName, const std::string &CommentStart = \fCstd::string('#')\fP, const std::string &CommentEnd = \fCstd::string('\\n')\fP, const std::string &FieldSeparator = \fCstd::string(' \\t\\n')\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 798 of file getpot\&.h\&.
+.PP
+References _basic_initialization(), _comment_end, _comment_start, _field_separator, _parse_argument_vector(), and _read_in_file()\&.
+.PP
+Referenced by _parse_argument_vector(), and GetPot()\&.
+.PP
+.nf
+802 {
+803   _basic_initialization();
+804 
+805   // overwrite default strings
+806   _comment_start = std::string(CommentStart);
+807   _comment_end   = std::string(CommentEnd);
+808   _field_separator = FieldSeparator;
+809 
+810   STRING_VECTOR _apriori_argv;
+811   // -- the first element of the argument vector stores the name of
+812   //    the first parsing source; however, this element is not
+813   //    parsed for variable assignments or nominuses\&.
+814   //
+815   //    Regardless, we don't add more than one name to the argument
+816   //    vector\&.
+817   _apriori_argv\&.push_back(FileName);
+818 
+819   STRING_VECTOR args = _read_in_file(FileName);
+820   _apriori_argv\&.insert(_apriori_argv\&.begin()+1, args\&.begin(), args\&.end());
+821   _parse_argument_vector(_apriori_argv);
+822 }
+.fi
+.SS "int GETPOT_NAMESPACE::GetPot::print (std::ostream &out_stream = \fCstd::cout\fP) const\fC [inline]\fP"
+output Print everything 
+.PP
+Definition at line 2477 of file getpot\&.h\&.
+.PP
+References argv\&.
+.PP
+.nf
+2478 {
+2479   out_stream << "argc = " << argv\&.size() << std::endl;
+2480   STRING_VECTOR::const_iterator it = argv\&.begin();
+2481   for (; it != argv\&.end(); ++it)
+2482     out_stream << *it << std::endl;
+2483   out_stream << std::endl;
+2484   return 1;
+2485 }
+.fi
+.SS "int GETPOT_NAMESPACE::GetPot::print (const char *custom_prefix, std::ostream &out_stream = \fCstd::cout\fP, unsigned intskip_count = \fC1\fP) const\fC [inline]\fP"
+Print everything after skipping skip_count arguments, with a custom prefix\&. skip_count defaults to 1 to handle the common 'executable input_file' command line case\&. 
+.PP
+Definition at line 2495 of file getpot\&.h\&.
+.PP
+References argv\&.
+.PP
+.nf
+2496 {
+2497   STRING_VECTOR::const_iterator it = argv\&.begin();
+2498   it += skip_count;
+2499   for (; it != argv\&.end(); ++it)
+2500     {
+2501       out_stream << custom_prefix;
+2502       out_stream << *it << std::endl;
+2503     }
+2504   out_stream << std::endl;
+2505   return 1;
+2506 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::reset_cursor ()\fC [inline]\fP"
+reset cursor to position '1' 
+.PP
+Definition at line 1719 of file getpot\&.h\&.
+.PP
+References cursor, and search_failed_f\&.
+.PP
+Referenced by init_multiple_occurrence()\&.
+.PP
+.nf
+1720 {
+1721   search_failed_f = false;
+1722   cursor = 0;
+1723 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::reset_nominus_cursor ()\fC [inline]\fP"
+nominus arguments 
+.PP
+Definition at line 2091 of file getpot\&.h\&.
+.PP
+References nominus_cursor\&.
+.PP
+.nf
+2092 {
+2093   nominus_cursor = -1;
+2094 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::search (const char *option)\fC [inline]\fP"
+search for a certain option and set cursor to position 
+.PP
+Definition at line 1630 of file getpot\&.h\&.
+.PP
+References _record_argument_request(), argv, cursor, prefix, search_failed_f, and search_loop_f\&.
+.PP
+Referenced by follow(), and search()\&.
+.PP
+.nf
+1631 {
+1632   unsigned           OldCursor = cursor;
+1633   const std::string  SearchTerm = prefix + Option;
+1634 
+1635   // (*) record requested arguments for later ufo detection
+1636   _record_argument_request(SearchTerm);
+1637 
+1638   if (OldCursor >= argv\&.size())
+1639     OldCursor = getpot_cast_int<unsigned>(argv\&.size() - 1);
+1640   search_failed_f = true;
+1641 
+1642   // (*) first loop from cursor position until end
+1643   for (unsigned c = cursor; c < argv\&.size(); c++)
+1644     {
+1645       if (argv[c] == SearchTerm)
+1646         {
+1647           cursor = c;
+1648           search_failed_f = false;
+1649           return true;
+1650         }
+1651     }
+1652   if (!search_loop_f)
+1653     return false;
+1654 
+1655   // (*) second loop from 0 to old cursor position
+1656   for (unsigned c = 1; c < OldCursor; c++)
+1657     {
+1658       if (argv[c] == SearchTerm)
+1659         {
+1660           cursor = c;
+1661           search_failed_f = false;
+1662           return true;
+1663         }
+1664     }
+1665 
+1666   // in case nothing is found the cursor stays where it was
+1667   return false;
+1668 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::search (const std::string &option)\fC [inline]\fP"
+
+.PP
+Definition at line 1621 of file getpot\&.h\&.
+.PP
+References search()\&.
+.PP
+.nf
+1622 {
+1623   return search(Option\&.c_str());
+1624 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::search (unsignedNo, const char *P, \&.\&.\&.)\fC [inline]\fP"
+
+.PP
+Definition at line 1673 of file getpot\&.h\&.
+.PP
+References _record_argument_request(), and search()\&.
+.PP
+.nf
+1674 {
+1675   // (*) recording the requested arguments happens in subroutine 'search'
+1676   if (No == 0)
+1677     return false;
+1678 
+1679   // search for the first argument
+1680   if (search(P) == true)
+1681     return true;
+1682 
+1683   // start interpreting variable argument list
+1684   va_list ap;
+1685   va_start(ap, P);
+1686   unsigned i = 1;
+1687   for (; i < No; i++)
+1688     {
+1689       char* Opt = va_arg(ap, char *);
+1690       // (*) search records itself for later ufo detection
+1691       if (search(Opt) == true)
+1692         break;
+1693     }
+1694 
+1695   if (i < No)
+1696     {
+1697       i++;
+1698       // loop was left before end of array --> hit but
+1699       // make sure that the rest of the search terms is marked
+1700       // as requested\&.
+1701       for (; i < No; i++)
+1702         {
+1703           char* Opt = va_arg(ap, char *);
+1704           // (*) record requested arguments for later ufo detection
+1705           _record_argument_request(Opt);
+1706         }
+1707       va_end(ap);
+1708       return true;
+1709     }
+1710 
+1711   va_end(ap);
+1712   // loop was left normally --> no hit
+1713   return false;
+1714 }
+.fi
+.SS "bool GETPOT_NAMESPACE::GetPot::search_failed () const\fC [inline]\fP"
+
+.PP
+Definition at line 258 of file getpot\&.h\&.
+.PP
+References search_failed_f\&.
+.PP
+.nf
+258 { return search_failed_f; }
+.fi
+.SS "template<typename T > void GETPOT_NAMESPACE::GetPot::set (const char *VarName, const T &Value, const boolRequested = \fCtrue\fP)\fC [inline]\fP"
+setting variables i) from outside of \fBGetPot\fP (considering prefix etc\&.) ii) from inside, use '\fB_set_variable()\fP' below 
+.PP
+Definition at line 2360 of file getpot\&.h\&.
+.PP
+References _set_variable()\&.
+.PP
+Referenced by set()\&.
+.PP
+.nf
+2361 {
+2362   std::ostringstream string_value;
+2363   string_value << Value;
+2364   _set_variable(VarName, string_value\&.str()\&.c_str(), Requested);
+2365 }
+.fi
+.SS "template<typename T > void GETPOT_NAMESPACE::GetPot::set (const std::string &VarName, const T &Value, const boolRequested = \fCtrue\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 2371 of file getpot\&.h\&.
+.PP
+References set()\&.
+.PP
+.nf
+2372 {
+2373   set(VarName\&.c_str(), Value, Requested);
+2374 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::set (const char *VarName, const char *Value, const boolRequested = \fCtrue\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 2379 of file getpot\&.h\&.
+.PP
+References _set_variable()\&.
+.PP
+.nf
+2380 {
+2381   _set_variable(VarName, Value, Requested);
+2382 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::set (const std::string &VarName, const char *Value, const boolRequested = \fCtrue\fP)\fC [inline]\fP"
+
+.PP
+Definition at line 2387 of file getpot\&.h\&.
+.PP
+References set()\&.
+.PP
+.nf
+2388 {
+2389   set(VarName\&.c_str(), Value, Requested);
+2390 }
+.fi
+.SS "void GETPOT_NAMESPACE::GetPot::set_prefix (const char *Prefix)\fC [inline]\fP"
+cursor oriented functions 
+.PP
+Definition at line 257 of file getpot\&.h\&.
+.PP
+References prefix\&.
+.PP
+.nf
+257 { prefix = std::string(Prefix); }
+.fi
+.SS "unsigned GETPOT_NAMESPACE::GetPot::size () const\fC [inline]\fP"
+
+.PP
+Definition at line 1770 of file getpot\&.h\&.
+.PP
+References argv\&.
+.PP
+Referenced by _DBE_expand()\&.
+.PP
+.nf
+1771 {
+1772   return getpot_cast_int<unsigned>(argv\&.size());
+1773 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_arguments (unsignedNumber, const char *Known, \&.\&.\&.) const\fC [inline]\fP"
+unidentified flying objects 
+.PP
+Definition at line 3196 of file getpot\&.h\&.
+.PP
+References unidentified_arguments()\&.
+.PP
+.nf
+3198 {
+3199   std::set<std::string> known_arguments;
+3200 
+3201   // (1) create a vector of known arguments
+3202   if (Number == 0)
+3203     return STRING_VECTOR();
+3204 
+3205   va_list ap;
+3206   va_start(ap, KnownArgument1);
+3207   known_arguments\&.insert(std::string(KnownArgument1));
+3208   for (unsigned i=1; i<Number; i++)
+3209     known_arguments\&.insert(std::string(va_arg(ap, char *)));
+3210   va_end(ap);
+3211 
+3212   return unidentified_arguments(known_arguments);
+3213 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_arguments (const std::set< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3236 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), argv, and prefix\&.
+.PP
+.nf
+3237 {
+3238   STRING_VECTOR ufos;
+3239   STRING_VECTOR::const_iterator it = argv\&.begin();
+3240   ++it; // forget about argv[0] (application or filename)
+3241   for (; it != argv\&.end(); ++it)
+3242     {
+3243       // -- argument belongs to prefixed section ?
+3244       const std::string arg = _get_remaining_string(*it, prefix);
+3245       if (arg == "")
+3246         continue;
+3247 
+3248       // -- check if in list
+3249       if (Knowns\&.find(arg) == Knowns\&.end())
+3250         ufos\&.push_back(*it);
+3251     }
+3252   return ufos;
+3253 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_arguments (const std::vector< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3226 of file getpot\&.h\&.
+.PP
+References unidentified_arguments()\&.
+.PP
+.nf
+3227 {
+3228   // We use set for efficiency, but want to support vector inputs for
+3229   // backwards compatibility\&.
+3230   return unidentified_arguments(std::set<std::string> (Knowns\&.begin(), Knowns\&.end()));
+3231 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_arguments () const\fC [inline]\fP"
+
+.PP
+Definition at line 3218 of file getpot\&.h\&.
+.PP
+References _requested_arguments\&.
+.PP
+Referenced by unidentified_arguments(), and unidentified_options()\&.
+.PP
+.nf
+3219 {
+3220   return unidentified_arguments(_requested_arguments);
+3221 }
+.fi
+.SS "std::string GETPOT_NAMESPACE::GetPot::unidentified_flags (const char *Known, intArgumentNumber = \fC-1\fP) const\fC [inline]\fP"
+
+.PP
+Definition at line 3334 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), argv, and prefix\&.
+.PP
+.nf
+3335 {
+3336   std::string         ufos;
+3337   // STRING_VECTOR known_arguments;
+3338   std::string         KFL(KnownFlagList);
+3339 
+3340   // (2) iteration over '-' arguments (options)
+3341   if (ArgumentNumber == -1)
+3342     {
+3343       STRING_VECTOR::const_iterator it = argv\&.begin();
+3344       ++it; // forget about argv[0] (application or filename)
+3345       for (; it != argv\&.end(); ++it)
+3346         {
+3347           // -- argument belongs to prefixed section ?
+3348           const std::string arg = _get_remaining_string(*it, prefix);
+3349           if (arg == "") continue;
+3350 
+3351           // -- does arguments start with '-' (but not '--')
+3352           if (arg\&.length() < 2)
+3353             continue;
+3354 
+3355           else if (arg[0] != '-')
+3356             continue;
+3357 
+3358           else if (arg[1] == '-')
+3359             continue;
+3360 
+3361           // -- check out if flags inside option are contained in KnownFlagList
+3362           const char* p=arg\&.c_str();
+3363           p++; // skip starting minus
+3364           for (; *p != '\0' ; p++)
+3365             if (KFL\&.find(*p) == std::string::npos) ufos += *p;
+3366         }
+3367     }
+3368   // (1) check specific argument
+3369   else
+3370     {
+3371       // -- only check arguments that start with prefix
+3372       int no_matches = 0;
+3373       for (unsigned i=1; i<argv\&.size(); i++)
+3374         {
+3375           const std::string Remain = _get_remaining_string(argv[i], prefix);
+3376           if (Remain != "")
+3377             {
+3378               no_matches++;
+3379               if (no_matches == ArgumentNumber)
+3380                 {
+3381                   // -- the right argument number inside the section is found
+3382                   // => check it for flags
+3383                   const char* p = Remain\&.c_str();
+3384                   p++; // skip starting minus
+3385                   for (; *p != '\0' ; p++)
+3386                     if (KFL\&.find(*p) == std::string::npos) ufos += *p;
+3387                   return ufos;
+3388                 }
+3389             }
+3390         }
+3391     }
+3392   return ufos;
+3393 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_nominuses (unsignedNumber, const char *Known, \&.\&.\&.) const\fC [inline]\fP"
+
+.PP
+Definition at line 3531 of file getpot\&.h\&.
+.PP
+References unidentified_nominuses()\&.
+.PP
+.nf
+3532 {
+3533   std::set<std::string> known_nominuses;
+3534 
+3535   // create vector of known arguments
+3536   if (Number == 0)
+3537     return STRING_VECTOR();
+3538 
+3539   va_list ap;
+3540   va_start(ap, Known);
+3541   known_nominuses\&.insert(std::string(Known));
+3542   for (unsigned i=1; i<Number; i++)
+3543     {
+3544       std::string tmp = std::string(va_arg(ap, char *));
+3545       if (tmp\&.length() == 0)
+3546         continue;
+3547       known_nominuses\&.insert(tmp);
+3548     }
+3549   va_end(ap);
+3550 
+3551   return unidentified_nominuses(known_nominuses);
+3552 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_nominuses (const std::set< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3582 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), argv, and prefix\&.
+.PP
+.nf
+3583 {
+3584   STRING_VECTOR ufos;
+3585 
+3586   // (2) iterate over all arguments
+3587   STRING_VECTOR::const_iterator it = argv\&.begin();
+3588   ++it; // forget about argv[0] (application or filename)
+3589   for (; it != argv\&.end(); ++it)
+3590     {
+3591       // -- check if nominus part of prefix
+3592       const std::string arg = _get_remaining_string(*it, prefix);
+3593       if (arg == "")
+3594         continue;
+3595 
+3596       if (arg\&.length() < 1)
+3597         continue;
+3598 
+3599       // option ? --> not a nomius
+3600       if (arg[0] == '-')
+3601         continue;
+3602 
+3603       // section ? --> not a real nominus
+3604       if (arg[0] == '[' && arg[arg\&.length()-1] == ']')
+3605         continue;
+3606 
+3607       // variable definition ? --> not a real nominus
+3608       bool continue_f = false;
+3609       for (unsigned i=0; i<arg\&.length() ; i++)
+3610         if (arg[i] == '=')
+3611           {
+3612             continue_f = true;
+3613             break;
+3614           }
+3615 
+3616       if (continue_f)
+3617         continue;
+3618 
+3619       // real nominuses are compared with the given list
+3620       if (Knowns\&.find(arg) == Knowns\&.end())
+3621         ufos\&.push_back(*it);
+3622     }
+3623   return ufos;
+3624 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_nominuses (const std::vector< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3572 of file getpot\&.h\&.
+.PP
+References unidentified_nominuses()\&.
+.PP
+.nf
+3573 {
+3574   // We use set for efficiency, but want to support vector inputs for
+3575   // backwards compatibility\&.
+3576   return unidentified_nominuses(std::set<std::string> (Knowns\&.begin(), Knowns\&.end()));
+3577 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_nominuses () const\fC [inline]\fP"
+
+.PP
+Definition at line 3557 of file getpot\&.h\&.
+.PP
+References _requested_arguments\&.
+.PP
+Referenced by unidentified_nominuses()\&.
+.PP
+.nf
+3558 {
+3559   // -- every nominus is an argument\&.
+3560   // -- the set of requested arguments contains the set of requested nominuss\&.
+3561   // -- IF the set of requested arguments contains unrequested nominuss,
+3562   //    THEN they were requested as 'follow' and 'next' arguments and not as real nominuses\&.
+3563   //
+3564   // => it is not necessary to separate requested nominus from the list
+3565 
+3566   return unidentified_nominuses(_requested_arguments);
+3567 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_options (unsignedNumber, const char *Known, \&.\&.\&.) const\fC [inline]\fP"
+
+.PP
+Definition at line 3258 of file getpot\&.h\&.
+.PP
+References unidentified_options()\&.
+.PP
+.nf
+3260 {
+3261   std::set<std::string> known_options;
+3262 
+3263   // (1) create a vector of known arguments
+3264   if (Number == 0)
+3265     return STRING_VECTOR();
+3266 
+3267   va_list ap;
+3268   va_start(ap, KnownOption1);
+3269   known_options\&.insert(std::string(KnownOption1));
+3270   for (unsigned i=1; i<Number; i++)
+3271     known_options\&.insert(std::string(va_arg(ap, char *)));
+3272   va_end(ap);
+3273 
+3274   return unidentified_options(known_options);
+3275 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_options (const std::set< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3304 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), argv, and prefix\&.
+.PP
+.nf
+3305 {
+3306   STRING_VECTOR ufos;
+3307   STRING_VECTOR::const_iterator it = argv\&.begin();
+3308   ++it; // forget about argv[0] (application or filename)
+3309   for (; it != argv\&.end(); ++it)
+3310     {
+3311       // -- argument belongs to prefixed section ?
+3312       const std::string arg = _get_remaining_string(*it, prefix);
+3313       if (arg == "")
+3314         continue;
+3315 
+3316       // is argument really an option (starting with '-') ?
+3317       if (arg\&.length() < 1 || arg[0] != '-')
+3318         continue;
+3319 
+3320       if (Knowns\&.find(arg) == Knowns\&.end())
+3321         ufos\&.push_back(*it);
+3322     }
+3323 
+3324   return ufos;
+3325 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_options (const std::vector< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3294 of file getpot\&.h\&.
+.PP
+References unidentified_options()\&.
+.PP
+.nf
+3295 {
+3296   // We use set for efficiency, but want to support vector inputs for
+3297   // backwards compatibility\&.
+3298   return unidentified_options(std::set<std::string> (Knowns\&.begin(), Knowns\&.end()));
+3299 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_options () const\fC [inline]\fP"
+
+.PP
+Definition at line 3280 of file getpot\&.h\&.
+.PP
+References _requested_arguments, and unidentified_arguments()\&.
+.PP
+Referenced by unidentified_options()\&.
+.PP
+.nf
+3281 {
+3282   // -- every option is an argument\&.
+3283   // -- the set of requested arguments contains the set of requested options\&.
+3284   // -- IF the set of requested arguments contains unrequested options,
+3285   //    THEN they were requested as 'follow' and 'next' arguments and not as real options\&.
+3286   //
+3287   // => it is not necessary to separate requested options from the list
+3288   return unidentified_arguments(_requested_arguments);
+3289 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_sections (unsignedNumber, const char *Known, \&.\&.\&.) const\fC [inline]\fP"
+
+.PP
+Definition at line 3459 of file getpot\&.h\&.
+.PP
+References unidentified_sections()\&.
+.PP
+.nf
+3461 {
+3462   std::set<std::string> known_sections;
+3463 
+3464   // (1) create a vector of known arguments
+3465   if (Number == 0)
+3466     return STRING_VECTOR();
+3467 
+3468   va_list ap;
+3469   va_start(ap, KnownSection1);
+3470   known_sections\&.insert(std::string(KnownSection1));
+3471   for (unsigned i=1; i<Number; i++)
+3472     {
+3473       std::string tmp = std::string(va_arg(ap, char *));
+3474 
+3475       if (tmp\&.length() == 0)
+3476         continue;
+3477 
+3478       if (tmp[tmp\&.length()-1] != '/')
+3479         tmp += '/';
+3480 
+3481       known_sections\&.insert(tmp);
+3482     }
+3483   va_end(ap);
+3484 
+3485   return unidentified_sections(known_sections);
+3486 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_sections (const std::set< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3509 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), prefix, and section_list\&.
+.PP
+.nf
+3510 {
+3511   STRING_VECTOR ufos;
+3512 
+3513   victorate(std::string, section_list, it)
+3514     {
+3515       // -- check if section conform to prefix
+3516       const std::string sec_name = _get_remaining_string(*it, prefix);
+3517       if (sec_name == "")
+3518         continue;
+3519 
+3520       // -- check if section is known
+3521       if (Knowns\&.find(sec_name) == Knowns\&.end())
+3522         ufos\&.push_back(*it);
+3523     }
+3524 
+3525   return ufos;
+3526 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_sections (const std::vector< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3499 of file getpot\&.h\&.
+.PP
+References unidentified_sections()\&.
+.PP
+.nf
+3500 {
+3501   // We use set for efficiency, but want to support vector inputs for
+3502   // backwards compatibility\&.
+3503   return unidentified_sections(std::set<std::string> (Knowns\&.begin(), Knowns\&.end()));
+3504 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_sections () const\fC [inline]\fP"
+
+.PP
+Definition at line 3491 of file getpot\&.h\&.
+.PP
+References _requested_sections\&.
+.PP
+Referenced by unidentified_sections()\&.
+.PP
+.nf
+3492 {
+3493   return unidentified_sections(_requested_sections);
+3494 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_variables (unsignedNumber, const char *Known, \&.\&.\&.) const\fC [inline]\fP"
+
+.PP
+Definition at line 3398 of file getpot\&.h\&.
+.PP
+References unidentified_variables()\&.
+.PP
+.nf
+3400 {
+3401   std::set<std::string> known_variables;
+3402 
+3403   // create vector of known arguments
+3404   if (Number == 0)
+3405     return STRING_VECTOR();
+3406 
+3407   va_list ap;
+3408   va_start(ap, KnownVariable1);
+3409   known_variables\&.insert(std::string(KnownVariable1));
+3410   for (unsigned i=1; i<Number; i++)
+3411     known_variables\&.insert(std::string(va_arg(ap, char *)));
+3412   va_end(ap);
+3413 
+3414   return unidentified_variables(known_variables);
+3415 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_variables (const std::set< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3430 of file getpot\&.h\&.
+.PP
+References _get_remaining_string(), prefix, and variables\&.
+.PP
+.nf
+3431 {
+3432   STRING_VECTOR ufos;
+3433 
+3434   victorate(GetPot::variable, variables, it)
+3435     {
+3436       // -- check if variable has specific prefix
+3437       const std::string var_name = _get_remaining_string((*it)\&.name, prefix);
+3438       if (var_name == "")
+3439         continue;
+3440 
+3441       // -- check if variable is known
+3442       if (Knowns\&.find(var_name) == Knowns\&.end())
+3443         ufos\&.push_back((*it)\&.name);
+3444     }
+3445   return ufos;
+3446 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_variables (const std::vector< std::string > &Knowns) const\fC [inline]\fP"
+
+.PP
+Definition at line 3420 of file getpot\&.h\&.
+.PP
+References unidentified_variables()\&.
+.PP
+.nf
+3421 {
+3422   // We use set for efficiency, but want to support vector inputs for
+3423   // backwards compatibility\&.
+3424   return unidentified_variables(std::set<std::string> (Knowns\&.begin(), Knowns\&.end()));
+3425 }
+.fi
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::unidentified_variables () const\fC [inline]\fP"
+
+.PP
+Definition at line 3451 of file getpot\&.h\&.
+.PP
+References _requested_variables\&.
+.PP
+Referenced by unidentified_variables()\&.
+.PP
+.nf
+3452 {
+3453   return unidentified_variables(_requested_variables);
+3454 }
+.fi
+.SS "unsigned GETPOT_NAMESPACE::GetPot::vector_variable_size (const char *VarName) const\fC [inline]\fP"
+
+.PP
+Definition at line 2395 of file getpot\&.h\&.
+.PP
+References _request_variable(), and GETPOT_NAMESPACE::GetPot::variable::value\&.
+.PP
+Referenced by vector_variable_size()\&.
+.PP
+.nf
+2396 {
+2397   const variable*  sv = _request_variable(VarName);
+2398   if (sv == 0)
+2399     return 0;
+2400   return (unsigned)(sv->value\&.size());
+2401 }
+.fi
+.SS "unsigned GETPOT_NAMESPACE::GetPot::vector_variable_size (const std::string &VarName) const\fC [inline]\fP"
+
+.PP
+Definition at line 2406 of file getpot\&.h\&.
+.PP
+References vector_variable_size()\&.
+.PP
+.nf
+2407 {
+2408   return vector_variable_size(VarName\&.c_str());
+2409 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::string GETPOT_NAMESPACE::GetPot::_comment_end\fC [private]\fP"
+
+.PP
+Definition at line 432 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _parse_argument_vector(), _skip_whitespace(), operator=(), and parse_input_file()\&.
+.SS "std::string GETPOT_NAMESPACE::GetPot::_comment_start\fC [private]\fP"
+comment delimiters 
+.PP
+Definition at line 431 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _parse_argument_vector(), _read_in_stream(), _skip_whitespace(), operator=(), and parse_input_file()\&.
+.SS "std::string GETPOT_NAMESPACE::GetPot::_field_separator\fC [private]\fP"
+field separator (separating elements of a vector) 
+.PP
+Definition at line 437 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _parse_argument_vector(), _set_variable(), operator=(), parse_command_line(), and parse_input_file()\&.
+.SS "\fBlibMesh::Threads::spin_mutex\fP GETPOT_NAMESPACE::GetPot::_getpot_mtx\fC [mutable]\fP, \fC [private]\fP"
+we have some mutable non-thread-safe members, but we want to be able to call const member functions from multiple threads at once, so we'll wrap access to mutable objects in a mutex\&. 
+.PP
+Definition at line 454 of file getpot\&.h\&.
+.PP
+Referenced by operator=()\&.
+.SS "std::set<const char*, \fBltstr\fP> GETPOT_NAMESPACE::GetPot::_internal_string_container\fC [mutable]\fP, \fC [private]\fP"
+some functions return a char pointer to a string created on the fly\&. this container makes them 'available' until the getpot object is destroyed\&. user codes are recommended to instead request std::string values\&. We use char* here because c_str() results are only guaranteed to remain valid until a non-const string method is called 
+.PP
+Definition at line 465 of file getpot\&.h\&.
+.PP
+Referenced by _internal_managed_copy(), GetPot(), operator=(), and ~GetPot()\&.
+.SS "std::set<std::string> GETPOT_NAMESPACE::GetPot::_requested_arguments\fC [mutable]\fP, \fC [private]\fP"
+keeping track about arguments that are requested, so that the UFO detection can be simplified 
+.PP
+Definition at line 477 of file getpot\&.h\&.
+.PP
+Referenced by _parse_argument_vector(), _record_argument_request(), absorb(), clear_requests(), operator=(), unidentified_arguments(), unidentified_nominuses(), and unidentified_options()\&.
+.SS "std::set<std::string> GETPOT_NAMESPACE::GetPot::_requested_sections\fC [mutable]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 479 of file getpot\&.h\&.
+.PP
+Referenced by _record_argument_request(), _record_variable_request(), absorb(), clear_requests(), operator=(), and unidentified_sections()\&.
+.SS "std::set<std::string> GETPOT_NAMESPACE::GetPot::_requested_variables\fC [mutable]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 478 of file getpot\&.h\&.
+.PP
+Referenced by _record_variable_request(), absorb(), clear_requests(), operator=(), and unidentified_variables()\&.
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::argv\fC [private]\fP"
+argument vector 
+.PP
+Definition at line 411 of file getpot\&.h\&.
+.PP
+Referenced by _match_starting_string(), _parse_argument_vector(), absorb(), argument_contains(), direct_follow(), get(), next(), next_nominus(), next_nominus_string(), nominus_vector(), operator=(), operator[](), options_contain(), print(), search(), size(), unidentified_arguments(), unidentified_flags(), unidentified_nominuses(), and unidentified_options()\&.
+.SS "unsigned GETPOT_NAMESPACE::GetPot::cursor\fC [private]\fP"
+
+.PP
+Definition at line 412 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _match_starting_string(), direct_follow(), next(), operator=(), reset_cursor(), and search()\&.
+.SS "std::vector<unsigned> GETPOT_NAMESPACE::GetPot::idx_nominus\fC [private]\fP"
+
+.PP
+Definition at line 421 of file getpot\&.h\&.
+.PP
+Referenced by _parse_argument_vector(), next_nominus(), next_nominus_string(), nominus_size(), nominus_vector(), and operator=()\&.
+.SS "int GETPOT_NAMESPACE::GetPot::nominus_cursor\fC [private]\fP"
+nominus vector 
+.PP
+Definition at line 420 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), next_nominus(), next_nominus_string(), operator=(), and reset_nominus_cursor()\&.
+.SS "std::set<std::string> GETPOT_NAMESPACE::GetPot::overridden_vars\fC [private]\fP"
+
+.PP
+Definition at line 415 of file getpot\&.h\&.
+.PP
+Referenced by _set_variable(), get_overridden_variables(), and operator=()\&.
+.SS "std::string GETPOT_NAMESPACE::GetPot::prefix\fC [private]\fP"
+member variables 
+.PP
+Definition at line 404 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _DBE_get_variable(), _find_variable(), argument_contains(), get_variable_names(), next(), operator=(), options_contain(), search(), set_prefix(), unidentified_arguments(), unidentified_flags(), unidentified_nominuses(), unidentified_options(), unidentified_sections(), and unidentified_variables()\&.
+.SS "bool GETPOT_NAMESPACE::GetPot::request_recording_f\fC [private]\fP"
+
+.PP
+Definition at line 481 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _parse_argument_vector(), _record_argument_request(), _record_variable_request(), absorb(), disable_request_recording(), enable_request_recording(), and operator=()\&.
+.SS "bool GETPOT_NAMESPACE::GetPot::search_failed_f\fC [private]\fP"
+
+.PP
+Definition at line 414 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _match_starting_string(), next(), operator=(), reset_cursor(), search(), and search_failed()\&.
+.SS "bool GETPOT_NAMESPACE::GetPot::search_loop_f\fC [private]\fP"
+
+.PP
+Definition at line 413 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _match_starting_string(), disable_loop(), enable_loop(), operator=(), and search()\&.
+.SS "std::string GETPOT_NAMESPACE::GetPot::section\fC [private]\fP"
+
+.PP
+Definition at line 405 of file getpot\&.h\&.
+.PP
+Referenced by _basic_initialization(), _DBE_get_variable(), _parse_argument_vector(), _record_argument_request(), _record_variable_request(), and operator=()\&.
+.SS "\fBSTRING_VECTOR\fP GETPOT_NAMESPACE::GetPot::section_list\fC [private]\fP"
+
+.PP
+Definition at line 406 of file getpot\&.h\&.
+.PP
+Referenced by _parse_argument_vector(), get_section_names(), operator=(), and unidentified_sections()\&.
+.SS "std::vector<\fBvariable\fP> GETPOT_NAMESPACE::GetPot::variables\fC [private]\fP"
+variables (arguments of the form 'variable=value') 
+.PP
+Definition at line 426 of file getpot\&.h\&.
+.PP
+Referenced by _find_variable(), _set_variable(), absorb(), get_variable_names(), operator=(), and unidentified_variables()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

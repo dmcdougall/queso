@@ -1,0 +1,948 @@
+.TH "libMesh::NoxNonlinearSolver< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::NoxNonlinearSolver< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <trilinos_nox_nonlinear_solver\&.h>\fP
+.PP
+Inherits \fBlibMesh::NonlinearSolver< T >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBNonlinearImplicitSystem\fP \fBsys_type\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBNoxNonlinearSolver\fP (\fBsys_type\fP &\fBsystem\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~NoxNonlinearSolver\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBinit\fP (const char *name=NULL)"
+.br
+.ti -1c
+.RI "virtual std::pair< unsigned 
+.br
+int, \fBReal\fP > \fBsolve\fP (\fBSparseMatrix\fP< T > &, \fBNumericVector\fP< T > &, \fBNumericVector\fP< T > &, const double, const unsigned int)"
+.br
+.ti -1c
+.RI "virtual int \fBget_total_linear_iterations\fP ()"
+.br
+.ti -1c
+.RI "virtual unsigned \fBget_current_nonlinear_iteration_number\fP () const "
+.br
+.ti -1c
+.RI "bool \fBinitialized\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBprint_converged_reason\fP ()"
+.br
+.ti -1c
+.RI "const \fBsys_type\fP & \fBsystem\fP () const "
+.br
+.ti -1c
+.RI "\fBsys_type\fP & \fBsystem\fP ()"
+.br
+.ti -1c
+.RI "void \fBattach_preconditioner\fP (\fBPreconditioner\fP< T > *preconditioner)"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fBcomm\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBn_processors\fP () const "
+.br
+.ti -1c
+.RI "\fBprocessor_id_type\fP \fBprocessor_id\fP () const "
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBAutoPtr\fP
+.br
+< \fBNonlinearSolver\fP< T > > \fBbuild\fP (\fBsys_type\fP &s, const \fBSolverPackage\fP solver_package=\fBlibMesh::default_solver_package\fP())"
+.br
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "void(* \fBresidual\fP )(const \fBNumericVector\fP< \fBNumber\fP > &X, \fBNumericVector\fP< \fBNumber\fP > &R, \fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem::ComputeResidual\fP * \fBresidual_object\fP"
+.br
+.ti -1c
+.RI "void(* \fBjacobian\fP )(const \fBNumericVector\fP< \fBNumber\fP > &X, \fBSparseMatrix\fP< \fBNumber\fP > &J, \fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem::ComputeJacobian\fP * \fBjacobian_object\fP"
+.br
+.ti -1c
+.RI "void(* \fBmatvec\fP )(const \fBNumericVector\fP< \fBNumber\fP > &X, \fBNumericVector\fP< \fBNumber\fP > *R, \fBSparseMatrix\fP< \fBNumber\fP > *J, \fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem::ComputeResidualandJacobian\fP * \fBresidual_and_jacobian_object\fP"
+.br
+.ti -1c
+.RI "void(* \fBbounds\fP )(\fBNumericVector\fP< \fBNumber\fP > &XL, \fBNumericVector\fP< \fBNumber\fP > &XU, \fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem::ComputeBounds\fP * \fBbounds_object\fP"
+.br
+.ti -1c
+.RI "void(* \fBnullspace\fP )(std::vector< \fBNumericVector\fP< \fBNumber\fP > * > &sp, \fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem::ComputeVectorSubspace\fP * \fBnullspace_object\fP"
+.br
+.ti -1c
+.RI "void(* \fBnearnullspace\fP )(std::vector< \fBNumericVector\fP< \fBNumber\fP > * > &sp, \fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "\fBNonlinearImplicitSystem::ComputeVectorSubspace\fP * \fBnearnullspace_object\fP"
+.br
+.ti -1c
+.RI "void(* \fBuser_presolve\fP )(\fBsys_type\fP &S)"
+.br
+.ti -1c
+.RI "unsigned int \fBmax_nonlinear_iterations\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBmax_function_evaluations\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBabsolute_residual_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBrelative_residual_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBabsolute_step_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBrelative_step_tolerance\fP"
+.br
+.ti -1c
+.RI "unsigned int \fBmax_linear_iterations\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBinitial_linear_tolerance\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBminimum_linear_tolerance\fP"
+.br
+.ti -1c
+.RI "bool \fBconverged\fP"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBsys_type\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_initialized\fP"
+.br
+.ti -1c
+.RI "\fBPreconditioner\fP< T > * \fB_preconditioner\fP"
+.br
+.ti -1c
+.RI "const \fBParallel::Communicator\fP & \fB_communicator\fP"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "NOX::Solver::Generic * \fB_solver\fP"
+.br
+.ti -1c
+.RI "\fBProblem_Interface\fP * \fB_interface\fP"
+.br
+.ti -1c
+.RI "int \fB_n_linear_iterations\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::NoxNonlinearSolver< T >"
+This class provides an interface to nox iterative solvers that is compatible with the \fC\fBlibMesh\fP\fP \fCNonlinearSolver<>\fP 
+.PP
+\fBAuthor:\fP
+.RS 4
+Chris Newman, 2008 
+.RE
+.PP
+
+.PP
+Definition at line 56 of file trilinos_nox_nonlinear_solver\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SS "template<typename T> typedef \fBNonlinearImplicitSystem\fP \fBlibMesh::NoxNonlinearSolver\fP< T >::\fBsys_type\fP"
+The type of system 
+.PP
+Definition at line 62 of file trilinos_nox_nonlinear_solver\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T > \fBlibMesh::NoxNonlinearSolver\fP< T >::\fBNoxNonlinearSolver\fP (\fBsys_type\fP &system)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Initializes Nox data structures 
+.PP
+Definition at line 128 of file trilinos_nox_nonlinear_solver\&.h\&.
+.PP
+.nf
+128                                                            :
+129   NonlinearSolver<T>(system),
+130   _solver(NULL),
+131   _interface(NULL),
+132   _n_linear_iterations(0)
+133 {
+134 }
+.fi
+.SS "template<typename T > \fBlibMesh::NoxNonlinearSolver\fP< T >::~\fBNoxNonlinearSolver\fP ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 140 of file trilinos_nox_nonlinear_solver\&.h\&.
+.PP
+.nf
+141 {
+142   this->clear ();
+143 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> void \fBlibMesh::NonlinearSolver\fP< T >::attach_preconditioner (\fBPreconditioner\fP< T > *preconditioner)\fC [inherited]\fP"
+Attaches a \fBPreconditioner\fP object to be used during the linear solves\&. 
+.PP
+Definition at line 91 of file nonlinear_solver\&.C\&.
+.PP
+References libMesh::libMeshPrivateData::_is_initialized, and libMesh::err\&.
+.PP
+.nf
+92 {
+93   if(this->_is_initialized)
+94     {
+95       libMesh::err << "Preconditioner must be attached before the solver is initialized!"<<std::endl;
+96       libmesh_error();
+97     }
+98 
+99   _preconditioner = preconditioner;
+100 }
+.fi
+.SS "template<typename T > \fBAutoPtr\fP< \fBNonlinearSolver\fP< T > > \fBlibMesh::NonlinearSolver\fP< T >::build (\fBsys_type\fP &s, const \fBSolverPackage\fPsolver_package = \fC\fBlibMesh::default_solver_package\fP()\fP)\fC [static]\fP, \fC [inherited]\fP"
+Builds a \fC\fBNonlinearSolver\fP\fP using the nonlinear solver package specified by \fCsolver_package\fP 
+.PP
+Definition at line 38 of file nonlinear_solver\&.C\&.
+.PP
+References libMesh::err, libMesh::on_command_line(), libMesh::PETSC_SOLVERS, libMesh::AutoPtr< Tp >::reset(), and libMesh::TRILINOS_SOLVERS\&.
+.PP
+.nf
+39 {
+40   AutoPtr<NonlinearSolver<T> > ap;
+41 
+42   // Build the appropriate solver
+43   switch (solver_package)
+44     {
+45 
+46 #ifdef LIBMESH_HAVE_PETSC
+47     case PETSC_SOLVERS:
+48 #if PETSC_VERSION_LESS_THAN(3,3,0)
+49       ap\&.reset(new PetscNonlinearSolver<T>(s));
+50       break;
+51 #else
+52       if (libMesh::on_command_line ("--use-petsc-dm")){
+53         ap\&.reset(new PetscDMNonlinearSolver<T>(s));
+54       }
+55       else {
+56         ap\&.reset(new PetscNonlinearSolver<T>(s));
+57       }
+58       break;
+59 #endif
+60 #endif // LIBMESH_HAVE_PETSC
+61 
+62 #ifdef LIBMESH_HAVE_NOX
+63     case TRILINOS_SOLVERS:
+64       ap\&.reset(new NoxNonlinearSolver<T>(s));
+65       break;
+66 #endif
+67 
+68     default:
+69       libMesh::err << "ERROR:  Unrecognized solver package: "
+70                    << solver_package
+71                    << std::endl;
+72       libmesh_error();
+73     }
+74 
+75   return ap;
+76 }
+.fi
+.SS "template<typename T > void \fBlibMesh::NoxNonlinearSolver\fP< T >::clear ()\fC [virtual]\fP"
+Release all memory and clear data structures\&. 
+.PP
+Reimplemented from \fBlibMesh::NonlinearSolver< T >\fP\&.
+.PP
+Definition at line 261 of file trilinos_nox_nonlinear_solver\&.C\&.
+.PP
+.nf
+262 {
+263 }
+.fi
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::comm () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a reference to the \fC\fBParallel::Communicator\fP\fP object used by this mesh\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_diff_solver_monitor(), libMesh::__libmesh_petsc_diff_solver_residual(), libMesh::__libmesh_petsc_snes_residual(), libMesh::MeshRefinement::_coarsen_elements(), libMesh::ExactSolution::_compute_error(), libMesh::MetisPartitioner::_do_partition(), libMesh::ParmetisPartitioner::_do_repartition(), libMesh::UniformRefinementEstimator::_estimate_error(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_get_diagonal(), libMesh::SlepcEigenSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult(), libMesh::PetscLinearSolver< T >::_petsc_shell_matrix_mult_add(), libMesh::EquationSystems::_read_impl(), libMesh::MeshRefinement::_refine_elements(), libMesh::ParallelMesh::add_elem(), libMesh::ImplicitSystem::add_matrix(), libMesh::ParallelMesh::add_node(), libMesh::System::add_vector(), libMesh::UnstructuredMesh::all_second_order(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::FEMSystem::assemble_qoi(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::DofMap::attach_matrix(), libMesh::MeshTools::bounding_box(), libMesh::System::calculate_norm(), libMesh::MeshRefinement::coarsen_elements(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), libMesh::Problem_Interface::computePreconditioner(), libMesh::MeshTools::correct_node_proc_ids(), libMesh::MeshCommunication::delete_remote_elements(), libMesh::DofMap::distribute_dofs(), DMlibMeshFunction(), DMLibMeshSetSystem(), DMVariableBounds_libMesh(), libMesh::MeshRefinement::eliminate_unrefined_patches(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointRefinementEstimator::estimate_error(), libMesh::MeshRefinement::flag_elements_by_elem_fraction(), libMesh::MeshRefinement::flag_elements_by_error_fraction(), libMesh::MeshRefinement::flag_elements_by_nelem_target(), libMesh::for(), libMesh::CondensedEigenSystem::get_eigenpair(), libMesh::ImplicitSystem::get_linear_solver(), libMesh::LocationMap< T >::init(), libMesh::TimeSolver::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::EigenSystem::init_data(), libMesh::EigenSystem::init_matrices(), libMesh::ParmetisPartitioner::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::ParallelMesh::libmesh_assert_valid_parallel_flags(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::MeshRefinement::limit_level_mismatch_at_edge(), libMesh::MeshRefinement::limit_level_mismatch_at_node(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshCommunication::make_elems_parallel_consistent(), libMesh::MeshRefinement::make_flags_parallel_consistent(), libMesh::MeshCommunication::make_node_ids_parallel_consistent(), libMesh::MeshCommunication::make_node_proc_ids_parallel_consistent(), libMesh::MeshCommunication::make_nodes_parallel_consistent(), libMesh::MeshRefinement::make_refinement_compatible(), libMesh::FEMSystem::mesh_position_set(), libMesh::MeshSerializer::MeshSerializer(), libMesh::ParallelMesh::n_active_elem(), libMesh::MeshTools::n_active_levels(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::CondensedEigenSystem::n_global_non_condensed_dofs(), libMesh::MeshTools::n_levels(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::MeshTools::n_p_levels(), libMesh::ParallelMesh::parallel_max_elem_id(), libMesh::ParallelMesh::parallel_max_node_id(), libMesh::ParallelMesh::parallel_n_elem(), libMesh::ParallelMesh::parallel_n_nodes(), libMesh::Partitioner::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::petsc_auto_fieldsplit(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshBase::prepare_for_use(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::XdrIO::read(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshRefinement::refine_and_coarsen_elements(), libMesh::MeshRefinement::refine_elements(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshBase::subdomain_ids(), libMesh::BoundaryInfo::sync(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::MeshRefinement::test_level_one(), libMesh::MeshRefinement::test_unflagged(), libMesh::MeshTools::total_weight(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::LegacyXdrIO::write_mesh(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), and libMesh::DivaIO::write_stream()\&.
+.PP
+.nf
+87   { return _communicator; }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "template<typename T> virtual unsigned \fBlibMesh::NoxNonlinearSolver\fP< T >::get_current_nonlinear_iteration_number () const\fC [inline]\fP, \fC [virtual]\fP"
+If called \fIduring\fP the \fBsolve()\fP, for example by the user-specified residual or Jacobian function, returns the current nonlinear iteration number\&. Not currently implemented\&. 
+.PP
+Implements \fBlibMesh::NonlinearSolver< T >\fP\&.
+.PP
+Definition at line 104 of file trilinos_nox_nonlinear_solver\&.h\&.
+.PP
+.nf
+104 { libmesh_not_implemented(); return 0; }
+.fi
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "template<typename T > int \fBlibMesh::NoxNonlinearSolver\fP< T >::get_total_linear_iterations ()\fC [virtual]\fP"
+Get the total number of linear iterations done in the last solve 
+.PP
+Implements \fBlibMesh::NonlinearSolver< T >\fP\&.
+.PP
+Definition at line 408 of file trilinos_nox_nonlinear_solver\&.C\&.
+.PP
+.nf
+409 {
+410   return _n_linear_iterations;
+411 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "template<typename T > void \fBlibMesh::NoxNonlinearSolver\fP< T >::init (const char *name = \fCNULL\fP)\fC [virtual]\fP"
+Initialize data structures if not done so already\&. 
+.PP
+Implements \fBlibMesh::NonlinearSolver< T >\fP\&.
+.PP
+Definition at line 266 of file trilinos_nox_nonlinear_solver\&.C\&.
+.PP
+References libMesh::initialized()\&.
+.PP
+.nf
+267 {
+268   if (!this->initialized())
+269     _interface = new Problem_Interface(this);
+270 }
+.fi
+.SS "template<typename T> bool \fBlibMesh::NonlinearSolver\fP< T >::initialized () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the data structures are initialized, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 86 of file nonlinear_solver\&.h\&.
+.PP
+.nf
+86 { return _is_initialized; }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::n_processors () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of processors in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 92 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::size()\&.
+.PP
+Referenced by libMesh::ParmetisPartitioner::_do_repartition(), libMesh::ParallelMesh::add_elem(), libMesh::ParallelMesh::add_node(), libMesh::LaplaceMeshSmoother::allgather_graph(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::AztecLinearSolver< T >::AztecLinearSolver(), libMesh::ParallelMesh::clear(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::UnstructuredMesh::create_pid_mesh(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::EnsightIO::EnsightIO(), libMesh::MeshBase::get_info(), libMesh::EquationSystems::init(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::Nemesis_IO_Helper::initialize(), libMesh::MeshTools::libmesh_assert_valid_dof_ids(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::MeshTools::libmesh_assert_valid_refinement_flags(), libMesh::DofMap::local_variable_indices(), libMesh::MeshBase::n_active_elem_on_proc(), libMesh::MeshBase::n_elem_on_proc(), libMesh::MeshBase::n_nodes_on_proc(), libMesh::Partitioner::partition(), libMesh::MeshBase::partition(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::PetscLinearSolver< T >::PetscLinearSolver(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::MeshTools::processor_bounding_box(), libMesh::System::project_vector(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::UnstructuredMesh::read(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::System::read_serialized_vector(), libMesh::Partitioner::repartition(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::BoundaryInfo::sync(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::CheckpointIO::write(), libMesh::GMVIO::write_binary(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+93   { return libmesh_cast_int<processor_id_type>(_communicator\&.size()); }
+.fi
+.SS "template<typename T> virtual void \fBlibMesh::NonlinearSolver\fP< T >::print_converged_reason ()\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Prints a useful message about why the latest nonlinear solve con(di)verged\&. 
+.PP
+Reimplemented in \fBlibMesh::PetscNonlinearSolver< T >\fP\&.
+.PP
+Definition at line 112 of file nonlinear_solver\&.h\&.
+.PP
+.nf
+112 { libmesh_not_implemented(); }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SS "\fBprocessor_id_type\fP libMesh::ParallelObject::processor_id () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the rank of this processor in the group\&. 
+.RE
+.PP
+
+.PP
+Definition at line 98 of file parallel_object\&.h\&.
+.PP
+References libMesh::ParallelObject::_communicator, and libMesh::Parallel::Communicator::rank()\&.
+.PP
+Referenced by libMesh::MetisPartitioner::_do_partition(), libMesh::EquationSystems::_read_impl(), libMesh::SerialMesh::active_local_elements_begin(), libMesh::ParallelMesh::active_local_elements_begin(), libMesh::SerialMesh::active_local_elements_end(), libMesh::ParallelMesh::active_local_elements_end(), libMesh::SerialMesh::active_local_subdomain_elements_begin(), libMesh::ParallelMesh::active_local_subdomain_elements_begin(), libMesh::SerialMesh::active_local_subdomain_elements_end(), libMesh::ParallelMesh::active_local_subdomain_elements_end(), libMesh::SerialMesh::active_not_local_elements_begin(), libMesh::ParallelMesh::active_not_local_elements_begin(), libMesh::SerialMesh::active_not_local_elements_end(), libMesh::ParallelMesh::active_not_local_elements_end(), libMesh::ParallelMesh::add_elem(), libMesh::DofMap::add_neighbors_to_send_list(), libMesh::ParallelMesh::add_node(), libMesh::UnstructuredMesh::all_second_order(), libMesh::ParmetisPartitioner::assign_partitioning(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::Nemesis_IO_Helper::build_element_and_node_maps(), libMesh::ParmetisPartitioner::build_graph(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::DofMap::build_sparsity(), libMesh::ParallelMesh::clear(), libMesh::ExodusII_IO_Helper::close(), libMesh::Nemesis_IO_Helper::compute_border_node_ids(), libMesh::Nemesis_IO_Helper::compute_communication_map_parameters(), libMesh::Nemesis_IO_Helper::compute_internal_and_border_elems_and_internal_nodes(), libMesh::Nemesis_IO_Helper::compute_node_communication_maps(), libMesh::Nemesis_IO_Helper::compute_num_global_elem_blocks(), libMesh::Nemesis_IO_Helper::compute_num_global_nodesets(), libMesh::Nemesis_IO_Helper::compute_num_global_sidesets(), libMesh::Nemesis_IO_Helper::construct_nemesis_filename(), libMesh::ExodusII_IO_Helper::create(), libMesh::DofMap::distribute_dofs(), libMesh::DofMap::distribute_local_dofs_node_major(), libMesh::DofMap::distribute_local_dofs_var_major(), libMesh::DofMap::end_dof(), libMesh::DofMap::end_old_dof(), libMesh::EnsightIO::EnsightIO(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::DofMap::first_dof(), libMesh::DofMap::first_old_dof(), libMesh::Nemesis_IO_Helper::get_cmap_params(), libMesh::Nemesis_IO_Helper::get_eb_info_global(), libMesh::Nemesis_IO_Helper::get_elem_cmap(), libMesh::Nemesis_IO_Helper::get_elem_map(), libMesh::MeshBase::get_info(), libMesh::Nemesis_IO_Helper::get_init_global(), libMesh::Nemesis_IO_Helper::get_init_info(), libMesh::Nemesis_IO_Helper::get_loadbal_param(), libMesh::Nemesis_IO_Helper::get_node_cmap(), libMesh::Nemesis_IO_Helper::get_node_map(), libMesh::Nemesis_IO_Helper::get_ns_param_global(), libMesh::Nemesis_IO_Helper::get_ss_param_global(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::SystemSubsetBySubdomain::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::ExodusII_IO_Helper::initialize_element_variables(), libMesh::ExodusII_IO_Helper::initialize_global_variables(), libMesh::ExodusII_IO_Helper::initialize_nodal_variables(), libMesh::SparsityPattern::Build::join(), libMesh::DofMap::last_dof(), libMesh::MeshTools::libmesh_assert_valid_procids< Elem >(), libMesh::MeshTools::libmesh_assert_valid_procids< Node >(), libMesh::SerialMesh::local_elements_begin(), libMesh::ParallelMesh::local_elements_begin(), libMesh::SerialMesh::local_elements_end(), libMesh::ParallelMesh::local_elements_end(), libMesh::SerialMesh::local_level_elements_begin(), libMesh::ParallelMesh::local_level_elements_begin(), libMesh::SerialMesh::local_level_elements_end(), libMesh::ParallelMesh::local_level_elements_end(), libMesh::SerialMesh::local_nodes_begin(), libMesh::ParallelMesh::local_nodes_begin(), libMesh::SerialMesh::local_nodes_end(), libMesh::ParallelMesh::local_nodes_end(), libMesh::SerialMesh::local_not_level_elements_begin(), libMesh::ParallelMesh::local_not_level_elements_begin(), libMesh::SerialMesh::local_not_level_elements_end(), libMesh::ParallelMesh::local_not_level_elements_end(), libMesh::DofMap::local_variable_indices(), libMesh::MeshRefinement::make_coarsening_compatible(), libMesh::MeshBase::n_active_local_elem(), libMesh::BoundaryInfo::n_boundary_conds(), libMesh::BoundaryInfo::n_edge_conds(), libMesh::DofMap::n_local_dofs(), libMesh::System::n_local_dofs(), libMesh::MeshBase::n_local_elem(), libMesh::MeshBase::n_local_nodes(), libMesh::BoundaryInfo::n_nodeset_conds(), libMesh::SerialMesh::not_local_elements_begin(), libMesh::ParallelMesh::not_local_elements_begin(), libMesh::SerialMesh::not_local_elements_end(), libMesh::ParallelMesh::not_local_elements_end(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::SparsityPattern::Build::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::MeshFunction::operator()(), libMesh::ParallelMesh::ParallelMesh(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::System::point_value(), libMesh::System::project_vector(), libMesh::Nemesis_IO_Helper::put_cmap_params(), libMesh::Nemesis_IO_Helper::put_elem_cmap(), libMesh::Nemesis_IO_Helper::put_elem_map(), libMesh::Nemesis_IO_Helper::put_loadbal_param(), libMesh::Nemesis_IO_Helper::put_node_cmap(), libMesh::Nemesis_IO_Helper::put_node_map(), libMesh::Nemesis_IO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::UnstructuredMesh::read(), libMesh::CheckpointIO::read_connectivity(), libMesh::ExodusII_IO_Helper::read_elem_num_map(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::ExodusII_IO_Helper::read_node_num_map(), libMesh::System::read_parallel_data(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::System::read_serialized_data(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::MeshData::read_xdr(), libMesh::Partitioner::set_node_processor_ids(), libMesh::DofMap::set_nonlocal_dof_objects(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::BoundaryInfo::sync(), libMesh::MeshTools::total_weight(), libMesh::ParallelMesh::update_parallel_id_counts(), libMesh::MeshTools::weight(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::UnstructuredMesh::write(), libMesh::EquationSystems::write(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::ExodusII_IO::write_global_data(), libMesh::ExodusII_IO_Helper::write_global_values(), libMesh::System::write_header(), libMesh::ExodusII_IO::write_information_records(), libMesh::ExodusII_IO_Helper::write_information_records(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::UCDIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::ExodusII_IO_Helper::write_nodal_values(), libMesh::ExodusII_IO_Helper::write_nodesets(), libMesh::Nemesis_IO_Helper::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::System::write_serialized_data(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::ExodusII_IO_Helper::write_sidesets(), libMesh::Nemesis_IO_Helper::write_sidesets(), libMesh::ExodusII_IO::write_timestep(), and libMesh::ExodusII_IO_Helper::write_timestep()\&.
+.PP
+.nf
+99   { return libmesh_cast_int<processor_id_type>(_communicator\&.rank()); }
+.fi
+.SS "template<typename T> std::pair< unsigned int, \fBReal\fP > \fBlibMesh::NoxNonlinearSolver\fP< T >::solve (\fBSparseMatrix\fP< T > &, \fBNumericVector\fP< T > &x_in, \fBNumericVector\fP< T > &, const double, const unsignedint)\fC [virtual]\fP"
+Call the Nox solver\&. It calls the method below, using the same matrix for the system and preconditioner matrices\&. 
+.PP
+Implements \fBlibMesh::NonlinearSolver< T >\fP\&.
+.PP
+Definition at line 274 of file trilinos_nox_nonlinear_solver\&.C\&.
+.PP
+References libMesh::NumericVector< T >::close(), libMesh::TriangleWrapper::init(), libMesh::EpetraMatrix< T >::mat(), libMesh::ImplicitSystem::matrix, libMesh::pc, libMesh::Real, libMesh::solver, libMesh::sys, libMesh::ImplicitSystem::system(), libMesh::EpetraVector< T >::vec(), and libMesh::x\&.
+.PP
+.nf
+279 {
+280   this->init ();
+281 
+282   if (this->user_presolve)
+283     this->user_presolve(this->system());
+284 
+285   EpetraVector<T> * x_epetra = libmesh_cast_ptr<EpetraVector<T>*>(&x_in);
+286   // Creating a Teuchos::RCP as they do in NOX examples does not work here - we get some invalid memory references
+287   // thus we make a local copy
+288   NOX::Epetra::Vector x(*x_epetra->vec());
+289 
+290   Teuchos::RCP<Teuchos::ParameterList> nlParamsPtr = Teuchos::rcp(new Teuchos::ParameterList);
+291   Teuchos::ParameterList& nlParams = *(nlParamsPtr\&.get());
+292   nlParams\&.set("Nonlinear Solver", "Line Search Based");
+293 
+294   //print params
+295   Teuchos::ParameterList& printParams = nlParams\&.sublist("Printing");
+296   printParams\&.set("Output Precision", 3);
+297   printParams\&.set("Output Processor", 0);
+298   printParams\&.set("Output Information",
+299                   NOX::Utils::OuterIteration +
+300                   NOX::Utils::OuterIterationStatusTest +
+301                   NOX::Utils::InnerIteration +
+302                   NOX::Utils::LinearSolverDetails +
+303                   NOX::Utils::Parameters +
+304                   NOX::Utils::Details +
+305                   NOX::Utils::Warning);
+306 
+307   Teuchos::ParameterList& dirParams = nlParams\&.sublist("Direction");
+308   dirParams\&.set("Method", "Newton");
+309   Teuchos::ParameterList& newtonParams = dirParams\&.sublist("Newton");
+310   newtonParams\&.set("Forcing Term Method", "Constant");
+311 
+312   Teuchos::ParameterList& lsParams = newtonParams\&.sublist("Linear Solver");
+313   lsParams\&.set("Aztec Solver", "GMRES");
+314   lsParams\&.set("Max Iterations", static_cast<int>(this->max_linear_iterations));
+315   lsParams\&.set("Tolerance", this->initial_linear_tolerance);
+316   lsParams\&.set("Output Frequency", 1);
+317   lsParams\&.set("Size of Krylov Subspace", 1000);
+318 
+319   //create linear system
+320   Teuchos::RCP<NOX::Epetra::Interface::Required> iReq(_interface);
+321   Teuchos::RCP<NOX::Epetra::LinearSystemAztecOO> linSys;
+322   Teuchos::RCP<Epetra_Operator> pc;
+323 
+324   if (this->jacobian || this->jacobian_object || this->residual_and_jacobian_object)
+325     {
+326       if(this->_preconditioner)
+327         {
+328           // PJNFK
+329           lsParams\&.set("Preconditioner", "User Defined");
+330 
+331           TrilinosPreconditioner<Number> * trilinos_pc = libmesh_cast_ptr<TrilinosPreconditioner<Number> *>(this->_preconditioner);
+332           pc = Teuchos::rcp(trilinos_pc);
+333 
+334           Teuchos::RCP<NOX::Epetra::Interface::Preconditioner> iPrec(_interface);
+335           linSys = Teuchos::rcp(new NOX::Epetra::LinearSystemAztecOO(printParams, lsParams, iReq, iPrec, pc, x));
+336         }
+337       else
+338         {
+339           lsParams\&.set("Preconditioner", "None");
+340           //      lsParams\&.set("Preconditioner", "Ifpack");
+341           //      lsParams\&.set("Preconditioner", "AztecOO");
+342 
+343           // full jacobian
+344           NonlinearImplicitSystem & sys = _interface->_solver->system();
+345           EpetraMatrix<Number> & jacSys = *libmesh_cast_ptr<EpetraMatrix<Number>*>(sys\&.matrix);
+346           Teuchos::RCP<Epetra_RowMatrix> jacMat = Teuchos::rcp(jacSys\&.mat());
+347 
+348           Teuchos::RCP<NOX::Epetra::Interface::Jacobian> iJac(_interface);
+349           linSys = Teuchos::rcp(new NOX::Epetra::LinearSystemAztecOO(printParams, lsParams, iReq, iJac, jacMat, x));
+350         }
+351     }
+352   else
+353     {
+354       // matrix free
+355       Teuchos::RCP<NOX::Epetra::MatrixFree> MF = Teuchos::rcp(new NOX::Epetra::MatrixFree(printParams, iReq, x));
+356 
+357       Teuchos::RCP<NOX::Epetra::Interface::Jacobian> iJac(MF);
+358       linSys = Teuchos::rcp(new NOX::Epetra::LinearSystemAztecOO(printParams, lsParams, iReq, iJac, MF, x));
+359     }
+360 
+361   //create group
+362   Teuchos::RCP<NOX::Epetra::Group> grpPtr = Teuchos::rcp(new NOX::Epetra::Group(printParams, iReq, x, linSys));
+363   NOX::Epetra::Group& grp = *(grpPtr\&.get());
+364 
+365   Teuchos::RCP<NOX::StatusTest::NormF> absresid =
+366     Teuchos::rcp(new NOX::StatusTest::NormF(this->absolute_residual_tolerance, NOX::StatusTest::NormF::Unscaled));
+367   Teuchos::RCP<NOX::StatusTest::NormF> relresid =
+368     Teuchos::rcp(new NOX::StatusTest::NormF(grp, this->relative_residual_tolerance));
+369   Teuchos::RCP<NOX::StatusTest::MaxIters> maxiters =
+370     Teuchos::rcp(new NOX::StatusTest::MaxIters(this->max_nonlinear_iterations));
+371   Teuchos::RCP<NOX::StatusTest::FiniteValue> finiteval =
+372     Teuchos::rcp(new NOX::StatusTest::FiniteValue());
+373   Teuchos::RCP<NOX::StatusTest::NormUpdate> normupdate =
+374     Teuchos::rcp(new NOX::StatusTest::NormUpdate(this->absolute_step_tolerance));
+375   Teuchos::RCP<NOX::StatusTest::Combo> combo =
+376     Teuchos::rcp(new NOX::StatusTest::Combo(NOX::StatusTest::Combo::OR));
+377   combo->addStatusTest(absresid);
+378   combo->addStatusTest(relresid);
+379   combo->addStatusTest(maxiters);
+380   combo->addStatusTest(finiteval);
+381   combo->addStatusTest(normupdate);
+382 
+383   Teuchos::RCP<Teuchos::ParameterList> finalPars = nlParamsPtr;
+384 
+385   Teuchos::RCP<NOX::Solver::Generic> solver = NOX::Solver::buildSolver(grpPtr, combo, nlParamsPtr);
+386   NOX::StatusTest::StatusType status = solver->solve();
+387   this->converged = (status == NOX::StatusTest::Converged);
+388 
+389   const NOX::Epetra::Group& finalGroup = dynamic_cast<const NOX::Epetra::Group&>(solver->getSolutionGroup());
+390   const NOX::Epetra::Vector& noxFinalSln = dynamic_cast<const NOX::Epetra::Vector&>(finalGroup\&.getX());
+391 
+392   *x_epetra->vec() = noxFinalSln\&.getEpetraVector();
+393   x_in\&.close();
+394 
+395   Real residual_norm = finalGroup\&.getNormF();
+396   unsigned int total_iters = solver->getNumIterations();
+397   _n_linear_iterations = finalPars->sublist("Direction")\&.sublist("Newton")\&.sublist("Linear Solver")\&.sublist("Output")\&.get("Total Number of Linear Iterations", -1);
+398 
+399   // do not let Trilinos to deallocate what we allocated
+400   pc\&.release();
+401   iReq\&.release();
+402 
+403   return std::make_pair(total_iters, residual_norm);
+404 }
+.fi
+.SS "template<typename T> const \fBsys_type\fP& \fBlibMesh::NonlinearSolver\fP< T >::system () const\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a constant reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 220 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_snes_residual(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), and libMesh::Problem_Interface::computePreconditioner()\&.
+.PP
+.nf
+220 { return _system; }
+.fi
+.SS "template<typename T> \fBsys_type\fP& \fBlibMesh::NonlinearSolver\fP< T >::system ()\fC [inline]\fP, \fC [inherited]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a writeable reference to the system we are solving\&. 
+.RE
+.PP
+
+.PP
+Definition at line 225 of file nonlinear_solver\&.h\&.
+.PP
+.nf
+225 { return _system; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "const \fBParallel::Communicator\fP& libMesh::ParallelObject::_communicator\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 104 of file parallel_object\&.h\&.
+.PP
+Referenced by libMesh::EquationSystems::build_solution_vector(), libMesh::ParallelObject::comm(), libMesh::EquationSystems::get_solution(), libMesh::ParallelObject::n_processors(), libMesh::ParallelObject::operator=(), and libMesh::ParallelObject::processor_id()\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "template<typename T> \fBProblem_Interface\fP* \fBlibMesh::NoxNonlinearSolver\fP< T >::_interface\fC [private]\fP"
+\fBSolver\fP interface 
+.PP
+Definition at line 116 of file trilinos_nox_nonlinear_solver\&.h\&.
+.SS "template<typename T> bool \fBlibMesh::NonlinearSolver\fP< T >::_is_initialized\fC [protected]\fP, \fC [inherited]\fP"
+Flag indicating if the data structures have been initialized\&. 
+.PP
+Definition at line 301 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::NonlinearSolver< Number >::initialized()\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "template<typename T> int \fBlibMesh::NoxNonlinearSolver\fP< T >::_n_linear_iterations\fC [private]\fP"
+Stores the total number of linear iterations from the last solve\&. 
+.PP
+Definition at line 121 of file trilinos_nox_nonlinear_solver\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "template<typename T> \fBPreconditioner\fP<T>* \fBlibMesh::NonlinearSolver\fP< T >::_preconditioner\fC [protected]\fP, \fC [inherited]\fP"
+Holds the \fBPreconditioner\fP object to be used for the linear solves\&. 
+.PP
+Definition at line 306 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> NOX::Solver::Generic* \fBlibMesh::NoxNonlinearSolver\fP< T >::_solver\fC [private]\fP"
+Nonlinear solver context 
+.PP
+Definition at line 111 of file trilinos_nox_nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBsys_type\fP& \fBlibMesh::NonlinearSolver\fP< T >::_system\fC [protected]\fP, \fC [inherited]\fP"
+A reference to the system we are solving\&. 
+.PP
+Definition at line 296 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::NonlinearSolver< Number >::system()\&.
+.SS "template<typename T> \fBReal\fP \fBlibMesh::NonlinearSolver\fP< T >::absolute_residual_tolerance\fC [inherited]\fP"
+The \fBNonlinearSolver\fP should exit after the residual is reduced to either less than absolute_residual_tolerance or less than relative_residual_tolerance times the initial residual\&.
+.PP
+Users should increase any of these tolerances that they want to use for a stopping condition\&. 
+.PP
+Definition at line 252 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBReal\fP \fBlibMesh::NonlinearSolver\fP< T >::absolute_step_tolerance\fC [inherited]\fP"
+The \fBNonlinearSolver\fP should exit after the full nonlinear step norm is reduced to either less than absolute_step_tolerance or less than relative_step_tolerance times the largest nonlinear solution which has been seen so far\&.
+.PP
+Users should increase any of these tolerances that they want to use for a stopping condition\&.
+.PP
+Note that not all NonlinearSolvers support relative_step_tolerance! 
+.PP
+Definition at line 266 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::bounds)(\fBNumericVector\fP< \fBNumber\fP > &XL, \fBNumericVector\fP< \fBNumber\fP > &XU, \fBsys_type\fP &S)\fC [inherited]\fP"
+Function that computes the lower and upper bounds \fCXL\fP and \fCXU\fP on the solution of the nonlinear system\&. 
+.PP
+Definition at line 176 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBNonlinearImplicitSystem::ComputeBounds\fP* \fBlibMesh::NonlinearSolver\fP< T >::bounds_object\fC [inherited]\fP"
+Object that computes the bounds vectors $ XL $ and $ XU $\&. 
+.PP
+Definition at line 182 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> bool \fBlibMesh::NonlinearSolver\fP< T >::converged\fC [inherited]\fP"
+After a call to solve this will reflect whether or not the nonlinear solve was successful\&. 
+.PP
+Definition at line 290 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBReal\fP \fBlibMesh::NonlinearSolver\fP< T >::initial_linear_tolerance\fC [inherited]\fP"
+Any required linear solves will at first be done with this tolerance; the \fBNonlinearSolver\fP may tighten the tolerance for later solves\&. 
+.PP
+Definition at line 279 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::jacobian)(const \fBNumericVector\fP< \fBNumber\fP > &X, \fBSparseMatrix\fP< \fBNumber\fP > &J, \fBsys_type\fP &S)\fC [inherited]\fP"
+Function that computes the Jacobian \fCJ(X)\fP of the nonlinear system at the input iterate \fCX\fP\&. 
+.PP
+Definition at line 144 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::Problem_Interface::computeJacobian(), and libMesh::Problem_Interface::computePreconditioner()\&.
+.SS "template<typename T> \fBNonlinearImplicitSystem::ComputeJacobian\fP* \fBlibMesh::NonlinearSolver\fP< T >::jacobian_object\fC [inherited]\fP"
+Object that computes the Jacobian \fCJ(X)\fP of the nonlinear system at the input iterate \fCX\fP\&. 
+.PP
+Definition at line 152 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::Problem_Interface::computeJacobian(), and libMesh::Problem_Interface::computePreconditioner()\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::matvec)(const \fBNumericVector\fP< \fBNumber\fP > &X, \fBNumericVector\fP< \fBNumber\fP > *R, \fBSparseMatrix\fP< \fBNumber\fP > *J, \fBsys_type\fP &S)\fC [inherited]\fP"
+Function that computes either the residual $ R(X) $ or the Jacobian $ J(X) $ of the nonlinear system at the input iterate $ X $\&. Note that either \fCR\fP or \fCJ\fP could be \fCXSNULL\fP\&. 
+.PP
+Definition at line 160 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_snes_residual(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), and libMesh::Problem_Interface::computePreconditioner()\&.
+.SS "template<typename T> unsigned int \fBlibMesh::NonlinearSolver\fP< T >::max_function_evaluations\fC [inherited]\fP"
+Maximum number of function evaluations\&. 
+.PP
+Definition at line 240 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> unsigned int \fBlibMesh::NonlinearSolver\fP< T >::max_linear_iterations\fC [inherited]\fP"
+Each linear solver step should exit after \fCmax_linear_iterations\fP is exceeded\&. 
+.PP
+Definition at line 273 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> unsigned int \fBlibMesh::NonlinearSolver\fP< T >::max_nonlinear_iterations\fC [inherited]\fP"
+Maximum number of non-linear iterations\&. 
+.PP
+Definition at line 235 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBReal\fP \fBlibMesh::NonlinearSolver\fP< T >::minimum_linear_tolerance\fC [inherited]\fP"
+The tolerance for linear solves is kept above this minimum 
+.PP
+Definition at line 284 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::nearnullspace)(std::vector< \fBNumericVector\fP< \fBNumber\fP > * > &sp, \fBsys_type\fP &S)\fC [inherited]\fP"
+Function that computes a basis for the Jacobian's near nullspace -- the set of 'low energy modes' -- that can be used for AMG coarsening, if the solver supports it (e\&.g\&., ML, PETSc's GAMG)\&. 
+.PP
+Definition at line 205 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBNonlinearImplicitSystem::ComputeVectorSubspace\fP* \fBlibMesh::NonlinearSolver\fP< T >::nearnullspace_object\fC [inherited]\fP"
+A callable object that computes a basis for the Jacobian's near nullspace -- the set of 'low energy modes' -- that can be used for AMG coarsening, if the solver supports it (e\&.g\&., ML, PETSc's GAMG)\&. 
+.PP
+Definition at line 212 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::nullspace)(std::vector< \fBNumericVector\fP< \fBNumber\fP > * > &sp, \fBsys_type\fP &S)\fC [inherited]\fP"
+Function that computes a basis for the Jacobian's nullspace -- the kernel or the 'zero energy modes' -- that can be used in solving a degenerate problem iteratively, if the solver supports it (e\&.g\&., PETSc's KSP)\&. 
+.PP
+Definition at line 190 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBNonlinearImplicitSystem::ComputeVectorSubspace\fP* \fBlibMesh::NonlinearSolver\fP< T >::nullspace_object\fC [inherited]\fP"
+A callable object that computes a basis for the Jacobian's nullspace -- the kernel or the 'zero energy modes' -- that can be used in solving a degenerate problem iteratively, if the solver supports it (e\&.g\&., PETSc's KSP)\&. 
+.PP
+Definition at line 198 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBReal\fP \fBlibMesh::NonlinearSolver\fP< T >::relative_residual_tolerance\fC [inherited]\fP"
+
+.PP
+Definition at line 253 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> \fBReal\fP \fBlibMesh::NonlinearSolver\fP< T >::relative_step_tolerance\fC [inherited]\fP"
+
+.PP
+Definition at line 267 of file nonlinear_solver\&.h\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::residual)(const \fBNumericVector\fP< \fBNumber\fP > &X, \fBNumericVector\fP< \fBNumber\fP > &R, \fBsys_type\fP &S)\fC [inherited]\fP"
+Function that computes the residual \fCR(X)\fP of the nonlinear system at the input iterate \fCX\fP\&. 
+.PP
+Definition at line 130 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_snes_residual(), and libMesh::Problem_Interface::computeF()\&.
+.SS "template<typename T> \fBNonlinearImplicitSystem::ComputeResidualandJacobian\fP* \fBlibMesh::NonlinearSolver\fP< T >::residual_and_jacobian_object\fC [inherited]\fP"
+Object that computes either the residual $ R(X) $ or the Jacobian $ J(X) $ of the nonlinear system at the input iterate $ X $\&. Note that either \fCR\fP or \fCJ\fP could be \fCXSNULL\fP\&. 
+.PP
+Definition at line 171 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_snes_residual(), libMesh::Problem_Interface::computeF(), libMesh::Problem_Interface::computeJacobian(), and libMesh::Problem_Interface::computePreconditioner()\&.
+.SS "template<typename T> \fBNonlinearImplicitSystem::ComputeResidual\fP* \fBlibMesh::NonlinearSolver\fP< T >::residual_object\fC [inherited]\fP"
+Object that computes the residual \fCR(X)\fP of the nonlinear system at the input iterate \fCX\fP\&. 
+.PP
+Definition at line 138 of file nonlinear_solver\&.h\&.
+.PP
+Referenced by libMesh::__libmesh_petsc_snes_residual(), and libMesh::Problem_Interface::computeF()\&.
+.SS "template<typename T> void(*  \fBlibMesh::NonlinearSolver\fP< T >::user_presolve)(\fBsys_type\fP &S)\fC [inherited]\fP"
+
+.PP
+Definition at line 215 of file nonlinear_solver\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

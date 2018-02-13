@@ -1,0 +1,118 @@
+.TH "libMesh::Singleton" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Singleton \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <libmesh_singleton\&.h>\fP
+.PP
+Inherited by \fBlibMesh::RemoteElem\fP\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBSetup\fP"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static void \fBsetup\fP ()"
+.br
+.ti -1c
+.RI "static void \fBcleanup\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSingleton\fP ()"
+.br
+.ti -1c
+.RI "virtual \fB~Singleton\fP ()"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Base class for all library singleton objects\&. 
+.PP
+Definition at line 30 of file libmesh_singleton\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Singleton::Singleton ()\fC [protected]\fP"
+Constructor\&. Adds the derived object to the singleton cache list\&. 
+.PP
+Definition at line 64 of file libmesh_singleton\&.C\&.
+.PP
+.nf
+65 {
+66   SingletonMutex::scoped_lock lock(singleton_mtx);
+67 
+68   get_singleton_cache()\&.push_back (this);
+69 }
+.fi
+.SS "virtual libMesh::Singleton::~Singleton ()\fC [inline]\fP, \fC [protected]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 42 of file libmesh_singleton\&.h\&.
+.PP
+.nf
+42 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::Singleton::cleanup ()\fC [static]\fP"
+Cleanup function\&. Removes all dynamically created \fC\fBSingleton\fP\fP objects\&. 
+.PP
+Definition at line 96 of file libmesh_singleton\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+97 {
+98   SingletonMutex::scoped_lock lock(singleton_mtx);
+99 
+100   SingletonList& singleton_cache = get_singleton_cache();
+101 
+102   for (SingletonList::reverse_iterator it = singleton_cache\&.rbegin();
+103        it!=singleton_cache\&.rend(); ++it)
+104     {
+105       libmesh_assert (*it != NULL);
+106       delete *it;
+107       *it = NULL;
+108     }
+109 
+110   singleton_cache\&.clear();
+111 }
+.fi
+.SS "void libMesh::Singleton::setup ()\fC [static]\fP"
+\fBSetup\fP function\&. Initializes any derived \fC\fBSingleton::Setup\fP\fP objects\&. objects\&. 
+.PP
+Definition at line 80 of file libmesh_singleton\&.C\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+.nf
+81 {
+82   SingletonMutex::scoped_lock lock(setup_mtx);
+83 
+84   SetupList& setup_cache = get_setup_cache();
+85 
+86   for (SetupList::iterator it = setup_cache\&.begin();
+87        it!=setup_cache\&.end(); ++it)
+88     {
+89       libmesh_assert (*it != NULL);
+90       (*it)->setup();
+91     }
+92 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

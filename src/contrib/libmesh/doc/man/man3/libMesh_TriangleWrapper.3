@@ -1,0 +1,144 @@
+.TH "libMesh::TriangleWrapper" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TriangleWrapper \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBIO_Type\fP { \fBINPUT\fP = 0, \fBOUTPUT\fP = 1, \fBBOTH\fP = 2 }"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinit\fP (triangulateio &t)"
+.br
+.ti -1c
+.RI "void \fBdestroy\fP (triangulateio &t, \fBIO_Type\fP)"
+.br
+.ti -1c
+.RI "void \fBcopy_tri_to_mesh\fP (const triangulateio &triangle_data_input, \fBUnstructuredMesh\fP &mesh_output, const \fBElemType\fP type)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+A special namespace for wrapping the standard Triangle API, as well as some helper functions for initializing/destroying the structs triangle uses to communicate\&. 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBlibMesh::TriangleWrapper::IO_Type\fP"
+
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIINPUT \fP\fP
+.TP
+\fB\fIOUTPUT \fP\fP
+.TP
+\fB\fIBOTH \fP\fP
+.PP
+Definition at line 53 of file mesh_triangle_wrapper\&.h\&.
+.PP
+.nf
+53              {
+54   INPUT  = 0,
+55   OUTPUT = 1,
+56   BOTH   = 2};
+.fi
+.SH "Function Documentation"
+.PP 
+.SS "void libMesh::TriangleWrapper::copy_tri_to_mesh (const triangulateio &triangle_data_input, UnstructuredMesh &mesh_output, const ElemTypetype)"
+Copies triangulation data computed by triange from a triangulateio object to a LibMesh mesh\&. This routine is used internally by the \fBMeshTools::Generation::build_delaunay_square\fP(\&.\&.\&.) and MeshTools::Generation::build_delaunay_square_with_hole(\&.\&.\&.) routines\&. 
+.PP
+Definition at line 102 of file mesh_triangle_wrapper\&.C\&.
+.PP
+References libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::MeshBase::clear(), libMesh::err, libMesh::UnstructuredMesh::find_neighbors(), libMesh::MeshBase::node_ptr(), libMesh::MeshBase::set_mesh_dimension(), libMesh::Elem::set_node(), libMesh::TRI3, and libMesh::TRI6\&.
+.PP
+Referenced by libMesh::TriangleInterface::triangulate()\&.
+.PP
+.nf
+105 {
+106   // Transfer the information into the LibMesh mesh\&.
+107   mesh_output\&.clear();
+108 
+109   // Make sure the new Mesh will be 2D
+110   mesh_output\&.set_mesh_dimension(2);
+111 
+112   // Node information
+113   for (int i=0, c=0; c<triangle_data_input\&.numberofpoints; i+=2, ++c)
+114     {
+115       // Specify ID when adding point, otherwise, if this is ParallelMesh,
+116       // it might add points with a non-sequential numbering\&.\&.\&.
+117       mesh_output\&.add_point( Point(triangle_data_input\&.pointlist[i],
+118                                    triangle_data_input\&.pointlist[i+1]),
+119                              /*id=*/c);
+120     }
+121 
+122   // Element information
+123   for (int i=0; i<triangle_data_input\&.numberoftriangles; ++i)
+124     {
+125       switch (type)
+126         {
+127         case TRI3:
+128           {
+129             Elem* elem = mesh_output\&.add_elem (new Tri3);
+130 
+131             for (unsigned int n=0; n<3; ++n)
+132               elem->set_node(n) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*3 + n]);
+133 
+134             break;
+135           }
+136 
+137         case TRI6:
+138           {
+139             Elem* elem = mesh_output\&.add_elem (new Tri6);
+140 
+141             // Triangle number TRI6 nodes in a different way to libMesh
+142             elem->set_node(0) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*6 + 0]);
+143             elem->set_node(1) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*6 + 1]);
+144             elem->set_node(2) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*6 + 2]);
+145             elem->set_node(3) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*6 + 5]);
+146             elem->set_node(4) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*6 + 3]);
+147             elem->set_node(5) = mesh_output\&.node_ptr(triangle_data_input\&.trianglelist[i*6 + 4]);
+148 
+149             break;
+150           }
+151 
+152         default:
+153           {
+154             libMesh::err << "ERROR: Unrecognized triangular element type\&." << std::endl;
+155             libmesh_error();
+156           }
+157         }
+158     }
+159 
+160   // Note: If the input mesh was a parallel one, calling
+161   // prepare_for_use() now will re-parallelize it by a call to
+162   // delete_remote_elements()\&.\&.\&. We do not actually want to
+163   // reparallelize it here though: the triangulate() function may
+164   // still do some Mesh smoothing\&.  The main thing needed (for
+165   // smoothing) is the neighbor information, so let's just find
+166   // neighbors\&.\&.\&.
+167   //mesh_output\&.prepare_for_use(/*skip_renumber =*/false);
+168   mesh_output\&.find_neighbors();
+169 }
+.fi
+.SS "void libMesh::TriangleWrapper::destroy (triangulateio &t, IO_Type)"
+Frees any memory which has been dynamically allocated by Triangle\&. Note the following facts: 1) Triangle does not free any memory itself 2) It is always safe to call free on a NULL pointer\&.
+.PP
+However, triangle \fIdoes\fP shallow-copy (for example) the holelist pointer from the input to output struct \fBwithout\fP performing a deep copy of the holelist itself\&. Therefore, double-free will occur without additional care! 
+.PP
+Referenced by libMesh::TriangleInterface::triangulate()\&.
+.SS "void libMesh::TriangleWrapper::init (triangulateio &t)"
+Initializes the fields of t to NULL/0 as necessary\&. This is helpful for preventing the access of uninitialized memory when working with C, which has no constructors or destructors\&. 
+.PP
+Referenced by libMesh::LaspackLinearSolver< T >::adjoint_solve(), libMesh::PetscLinearSolver< T >::adjoint_solve(), libMesh::SlepcEigenSolver< T >::attach_deflation_space(), libMesh::PetscDiffSolver::init(), libMesh::LaspackVector< T >::init(), libMesh::DistributedVector< T >::init(), libMesh::EigenSparseVector< T >::init(), libMesh::PetscVector< T >::init(), libMesh::EpetraVector< T >::init(), libMesh::EigenSparseLinearSolver< T >::solve(), libMesh::LaspackLinearSolver< T >::solve(), libMesh::NoxNonlinearSolver< T >::solve(), libMesh::PetscDMNonlinearSolver< T >::solve(), libMesh::PetscDiffSolver::solve(), libMesh::AztecLinearSolver< T >::solve(), libMesh::PetscNonlinearSolver< T >::solve(), libMesh::PetscLinearSolver< T >::solve(), libMesh::SlepcEigenSolver< T >::solve_generalized(), libMesh::SlepcEigenSolver< T >::solve_standard(), libMesh::TriangleInterface::triangulate(), libMesh::LaspackMatrix< T >::update_sparsity_pattern(), and libMesh::EpetraMatrix< T >::update_sparsity_pattern()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

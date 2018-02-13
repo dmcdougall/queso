@@ -1,0 +1,363 @@
+.TH "libMesh::RBEIMAssembly" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::RBEIMAssembly \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <rb_eim_assembly\&.h>\fP
+.PP
+Inherits \fBlibMesh::ElemAssembly\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBRBEIMAssembly\fP (\fBRBEIMConstruction\fP &rb_eim_con_in, unsigned int basis_function_index_in)"
+.br
+.ti -1c
+.RI "virtual \fB~RBEIMAssembly\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBevaluate_basis_function\fP (unsigned int var, const \fBElem\fP &element, const \fBQBase\fP &element_qrule, std::vector< \fBNumber\fP > &values)"
+.br
+.ti -1c
+.RI "\fBRBEIMConstruction\fP & \fBget_rb_eim_construction\fP ()"
+.br
+.ti -1c
+.RI "\fBNumericVector\fP< \fBNumber\fP > & \fBget_ghosted_basis_function\fP ()"
+.br
+.ti -1c
+.RI "\fBFEBase\fP & \fBget_fe\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "virtual void \fBinterior_assembly\fP (\fBFEMContext\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBboundary_assembly\fP (\fBFEMContext\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBget_nodal_rhs_values\fP (std::map< \fBnumeric_index_type\fP, \fBNumber\fP > &values, const \fBSystem\fP &, const \fBNode\fP &)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static std::string \fBget_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBprint_info\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_objects\fP ()"
+.br
+.ti -1c
+.RI "static void \fBenable_print_counter_info\fP ()"
+.br
+.ti -1c
+.RI "static void \fBdisable_print_counter_info\fP ()"
+.br
+.in -1c
+.SS "Protected Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::string, 
+.br
+std::pair< unsigned int, 
+.br
+unsigned int > > \fBCounts\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBincrement_constructor_count\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBincrement_destructor_count\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Static Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "static \fBCounts\fP \fB_counts\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::atomic\fP
+.br
+< unsigned int > \fB_n_objects\fP"
+.br
+.ti -1c
+.RI "static \fBThreads::spin_mutex\fP \fB_mutex\fP"
+.br
+.ti -1c
+.RI "static bool \fB_enable_print_counter\fP = true"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinitialize_fe_objects\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBRBEIMConstruction\fP & \fB_rb_eim_con\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_basis_function_index\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< \fBNumericVector\fP< \fBNumber\fP > > \fB_ghosted_basis_function\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBFEBase\fP * > \fB_fe_var\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBQBase\fP * > \fB_fe_qrule\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides functionality required to define an assembly object that arises from an 'Empirical Interpolation Method' (EIM) approximation\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David J\&. Knezevic, 2012 
+.RE
+.PP
+
+.PP
+Definition at line 47 of file rb_eim_assembly\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::string, std::pair<unsigned int, unsigned int> > \fBlibMesh::ReferenceCounter::Counts\fP\fC [protected]\fP, \fC [inherited]\fP"
+Data structure to log the information\&. The log is identified by the class name\&. 
+.PP
+Definition at line 113 of file reference_counter\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::RBEIMAssembly::RBEIMAssembly (\fBRBEIMConstruction\fP &rb_eim_con_in, unsigned intbasis_function_index_in)"
+Constructor\&. 
+.SS "virtual libMesh::RBEIMAssembly::~RBEIMAssembly ()\fC [virtual]\fP"
+Destructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "virtual void libMesh::ElemAssembly::boundary_assembly (\fBFEMContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Perform the element boundary assembly\&. 
+.PP
+Definition at line 60 of file elem_assembly\&.h\&.
+.PP
+.nf
+60 { }
+.fi
+.SS "void libMesh::ReferenceCounter::disable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 106 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+107 {
+108   _enable_print_counter = false;
+109   return;
+110 }
+.fi
+.SS "void libMesh::ReferenceCounter::enable_print_counter_info ()\fC [static]\fP, \fC [inherited]\fP"
+Methods to enable/disable the reference counter output from \fBprint_info()\fP 
+.PP
+Definition at line 100 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter\&.
+.PP
+.nf
+101 {
+102   _enable_print_counter = true;
+103   return;
+104 }
+.fi
+.SS "virtual void libMesh::RBEIMAssembly::evaluate_basis_function (unsigned intvar, const \fBElem\fP &element, const \fBQBase\fP &element_qrule, std::vector< \fBNumber\fP > &values)\fC [virtual]\fP"
+Evaluate variable \fCvar_number\fP of this object's EIM basis function at the points \fCqpoints\fP\&. Fill \fCvalues\fP with the basis function values\&. 
+.SS "\fBFEBase\fP& libMesh::RBEIMAssembly::get_fe (unsigned intvar)"
+Retrieve the \fBFE\fP object associated with variable \fCvar\fP\&. 
+.SS "\fBNumericVector\fP<\fBNumber\fP>& libMesh::RBEIMAssembly::get_ghosted_basis_function ()"
+Get a reference to the ghosted_basis_function\&. 
+.SS "std::string libMesh::ReferenceCounter::get_info ()\fC [static]\fP, \fC [inherited]\fP"
+Gets a string containing the reference information\&. 
+.PP
+Definition at line 47 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_counts, and libMesh::Quality::name()\&.
+.PP
+Referenced by libMesh::ReferenceCounter::print_info()\&.
+.PP
+.nf
+48 {
+49 #if defined(LIBMESH_ENABLE_REFERENCE_COUNTING) && defined(DEBUG)
+50 
+51   std::ostringstream oss;
+52 
+53   oss << '\n'
+54       << " ---------------------------------------------------------------------------- \n"
+55       << "| Reference count information                                                |\n"
+56       << " ---------------------------------------------------------------------------- \n";
+57 
+58   for (Counts::iterator it = _counts\&.begin();
+59        it != _counts\&.end(); ++it)
+60     {
+61       const std::string name(it->first);
+62       const unsigned int creations    = it->second\&.first;
+63       const unsigned int destructions = it->second\&.second;
+64 
+65       oss << "| " << name << " reference count information:\n"
+66           << "|  Creations:    " << creations    << '\n'
+67           << "|  Destructions: " << destructions << '\n';
+68     }
+69 
+70   oss << " ---------------------------------------------------------------------------- \n";
+71 
+72   return oss\&.str();
+73 
+74 #else
+75 
+76   return "";
+77 
+78 #endif
+79 }
+.fi
+.SS "virtual void libMesh::ElemAssembly::get_nodal_rhs_values (std::map< \fBnumeric_index_type\fP, \fBNumber\fP > &values, const \fBSystem\fP &, const \fBNode\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Get values to add to the RHS vector based on \fCnode\fP\&. This allows one to impose point loads, for example\&. 
+.PP
+Definition at line 67 of file elem_assembly\&.h\&.
+.PP
+.nf
+71   {
+72     // By default, just clear the values map
+73     values\&.clear();
+74   }
+.fi
+.SS "\fBRBEIMConstruction\fP& libMesh::RBEIMAssembly::get_rb_eim_construction ()"
+Get a reference to the \fBRBEIMConstruction\fP object\&. 
+.SS "void libMesh::ReferenceCounter::increment_constructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the construction counter\&. Should be called in the constructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 163 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::ReferenceCountedObject()\&.
+.PP
+.nf
+164 {
+165   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+166   std::pair<unsigned int, unsigned int>& p = _counts[name];
+167 
+168   p\&.first++;
+169 }
+.fi
+.SS "void libMesh::ReferenceCounter::increment_destructor_count (const std::string &name)\fC [inline]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Increments the destruction counter\&. Should be called in the destructor of any derived class that will be reference counted\&. 
+.PP
+Definition at line 176 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_counts, libMesh::Quality::name(), and libMesh::Threads::spin_mtx\&.
+.PP
+Referenced by libMesh::ReferenceCountedObject< RBParametrized >::~ReferenceCountedObject()\&.
+.PP
+.nf
+177 {
+178   Threads::spin_mutex::scoped_lock lock(Threads::spin_mtx);
+179   std::pair<unsigned int, unsigned int>& p = _counts[name];
+180 
+181   p\&.second++;
+182 }
+.fi
+.SS "void libMesh::RBEIMAssembly::initialize_fe_objects ()\fC [private]\fP"
+Initialize the \fBFE\fP objects in _fe_var\&. 
+.SS "virtual void libMesh::ElemAssembly::interior_assembly (\fBFEMContext\fP &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+Perform the element interior assembly\&. 
+.PP
+Definition at line 55 of file elem_assembly\&.h\&.
+.PP
+.nf
+55 { }
+.fi
+.SS "static unsigned int libMesh::ReferenceCounter::n_objects ()\fC [inline]\fP, \fC [static]\fP, \fC [inherited]\fP"
+Prints the number of outstanding (created, but not yet destroyed) objects\&. 
+.PP
+Definition at line 79 of file reference_counter\&.h\&.
+.PP
+References libMesh::ReferenceCounter::_n_objects\&.
+.PP
+.nf
+80   { return _n_objects; }
+.fi
+.SS "void libMesh::ReferenceCounter::print_info (std::ostream &out = \fC\fBlibMesh::out\fP\fP)\fC [static]\fP, \fC [inherited]\fP"
+Prints the reference information, by default to \fC\fBlibMesh::out\fP\fP\&. 
+.PP
+Definition at line 88 of file reference_counter\&.C\&.
+.PP
+References libMesh::ReferenceCounter::_enable_print_counter, and libMesh::ReferenceCounter::get_info()\&.
+.PP
+.nf
+89 {
+90   if( _enable_print_counter ) out_stream << ReferenceCounter::get_info();
+91 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "unsigned int libMesh::RBEIMAssembly::_basis_function_index\fC [private]\fP"
+The EIM basis function index (from rb_eim_eval) for this assembly object\&. 
+.PP
+Definition at line 101 of file rb_eim_assembly\&.h\&.
+.SS "\fBReferenceCounter::Counts\fP libMesh::ReferenceCounter::_counts\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Actually holds the data\&. 
+.PP
+Definition at line 118 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::get_info(), libMesh::ReferenceCounter::increment_constructor_count(), and libMesh::ReferenceCounter::increment_destructor_count()\&.
+.SS "bool libMesh::ReferenceCounter::_enable_print_counter = true\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Flag to control whether reference count information is printed when print_info is called\&. 
+.PP
+Definition at line 137 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::disable_print_counter_info(), libMesh::ReferenceCounter::enable_print_counter_info(), and libMesh::ReferenceCounter::print_info()\&.
+.SS "std::vector< \fBQBase\fP* > libMesh::RBEIMAssembly::_fe_qrule\fC [private]\fP"
+We also store the quadrature rule associated with each \fBFE\fP object\&. 
+.PP
+Definition at line 120 of file rb_eim_assembly\&.h\&.
+.SS "std::vector< \fBFEBase\fP* > libMesh::RBEIMAssembly::_fe_var\fC [private]\fP"
+We store an \fBFE\fP object for each variable in _rb_eim_con\&. This is used in evaluate_basis_function\&. Note that by storing the \fBFE\fP objects (rather than recreating them each time) we benefit from caching in fe\&.reinit()\&. 
+.PP
+Definition at line 115 of file rb_eim_assembly\&.h\&.
+.SS "\fBAutoPtr\fP< \fBNumericVector\fP<\fBNumber\fP> > libMesh::RBEIMAssembly::_ghosted_basis_function\fC [private]\fP"
+The basis function that we sample to evaluate the empirical interpolation approximation\&. This will be a GHOSTED vector to facilitate interpolation in the case of multiple processors\&. 
+.PP
+Definition at line 108 of file rb_eim_assembly\&.h\&.
+.SS "\fBThreads::spin_mutex\fP libMesh::ReferenceCounter::_mutex\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+Mutual exclusion object to enable thread-safe reference counting\&. 
+.PP
+Definition at line 131 of file reference_counter\&.h\&.
+.SS "\fBThreads::atomic\fP< unsigned int > libMesh::ReferenceCounter::_n_objects\fC [static]\fP, \fC [protected]\fP, \fC [inherited]\fP"
+The number of objects\&. Print the reference count information when the number returns to 0\&. 
+.PP
+Definition at line 126 of file reference_counter\&.h\&.
+.PP
+Referenced by libMesh::ReferenceCounter::n_objects(), libMesh::ReferenceCounter::ReferenceCounter(), and libMesh::ReferenceCounter::~ReferenceCounter()\&.
+.SS "\fBRBEIMConstruction\fP& libMesh::RBEIMAssembly::_rb_eim_con\fC [private]\fP"
+The \fBRBEIMConstruction\fP object that this \fBRBEIMAssembly\fP is based on\&. 
+.PP
+Definition at line 96 of file rb_eim_assembly\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

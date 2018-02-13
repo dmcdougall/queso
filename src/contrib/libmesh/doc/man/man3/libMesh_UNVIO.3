@@ -1,0 +1,1674 @@
+.TH "libMesh::UNVIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::UNVIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <unv_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP, and \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUNVIO\fP (\fBMeshBase\fP &\fBmesh\fP, \fBMeshData\fP &mesh_data)"
+.br
+.ti -1c
+.RI "\fBUNVIO\fP (const \fBMeshBase\fP &\fBmesh\fP, \fBMeshData\fP &mesh_data)"
+.br
+.ti -1c
+.RI "virtual \fB~UNVIO\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "bool & \fBverbose\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBread_implementation\fP (std::istream &in_stream)"
+.br
+.ti -1c
+.RI "void \fBwrite_implementation\fP (std::ostream &out_stream)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBcount_nodes\fP (std::istream &in_file)"
+.br
+.ti -1c
+.RI "void \fBnode_in\fP (std::istream &in_file)"
+.br
+.ti -1c
+.RI "void \fBcount_elements\fP (std::istream &in_file)"
+.br
+.ti -1c
+.RI "void \fBelement_in\fP (std::istream &in_file)"
+.br
+.ti -1c
+.RI "bool \fBbeginning_of_dataset\fP (std::istream &in_file, const std::string &ds_name) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBD_to_e\fP (std::string &number) const "
+.br
+.ti -1c
+.RI "void \fBnode_out\fP (std::ostream &out_file)"
+.br
+.ti -1c
+.RI "void \fBelement_out\fP (std::ostream &out_file)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_verbose\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > \fB_assign_nodes\fP"
+.br
+.ti -1c
+.RI "std::map< std::string, 
+.br
+std::streampos > \fB_ds_position\fP"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fB_n_nodes\fP"
+.br
+.ti -1c
+.RI "\fBdof_id_type\fP \fB_n_elements\fP"
+.br
+.ti -1c
+.RI "bool \fB_need_D_to_e\fP"
+.br
+.ti -1c
+.RI "\fBMeshData\fP & \fB_mesh_data\fP"
+.br
+.in -1c
+.SS "Static Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "static const std::string \fB_label_dataset_nodes\fP = '2411'"
+.br
+.ti -1c
+.RI "static const std::string \fB_label_dataset_elements\fP = '2412'"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBUNVIO\fP\fP class implements the Ideas \fCUNV\fP universal file format\&. This class enables both reading and writing \fCUNV\fP files\&. 
+.PP
+Definition at line 49 of file unv_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::UNVIO::UNVIO (\fBMeshBase\fP &mesh, \fBMeshData\fP &mesh_data)\fC [inline]\fP"
+Constructor\&. Takes a writeable reference to a mesh object\&. This is the constructor required to read a mesh\&. 
+.PP
+Definition at line 243 of file unv_io\&.h\&.
+.PP
+.nf
+243                                                  :
+244   MeshInput<MeshBase> (mesh),
+245   MeshOutput<MeshBase>(mesh),
+246   _verbose (false),
+247   _mesh_data (mesh_data)
+248 {
+249 }
+.fi
+.SS "libMesh::UNVIO::UNVIO (const \fBMeshBase\fP &mesh, \fBMeshData\fP &mesh_data)\fC [inline]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. This constructor will only allow us to write the mesh\&. 
+.PP
+Definition at line 254 of file unv_io\&.h\&.
+.PP
+.nf
+254                                                        :
+255   MeshOutput<MeshBase> (mesh),
+256   _verbose (false),
+257   _mesh_data (mesh_data)
+258 {
+259 }
+.fi
+.SS "libMesh::UNVIO::~UNVIO ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 264 of file unv_io\&.h\&.
+.PP
+References clear()\&.
+.PP
+.nf
+265 {
+266   this->clear ();
+267 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "bool libMesh::UNVIO::beginning_of_dataset (std::istream &in_file, const std::string &ds_name) const\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+\fCfalse\fP when error occured, \fCtrue\fP otherwise\&. Adjusts the \fCin_stream\fP to the beginning of the dataset \fCds_name\fP\&. 
+.RE
+.PP
+
+.PP
+Definition at line 280 of file unv_io\&.h\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+Referenced by element_in(), and node_in()\&.
+.PP
+.nf
+282 {
+283   libmesh_assert (in_file\&.good());
+284   libmesh_assert (!ds_name\&.empty());
+285 
+286   std::string olds, news;
+287 
+288   while (true)
+289     {
+290       in_file >> olds >> news;
+291 
+292       /*
+293        * a "-1" followed by a number means the beginning of a dataset
+294        * stop combing at the end of the file
+295        */
+296       while( ((olds != "-1") || (news == "-1") ) && !in_file\&.eof() )
+297         {
+298           olds = news;
+299           in_file >> news;
+300         }
+301 
+302       if (in_file\&.eof())
+303         return false;
+304 
+305       if (news == ds_name)
+306         return true;
+307     }
+308 
+309   // should never end up here
+310   libmesh_error();
+311   return false;
+312 }
+.fi
+.SS "void libMesh::UNVIO::clear ()\fC [private]\fP"
+Clears the data structures to a pristine state\&. 
+.PP
+Definition at line 62 of file unv_io\&.C\&.
+.PP
+References _assign_nodes, _ds_position, _n_elements, _n_nodes, and _need_D_to_e\&.
+.PP
+Referenced by read_implementation(), and ~UNVIO()\&.
+.PP
+.nf
+63 {
+64   /*
+65    * Initialize these to dummy values
+66    */
+67   this->_n_nodes     = 0;
+68   this->_n_elements  = 0;
+69   this->_need_D_to_e = true;
+70 
+71   this->_assign_nodes\&.clear();
+72   this->_ds_position\&.clear();
+73 }
+.fi
+.SS "void libMesh::UNVIO::count_elements (std::istream &in_file)\fC [private]\fP"
+When reading, counting the elements first helps pre-allocation\&. 
+.PP
+Definition at line 486 of file unv_io\&.C\&.
+.PP
+References _n_elements, data, libMesh::err, libMesh::out, libMesh::START_LOG(), libMesh::STOP_LOG(), and verbose()\&.
+.PP
+Referenced by read_implementation()\&.
+.PP
+.nf
+487 {
+488   START_LOG("count_elements()","UNVIO");
+489 
+490   if (this->_n_elements != 0)
+491     {
+492       libMesh::err << "Error: Trying to scan elements twice!"
+493                    << std::endl;
+494       libmesh_error();
+495     }
+496 
+497 
+498   // Simply read the element
+499   // dataset for the @e only
+500   // purpose to count nodes!
+501 
+502   std::string data;
+503   unsigned int fe_id;
+504 
+505   while (!in_file\&.eof())
+506     {
+507       // read element label
+508       in_file >> data;
+509 
+510       // end of dataset?
+511       if (data == "-1")
+512         break;
+513 
+514       // read fe_id
+515       in_file >> fe_id;
+516 
+517       // Skip related data,
+518       // and node number list
+519       in_file\&.ignore (256,'\n');
+520       in_file\&.ignore (256,'\n');
+521 
+522       // For some elements the node numbers
+523       // are given more than one record
+524 
+525       // TET10 or QUAD9
+526       if (fe_id == 118 || fe_id == 300)
+527         in_file\&.ignore (256,'\n');
+528 
+529       // HEX20
+530       if (fe_id == 116)
+531         {
+532           in_file\&.ignore (256,'\n');
+533           in_file\&.ignore (256,'\n');
+534         }
+535 
+536       this->_n_elements++;
+537     }
+538 
+539 
+540   if (in_file\&.eof())
+541     {
+542       libMesh::err << "ERROR: File ended before end of element dataset!"
+543                    << std::endl;
+544       libmesh_error();
+545     }
+546 
+547   if (this->verbose())
+548     libMesh::out << "  Elements: " << this->_n_elements << std::endl;
+549 
+550   STOP_LOG("count_elements()","UNVIO");
+551 }
+.fi
+.SS "void libMesh::UNVIO::count_nodes (std::istream &in_file)\fC [private]\fP"
+When reading, counting the nodes first helps pre-allocation\&. Also determine whether we need to convert from 'D' to 'e'\&. 
+.PP
+Definition at line 374 of file unv_io\&.C\&.
+.PP
+References _n_nodes, _need_D_to_e, data, libMesh::err, libMesh::out, libMesh::START_LOG(), libMesh::STOP_LOG(), and verbose()\&.
+.PP
+Referenced by read_implementation()\&.
+.PP
+.nf
+375 {
+376   START_LOG("count_nodes()","UNVIO");
+377 
+378   // if this->_n_nodes is not 0 the dataset
+379   // has already been scanned
+380   if (this->_n_nodes != 0)
+381     {
+382       libMesh::err << "Error: Trying to scan nodes twice!"
+383                    << std::endl;
+384       libmesh_error();
+385     }
+386 
+387 
+388   // Read from file, count nodes,
+389   // check if floats have to be converted
+390   std::string data;
+391 
+392   in_file >> data; // read the first node label
+393 
+394 
+395   if (data == "-1")
+396     {
+397       libMesh::err << "ERROR: Bad, already reached end of dataset before even starting to read nodes!"
+398                    << std::endl;
+399       libmesh_error();
+400     }
+401 
+402 
+403   // ignore the misc data for this node
+404   in_file\&.ignore(256,'\n');
+405 
+406 
+407 
+408   // Now we are there to verify whether we need
+409   // to convert from D to e or not
+410   in_file >> data;
+411 
+412   // When this "data" contains a "D", then
+413   // we have to convert each and every float\&.\&.\&.
+414   // But also assume when _this_ specific
+415   // line does not contain a "D", then the
+416   // other lines won't, too\&.
+417   {
+418     // #ifdef __HP_aCC
+419     //     // Use an "int" instead of unsigned int,
+420     //     // otherwise HP aCC may crash!
+421     //     const int position          = data\&.find("D",6);
+422     // #else
+423     //     const unsigned int position = data\&.find("D",6);
+424     // #endif
+425     std::string::size_type position = data\&.find("D",6);
+426 
+427     if (position!=std::string::npos) // npos means no position
+428       {
+429         this->_need_D_to_e = true;
+430 
+431         if (this->verbose())
+432           libMesh::out << "  Convert from \"D\" to \"e\"" << std::endl;
+433       }
+434     else
+435       this->_need_D_to_e = false;
+436   }
+437 
+438   // read the remaining two coordinates
+439   in_file >> data;
+440   in_file >> data;
+441 
+442 
+443   // this was our first node
+444   this->_n_nodes++;
+445 
+446 
+447 
+448   // proceed _counting_ the remaining
+449   // nodes\&.
+450   while (in_file\&.good())
+451     {
+452       // read the node label
+453       in_file >> data;
+454 
+455       if (data == "-1")
+456         // end of dataset is reached
+457         break;
+458 
+459       // ignore the remaining data (coord_sys_label, color etc)
+460       in_file\&.ignore (256, '\n');
+461       // ignore the coordinates
+462       in_file\&.ignore (256, '\n');
+463 
+464       this->_n_nodes++;
+465     }
+466 
+467 
+468   if (in_file\&.eof())
+469     {
+470       libMesh::err << "ERROR: File ended before end of node dataset!"
+471                    << std::endl;
+472       libmesh_error();
+473     }
+474 
+475   if (this->verbose())
+476     libMesh::out << "  Nodes   : " << this->_n_nodes << std::endl;
+477 
+478   STOP_LOG("count_nodes()","UNVIO");
+479 }
+.fi
+.SS "\fBReal\fP libMesh::UNVIO::D_to_e (std::string &number) const\fC [inline]\fP, \fC [private]\fP"
+Method for converting exponential notation from 'D' to 'e', for example \fC3\&.141592654D+00\fP \fC-->\fP \fC3\&.141592654e+00\fP in order to make it readable for C++\&. 
+.PP
+Definition at line 317 of file unv_io\&.h\&.
+.PP
+References libMesh::libmesh_assert()\&.
+.PP
+Referenced by node_in()\&.
+.PP
+.nf
+318 {
+319   /* find "D" in string, start looking at
+320    * 6th element, to improve speed\&.
+321    * We dont expect a "D" earlier
+322    */
+323 
+324 #ifdef __HP_aCC
+325   // Use an int instead of an unsigned int,
+326   // otherwise HP aCC may crash!
+327   const int position = number\&.find("D",6);
+328 #else
+329   const std::string::size_type position = number\&.find("D",6);
+330 #endif
+331 
+332   libmesh_assert (position != std::string::npos);
+333   number\&.replace(position, 1, "e");
+334 
+335   return std::atof (number\&.c_str());
+336 }
+.fi
+.SS "void libMesh::UNVIO::element_in (std::istream &in_file)\fC [private]\fP"
+Method reads elements and stores them in \fCstd::vector<Elem*>\fP \fC_elements\fP in the same order as they come in\&. Within \fC\fBUNVIO\fP\fP, element labels are ignored, but \fC\fBMeshData\fP\fP takes care of such things (if active)\&. 
+.PP
+Definition at line 662 of file unv_io\&.C\&.
+.PP
+References _assign_nodes, _label_dataset_elements, _mesh_data, _n_elements, _n_nodes, libMesh::MeshBase::add_elem(), libMesh::MeshData::add_foreign_elem_id(), beginning_of_dataset(), libMesh::Elem::dim(), libMesh::MeshInput< MeshBase >::elems_of_dimension, libMesh::err, libMesh::libmesh_assert(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshInput< MeshBase >::mesh(), n_nodes, libMesh::MeshBase::node_ptr(), libMesh::out, libMesh::DofObject::set_id(), libMesh::Elem::set_node(), libMesh::START_LOG(), libMesh::STOP_LOG(), and verbose()\&.
+.PP
+Referenced by read_implementation()\&.
+.PP
+.nf
+663 {
+664   START_LOG("element_in()","UNVIO");
+665 
+666   if (this->verbose())
+667     libMesh::out << "  Reading elements" << std::endl;
+668 
+669   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+670 
+671   // adjust the \p istream to our
+672   // position
+673   const bool ok = this->beginning_of_dataset(in_file, _label_dataset_elements);
+674 
+675   if (!ok)
+676     {
+677       libMesh::err << "ERROR: Could not find element dataset!" << std::endl;
+678       libmesh_error();
+679     }
+680 
+681 
+682   unsigned int      element_lab,       // element label (not supported yet)
+683     n_nodes;           // number of nodes on element
+684   unsigned long int fe_descriptor_id,  // FE descriptor id
+685     phys_prop_tab_num, // physical property table number (not supported yet)
+686     mat_prop_tab_num,  // material property table number (not supported yet)
+687     color;             // color (not supported yet)
+688 
+689 
+690   // vector that temporarily holds the node labels defining element
+691   std::vector<unsigned int> node_labels (21);
+692 
+693 
+694   // vector that assigns element nodes to their correct position
+695   // for example:
+696   // 44:plane stress      | QUAD4
+697   // linear quadrilateral |
+698   // position in UNV-file | position in libmesh
+699   // assign_elem_node[1]   = 0
+700   // assign_elem_node[2]   = 3
+701   // assign_elem_node[3]   = 2
+702   // assign_elem_node[4]   = 1
+703   //
+704   // UNV is 1-based, we leave the 0th element of the vectors unused in order
+705   // to prevent confusion, this way we can store elements with up to 20 nodes
+706   unsigned int assign_elem_nodes[21];
+707 
+708 
+709   // Get the beginning and end of the _assign_nodes vector
+710   // to eliminate repeated function calls
+711   const std::vector<dof_id_type>::const_iterator it_begin =
+712     this->_assign_nodes\&.begin();
+713 
+714   const std::vector<dof_id_type>::const_iterator it_end   =
+715     this->_assign_nodes\&.end();
+716 
+717 
+718 
+719   // read from the virtual file
+720   for (dof_id_type i=0; i<this->_n_elements; i++)
+721     {
+722       in_file >> element_lab             // read element label
+723               >> fe_descriptor_id        // read FE descriptor id
+724               >> phys_prop_tab_num       // (not supported yet)
+725               >> mat_prop_tab_num        // (not supported yet)
+726               >> color                   // (not supported yet)
+727               >> n_nodes;                // read number of nodes on element
+728 
+729       for (unsigned int j=1; j<=n_nodes; j++)
+730         in_file >> node_labels[j];       // read node labels
+731 
+732       Elem* elem = NULL;                 // element pointer
+733 
+734       switch (fe_descriptor_id)
+735         {
+736 
+737         case 41: // Plane Stress Linear Triangle
+738         case 91: // Thin Shell   Linear Triangle
+739           {
+740             elem = new Tri3;  // create new element
+741 
+742             assign_elem_nodes[1]=0;
+743             assign_elem_nodes[2]=2;
+744             assign_elem_nodes[3]=1;
+745             break;
+746           }
+747 
+748         case 42: // Plane Stress Quadratic Triangle
+749         case 92: // Thin Shell   Quadratic Triangle
+750           {
+751             elem = new Tri6;  // create new element
+752 
+753             assign_elem_nodes[1]=0;
+754             assign_elem_nodes[2]=5;
+755             assign_elem_nodes[3]=2;
+756             assign_elem_nodes[4]=4;
+757             assign_elem_nodes[5]=1;
+758             assign_elem_nodes[6]=3;
+759             break;
+760           }
+761 
+762         case 43: // Plane Stress Cubic Triangle
+763           {
+764             libMesh::err << "ERROR: UNV-element type 43: Plane Stress Cubic Triangle"
+765                          << " not supported\&."
+766                          << std::endl;
+767             libmesh_error();
+768             break;
+769           }
+770 
+771         case 44: // Plane Stress Linear Quadrilateral
+772         case 94: // Thin Shell   Linear Quadrilateral
+773           {
+774             elem = new Quad4; // create new element
+775 
+776             assign_elem_nodes[1]=0;
+777             assign_elem_nodes[2]=3;
+778             assign_elem_nodes[3]=2;
+779             assign_elem_nodes[4]=1;
+780             break;
+781           }
+782 
+783         case 45: // Plane Stress Quadratic Quadrilateral
+784         case 95: // Thin Shell   Quadratic Quadrilateral
+785           {
+786             elem = new Quad8; // create new element
+787 
+788             assign_elem_nodes[1]=0;
+789             assign_elem_nodes[2]=7;
+790             assign_elem_nodes[3]=3;
+791             assign_elem_nodes[4]=6;
+792             assign_elem_nodes[5]=2;
+793             assign_elem_nodes[6]=5;
+794             assign_elem_nodes[7]=1;
+795             assign_elem_nodes[8]=4;
+796             break;
+797           }
+798 
+799         case 300: // Thin Shell   Quadratic Quadrilateral (nine nodes)
+800           {
+801             elem = new Quad9; // create new element
+802 
+803             assign_elem_nodes[1]=0;
+804             assign_elem_nodes[2]=7;
+805             assign_elem_nodes[3]=3;
+806             assign_elem_nodes[4]=6;
+807             assign_elem_nodes[5]=2;
+808             assign_elem_nodes[6]=5;
+809             assign_elem_nodes[7]=1;
+810             assign_elem_nodes[8]=4;
+811             assign_elem_nodes[9]=8;
+812             break;
+813           }
+814 
+815         case 46: // Plane Stress Cubic Quadrilateral
+816           {
+817             libMesh::err << "ERROR: UNV-element type 46: Plane Stress Cubic Quadrilateral"
+818                          << " not supported\&."
+819                          << std::endl;
+820             libmesh_error();
+821             break;
+822           }
+823 
+824         case 111: // Solid Linear Tetrahedron
+825           {
+826             elem = new Tet4;  // create new element
+827 
+828             assign_elem_nodes[1]=0;
+829             assign_elem_nodes[2]=1;
+830             assign_elem_nodes[3]=2;
+831             assign_elem_nodes[4]=3;
+832             break;
+833           }
+834 
+835         case 112: // Solid Linear Prism
+836           {
+837             elem = new Prism6;  // create new element
+838 
+839             assign_elem_nodes[1]=0;
+840             assign_elem_nodes[2]=1;
+841             assign_elem_nodes[3]=2;
+842             assign_elem_nodes[4]=3;
+843             assign_elem_nodes[5]=4;
+844             assign_elem_nodes[6]=5;
+845             break;
+846           }
+847 
+848         case 115: // Solid Linear Brick
+849           {
+850             elem = new Hex8;  // create new element
+851 
+852             assign_elem_nodes[1]=0;
+853             assign_elem_nodes[2]=4;
+854             assign_elem_nodes[3]=5;
+855             assign_elem_nodes[4]=1;
+856             assign_elem_nodes[5]=3;
+857             assign_elem_nodes[6]=7;
+858             assign_elem_nodes[7]=6;
+859             assign_elem_nodes[8]=2;
+860             break;
+861           }
+862 
+863         case 116: // Solid Quadratic Brick
+864           {
+865             elem = new Hex20; // create new element
+866 
+867             assign_elem_nodes[1]=0;
+868             assign_elem_nodes[2]=12;
+869             assign_elem_nodes[3]=4;
+870             assign_elem_nodes[4]=16;
+871             assign_elem_nodes[5]=5;
+872             assign_elem_nodes[6]=13;
+873             assign_elem_nodes[7]=1;
+874             assign_elem_nodes[8]=8;
+875 
+876             assign_elem_nodes[9]=11;
+877             assign_elem_nodes[10]=19;
+878             assign_elem_nodes[11]=17;
+879             assign_elem_nodes[12]=9;
+880 
+881             assign_elem_nodes[13]=3;
+882             assign_elem_nodes[14]=15;
+883             assign_elem_nodes[15]=7;
+884             assign_elem_nodes[16]=18;
+885             assign_elem_nodes[17]=6;
+886             assign_elem_nodes[18]=14;
+887             assign_elem_nodes[19]=2;
+888             assign_elem_nodes[20]=10;
+889             break;
+890           }
+891 
+892         case 117: // Solid Cubic Brick
+893           {
+894             libMesh::err << "Error: UNV-element type 117: Solid Cubic Brick"
+895                          << " not supported\&."
+896                          << std::endl;
+897             libmesh_error();
+898             break;
+899           }
+900 
+901         case 118: // Solid Quadratic Tetrahedron
+902           {
+903             elem = new Tet10; // create new element
+904 
+905             assign_elem_nodes[1]=0;
+906             assign_elem_nodes[2]=4;
+907             assign_elem_nodes[3]=1;
+908             assign_elem_nodes[4]=5;
+909             assign_elem_nodes[5]=2;
+910             assign_elem_nodes[6]=6;
+911             assign_elem_nodes[7]=7;
+912             assign_elem_nodes[8]=8;
+913             assign_elem_nodes[9]=9;
+914             assign_elem_nodes[10]=3;
+915             break;
+916           }
+917 
+918         default: // Unrecognized element type
+919           {
+920             libMesh::err << "ERROR: UNV-element type "
+921                          << fe_descriptor_id
+922                          << " not supported\&."
+923                          << std::endl;
+924             libmesh_error();
+925             break;
+926           }
+927         }
+928 
+929       // nodes are being stored in element
+930       for (dof_id_type j=1; j<=n_nodes; j++)
+931         {
+932           // Find the position of node_labels[j] in the _assign_nodes vector\&.
+933           const std::pair<std::vector<dof_id_type>::const_iterator,
+934             std::vector<dof_id_type>::const_iterator>
+935             it = std::equal_range (it_begin,
+936                                    it_end,
+937                                    node_labels[j]);
+938 
+939           // it better be there, so libmesh_assert that it was found\&.
+940           libmesh_assert (it\&.first != it\&.second);
+941           libmesh_assert_equal_to (*(it\&.first), node_labels[j]);
+942 
+943           // Now, the distance between this UNV id and the beginning of
+944           // the _assign_nodes vector will give us a unique id in the
+945           // range [0,n_nodes) that we can use for defining a contiguous
+946           // connectivity\&.
+947           const dof_id_type assigned_node =
+948             libmesh_cast_int<dof_id_type>
+949             (std::distance (it_begin, it\&.first));
+950 
+951           // Make sure we didn't get an out-of-bounds id
+952           libmesh_assert_less (assigned_node, this->_n_nodes);
+953 
+954           elem->set_node(assign_elem_nodes[j]) =
+955             mesh\&.node_ptr(assigned_node);
+956         }
+957 
+958       elems_of_dimension[elem->dim()] = true;
+959 
+960       // add elem to the Mesh &
+961       // tell the MeshData object the foreign elem id
+962       // (note that mesh\&.add_elem() returns a pointer to the new element)
+963       elem->set_id(i);
+964       this->_mesh_data\&.add_foreign_elem_id (mesh\&.add_elem(elem), element_lab);
+965     }
+966 
+967   STOP_LOG("element_in()","UNVIO");
+968 }
+.fi
+.SS "void libMesh::UNVIO::element_out (std::ostream &out_file)\fC [private]\fP"
+Outputs the element data to the file \fCout_file\fP\&. For this to work, the \fC\fBMeshData\fP\fP of the current \fC\fBMesh\fP\fP has to be active\&. Do not use this directly, but through the proper write method\&. 
+.PP
+Definition at line 1041 of file unv_io\&.C\&.
+.PP
+References _label_dataset_elements, _mesh_data, libMesh::MeshData::active(), libMesh::MeshData::compatibility_mode(), libMesh::MeshData::elem_to_foreign_id(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), end, libMesh::err, libMesh::Elem::get_node(), libMesh::HEX20, libMesh::HEX8, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::Elem::n_nodes(), libMesh::MeshData::node_to_foreign_id(), libMesh::out, libMesh::PRISM6, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI6, libMesh::Elem::type(), and verbose()\&.
+.PP
+Referenced by write_implementation()\&.
+.PP
+.nf
+1042 {
+1043   libmesh_assert (this->_mesh_data\&.active() ||
+1044                   this->_mesh_data\&.compatibility_mode());
+1045 
+1046   if (this->verbose())
+1047     libMesh::out << "  Writing elements" << std::endl;
+1048 
+1049   // Write beginning of dataset
+1050   out_file << "    -1\n"
+1051            << "  "
+1052            << _label_dataset_elements
+1053            << "\n";
+1054 
+1055   unsigned long int fe_descriptor_id = 0;    // FE descriptor id
+1056   unsigned long int phys_prop_tab_dummy = 2; // physical property (not supported yet)
+1057   unsigned long int mat_prop_tab_dummy = 1;  // material property (not supported yet)
+1058   unsigned long int color_dummy = 7;         // color (not supported yet)
+1059 
+1060 
+1061   // vector that assigns element nodes to their correct position
+1062   // currently only elements with up to 20 nodes
+1063   //
+1064   // Example:
+1065   // QUAD4               | 44:plane stress
+1066   //                     | linear quad
+1067   // position in libMesh | UNV numbering
+1068   // (note: 0-based)     | (note: 1-based)
+1069   //
+1070   // assign_elem_node[0]  = 0
+1071   // assign_elem_node[1]  = 3
+1072   // assign_elem_node[2]  = 2
+1073   // assign_elem_node[3]  = 1
+1074   unsigned int assign_elem_nodes[20];
+1075 
+1076   unsigned int n_elem_written=0;
+1077 
+1078   // A reference to the parent class's mesh
+1079   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+1080 
+1081   MeshBase::const_element_iterator it  = mesh\&.elements_begin();
+1082   const MeshBase::const_element_iterator end = mesh\&.elements_end();
+1083 
+1084   for (; it != end; ++it)
+1085     {
+1086       const Elem* elem = *it;
+1087 
+1088       elem->n_nodes();
+1089 
+1090       switch (elem->type())
+1091         {
+1092 
+1093         case TRI3:
+1094           {
+1095             fe_descriptor_id = 41; // Plane Stress Linear Triangle
+1096             assign_elem_nodes[0] = 0;
+1097             assign_elem_nodes[1] = 2;
+1098             assign_elem_nodes[2] = 1;
+1099             break;
+1100           }
+1101 
+1102         case TRI6:
+1103           {
+1104             fe_descriptor_id = 42; // Plane Stress Quadratic Triangle
+1105             assign_elem_nodes[0] = 0;
+1106             assign_elem_nodes[1] = 5;
+1107             assign_elem_nodes[2] = 2;
+1108             assign_elem_nodes[3] = 4;
+1109             assign_elem_nodes[4] = 1;
+1110             assign_elem_nodes[5] = 3;
+1111             break;
+1112           }
+1113 
+1114         case QUAD4:
+1115           {
+1116             fe_descriptor_id = 44; // Plane Stress Linear Quadrilateral
+1117             assign_elem_nodes[0] = 0;
+1118             assign_elem_nodes[1] = 3;
+1119             assign_elem_nodes[2] = 2;
+1120             assign_elem_nodes[3] = 1;
+1121             break;
+1122           }
+1123 
+1124         case QUAD8:
+1125           {
+1126             fe_descriptor_id = 45; // Plane Stress Quadratic Quadrilateral
+1127             assign_elem_nodes[0] = 0;
+1128             assign_elem_nodes[1] = 7;
+1129             assign_elem_nodes[2] = 3;
+1130             assign_elem_nodes[3] = 6;
+1131             assign_elem_nodes[4] = 2;
+1132             assign_elem_nodes[5] = 5;
+1133             assign_elem_nodes[6] = 1;
+1134             assign_elem_nodes[7] = 4;
+1135             break;
+1136           }
+1137 
+1138         case QUAD9:
+1139           {
+1140             fe_descriptor_id = 300; // Plane Stress Quadratic Quadrilateral
+1141             assign_elem_nodes[0] = 0;
+1142             assign_elem_nodes[1] = 7;
+1143             assign_elem_nodes[2] = 3;
+1144             assign_elem_nodes[3] = 6;
+1145             assign_elem_nodes[4] = 2;
+1146             assign_elem_nodes[5] = 5;
+1147             assign_elem_nodes[6] = 1;
+1148             assign_elem_nodes[7] = 4;
+1149             assign_elem_nodes[8] = 8;
+1150             break;
+1151           }
+1152 
+1153         case TET4:
+1154           {
+1155             fe_descriptor_id = 111; // Solid Linear Tetrahedron
+1156             assign_elem_nodes[0] = 0;
+1157             assign_elem_nodes[1] = 1;
+1158             assign_elem_nodes[2] = 2;
+1159             assign_elem_nodes[3] = 3;
+1160             break;
+1161           }
+1162 
+1163         case PRISM6:
+1164           {
+1165             fe_descriptor_id = 112; // Solid Linear Prism
+1166             assign_elem_nodes[0] = 0;
+1167             assign_elem_nodes[1] = 1;
+1168             assign_elem_nodes[2] = 2;
+1169             assign_elem_nodes[3] = 3;
+1170             assign_elem_nodes[4] = 4;
+1171             assign_elem_nodes[5] = 5;
+1172             break;
+1173           }
+1174 
+1175         case HEX8:
+1176           {
+1177             fe_descriptor_id = 115; // Solid Linear Brick
+1178             assign_elem_nodes[0] = 0;
+1179             assign_elem_nodes[1] = 4;
+1180             assign_elem_nodes[2] = 5;
+1181             assign_elem_nodes[3] = 1;
+1182             assign_elem_nodes[4] = 3;
+1183             assign_elem_nodes[5] = 7;
+1184             assign_elem_nodes[6] = 6;
+1185             assign_elem_nodes[7] = 2;
+1186             break;
+1187           }
+1188 
+1189         case HEX20:
+1190           {
+1191             fe_descriptor_id = 116; // Solid Quadratic Brick
+1192             assign_elem_nodes[ 0] = 0;
+1193             assign_elem_nodes[ 1] = 12;
+1194             assign_elem_nodes[ 2] = 4;
+1195             assign_elem_nodes[ 3] = 16;
+1196             assign_elem_nodes[ 4] = 5;
+1197             assign_elem_nodes[ 5] = 13;
+1198             assign_elem_nodes[ 6] = 1;
+1199             assign_elem_nodes[ 7] = 8;
+1200 
+1201             assign_elem_nodes[ 8] = 11;
+1202             assign_elem_nodes[ 9] = 19;
+1203             assign_elem_nodes[10] = 17;
+1204             assign_elem_nodes[11] = 9;
+1205 
+1206             assign_elem_nodes[12] = 3;
+1207             assign_elem_nodes[13] = 15;
+1208             assign_elem_nodes[14] = 7;
+1209             assign_elem_nodes[15] = 18;
+1210             assign_elem_nodes[16] = 6;
+1211             assign_elem_nodes[17] = 14;
+1212             assign_elem_nodes[18] = 2;
+1213             assign_elem_nodes[19] = 10;
+1214 
+1215 
+1216             break;
+1217           }
+1218 
+1219         case TET10:
+1220           {
+1221             fe_descriptor_id = 118; // Solid Quadratic Tetrahedron
+1222             assign_elem_nodes[0] = 0;
+1223             assign_elem_nodes[1] = 4;
+1224             assign_elem_nodes[2] = 1;
+1225             assign_elem_nodes[3] = 5;
+1226             assign_elem_nodes[4] = 2;
+1227             assign_elem_nodes[5] = 6;
+1228             assign_elem_nodes[6] = 7;
+1229             assign_elem_nodes[7] = 8;
+1230             assign_elem_nodes[8] = 9;
+1231             assign_elem_nodes[9] = 3;
+1232             break;
+1233           }
+1234 
+1235         default:
+1236           {
+1237             libMesh::err << "ERROR: Element type = "
+1238                          << elem->type()
+1239                          << " not supported in "
+1240                          << "UNVIO!"
+1241                          << std::endl;
+1242             libmesh_error();
+1243             break;
+1244           }
+1245         }
+1246 
+1247 
+1248       out_file << std::setw(10) << this->_mesh_data\&.elem_to_foreign_id(elem)  // element ID
+1249                << std::setw(10) << fe_descriptor_id                           // type of element
+1250                << std::setw(10) << phys_prop_tab_dummy                        // not supported
+1251                << std::setw(10) << mat_prop_tab_dummy                         // not supported
+1252                << std::setw(10) << color_dummy                                // not supported
+1253                << std::setw(10) << elem->n_nodes()                            // No\&. of nodes per element
+1254                << '\n';
+1255 
+1256       for (unsigned int j=0; j<elem->n_nodes(); j++)
+1257         {
+1258           // assign_elem_nodes[j]-th node: i\&.e\&., j loops over the
+1259           // libMesh numbering, and assign_elem_nodes[j] over the
+1260           // UNV numbering\&.
+1261           const Node* node_in_unv_order = elem->get_node(assign_elem_nodes[j]);
+1262 
+1263           // new record after 8 id entries
+1264           if (j==8 || j==16)
+1265             out_file << '\n';
+1266 
+1267           // write foreign label for this node
+1268           out_file << std::setw(10) << this->_mesh_data\&.node_to_foreign_id(node_in_unv_order);
+1269 
+1270 
+1271         }
+1272 
+1273       out_file << '\n';
+1274 
+1275       n_elem_written++;
+1276     }
+1277 
+1278   if (this->verbose())
+1279     libMesh::out << "  Finished writing " << n_elem_written << " elements" << std::endl;
+1280 
+1281   // Write end of dataset
+1282   out_file << "    -1\n";
+1283 }
+.fi
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), element_in(), element_out(), libMesh::TetGenIO::node_in(), node_in(), node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), libMesh::MatlabIO::read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and libMesh::GnuPlotIO::write_solution()\&.
+.SS "void libMesh::UNVIO::node_in (std::istream &in_file)\fC [private]\fP"
+Method reads nodes from \fCin_file\fP and stores them in vector<Node*> \fCnodes\fP in the order they come in\&. The original node labels are being stored in \fC_assign_nodes\fP in order to assign the elements to the correct nodes later\&. In addition, provided it is active, the \fC\fBMeshData\fP\fP gets to know the node id from the Universal file, too\&. 
+.PP
+Definition at line 555 of file unv_io\&.C\&.
+.PP
+References _assign_nodes, _label_dataset_nodes, _mesh_data, _n_nodes, _need_D_to_e, libMesh::MeshData::add_foreign_node_id(), libMesh::MeshBase::add_point(), beginning_of_dataset(), D_to_e(), libMesh::err, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::out, libMesh::START_LOG(), libMesh::STOP_LOG(), and verbose()\&.
+.PP
+Referenced by read_implementation()\&.
+.PP
+.nf
+556 {
+557   START_LOG("node_in()","UNVIO");
+558 
+559   if (this->verbose())
+560     libMesh::out << "  Reading nodes" << std::endl;
+561 
+562   // adjust the \p istream to our position
+563   const bool ok = this->beginning_of_dataset(in_file, _label_dataset_nodes);
+564 
+565   if (!ok)
+566     {
+567       libMesh::err << "ERROR: Could not find node dataset!" << std::endl;
+568       libmesh_error();
+569     }
+570 
+571   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+572 
+573   unsigned int node_lab;           // label of the node
+574   unsigned int exp_coord_sys_num,  // export coordinate system number       (not supported yet)
+575     disp_coord_sys_num, // displacement coordinate system number (not supported yet)
+576     color;              // color                                 (not supported yet)
+577 
+578   // allocate the correct amount
+579   // of memory for the node vector
+580   this->_assign_nodes\&.reserve (this->_n_nodes);
+581 
+582 
+583   // always 3 coordinates in the UNV file, no matter
+584   // which dimensionality libMesh is in
+585   //std::vector<Real> xyz (3);
+586   Point xyz;
+587 
+588   // depending on whether we have to convert each
+589   // coordinate (float), we offer two versions\&.
+590   // Note that \p count_nodes() already verified
+591   // whether this file uses "D" of "e"
+592   if (this->_need_D_to_e)
+593     {
+594       // ok, convert\&.\&.\&.
+595       std::string num_buf;
+596 
+597       for(dof_id_type i=0; i<this->_n_nodes; i++)
+598         {
+599           libmesh_assert (!in_file\&.eof());
+600 
+601           in_file >> node_lab                // read the node label
+602                   >> exp_coord_sys_num       // (not supported yet)
+603                   >> disp_coord_sys_num      // (not supported yet)
+604                   >> color;                  // (not supported yet)
+605 
+606           // take care of the
+607           // floating-point data
+608           for (unsigned int d=0; d<3; d++)
+609             {
+610               in_file >> num_buf;
+611               xyz(d) = this->D_to_e (num_buf);
+612             }
+613 
+614           // set up the id map
+615           this->_assign_nodes\&.push_back (node_lab);
+616 
+617           // add node to the Mesh &
+618           // tell the MeshData object the foreign node id
+619           // (note that mesh\&.add_point() returns a pointer to the new node)
+620           this->_mesh_data\&.add_foreign_node_id (mesh\&.add_point(xyz,i), node_lab);
+621         }
+622     }
+623 
+624   else
+625     {
+626       // very well, no need to convert anything,
+627       // just plain import\&.
+628       for (unsigned int i=0;i<this->_n_nodes;i++)
+629         {
+630           libmesh_assert (!in_file\&.eof());
+631 
+632           in_file >> node_lab                // read the node label
+633                   >> exp_coord_sys_num       // (not supported yet)
+634                   >> disp_coord_sys_num      // (not supported yet)
+635                   >> color                   // (not supported yet)
+636                   >> xyz(0)                  // read x-coordinate
+637                   >> xyz(1)                  // read y-coordinate
+638                   >> xyz(2);                 // read z-coordinate
+639 
+640           // set up the id map
+641           this->_assign_nodes\&.push_back (node_lab);
+642 
+643           // add node to the Mesh &
+644           // tell the MeshData object the foreign node id
+645           // (note that mesh\&.add_point() returns a pointer to the new node)
+646           this->_mesh_data\&.add_foreign_node_id (mesh\&.add_point(xyz,i), node_lab);
+647         }
+648     }
+649 
+650   // now we need to sort the _assign_nodes vector so we can
+651   // search it efficiently like a map
+652   std::sort (this->_assign_nodes\&.begin(),
+653              this->_assign_nodes\&.end());
+654 
+655   STOP_LOG("node_in()","UNVIO");
+656 }
+.fi
+.SS "void libMesh::UNVIO::node_out (std::ostream &out_file)\fC [private]\fP"
+Outputs nodes to the file \fCout_file\fP\&. For this to work, the \fC\fBMeshData\fP\fP of the current \fC\fBMeshBase\fP\fP has to be active\&. Do not use this directly, but through the proper write method\&. 
+.PP
+Definition at line 975 of file unv_io\&.C\&.
+.PP
+References _label_dataset_nodes, _mesh_data, _n_nodes, libMesh::MeshData::active(), libMesh::MeshData::compatibility_mode(), end, libMesh::libmesh_assert(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshData::node_to_foreign_id(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::out, libMesh::MeshBase::spatial_dimension(), and verbose()\&.
+.PP
+Referenced by write_implementation()\&.
+.PP
+.nf
+976 {
+977 
+978   libmesh_assert (this->_mesh_data\&.active() ||
+979                   this->_mesh_data\&.compatibility_mode());
+980 
+981 
+982   if (this->verbose())
+983     libMesh::out << "  Writing " << this->_n_nodes << " nodes" << std::endl;
+984 
+985   // Write beginning of dataset
+986   out_file << "    -1\n"
+987            << "  "
+988            << _label_dataset_nodes
+989            << '\n';
+990 
+991 
+992   unsigned int exp_coord_sys_dummy  = 0; // export coordinate sys\&. (not supported yet)
+993   unsigned int disp_coord_sys_dummy = 0; // displacement coordinate sys\&. (not supp\&. yet)
+994   unsigned int color_dummy          = 0; // color(not supported yet)
+995 
+996   // A reference to the parent class's mesh
+997   const MeshBase& mesh = MeshOutput<MeshBase>::mesh();
+998 
+999   MeshBase::const_node_iterator       nd  = mesh\&.nodes_begin();
+1000   const MeshBase::const_node_iterator end = mesh\&.nodes_end();
+1001 
+1002   for (; nd != end; ++nd)
+1003     {
+1004       const Node* current_node = *nd;
+1005 
+1006       char buf[78];
+1007       std::sprintf(buf, "%10d%10u%10u%10u\n",
+1008                    this->_mesh_data\&.node_to_foreign_id(current_node),
+1009                    exp_coord_sys_dummy,
+1010                    disp_coord_sys_dummy,
+1011                    color_dummy);
+1012       out_file << buf;
+1013 
+1014       // the coordinates
+1015       if (mesh\&.spatial_dimension() == 3)
+1016         std::sprintf(buf, "%25\&.16E%25\&.16E%25\&.16E\n",
+1017                      static_cast<double>((*current_node)(0)),
+1018                      static_cast<double>((*current_node)(1)),
+1019                      static_cast<double>((*current_node)(2)));
+1020       else if (mesh\&.spatial_dimension() == 2)
+1021         std::sprintf(buf, "%25\&.16E%25\&.16E\n",
+1022                      static_cast<double>((*current_node)(0)),
+1023                      static_cast<double>((*current_node)(1)));
+1024       else
+1025         std::sprintf(buf, "%25\&.16E\n",
+1026                      static_cast<double>((*current_node)(0)));
+1027 
+1028       out_file << buf;
+1029     }
+1030 
+1031 
+1032   // Write end of dataset
+1033   out_file << "    -1\n";
+1034 }
+.fi
+.SS "void libMesh::UNVIO::read (const std::string &file_name)\fC [virtual]\fP"
+This method implements reading a mesh from a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 79 of file unv_io\&.C\&.
+.PP
+References libMesh::err, and read_implementation()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+80 {
+81   if (file_name\&.rfind("\&.gz") < file_name\&.size())
+82     {
+83 #ifdef LIBMESH_HAVE_GZSTREAM
+84 
+85       igzstream in_stream (file_name\&.c_str());
+86       this->read_implementation (in_stream);
+87 
+88 #else
+89 
+90       libMesh::err << "ERROR:  You must have the zlib\&.h header "
+91                    << "files and libraries to read and write "
+92                    << "compressed streams\&."
+93                    << std::endl;
+94       libmesh_error();
+95 
+96 #endif
+97       return;
+98     }
+99 
+100   else
+101     {
+102       std::ifstream in_stream (file_name\&.c_str());
+103       this->read_implementation (in_stream);
+104       return;
+105     }
+106 }
+.fi
+.SS "void libMesh::UNVIO::read_implementation (std::istream &in_stream)\fC [private]\fP"
+The actual implementation of the read function\&. The public read interface simply decides which type of stream to pass the implementation\&. 
+.PP
+Definition at line 109 of file unv_io\&.C\&.
+.PP
+References _assign_nodes, _ds_position, _label_dataset_elements, _label_dataset_nodes, _mesh_data, clear(), libMesh::MeshData::close_foreign_id_maps(), count_elements(), count_nodes(), element_in(), libMesh::MeshInput< MeshBase >::elems_of_dimension, libMesh::err, libMesh::MeshInput< MT >::mesh(), node_in(), libMesh::out, and verbose()\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+110 {
+111   // clear everything, so that
+112   // we can start from scratch
+113   this->clear ();
+114 
+115   // Keep track of what kinds of elements this file contains
+116   elems_of_dimension\&.clear();
+117   elems_of_dimension\&.resize(4, false);
+118 
+119   // Note that we read this file
+120   // @e twice\&.  First time to
+121   // detect the number of nodes
+122   // and elements (and possible
+123   // conversion tasks like D_to_e)
+124   // and the order of datasets
+125   // (nodes first, then elements,
+126   // or the other way around),
+127   // and second to do the actual
+128   // read\&.
+129   std::vector<std::string> order_of_datasets;
+130   order_of_datasets\&.reserve(2);
+131 
+132   {
+133     // the first time we read the file,
+134     // merely to obtain overall info
+135     if ( !in_stream\&.good() )
+136       {
+137         libMesh::err << "ERROR: Input file not good\&."
+138                      << std::endl;
+139         libmesh_error();
+140       }
+141 
+142 
+143     // Count nodes and elements, then let
+144     // other methods read the element and
+145     // node data\&.  Also remember which
+146     // dataset comes first: nodes or elements
+147     if (this->verbose())
+148       libMesh::out << "  Counting nodes and elements" << std::endl;
+149 
+150 
+151     //    bool reached_eof = false;
+152     bool found_node  = false;
+153     bool found_elem  = false;
+154 
+155 
+156     std::string olds, news;
+157 
+158     while (in_stream\&.good())
+159       {
+160         in_stream >> olds >> news;
+161 
+162         // a "-1" followed by a number means the beginning of a dataset
+163         // stop combing at the end of the file
+164         while ( ((olds != "-1") || (news == "-1") ) && !in_stream\&.eof() )
+165           {
+166             olds = news;
+167             in_stream >> news;
+168           }
+169 
+170         //  if (in_stream\&.eof())
+171         //    {
+172         //      reached_eof = true;
+173         //      break;
+174         //    }
+175 
+176 
+177         // if beginning of dataset, buffer it in
+178         // temp_buffer, if desired
+179         if (news == _label_dataset_nodes)
+180           {
+181             found_node = true;
+182             order_of_datasets\&.push_back (_label_dataset_nodes);
+183             this->count_nodes (in_stream);
+184 
+185             // we can save some time scanning the file
+186             // when we know we already have everything
+187             // we want
+188             if (found_elem)
+189               break;
+190           }
+191 
+192         else if (news == _label_dataset_elements)
+193           {
+194             found_elem = true;
+195             order_of_datasets\&.push_back (_label_dataset_elements);
+196             this->count_elements (in_stream);
+197 
+198             // we can save some time scanning the file
+199             // when we know we already have everything
+200             // we want
+201             if (found_node)
+202               break;
+203           }
+204       }
+205 
+206 
+207     // Here we should better have found
+208     // the datasets for nodes and elements,
+209     // otherwise the unv files is bad!
+210     if (!found_elem)
+211       {
+212         libMesh::err << "ERROR: Could not find elements!" << std::endl;
+213         libmesh_error();
+214       }
+215 
+216     if (!found_node)
+217       {
+218         libMesh::err << "ERROR: Could not find nodes!" << std::endl;
+219         libmesh_error();
+220       }
+221 
+222 
+223     // Don't close, just seek to the beginning
+224     in_stream\&.seekg(0, std::ios::beg);
+225 
+226     if (!in_stream\&.good() )
+227       {
+228         libMesh::err << "ERROR: Cannot re-read input file\&."
+229                      << std::endl;
+230         libmesh_error();
+231       }
+232   }
+233 
+234 
+235 
+236 
+237 
+238   // We finished scanning the file,
+239   // and our member data
+240   // \p this->_n_nodes,
+241   // \p this->_n_elements,
+242   // \p this->_need_D_to_e
+243   // should be properly initialized\&.
+244   {
+245     // Read the datasets in the order that
+246     // we already know
+247     libmesh_assert_equal_to (order_of_datasets\&.size(), 2);
+248 
+249     for (unsigned int ds=0; ds < order_of_datasets\&.size(); ds++)
+250       {
+251         if (order_of_datasets[ds] == _label_dataset_nodes)
+252           this->node_in    (in_stream);
+253 
+254         else if (order_of_datasets[ds] == _label_dataset_elements)
+255           this->element_in (in_stream);
+256 
+257         else
+258           libmesh_error();
+259       }
+260 
+261     // Set the mesh dimension to the largest encountered for an element
+262     for (unsigned int i=0; i!=4; ++i)
+263       if (elems_of_dimension[i])
+264         MeshInput<MeshBase>::mesh()\&.set_mesh_dimension(i);
+265 
+266 #if LIBMESH_DIM < 3
+267     if (MeshInput<MeshBase>::mesh()\&.mesh_dimension() > LIBMESH_DIM)
+268       {
+269         libMesh::err << "Cannot open dimension " <<
+270           MeshInput<MeshBase>::mesh()\&.mesh_dimension() <<
+271           " mesh file when configured without " <<
+272           MeshInput<MeshBase>::mesh()\&.mesh_dimension() << "D support\&." <<
+273           std::endl;
+274         libmesh_error();
+275       }
+276 #endif
+277 
+278     // tell the MeshData object that we are finished
+279     // reading data
+280     this->_mesh_data\&.close_foreign_id_maps ();
+281 
+282     if (this->verbose())
+283       libMesh::out << "  Finished\&." << std::endl << std::endl;
+284   }
+285 
+286   // save memory
+287   this->_assign_nodes\&.clear();
+288   this->_ds_position\&.clear();
+289 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and libMesh::UCDIO::read_implementation()\&.
+.SS "bool & libMesh::UNVIO::verbose ()\fC [inline]\fP"
+Set the flag indicationg if we should be verbose\&. 
+.PP
+Definition at line 272 of file unv_io\&.h\&.
+.PP
+References _verbose\&.
+.PP
+Referenced by count_elements(), count_nodes(), element_in(), element_out(), node_in(), node_out(), and read_implementation()\&.
+.PP
+.nf
+273 {
+274   return _verbose;
+275 }
+.fi
+.SS "void libMesh::UNVIO::write (const std::string &file_name)\fC [virtual]\fP"
+This method implements writing a mesh to a specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 295 of file unv_io\&.C\&.
+.PP
+References libMesh::err, and write_implementation()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::write()\&.
+.PP
+.nf
+296 {
+297   if (file_name\&.rfind("\&.gz") < file_name\&.size())
+298     {
+299 #ifdef LIBMESH_HAVE_GZSTREAM
+300 
+301       ogzstream out_stream(file_name\&.c_str());
+302       this->write_implementation (out_stream);
+303 
+304 #else
+305 
+306       libMesh::err << "ERROR:  You must have the zlib\&.h header "
+307                    << "files and libraries to read and write "
+308                    << "compressed streams\&."
+309                    << std::endl;
+310       libmesh_error();
+311 
+312 #endif
+313 
+314       return;
+315     }
+316 
+317   else
+318     {
+319       std::ofstream out_stream (file_name\&.c_str());
+320       this->write_implementation (out_stream);
+321       return;
+322     }
+323 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::UNVIO::write_implementation (std::ostream &out_stream)\fC [private]\fP"
+The actual implementation of the write function\&. The public write interface simply decides which type of stream to pass the implementation\&. 
+.PP
+Definition at line 328 of file unv_io\&.C\&.
+.PP
+References _mesh_data, _n_elements, _n_nodes, _need_D_to_e, libMesh::MeshData::active(), libMesh::MeshData::compatibility_mode(), element_out(), libMesh::MeshData::enable_compatibility_mode(), libMesh::err, libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshBase::n_elem(), libMesh::MeshBase::n_nodes(), and node_out()\&.
+.PP
+Referenced by write()\&.
+.PP
+.nf
+329 {
+330   if ( !out_file\&.good() )
+331     {
+332       libMesh::err << "ERROR: Output file not good\&."
+333                    << std::endl;
+334       libmesh_error();
+335     }
+336 
+337 
+338   MeshBase& mesh = MeshInput<MeshBase>::mesh();
+339 
+340   // already know these data, so initialize
+341   // them\&.  Does not hurt\&.
+342   this->_n_nodes      = mesh\&.n_nodes();
+343   this->_n_elements   = mesh\&.n_elem();
+344   this->_need_D_to_e  = false;
+345 
+346 
+347 
+348   // we need the MeshData, otherwise we do not
+349   // know the foreign node id
+350   if (!this->_mesh_data\&.active())
+351     if (!this->_mesh_data\&.compatibility_mode())
+352       {
+353         libMesh::err << std::endl
+354                      << "*************************************************************************" << std::endl
+355                      << "* WARNING: MeshData neither active nor in compatibility mode\&.           *" << std::endl
+356                      << "*          Enable compatibility mode for MeshData\&.  Use this Universal  *" << std::endl
+357                      << "*          file with caution: libMesh node and element ids are used\&.    *" << std::endl
+358                      << "*************************************************************************" << std::endl
+359                      << std::endl;
+360         this->_mesh_data\&.enable_compatibility_mode();
+361       }
+362 
+363 
+364 
+365   // write the nodes,  then the elements
+366   this->node_out    (out_file);
+367   this->element_out (out_file);
+368 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_nodal_data (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)\fC [inline]\fP, \fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented in \fBlibMesh::ExodusII_IO\fP, \fBlibMesh::GMVIO\fP, \fBlibMesh::Nemesis_IO\fP, \fBlibMesh::GmshIO\fP, \fBlibMesh::VTKIO\fP, \fBlibMesh::UCDIO\fP, \fBlibMesh::MEDITIO\fP, \fBlibMesh::GnuPlotIO\fP, and \fBlibMesh::TecplotIO\fP\&.
+.PP
+Definition at line 98 of file mesh_output\&.h\&.
+.PP
+.nf
+101   { libmesh_error(); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<\fBdof_id_type\fP> libMesh::UNVIO::_assign_nodes\fC [private]\fP"
+maps node id's from UNV to internal\&. Used when reading\&. 
+.PP
+Definition at line 194 of file unv_io\&.h\&.
+.PP
+Referenced by clear(), element_in(), node_in(), and read_implementation()\&.
+.SS "std::map<std::string,std::streampos> libMesh::UNVIO::_ds_position\fC [private]\fP"
+stores positions of relevant datasets in the file, should help to re-read the data faster\&. Used when reading\&. 
+.PP
+Definition at line 200 of file unv_io\&.h\&.
+.PP
+Referenced by clear(), and read_implementation()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "const std::string libMesh::UNVIO::_label_dataset_elements = '2412'\fC [static]\fP, \fC [private]\fP"
+label for the element dataset 
+.PP
+Definition at line 222 of file unv_io\&.h\&.
+.PP
+Referenced by element_in(), element_out(), and read_implementation()\&.
+.SS "const std::string libMesh::UNVIO::_label_dataset_nodes = '2411'\fC [static]\fP, \fC [private]\fP"
+label for the node dataset 
+.PP
+Definition at line 217 of file unv_io\&.h\&.
+.PP
+Referenced by node_in(), node_out(), and read_implementation()\&.
+.SS "\fBMeshData\fP& libMesh::UNVIO::_mesh_data\fC [private]\fP"
+A pointer to the \fBMeshData\fP object you would like to use\&. with this \fBUNVIO\fP object\&. Can be NULL\&. 
+.PP
+Definition at line 234 of file unv_io\&.h\&.
+.PP
+Referenced by element_in(), element_out(), node_in(), node_out(), read_implementation(), and write_implementation()\&.
+.SS "\fBdof_id_type\fP libMesh::UNVIO::_n_elements\fC [private]\fP"
+total number of elements, determined through \fC\fBcount_elements()\fP\fP\&. Primarily used when reading\&. 
+.PP
+Definition at line 212 of file unv_io\&.h\&.
+.PP
+Referenced by clear(), count_elements(), element_in(), and write_implementation()\&.
+.SS "\fBdof_id_type\fP libMesh::UNVIO::_n_nodes\fC [private]\fP"
+total number of nodes, determined through \fC\fBcount_nodes()\fP\fP\&. Primarily used when reading\&. 
+.PP
+Definition at line 206 of file unv_io\&.h\&.
+.PP
+Referenced by clear(), count_nodes(), element_in(), node_in(), node_out(), and write_implementation()\&.
+.SS "bool libMesh::UNVIO::_need_D_to_e\fC [private]\fP"
+whether we need to convert notation of exponentials\&. Used when reading\&. 
+.PP
+Definition at line 228 of file unv_io\&.h\&.
+.PP
+Referenced by clear(), count_nodes(), node_in(), and write_implementation()\&.
+.SS "bool libMesh::UNVIO::_verbose\fC [private]\fP"
+should be be verbose? 
+.PP
+Definition at line 189 of file unv_io\&.h\&.
+.PP
+Referenced by verbose()\&.
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

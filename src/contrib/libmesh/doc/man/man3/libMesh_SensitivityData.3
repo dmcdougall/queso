@@ -1,0 +1,264 @@
+.TH "libMesh::SensitivityData" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::SensitivityData \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <sensitivity_data\&.h>\fP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBConstRow\fP"
+.br
+.ti -1c
+.RI "class \fBRow\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSensitivityData\fP ()"
+.br
+.ti -1c
+.RI "\fBSensitivityData\fP (const \fBQoISet\fP &qoi_indices, const \fBSystem\fP &\fBsys\fP, const \fBParameterVector\fP &parameter_vector)"
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "void \fBallocate_data\fP (const \fBQoISet\fP &qoi_indices, const \fBSystem\fP &\fBsys\fP, const \fBParameterVector\fP &parameter_vector)"
+.br
+.ti -1c
+.RI "void \fBallocate_hessian_data\fP (const \fBQoISet\fP &qoi_indices, const \fBSystem\fP &\fBsys\fP, const \fBParameterVector\fP &parameter_vector)"
+.br
+.ti -1c
+.RI "const \fBNumber\fP & \fBderivative\fP (unsigned int qoi_index, unsigned int parameter_index) const "
+.br
+.ti -1c
+.RI "const \fBNumber\fP & \fBsecond_derivative\fP (unsigned int qoi_index, unsigned int parameter_index1, unsigned int parameter_index2) const "
+.br
+.ti -1c
+.RI "\fBNumber\fP & \fBderivative\fP (unsigned int qoi_index, unsigned int parameter_index)"
+.br
+.ti -1c
+.RI "\fBNumber\fP & \fBsecond_derivative\fP (unsigned int qoi_index, unsigned int parameter_index1, unsigned int parameter_index2)"
+.br
+.ti -1c
+.RI "\fBConstRow\fP \fBoperator[]\fP (unsigned int qoi) const "
+.br
+.ti -1c
+.RI "\fBRow\fP \fBoperator[]\fP (unsigned int qoi)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< \fBNumber\fP > > \fB_grad_data\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< std::vector< \fBNumber\fP > > > \fB_hess_data\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Data structure for holding completed parameter sensitivity calculations\&. 
+.PP
+Definition at line 42 of file sensitivity_data\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::SensitivityData::SensitivityData ()\fC [inline]\fP"
+Default constructor: empty data set 
+.PP
+Definition at line 70 of file sensitivity_data\&.h\&.
+.PP
+.nf
+70 {}
+.fi
+.SS "libMesh::SensitivityData::SensitivityData (const \fBQoISet\fP &qoi_indices, const \fBSystem\fP &sys, const \fBParameterVector\fP &parameter_vector)\fC [inline]\fP"
+Constructor from \fBQoISet\fP and \fBParameterVector\fP: allocates space for all required sensitivities 
+.PP
+Definition at line 156 of file sensitivity_data\&.h\&.
+.PP
+References allocate_data()\&.
+.PP
+.nf
+159 {
+160   this->allocate_data(qoi_indices, sys, parameter_vector);
+161 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::SensitivityData::allocate_data (const \fBQoISet\fP &qoi_indices, const \fBSystem\fP &sys, const \fBParameterVector\fP &parameter_vector)\fC [inline]\fP"
+Given \fBQoISet\fP and \fBParameterVector\fP, allocates space for all required first derivative data 
+.PP
+Definition at line 166 of file sensitivity_data\&.h\&.
+.PP
+References _grad_data, libMesh::QoISet::has_index(), libMesh::System::qoi, and libMesh::ParameterVector::size()\&.
+.PP
+Referenced by libMesh::ImplicitSystem::adjoint_qoi_parameter_sensitivity(), libMesh::ImplicitSystem::forward_qoi_parameter_sensitivity(), libMesh::ImplicitSystem::qoi_parameter_hessian_vector_product(), and SensitivityData()\&.
+.PP
+.nf
+169 {
+170   const std::size_t Np = parameter_vector\&.size();
+171   const unsigned int Nq =
+172     libmesh_cast_int<unsigned int>(sys\&.qoi\&.size());
+173 
+174   if (_grad_data\&.size() < Nq)
+175     _grad_data\&.resize(Nq);
+176 
+177   for (unsigned int i=0; i != Nq; ++i)
+178     if (qoi_indices\&.has_index(i))
+179       {
+180         _grad_data[i]\&.clear();
+181         _grad_data[i]\&.resize(Np);
+182       }
+183 }
+.fi
+.SS "void libMesh::SensitivityData::allocate_hessian_data (const \fBQoISet\fP &qoi_indices, const \fBSystem\fP &sys, const \fBParameterVector\fP &parameter_vector)\fC [inline]\fP"
+Given \fBQoISet\fP and \fBParameterVector\fP, allocates space for all required second derivative data 
+.PP
+Definition at line 188 of file sensitivity_data\&.h\&.
+.PP
+References _hess_data, libMesh::QoISet::has_index(), libMesh::System::qoi, libMesh::resize(), and libMesh::ParameterVector::size()\&.
+.PP
+Referenced by libMesh::ImplicitSystem::qoi_parameter_hessian()\&.
+.PP
+.nf
+191 {
+192   const std::size_t Np = parameter_vector\&.size();
+193   const unsigned int Nq =
+194     libmesh_cast_int<unsigned int>(sys\&.qoi\&.size());
+195 
+196   if (_hess_data\&.size() < Nq)
+197     _hess_data\&.resize(Nq);
+198 
+199   for (unsigned int i=0; i != Nq; ++i)
+200     if (qoi_indices\&.has_index(i))
+201       {
+202         _hess_data[i]\&.clear();
+203         _hess_data[i]\&.resize(Np);
+204         for (std::size_t j=0; j != Np; ++j)
+205           _hess_data[i][j]\&.resize(Np);
+206       }
+207 }
+.fi
+.SS "void libMesh::SensitivityData::clear ()\fC [inline]\fP"
+Clears and deallocates all data 
+.PP
+Definition at line 83 of file sensitivity_data\&.h\&.
+.PP
+References _grad_data\&.
+.PP
+.nf
+83 { _grad_data\&.clear(); }
+.fi
+.SS "const \fBNumber\fP & libMesh::SensitivityData::derivative (unsigned intqoi_index, unsigned intparameter_index) const\fC [inline]\fP"
+Returns the parameter sensitivity derivative for the specified quantity of interest for the specified parameter 
+.PP
+Definition at line 212 of file sensitivity_data\&.h\&.
+.PP
+References _grad_data\&.
+.PP
+Referenced by libMesh::SensitivityData::Row::operator[](), and libMesh::SensitivityData::ConstRow::operator[]()\&.
+.PP
+.nf
+214 {
+215   libmesh_assert_less (qoi_index, _grad_data\&.size());
+216   libmesh_assert_less (parameter_index, _grad_data[qoi_index]\&.size());
+217 
+218   return _grad_data[qoi_index][parameter_index];
+219 }
+.fi
+.SS "\fBNumber\fP & libMesh::SensitivityData::derivative (unsigned intqoi_index, unsigned intparameter_index)\fC [inline]\fP"
+Gets/sets the parameter sensitivity derivative for the specified quantity of interest for the specified parameter 
+.PP
+Definition at line 224 of file sensitivity_data\&.h\&.
+.PP
+References _grad_data\&.
+.PP
+.nf
+226 {
+227   libmesh_assert_less (qoi_index, _grad_data\&.size());
+228   libmesh_assert_less (parameter_index, _grad_data[qoi_index]\&.size());
+229 
+230   return _grad_data[qoi_index][parameter_index];
+231 }
+.fi
+.SS "\fBConstRow\fP libMesh::SensitivityData::operator[] (unsigned intqoi) const\fC [inline]\fP"
+Vector address type operator: sd[q][p] is an alias for sd\&.derivative(q,p) 
+.PP
+Definition at line 136 of file sensitivity_data\&.h\&.
+.PP
+.nf
+136 { return ConstRow(*this, qoi); }
+.fi
+.SS "\fBRow\fP libMesh::SensitivityData::operator[] (unsigned intqoi)\fC [inline]\fP"
+
+.PP
+Definition at line 138 of file sensitivity_data\&.h\&.
+.PP
+.nf
+138 { return Row(*this, qoi); }
+.fi
+.SS "const \fBNumber\fP & libMesh::SensitivityData::second_derivative (unsigned intqoi_index, unsigned intparameter_index1, unsigned intparameter_index2) const\fC [inline]\fP"
+Returns the parameter sensitivity derivative for the specified quantity of interest for the specified pair of parameters 
+.PP
+Definition at line 236 of file sensitivity_data\&.h\&.
+.PP
+References _hess_data\&.
+.PP
+Referenced by libMesh::ImplicitSystem::qoi_parameter_hessian()\&.
+.PP
+.nf
+239 {
+240   libmesh_assert_less (qoi_index, _hess_data\&.size());
+241   libmesh_assert_less (parameter_index1, _hess_data[qoi_index]\&.size());
+242   libmesh_assert_less (parameter_index2, _hess_data[qoi_index][parameter_index1]\&.size());
+243 
+244   return _hess_data[qoi_index][parameter_index1][parameter_index2];
+245 }
+.fi
+.SS "\fBNumber\fP & libMesh::SensitivityData::second_derivative (unsigned intqoi_index, unsigned intparameter_index1, unsigned intparameter_index2)\fC [inline]\fP"
+Gets/sets the parameter sensitivity second derivative for the specified quantity of interest for the specified pair of parameters 
+.PP
+Definition at line 250 of file sensitivity_data\&.h\&.
+.PP
+References _hess_data\&.
+.PP
+.nf
+253 {
+254   libmesh_assert_less (qoi_index, _hess_data\&.size());
+255   libmesh_assert_less (parameter_index1, _hess_data[qoi_index]\&.size());
+256   libmesh_assert_less (parameter_index2, _hess_data[qoi_index][parameter_index1]\&.size());
+257 
+258   return _hess_data[qoi_index][parameter_index1][parameter_index2];
+259 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<std::vector<\fBNumber\fP> > libMesh::SensitivityData::_grad_data\fC [private]\fP"
+Data storage; currently pretty trivial 
+.PP
+Definition at line 144 of file sensitivity_data\&.h\&.
+.PP
+Referenced by allocate_data(), clear(), and derivative()\&.
+.SS "std::vector<std::vector<std::vector<\fBNumber\fP> > > libMesh::SensitivityData::_hess_data\fC [private]\fP"
+
+.PP
+Definition at line 145 of file sensitivity_data\&.h\&.
+.PP
+Referenced by allocate_hessian_data(), and second_derivative()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

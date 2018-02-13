@@ -1,0 +1,208 @@
+.TH "libMesh::MatlabIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MatlabIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <matlab_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMatlabIO\fP (\fBMeshBase\fP &)"
+.br
+.ti -1c
+.RI "virtual void \fBread\fP (const std::string &name)"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBMeshBase\fP & \fBmesh\fP ()"
+.br
+.ti -1c
+.RI "void \fBskip_comment_lines\fP (std::istream &in, const char comment_start)"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< bool > \fBelems_of_dimension\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fBread_stream\fP (std::istream &in)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements reading meshes in the Matlab PDE toolkit in a proprietary format\&.
+.PP
+A VALID INPUT FILE for this type of mesh should be generated in Matlab with the following steps: 1\&.) Draw the domain and triangulate it in the GUI 2\&.) Export the mesh to matlab using Mesh->Export \fBMesh\fP 3\&.) Create a file with this script: fid = fopen('filename', 'w'); fprintf(fid, 'd d 
+.br
+', length(p), length(t)); fprintf(fid, 'f f 
+.br
+', p); fprintf(fid, 'd d d d 
+.br
+', t); fclose(fid);
+.PP
+What's going on here? There is no standard for exporting PDE toolkit meshes to files in Matlab\&. When you choose 'export mesh' in the GUI, it returns three matrices that it likes to call p, e, and t\&. All meshes (as far as I can tell) that come from the PDE toolkit are 2D triangle meshes\&.
+.PP
+p is the point matrix\&.\&.\&. Row 1: x coordinate Row 2: y coordinate
+.PP
+e is the edge matrix \&.\&.\&. Row 1: starting point number (dummy) Row 2: ending point number (dummy) Row 3: starting parameter value (?) (dummy) Row 4: ending parameter value (?) (dummy) Row 5: boundary segment number (?) (dummy) Row 6: left-hand subdomain number (dummy) Row 7: right-hand subdomain number (dummy)
+.PP
+t is the triangle matrix \&.\&.\&. Row 1: \fBNode\fP number 1 Row 2: \fBNode\fP number 2 Row 3: \fBNode\fP number 3 Row 4: subdomain number (dummy)
+.PP
+There are some important things to notice here: o The implied ordering of the p matrix is 1\&.\&.N o The e matrix is entirely irrelevant in this code o All of the matrices are row based
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2004 
+.RE
+.PP
+
+.PP
+Definition at line 89 of file matlab_io\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::MatlabIO::MatlabIO (\fBMeshBase\fP &mesh_in)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Takes a non-const \fBMesh\fP reference which it will fill up with elements\&. 
+.PP
+Definition at line 118 of file matlab_io\&.h\&.
+.PP
+.nf
+118                                      :
+119   MeshInput<MeshBase>  (mesh_in)
+120 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBMeshBase\fP & \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::mesh ()\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a writeable reference\&. 
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenIO::element_in(), libMesh::UNVIO::element_in(), libMesh::UNVIO::element_out(), libMesh::TetGenIO::node_in(), libMesh::UNVIO::node_in(), libMesh::UNVIO::node_out(), libMesh::VTKIO::nodes_to_vtk(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::VTKIO::read(), libMesh::LegacyXdrIO::read_ascii(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::UCDIO::read_implementation(), libMesh::GmshIO::read_mesh(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::OFFIO::read_stream(), read_stream(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::TetGenIO::write(), libMesh::ExodusII_IO::write(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::CheckpointIO::write_bcs(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO::write_element_data(), libMesh::UCDIO::write_implementation(), libMesh::UNVIO::write_implementation(), libMesh::GmshIO::write_mesh(), libMesh::UCDIO::write_nodal_data(), libMesh::VTKIO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data(), libMesh::ExodusII_IO::write_nodal_data_common(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::XdrIO::write_parallel(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), and libMesh::CheckpointIO::write_subdomain_names()\&.
+.SS "void libMesh::MatlabIO::read (const std::string &name)\fC [virtual]\fP"
+Reads in a matlab data file based on the string you pass it\&. 
+.PP
+Implements \fBlibMesh::MeshInput< MeshBase >\fP\&.
+.PP
+Definition at line 33 of file matlab_io\&.C\&.
+.PP
+References read_stream()\&.
+.PP
+Referenced by libMesh::UnstructuredMesh::read()\&.
+.PP
+.nf
+34 {
+35   std::ifstream in (name\&.c_str());
+36 
+37   this->read_stream(in);
+38 }
+.fi
+.SS "void libMesh::MatlabIO::read_stream (std::istream &in)\fC [private]\fP, \fC [virtual]\fP"
+Implementation of the \fBread()\fP function\&. This function is called by the public interface function and implements reading the file\&. 
+.PP
+Definition at line 41 of file matlab_io\&.C\&.
+.PP
+References libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::MeshBase::clear(), libMesh::err, libMesh::libmesh_assert(), libMesh::libmesh_assert_greater(), libMesh::MeshInput< MeshBase >::mesh(), libMesh::MeshInput< MT >::mesh(), libMesh::MeshBase::node_ptr(), libMesh::processor_id(), libMesh::Real, libMesh::DofObject::set_id(), libMesh::MeshBase::set_mesh_dimension(), libMesh::Elem::set_node(), and libMesh::x\&.
+.PP
+Referenced by read()\&.
+.PP
+.nf
+42 {
+43   // This is a serial-only process for now;
+44   // the Mesh should be read on processor 0 and
+45   // broadcast later
+46   libmesh_assert_equal_to (this->mesh()\&.processor_id(), 0);
+47 
+48   // Get a reference to the mesh
+49   MeshBase& the_mesh = MeshInput<MeshBase>::mesh();
+50 
+51   // Clear any existing mesh data
+52   the_mesh\&.clear();
+53 
+54   // PDE toolkit only works in 2D
+55   the_mesh\&.set_mesh_dimension(2);
+56 
+57 #if LIBMESH_DIM < 2
+58   libMesh::err << "Cannot open dimension 2 mesh file when configured without 2D support\&." <<
+59     std::endl;
+60   libmesh_error();
+61 #endif
+62 
+63   // Check the input buffer
+64   libmesh_assert (in\&.good());
+65 
+66   unsigned int nNodes=0, nElem=0;
+67 
+68   in >> nNodes   // Read the number of nodes
+69      >> nElem;   // Read the number of elements
+70 
+71   // Sort of check that it worked
+72   libmesh_assert_greater (nNodes, 0);
+73   libmesh_assert_greater (nElem, 0);
+74 
+75   // Read the nodal coordinates
+76   {
+77     Real x=0\&., y=0\&., z=0\&.;
+78 
+79     for (unsigned int i=0; i<nNodes; i++)
+80       {
+81         in >> x   // x-coordinate value
+82            >> y;  // y-coordinate value
+83 
+84         the_mesh\&.add_point ( Point(x,y,z), i);
+85       }
+86   }
+87 
+88   // Read the elements (elements)
+89   {
+90     unsigned int node=0, dummy=0;
+91 
+92     for (unsigned int i=0; i<nElem; i++)
+93       {
+94         Elem* elem = new Tri3; // Always build a triangle
+95         elem->set_id(i);
+96         the_mesh\&.add_elem (elem);
+97 
+98         for (unsigned int n=0; n<3; n++)  // Always read three 3 nodes
+99           {
+100             in >> node;
+101             elem->set_node(n) = the_mesh\&.node_ptr(node-1);  // Assign the node number
+102           }
+103 
+104         // There is an additional subdomain number here,
+105         // so we read it and get rid of it!
+106         in >> dummy;
+107       }
+108   }
+109 
+110 }
+.fi
+.SS "void \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::skip_comment_lines (std::istream &in, const charcomment_start)\fC [protected]\fP, \fC [inherited]\fP"
+Reads input from \fCin\fP, skipping all the lines that start with the character \fCcomment_start\fP\&. 
+.PP
+Referenced by libMesh::TetGenIO::read(), and libMesh::UCDIO::read_implementation()\&.
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<bool> \fBlibMesh::MeshInput\fP< \fBMeshBase\fP  >::elems_of_dimension\fC [protected]\fP, \fC [inherited]\fP"
+A vector of bools describing what dimension elements have been encountered when reading a mesh\&. 
+.PP
+Definition at line 93 of file mesh_input\&.h\&.
+.PP
+Referenced by libMesh::GMVIO::_read_one_cell(), libMesh::UNVIO::element_in(), libMesh::Nemesis_IO::read(), libMesh::ExodusII_IO::read(), libMesh::GMVIO::read(), libMesh::VTKIO::read(), libMesh::UCDIO::read_implementation(), libMesh::UNVIO::read_implementation(), libMesh::LegacyXdrIO::read_mesh(), and libMesh::XdrIO::read_serialized_connectivity()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

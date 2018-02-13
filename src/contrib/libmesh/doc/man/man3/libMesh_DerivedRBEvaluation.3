@@ -1,0 +1,116 @@
+.TH "libMesh::DerivedRBEvaluation< Base >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DerivedRBEvaluation< Base > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <derived_rb_evaluation\&.h>\fP
+.PP
+Inherits Base\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBDERIVED_RESIDUAL_TYPE\fP { \fBRESIDUAL_WRT_UBER\fP, \fBRESIDUAL_WRT_TRUTH\fP }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDerivedRBEvaluation\fP (const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+.br
+.ti -1c
+.RI "virtual void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "virtual unsigned int \fBget_n_basis_functions\fP () const "
+.br
+.ti -1c
+.RI "virtual void \fBset_n_basis_functions\fP (unsigned int n_bfs)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_out_basis_functions\fP (\fBSystem\fP &\fBsys\fP, const std::string &directory_name='offline_data', const bool write_binary_basis_functions=true)"
+.br
+.ti -1c
+.RI "virtual void \fBread_in_basis_functions\fP (\fBSystem\fP &\fBsys\fP, const std::string &directory_name='offline_data', const bool read_binary_basis_functions=true)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBDenseVector\fP
+.br
+< \fBNumber\fP > > \fBderived_basis_functions\fP"
+.br
+.ti -1c
+.RI "\fBDERIVED_RESIDUAL_TYPE\fP \fBresidual_type_flag\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<class Base>class libMesh::DerivedRBEvaluation< Base >"
+This class is part of the rbOOmit framework\&.
+.PP
+\fBDerivedRBEvaluation\fP encapsulates the code and data required to perform 'online' evaluations for the 'two-stage' reduced basis method\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David J\&. Knezevic, 2011 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file derived_rb_evaluation\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "template<class Base > enum \fBlibMesh::DerivedRBEvaluation::DERIVED_RESIDUAL_TYPE\fP"
+Define an enumeration for the two types of residuals we can compute: with respect to the uber, and the truth\&. 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIRESIDUAL_WRT_UBER \fP\fP
+.TP
+\fB\fIRESIDUAL_WRT_TRUTH \fP\fP
+.PP
+Definition at line 105 of file derived_rb_evaluation\&.h\&.
+.PP
+.nf
+105 { RESIDUAL_WRT_UBER, RESIDUAL_WRT_TRUTH };
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<class Base > \fBlibMesh::DerivedRBEvaluation\fP< Base >::\fBDerivedRBEvaluation\fP (const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD)"
+Constructor\&. 
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBEvaluation\fP< Base >::clear ()\fC [virtual]\fP"
+Clear this object\&. Overload to also reset residual_type_flag\&. 
+.SS "template<class Base > virtual unsigned int \fBlibMesh::DerivedRBEvaluation\fP< Base >::get_n_basis_functions () const\fC [virtual]\fP"
+Get the current number of basis functions\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBEvaluation\fP< Base >::read_in_basis_functions (\fBSystem\fP &sys, const std::string &directory_name = \fC'offline_data'\fP, const boolread_binary_basis_functions = \fCtrue\fP)\fC [virtual]\fP"
+Read in all the basis functions from file\&. \fCsys\fP and \fCwrite_binary_basis_functions\fP are ignored here, basis functions are read from the directory \fCdirectory_name\fP\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBEvaluation\fP< Base >::set_n_basis_functions (unsigned intn_bfs)\fC [virtual]\fP"
+Set the number of basis functions\&. Useful when reading in stored data\&. 
+.SS "template<class Base > virtual void \fBlibMesh::DerivedRBEvaluation\fP< Base >::write_out_basis_functions (\fBSystem\fP &sys, const std::string &directory_name = \fC'offline_data'\fP, const boolwrite_binary_basis_functions = \fCtrue\fP)\fC [virtual]\fP"
+Write out all the basis functions to file\&. \fCsys\fP and \fCwrite_binary_basis_functions\fP are ignored here, basis functions are written to the directory \fCdirectory_name\fP\&. 
+.SH "Member Data Documentation"
+.PP 
+.SS "template<class Base > std::vector< \fBDenseVector\fP<\fBNumber\fP> > \fBlibMesh::DerivedRBEvaluation\fP< Base >::derived_basis_functions"
+The dense vectors that define the derived basis functions based on the uber system\&. 
+.PP
+Definition at line 99 of file derived_rb_evaluation\&.h\&.
+.SS "template<class Base > \fBDERIVED_RESIDUAL_TYPE\fP \fBlibMesh::DerivedRBEvaluation\fP< Base >::residual_type_flag"
+This flag indicates which type of error bound we employ\&. The options are: RESIDUAL_WRT_UBER: The residual is wrt the uber space X_N\&. RESIDUAL_WRT_TRUTH: The residual is wrt the truth space X^\&. 
+.PP
+Definition at line 113 of file derived_rb_evaluation\&.h\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

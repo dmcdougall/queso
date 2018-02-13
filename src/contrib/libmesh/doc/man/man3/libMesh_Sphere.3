@@ -1,0 +1,569 @@
+.TH "libMesh::Sphere" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Sphere \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <sphere\&.h>\fP
+.PP
+Inherits \fBlibMesh::Surface\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBSphere\fP ()"
+.br
+.ti -1c
+.RI "\fBSphere\fP (const \fBPoint\fP &c, const \fBReal\fP r)"
+.br
+.ti -1c
+.RI "\fBSphere\fP (const \fBPoint\fP &, const \fBPoint\fP &, const \fBPoint\fP &, const \fBPoint\fP &)"
+.br
+.ti -1c
+.RI "\fBSphere\fP (const \fBSphere\fP &other_sphere)"
+.br
+.ti -1c
+.RI "\fB~Sphere\fP ()"
+.br
+.ti -1c
+.RI "void \fBcreate_from_center_radius\fP (const \fBPoint\fP &c, const \fBReal\fP r)"
+.br
+.ti -1c
+.RI "bool \fBintersects\fP (const \fBSphere\fP &other_sphere) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBdistance\fP (const \fBSphere\fP &other_sphere) const "
+.br
+.ti -1c
+.RI "bool \fBabove_surface\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "bool \fBbelow_surface\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "bool \fBon_surface\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBclosest_point\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBunit_normal\fP (const \fBPoint\fP &p) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBradius\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP & \fBradius\fP ()"
+.br
+.ti -1c
+.RI "const \fBPoint\fP & \fBcenter\fP () const "
+.br
+.ti -1c
+.RI "\fBPoint\fP & \fBcenter\fP ()"
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBsurface_coords\fP (const \fBPoint\fP &cart) const "
+.br
+.ti -1c
+.RI "\fBPoint\fP \fBworld_coords\fP (const \fBPoint\fP &sph) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBPoint\fP \fB_cent\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fB_rad\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines a sphere\&. It also computes coordinate transformations between cartesian $ (x, y, z) $ and spherical $ (r, \theta, \phi) $ coordinates\&. The spherical coordinates are valid in the ranges:
+.PP
+.IP "\(bu" 2
+$ 0 \le r < \infty $
+.IP "\(bu" 2
+$ 0 \le \theta < \pi $
+.IP "\(bu" 2
+$ 0 \le \phi < 2\pi $
+.PP
+.PP
+The coordinates are related as follows: $ \phi $ is the angle in the xy plane starting with 0\&. from the positive x axis, $ \theta $ is measured against the positive z axis\&. 
+.PP
+.nf
+\      | Z
+\theta|
+\    |    .
+\   |   .
+\  |  .
+\ | .
+\|.
+---------------+---------.---------
+/|\       .          Y
+/phi\     .
+/  |  \   .
+/   |   \ .
+/.........\
+/     |
+X /
+
+.fi
+.PP
+.PP
+\fBAuthor:\fP
+.RS 4
+Benjamin S\&. Kirk, Daniel Dreyer 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2002-2007 
+.RE
+.PP
+
+.PP
+Definition at line 75 of file sphere\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Sphere::Sphere ()"
+Dummy Constructor\&. 
+.PP
+Definition at line 36 of file sphere\&.C\&.
+.PP
+.nf
+36                 :
+37   _rad(-1\&.)
+38 {
+39 }
+.fi
+.SS "libMesh::Sphere::Sphere (const \fBPoint\fP &c, const \fBReal\fPr)"
+Constructs a sphere of radius r centered at c\&. 
+.PP
+Definition at line 43 of file sphere\&.C\&.
+.PP
+References create_from_center_radius(), and libMesh::libmesh_assert_greater()\&.
+.PP
+.nf
+45 {
+46   libmesh_assert_greater (r, 0\&.);
+47 
+48   this->create_from_center_radius (c, r);
+49 }
+.fi
+.SS "libMesh::Sphere::Sphere (const \fBPoint\fP &pa, const \fBPoint\fP &pb, const \fBPoint\fP &pc, const \fBPoint\fP &pd)"
+Constructs a sphere connecting four points 
+.PP
+Definition at line 62 of file sphere\&.C\&.
+.PP
+References std::abs(), create_from_center_radius(), libMesh::TypeTensor< T >::det(), libMesh::libmesh_assert_greater(), libMesh::Real, and libMesh::TypeVector< T >::size_sq()\&.
+.PP
+.nf
+66 {
+67   Point pad = pa - pd;
+68   Point pbd = pb - pd;
+69   Point pcd = pc - pd;
+70 
+71   TensorValue<Real> T(pad,pbd,pcd);
+72 
+73   Real D = T\&.det();
+74 
+75   // The points had better not be coplanar
+76   libmesh_assert_greater (std::abs(D), 1e-12);
+77 
+78   Real e = 0\&.5*(pa\&.size_sq() - pd\&.size_sq());
+79   Real f = 0\&.5*(pb\&.size_sq() - pd\&.size_sq());
+80   Real g = 0\&.5*(pc\&.size_sq() - pd\&.size_sq());
+81 
+82   TensorValue<Real> T1(e,pad(1),pad(2),
+83                        f,pbd(1),pbd(2),
+84                        g,pcd(1),pcd(2));
+85   Real sx = T1\&.det()/D;
+86 
+87   TensorValue<Real> T2(pad(0),e,pad(2),
+88                        pbd(0),f,pbd(2),
+89                        pcd(0),g,pcd(2));
+90   Real sy = T2\&.det()/D;
+91 
+92   TensorValue<Real> T3(pad(0),pad(1),e,
+93                        pbd(0),pbd(1),f,
+94                        pcd(0),pcd(1),g);
+95   Real sz = T3\&.det()/D;
+96 
+97   Point c(sx,sy,sz);
+98   Real r = (c-pa)\&.size();
+99 
+100   this->create_from_center_radius(c,r);
+101 }
+.fi
+.SS "libMesh::Sphere::Sphere (const \fBSphere\fP &other_sphere)"
+Copy-constructor\&. 
+.PP
+Definition at line 53 of file sphere\&.C\&.
+.PP
+References center(), create_from_center_radius(), and radius()\&.
+.PP
+.nf
+53                                           :
+54   Surface()
+55 {
+56   this->create_from_center_radius (other_sphere\&.center(),
+57                                    other_sphere\&.radius());
+58 }
+.fi
+.SS "libMesh::Sphere::~Sphere ()"
+Destructor\&. Does nothing at the moment\&. 
+.PP
+Definition at line 105 of file sphere\&.C\&.
+.PP
+.nf
+106 {
+107 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "bool libMesh::Sphere::above_surface (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is above the surface, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 140 of file sphere\&.C\&.
+.PP
+References center(), libMesh::libmesh_assert_greater(), radius(), and libMesh::TypeVector< T >::size()\&.
+.PP
+Referenced by below_surface()\&.
+.PP
+.nf
+141 {
+142   libmesh_assert_greater (this->radius(), 0\&.);
+143 
+144   // create a vector from the center to the point\&.
+145   const Point w = p - this->center();
+146 
+147   if (w\&.size() > this->radius())
+148     return true;
+149 
+150   return false;
+151 }
+.fi
+.SS "bool libMesh::Sphere::below_surface (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is below the surface, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 155 of file sphere\&.C\&.
+.PP
+References above_surface(), libMesh::libmesh_assert_greater(), and radius()\&.
+.PP
+.nf
+156 {
+157   libmesh_assert_greater (this->radius(), 0\&.);
+158 
+159   return ( !this->above_surface (p) );
+160 }
+.fi
+.SS "const \fBPoint\fP& libMesh::Sphere::center () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the center of the sphere\&. 
+.RE
+.PP
+
+.PP
+Definition at line 165 of file sphere\&.h\&.
+.PP
+References _cent\&.
+.PP
+Referenced by above_surface(), closest_point(), create_from_center_radius(), distance(), on_surface(), Sphere(), surface_coords(), unit_normal(), and world_coords()\&.
+.PP
+.nf
+165 { return _cent; }
+.fi
+.SS "\fBPoint\fP& libMesh::Sphere::center ()\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the center of the sphere\&. 
+.RE
+.PP
+
+.PP
+Definition at line 170 of file sphere\&.h\&.
+.PP
+References _cent\&.
+.PP
+.nf
+170 { return _cent; }
+.fi
+.SS "\fBPoint\fP libMesh::Sphere::closest_point (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the closest point on the surface to point p\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 181 of file sphere\&.C\&.
+.PP
+References center(), libMesh::libmesh_assert_greater(), radius(), and unit_normal()\&.
+.PP
+.nf
+182 {
+183   libmesh_assert_greater (this->radius(), 0\&.);
+184 
+185   // get the normal from the surface in the direction
+186   // of p
+187   Point normal = this->unit_normal (p);
+188 
+189   // The closest point on the sphere is in the direction
+190   // of the normal a distance r from the center\&.
+191   const Point cp = this->center() + normal*this->radius();
+192 
+193   return cp;
+194 }
+.fi
+.SS "void libMesh::Sphere::create_from_center_radius (const \fBPoint\fP &c, const \fBReal\fPr)"
+Defines a sphere of radius r centered at c\&. 
+.PP
+Definition at line 111 of file sphere\&.C\&.
+.PP
+References center(), libMesh::libmesh_assert_greater(), and radius()\&.
+.PP
+Referenced by Sphere()\&.
+.PP
+.nf
+112 {
+113   this->center() = c;
+114   this->radius() = r;
+115 
+116   libmesh_assert_greater (this->radius(), 0\&.);
+117 }
+.fi
+.SS "\fBReal\fP libMesh::Sphere::distance (const \fBSphere\fP &other_sphere) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the distance between the surface of this sphere and another sphere\&. 
+.RE
+.PP
+
+.PP
+Definition at line 128 of file sphere\&.C\&.
+.PP
+References center(), libMesh::libmesh_assert_greater(), radius(), and libMesh::Real\&.
+.PP
+Referenced by intersects()\&.
+.PP
+.nf
+129 {
+130   libmesh_assert_greater ( this->radius(), 0\&. );
+131   libmesh_assert_greater ( other_sphere\&.radius(), 0\&. );
+132 
+133   const Real the_distance = (this->center() - other_sphere\&.center())\&.size();
+134 
+135   return the_distance - (this->radius() + other_sphere\&.radius());
+136 }
+.fi
+.SS "bool libMesh::Sphere::intersects (const \fBSphere\fP &other_sphere) const"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if other_sphere intersects this sphere, false otherwise\&. 
+.RE
+.PP
+
+.PP
+Definition at line 121 of file sphere\&.C\&.
+.PP
+References distance()\&.
+.PP
+.nf
+122 {
+123   return distance(other_sphere) < 0 ? true : false;
+124 }
+.fi
+.SS "bool libMesh::Sphere::on_surface (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is on the surface, false otherwise\&. Note that the definition of on the surface really means 'very close' to account for roundoff error\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 164 of file sphere\&.C\&.
+.PP
+References std::abs(), center(), libMesh::libmesh_assert_greater(), radius(), and libMesh::TypeVector< T >::size()\&.
+.PP
+.nf
+165 {
+166   libmesh_assert_greater (this->radius(), 0\&.);
+167 
+168   // Create a vector from the center to the point\&.
+169   const Point w = p - this->center();
+170 
+171   // if the size of that vector is the same as the radius() then
+172   // the point is on the surface\&.
+173   if (std::abs(w\&.size() - this->radius()) < 1\&.e-10)
+174     return true;
+175 
+176   return false;
+177 }
+.fi
+.SS "\fBReal\fP libMesh::Sphere::radius () const\fC [inline]\fP"
+Returns the radius of the sphere\&. 
+.PP
+Definition at line 155 of file sphere\&.h\&.
+.PP
+References _rad\&.
+.PP
+Referenced by above_surface(), below_surface(), closest_point(), create_from_center_radius(), distance(), on_surface(), Sphere(), and unit_normal()\&.
+.PP
+.nf
+155 { return _rad; }
+.fi
+.SS "\fBReal\fP& libMesh::Sphere::radius ()\fC [inline]\fP"
+Returns the radius of the sphere as a writeable reference\&. 
+.PP
+Definition at line 160 of file sphere\&.h\&.
+.PP
+References _rad\&.
+.PP
+.nf
+160 { return _rad; }
+.fi
+.SS "\fBPoint\fP libMesh::Sphere::surface_coords (const \fBPoint\fP &cart) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the spherical coordinates for the cartesian coordinates \fCcart\fP\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 204 of file sphere\&.h\&.
+.PP
+References center(), libMesh::pi, libMesh::Real, and libMesh::TypeVector< T >::size()\&.
+.PP
+.nf
+205 {
+206   // constant translation in the origin
+207   const Point c (cart-this->center());
+208 
+209   // phi: special care, so that it gives 0\&.\&.2pi results
+210   const Real phi = std::atan2(c(1), c(0));
+211 
+212   return Point(/* radius */ c\&.size(),
+213                /* theta  */ std::atan2( std::sqrt( c(0)*c(0) + c(1)*c(1) ), c(2) ),
+214                /* phi    */ ( (phi < 0)  ?  2\&.*libMesh::pi+phi  :  phi ) );
+215 }
+.fi
+.SS "\fBPoint\fP libMesh::Sphere::unit_normal (const \fBPoint\fP &p) const\fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+a unit vector normal to the surface at point p\&. 
+.RE
+.PP
+
+.PP
+Implements \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 198 of file sphere\&.C\&.
+.PP
+References center(), libMesh::libmesh_assert_greater(), radius(), and libMesh::TypeVector< T >::unit()\&.
+.PP
+Referenced by closest_point()\&.
+.PP
+.nf
+199 {
+200   libmesh_assert_greater (this->radius(), 0\&.);
+201 
+202   libmesh_assert_not_equal_to (p, this->center());
+203 
+204   // Create a vector from the center to the point
+205   Point n = p - this->center();
+206 
+207   return n\&.unit();
+208 }
+.fi
+.SS "\fBPoint\fP libMesh::Sphere::world_coords (const \fBPoint\fP &sph) const\fC [inline]\fP, \fC [virtual]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the cartesian coordinates for the spherical coordinates \fCsph\fP\&. 
+.RE
+.PP
+
+.PP
+Reimplemented from \fBlibMesh::Surface\fP\&.
+.PP
+Definition at line 220 of file sphere\&.h\&.
+.PP
+References center(), and libMesh::Real\&.
+.PP
+.nf
+221 {
+222   const Real r     = sph(0);
+223   const Real theta = sph(1);
+224   const Real phi   = sph(2);
+225 
+226   // constant translation out of the origin
+227   return Point (/* x */ r*std::sin(theta)*std::cos(phi) + this->center()(0),
+228                 /* y */ r*std::sin(theta)*std::sin(phi) + this->center()(1),
+229                 /* z */ r*std::cos(theta)               + this->center()(2));
+230 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBPoint\fP libMesh::Sphere::_cent\fC [private]\fP"
+The center of the sphere\&. 
+.PP
+Definition at line 191 of file sphere\&.h\&.
+.PP
+Referenced by center()\&.
+.SS "\fBReal\fP libMesh::Sphere::_rad\fC [private]\fP"
+The radius of the sphere\&. 
+.PP
+Definition at line 196 of file sphere\&.h\&.
+.PP
+Referenced by radius()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

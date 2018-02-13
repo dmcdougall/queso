@@ -1,0 +1,282 @@
+.TH "libMesh::ParameterVector" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::ParameterVector \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <parameter_vector\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBParameterVector\fP ()"
+.br
+.ti -1c
+.RI "\fBParameterVector\fP (const std::vector< \fBNumber\fP * > &params)"
+.br
+.ti -1c
+.RI "void \fBdeep_copy\fP (\fBParameterVector\fP &target) const "
+.br
+.ti -1c
+.RI "void \fBshallow_copy\fP (\fBParameterVector\fP &target) const "
+.br
+.ti -1c
+.RI "void \fBvalue_copy\fP (const \fBParameterVector\fP &target) const "
+.br
+.ti -1c
+.RI "void \fBclear\fP ()"
+.br
+.ti -1c
+.RI "std::size_t \fBsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBresize\fP (unsigned int s)"
+.br
+.ti -1c
+.RI "void \fBdeep_resize\fP (unsigned int s)"
+.br
+.ti -1c
+.RI "\fBNumber\fP * \fBoperator[]\fP (unsigned int i) const "
+.br
+.ti -1c
+.RI "\fBNumber\fP *& \fBoperator[]\fP (unsigned int i)"
+.br
+.ti -1c
+.RI "\fBParameterVector\fP & \fBoperator*=\fP (const \fBNumber\fP a)"
+.br
+.ti -1c
+.RI "\fBParameterVector\fP & \fBoperator+=\fP (const \fBParameterVector\fP &a)"
+.br
+.ti -1c
+.RI "const \fBParameterVector\fP & \fBoperator+=\fP (const \fBParameterVector\fP &a) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::vector< \fBNumber\fP * > \fB_params\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBNumber\fP > \fB_my_data\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Data structure for specifying which \fBParameters\fP should be independent variables in a parameter sensitivity calculation\&. 
+.PP
+Definition at line 38 of file parameter_vector\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::ParameterVector::ParameterVector ()\fC [inline]\fP"
+Default constructor: 'no parameters' 
+.PP
+Definition at line 44 of file parameter_vector\&.h\&.
+.PP
+.nf
+44 {}
+.fi
+.SS "libMesh::ParameterVector::ParameterVector (const std::vector< \fBNumber\fP * > &params)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor-from-vector-of-Number*: each points to a parameter 
+.PP
+Definition at line 50 of file parameter_vector\&.h\&.
+.PP
+.nf
+50 : _params(params) {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::ParameterVector::clear ()\fC [inline]\fP"
+Resets to 'no parameters' 
+.PP
+Definition at line 74 of file parameter_vector\&.h\&.
+.PP
+References _params\&.
+.PP
+.nf
+74 { _params\&.clear(); }
+.fi
+.SS "void libMesh::ParameterVector::deep_copy (\fBParameterVector\fP &target) const"
+Deep copy constructor: the \fCtarget\fP will now own new copies of all the parameter values I'm pointing to 
+.PP
+Definition at line 33 of file parameter_vector\&.C\&.
+.PP
+References _my_data, and _params\&.
+.PP
+Referenced by libMesh::ImplicitSystem::qoi_parameter_hessian_vector_product(), libMesh::ImplicitSystem::weighted_sensitivity_adjoint_solve(), and libMesh::ImplicitSystem::weighted_sensitivity_solve()\&.
+.PP
+.nf
+34 {
+35   const unsigned int Np = libmesh_cast_int<unsigned int>
+36     (this->_params\&.size());
+37   target\&._params\&.resize(Np);
+38   target\&._my_data\&.resize(Np);
+39   for (unsigned int i=0; i != Np; ++i)
+40     {
+41       target\&._params[i] = &target\&._my_data[i];
+42       target\&._my_data[i] = *(this->_params[i]);
+43     }
+44 }
+.fi
+.SS "void libMesh::ParameterVector::deep_resize (unsigned ints)"
+Sets the number of parameters to be used\&. This method is for resizing a \fBParameterVector\fP that owns its own parameter values 
+.PP
+Definition at line 68 of file parameter_vector\&.C\&.
+.PP
+References _my_data, and _params\&.
+.PP
+.nf
+69 {
+70   this->_params\&.resize(s);
+71   this->_my_data\&.resize(s);
+72   for (unsigned int i=0; i != s; ++i)
+73     this->_params[i] = &this->_my_data[i];
+74 }
+.fi
+.SS "\fBParameterVector\fP & libMesh::ParameterVector::operator*= (const \fBNumber\fPa)"
+Multiplication operator; acts individually on each parameter\&. 
+.PP
+Definition at line 78 of file parameter_vector\&.C\&.
+.PP
+References _params\&.
+.PP
+.nf
+79 {
+80   const unsigned int Np = libmesh_cast_int<unsigned int>
+81     (this->_params\&.size());
+82   for (unsigned int i=0; i != Np; ++i)
+83     *(this->_params[i]) *= a;
+84   return *this;
+85 }
+.fi
+.SS "\fBParameterVector\fP & libMesh::ParameterVector::operator+= (const \fBParameterVector\fP &a)"
+Addition operator\&. The parameter vector to be added in must have the same number of values\&. 
+.PP
+Definition at line 100 of file parameter_vector\&.C\&.
+.PP
+.nf
+101 {
+102   (*this) += a;
+103   return *this;
+104 }
+.fi
+.SS "const \fBParameterVector\fP & libMesh::ParameterVector::operator+= (const \fBParameterVector\fP &a) const"
+Addition operator\&. The parameter vector to be added in must have the same number of values\&. 
+.PP
+Definition at line 89 of file parameter_vector\&.C\&.
+.PP
+References _params\&.
+.PP
+.nf
+90 {
+91   const unsigned int Np = libmesh_cast_int<unsigned int>
+92     (this->_params\&.size());
+93   libmesh_assert_equal_to (a\&._params\&.size(), Np);
+94   for (unsigned int i=0; i != Np; ++i)
+95     *(this->_params[i]) += *(a\&._params[i]);
+96   return *this;
+97 }
+.fi
+.SS "\fBNumber\fP * libMesh::ParameterVector::operator[] (unsigned inti) const\fC [inline]\fP"
+Returns a pointer to a parameter value 
+.PP
+Definition at line 142 of file parameter_vector\&.h\&.
+.PP
+References _params, and libMesh::libmesh_assert_greater()\&.
+.PP
+.nf
+143 {
+144   libmesh_assert_greater (_params\&.size(), i);
+145 
+146   return _params[i];
+147 }
+.fi
+.SS "\fBNumber\fP *& libMesh::ParameterVector::operator[] (unsigned inti)\fC [inline]\fP"
+Returns a reference to a pointer to a parameter value, suitable for repointing it to a different address\&. 
+.PP
+Definition at line 152 of file parameter_vector\&.h\&.
+.PP
+References _params, and libMesh::libmesh_assert_greater()\&.
+.PP
+.nf
+153 {
+154   libmesh_assert_greater (_params\&.size(), i);
+155 
+156   return _params[i];
+157 }
+.fi
+.SS "void libMesh::ParameterVector::resize (unsigned ints)\fC [inline]\fP"
+Sets the number of parameters to be used\&. This method is for resizing a \fBParameterVector\fP that acts as a proxy to other parameter values 
+.PP
+Definition at line 86 of file parameter_vector\&.h\&.
+.PP
+References _params\&.
+.PP
+.nf
+86 { _params\&.resize(s); }
+.fi
+.SS "void libMesh::ParameterVector::shallow_copy (\fBParameterVector\fP &target) const"
+Shallow copy constructor: the \fCtarget\fP will now point to all the parameter values I'm pointing to 
+.PP
+Definition at line 48 of file parameter_vector\&.C\&.
+.PP
+References _my_data, and _params\&.
+.PP
+.nf
+49 {
+50   target\&._my_data\&.clear();
+51   target\&._params = this->_params;
+52 }
+.fi
+.SS "std::size_t libMesh::ParameterVector::size () const\fC [inline]\fP"
+Returns the number of parameters to be used 
+.PP
+Definition at line 79 of file parameter_vector\&.h\&.
+.PP
+References _params\&.
+.PP
+Referenced by libMesh::ImplicitSystem::adjoint_qoi_parameter_sensitivity(), libMesh::SensitivityData::allocate_data(), libMesh::SensitivityData::allocate_hessian_data(), libMesh::ImplicitSystem::assemble_residual_derivatives(), libMesh::ImplicitSystem::forward_qoi_parameter_sensitivity(), libMesh::ImplicitSystem::qoi_parameter_hessian(), libMesh::ImplicitSystem::qoi_parameter_hessian_vector_product(), libMesh::System::qoi_parameter_sensitivity(), and libMesh::ImplicitSystem::sensitivity_solve()\&.
+.PP
+.nf
+79 { return _params\&.size(); }
+.fi
+.SS "void libMesh::ParameterVector::value_copy (const \fBParameterVector\fP &target) const"
+Value copy method: the \fCtarget\fP, which should already have as many parameters as I do, will now have those parameters set to my values\&. 
+.PP
+Definition at line 56 of file parameter_vector\&.C\&.
+.PP
+References _params\&.
+.PP
+Referenced by libMesh::ImplicitSystem::qoi_parameter_hessian_vector_product(), libMesh::ImplicitSystem::weighted_sensitivity_adjoint_solve(), and libMesh::ImplicitSystem::weighted_sensitivity_solve()\&.
+.PP
+.nf
+57 {
+58   const unsigned int Np = libmesh_cast_int<unsigned int>
+59     (this->_params\&.size());
+60   libmesh_assert_equal_to (target\&._params\&.size(), Np);
+61 
+62   for (unsigned int i=0; i != Np; ++i)
+63     *(this->_params[i]) = *(target\&._params[i]);
+64 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<\fBNumber\fP> libMesh::ParameterVector::_my_data\fC [private]\fP"
+\fBParameters\fP which I own; e\&.g\&. as the result of a deep copy 
+.PP
+Definition at line 131 of file parameter_vector\&.h\&.
+.PP
+Referenced by deep_copy(), deep_resize(), and shallow_copy()\&.
+.SS "std::vector<\fBNumber\fP *> libMesh::ParameterVector::_params\fC [private]\fP"
+Pointers to parameters which may exist elsewhere 
+.PP
+Definition at line 126 of file parameter_vector\&.h\&.
+.PP
+Referenced by clear(), deep_copy(), deep_resize(), operator*=(), operator+=(), operator[](), resize(), shallow_copy(), size(), and value_copy()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

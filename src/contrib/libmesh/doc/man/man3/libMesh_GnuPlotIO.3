@@ -1,0 +1,428 @@
+.TH "libMesh::GnuPlotIO" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::GnuPlotIO \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gnuplot_io\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "enum \fBPlottingProperties\fP { \fBGRID_ON\fP = 1, \fBPNG_OUTPUT\fP = 2 }"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBGnuPlotIO\fP (const \fBMeshBase\fP &, const std::string &=std::string('FE 1D Solution'), int properties=0)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite\fP (const std::string &)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_nodal_data\fP (const std::string &, const std::vector< \fBNumber\fP > &, const std::vector< std::string > &)"
+.br
+.ti -1c
+.RI "void \fBset_title\fP (const std::string &title)"
+.br
+.ti -1c
+.RI "void \fBuse_grid\fP (bool grid)"
+.br
+.ti -1c
+.RI "void \fBset_png_output\fP (bool png_output)"
+.br
+.ti -1c
+.RI "virtual void \fBwrite_equation_systems\fP (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names=NULL)"
+.br
+.ti -1c
+.RI "unsigned int & \fBascii_precision\fP ()"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBaxes_limits\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "const \fBMeshBase\fP & \fBmesh\fP () const"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "const bool \fB_is_parallel_format\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBwrite_solution\fP (const std::string &, const std::vector< \fBNumber\fP > *=NULL, const std::vector< std::string > *=NULL)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fB_title\fP"
+.br
+.ti -1c
+.RI "bool \fB_grid\fP"
+.br
+.ti -1c
+.RI "bool \fB_png_output\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements writing meshes using GNUplot, designed for use only with 1D meshes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+David Knezevic, 2005 
+.RE
+.PP
+
+.PP
+Definition at line 45 of file gnuplot_io\&.h\&.
+.SH "Member Enumeration Documentation"
+.PP 
+.SS "enum \fBlibMesh::GnuPlotIO::PlottingProperties\fP"
+Define enumerations to set plotting properties on construction 
+.PP
+\fBEnumerator\fP
+.in +1c
+.TP
+\fB\fIGRID_ON \fP\fP
+.TP
+\fB\fIPNG_OUTPUT \fP\fP
+.PP
+Definition at line 52 of file gnuplot_io\&.h\&.
+.PP
+.nf
+52                           { GRID_ON    = 1,
+53                             PNG_OUTPUT = 2};
+.fi
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::GnuPlotIO::GnuPlotIO (const \fBMeshBase\fP &mesh_in, const std::string &title = \fCstd::string('FE 1D Solution')\fP, intproperties = \fC0\fP)\fC [explicit]\fP"
+Constructor\&. Takes a reference to a constant mesh object\&. To set the properties, we input a bitwise OR of the \fBGnuPlotIO::PlottingProperties\fP enumerations, e\&.g\&. \fBGnuPlotIO::GRID_ON\fP | \fBGnuPlotIO::PNG_OUTPUT\fP 
+.PP
+Definition at line 32 of file gnuplot_io\&.C\&.
+.PP
+References _grid, _png_output, GRID_ON, and PNG_OUTPUT\&.
+.PP
+.nf
+35   :
+36   MeshOutput<MeshBase> (mesh_in),
+37   _title(title)
+38 {
+39   _grid       = (mesh_properties & GRID_ON);
+40   _png_output = (mesh_properties & PNG_OUTPUT);
+41 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "unsigned int& \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::ascii_precision ()\fC [inherited]\fP"
+Return/set the precision to use when writing ASCII files\&.
+.PP
+By default we use numeric_limits<Real>::digits10 + 2, which should be enough to write out to ASCII and get the exact same Real back when reading in\&. 
+.PP
+Referenced by libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), and libMesh::GMVIO::write_ascii_old_impl()\&.
+.SS "const \fBMeshBase\fP & \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::mesh () const\fC [protected]\fP, \fC [inherited]\fP"
+Returns the object as a read-only reference\&. 
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::TecplotIO::write(), libMesh::PostscriptIO::write(), libMesh::MEDITIO::write(), libMesh::EnsightIO::write(), libMesh::TecplotIO::write_ascii(), libMesh::TecplotIO::write_binary(), libMesh::TecplotIO::write_nodal_data(), libMesh::MEDITIO::write_nodal_data(), and write_solution()\&.
+.SS "void libMesh::GnuPlotIO::set_png_output (boolpng_output)\fC [inline]\fP"
+Write output to a \&.png file using gnuplot 
+.PP
+Definition at line 93 of file gnuplot_io\&.h\&.
+.PP
+References _png_output\&.
+.PP
+.nf
+93 { _png_output = png_output; }
+.fi
+.SS "void libMesh::GnuPlotIO::set_title (const std::string &title)\fC [inline]\fP"
+Set title of plot 
+.PP
+Definition at line 82 of file gnuplot_io\&.h\&.
+.PP
+References _title\&.
+.PP
+.nf
+82 { _title = title; }
+.fi
+.SS "void libMesh::GnuPlotIO::use_grid (boolgrid)\fC [inline]\fP"
+Turn grid on or off\&. 
+.PP
+Definition at line 87 of file gnuplot_io\&.h\&.
+.PP
+References _grid\&.
+.PP
+.nf
+87 { _grid = grid; }
+.fi
+.SS "void libMesh::GnuPlotIO::write (const std::string &fname)\fC [virtual]\fP"
+Write the mesh to the specified file\&. 
+.PP
+Implements \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 43 of file gnuplot_io\&.C\&.
+.PP
+References write_solution()\&.
+.PP
+.nf
+44 {
+45   this->write_solution(fname);
+46 }
+.fi
+.SS "virtual void \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::write_equation_systems (const std::string &, const \fBEquationSystems\fP &, const std::set< std::string > *system_names = \fCNULL\fP)\fC [virtual]\fP, \fC [inherited]\fP"
+This method implements writing a mesh with data to a specified file where the data is taken from the \fCEquationSystems\fP object\&. 
+.PP
+Referenced by libMesh::Nemesis_IO::write_timestep(), and libMesh::ExodusII_IO::write_timestep()\&.
+.SS "void libMesh::GnuPlotIO::write_nodal_data (const std::string &fname, const std::vector< \fBNumber\fP > &soln, const std::vector< std::string > &names)\fC [virtual]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are provided\&. 
+.PP
+Reimplemented from \fBlibMesh::MeshOutput< MeshBase >\fP\&.
+.PP
+Definition at line 48 of file gnuplot_io\&.C\&.
+.PP
+References libMesh::START_LOG(), libMesh::STOP_LOG(), and write_solution()\&.
+.PP
+.nf
+51 {
+52   START_LOG("write_nodal_data()", "GnuPlotIO");
+53 
+54   this->write_solution(fname, &soln, &names);
+55 
+56   STOP_LOG("write_nodal_data()", "GnuPlotIO");
+57 }
+.fi
+.SS "void libMesh::GnuPlotIO::write_solution (const std::string &fname, const std::vector< \fBNumber\fP > *soln = \fCNULL\fP, const std::vector< std::string > *names = \fCNULL\fP)\fC [private]\fP"
+This method implements writing a mesh with nodal data to a specified file where the nodal data and variable names are optionally provided\&. This will write an ASCII file\&. 
+.PP
+Definition at line 62 of file gnuplot_io\&.C\&.
+.PP
+References _grid, _png_output, _title, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), axes_limits, data, libMesh::err, libMesh::Elem::get_node(), libMesh::libmesh_assert(), libMesh::MeshOutput< MT >::mesh(), libMesh::MeshOutput< MeshBase >::mesh(), libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_active_elem(), libMesh::Elem::n_nodes(), libMesh::n_vars, libMesh::Elem::neighbor(), libMesh::Elem::node(), libMesh::MeshBase::point(), libMesh::processor_id(), and libMesh::Real\&.
+.PP
+Referenced by write(), and write_nodal_data()\&.
+.PP
+.nf
+65 {
+66   // Even when writing on a serialized ParallelMesh, we expect
+67   // non-proc-0 help with calls like n_active_elem
+68   // libmesh_assert_equal_to (this->mesh()\&.processor_id(), 0);
+69 
+70   const MeshBase& the_mesh = MeshOutput<MeshBase>::mesh();
+71 
+72   dof_id_type n_active_elem = the_mesh\&.n_active_elem();
+73 
+74   if (this->mesh()\&.processor_id() == 0)
+75     {
+76       std::stringstream data_stream_name;
+77       data_stream_name << fname << "_data";
+78       const std::string data_file_name = data_stream_name\&.str();
+79 
+80       // This class is designed only for use with 1D meshes
+81       libmesh_assert_equal_to (the_mesh\&.mesh_dimension(), 1);
+82 
+83       // Make sure we have a solution to plot
+84       libmesh_assert ((names != NULL) && (soln != NULL));
+85 
+86       // Create an output stream for script file
+87       std::ofstream out_stream(fname\&.c_str());
+88 
+89       // Make sure it opened correctly
+90       if (!out_stream\&.good())
+91         libmesh_file_error(fname\&.c_str());
+92 
+93       // The number of variables in the equation system
+94       const unsigned int n_vars =
+95         libmesh_cast_int<unsigned int>(names->size());
+96 
+97       // Write header to stream
+98       out_stream << "# This file was generated by gnuplot_io\&.C\n"
+99                  << "# Stores 1D solution data in GNUplot format\n"
+100                  << "# Execute this by loading gnuplot and typing "
+101                  << "\"call '" << fname << "'\"\n"
+102                  << "reset\n"
+103                  << "set title \"" << _title << "\"\n"
+104                  << "set xlabel \"x\"\n"
+105                  << "set xtics nomirror\n";
+106 
+107       // Loop over the elements to find the minimum and maximum x values,
+108       // and also to find the element boundaries to write out as xtics
+109       // if requested\&.
+110       Real x_min=0\&., x_max=0\&.;
+111 
+112       // construct string for xtic positions at element edges
+113       std::stringstream xtics_stream;
+114 
+115       MeshBase::const_element_iterator it = the_mesh\&.active_elements_begin();
+116       const MeshBase::const_element_iterator end_it =
+117         the_mesh\&.active_elements_end();
+118 
+119       unsigned int count = 0;
+120 
+121       for( ; it != end_it; ++it)
+122         {
+123           const Elem* el = *it;
+124 
+125           // if el is the left edge of the mesh, print its left node position
+126           if(el->neighbor(0) == NULL)
+127             {
+128               x_min = (*(el->get_node(0)))(0);
+129               xtics_stream << "\"\" " << x_min << ", \\\n";
+130             }
+131           if(el->neighbor(1) == NULL)
+132             {
+133               x_max = (*(el->get_node(1)))(0);
+134             }
+135           xtics_stream << "\"\" " << (*(el->get_node(1)))(0);
+136 
+137           if(count+1 != n_active_elem)
+138             {
+139               xtics_stream << ", \\\n";
+140             }
+141           count++;
+142         }
+143 
+144       out_stream << "set xrange [" << x_min << ":" << x_max << "]\n";
+145 
+146       if(_grid)
+147         out_stream << "set x2tics (" << xtics_stream\&.str() << ")\nset grid noxtics noytics x2tics\n";
+148 
+149       if(_png_output)
+150         {
+151           out_stream << "set terminal png\n";
+152           out_stream << "set output \"" << fname << "\&.png\"\n";
+153         }
+154 
+155       out_stream << "plot "
+156                  << axes_limits
+157                  << " \"" << data_file_name << "\" using 1:2 title \"" << (*names)[0]
+158                  << "\" with lines";
+159       if(n_vars > 1)
+160         {
+161           for(unsigned int i=1; i<n_vars; i++)
+162             {
+163               out_stream << ", \\\n\"" << data_file_name << "\" using 1:" << i+2
+164                          << " title \"" << (*names)[i] << "\" with lines";
+165             }
+166         }
+167 
+168       out_stream\&.close();
+169 
+170 
+171       // Create an output stream for data file
+172       std::ofstream data(data_file_name\&.c_str());
+173 
+174       if (!data\&.good())
+175         {
+176           libMesh::err << "ERROR: opening output data file " << std::endl;
+177           libmesh_error();
+178         }
+179 
+180       // get ordered nodal data using a map
+181       typedef std::pair<Real, std::vector<Number> > key_value_pair;
+182       typedef std::map<Real, std::vector<Number> > map_type;
+183       typedef map_type::iterator map_iterator;
+184 
+185       map_type node_map;
+186 
+187 
+188       it  = the_mesh\&.active_elements_begin();
+189 
+190       for ( ; it != end_it; ++it)
+191         {
+192           const Elem* elem = *it;
+193 
+194           for(unsigned int i=0; i<elem->n_nodes(); i++)
+195             {
+196               std::vector<Number> values;
+197 
+198               // Get the global id of the node
+199               dof_id_type global_id = elem->node(i);
+200 
+201               for(unsigned int c=0; c<n_vars; c++)
+202                 {
+203                   values\&.push_back( (*soln)[global_id*n_vars + c] );
+204                 }
+205 
+206               node_map[ the_mesh\&.point(global_id)(0) ] = values;
+207             }
+208         }
+209 
+210 
+211       map_iterator map_it = node_map\&.begin();
+212       const map_iterator end_map_it = node_map\&.end();
+213 
+214       for( ; map_it != end_map_it; ++map_it)
+215         {
+216           key_value_pair kvp = *map_it;
+217           std::vector<Number> values = kvp\&.second;
+218 
+219           data << kvp\&.first << "\t";
+220 
+221           for(unsigned int i=0; i<values\&.size(); i++)
+222             {
+223               data << values[i] << "\t";
+224             }
+225 
+226           data << "\n";
+227         }
+228 
+229       data\&.close();
+230     }
+231 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::GnuPlotIO::_grid\fC [private]\fP"
+
+.PP
+Definition at line 117 of file gnuplot_io\&.h\&.
+.PP
+Referenced by GnuPlotIO(), use_grid(), and write_solution()\&.
+.SS "const bool \fBlibMesh::MeshOutput\fP< \fBMeshBase\fP  >::_is_parallel_format\fC [protected]\fP, \fC [inherited]\fP"
+Flag specifying whether this format is parallel-capable\&. If this is false (default) I/O is only permitted when the mesh has been serialized\&. 
+.PP
+Definition at line 126 of file mesh_output\&.h\&.
+.PP
+Referenced by libMesh::FroIO::write(), libMesh::DivaIO::write(), libMesh::PostscriptIO::write(), and libMesh::EnsightIO::write()\&.
+.SS "bool libMesh::GnuPlotIO::_png_output\fC [private]\fP"
+
+.PP
+Definition at line 118 of file gnuplot_io\&.h\&.
+.PP
+Referenced by GnuPlotIO(), set_png_output(), and write_solution()\&.
+.SS "std::string libMesh::GnuPlotIO::_title\fC [private]\fP"
+
+.PP
+Definition at line 115 of file gnuplot_io\&.h\&.
+.PP
+Referenced by set_title(), and write_solution()\&.
+.SS "std::string libMesh::GnuPlotIO::axes_limits"
+GNUplot automatically adjusts the x and y-axes of 2D plots to 'zoom in' on the data\&. You can set this string to force GNUplot to maintain a fixed set of axes\&. Example: axes_limits = '[0:1] [0:1]' would force x and y to be plotted on the range 0<=x<=1 and 0<=y<=1 regardless of where the data lie\&. 
+.PP
+Definition at line 103 of file gnuplot_io\&.h\&.
+.PP
+Referenced by write_solution()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

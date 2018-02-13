@@ -1,0 +1,262 @@
+.TH "libMesh::Threads::BlockedRange< T >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Threads::BlockedRange< T > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <threads\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef T \fBconst_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBBlockedRange\fP (const unsigned int new_grainsize=1000)"
+.br
+.ti -1c
+.RI "\fBBlockedRange\fP (const \fBconst_iterator\fP first, const \fBconst_iterator\fP last, const unsigned int new_grainsize=1000)"
+.br
+.ti -1c
+.RI "\fBBlockedRange\fP (const \fBBlockedRange\fP< T > &r)"
+.br
+.ti -1c
+.RI "\fBBlockedRange\fP (\fBBlockedRange\fP< T > &r, \fBThreads::split\fP)"
+.br
+.ti -1c
+.RI "void \fBreset\fP (const \fBconst_iterator\fP first, const \fBconst_iterator\fP last)"
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fBbegin\fP () const "
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fBend\fP () const "
+.br
+.ti -1c
+.RI "unsigned int \fBgrainsize\fP () const "
+.br
+.ti -1c
+.RI "void \fBgrainsize\fP (const unsigned int &gs)"
+.br
+.ti -1c
+.RI "int \fBsize\fP () const "
+.br
+.ti -1c
+.RI "bool \fBempty\fP () const "
+.br
+.ti -1c
+.RI "bool \fBis_divisible\fP () const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBconst_iterator\fP \fB_end\fP"
+.br
+.ti -1c
+.RI "\fBconst_iterator\fP \fB_begin\fP"
+.br
+.ti -1c
+.RI "unsigned int \fB_grainsize\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename T>class libMesh::Threads::BlockedRange< T >"
+Blocked range which can be subdivided and executed in parallel\&. 
+.PP
+Definition at line 907 of file threads\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename T> typedef T \fBlibMesh::Threads::BlockedRange\fP< T >::\fBconst_iterator\fP"
+Allows an \fC\fBStoredRange\fP\fP to behave like an STL container\&. 
+.PP
+Definition at line 913 of file threads\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<typename T> \fBlibMesh::Threads::BlockedRange\fP< T >::\fBBlockedRange\fP (const unsigned intnew_grainsize = \fC1000\fP)\fC [inline]\fP, \fC [explicit]\fP"
+Constructor\&. Optionally takes the \fCgrainsize\fP parameter, which is the smallest chunk the range may be broken into for parallel execution\&. 
+.PP
+Definition at line 920 of file threads\&.h\&.
+.PP
+.nf
+920                                                                   :
+921     _grainsize(new_grainsize)
+922   {}
+.fi
+.SS "template<typename T> \fBlibMesh::Threads::BlockedRange\fP< T >::\fBBlockedRange\fP (const \fBconst_iterator\fPfirst, const \fBconst_iterator\fPlast, const unsigned intnew_grainsize = \fC1000\fP)\fC [inline]\fP"
+Constructor\&. Takes the beginning and end of the range\&. Optionally takes the \fCgrainsize\fP parameter, which is the smallest chunk the range may be broken into for parallel execution\&. 
+.PP
+Definition at line 930 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::reset()\&.
+.PP
+.nf
+932                                                          :
+933     _grainsize(new_grainsize)
+934   {
+935     this->reset(first, last);
+936   }
+.fi
+.SS "template<typename T> \fBlibMesh::Threads::BlockedRange\fP< T >::\fBBlockedRange\fP (const \fBBlockedRange\fP< T > &r)\fC [inline]\fP"
+Copy constructor\&. The \fC\fBStoredRange\fP\fP can be copied into subranges for parallel execution\&. In this way the initial \fC\fBStoredRange\fP\fP can be thought of as the root of a binary tree\&. The root element is the only element which interacts with the user\&. It takes a specified range of objects and packs it into a contiguous vector which can be split efficiently\&. However, there is no need for the child ranges to contain this vector, so long as the parent outlives the children\&. So we implement the copy constructor to specifically omit the \fC_objs\fP vector\&. 
+.PP
+Definition at line 951 of file threads\&.h\&.
+.PP
+.nf
+951                                          :
+952     _end(r\&._end),
+953     _begin(r\&._begin),
+954     _grainsize(r\&._grainsize)
+955   {}
+.fi
+.SS "template<typename T> \fBlibMesh::Threads::BlockedRange\fP< T >::\fBBlockedRange\fP (\fBBlockedRange\fP< T > &r, \fBThreads::split\fP)\fC [inline]\fP"
+Splits the range \fCr\fP\&. The first half of the range is left in place, the second half of the range is placed in *this\&. 
+.PP
+Definition at line 962 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_begin, and libMesh::Threads::BlockedRange< T >::_end\&.
+.PP
+.nf
+962                                                    :
+963     _end(r\&._end),
+964     _begin(r\&._begin),
+965     _grainsize(r\&._grainsize)
+966   {
+967     const_iterator
+968       beginning = r\&._begin,
+969       ending    = r\&._end,
+970       middle    = beginning + (ending - beginning)/2u;
+971 
+972     r\&._end = _begin = middle;
+973   }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename T> \fBconst_iterator\fP \fBlibMesh::Threads::BlockedRange\fP< T >::begin () const\fC [inline]\fP"
+Beginning of the range\&. 
+.PP
+Definition at line 988 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_begin\&.
+.PP
+.nf
+988 { return _begin; }
+.fi
+.SS "template<typename T> bool \fBlibMesh::Threads::BlockedRange\fP< T >::empty () const\fC [inline]\fP"
+Returns true if the range is empty\&. 
+.PP
+Definition at line 1018 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_begin, and libMesh::Threads::BlockedRange< T >::_end\&.
+.PP
+.nf
+1018 { return (_begin == _end); }
+.fi
+.SS "template<typename T> \fBconst_iterator\fP \fBlibMesh::Threads::BlockedRange\fP< T >::end () const\fC [inline]\fP"
+End of the range\&. 
+.PP
+Definition at line 993 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_end\&.
+.PP
+.nf
+993 { return _end; }
+.fi
+.SS "template<typename T> unsigned int \fBlibMesh::Threads::BlockedRange\fP< T >::grainsize () const\fC [inline]\fP"
+The grain size for the range\&. The range will be subdivided into subranges not to exceed the grain size\&. 
+.PP
+Definition at line 999 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_grainsize\&.
+.PP
+Referenced by libMesh::Threads::BlockedRange< T >::is_divisible()\&.
+.PP
+.nf
+999 {return _grainsize;}
+.fi
+.SS "template<typename T> void \fBlibMesh::Threads::BlockedRange\fP< T >::grainsize (const unsigned int &gs)\fC [inline]\fP"
+Set the grain size\&. 
+.PP
+Definition at line 1004 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_grainsize\&.
+.PP
+.nf
+1004 {_grainsize = gs;}
+.fi
+.SS "template<typename T> bool \fBlibMesh::Threads::BlockedRange\fP< T >::is_divisible () const\fC [inline]\fP"
+Returns true if the range can be subdivided\&. 
+.PP
+Definition at line 1023 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_begin, libMesh::Threads::BlockedRange< T >::_end, and libMesh::Threads::BlockedRange< T >::grainsize()\&.
+.PP
+.nf
+1023 { return ((_begin + this->grainsize()) < _end); }
+.fi
+.SS "template<typename T> void \fBlibMesh::Threads::BlockedRange\fP< T >::reset (const \fBconst_iterator\fPfirst, const \fBconst_iterator\fPlast)\fC [inline]\fP"
+Resets the \fC\fBStoredRange\fP\fP to contain [first,last)\&. 
+.PP
+Definition at line 978 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_begin, and libMesh::Threads::BlockedRange< T >::_end\&.
+.PP
+Referenced by libMesh::Threads::BlockedRange< T >::BlockedRange()\&.
+.PP
+.nf
+980   {
+981     _begin = first;
+982     _end   = last;
+983   }
+.fi
+.SS "template<typename T> int \fBlibMesh::Threads::BlockedRange\fP< T >::size () const\fC [inline]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the size of the range\&. 
+.RE
+.PP
+
+.PP
+Definition at line 1009 of file threads\&.h\&.
+.PP
+References libMesh::Threads::BlockedRange< T >::_begin, and libMesh::Threads::BlockedRange< T >::_end\&.
+.PP
+.nf
+1009 { return (_end -_begin); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<typename T> \fBconst_iterator\fP \fBlibMesh::Threads::BlockedRange\fP< T >::_begin\fC [private]\fP"
+
+.PP
+Definition at line 1028 of file threads\&.h\&.
+.PP
+Referenced by libMesh::Threads::BlockedRange< T >::begin(), libMesh::Threads::BlockedRange< T >::BlockedRange(), libMesh::Threads::BlockedRange< T >::empty(), libMesh::Threads::BlockedRange< T >::is_divisible(), libMesh::Threads::BlockedRange< T >::reset(), and libMesh::Threads::BlockedRange< T >::size()\&.
+.SS "template<typename T> \fBconst_iterator\fP \fBlibMesh::Threads::BlockedRange\fP< T >::_end\fC [private]\fP"
+
+.PP
+Definition at line 1027 of file threads\&.h\&.
+.PP
+Referenced by libMesh::Threads::BlockedRange< T >::BlockedRange(), libMesh::Threads::BlockedRange< T >::empty(), libMesh::Threads::BlockedRange< T >::end(), libMesh::Threads::BlockedRange< T >::is_divisible(), libMesh::Threads::BlockedRange< T >::reset(), and libMesh::Threads::BlockedRange< T >::size()\&.
+.SS "template<typename T> unsigned int \fBlibMesh::Threads::BlockedRange\fP< T >::_grainsize\fC [private]\fP"
+
+.PP
+Definition at line 1029 of file threads\&.h\&.
+.PP
+Referenced by libMesh::Threads::BlockedRange< T >::grainsize()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

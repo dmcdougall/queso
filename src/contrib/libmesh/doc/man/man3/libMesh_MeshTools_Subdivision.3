@@ -1,0 +1,437 @@
+.TH "libMesh::MeshTools::Subdivision" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::MeshTools::Subdivision \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBfind_one_ring\fP (const \fBTri3Subdivision\fP *elem, std::vector< \fBNode\fP * > &nodes)"
+.br
+.ti -1c
+.RI "void \fBall_subdivision\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBprepare_subdivision_mesh\fP (\fBMeshBase\fP &\fBmesh\fP, bool ghosted=false)"
+.br
+.ti -1c
+.RI "void \fBadd_boundary_ghosts\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "void \fBtag_boundary_ghosts\fP (\fBMeshBase\fP &\fBmesh\fP)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "static const unsigned int \fBnext\fP [3] = {1,2,0}"
+.br
+.ti -1c
+.RI "static const unsigned int \fBprev\fP [3] = {2,0,1}"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+\fBUtility\fP functions for subdivision surface operations on a \fC\fBMesh\fP\fP\&. 
+.SH "Function Documentation"
+.PP 
+.SS "void libMesh::MeshTools::Subdivision::add_boundary_ghosts (MeshBase &mesh)"
+Adds a new layer of 'ghost' elements along the domain boundaries\&. This function normally needn't be called by the user, because it is invoked by \fCprepare_subdivision_mesh\fP\&. 
+.PP
+Definition at line 236 of file mesh_subdivision_support\&.C\&.
+.PP
+References libMesh::MeshBase::add_elem(), libMesh::MeshBase::add_point(), libMesh::MeshBase::boundary_info, libMesh::MeshBase::elem(), libMesh::Elem::get_node(), libMesh::DofObject::id(), libMesh::Tri3Subdivision::is_ghost(), libMesh::libmesh_assert(), libMesh::Tri3Subdivision::local_node_number(), libMesh::MeshBase::n_elem(), libMesh::MeshTools::n_elem(), libMesh::Tri::n_sides(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), next, libMesh::Elem::node(), libMesh::Elem::point(), prev, libMesh::Real, libMesh::Tri3Subdivision::set_ghost(), libMesh::Elem::set_neighbor(), libMesh::Elem::set_node(), libMesh::TRI3SUBDIVISION, and libMesh::Elem::type()\&.
+.PP
+Referenced by prepare_subdivision_mesh()\&.
+.PP
+.nf
+237 {
+238   static const Real tol = 1e-5;
+239 
+240   // add the mirrored ghost elements (without using iterators, because the mesh is modified in the course)
+241   std::vector<Tri3Subdivision*> ghost_elems;
+242   std::vector<Node*> ghost_nodes;
+243   const unsigned int n_elem = mesh\&.n_elem();
+244   for (unsigned int eid = 0; eid < n_elem; ++eid)
+245     {
+246       Elem* elem = mesh\&.elem(eid);
+247       libmesh_assert_equal_to(elem->type(), TRI3SUBDIVISION);
+248 
+249       for (unsigned int i = 0; i < elem->n_sides(); ++i)
+250         {
+251           libmesh_assert_not_equal_to(elem->neighbor(i), elem);
+252           if (elem->neighbor(i) == NULL)
+253             {
+254               // this is the vertex to be mirrored
+255               Point point = elem->point(i) + elem->point(next[i]) - elem->point(prev[i]);
+256 
+257               // Check if the proposed vertex doesn't coincide with one of the existing vertices\&.
+258               // This is necessary because for some triangulations, it can happen that two mirrored
+259               // ghost vertices coincide, which would then lead to a zero size ghost element below\&.
+260               Node* node = NULL;
+261               for (unsigned int j = 0; j < ghost_nodes\&.size(); ++j)
+262                 {
+263                   if ((*ghost_nodes[j] - point)\&.size() < tol * (elem->point(i) - point)\&.size())
+264                     {
+265                       node = ghost_nodes[j];
+266                       break;
+267                     }
+268                 }
+269 
+270               // add the new vertex only if no other is nearby
+271               if (node == NULL)
+272                 {
+273                   node = mesh\&.add_point(point);
+274                   ghost_nodes\&.push_back(node);
+275                 }
+276 
+277               Tri3Subdivision* newelem = new Tri3Subdivision();
+278               ghost_elems\&.push_back(newelem);
+279 
+280               newelem->set_node(0) = elem->get_node(next[i]);
+281               newelem->set_node(1) = elem->get_node(i);
+282               newelem->set_node(2) = node;
+283               newelem->set_neighbor(0,elem);
+284               newelem->set_ghost(true);
+285               elem->set_neighbor(i,newelem);
+286 
+287               mesh\&.add_elem(newelem);
+288               mesh\&.boundary_info->add_node(elem->get_node(i), 1);
+289               mesh\&.boundary_info->add_node(elem->get_node(next[i]), 1);
+290               mesh\&.boundary_info->add_node(elem->get_node(prev[i]), 1);
+291               mesh\&.boundary_info->add_node(node, 1);
+292             }
+293         }
+294     }
+295 
+296   // add the missing ghost elements (connecting new ghost nodes)
+297   std::vector<Tri3Subdivision*> missing_ghost_elems;
+298   std::vector<Tri3Subdivision*>::iterator       ghost_el     = ghost_elems\&.begin();
+299   const std::vector<Tri3Subdivision*>::iterator end_ghost_el = ghost_elems\&.end();
+300   for (; ghost_el != end_ghost_el; ++ghost_el)
+301     {
+302       Tri3Subdivision *elem = *ghost_el;
+303       libmesh_assert(elem->is_ghost());
+304 
+305       for (unsigned int i = 0; i < elem->n_sides(); ++i)
+306         {
+307           if (elem->neighbor(i) == NULL && elem->neighbor(prev[i]) != NULL)
+308             {
+309               // go around counter-clockwise
+310               Tri3Subdivision *nb1 = static_cast<Tri3Subdivision *>(elem->neighbor(prev[i]));
+311               Tri3Subdivision *nb2 = nb1;
+312               unsigned int j = i;
+313               while (nb1 != NULL && nb1->id() != elem->id())
+314                 {
+315                   j = nb1->local_node_number(elem->node(i));
+316                   nb2 = nb1;
+317                   nb1 = static_cast<Tri3Subdivision *>(nb1->neighbor(prev[j]));
+318                   libmesh_assert(nb1 == NULL || nb1->id() != nb2->id());
+319                 }
+320 
+321               libmesh_assert_not_equal_to(nb2->id(), elem->id());
+322 
+323               // Above, we merged coinciding ghost vertices\&. Therefore, we need
+324               // to exclude the case where there is no ghost element to add between
+325               // these two (identical) ghost nodes\&.
+326               if (elem->get_node(next[i])->id() == nb2->get_node(prev[j])->id())
+327                 break;
+328 
+329               Tri3Subdivision *newelem = new Tri3Subdivision();
+330               newelem->set_node(0) = elem->get_node(next[i]);
+331               newelem->set_node(1) = elem->get_node(i);
+332               newelem->set_node(2) = nb2->get_node(prev[j]);
+333               newelem->set_neighbor(0,elem);
+334               newelem->set_neighbor(1,nb2);
+335               newelem->set_neighbor(2,NULL);
+336               newelem->set_ghost(true);
+337 
+338               elem->set_neighbor(i,newelem);
+339               nb2->set_neighbor(prev[j],newelem);
+340 
+341               missing_ghost_elems\&.push_back(newelem);
+342               break;
+343             }
+344         } // end side loop
+345     } // end ghost element loop
+346 
+347   // add the missing ghost elements to the mesh
+348   std::vector<Tri3Subdivision*>::iterator       missing_el     = missing_ghost_elems\&.begin();
+349   const std::vector<Tri3Subdivision*>::iterator end_missing_el = missing_ghost_elems\&.end();
+350   for (; missing_el != end_missing_el; ++missing_el)
+351     mesh\&.add_elem(*missing_el);
+352 }
+.fi
+.SS "void libMesh::MeshTools::Subdivision::all_subdivision (MeshBase &mesh)"
+Turns a triangulated \fCmesh\fP into a subdivision mesh\&. This function normally needn't be called by the user, because it is invoked by \fCprepare_subdivision_mesh\fP\&. 
+.PP
+Definition at line 89 of file mesh_subdivision_support\&.C\&.
+.PP
+References libMesh::MeshBase::boundary_info, libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::DofObject::id(), libMesh::MeshBase::insert_elem(), libMesh::BoundaryInfo::invalid_id, libMesh::libmesh_assert_greater(), libMesh::MeshBase::n_elem(), libMesh::Elem::n_sides(), libMesh::MeshBase::prepare_for_use(), libMesh::DofObject::set_id(), side, libMesh::TRI3, and libMesh::Elem::type()\&.
+.PP
+Referenced by prepare_subdivision_mesh()\&.
+.PP
+.nf
+90 {
+91   std::vector<Elem*> new_elements;
+92   new_elements\&.reserve(mesh\&.n_elem());
+93   const bool mesh_has_boundary_data = (mesh\&.boundary_info->n_boundary_ids() > 0);
+94 
+95   std::vector<Elem*> new_boundary_elements;
+96   std::vector<unsigned int> new_boundary_sides;
+97   std::vector<short int> new_boundary_ids;
+98 
+99   MeshBase::const_element_iterator       el     = mesh\&.elements_begin();
+100   const MeshBase::const_element_iterator end_el = mesh\&.elements_end();
+101   for (; el != end_el; ++el)
+102     {
+103       const Elem* elem = *el;
+104       libmesh_assert_equal_to(elem->type(), TRI3);
+105 
+106       Elem* tri = new Tri3Subdivision;
+107       tri->set_id(elem->id());
+108       tri->set_node(0) = (*el)->get_node(0);
+109       tri->set_node(1) = (*el)->get_node(1);
+110       tri->set_node(2) = (*el)->get_node(2);
+111 
+112       if (mesh_has_boundary_data)
+113         {
+114           for (unsigned int side = 0; side < elem->n_sides(); ++side)
+115             {
+116               const short int boundary_id = mesh\&.boundary_info->boundary_id(elem, side);
+117               if (boundary_id != BoundaryInfo::invalid_id)
+118                 {
+119                   // add the boundary id to the list of new boundary ids
+120                   new_boundary_ids\&.push_back(boundary_id);
+121                   new_boundary_elements\&.push_back(tri);
+122                   new_boundary_sides\&.push_back(side);
+123                 }
+124             }
+125 
+126           // remove the original element from the BoundaryInfo structure
+127           mesh\&.boundary_info->remove(elem);
+128         }
+129 
+130       new_elements\&.push_back(tri);
+131       mesh\&.insert_elem(tri);
+132     }
+133   mesh\&.prepare_for_use();
+134 
+135   if (mesh_has_boundary_data)
+136     {
+137       // If the old mesh had boundary data, the new mesh better have some too\&.
+138       libmesh_assert_greater(new_boundary_elements\&.size(), 0);
+139 
+140       // We should also be sure that the lengths of the new boundary data vectors
+141       // are all the same\&.
+142       libmesh_assert_equal_to(new_boundary_sides\&.size(), new_boundary_elements\&.size());
+143       libmesh_assert_equal_to(new_boundary_sides\&.size(), new_boundary_ids\&.size());
+144 
+145       // Add the new boundary info to the mesh\&.
+146       for (unsigned int s = 0; s < new_boundary_elements\&.size(); ++s)
+147         mesh\&.boundary_info->add_side(new_boundary_elements[s],
+148                                      new_boundary_sides[s],
+149                                      new_boundary_ids[s]);
+150     }
+151 
+152   mesh\&.prepare_for_use();
+153 }
+.fi
+.SS "void libMesh::MeshTools::Subdivision::find_one_ring (const Tri3Subdivision *elem, std::vector< Node * > &nodes)"
+Determines the 1-ring of element \fCelem\fP, and writes it to the \fCnodes\fP vector\&. This is necessary because subdivision elements have a larger local support than conventionally interpolated elements\&. The 1-ring may, for instance, look like this: 
+.PP
+.nf
+*    N+4 - N+1 - N+2
+*    / \   / \   / \
+*   /   \ /   \ /   \
+* N+5 -- N --- 1 -- N+3
+*   \   / \ e / \   /
+*    \ /   \ /   \ /
+*    N-1--- 0 --- 2
+*      \   /|\   /
+*       \ / | \ /
+*        5--4--3
+* 
+.fi
+.PP
+ 
+.PP
+Definition at line 31 of file mesh_subdivision_support\&.C\&.
+.PP
+References libMesh::Elem::get_node(), libMesh::Tri3Subdivision::get_ordered_node(), libMesh::Tri3Subdivision::get_ordered_valence(), libMesh::Tri3Subdivision::is_subdivision_updated(), libMesh::libmesh_assert(), libMesh::Tri3Subdivision::local_node_number(), libMesh::Elem::neighbor(), and next\&.
+.PP
+Referenced by libMesh::FEMap::compute_map(), libMesh::DofMap::dof_indices(), and libMesh::DofMap::old_dof_indices()\&.
+.PP
+.nf
+32 {
+33   libmesh_assert(elem->is_subdivision_updated());
+34   libmesh_assert(elem->get_ordered_node(0));
+35 
+36   unsigned int valence = elem->get_ordered_valence(0);
+37   nodes\&.resize(valence + 6);
+38 
+39   // The first three vertices in the patch are the ones from the element triangle
+40   nodes[0]       = elem->get_ordered_node(0);
+41   nodes[1]       = elem->get_ordered_node(1);
+42   nodes[valence] = elem->get_ordered_node(2);
+43 
+44   const unsigned int nn0 = elem->local_node_number(nodes[0]->id());
+45 
+46   Tri3Subdivision* nb = dynamic_cast<Tri3Subdivision*>(elem->neighbor(nn0));
+47   libmesh_assert(nb);
+48 
+49   unsigned int j, i = 1;
+50 
+51   do
+52     {
+53       ++i;
+54       j = nb->local_node_number(nodes[0]->id());
+55       nodes[i] = nb->get_node(next[j]);
+56       nb = static_cast<Tri3Subdivision*>(nb->neighbor(j));
+57     } while (nb != elem);
+58 
+59   /* for nodes connected with N (= valence[0]) */
+60   nb = static_cast<Tri3Subdivision*>(elem->neighbor(next[nn0]));
+61   j = nb->local_node_number(nodes[1]->id());
+62   nodes[valence+1] = nb->get_node(next[j]);
+63 
+64   nb = static_cast<Tri3Subdivision*>(nb->neighbor(next[j]));
+65   j = nb->local_node_number(nodes[valence+1]->id());
+66   nodes[valence+4] = nb->get_node(next[j]);
+67 
+68   nb = static_cast<Tri3Subdivision*>(nb->neighbor(next[j]));
+69   j = nb->local_node_number(nodes[valence+4]->id());
+70   nodes[valence+5] = nb->get_node(next[j]);
+71 
+72   /* for nodes connected with 1 */
+73   nb = static_cast<Tri3Subdivision*>(elem->neighbor(next[nn0]));
+74   j = nb->local_node_number(nodes[1]->id());
+75   // nodes[valence+1] has been determined already
+76 
+77   nb = static_cast<Tri3Subdivision*>(nb->neighbor(j));
+78   j = nb->local_node_number(nodes[1]->id());
+79   nodes[valence+2] = nb->get_node(next[j]);
+80 
+81   nb = static_cast<Tri3Subdivision*>(nb->neighbor(j));
+82   j = nb->local_node_number(nodes[1]->id());
+83   nodes[valence+3] = nb->get_node(next[j]);
+84 
+85   return;
+86 }
+.fi
+.SS "void libMesh::MeshTools::Subdivision::prepare_subdivision_mesh (MeshBase &mesh, boolghosted = \fCfalse\fP)"
+Prepares the \fCmesh\fP for use with subdivision elements\&. The \fCghosted\fP flag determines how boundaries are treated\&. If \fCfalse\fP, a new layer of 'ghost' elements is appended along the domain boundaries\&. If \fCtrue\fP, the outermost element layer is taken as ghosts, i\&.e\&. no new elements are added\&. 
+.PP
+Definition at line 156 of file mesh_subdivision_support\&.C\&.
+.PP
+References add_boundary_ghosts(), all_subdivision(), libMesh::MeshTools::build_nodes_to_elem_map(), libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::MeshTools::find_nodal_neighbors(), libMesh::Tri3Subdivision::is_ghost(), libMesh::libmesh_assert(), libMesh::libmesh_assert_greater(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::MeshBase::prepare_for_use(), libMesh::Tri3Subdivision::prepare_subdivision_properties(), libMesh::Node::set_valence(), and tag_boundary_ghosts()\&.
+.PP
+.nf
+157 {
+158   mesh\&.prepare_for_use();
+159 
+160   // convert all mesh elements to subdivision elements
+161   all_subdivision(mesh);
+162 
+163   if (!ghosted)
+164     {
+165       // add the ghost elements for the boundaries
+166       add_boundary_ghosts(mesh);
+167     }
+168   else
+169     {
+170       // This assumes that the mesh already has the ghosts\&. Only tagging them is required here\&.
+171       tag_boundary_ghosts(mesh);
+172     }
+173 
+174   mesh\&.prepare_for_use();
+175 
+176   std::vector<std::vector<const Elem*> > nodes_to_elem_map;
+177   MeshTools::build_nodes_to_elem_map(mesh, nodes_to_elem_map);
+178 
+179   // compute the node valences
+180   MeshBase::const_node_iterator       nd     = mesh\&.nodes_begin();
+181   const MeshBase::const_node_iterator end_nd = mesh\&.nodes_end();
+182   for (; nd != end_nd; ++nd)
+183     {
+184       Node* node = *nd;
+185       std::vector<const Node*> neighbors;
+186       MeshTools::find_nodal_neighbors(mesh, *node, nodes_to_elem_map, neighbors);
+187       const unsigned int valence = neighbors\&.size();
+188       libmesh_assert_greater(valence, 1);
+189       node->set_valence(valence);
+190     }
+191 
+192   MeshBase::const_element_iterator       el     = mesh\&.elements_begin();
+193   const MeshBase::const_element_iterator end_el = mesh\&.elements_end();
+194   for (; el != end_el; ++el)
+195     {
+196       Tri3Subdivision* elem = dynamic_cast<Tri3Subdivision*>(*el);
+197       libmesh_assert(elem);
+198       if (!elem->is_ghost())
+199         elem->prepare_subdivision_properties();
+200     }
+201 }
+.fi
+.SS "void libMesh::MeshTools::Subdivision::tag_boundary_ghosts (MeshBase &mesh)"
+Flags the outermost element layer along the domain boundaries as 'ghost' elements\&. This function normally needn't be called by the user, because it is invoked by \fCprepare_subdivision_mesh\fP\&. 
+.PP
+Definition at line 204 of file mesh_subdivision_support\&.C\&.
+.PP
+References libMesh::MeshBase::elements_begin(), libMesh::MeshBase::elements_end(), libMesh::Elem::n_sides(), libMesh::Elem::neighbor(), next, prev, libMesh::Tri3Subdivision::set_ghost(), libMesh::TRI3SUBDIVISION, and libMesh::Elem::type()\&.
+.PP
+Referenced by prepare_subdivision_mesh()\&.
+.PP
+.nf
+205 {
+206   MeshBase::element_iterator       el     = mesh\&.elements_begin();
+207   const MeshBase::element_iterator end_el = mesh\&.elements_end();
+208   for (; el != end_el; ++el)
+209     {
+210       Elem* elem = *el;
+211       libmesh_assert_equal_to(elem->type(), TRI3SUBDIVISION);
+212 
+213       Tri3Subdivision* sd_elem = static_cast<Tri3Subdivision*>(elem);
+214       for (unsigned int i = 0; i < elem->n_sides(); ++i)
+215         {
+216           if (elem->neighbor(i) == NULL)
+217             {
+218               sd_elem->set_ghost(true);
+219               // set all other neighbors to ghosts as well
+220               if (elem->neighbor(next[i]))
+221                 {
+222                   Tri3Subdivision* nb = static_cast<Tri3Subdivision*>(elem->neighbor(next[i]));
+223                   nb->set_ghost(true);
+224                 }
+225               if (elem->neighbor(prev[i]))
+226                 {
+227                   Tri3Subdivision* nb = static_cast<Tri3Subdivision*>(elem->neighbor(prev[i]));
+228                   nb->set_ghost(true);
+229                 }
+230             }
+231         }
+232     }
+233 }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "const unsigned int libMesh::MeshTools::Subdivision::next[3] = {1,2,0}\fC [static]\fP"
+A lookup table for the increment modulo 3 operation, for iterating through the three nodes per element in positive direction\&. 
+.PP
+Definition at line 100 of file mesh_subdivision_support\&.h\&.
+.PP
+Referenced by add_boundary_ghosts(), find_one_ring(), libMesh::Tri3Subdivision::prepare_subdivision_properties(), libMesh::ParallelMesh::renumber_dof_objects(), and tag_boundary_ghosts()\&.
+.SS "const unsigned int libMesh::MeshTools::Subdivision::prev[3] = {2,0,1}\fC [static]\fP"
+A lookup table for the decrement modulo 3 operation, for iterating through the three nodes per element in negative direction\&. 
+.PP
+Definition at line 106 of file mesh_subdivision_support\&.h\&.
+.PP
+Referenced by add_boundary_ghosts(), libMesh::Utility::is_sorted(), libMesh::Tri3Subdivision::prepare_subdivision_properties(), and tag_boundary_ghosts()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

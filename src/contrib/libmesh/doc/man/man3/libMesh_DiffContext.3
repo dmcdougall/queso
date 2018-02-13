@@ -1,0 +1,999 @@
+.TH "libMesh::DiffContext" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::DiffContext \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <diff_context\&.h>\fP
+.PP
+Inherited by \fBlibMesh::FEMContext\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< const 
+.br
+\fBNumericVector\fP< \fBNumber\fP >
+.br
+ *, std::pair< \fBDenseVector\fP
+.br
+< \fBNumber\fP >, std::vector
+.br
+< \fBDenseSubVector\fP< \fBNumber\fP >
+.br
+ * > > >::iterator \fBlocalized_vectors_iterator\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDiffContext\fP (const \fBSystem\fP &)"
+.br
+.ti -1c
+.RI "virtual \fB~DiffContext\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBelem_reinit\fP (\fBReal\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBelem_side_reinit\fP (\fBReal\fP)"
+.br
+.ti -1c
+.RI "virtual void \fBelem_edge_reinit\fP (\fBReal\fP)"
+.br
+.ti -1c
+.RI "unsigned int \fBn_vars\fP () const "
+.br
+.ti -1c
+.RI "const \fBSystem\fP & \fBget_system\fP () const "
+.br
+.ti -1c
+.RI "const \fBDenseVector\fP< \fBNumber\fP > & \fBget_elem_solution\fP () const "
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > & \fBget_elem_solution\fP ()"
+.br
+.ti -1c
+.RI "const \fBDenseSubVector\fP< \fBNumber\fP > & \fBget_elem_solution\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "const \fBDenseVector\fP< \fBNumber\fP > & \fBget_elem_fixed_solution\fP () const "
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > & \fBget_elem_fixed_solution\fP ()"
+.br
+.ti -1c
+.RI "const \fBDenseSubVector\fP< \fBNumber\fP > & \fBget_elem_fixed_solution\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "const \fBDenseVector\fP< \fBNumber\fP > & \fBget_elem_residual\fP () const "
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > & \fBget_elem_residual\fP ()"
+.br
+.ti -1c
+.RI "const \fBDenseSubVector\fP< \fBNumber\fP > & \fBget_elem_residual\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "\fBDenseSubVector\fP< \fBNumber\fP > & \fBget_elem_residual\fP (unsigned int var)"
+.br
+.ti -1c
+.RI "const \fBDenseMatrix\fP< \fBNumber\fP > & \fBget_elem_jacobian\fP () const "
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< \fBNumber\fP > & \fBget_elem_jacobian\fP ()"
+.br
+.ti -1c
+.RI "const \fBDenseSubMatrix\fP< \fBNumber\fP > & \fBget_elem_jacobian\fP (unsigned int var1, unsigned int var2) const "
+.br
+.ti -1c
+.RI "\fBDenseSubMatrix\fP< \fBNumber\fP > & \fBget_elem_jacobian\fP (unsigned int var1, unsigned int var2)"
+.br
+.ti -1c
+.RI "const std::vector< \fBNumber\fP > & \fBget_qois\fP () const "
+.br
+.ti -1c
+.RI "std::vector< \fBNumber\fP > & \fBget_qois\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< \fBDenseVector\fP
+.br
+< \fBNumber\fP > > & \fBget_qoi_derivatives\fP () const "
+.br
+.ti -1c
+.RI "std::vector< \fBDenseVector\fP
+.br
+< \fBNumber\fP > > & \fBget_qoi_derivatives\fP ()"
+.br
+.ti -1c
+.RI "const \fBDenseSubVector\fP< \fBNumber\fP > & \fBget_qoi_derivatives\fP (unsigned int qoi, unsigned int var) const "
+.br
+.ti -1c
+.RI "\fBDenseSubVector\fP< \fBNumber\fP > & \fBget_qoi_derivatives\fP (unsigned int qoi, unsigned int var)"
+.br
+.ti -1c
+.RI "const std::vector< \fBdof_id_type\fP > & \fBget_dof_indices\fP () const "
+.br
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > & \fBget_dof_indices\fP ()"
+.br
+.ti -1c
+.RI "const std::vector< \fBdof_id_type\fP > & \fBget_dof_indices\fP (unsigned int var) const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_system_time\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_time\fP () const "
+.br
+.ti -1c
+.RI "void \fBset_time\fP (\fBReal\fP time_in)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_elem_solution_derivative\fP () const "
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_fixed_solution_derivative\fP () const "
+.br
+.ti -1c
+.RI "bool \fBis_adjoint\fP () const "
+.br
+.ti -1c
+.RI "bool & \fBis_adjoint\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_deltat_pointer\fP (\fBReal\fP *dt)"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBget_deltat_value\fP ()"
+.br
+.ti -1c
+.RI "void \fBadd_localized_vector\fP (\fBNumericVector\fP< \fBNumber\fP > &_localized_vector, const \fBSystem\fP &\fB_sys\fP)"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > & \fBget_localized_vector\fP (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector)"
+.br
+.ti -1c
+.RI "const \fBDenseVector\fP< \fBNumber\fP > & \fBget_localized_vector\fP (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector) const "
+.br
+.ti -1c
+.RI "\fBDenseSubVector\fP< \fBNumber\fP > & \fBget_localized_subvector\fP (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector, unsigned int _var)"
+.br
+.ti -1c
+.RI "const \fBDenseSubVector\fP< \fBNumber\fP > & \fBget_localized_subvector\fP (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector, unsigned int _var) const "
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP \fBtime\fP"
+.br
+.ti -1c
+.RI "const \fBReal\fP \fBsystem_time\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBelem_solution_derivative\fP"
+.br
+.ti -1c
+.RI "\fBReal\fP \fBfixed_solution_derivative\fP"
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::map< const \fBNumericVector\fP
+.br
+< \fBNumber\fP > *, std::pair
+.br
+< \fBDenseVector\fP< \fBNumber\fP >
+.br
+, std::vector< \fBDenseSubVector\fP
+.br
+< \fBNumber\fP > * > > > \fBlocalized_vectors\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBelem_solution\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBDenseSubVector\fP
+.br
+< \fBNumber\fP > * > \fBelem_subsolutions\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBelem_fixed_solution\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBDenseSubVector\fP
+.br
+< \fBNumber\fP > * > \fBelem_fixed_subsolutions\fP"
+.br
+.ti -1c
+.RI "\fBDenseVector\fP< \fBNumber\fP > \fBelem_residual\fP"
+.br
+.ti -1c
+.RI "\fBDenseMatrix\fP< \fBNumber\fP > \fBelem_jacobian\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBNumber\fP > \fBelem_qoi\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBDenseVector\fP
+.br
+< \fBNumber\fP > > \fBelem_qoi_derivative\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< \fBDenseSubVector\fP< \fBNumber\fP > * > > \fBelem_qoi_subderivatives\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBDenseSubVector\fP
+.br
+< \fBNumber\fP > * > \fBelem_subresiduals\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< \fBDenseSubMatrix\fP< \fBNumber\fP > * > > \fBelem_subjacobians\fP"
+.br
+.ti -1c
+.RI "std::vector< \fBdof_id_type\fP > \fBdof_indices\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< \fBdof_id_type\fP > > \fBdof_indices_var\fP"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBReal\fP * \fB_deltat\fP"
+.br
+.ti -1c
+.RI "const \fBSystem\fP & \fB_system\fP"
+.br
+.ti -1c
+.RI "bool \fB_is_adjoint\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides all data required for a physics package (e\&.g\&. a \fBDifferentiableSystem\fP subclass) to perform local element residual and jacobian integrations\&.
+.PP
+This class is part of the new \fBDifferentiableSystem\fP framework, which is still experimental\&. Users of this framework should beware of bugs and future API changes\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 2009 
+.RE
+.PP
+
+.PP
+Definition at line 57 of file diff_context\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<const \fBNumericVector\fP<\fBNumber\fP>*, std::pair<\fBDenseVector\fP<\fBNumber\fP>, std::vector<\fBDenseSubVector\fP<\fBNumber\fP>*> > >::iterator \fBlibMesh::DiffContext::localized_vectors_iterator\fP"
+Typedef for the localized_vectors iterator 
+.PP
+Definition at line 340 of file diff_context\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::DiffContext::DiffContext (const \fBSystem\fP &sys)\fC [explicit]\fP"
+Constructor\&. Optionally initializes required data structures\&. 
+.PP
+Definition at line 27 of file diff_context\&.C\&.
+.PP
+References elem_fixed_solution, elem_fixed_subsolutions, elem_jacobian, elem_qoi, elem_qoi_derivative, elem_qoi_subderivatives, elem_residual, elem_solution, elem_subjacobians, elem_subresiduals, elem_subsolutions, libMesh::System::n_vars(), libMesh::System::qoi, and libMesh::System::use_fixed_solution\&.
+.PP
+.nf
+27                                            :
+28   time(sys\&.time),
+29   system_time(sys\&.time),
+30   elem_solution_derivative(1\&.),
+31   fixed_solution_derivative(0\&.),
+32   dof_indices_var(sys\&.n_vars()),
+33   _deltat(NULL),
+34   _system(sys),
+35   _is_adjoint(false)
+36 {
+37   // Finally initialize solution/residual/jacobian data structures
+38   unsigned int nv = sys\&.n_vars();
+39 
+40   elem_subsolutions\&.reserve(nv);
+41   elem_subresiduals\&.reserve(nv);
+42   elem_subjacobians\&.resize(nv);
+43   if (sys\&.use_fixed_solution)
+44     elem_fixed_subsolutions\&.reserve(nv);
+45 
+46   // If the user resizes sys\&.qoi, it will invalidate us
+47   std::size_t n_qoi = sys\&.qoi\&.size();
+48   elem_qoi\&.resize(n_qoi);
+49   elem_qoi_derivative\&.resize(n_qoi);
+50   elem_qoi_subderivatives\&.resize(n_qoi);
+51   for (std::size_t q=0; q != n_qoi; ++q)
+52     elem_qoi_subderivatives[q]\&.reserve(nv);
+53 
+54   for (unsigned int i=0; i != nv; ++i)
+55     {
+56       elem_subsolutions\&.push_back(new DenseSubVector<Number>(elem_solution));
+57       elem_subresiduals\&.push_back(new DenseSubVector<Number>(elem_residual));
+58       for (std::size_t q=0; q != n_qoi; ++q)
+59         elem_qoi_subderivatives[q]\&.push_back(new DenseSubVector<Number>(elem_qoi_derivative[q]));
+60       elem_subjacobians[i]\&.reserve(nv);
+61 
+62       if (sys\&.use_fixed_solution)
+63         elem_fixed_subsolutions\&.push_back
+64           (new DenseSubVector<Number>(elem_fixed_solution));
+65 
+66       for (unsigned int j=0; j != nv; ++j)
+67         {
+68           elem_subjacobians[i]\&.push_back
+69             (new DenseSubMatrix<Number>(elem_jacobian));
+70         }
+71     }
+72 }
+.fi
+.SS "libMesh::DiffContext::~DiffContext ()\fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 76 of file diff_context\&.C\&.
+.PP
+References elem_fixed_subsolutions, elem_qoi_subderivatives, elem_subjacobians, elem_subresiduals, elem_subsolutions, and localized_vectors\&.
+.PP
+.nf
+77 {
+78   for (std::size_t i=0; i != elem_subsolutions\&.size(); ++i)
+79     {
+80       delete elem_subsolutions[i];
+81       delete elem_subresiduals[i];
+82       for (std::size_t q=0; q != elem_qoi_subderivatives\&.size(); ++q)
+83         delete elem_qoi_subderivatives[q][i];
+84       if (!elem_fixed_subsolutions\&.empty())
+85         delete elem_fixed_subsolutions[i];
+86 
+87       for (std::size_t j=0; j != elem_subjacobians[i]\&.size(); ++j)
+88         delete elem_subjacobians[i][j];
+89     }
+90 
+91   // We also need to delete all the DenseSubVectors from the localized_vectors map
+92   // localized_vectors iterators
+93   std::map<const NumericVector<Number>*, std::pair<DenseVector<Number>, std::vector<DenseSubVector<Number>*> > >::iterator localized_vectors_it = localized_vectors\&.begin();
+94   std::map<const NumericVector<Number>*, std::pair<DenseVector<Number>, std::vector<DenseSubVector<Number>*> > >::iterator localized_vectors_end = localized_vectors\&.end();
+95 
+96   // Loop over every localized_vector
+97   for(; localized_vectors_it != localized_vectors_end; ++localized_vectors_it)
+98     {
+99       // Grab the DenseSubVector to be deleted
+100       std::vector<DenseSubVector<Number>* >&  localized_vector_dsv = localized_vectors_it->second\&.second;
+101 
+102       // Loop over that vector and delete each entry
+103       for(std::size_t i=0; i != localized_vector_dsv\&.size(); ++i)
+104         delete localized_vector_dsv[i];
+105     }
+106 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::DiffContext::add_localized_vector (\fBNumericVector\fP< \fBNumber\fP > &_localized_vector, const \fBSystem\fP &_sys)"
+Adds a vector to the map of localized vectors\&. We can later evaluate interior_values, interior_gradients and side_values for these fields these vectors represent\&. 
+.PP
+Definition at line 125 of file diff_context\&.C\&.
+.PP
+References localized_vectors, and libMesh::System::n_vars()\&.
+.PP
+.nf
+126 {
+127   // Make an empty pair keyed with a reference to this _localized_vector
+128   localized_vectors[&_localized_vector] = std::make_pair(DenseVector<Number>(), std::vector<DenseSubVector<Number>*>());
+129 
+130   unsigned int nv = _sys\&.n_vars();
+131 
+132   localized_vectors[&_localized_vector]\&.second\&.reserve(nv);
+133 
+134   // Fill the DenseSubVector with nv copies of DenseVector
+135   for(unsigned int i=0; i != nv; ++i)
+136     localized_vectors[&_localized_vector]\&.second\&.push_back(new DenseSubVector<Number>(localized_vectors[&_localized_vector]\&.first));
+137 }
+.fi
+.SS "virtual void libMesh::DiffContext::elem_edge_reinit (\fBReal\fP)\fC [inline]\fP, \fC [virtual]\fP"
+Gives derived classes the opportunity to reinitialize data needed for an edge integration at a new point within a timestep 
+.PP
+Reimplemented in \fBlibMesh::FEMContext\fP\&.
+.PP
+Definition at line 90 of file diff_context\&.h\&.
+.PP
+.nf
+90 {}
+.fi
+.SS "virtual void libMesh::DiffContext::elem_reinit (\fBReal\fP)\fC [inline]\fP, \fC [virtual]\fP"
+Gives derived classes the opportunity to reinitialize data (\fBFE\fP objects in \fBFEMSystem\fP, for example) needed for an interior integration at a new point within a timestep 
+.PP
+Reimplemented in \fBlibMesh::FEMContext\fP\&.
+.PP
+Definition at line 78 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), and libMesh::Euler2Solver::element_residual()\&.
+.PP
+.nf
+78 {}
+.fi
+.SS "virtual void libMesh::DiffContext::elem_side_reinit (\fBReal\fP)\fC [inline]\fP, \fC [virtual]\fP"
+Gives derived classes the opportunity to reinitialize data needed for a side integration at a new point within a timestep 
+.PP
+Reimplemented in \fBlibMesh::FEMContext\fP\&.
+.PP
+Definition at line 84 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+84 {}
+.fi
+.SS "\fBReal\fP libMesh::DiffContext::get_deltat_value ()"
+Returns the value currently pointed to by this class's _deltat member 
+.PP
+Definition at line 117 of file diff_context\&.C\&.
+.PP
+References _deltat, and libMesh::libmesh_assert()\&.
+.PP
+Referenced by libMesh::FEMContext::_update_time_from_system()\&.
+.PP
+.nf
+118 {
+119   libmesh_assert(_deltat);
+120 
+121   return *_deltat;
+122 }
+.fi
+.SS "const std::vector<\fBdof_id_type\fP>& libMesh::DiffContext::get_dof_indices () const\fC [inline]\fP"
+Accessor for element dof indices 
+.PP
+Definition at line 235 of file diff_context\&.h\&.
+.PP
+References dof_indices\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::numerical_jacobian(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+236   { return dof_indices; }
+.fi
+.SS "std::vector<\fBdof_id_type\fP>& libMesh::DiffContext::get_dof_indices ()\fC [inline]\fP"
+Non-const accessor for element dof indices 
+.PP
+Definition at line 241 of file diff_context\&.h\&.
+.PP
+References dof_indices\&.
+.PP
+.nf
+242   { return dof_indices; }
+.fi
+.SS "const std::vector<\fBdof_id_type\fP>& libMesh::DiffContext::get_dof_indices (unsigned intvar) const\fC [inline]\fP"
+Accessor for element dof indices of a particular variable corresponding to the index argument\&. 
+.PP
+Definition at line 248 of file diff_context\&.h\&.
+.PP
+References dof_indices_var\&.
+.PP
+.nf
+249   { return dof_indices_var[var]; }
+.fi
+.SS "const \fBDenseVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_fixed_solution () const\fC [inline]\fP"
+Accessor for element fixed solution\&. 
+.PP
+Definition at line 126 of file diff_context\&.h\&.
+.PP
+References elem_fixed_solution\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::SteadySolver::element_residual(), libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), and libMesh::SteadySolver::side_residual()\&.
+.PP
+.nf
+127   { return elem_fixed_solution; }
+.fi
+.SS "\fBDenseVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_fixed_solution ()\fC [inline]\fP"
+Non-const accessor for element fixed solution\&. 
+.PP
+Definition at line 132 of file diff_context\&.h\&.
+.PP
+References elem_fixed_solution\&.
+.PP
+.nf
+133   { return elem_fixed_solution; }
+.fi
+.SS "const \fBDenseSubVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_fixed_solution (unsigned intvar) const\fC [inline]\fP"
+Accessor for element fixed solution of a particular variable corresponding to the variable index argument\&. 
+.PP
+Definition at line 139 of file diff_context\&.h\&.
+.PP
+References elem_fixed_subsolutions\&.
+.PP
+.nf
+140   { return *(elem_fixed_subsolutions[var]); }
+.fi
+.SS "const \fBDenseMatrix\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_jacobian () const\fC [inline]\fP"
+Const accessor for element Jacobian\&. 
+.PP
+Definition at line 171 of file diff_context\&.h\&.
+.PP
+References elem_jacobian\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::FEMSystem::numerical_jacobian(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+172   { return elem_jacobian; }
+.fi
+.SS "\fBDenseMatrix\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_jacobian ()\fC [inline]\fP"
+Non-const accessor for element Jacobian\&. 
+.PP
+Definition at line 177 of file diff_context\&.h\&.
+.PP
+References elem_jacobian\&.
+.PP
+.nf
+178   { return elem_jacobian; }
+.fi
+.SS "const \fBDenseSubMatrix\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_jacobian (unsigned intvar1, unsigned intvar2) const\fC [inline]\fP"
+Const accessor for element Jacobian of particular variables corresponding to the variable index arguments\&. 
+.PP
+Definition at line 184 of file diff_context\&.h\&.
+.PP
+References elem_subjacobians\&.
+.PP
+.nf
+185   { return *(elem_subjacobians[var1][var2]); }
+.fi
+.SS "\fBDenseSubMatrix\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_jacobian (unsigned intvar1, unsigned intvar2)\fC [inline]\fP"
+Non-const accessor for element Jacobian of particular variables corresponding to the variable index arguments\&. 
+.PP
+Definition at line 191 of file diff_context\&.h\&.
+.PP
+References elem_subjacobians\&.
+.PP
+.nf
+192   { return *(elem_subjacobians[var1][var2]); }
+.fi
+.SS "const \fBDenseVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_residual () const\fC [inline]\fP"
+Const accessor for element residual\&. 
+.PP
+Definition at line 145 of file diff_context\&.h\&.
+.PP
+References elem_residual\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::FEMSystem::numerical_jacobian(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.PP
+.nf
+146   { return elem_residual; }
+.fi
+.SS "\fBDenseVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_residual ()\fC [inline]\fP"
+Non-const accessor for element residual\&. 
+.PP
+Definition at line 151 of file diff_context\&.h\&.
+.PP
+References elem_residual\&.
+.PP
+.nf
+152   { return elem_residual; }
+.fi
+.SS "const \fBDenseSubVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_residual (unsigned intvar) const\fC [inline]\fP"
+Const accessor for element residual of a particular variable corresponding to the variable index argument\&. 
+.PP
+Definition at line 158 of file diff_context\&.h\&.
+.PP
+References elem_subresiduals\&.
+.PP
+.nf
+159   { return *(elem_subresiduals[var]); }
+.fi
+.SS "\fBDenseSubVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_residual (unsigned intvar)\fC [inline]\fP"
+Non-const accessor for element residual of a particular variable corresponding to the variable index argument\&. 
+.PP
+Definition at line 165 of file diff_context\&.h\&.
+.PP
+References elem_subresiduals\&.
+.PP
+.nf
+166   { return *(elem_subresiduals[var]); }
+.fi
+.SS "const \fBDenseVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_solution () const\fC [inline]\fP"
+Accessor for element solution\&. 
+.PP
+Definition at line 107 of file diff_context\&.h\&.
+.PP
+References elem_solution\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::SteadySolver::element_residual(), libMesh::FEMSystem::mesh_position_get(), libMesh::FEMSystem::numerical_jacobian(), libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), and libMesh::SteadySolver::side_residual()\&.
+.PP
+.nf
+108   { return elem_solution; }
+.fi
+.SS "\fBDenseVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_solution ()\fC [inline]\fP"
+Non-const accessor for element solution\&. 
+.PP
+Definition at line 113 of file diff_context\&.h\&.
+.PP
+References elem_solution\&.
+.PP
+.nf
+114   { return elem_solution; }
+.fi
+.SS "const \fBDenseSubVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_elem_solution (unsigned intvar) const\fC [inline]\fP"
+Accessor for element solution of a particular variable corresponding to the variable index argument\&. 
+.PP
+Definition at line 120 of file diff_context\&.h\&.
+.PP
+References elem_subsolutions\&.
+.PP
+.nf
+121   { return *(elem_subsolutions[var]); }
+.fi
+.SS "\fBReal\fP libMesh::DiffContext::get_elem_solution_derivative () const\fC [inline]\fP"
+
+.PP
+Definition at line 269 of file diff_context\&.h\&.
+.PP
+References elem_solution_derivative\&.
+.PP
+.nf
+270   { return elem_solution_derivative; }
+.fi
+.SS "\fBReal\fP libMesh::DiffContext::get_fixed_solution_derivative () const\fC [inline]\fP"
+
+.PP
+Definition at line 272 of file diff_context\&.h\&.
+.PP
+References fixed_solution_derivative\&.
+.PP
+.nf
+273   { return fixed_solution_derivative; }
+.fi
+.SS "\fBDenseSubVector\fP< \fBNumber\fP > & libMesh::DiffContext::get_localized_subvector (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector, unsigned int_var)"
+Return a reference to \fBDenseSubVector\fP localization of _localized_vector at variable _var contained in the localized_vectors map 
+.PP
+Definition at line 155 of file diff_context\&.C\&.
+.PP
+References localized_vectors\&.
+.PP
+Referenced by libMesh::FEMContext::interior_values()\&.
+.PP
+.nf
+156 {
+157   return *localized_vectors[&_localized_vector]\&.second[_var];
+158 }
+.fi
+.SS "const \fBDenseSubVector\fP< \fBNumber\fP > & libMesh::DiffContext::get_localized_subvector (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector, unsigned int_var) const"
+const accessible version of get_localized_subvector function 
+.PP
+Definition at line 161 of file diff_context\&.C\&.
+.PP
+References libMesh::libmesh_assert(), and localized_vectors\&.
+.PP
+.nf
+162 {
+163   std::map<const NumericVector<Number>*, std::pair<DenseVector<Number>, std::vector<DenseSubVector<Number>*> > >::const_iterator
+164     localized_vectors_it = localized_vectors\&.find(&_localized_vector);
+165   libmesh_assert(localized_vectors_it != localized_vectors\&.end());
+166   return *localized_vectors_it->second\&.second[_var];
+167 }
+.fi
+.SS "\fBDenseVector\fP< \fBNumber\fP > & libMesh::DiffContext::get_localized_vector (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector)"
+Return a reference to \fBDenseVector\fP localization of _localized_vector contained in the localized_vectors map 
+.PP
+Definition at line 140 of file diff_context\&.C\&.
+.PP
+References localized_vectors\&.
+.PP
+.nf
+141 {
+142   return localized_vectors[&_localized_vector]\&.first;
+143 }
+.fi
+.SS "const \fBDenseVector\fP< \fBNumber\fP > & libMesh::DiffContext::get_localized_vector (const \fBNumericVector\fP< \fBNumber\fP > &_localized_vector) const"
+const accessible version of get_localized_vector function 
+.PP
+Definition at line 146 of file diff_context\&.C\&.
+.PP
+References libMesh::libmesh_assert(), and localized_vectors\&.
+.PP
+.nf
+147 {
+148   std::map<const NumericVector<Number>*, std::pair<DenseVector<Number>, std::vector<DenseSubVector<Number>*> > >::const_iterator
+149     localized_vectors_it = localized_vectors\&.find(&_localized_vector);
+150   libmesh_assert(localized_vectors_it != localized_vectors\&.end());
+151   return localized_vectors_it->second\&.first;
+152 }
+.fi
+.SS "const std::vector<\fBDenseVector\fP<\fBNumber\fP> >& libMesh::DiffContext::get_qoi_derivatives () const\fC [inline]\fP"
+Const accessor for QoI derivatives\&. 
+.PP
+Definition at line 209 of file diff_context\&.h\&.
+.PP
+References elem_qoi_derivative\&.
+.PP
+.nf
+210   { return elem_qoi_derivative; }
+.fi
+.SS "std::vector<\fBDenseVector\fP<\fBNumber\fP> >& libMesh::DiffContext::get_qoi_derivatives ()\fC [inline]\fP"
+Non-const accessor for QoI derivatives\&. 
+.PP
+Definition at line 215 of file diff_context\&.h\&.
+.PP
+References elem_qoi_derivative\&.
+.PP
+.nf
+216   { return elem_qoi_derivative; }
+.fi
+.SS "const \fBDenseSubVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_qoi_derivatives (unsigned intqoi, unsigned intvar) const\fC [inline]\fP"
+Const accessor for QoI derivative of a particular qoi and variable corresponding to the index arguments\&. 
+.PP
+Definition at line 222 of file diff_context\&.h\&.
+.PP
+References elem_qoi_subderivatives\&.
+.PP
+.nf
+223   { return *(elem_qoi_subderivatives[qoi][var]); }
+.fi
+.SS "\fBDenseSubVector\fP<\fBNumber\fP>& libMesh::DiffContext::get_qoi_derivatives (unsigned intqoi, unsigned intvar)\fC [inline]\fP"
+Non-const accessor for QoI derivative of a particular qoi and variable corresponding to the index arguments\&. 
+.PP
+Definition at line 229 of file diff_context\&.h\&.
+.PP
+References elem_qoi_subderivatives\&.
+.PP
+.nf
+230   { return *(elem_qoi_subderivatives[qoi][var]); }
+.fi
+.SS "const std::vector<\fBNumber\fP>& libMesh::DiffContext::get_qois () const\fC [inline]\fP"
+Const accessor for QoI vector\&. 
+.PP
+Definition at line 197 of file diff_context\&.h\&.
+.PP
+References elem_qoi\&.
+.PP
+.nf
+198   { return elem_qoi; }
+.fi
+.SS "std::vector<\fBNumber\fP>& libMesh::DiffContext::get_qois ()\fC [inline]\fP"
+Non-const accessor for QoI vector\&. 
+.PP
+Definition at line 203 of file diff_context\&.h\&.
+.PP
+References elem_qoi\&.
+.PP
+.nf
+204   { return elem_qoi; }
+.fi
+.SS "const \fBSystem\fP& libMesh::DiffContext::get_system () const\fC [inline]\fP"
+Accessor for associated system\&. 
+.PP
+Definition at line 101 of file diff_context\&.h\&.
+.PP
+References _system\&.
+.PP
+Referenced by libMesh::DGFEMContext::neighbor_side_fe_reinit()\&.
+.PP
+.nf
+102   { return _system; }
+.fi
+.SS "\fBReal\fP libMesh::DiffContext::get_system_time () const\fC [inline]\fP"
+Accessor for the time variable stored in the system class\&. 
+.PP
+Definition at line 254 of file diff_context\&.h\&.
+.PP
+References system_time\&.
+.PP
+.nf
+255   { return system_time; }
+.fi
+.SS "\fBReal\fP libMesh::DiffContext::get_time () const\fC [inline]\fP"
+Accessor for the time for which the current nonlinear_solution is defined\&. 
+.PP
+Definition at line 260 of file diff_context\&.h\&.
+.PP
+References time\&.
+.PP
+.nf
+261   { return time; }
+.fi
+.SS "bool libMesh::DiffContext::is_adjoint () const\fC [inline]\fP"
+Accessor for querying whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 279 of file diff_context\&.h\&.
+.PP
+References _is_adjoint\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context()\&.
+.PP
+.nf
+280   { return _is_adjoint; }
+.fi
+.SS "bool& libMesh::DiffContext::is_adjoint ()\fC [inline]\fP"
+Accessor for setting whether we need to do a primal or adjoint solve 
+.PP
+Definition at line 286 of file diff_context\&.h\&.
+.PP
+References _is_adjoint\&.
+.PP
+.nf
+287   { return _is_adjoint; }
+.fi
+.SS "unsigned int libMesh::DiffContext::n_vars () const\fC [inline]\fP"
+Number of variables in solution\&. 
+.PP
+Definition at line 95 of file diff_context\&.h\&.
+.PP
+References dof_indices_var\&.
+.PP
+.nf
+96   { return libmesh_cast_int<unsigned int>(dof_indices_var\&.size()); }
+.fi
+.SS "void libMesh::DiffContext::set_deltat_pointer (\fBReal\fP *dt)"
+Points the _deltat member of this class at a timestep value stored in the creating \fBSystem\fP, for example DiffSystem::deltat 
+.PP
+Definition at line 109 of file diff_context\&.C\&.
+.PP
+References _deltat\&.
+.PP
+Referenced by libMesh::FEMSystem::build_context(), and libMesh::FEMSystem::init_context()\&.
+.PP
+.nf
+110 {
+111   // We may actually want to be able to set this pointer to NULL, so
+112   // don't report an error for that\&.
+113   _deltat = dt;
+114 }
+.fi
+.SS "void libMesh::DiffContext::set_time (\fBReal\fPtime_in)\fC [inline]\fP"
+Set the time for which the current nonlinear_solution is defined\&. 
+.PP
+Definition at line 266 of file diff_context\&.h\&.
+.PP
+References time\&.
+.PP
+.nf
+267   { time = time_in; }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBReal\fP* libMesh::DiffContext::_deltat\fC [private]\fP"
+Default NULL, can optionally be used to point to a timestep value in the System-derived class responsible for creating this \fBDiffContext\fP\&.
+.PP
+In DiffSystem's build_context() function, is assigned to point to the deltat member of that class\&.
+.PP
+Accessible via public get_deltat()/set_deltat() methods of this class\&.
+.PP
+Always test for NULL before using! 
+.PP
+Definition at line 435 of file diff_context\&.h\&.
+.PP
+Referenced by get_deltat_value(), and set_deltat_pointer()\&.
+.SS "bool libMesh::DiffContext::_is_adjoint\fC [private]\fP"
+Is this context to be used for a primal or adjoint solve? 
+.PP
+Definition at line 445 of file diff_context\&.h\&.
+.PP
+Referenced by is_adjoint()\&.
+.SS "const \fBSystem\fP& libMesh::DiffContext::_system\fC [private]\fP"
+A reference to the system this context is constructed with 
+.PP
+Definition at line 440 of file diff_context\&.h\&.
+.PP
+Referenced by get_system()\&.
+.SS "std::vector<\fBdof_id_type\fP> libMesh::DiffContext::dof_indices\fC [protected]\fP"
+Global Degree of freedom index lists 
+.PP
+Definition at line 419 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::FEMContext::fixed_interior_hessian(), libMesh::FEMContext::fixed_interior_value(), libMesh::FEMContext::fixed_point_gradient(), libMesh::FEMContext::fixed_point_hessian(), libMesh::FEMContext::fixed_point_value(), libMesh::FEMContext::fixed_side_gradient(), libMesh::FEMContext::fixed_side_hessian(), libMesh::FEMContext::fixed_side_value(), get_dof_indices(), libMesh::FEMContext::interior_curl(), libMesh::FEMContext::interior_div(), libMesh::FEMContext::interior_gradient(), libMesh::FEMContext::interior_hessian(), libMesh::FEMContext::interior_value(), libMesh::FEMContext::interior_values(), libMesh::DGFEMContext::neighbor_side_fe_reinit(), libMesh::FEMContext::point_curl(), libMesh::FEMContext::point_gradient(), libMesh::FEMContext::point_hessian(), libMesh::FEMContext::point_value(), libMesh::FEMContext::pre_fe_reinit(), libMesh::FEMContext::side_gradient(), libMesh::FEMContext::side_hessian(), and libMesh::FEMContext::side_value()\&.
+.SS "std::vector<std::vector<\fBdof_id_type\fP> > libMesh::DiffContext::dof_indices_var\fC [protected]\fP"
+
+.PP
+Definition at line 420 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::FEMContext::fixed_interior_hessian(), libMesh::FEMContext::fixed_interior_value(), libMesh::FEMContext::fixed_point_gradient(), libMesh::FEMContext::fixed_point_hessian(), libMesh::FEMContext::fixed_point_value(), libMesh::FEMContext::fixed_side_gradient(), libMesh::FEMContext::fixed_side_hessian(), libMesh::FEMContext::fixed_side_value(), get_dof_indices(), libMesh::FEMContext::interior_curl(), libMesh::FEMContext::interior_div(), libMesh::FEMContext::interior_gradient(), libMesh::FEMContext::interior_hessian(), libMesh::FEMContext::interior_value(), libMesh::FEMContext::interior_values(), n_vars(), libMesh::DGFEMContext::neighbor_side_fe_reinit(), libMesh::FEMContext::point_curl(), libMesh::FEMContext::point_gradient(), libMesh::FEMContext::point_hessian(), libMesh::FEMContext::point_value(), libMesh::FEMContext::pre_fe_reinit(), libMesh::FEMContext::side_gradient(), libMesh::FEMContext::side_hessian(), and libMesh::FEMContext::side_value()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::DiffContext::elem_fixed_solution\fC [protected]\fP"
+Element by element components of nonlinear_solution at a fixed point in a timestep, for optional use by e\&.g\&. stabilized methods 
+.PP
+Definition at line 385 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_elem_fixed_solution(), and libMesh::FEMContext::pre_fe_reinit()\&.
+.SS "std::vector<\fBDenseSubVector\fP<\fBNumber\fP> *> libMesh::DiffContext::elem_fixed_subsolutions\fC [protected]\fP"
+
+.PP
+Definition at line 386 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), libMesh::FEMContext::fixed_interior_hessian(), libMesh::FEMContext::fixed_interior_value(), libMesh::FEMContext::fixed_point_gradient(), libMesh::FEMContext::fixed_point_hessian(), libMesh::FEMContext::fixed_point_value(), libMesh::FEMContext::fixed_side_gradient(), libMesh::FEMContext::fixed_side_hessian(), libMesh::FEMContext::fixed_side_value(), get_elem_fixed_solution(), libMesh::FEMContext::pre_fe_reinit(), and ~DiffContext()\&.
+.SS "\fBDenseMatrix\fP<\fBNumber\fP> libMesh::DiffContext::elem_jacobian\fC [protected]\fP"
+Element jacobian: derivatives of elem_residual with respect to elem_solution 
+.PP
+Definition at line 397 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_elem_jacobian(), and libMesh::FEMContext::pre_fe_reinit()\&.
+.SS "std::vector<\fBNumber\fP> libMesh::DiffContext::elem_qoi\fC [protected]\fP"
+Element quantity of interest contributions 
+.PP
+Definition at line 402 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), and get_qois()\&.
+.SS "std::vector<\fBDenseVector\fP<\fBNumber\fP> > libMesh::DiffContext::elem_qoi_derivative\fC [protected]\fP"
+Element quantity of interest derivative contributions 
+.PP
+Definition at line 407 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_qoi_derivatives(), and libMesh::FEMContext::pre_fe_reinit()\&.
+.SS "std::vector<std::vector<\fBDenseSubVector\fP<\fBNumber\fP> *> > libMesh::DiffContext::elem_qoi_subderivatives\fC [protected]\fP"
+
+.PP
+Definition at line 408 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_qoi_derivatives(), libMesh::FEMContext::pre_fe_reinit(), and ~DiffContext()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::DiffContext::elem_residual\fC [protected]\fP"
+Element residual vector 
+.PP
+Definition at line 391 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_elem_residual(), and libMesh::FEMContext::pre_fe_reinit()\&.
+.SS "\fBDenseVector\fP<\fBNumber\fP> libMesh::DiffContext::elem_solution\fC [protected]\fP"
+Element by element components of nonlinear_solution as adjusted by a time_solver 
+.PP
+Definition at line 377 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_elem_solution(), and libMesh::FEMContext::pre_fe_reinit()\&.
+.SS "\fBReal\fP libMesh::DiffContext::elem_solution_derivative"
+The derivative of elem_solution with respect to the nonlinear solution, for use by systems constructing jacobians with elem_fixed_solution based methods 
+.PP
+Definition at line 310 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), get_elem_solution_derivative(), libMesh::EulerSolver::side_residual(), and libMesh::Euler2Solver::side_residual()\&.
+.SS "std::vector<std::vector<\fBDenseSubMatrix\fP<\fBNumber\fP> *> > libMesh::DiffContext::elem_subjacobians\fC [protected]\fP"
+
+.PP
+Definition at line 414 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_elem_jacobian(), libMesh::FEMContext::pre_fe_reinit(), and ~DiffContext()\&.
+.SS "std::vector<\fBDenseSubVector\fP<\fBNumber\fP> *> libMesh::DiffContext::elem_subresiduals\fC [protected]\fP"
+Element residual subvectors and Jacobian submatrices 
+.PP
+Definition at line 413 of file diff_context\&.h\&.
+.PP
+Referenced by DiffContext(), get_elem_residual(), libMesh::FEMContext::pre_fe_reinit(), and ~DiffContext()\&.
+.SS "std::vector<\fBDenseSubVector\fP<\fBNumber\fP> *> libMesh::DiffContext::elem_subsolutions\fC [protected]\fP"
+
+.PP
+Definition at line 378 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::FEMContext::_do_elem_position_set(), DiffContext(), libMesh::FEMContext::elem_position_get(), get_elem_solution(), libMesh::FEMContext::interior_curl(), libMesh::FEMContext::interior_div(), libMesh::FEMContext::interior_gradient(), libMesh::FEMContext::interior_hessian(), libMesh::FEMContext::interior_value(), libMesh::FEMContext::point_curl(), libMesh::FEMContext::point_gradient(), libMesh::FEMContext::point_hessian(), libMesh::FEMContext::point_value(), libMesh::FEMContext::pre_fe_reinit(), libMesh::FEMContext::side_gradient(), libMesh::FEMContext::side_hessian(), libMesh::FEMContext::side_value(), and ~DiffContext()\&.
+.SS "\fBReal\fP libMesh::DiffContext::fixed_solution_derivative"
+The derivative of elem_fixed_solution with respect to the nonlinear solution, for use by systems constructing jacobians with elem_fixed_solution based methods 
+.PP
+Definition at line 317 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::EulerSolver::element_residual(), libMesh::Euler2Solver::element_residual(), libMesh::SteadySolver::element_residual(), get_fixed_solution_derivative(), libMesh::EulerSolver::side_residual(), libMesh::Euler2Solver::side_residual(), and libMesh::SteadySolver::side_residual()\&.
+.SS "std::map<const \fBNumericVector\fP<\fBNumber\fP>*, std::pair<\fBDenseVector\fP<\fBNumber\fP>, std::vector<\fBDenseSubVector\fP<\fBNumber\fP>*> > > libMesh::DiffContext::localized_vectors\fC [protected]\fP"
+Contains pointers to vectors the user has asked to be localized, keyed with pairs of element localized versions of that vector and per variable views 
+.PP
+Definition at line 371 of file diff_context\&.h\&.
+.PP
+Referenced by add_localized_vector(), get_localized_subvector(), get_localized_vector(), libMesh::FEMContext::pre_fe_reinit(), and ~DiffContext()\&.
+.SS "const \fBReal\fP libMesh::DiffContext::system_time"
+This is the time stored in the \fBSystem\fP class at the time this context was created, i\&.e\&. the time at the beginning of the current timestep\&. This value gets set in the constructor and unlike \fBDiffContext::time\fP, is not tweaked mid-timestep by transient solvers: it remains equal to the value it was assigned at construction\&. 
+.PP
+Definition at line 303 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::FEMContext::_update_time_from_system(), and get_system_time()\&.
+.SS "\fBReal\fP libMesh::DiffContext::time"
+For time-dependent problems, this is the time t for which the current nonlinear_solution is defined\&. FIXME - this needs to be tweaked mid-timestep by all transient solvers! 
+.PP
+Definition at line 294 of file diff_context\&.h\&.
+.PP
+Referenced by libMesh::FEMContext::_update_time_from_system(), get_time(), and set_time()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

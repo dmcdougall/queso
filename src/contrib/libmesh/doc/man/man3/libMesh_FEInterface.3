@@ -1,0 +1,2363 @@
+.TH "libMesh::FEInterface" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::FEInterface \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <fe_interface\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual \fB~FEInterface\fP ()"
+.br
+.ti -1c
+.RI "template<> void \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int i, const \fBPoint\fP &p, \fBReal\fP &phi)"
+.br
+.ti -1c
+.RI "template<> void \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned int i, const \fBPoint\fP &p, \fBReal\fP &phi)"
+.br
+.ti -1c
+.RI "template<> void \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int i, const \fBPoint\fP &p, \fBRealGradient\fP &phi)"
+.br
+.ti -1c
+.RI "template<> void \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned int i, const \fBPoint\fP &p, \fBRealGradient\fP &phi)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static unsigned int \fBn_shape_functions\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_dofs\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_dofs_at_node\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int n)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_dofs_per_elem\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "static void \fBdofs_on_side\fP (const \fBElem\fP *const elem, const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, unsigned int s, std::vector< unsigned int > &di)"
+.br
+.ti -1c
+.RI "static void \fBdofs_on_edge\fP (const \fBElem\fP *const elem, const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, unsigned int e, std::vector< unsigned int > &di)"
+.br
+.ti -1c
+.RI "static void \fBnodal_soln\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBNumber\fP > &elem_soln, std::vector< \fBNumber\fP > &nodal_soln)"
+.br
+.ti -1c
+.RI "static \fBPoint\fP \fBmap\fP (unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const \fBPoint\fP &p)"
+.br
+.ti -1c
+.RI "static \fBPoint\fP \fBinverse_map\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const \fBPoint\fP &p, const \fBReal\fP tolerance=\fBTOLERANCE\fP, const bool secure=true)"
+.br
+.ti -1c
+.RI "static void \fBinverse_map\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBPoint\fP > &physical_points, std::vector< \fBPoint\fP > &reference_points, const \fBReal\fP tolerance=\fBTOLERANCE\fP, const bool secure=true)"
+.br
+.ti -1c
+.RI "static bool \fBon_reference_element\fP (const \fBPoint\fP &p, const \fBElemType\fP t, const \fBReal\fP eps=\fBTOLERANCE\fP)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int i, const \fBPoint\fP &p)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned int i, const \fBPoint\fP &p)"
+.br
+.ti -1c
+.RI "template<typename OutputType > static void \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int i, const \fBPoint\fP &p, OutputType &phi)"
+.br
+.ti -1c
+.RI "template<typename OutputType > static void \fBshape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned int i, const \fBPoint\fP &p, OutputType &phi)"
+.br
+.ti -1c
+.RI "static void \fBcompute_data\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, \fBFEComputeData\fP &\fBdata\fP)"
+.br
+.ti -1c
+.RI "static void \fBcompute_constraints\fP (\fBDofConstraints\fP &constraints, \fBDofMap\fP &\fBdof_map\fP, const unsigned int variable_number, const \fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "static void \fBcompute_periodic_constraints\fP (\fBDofConstraints\fP &constraints, \fBDofMap\fP &\fBdof_map\fP, const \fBPeriodicBoundaries\fP &boundaries, const \fBMeshBase\fP &\fBmesh\fP, const \fBPointLocatorBase\fP *point_locator, const unsigned int variable_number, const \fBElem\fP *elem)"
+.br
+.ti -1c
+.RI "static unsigned int \fBmax_order\fP (const \fBFEType\fP &fe_t, const \fBElemType\fP &el_t)"
+.br
+.ti -1c
+.RI "static bool \fBextra_hanging_dofs\fP (const \fBFEType\fP &fe_t)"
+.br
+.ti -1c
+.RI "static \fBFEFieldType\fP \fBfield_type\fP (const \fBFEType\fP &fe_type)"
+.br
+.ti -1c
+.RI "static \fBFEFieldType\fP \fBfield_type\fP (const \fBFEFamily\fP &fe_family)"
+.br
+.ti -1c
+.RI "static unsigned int \fBn_vec_dim\fP (const \fBMeshBase\fP &\fBmesh\fP, const \fBFEType\fP &fe_type)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBFEInterface\fP ()"
+.br
+.in -1c
+.SS "Static Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBis_InfFE_elem\fP (const \fBElemType\fP et)"
+.br
+.ti -1c
+.RI "static unsigned int \fBifem_n_shape_functions\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "static unsigned int \fBifem_n_dofs\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "static unsigned int \fBifem_n_dofs_at_node\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int n)"
+.br
+.ti -1c
+.RI "static unsigned int \fBifem_n_dofs_per_elem\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t)"
+.br
+.ti -1c
+.RI "static void \fBifem_nodal_soln\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBNumber\fP > &elem_soln, std::vector< \fBNumber\fP > &\fBnodal_soln\fP)"
+.br
+.ti -1c
+.RI "static \fBPoint\fP \fBifem_inverse_map\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const \fBPoint\fP &p, const \fBReal\fP tolerance=\fBTOLERANCE\fP, const bool secure=true)"
+.br
+.ti -1c
+.RI "static void \fBifem_inverse_map\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBPoint\fP > &physical_points, std::vector< \fBPoint\fP > &reference_points, const \fBReal\fP tolerance=\fBTOLERANCE\fP, const bool secure=true)"
+.br
+.ti -1c
+.RI "static bool \fBifem_on_reference_element\fP (const \fBPoint\fP &p, const \fBElemType\fP t, const \fBReal\fP eps)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBifem_shape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElemType\fP t, const unsigned int i, const \fBPoint\fP &p)"
+.br
+.ti -1c
+.RI "static \fBReal\fP \fBifem_shape\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned int i, const \fBPoint\fP &p)"
+.br
+.ti -1c
+.RI "static void \fBifem_compute_data\fP (const unsigned int \fBdim\fP, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, \fBFEComputeData\fP &\fBdata\fP)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class provides an encapsulated access to all \fIstatic\fP public member functions of finite element classes\&. Using this class, one need not worry about the correct finite element class\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Daniel Dreyer, 2002-2007 
+.RE
+.PP
+
+.PP
+Definition at line 64 of file fe_interface\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::FEInterface::FEInterface ()\fC [private]\fP"
+Empty constructor\&. Do not create an object of this type\&. 
+.PP
+Definition at line 32 of file fe_interface\&.C\&.
+.PP
+References libMesh::err\&.
+.PP
+.nf
+33 {
+34   libMesh::err << "ERROR: Do not define an object of this type\&."
+35                << std::endl;
+36   libmesh_error();
+37 }
+.fi
+.SS "virtual libMesh::FEInterface::~FEInterface ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 78 of file fe_interface\&.h\&.
+.PP
+.nf
+78 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::FEInterface::compute_constraints (\fBDofConstraints\fP &constraints, \fBDofMap\fP &dof_map, const unsigned intvariable_number, const \fBElem\fP *elem)\fC [static]\fP"
+Computes the constraint matrix contributions (for non-conforming adapted meshes) corresponding to variable number \fCvar_number\fP\&. 
+.PP
+Definition at line 846 of file fe_interface\&.C\&.
+.PP
+References libMesh::BERNSTEIN, libMesh::CLOUGH, libMesh::FE< Dim, T >::compute_constraints(), libMesh::Elem::dim(), libMesh::FEType::family, libMesh::HERMITE, libMesh::HIERARCHIC, libMesh::L2_HIERARCHIC, libMesh::LAGRANGE, libMesh::LAGRANGE_VEC, libMesh::libmesh_assert(), libMesh::SZABAB, and libMesh::DofMap::variable_type()\&.
+.PP
+.nf
+850 {
+851   libmesh_assert(elem);
+852 
+853   const FEType& fe_t = dof_map\&.variable_type(variable_number);
+854 
+855   switch (elem->dim())
+856     {
+857     case 0:
+858     case 1:
+859       {
+860         // No constraints in 0D/1D\&.
+861         return;
+862       }
+863 
+864 
+865     case 2:
+866       {
+867         switch (fe_t\&.family)
+868           {
+869           case CLOUGH:
+870             FE<2,CLOUGH>::compute_constraints (constraints,
+871                                                dof_map,
+872                                                variable_number,
+873                                                elem); return;
+874 
+875           case HERMITE:
+876             FE<2,HERMITE>::compute_constraints (constraints,
+877                                                 dof_map,
+878                                                 variable_number,
+879                                                 elem); return;
+880 
+881           case LAGRANGE:
+882             FE<2,LAGRANGE>::compute_constraints (constraints,
+883                                                  dof_map,
+884                                                  variable_number,
+885                                                  elem); return;
+886 
+887           case HIERARCHIC:
+888             FE<2,HIERARCHIC>::compute_constraints (constraints,
+889                                                    dof_map,
+890                                                    variable_number,
+891                                                    elem); return;
+892 
+893           case L2_HIERARCHIC:
+894             FE<2,L2_HIERARCHIC>::compute_constraints (constraints,
+895                                                       dof_map,
+896                                                       variable_number,
+897                                                       elem); return;
+898 
+899           case LAGRANGE_VEC:
+900             FE<2,LAGRANGE_VEC>::compute_constraints (constraints,
+901                                                      dof_map,
+902                                                      variable_number,
+903                                                      elem); return;
+904 
+905 
+906 #ifdef LIBMESH_ENABLE_HIGHER_ORDER_SHAPES
+907           case SZABAB:
+908             FE<2,SZABAB>::compute_constraints (constraints,
+909                                                dof_map,
+910                                                variable_number,
+911                                                elem); return;
+912 
+913           case BERNSTEIN:
+914             FE<2,BERNSTEIN>::compute_constraints (constraints,
+915                                                   dof_map,
+916                                                   variable_number,
+917                                                   elem); return;
+918 
+919 #endif
+920           default:
+921             return;
+922           }
+923       }
+924 
+925 
+926     case 3:
+927       {
+928         switch (fe_t\&.family)
+929           {
+930           case HERMITE:
+931             FE<3,HERMITE>::compute_constraints (constraints,
+932                                                 dof_map,
+933                                                 variable_number,
+934                                                 elem); return;
+935 
+936           case LAGRANGE:
+937             FE<3,LAGRANGE>::compute_constraints (constraints,
+938                                                  dof_map,
+939                                                  variable_number,
+940                                                  elem); return;
+941 
+942           case HIERARCHIC:
+943             FE<3,HIERARCHIC>::compute_constraints (constraints,
+944                                                    dof_map,
+945                                                    variable_number,
+946                                                    elem); return;
+947 
+948           case L2_HIERARCHIC:
+949             FE<3,L2_HIERARCHIC>::compute_constraints (constraints,
+950                                                       dof_map,
+951                                                       variable_number,
+952                                                       elem); return;
+953 
+954           case LAGRANGE_VEC:
+955             FE<3,LAGRANGE_VEC>::compute_constraints (constraints,
+956                                                      dof_map,
+957                                                      variable_number,
+958                                                      elem); return;
+959 #ifdef LIBMESH_ENABLE_HIGHER_ORDER_SHAPES
+960           case SZABAB:
+961             FE<3,SZABAB>::compute_constraints (constraints,
+962                                                dof_map,
+963                                                variable_number,
+964                                                elem); return;
+965 
+966           case BERNSTEIN:
+967             FE<3,BERNSTEIN>::compute_constraints (constraints,
+968                                                   dof_map,
+969                                                   variable_number,
+970                                                   elem); return;
+971 
+972 #endif
+973           default:
+974             return;
+975           }
+976       }
+977 
+978 
+979     default:
+980       libmesh_error();
+981     }
+982 }
+.fi
+.SS "void libMesh::FEInterface::compute_data (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, \fBFEComputeData\fP &data)\fC [static]\fP"
+Lets the appropriate child of \fCFEBase\fP compute the requested data for the input specified in \fCdata\fP, and returns the values also through \fCdata\fP\&. See this as a generalization of \fC\fBshape()\fP\fP\&. Currently, with disabled infinite elements, returns a vector of all shape functions of \fCelem\fP evaluated ap \fCp\fP\&.
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the base order of the element\&. 
+.PP
+Definition at line 810 of file fe_interface\&.C\&.
+.PP
+References ifem_compute_data(), libMesh::FEComputeData::init(), is_InfFE_elem(), n_dofs(), libMesh::FEType::order, libMesh::FEComputeData::p, libMesh::Elem::p_level(), libMesh::FEComputeData::shape, shape(), and libMesh::Elem::type()\&.
+.PP
+Referenced by libMesh::MeshFunction::operator()()\&.
+.PP
+.nf
+814 {
+815 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+816 
+817   if ( is_InfFE_elem(elem->type()) )
+818     {
+819       data\&.init();
+820       ifem_compute_data(dim, fe_t, elem, data);
+821       return;
+822     }
+823 
+824 #endif
+825 
+826   FEType p_refined = fe_t;
+827   p_refined\&.order = static_cast<Order>(p_refined\&.order + elem->p_level());
+828 
+829   const unsigned int n_dof = n_dofs (dim, p_refined, elem->type());
+830   const Point&       p     = data\&.p;
+831   data\&.shape\&.resize(n_dof);
+832 
+833   // set default values for all the output fields
+834   data\&.init();
+835 
+836   for (unsigned int n=0; n<n_dof; n++)
+837     data\&.shape[n] = shape(dim, p_refined, elem, n, p);
+838 
+839   return;
+840 }
+.fi
+.SS "void libMesh::FEInterface::compute_periodic_constraints (\fBDofConstraints\fP &constraints, \fBDofMap\fP &dof_map, const \fBPeriodicBoundaries\fP &boundaries, const \fBMeshBase\fP &mesh, const \fBPointLocatorBase\fP *point_locator, const unsigned intvariable_number, const \fBElem\fP *elem)\fC [static]\fP"
+Computes the constraint matrix contributions (for periodic boundary conditions) corresponding to variable number \fCvar_number\fP\&. 
+.PP
+Definition at line 990 of file fe_interface\&.C\&.
+.PP
+References libMesh::FEGenericBase< T >::compute_periodic_constraints()\&.
+.PP
+.nf
+997 {
+998   // No element-specific optimizations currently exist
+999   FEBase::compute_periodic_constraints (constraints,
+1000                                         dof_map,
+1001                                         boundaries,
+1002                                         mesh,
+1003                                         point_locator,
+1004                                         variable_number,
+1005                                         elem);
+1006 }
+.fi
+.SS "void libMesh::FEInterface::dofs_on_edge (const \fBElem\fP *constelem, const unsigned intdim, const \fBFEType\fP &fe_t, unsigned inte, std::vector< unsigned int > &di)\fC [static]\fP"
+Fills the vector di with the local degree of freedom indices associated with edge \fCe\fP of element \fCelem\fP Automatically decides which finite element class to use\&.
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the base order of the element\&. 
+.PP
+Definition at line 507 of file fe_interface\&.C\&.
+.PP
+References libMesh::FEType::order\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.PP
+.nf
+512 {
+513   const Order o = fe_t\&.order;
+514 
+515   void_fe_with_vec_switch(dofs_on_edge(elem, o, e, di));
+516 
+517   libmesh_error();
+518 }
+.fi
+.SS "void libMesh::FEInterface::dofs_on_side (const \fBElem\fP *constelem, const unsigned intdim, const \fBFEType\fP &fe_t, unsigned ints, std::vector< unsigned int > &di)\fC [static]\fP"
+Fills the vector di with the local degree of freedom indices associated with side \fCs\fP of element \fCelem\fP Automatically decides which finite element class to use\&.
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the base order of the element\&. 
+.PP
+Definition at line 492 of file fe_interface\&.C\&.
+.PP
+References libMesh::FEType::order\&.
+.PP
+Referenced by libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), and libMesh::BoundaryProjectSolution::operator()()\&.
+.PP
+.nf
+497 {
+498   const Order o = fe_t\&.order;
+499 
+500   void_fe_with_vec_switch(dofs_on_side(elem, o, s, di));
+501 
+502   libmesh_error();
+503 }
+.fi
+.SS "bool libMesh::FEInterface::extra_hanging_dofs (const \fBFEType\fP &fe_t)\fC [static]\fP"
+Returns true if separate degrees of freedom must be allocated for vertex DoFs and edge/face DoFs at a hanging node\&. 
+.PP
+Definition at line 1357 of file fe_interface\&.C\&.
+.PP
+References libMesh::BERNSTEIN, libMesh::CLOUGH, libMesh::FEType::family, libMesh::HERMITE, libMesh::HIERARCHIC, libMesh::L2_HIERARCHIC, libMesh::L2_LAGRANGE, libMesh::LAGRANGE, libMesh::LAGRANGE_VEC, libMesh::MONOMIAL, libMesh::NEDELEC_ONE, libMesh::SUBDIVISION, libMesh::SZABAB, and libMesh::XYZ\&.
+.PP
+Referenced by libMesh::DofMap::_dof_indices(), libMesh::DofMap::old_dof_indices(), and libMesh::DofMap::reinit()\&.
+.PP
+.nf
+1358 {
+1359   switch (fe_t\&.family)
+1360     {
+1361     case LAGRANGE:
+1362     case L2_LAGRANGE:
+1363     case MONOMIAL:
+1364     case L2_HIERARCHIC:
+1365     case XYZ:
+1366     case SUBDIVISION:
+1367     case LAGRANGE_VEC:
+1368     case NEDELEC_ONE:
+1369       return false;
+1370     case CLOUGH:
+1371     case HERMITE:
+1372     case HIERARCHIC:
+1373 #ifdef LIBMESH_ENABLE_HIGHER_ORDER_SHAPES
+1374     case BERNSTEIN:
+1375     case SZABAB:
+1376 #endif
+1377     default:
+1378       return true;
+1379     }
+1380 }
+.fi
+.SS "\fBFEFieldType\fP libMesh::FEInterface::field_type (const \fBFEType\fP &fe_type)\fC [static]\fP"
+Returns the number of components of a vector-valued element\&. Scalar-valued elements return 1\&. 
+.PP
+Definition at line 1382 of file fe_interface\&.C\&.
+.PP
+References libMesh::FEType::family\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::EquationSystems::build_solution_vector(), libMesh::EquationSystems::build_variable_names(), libMesh::ExactSolution::compute_error(), libMesh::ExactSolution::error_norm(), libMesh::FEMSystem::init_context(), and libMesh::FE< Dim, T >::init_shape_functions()\&.
+.PP
+.nf
+1383 {
+1384   return FEInterface::field_type( fe_type\&.family );
+1385 }
+.fi
+.SS "\fBFEFieldType\fP libMesh::FEInterface::field_type (const \fBFEFamily\fP &fe_family)\fC [static]\fP"
+Returns the number of components of a vector-valued element\&. Scalar-valued elements return 1\&. 
+.PP
+Definition at line 1387 of file fe_interface\&.C\&.
+.PP
+References libMesh::LAGRANGE_VEC, libMesh::NEDELEC_ONE, libMesh::TYPE_SCALAR, and libMesh::TYPE_VECTOR\&.
+.PP
+.nf
+1388 {
+1389   switch (fe_family)
+1390     {
+1391     case LAGRANGE_VEC:
+1392     case NEDELEC_ONE:
+1393       return TYPE_VECTOR;
+1394     default:
+1395       return TYPE_SCALAR;
+1396     }
+1397 }
+.fi
+.SS "void libMesh::FEInterface::ifem_compute_data (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, \fBFEComputeData\fP &data)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 871 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), libMesh::INFINITE_MAP, libMesh::JACOBI_20_00, libMesh::JACOBI_30_00, libMesh::LAGRANGE, libMesh::LEGENDRE, and libMesh::FEType::radial_family\&.
+.PP
+Referenced by compute_data()\&.
+.PP
+.nf
+875 {
+876   switch (dim)
+877     {
+878       // 1D
+879     case 1:
+880       {
+881         switch (fe_t\&.radial_family)
+882           {
+883             /*
+884              * For no derivatives (and local coordinates, as
+885              * given in \p p) the infinite element shapes
+886              * are independent of mapping type
+887              */
+888           case INFINITE_MAP:
+889             InfFE<1,INFINITE_MAP,CARTESIAN>::compute_data(fe_t, elem, data);
+890             break;
+891 
+892           case JACOBI_20_00:
+893             InfFE<1,JACOBI_20_00,CARTESIAN>::compute_data(fe_t, elem, data);
+894             break;
+895 
+896           case JACOBI_30_00:
+897             InfFE<1,JACOBI_30_00,CARTESIAN>::compute_data(fe_t, elem, data);
+898             break;
+899 
+900           case LEGENDRE:
+901             InfFE<1,LEGENDRE,CARTESIAN>::compute_data(fe_t, elem, data);
+902             break;
+903 
+904           case LAGRANGE:
+905             InfFE<1,LAGRANGE,CARTESIAN>::compute_data(fe_t, elem, data);
+906             break;
+907 
+908           default:
+909             libmesh_error();
+910           }
+911 
+912         break;
+913       }
+914 
+915 
+916       // 2D
+917     case 2:
+918       {
+919         switch (fe_t\&.radial_family)
+920           {
+921           case INFINITE_MAP:
+922             InfFE<2,INFINITE_MAP,CARTESIAN>::compute_data(fe_t, elem, data);
+923             break;
+924 
+925           case JACOBI_20_00:
+926             InfFE<2,JACOBI_20_00,CARTESIAN>::compute_data(fe_t, elem, data);
+927             break;
+928 
+929           case JACOBI_30_00:
+930             InfFE<2,JACOBI_30_00,CARTESIAN>::compute_data(fe_t, elem, data);
+931             break;
+932 
+933           case LEGENDRE:
+934             InfFE<2,LEGENDRE,CARTESIAN>::compute_data(fe_t, elem, data);
+935             break;
+936 
+937           case LAGRANGE:
+938             InfFE<2,LAGRANGE,CARTESIAN>::compute_data(fe_t, elem, data);
+939             break;
+940 
+941           default:
+942             libmesh_error();
+943           }
+944 
+945         break;
+946       }
+947 
+948 
+949       // 3D
+950     case 3:
+951       {
+952         switch (fe_t\&.radial_family)
+953           {
+954           case INFINITE_MAP:
+955             InfFE<3,INFINITE_MAP,CARTESIAN>::compute_data(fe_t, elem, data);
+956             break;
+957 
+958           case JACOBI_20_00:
+959             InfFE<3,JACOBI_20_00,CARTESIAN>::compute_data(fe_t, elem, data);
+960             break;
+961 
+962           case JACOBI_30_00:
+963             InfFE<3,JACOBI_30_00,CARTESIAN>::compute_data(fe_t, elem, data);
+964             break;
+965 
+966           case LEGENDRE:
+967             InfFE<3,LEGENDRE,CARTESIAN>::compute_data(fe_t, elem, data);
+968             break;
+969 
+970           case LAGRANGE:
+971             InfFE<3,LAGRANGE,CARTESIAN>::compute_data(fe_t, elem, data);
+972             break;
+973 
+974           default:
+975             libmesh_error();
+976           }
+977 
+978         break;
+979       }
+980 
+981 
+982     default:
+983       libmesh_error();
+984       break;
+985     }
+986 
+987   return;
+988 }
+.fi
+.SS "\fBPoint\fP libMesh::FEInterface::ifem_inverse_map (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const \fBPoint\fP &p, const \fBReal\fPtolerance = \fC\fBTOLERANCE\fP\fP, const boolsecure = \fCtrue\fP)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 470 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::CARTESIAN, libMesh::ELLIPSOIDAL, libMesh::err, libMesh::FEType::inf_map, libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::inverse_map(), and libMesh::SPHERICAL\&.
+.PP
+Referenced by inverse_map()\&.
+.PP
+.nf
+476 {
+477   switch (dim)
+478     {
+479       // 1D
+480     case 1:
+481       {
+482         switch (fe_t\&.inf_map)
+483           {
+484           case CARTESIAN:
+485             return InfFE<1,JACOBI_20_00,CARTESIAN>::inverse_map(elem, p, tolerance, secure);
+486 
+487           case SPHERICAL:
+488           case ELLIPSOIDAL:
+489             {
+490               libMesh::err << "ERROR: Spherical and Ellipsoidal IFEMs not (yet) " << std::endl
+491                            << "implemented\&." << std::endl;
+492               libmesh_error();
+493             }
+494 
+495             /*
+496               case SPHERICAL:
+497               return InfFE<1,JACOBI_20_00,SPHERICAL>::inverse_map(elem, p, tolerance);
+498 
+499               case ELLIPSOIDAL:
+500               return InfFE<1,JACOBI_20_00,ELLIPSOIDAL>::inverse_map(elem, p, tolerance);
+501             */
+502 
+503           default:
+504             libmesh_error();
+505           }
+506       }
+507 
+508 
+509       // 2D
+510     case 2:
+511       {
+512         switch (fe_t\&.inf_map)
+513           {
+514           case CARTESIAN:
+515             return InfFE<2,JACOBI_20_00,CARTESIAN>::inverse_map(elem, p, tolerance, secure);
+516 
+517           case SPHERICAL:
+518           case ELLIPSOIDAL:
+519             {
+520               libMesh::err << "ERROR: Spherical and Ellipsoidal IFEMs not (yet) " << std::endl
+521                            << "implemented\&." << std::endl;
+522               libmesh_error();
+523             }
+524 
+525             /*
+526               case SPHERICAL:
+527               return InfFE<2,JACOBI_20_00,SPHERICAL>::inverse_map(elem, p, tolerance);
+528 
+529               case ELLIPSOIDAL:
+530               return InfFE<2,JACOBI_20_00,ELLIPSOIDAL>::inverse_map(elem, p, tolerance);
+531             */
+532 
+533           default:
+534             libmesh_error();
+535           }
+536 
+537       }
+538 
+539 
+540       // 3D
+541     case 3:
+542       {
+543         switch (fe_t\&.inf_map)
+544           {
+545           case CARTESIAN:
+546             return InfFE<3,JACOBI_20_00,CARTESIAN>::inverse_map(elem, p, tolerance, secure);
+547 
+548           case SPHERICAL:
+549           case ELLIPSOIDAL:
+550             {
+551               libMesh::err << "ERROR: Spherical and Ellipsoidal IFEMs not (yet) " << std::endl
+552                            << "implemented\&." << std::endl;
+553               libmesh_error();
+554             }
+555 
+556             /*
+557               case SPHERICAL:
+558               return InfFE<3,JACOBI_20_00,SPHERICAL>::inverse_map(elem, p, tolerance);
+559 
+560               case ELLIPSOIDAL:
+561               return InfFE<3,JACOBI_20_00,ELLIPSOIDAL>::inverse_map(elem, p, tolerance);
+562             */
+563 
+564           default:
+565             libmesh_error();
+566           }
+567 
+568       }
+569 
+570 
+571     default:
+572       libmesh_error();
+573     }
+574 
+575 
+576   libmesh_error();
+577   Point pt;
+578   return pt;
+579 }
+.fi
+.SS "void libMesh::FEInterface::ifem_inverse_map (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBPoint\fP > &physical_points, std::vector< \fBPoint\fP > &reference_points, const \fBReal\fPtolerance = \fC\fBTOLERANCE\fP\fP, const boolsecure = \fCtrue\fP)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 583 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::CARTESIAN, libMesh::FEType::inf_map, and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::inverse_map()\&.
+.PP
+.nf
+590 {
+591   switch (dim)
+592     {
+593       // 1D
+594     case 1:
+595       {
+596         switch (fe_t\&.inf_map)
+597           {
+598           case CARTESIAN:
+599             InfFE<1,JACOBI_20_00,CARTESIAN>::inverse_map(elem, physical_points, reference_points, tolerance, secure);
+600             return;
+601 
+602           default:
+603             libmesh_error();
+604           }
+605       }
+606 
+607 
+608       // 2D
+609     case 2:
+610       {
+611         switch (fe_t\&.inf_map)
+612           {
+613           case CARTESIAN:
+614             InfFE<2,JACOBI_20_00,CARTESIAN>::inverse_map(elem, physical_points, reference_points, tolerance, secure);
+615             return;
+616 
+617           default:
+618             libmesh_error();
+619           }
+620 
+621       }
+622 
+623 
+624       // 3D
+625     case 3:
+626       {
+627         switch (fe_t\&.inf_map)
+628           {
+629           case CARTESIAN:
+630             InfFE<3,JACOBI_20_00,CARTESIAN>::inverse_map(elem, physical_points, reference_points, tolerance, secure);
+631             return;
+632 
+633           default:
+634             libmesh_error();
+635           }
+636 
+637       }
+638 
+639 
+640     default:
+641       libmesh_error();
+642     }
+643 
+644   libmesh_error();
+645   return;
+646 }
+.fi
+.SS "unsigned int libMesh::FEInterface::ifem_n_dofs (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 75 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs()\&.
+.PP
+Referenced by n_dofs()\&.
+.PP
+.nf
+78 {
+79   switch (dim)
+80     {
+81       // 1D
+82     case 1:
+83       /*
+84        * Since InfFE<Dim,T_radial,T_map>::n_dofs(\&.\&.\&.)
+85        * is actually independent of T_radial and T_map, we can use
+86        * just any T_radial and T_map
+87        */
+88       return InfFE<1,JACOBI_20_00,CARTESIAN>::n_dofs(fe_t, t);
+89 
+90       // 2D
+91     case 2:
+92       return InfFE<2,JACOBI_20_00,CARTESIAN>::n_dofs(fe_t, t);
+93 
+94       // 3D
+95     case 3:
+96       return InfFE<3,JACOBI_20_00,CARTESIAN>::n_dofs(fe_t, t);
+97 
+98     default:
+99       libmesh_error();
+100     }
+101 
+102 
+103   libmesh_error();
+104   return 0;
+105 }
+.fi
+.SS "unsigned int libMesh::FEInterface::ifem_n_dofs_at_node (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned intn)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 110 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs_at_node()\&.
+.PP
+Referenced by n_dofs_at_node()\&.
+.PP
+.nf
+114 {
+115   switch (dim)
+116     {
+117       // 1D
+118     case 1:
+119       /*
+120        * Since InfFE<Dim,T_radial,T_map>::n_dofs_at_node(\&.\&.\&.)
+121        * is actually independent of T_radial and T_map, we can use
+122        * just any T_radial and T_map
+123        */
+124       return InfFE<1,JACOBI_20_00,CARTESIAN>::n_dofs_at_node(fe_t, t, n);
+125 
+126       // 2D
+127     case 2:
+128       return InfFE<2,JACOBI_20_00,CARTESIAN>::n_dofs_at_node(fe_t, t, n);
+129 
+130       // 3D
+131     case 3:
+132       return InfFE<3,JACOBI_20_00,CARTESIAN>::n_dofs_at_node(fe_t, t, n);
+133 
+134     default:
+135       libmesh_error();
+136     }
+137 
+138 
+139   libmesh_error();
+140   return 0;
+141 }
+.fi
+.SS "unsigned int libMesh::FEInterface::ifem_n_dofs_per_elem (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 147 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs_per_elem()\&.
+.PP
+Referenced by n_dofs_per_elem()\&.
+.PP
+.nf
+150 {
+151   switch (dim)
+152     {
+153       // 1D
+154     case 1:
+155       /*
+156        * Since InfFE<Dim,T_radial,T_map>::n_dofs(\&.\&.\&.)
+157        * is actually independent of T_radial and T_map, we can use
+158        * just any T_radial and T_map
+159        */
+160       return InfFE<1,JACOBI_20_00,CARTESIAN>::n_dofs_per_elem(fe_t, t);
+161 
+162       // 2D
+163     case 2:
+164       return InfFE<2,JACOBI_20_00,CARTESIAN>::n_dofs_per_elem(fe_t, t);
+165 
+166       // 3D
+167     case 3:
+168       return InfFE<3,JACOBI_20_00,CARTESIAN>::n_dofs_per_elem(fe_t, t);
+169 
+170     default:
+171       libmesh_error();
+172     }
+173 
+174 
+175   libmesh_error();
+176   return 0;
+177 }
+.fi
+.SS "unsigned int libMesh::FEInterface::ifem_n_shape_functions (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 39 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_shape_functions()\&.
+.PP
+Referenced by n_shape_functions()\&.
+.PP
+.nf
+42 {
+43   switch (dim)
+44     {
+45       // 1D
+46     case 1:
+47       /*
+48        * Since InfFE<Dim,T_radial,T_map>::n_shape_functions(\&.\&.\&.)
+49        * is actually independent of T_radial and T_map, we can use
+50        * just any T_radial and T_map
+51        */
+52       return InfFE<1,JACOBI_20_00,CARTESIAN>::n_shape_functions(fe_t, t);
+53 
+54       // 2D
+55     case 2:
+56       return InfFE<2,JACOBI_20_00,CARTESIAN>::n_shape_functions(fe_t, t);
+57 
+58       // 3D
+59     case 3:
+60       return InfFE<3,JACOBI_20_00,CARTESIAN>::n_shape_functions(fe_t, t);
+61 
+62     default:
+63       libmesh_error();
+64     }
+65 
+66 
+67   libmesh_error();
+68   return 0;
+69 }
+.fi
+.SS "void libMesh::FEInterface::ifem_nodal_soln (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBNumber\fP > &elem_soln, std::vector< \fBNumber\fP > &nodal_soln)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 182 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::CARTESIAN, libMesh::err, libMesh::FEType::inf_map, libMesh::INFINITE_MAP, libMesh::JACOBI_20_00, libMesh::JACOBI_30_00, libMesh::LAGRANGE, libMesh::LEGENDRE, libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::nodal_soln(), and libMesh::FEType::radial_family\&.
+.PP
+Referenced by nodal_soln()\&.
+.PP
+.nf
+187 {
+188   switch (dim)
+189     {
+190 
+191       // 1D
+192     case 1:
+193       {
+194         switch (fe_t\&.radial_family)
+195           {
+196           case INFINITE_MAP:
+197             {
+198               libMesh::err << "ERROR: INFINTE_MAP is not a valid shape family for radial approximation\&." << std::endl;
+199               libmesh_error();
+200               break;
+201             }
+202 
+203           case JACOBI_20_00:
+204             {
+205               switch (fe_t\&.inf_map)
+206                 {
+207                 case CARTESIAN:
+208                   {
+209                     InfFE<1,JACOBI_20_00,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+210                     break;
+211                   }
+212                 default:
+213                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+214                   libmesh_error();
+215                 }
+216               break;
+217             }
+218 
+219           case JACOBI_30_00:
+220             {
+221               switch (fe_t\&.inf_map)
+222                 {
+223                 case CARTESIAN:
+224                   {
+225                     InfFE<1,JACOBI_30_00,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+226                     break;
+227                   }
+228                 default:
+229                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+230                   libmesh_error();
+231                 }
+232               break;
+233             }
+234 
+235           case LEGENDRE:
+236             {
+237               switch (fe_t\&.inf_map)
+238                 {
+239                 case CARTESIAN:
+240                   {
+241                     InfFE<1,LEGENDRE,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+242                     break;
+243                   }
+244                 default:
+245                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+246                   libmesh_error();
+247                 }
+248               break;
+249             }
+250 
+251           case LAGRANGE:
+252             {
+253               switch (fe_t\&.inf_map)
+254                 {
+255                 case CARTESIAN:
+256                   {
+257                     InfFE<1,LAGRANGE,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+258                     break;
+259                   }
+260                 default:
+261                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+262                   libmesh_error();
+263                 }
+264               break;
+265             }
+266 
+267 
+268 
+269           default:
+270             libMesh::err << "ERROR: Bad FEType\&.radial_family= " << fe_t\&.radial_family << std::endl;
+271             libmesh_error();
+272             break;
+273           }
+274 
+275         break;
+276       }
+277 
+278 
+279 
+280 
+281       // 2D
+282     case 2:
+283       {
+284         switch (fe_t\&.radial_family)
+285           {
+286           case INFINITE_MAP:
+287             {
+288               libMesh::err << "ERROR: INFINTE_MAP is not a valid shape family for radial approximation\&." << std::endl;
+289               libmesh_error();
+290               break;
+291             }
+292 
+293           case JACOBI_20_00:
+294             {
+295               switch (fe_t\&.inf_map)
+296                 {
+297                 case CARTESIAN:
+298                   {
+299                     InfFE<2,JACOBI_20_00,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+300                     break;
+301                   }
+302                 default:
+303                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+304                   libmesh_error();
+305                 }
+306               break;
+307             }
+308 
+309           case JACOBI_30_00:
+310             {
+311               switch (fe_t\&.inf_map)
+312                 {
+313                 case CARTESIAN:
+314                   {
+315                     InfFE<2,JACOBI_30_00,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+316                     break;
+317                   }
+318                 default:
+319                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+320                   libmesh_error();
+321                 }
+322               break;
+323             }
+324 
+325           case LEGENDRE:
+326             {
+327               switch (fe_t\&.inf_map)
+328                 {
+329                 case CARTESIAN:
+330                   {
+331                     InfFE<2,LEGENDRE,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+332                     break;
+333                   }
+334                 default:
+335                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+336                   libmesh_error();
+337                 }
+338               break;
+339             }
+340 
+341           case LAGRANGE:
+342             {
+343               switch (fe_t\&.inf_map)
+344                 {
+345                 case CARTESIAN:
+346                   {
+347                     InfFE<2,LAGRANGE,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+348                     break;
+349                   }
+350                 default:
+351                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+352                   libmesh_error();
+353                 }
+354               break;
+355             }
+356 
+357 
+358 
+359           default:
+360             libMesh::err << "ERROR: Bad FEType\&.radial_family= " << fe_t\&.radial_family << std::endl;
+361             libmesh_error();
+362             break;
+363           }
+364 
+365         break;
+366       }
+367 
+368 
+369 
+370 
+371       // 3D
+372     case 3:
+373       {
+374         switch (fe_t\&.radial_family)
+375           {
+376           case INFINITE_MAP:
+377             {
+378               libMesh::err << "ERROR: INFINTE_MAP is not a valid shape family for radial approximation\&." << std::endl;
+379               libmesh_error();
+380               break;
+381             }
+382 
+383           case JACOBI_20_00:
+384             {
+385               switch (fe_t\&.inf_map)
+386                 {
+387                 case CARTESIAN:
+388                   {
+389                     InfFE<3,JACOBI_20_00,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+390                     break;
+391                   }
+392                 default:
+393                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+394                   libmesh_error();
+395                 }
+396               break;
+397             }
+398 
+399           case JACOBI_30_00:
+400             {
+401               switch (fe_t\&.inf_map)
+402                 {
+403                 case CARTESIAN:
+404                   {
+405                     InfFE<3,JACOBI_30_00,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+406                     break;
+407                   }
+408                 default:
+409                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+410                   libmesh_error();
+411                 }
+412               break;
+413             }
+414 
+415           case LEGENDRE:
+416             {
+417               switch (fe_t\&.inf_map)
+418                 {
+419                 case CARTESIAN:
+420                   {
+421                     InfFE<3,LEGENDRE,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+422                     break;
+423                   }
+424                 default:
+425                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+426                   libmesh_error();
+427                 }
+428               break;
+429             }
+430 
+431           case LAGRANGE:
+432             {
+433               switch (fe_t\&.inf_map)
+434                 {
+435                 case CARTESIAN:
+436                   {
+437                     InfFE<3,LAGRANGE,CARTESIAN>::nodal_soln(fe_t, elem, elem_soln, nodal_soln);
+438                     break;
+439                   }
+440                 default:
+441                   libMesh::err << "ERROR: Spherical & Ellipsoidal IFEMs not implemented\&." << std::endl;
+442                   libmesh_error();
+443                 }
+444               break;
+445             }
+446 
+447 
+448 
+449           default:
+450             libMesh::err << "ERROR: Bad FEType\&.radial_family= " << fe_t\&.radial_family << std::endl;
+451             libmesh_error();
+452             break;
+453           }
+454 
+455         break;
+456       }
+457 
+458     default:
+459       libmesh_error();
+460     }
+461   return;
+462 }
+.fi
+.SS "bool libMesh::FEInterface::ifem_on_reference_element (const \fBPoint\fP &p, const \fBElemType\fPt, const \fBReal\fPeps)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 651 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::FEAbstract::on_reference_element()\&.
+.PP
+.nf
+654 {
+655   return FEBase::on_reference_element(p,t,eps);
+656 }
+.fi
+.SS "\fBReal\fP libMesh::FEInterface::ifem_shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned inti, const \fBPoint\fP &p)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 661 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::INFINITE_MAP, libMesh::JACOBI_20_00, libMesh::JACOBI_30_00, libMesh::LAGRANGE, libMesh::LEGENDRE, libMesh::FEType::radial_family, and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::shape()\&.
+.PP
+Referenced by shape()\&.
+.PP
+.nf
+666 {
+667   switch (dim)
+668     {
+669       // 1D
+670     case 1:
+671       {
+672         switch (fe_t\&.radial_family)
+673           {
+674             /*
+675              * For no derivatives (and local coordinates, as
+676              * given in \p p) the infinite element shapes
+677              * are independent of mapping type
+678              */
+679           case INFINITE_MAP:
+680             return InfFE<1,INFINITE_MAP,CARTESIAN>::shape(fe_t, t, i, p);
+681 
+682           case JACOBI_20_00:
+683             return InfFE<1,JACOBI_20_00,CARTESIAN>::shape(fe_t, t, i, p);
+684 
+685           case JACOBI_30_00:
+686             return InfFE<1,JACOBI_30_00,CARTESIAN>::shape(fe_t, t, i, p);
+687 
+688           case LEGENDRE:
+689             return InfFE<1,LEGENDRE,CARTESIAN>::shape(fe_t, t, i, p);
+690 
+691           case LAGRANGE:
+692             return InfFE<1,LAGRANGE,CARTESIAN>::shape(fe_t, t, i, p);
+693 
+694           default:
+695             libmesh_error();
+696           }
+697       }
+698 
+699 
+700       // 2D
+701     case 2:
+702       {
+703         switch (fe_t\&.radial_family)
+704           {
+705           case INFINITE_MAP:
+706             return InfFE<2,INFINITE_MAP,CARTESIAN>::shape(fe_t, t, i, p);
+707 
+708           case JACOBI_20_00:
+709             return InfFE<2,JACOBI_20_00,CARTESIAN>::shape(fe_t, t, i, p);
+710 
+711           case JACOBI_30_00:
+712             return InfFE<2,JACOBI_30_00,CARTESIAN>::shape(fe_t, t, i, p);
+713 
+714           case LEGENDRE:
+715             return InfFE<2,LEGENDRE,CARTESIAN>::shape(fe_t, t, i, p);
+716 
+717           case LAGRANGE:
+718             return InfFE<2,LAGRANGE,CARTESIAN>::shape(fe_t, t, i, p);
+719 
+720           default:
+721             libmesh_error();
+722           }
+723 
+724       }
+725 
+726 
+727       // 3D
+728     case 3:
+729       {
+730         switch (fe_t\&.radial_family)
+731           {
+732           case INFINITE_MAP:
+733             return InfFE<3,INFINITE_MAP,CARTESIAN>::shape(fe_t, t, i, p);
+734 
+735           case JACOBI_20_00:
+736             return InfFE<3,JACOBI_20_00,CARTESIAN>::shape(fe_t, t, i, p);
+737 
+738           case JACOBI_30_00:
+739             return InfFE<3,JACOBI_30_00,CARTESIAN>::shape(fe_t, t, i, p);
+740 
+741           case LEGENDRE:
+742             return InfFE<3,LEGENDRE,CARTESIAN>::shape(fe_t, t, i, p);
+743 
+744           case LAGRANGE:
+745             return InfFE<3,LAGRANGE,CARTESIAN>::shape(fe_t, t, i, p);
+746 
+747           default:
+748             libmesh_error();
+749           }
+750 
+751       }
+752 
+753 
+754     default:
+755       libmesh_error();
+756     }
+757 
+758 
+759   libmesh_error();
+760   return 0\&.;
+761 }
+.fi
+.SS "\fBReal\fP libMesh::FEInterface::ifem_shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned inti, const \fBPoint\fP &p)\fC [static]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 766 of file fe_interface_inf_fe\&.C\&.
+.PP
+References libMesh::INFINITE_MAP, libMesh::JACOBI_20_00, libMesh::JACOBI_30_00, libMesh::LAGRANGE, libMesh::LEGENDRE, libMesh::FEType::radial_family, and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::shape()\&.
+.PP
+.nf
+771 {
+772   switch (dim)
+773     {
+774       // 1D
+775     case 1:
+776       {
+777         switch (fe_t\&.radial_family)
+778           {
+779             /*
+780              * For no derivatives (and local coordinates, as
+781              * given in \p p) the infinite element shapes
+782              * are independent of mapping type
+783              */
+784           case INFINITE_MAP:
+785             return InfFE<1,INFINITE_MAP,CARTESIAN>::shape(fe_t, elem, i, p);
+786 
+787           case JACOBI_20_00:
+788             return InfFE<1,JACOBI_20_00,CARTESIAN>::shape(fe_t, elem, i, p);
+789 
+790           case JACOBI_30_00:
+791             return InfFE<1,JACOBI_30_00,CARTESIAN>::shape(fe_t, elem, i, p);
+792 
+793           case LEGENDRE:
+794             return InfFE<1,LEGENDRE,CARTESIAN>::shape(fe_t, elem, i, p);
+795 
+796           case LAGRANGE:
+797             return InfFE<1,LAGRANGE,CARTESIAN>::shape(fe_t, elem, i, p);
+798 
+799           default:
+800             libmesh_error();
+801           }
+802       }
+803 
+804 
+805       // 2D
+806     case 2:
+807       {
+808         switch (fe_t\&.radial_family)
+809           {
+810           case INFINITE_MAP:
+811             return InfFE<2,INFINITE_MAP,CARTESIAN>::shape(fe_t, elem, i, p);
+812 
+813           case JACOBI_20_00:
+814             return InfFE<2,JACOBI_20_00,CARTESIAN>::shape(fe_t, elem, i, p);
+815 
+816           case JACOBI_30_00:
+817             return InfFE<2,JACOBI_30_00,CARTESIAN>::shape(fe_t, elem, i, p);
+818 
+819           case LEGENDRE:
+820             return InfFE<2,LEGENDRE,CARTESIAN>::shape(fe_t, elem, i, p);
+821 
+822           case LAGRANGE:
+823             return InfFE<2,LAGRANGE,CARTESIAN>::shape(fe_t, elem, i, p);
+824 
+825           default:
+826             libmesh_error();
+827           }
+828 
+829       }
+830 
+831 
+832       // 3D
+833     case 3:
+834       {
+835         switch (fe_t\&.radial_family)
+836           {
+837           case INFINITE_MAP:
+838             return InfFE<3,INFINITE_MAP,CARTESIAN>::shape(fe_t, elem, i, p);
+839 
+840           case JACOBI_20_00:
+841             return InfFE<3,JACOBI_20_00,CARTESIAN>::shape(fe_t, elem, i, p);
+842 
+843           case JACOBI_30_00:
+844             return InfFE<3,JACOBI_30_00,CARTESIAN>::shape(fe_t, elem, i, p);
+845 
+846           case LEGENDRE:
+847             return InfFE<3,LEGENDRE,CARTESIAN>::shape(fe_t, elem, i, p);
+848 
+849           case LAGRANGE:
+850             return InfFE<3,LAGRANGE,CARTESIAN>::shape(fe_t, elem, i, p);
+851 
+852           default:
+853             libmesh_error();
+854           }
+855 
+856       }
+857 
+858 
+859     default:
+860       libmesh_error();
+861     }
+862 
+863 
+864   libmesh_error();
+865   return 0\&.;
+866 }
+.fi
+.SS "\fBPoint\fP libMesh::FEInterface::inverse_map (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const \fBPoint\fP &p, const \fBReal\fPtolerance = \fC\fBTOLERANCE\fP\fP, const boolsecure = \fCtrue\fP)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the location (on the reference element) of the point \fCp\fP located in physical space\&. This function requires inverting the (probably nonlinear) transformation map, so it is not trivial\&. The optional parameter \fCtolerance\fP defines how close is 'good enough\&.' The map inversion iteration computes the sequence $ \{ p_n \} $, and the iteration is terminated when $ \|p - p_n\| < \mbox{\texttt{tolerance}} $ 
+.RE
+.PP
+
+.PP
+Definition at line 562 of file fe_interface\&.C\&.
+.PP
+References ifem_inverse_map(), is_InfFE_elem(), and libMesh::Elem::type()\&.
+.PP
+Referenced by libMesh::HPCoarsenTest::add_projection(), libMesh::FEMContext::build_new_fe(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::FEAbstract::compute_node_constraints(), libMesh::FEGenericBase< T >::compute_periodic_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), libMesh::FEGenericBase< T >::compute_proj_constraints(), libMesh::InfQuad4::contains_point(), libMesh::InfPrism6::contains_point(), libMesh::InfHex8::contains_point(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), inverse_map(), libMesh::DGFEMContext::neighbor_side_fe_reinit(), libMesh::MeshFunction::operator()(), libMesh::System::point_gradient(), libMesh::System::point_hessian(), libMesh::Elem::point_test(), libMesh::System::point_value(), libMesh::JumpErrorEstimator::reinit_sides(), and libMesh::HPCoarsenTest::select_refinement()\&.
+.PP
+.nf
+568 {
+569 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+570 
+571   if ( is_InfFE_elem(elem->type()) )
+572     return ifem_inverse_map(dim, fe_t, elem, p,tolerance, secure);
+573 
+574 #endif
+575 
+576   fe_with_vec_switch(inverse_map(elem, p, tolerance, secure));
+577 
+578   libmesh_error();
+579   return Point();
+580 }
+.fi
+.SS "void libMesh::FEInterface::inverse_map (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBPoint\fP > &physical_points, std::vector< \fBPoint\fP > &reference_points, const \fBReal\fPtolerance = \fC\fBTOLERANCE\fP\fP, const boolsecure = \fCtrue\fP)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the location (on the reference element) of the points \fCphysical_points\fP located in physical space\&. This function requires inverting the (probably nonlinear) transformation map, so it is not trivial\&. The location of each point on the reference element is returned in the vector \fCreference_points\fP\&. The optional parameter \fCtolerance\fP defines how close is 'good
+enough\&.' The map inversion iteration computes the sequence $ \{ p_n \} $, and the iteration is terminated when $ \|p - p_n\| < \mbox{\texttt{tolerance}} $ 
+.RE
+.PP
+
+.PP
+Definition at line 585 of file fe_interface\&.C\&.
+.PP
+References libMesh::err, ifem_inverse_map(), inverse_map(), is_InfFE_elem(), libMesh::TypeVector< T >::size(), and libMesh::Elem::type()\&.
+.PP
+.nf
+592 {
+593   const std::size_t n_pts = physical_points\&.size();
+594 
+595   // Resize the vector
+596   reference_points\&.resize(n_pts);
+597 
+598   if (n_pts == 0)
+599     {
+600       libMesh::err << "WARNING: empty vector physical_points!"
+601                    << std::endl;
+602       libmesh_here();
+603       return;
+604     }
+605 
+606 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+607 
+608   if ( is_InfFE_elem(elem->type()) )
+609     {
+610       ifem_inverse_map(dim, fe_t, elem, physical_points, reference_points, tolerance, secure);
+611       return;
+612 
+613       //       libMesh::err << "ERROR: Not implemented!"
+614       // << std::endl;
+615       //       libmesh_error();
+616     }
+617 
+618 #endif
+619 
+620   void_fe_with_vec_switch(inverse_map(elem, physical_points, reference_points, tolerance, secure));
+621 
+622   libmesh_error();
+623   return;
+624 }
+.fi
+.SS "bool libMesh::FEInterface::is_InfFE_elem (const \fBElemType\fPet)\fC [inline]\fP, \fC [static]\fP, \fC [private]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if \fCet\fP is an element to be processed by class \fC\fBInfFE\fP\fP\&. Otherwise, it returns false\&. For compatibility with disabled infinite elements it always returns false\&. 
+.RE
+.PP
+
+.PP
+Definition at line 449 of file fe_interface\&.h\&.
+.PP
+Referenced by compute_data(), inverse_map(), n_dofs(), n_dofs_at_node(), n_dofs_per_elem(), n_shape_functions(), nodal_soln(), and shape()\&.
+.PP
+.nf
+450 {
+451   return false;
+452 }
+.fi
+.SS "\fBPoint\fP libMesh::FEInterface::map (unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const \fBPoint\fP &p)\fC [static]\fP"
+Returns the point in physical space of the reference point refpoint which is passed in\&. 
+.PP
+Definition at line 547 of file fe_interface\&.C\&.
+.PP
+Referenced by libMesh::Elem::point_test()\&.
+.PP
+.nf
+551 {
+552   fe_with_vec_switch(map(elem, p));
+553 
+554   libmesh_error();
+555   return Point();
+556 }
+.fi
+.SS "unsigned int libMesh::FEInterface::max_order (const \fBFEType\fP &fe_t, const \fBElemType\fP &el_t)\fC [static]\fP"
+Returns the maximum polynomial degree that the given finite element family can support on the given geometric element\&. 
+.PP
+Definition at line 1012 of file fe_interface\&.C\&.
+.PP
+References libMesh::BERNSTEIN, libMesh::CLOUGH, libMesh::EDGE2, libMesh::EDGE3, libMesh::EDGE4, libMesh::FEType::family, libMesh::HERMITE, libMesh::HEX20, libMesh::HEX27, libMesh::HEX8, libMesh::HIERARCHIC, libMesh::L2_HIERARCHIC, libMesh::L2_LAGRANGE, libMesh::LAGRANGE, libMesh::LAGRANGE_VEC, libMesh::MONOMIAL, libMesh::NEDELEC_ONE, libMesh::PRISM15, libMesh::PRISM18, libMesh::PRISM6, libMesh::PYRAMID13, libMesh::PYRAMID14, libMesh::PYRAMID5, libMesh::QUAD4, libMesh::QUAD8, libMesh::QUAD9, libMesh::SUBDIVISION, libMesh::SZABAB, libMesh::TET10, libMesh::TET4, libMesh::TRI3, libMesh::TRI3SUBDIVISION, libMesh::TRI6, and libMesh::XYZ\&.
+.PP
+Referenced by libMesh::DofMap::reinit()\&.
+.PP
+.nf
+1014 {
+1015   // Yeah, I know, infinity is much larger than 11, but our
+1016   // solvers don't seem to like high degree polynomials, and our
+1017   // quadrature rules and number_lookups tables
+1018   // need to go up higher\&.
+1019   const unsigned int unlimited = 11;
+1020 
+1021   // If we used 0 as a default, then elements missing from this
+1022   // table (e\&.g\&. infinite elements) would be considered broken\&.
+1023   const unsigned int unknown = unlimited;
+1024 
+1025   switch (fe_t\&.family)
+1026     {
+1027     case LAGRANGE:
+1028     case L2_LAGRANGE: // TODO: L2_LAGRANGE can have higher "max_order" than LAGRANGE
+1029     case LAGRANGE_VEC:
+1030       switch (el_t)
+1031         {
+1032         case EDGE2:
+1033         case EDGE3:
+1034         case EDGE4:
+1035           return 3;
+1036         case TRI3:
+1037           return 1;
+1038         case TRI6:
+1039           return 2;
+1040         case QUAD4:
+1041           return 1;
+1042         case QUAD8:
+1043         case QUAD9:
+1044           return 2;
+1045         case TET4:
+1046           return 1;
+1047         case TET10:
+1048           return 2;
+1049         case HEX8:
+1050           return 1;
+1051         case HEX20:
+1052         case HEX27:
+1053           return 2;
+1054         case PRISM6:
+1055           return 1;
+1056         case PRISM15:
+1057         case PRISM18:
+1058           return 2;
+1059         case PYRAMID5:
+1060           return 1;
+1061         case PYRAMID13:
+1062         case PYRAMID14:
+1063           return 2;
+1064         default:
+1065           return unknown;
+1066         }
+1067       break;
+1068     case MONOMIAL:
+1069       switch (el_t)
+1070         {
+1071         case EDGE2:
+1072         case EDGE3:
+1073         case EDGE4:
+1074         case TRI3:
+1075         case TRI6:
+1076         case QUAD4:
+1077         case QUAD8:
+1078         case QUAD9:
+1079         case TET4:
+1080         case TET10:
+1081         case HEX8:
+1082         case HEX20:
+1083         case HEX27:
+1084         case PRISM6:
+1085         case PRISM15:
+1086         case PRISM18:
+1087         case PYRAMID5:
+1088         case PYRAMID13:
+1089         case PYRAMID14:
+1090           return unlimited;
+1091         default:
+1092           return unknown;
+1093         }
+1094       break;
+1095 #ifdef LIBMESH_ENABLE_HIGHER_ORDER_SHAPES
+1096     case BERNSTEIN:
+1097       switch (el_t)
+1098         {
+1099         case EDGE2:
+1100         case EDGE3:
+1101         case EDGE4:
+1102           return unlimited;
+1103         case TRI3:
+1104           return 0;
+1105         case TRI6:
+1106           return 6;
+1107         case QUAD4:
+1108           return 0;
+1109         case QUAD8:
+1110         case QUAD9:
+1111           return unlimited;
+1112         case TET4:
+1113           return 1;
+1114         case TET10:
+1115           return 2;
+1116         case HEX8:
+1117           return 0;
+1118         case HEX20:
+1119           return 2;
+1120         case HEX27:
+1121           return 4;
+1122         case PRISM6:
+1123         case PRISM15:
+1124         case PRISM18:
+1125         case PYRAMID5:
+1126         case PYRAMID13:
+1127         case PYRAMID14:
+1128           return 0;
+1129         default:
+1130           return unknown;
+1131         }
+1132       break;
+1133     case SZABAB:
+1134       switch (el_t)
+1135         {
+1136         case EDGE2:
+1137         case EDGE3:
+1138         case EDGE4:
+1139           return 7;
+1140         case TRI3:
+1141           return 0;
+1142         case TRI6:
+1143           return 7;
+1144         case QUAD4:
+1145           return 0;
+1146         case QUAD8:
+1147         case QUAD9:
+1148           return 7;
+1149         case TET4:
+1150         case TET10:
+1151         case HEX8:
+1152         case HEX20:
+1153         case HEX27:
+1154         case PRISM6:
+1155         case PRISM15:
+1156         case PRISM18:
+1157         case PYRAMID5:
+1158         case PYRAMID13:
+1159         case PYRAMID14:
+1160           return 0;
+1161         default:
+1162           return unknown;
+1163         }
+1164       break;
+1165 #endif
+1166     case XYZ:
+1167       switch (el_t)
+1168         {
+1169         case EDGE2:
+1170         case EDGE3:
+1171         case EDGE4:
+1172         case TRI3:
+1173         case TRI6:
+1174         case QUAD4:
+1175         case QUAD8:
+1176         case QUAD9:
+1177         case TET4:
+1178         case TET10:
+1179         case HEX8:
+1180         case HEX20:
+1181         case HEX27:
+1182         case PRISM6:
+1183         case PRISM15:
+1184         case PRISM18:
+1185         case PYRAMID5:
+1186         case PYRAMID13:
+1187         case PYRAMID14:
+1188           return unlimited;
+1189         default:
+1190           return unknown;
+1191         }
+1192       break;
+1193     case CLOUGH:
+1194       switch (el_t)
+1195         {
+1196         case EDGE2:
+1197         case EDGE3:
+1198           return 3;
+1199         case EDGE4:
+1200         case TRI3:
+1201           return 0;
+1202         case TRI6:
+1203           return 3;
+1204         case QUAD4:
+1205         case QUAD8:
+1206         case QUAD9:
+1207         case TET4:
+1208         case TET10:
+1209         case HEX8:
+1210         case HEX20:
+1211         case HEX27:
+1212         case PRISM6:
+1213         case PRISM15:
+1214         case PRISM18:
+1215         case PYRAMID5:
+1216         case PYRAMID13:
+1217         case PYRAMID14:
+1218           return 0;
+1219         default:
+1220           return unknown;
+1221         }
+1222       break;
+1223     case HERMITE:
+1224       switch (el_t)
+1225         {
+1226         case EDGE2:
+1227         case EDGE3:
+1228           return unlimited;
+1229         case EDGE4:
+1230         case TRI3:
+1231         case TRI6:
+1232           return 0;
+1233         case QUAD4:
+1234           return 3;
+1235         case QUAD8:
+1236         case QUAD9:
+1237           return unlimited;
+1238         case TET4:
+1239         case TET10:
+1240           return 0;
+1241         case HEX8:
+1242           return 3;
+1243         case HEX20:
+1244         case HEX27:
+1245           return unlimited;
+1246         case PRISM6:
+1247         case PRISM15:
+1248         case PRISM18:
+1249         case PYRAMID5:
+1250         case PYRAMID13:
+1251         case PYRAMID14:
+1252           return 0;
+1253         default:
+1254           return unknown;
+1255         }
+1256       break;
+1257     case HIERARCHIC:
+1258       switch (el_t)
+1259         {
+1260         case EDGE2:
+1261         case EDGE3:
+1262         case EDGE4:
+1263           return unlimited;
+1264         case TRI3:
+1265           return 1;
+1266         case TRI6:
+1267           return unlimited;
+1268         case QUAD4:
+1269           return 1;
+1270         case QUAD8:
+1271         case QUAD9:
+1272           return unlimited;
+1273         case TET4:
+1274         case TET10:
+1275           return 0;
+1276         case HEX8:
+1277         case HEX20:
+1278           return 1;
+1279         case HEX27:
+1280           return unlimited;
+1281         case PRISM6:
+1282         case PRISM15:
+1283         case PRISM18:
+1284         case PYRAMID5:
+1285         case PYRAMID13:
+1286         case PYRAMID14:
+1287           return 0;
+1288         default:
+1289           return unknown;
+1290         }
+1291       break;
+1292     case L2_HIERARCHIC:
+1293       switch (el_t)
+1294         {
+1295         case EDGE2:
+1296         case EDGE3:
+1297         case EDGE4:
+1298           return unlimited;
+1299         case TRI3:
+1300           return 1;
+1301         case TRI6:
+1302           return unlimited;
+1303         case QUAD4:
+1304           return 1;
+1305         case QUAD8:
+1306         case QUAD9:
+1307           return unlimited;
+1308         case TET4:
+1309         case TET10:
+1310           return 0;
+1311         case HEX8:
+1312         case HEX20:
+1313           return 1;
+1314         case HEX27:
+1315           return unlimited;
+1316         case PRISM6:
+1317         case PRISM15:
+1318         case PRISM18:
+1319         case PYRAMID5:
+1320         case PYRAMID13:
+1321         case PYRAMID14:
+1322           return 0;
+1323         default:
+1324           return unknown;
+1325         }
+1326       break;
+1327     case SUBDIVISION:
+1328       switch (el_t)
+1329         {
+1330         case TRI3SUBDIVISION:
+1331           return unlimited;
+1332         default:
+1333           return unknown;
+1334         }
+1335       break;
+1336     case NEDELEC_ONE:
+1337       switch (el_t)
+1338         {
+1339         case TRI6:
+1340         case QUAD8:
+1341         case QUAD9:
+1342         case HEX20:
+1343         case HEX27:
+1344           return 1;
+1345         default:
+1346           return 0;
+1347         }
+1348       break;
+1349     default:
+1350       return 0;
+1351       break;
+1352     }
+1353 }
+.fi
+.SS "unsigned int libMesh::FEInterface::n_dofs (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of shape functions associated with this finite element\&. Automatically decides which finite element class to use\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.PP
+Definition at line 424 of file fe_interface\&.C\&.
+.PP
+References ifem_n_dofs(), is_InfFE_elem(), and libMesh::FEType::order\&.
+.PP
+Referenced by libMesh::DofMap::_dof_indices(), libMesh::FEGenericBase< T >::coarsened_dof_values(), compute_data(), libMesh::FEAbstract::compute_node_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), libMesh::DofMap::dof_indices(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs(), and libMesh::HPCoarsenTest::select_refinement()\&.
+.PP
+.nf
+427 {
+428 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+429 
+430   if ( is_InfFE_elem(t) )
+431     return ifem_n_dofs(dim, fe_t, t);
+432 
+433 #endif
+434 
+435   const Order o = fe_t\&.order;
+436 
+437   fe_with_vec_switch(n_dofs(t, o));
+438 
+439   libmesh_error();
+440   return 0;
+441 }
+.fi
+.SS "unsigned int libMesh::FEInterface::n_dofs_at_node (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned intn)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of dofs at node n for a finite element of type \fCfe_t\fP\&. Automatically decides which finite element class to use\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.PP
+Definition at line 446 of file fe_interface\&.C\&.
+.PP
+References ifem_n_dofs_at_node(), is_InfFE_elem(), and libMesh::FEType::order\&.
+.PP
+Referenced by libMesh::DofMap::_dof_indices(), libMesh::FEGenericBase< T >::coarsened_dof_values(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_shape_indices(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs_at_node(), libMesh::DofMap::old_dof_indices(), libMesh::ProjectSolution::operator()(), libMesh::ProjectFEMSolution::operator()(), libMesh::BoundaryProjectSolution::operator()(), and libMesh::DofMap::reinit()\&.
+.PP
+.nf
+450 {
+451 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+452 
+453   if ( is_InfFE_elem(t) )
+454     return ifem_n_dofs_at_node(dim, fe_t, t, n);
+455 
+456 #endif
+457 
+458   const Order o = fe_t\&.order;
+459 
+460   fe_with_vec_switch(n_dofs_at_node(t, o, n));
+461 
+462   libmesh_error();
+463   return 0;
+464 }
+.fi
+.SS "unsigned int libMesh::FEInterface::n_dofs_per_elem (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of dofs interior to the element, not associated with any interior nodes\&. Automatically decides which finite element class to use\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.PP
+Definition at line 470 of file fe_interface\&.C\&.
+.PP
+References ifem_n_dofs_per_elem(), is_InfFE_elem(), and libMesh::FEType::order\&.
+.PP
+Referenced by libMesh::DofMap::_dof_indices(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_shape_indices(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::n_dofs_per_elem(), libMesh::DofMap::old_dof_indices(), and libMesh::DofMap::reinit()\&.
+.PP
+.nf
+473 {
+474 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+475 
+476   if ( is_InfFE_elem(t) )
+477     return ifem_n_dofs_per_elem(dim, fe_t, t);
+478 
+479 #endif
+480 
+481   const Order o = fe_t\&.order;
+482 
+483   fe_with_vec_switch(n_dofs_per_elem(t, o));
+484 
+485   libmesh_error();
+486   return 0;
+487 }
+.fi
+.SS "unsigned int libMesh::FEInterface::n_shape_functions (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the number of shape functions associated with this finite element of type \fCfe_t\fP\&. Automatically decides which finite element class to use\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.PP
+Definition at line 395 of file fe_interface\&.C\&.
+.PP
+References ifem_n_shape_functions(), is_InfFE_elem(), and libMesh::FEType::order\&.
+.PP
+.nf
+398 {
+399 
+400 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+401   /*
+402    * Since the FEType, stored in DofMap/(some System child), has to
+403    * be the _same_ for InfFE and FE, we have to catch calls
+404    * to infinite elements through the element type\&.
+405    */
+406 
+407   if ( is_InfFE_elem(t) )
+408     return ifem_n_shape_functions(dim, fe_t, t);
+409 
+410 #endif
+411 
+412   const Order o = fe_t\&.order;
+413 
+414   fe_with_vec_switch(n_shape_functions(t, o));
+415 
+416   libmesh_error();
+417   return 0;
+418 }
+.fi
+.SS "unsigned int libMesh::FEInterface::n_vec_dim (const \fBMeshBase\fP &mesh, const \fBFEType\fP &fe_type)\fC [static]\fP"
+Returns the number of components of a vector-valued element\&. Scalar-valued elements return 1\&. 
+.PP
+Definition at line 1399 of file fe_interface\&.C\&.
+.PP
+References libMesh::FEType::family, libMesh::LAGRANGE_VEC, libMesh::MeshBase::mesh_dimension(), and libMesh::NEDELEC_ONE\&.
+.PP
+Referenced by libMesh::ExactSolution::_compute_error(), libMesh::EquationSystems::build_solution_vector(), and libMesh::EquationSystems::build_variable_names()\&.
+.PP
+.nf
+1400 {
+1401   switch (fe_type\&.family)
+1402     {
+1403       //FIXME: We currently assume that the number of vector components is tied
+1404       //       to the mesh dimension\&. This will break for mixed-dimension meshes\&.
+1405     case LAGRANGE_VEC:
+1406     case NEDELEC_ONE:
+1407       return mesh\&.mesh_dimension();
+1408     default:
+1409       return 1;
+1410     }
+1411 }
+.fi
+.SS "void libMesh::FEInterface::nodal_soln (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const std::vector< \fBNumber\fP > &elem_soln, std::vector< \fBNumber\fP > &nodal_soln)\fC [static]\fP"
+Build the nodal soln from the element soln\&. This is the solution that will be plotted\&. Automatically passes the request to the appropriate finite element class member\&. To indicate that results from this specific implementation of \fCnodal_soln\fP should not be used, the vector \fCnodal_soln\fP is returned empty\&.
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the base order of the element\&. 
+.PP
+Definition at line 523 of file fe_interface\&.C\&.
+.PP
+References ifem_nodal_soln(), is_InfFE_elem(), libMesh::FEType::order, and libMesh::Elem::type()\&.
+.PP
+Referenced by libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::EquationSystems::build_solution_vector(), libMesh::EnsightIO::write_scalar_ascii(), and libMesh::EnsightIO::write_vector_ascii()\&.
+.PP
+.nf
+528 {
+529 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+530 
+531   if ( is_InfFE_elem(elem->type()) )
+532     {
+533       ifem_nodal_soln(dim, fe_t, elem, elem_soln, nodal_soln);
+534       return;
+535     }
+536 
+537 #endif
+538 
+539   const Order order = fe_t\&.order;
+540 
+541   void_fe_with_vec_switch(nodal_soln(elem, order, elem_soln, nodal_soln));
+542 }
+.fi
+.SS "bool libMesh::FEInterface::on_reference_element (const \fBPoint\fP &p, const \fBElemType\fPt, const \fBReal\fPeps = \fC\fBTOLERANCE\fP\fP)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+true if the point p is located on the reference element for element type t, false otherwise\&.
+.RE
+.PP
+Since we are doing floating point comparisons here the parameter \fCeps\fP can be specified to indicate a tolerance\&. For example, $ \xi \le 1 $ becomes $ \xi \le 1 + \epsilon $\&. 
+.PP
+Definition at line 628 of file fe_interface\&.C\&.
+.PP
+References libMesh::FEAbstract::on_reference_element()\&.
+.PP
+Referenced by libMesh::InfQuad4::contains_point(), libMesh::InfPrism6::contains_point(), libMesh::InfHex8::contains_point(), and libMesh::Elem::point_test()\&.
+.PP
+.nf
+631 {
+632   return FEBase::on_reference_element(p,t,eps);
+633 }
+.fi
+.SS "\fBReal\fP libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned inti, const \fBPoint\fP &p)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value of the $ i^{th} $ shape function at point \fCp\fP\&. This method allows you to specify the dimension, element type, and order directly\&. Automatically passes the request to the appropriate finite element class member\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.PP
+Definition at line 638 of file fe_interface\&.C\&.
+.PP
+References ifem_shape(), is_InfFE_elem(), and libMesh::FEType::order\&.
+.PP
+Referenced by compute_data(), libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::compute_data(), libMesh::FEAbstract::compute_node_constraints(), libMesh::FEAbstract::compute_periodic_node_constraints(), shape(), and libMesh::InfFE< friend_Dim, friend_T_radial, friend_T_map >::shape()\&.
+.PP
+.nf
+643 {
+644 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+645 
+646   if ( is_InfFE_elem(t) )
+647     return ifem_shape(dim, fe_t, t, i, p);
+648 
+649 #endif
+650 
+651   const Order o = fe_t\&.order;
+652 
+653   fe_switch(shape(t,o,i,p));
+654 
+655   libmesh_error();
+656   return 0\&.;
+657 }
+.fi
+.SS "\fBReal\fP libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned inti, const \fBPoint\fP &p)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value of the $ i^{th} $ shape function at point \fCp\fP\&. This method allows you to specify the dimension, element type, and order directly\&. Automatically passes the request to the appropriate finite element class member\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the base order of the element\&. 
+.PP
+Definition at line 659 of file fe_interface\&.C\&.
+.PP
+References ifem_shape(), is_InfFE_elem(), libMesh::FEType::order, shape(), and libMesh::Elem::type()\&.
+.PP
+.nf
+664 {
+665 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+666 
+667   if ( is_InfFE_elem(elem->type()) )
+668     return ifem_shape(dim, fe_t, elem, i, p);
+669 
+670 #endif
+671 
+672   const Order o = fe_t\&.order;
+673 
+674   fe_switch(shape(elem,o,i,p));
+675 
+676   libmesh_error();
+677   return 0\&.;
+678 }
+.fi
+.SS "template<typename OutputType > static void libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned inti, const \fBPoint\fP &p, OutputType &phi)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value of the $ i^{th} $ shape function at point \fCp\fP\&. This method allows you to specify the dimension, element type, and order directly\&. Automatically passes the request to the appropriate \fIscalar\fP finite element class member\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.SS "template<typename OutputType > static void libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned inti, const \fBPoint\fP &p, OutputType &phi)\fC [static]\fP"
+
+.PP
+\fBReturns:\fP
+.RS 4
+the value of the $ i^{th} $ shape function at point \fCp\fP\&. This method allows you to specify the dimension, element type, and order directly\&. Automatically passes the request to the appropriate \fIscalar\fP finite element class member\&.
+.RE
+.PP
+On a p-refined element, \fCfe_t\&.order\fP should be the total order of the element\&. 
+.SS "template<> void libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned inti, const \fBPoint\fP &p, \fBReal\fP &phi)"
+
+.PP
+Definition at line 681 of file fe_interface\&.C\&.
+.PP
+References libMesh::dim\&.
+.PP
+.nf
+687 {
+688 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+689 
+690   if ( is_InfFE_elem(t) )
+691     phi = ifem_shape(dim, fe_t, t, i, p);
+692 
+693 #endif
+694 
+695   const Order o = fe_t\&.order;
+696 
+697   switch(dim)
+698     {
+699     case 0:
+700       fe_scalar_vec_error_switch(0, shape(t,o,i,p), phi = , ; break;);
+701       break;
+702     case 1:
+703       fe_scalar_vec_error_switch(1, shape(t,o,i,p), phi = , ; break;);
+704       break;
+705     case 2:
+706       fe_scalar_vec_error_switch(2, shape(t,o,i,p), phi = , ; break;);
+707       break;
+708     case 3:
+709       fe_scalar_vec_error_switch(3, shape(t,o,i,p), phi = , ; break;);
+710       break;
+711     }
+712 
+713   return;
+714 }
+.fi
+.SS "template<> void libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned inti, const \fBPoint\fP &p, \fBReal\fP &phi)"
+
+.PP
+Definition at line 717 of file fe_interface\&.C\&.
+.PP
+References libMesh::dim\&.
+.PP
+.nf
+723 {
+724 #ifdef LIBMESH_ENABLE_INFINITE_ELEMENTS
+725 
+726   if ( is_InfFE_elem(elem->type()) )
+727     phi = ifem_shape(dim, fe_t, elem, i, p);
+728 
+729 #endif
+730 
+731   const Order o = fe_t\&.order;
+732 
+733   switch(dim)
+734     {
+735     case 0:
+736       fe_scalar_vec_error_switch(0, shape(elem,o,i,p), phi = , ; break;);
+737       break;
+738     case 1:
+739       fe_scalar_vec_error_switch(1, shape(elem,o,i,p), phi = , ; break;);
+740       break;
+741     case 2:
+742       fe_scalar_vec_error_switch(2, shape(elem,o,i,p), phi = , ; break;);
+743       break;
+744     case 3:
+745       fe_scalar_vec_error_switch(3, shape(elem,o,i,p), phi = , ; break;);
+746       break;
+747     }
+748 
+749   return;
+750 }
+.fi
+.SS "template<> void libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElemType\fPt, const unsigned inti, const \fBPoint\fP &p, \fBRealGradient\fP &phi)"
+
+.PP
+Definition at line 753 of file fe_interface\&.C\&.
+.PP
+References libMesh::dim\&.
+.PP
+.nf
+759 {
+760   const Order o = fe_t\&.order;
+761 
+762   switch(dim)
+763     {
+764     case 0:
+765       fe_vector_scalar_error_switch(0, shape(t,o,i,p), phi = , ; break;);
+766       break;
+767     case 1:
+768       fe_vector_scalar_error_switch(1, shape(t,o,i,p), phi = , ; break;);
+769       break;
+770     case 2:
+771       fe_vector_scalar_error_switch(2, shape(t,o,i,p), phi = , ; break;);
+772       break;
+773     case 3:
+774       fe_vector_scalar_error_switch(3, shape(t,o,i,p), phi = , ; break;);
+775       break;
+776     }
+777 
+778   return;
+779 }
+.fi
+.SS "template<> void libMesh::FEInterface::shape (const unsigned intdim, const \fBFEType\fP &fe_t, const \fBElem\fP *elem, const unsigned inti, const \fBPoint\fP &p, \fBRealGradient\fP &phi)"
+
+.PP
+Definition at line 782 of file fe_interface\&.C\&.
+.PP
+References libMesh::dim\&.
+.PP
+.nf
+788 {
+789   const Order o = fe_t\&.order;
+790 
+791   switch(dim)
+792     {
+793     case 0:
+794       fe_vector_scalar_error_switch(0, shape(elem,o,i,p), phi = , ; break;);
+795       break;
+796     case 1:
+797       fe_vector_scalar_error_switch(1, shape(elem,o,i,p), phi = , ; break;);
+798       break;
+799     case 2:
+800       fe_vector_scalar_error_switch(2, shape(elem,o,i,p), phi = , ; break;);
+801       break;
+802     case 3:
+803       fe_vector_scalar_error_switch(3, shape(elem,o,i,p), phi = , ; break;);
+804       break;
+805     }
+806 
+807   return;
+808 }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

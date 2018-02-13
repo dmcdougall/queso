@@ -1,0 +1,171 @@
+.TH "libMesh::mapvector< Val, index_t >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::mapvector< Val, index_t > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mapvector\&.h>\fP
+.PP
+Inherits map< index_t, Val >\&.
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "class \fBconst_veclike_iterator\fP"
+.br
+.ti -1c
+.RI "class \fBveclike_iterator\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< index_t, Val > \fBmaptype\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "Val & \fBoperator[]\fP (const index_t &k)"
+.br
+.ti -1c
+.RI "Val \fBoperator[]\fP (const index_t &k) const "
+.br
+.ti -1c
+.RI "void \fBerase\fP (index_t i)"
+.br
+.ti -1c
+.RI "void \fBerase\fP (const \fBveclike_iterator\fP &pos)"
+.br
+.ti -1c
+.RI "\fBveclike_iterator\fP \fBbegin\fP ()"
+.br
+.ti -1c
+.RI "\fBconst_veclike_iterator\fP \fBbegin\fP () const "
+.br
+.ti -1c
+.RI "\fBveclike_iterator\fP \fBend\fP ()"
+.br
+.ti -1c
+.RI "\fBconst_veclike_iterator\fP \fBend\fP () const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<typename Val, typename index_t = unsigned int>class libMesh::mapvector< Val, index_t >"
+This \fCmapvector\fP templated class is intended to provide the performance characteristics of a std::map with an interface more closely resembling that of a std::vector, for use with \fBParallelMesh\fP\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner 
+.RE
+.PP
+
+.PP
+Definition at line 38 of file mapvector\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<typename Val, typename index_t = unsigned int> typedef std::map<index_t, Val> \fBlibMesh::mapvector\fP< Val, index_t >::\fBmaptype\fP"
+
+.PP
+Definition at line 41 of file mapvector\&.h\&.
+.SH "Member Function Documentation"
+.PP 
+.SS "template<typename Val, typename index_t = unsigned int> \fBveclike_iterator\fP \fBlibMesh::mapvector\fP< Val, index_t >::begin ()\fC [inline]\fP"
+
+.PP
+Definition at line 124 of file mapvector\&.h\&.
+.PP
+Referenced by libMesh::ParallelMesh::fix_broken_node_and_element_numbering(), and libMesh::ParallelMesh::renumber_dof_objects()\&.
+.PP
+.nf
+124                            {
+125     return veclike_iterator(maptype::begin());
+126   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> \fBconst_veclike_iterator\fP \fBlibMesh::mapvector\fP< Val, index_t >::begin () const\fC [inline]\fP"
+
+.PP
+Definition at line 128 of file mapvector\&.h\&.
+.PP
+.nf
+128                                        {
+129     return const_veclike_iterator(maptype::begin());
+130   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> \fBveclike_iterator\fP \fBlibMesh::mapvector\fP< Val, index_t >::end ()\fC [inline]\fP"
+
+.PP
+Definition at line 132 of file mapvector\&.h\&.
+.PP
+Referenced by libMesh::ParallelMesh::fix_broken_node_and_element_numbering(), libMesh::mapvector< libMesh::Elem *, dof_id_type >::operator[](), and libMesh::ParallelMesh::renumber_dof_objects()\&.
+.PP
+.nf
+132                          {
+133     return veclike_iterator(maptype::end());
+134   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> \fBconst_veclike_iterator\fP \fBlibMesh::mapvector\fP< Val, index_t >::end () const\fC [inline]\fP"
+
+.PP
+Definition at line 136 of file mapvector\&.h\&.
+.PP
+.nf
+136                                      {
+137     return const_veclike_iterator(maptype::end());
+138   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> void \fBlibMesh::mapvector\fP< Val, index_t >::erase (index_ti)\fC [inline]\fP"
+
+.PP
+Definition at line 116 of file mapvector\&.h\&.
+.PP
+Referenced by libMesh::ParallelMesh::renumber_dof_objects()\&.
+.PP
+.nf
+116                         {
+117     maptype::erase(i);
+118   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> void \fBlibMesh::mapvector\fP< Val, index_t >::erase (const \fBveclike_iterator\fP &pos)\fC [inline]\fP"
+
+.PP
+Definition at line 120 of file mapvector\&.h\&.
+.PP
+.nf
+120                                           {
+121     maptype::erase(pos\&.it);
+122   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> Val& \fBlibMesh::mapvector\fP< Val, index_t >::operator[] (const index_t &k)\fC [inline]\fP"
+
+.PP
+Definition at line 43 of file mapvector\&.h\&.
+.PP
+.nf
+44   {
+45     return maptype::operator[](k);
+46   }
+.fi
+.SS "template<typename Val, typename index_t = unsigned int> Val \fBlibMesh::mapvector\fP< Val, index_t >::operator[] (const index_t &k) const\fC [inline]\fP"
+
+.PP
+Definition at line 47 of file mapvector\&.h\&.
+.PP
+.nf
+48   {
+49     typename maptype::const_iterator it = this->find(k);
+50     return it == this->end()\&.it? Val() : it->second;
+51   }
+.fi
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

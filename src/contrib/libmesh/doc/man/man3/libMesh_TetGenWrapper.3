@@ -1,0 +1,674 @@
+.TH "libMesh::TetGenWrapper" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::TetGenWrapper \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_tetgen_wrapper\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBTetGenWrapper\fP ()"
+.br
+.ti -1c
+.RI "\fB~TetGenWrapper\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_switches\fP (const std::string &s)"
+.br
+.ti -1c
+.RI "void \fBrun_tetgen\fP ()"
+.br
+.ti -1c
+.RI "int \fBget_numberoftetrahedra\fP ()"
+.br
+.ti -1c
+.RI "int \fBget_numberoftrifaces\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_numberofpoints\fP (int i)"
+.br
+.ti -1c
+.RI "int \fBget_numberofpoints\fP ()"
+.br
+.ti -1c
+.RI "void \fBset_numberoffacets\fP (int i)"
+.br
+.ti -1c
+.RI "void \fBset_numberofholes\fP (int i)"
+.br
+.ti -1c
+.RI "void \fBset_numberofregions\fP (int i)"
+.br
+.ti -1c
+.RI "void \fBallocate_pointlist\fP (int numofpoints)"
+.br
+.ti -1c
+.RI "void \fBallocate_facetlist\fP (int numoffacets, int numofholes)"
+.br
+.ti -1c
+.RI "void \fBallocate_regionlist\fP (int numofregions)"
+.br
+.ti -1c
+.RI "void \fBset_node\fP (unsigned i, \fBREAL\fP \fBx\fP, \fBREAL\fP y, \fBREAL\fP z)"
+.br
+.ti -1c
+.RI "void \fBget_output_node\fP (unsigned i, \fBREAL\fP &\fBx\fP, \fBREAL\fP &y, \fBREAL\fP &z)"
+.br
+.ti -1c
+.RI "int \fBget_element_node\fP (unsigned i, unsigned j)"
+.br
+.ti -1c
+.RI "int \fBget_triface_node\fP (unsigned i, unsigned j)"
+.br
+.ti -1c
+.RI "\fBREAL\fP \fBget_element_attribute\fP (unsigned i)"
+.br
+.ti -1c
+.RI "void \fBset_hole\fP (unsigned i, \fBREAL\fP \fBx\fP, \fBREAL\fP y, \fBREAL\fP z)"
+.br
+.ti -1c
+.RI "void \fBset_facet_numberofpolygons\fP (unsigned i, int num)"
+.br
+.ti -1c
+.RI "void \fBset_facet_numberofholes\fP (unsigned i, int num)"
+.br
+.ti -1c
+.RI "void \fBallocate_facet_polygonlist\fP (unsigned i, int numofpolygons)"
+.br
+.ti -1c
+.RI "void \fBset_polygon_numberofvertices\fP (unsigned i, unsigned j, int num)"
+.br
+.ti -1c
+.RI "void \fBallocate_polygon_vertexlist\fP (unsigned i, unsigned j, int numofvertices)"
+.br
+.ti -1c
+.RI "void \fBset_vertex\fP (unsigned i, unsigned j, unsigned k, int nodeindex)"
+.br
+.ti -1c
+.RI "void \fBset_region\fP (unsigned i, \fBREAL\fP \fBx\fP, \fBREAL\fP y, \fBREAL\fP z, \fBREAL\fP attribute, \fBREAL\fP vol_constraint)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "tetgenio \fBtetgen_data\fP"
+.br
+.ti -1c
+.RI "tetgenio * \fBtetgen_output\fP"
+.br
+.ti -1c
+.RI "tetgenmesh \fBtetgen_mesh\fP"
+.br
+.ti -1c
+.RI "tetgenbehavior \fBtetgen_be\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+The \fC\fBTetGenWrapper\fP\fP provides an interface for basic access to TetGen data structures and methods\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+, Steffen Petersen, 2004 Refactoring, John W\&. Peterson, 2011 
+.RE
+.PP
+
+.PP
+Definition at line 41 of file mesh_tetgen_wrapper\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::TetGenWrapper::TetGenWrapper ()"
+Constructor\&. 
+.PP
+Definition at line 34 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data, and tetgen_output\&.
+.PP
+.nf
+35 {
+36   tetgen_output = new tetgenio;
+37 
+38   this->tetgen_data\&.mesh_dim                = 3;
+39   this->tetgen_data\&.numberofpointattributes = 0;
+40   this->tetgen_data\&.firstnumber             = 0;
+41 }
+.fi
+.SS "libMesh::TetGenWrapper::~TetGenWrapper ()"
+Destructor\&. Empty\&. 
+.PP
+Definition at line 45 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_output\&.
+.PP
+.nf
+46 {
+47   delete tetgen_output;
+48 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::TetGenWrapper::allocate_facet_polygonlist (unsignedi, intnumofpolygons)"
+Method allocates memory, sets number of polygons for facet i in TetGen input\&. 
+.PP
+Definition at line 301 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, set_facet_numberofholes(), set_facet_numberofpolygons(), and tetgen_data\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+302 {
+303   this->set_facet_numberofpolygons(i, numofpolygons);
+304   this->set_facet_numberofholes(i, 0);
+305 
+306   // Don't try to create an array of size zero, this isn't portable
+307   if (numofpolygons > 0)
+308     {
+309       // Is there previously-allocated memory here?
+310       if (this->tetgen_data\&.facetlist[i]\&.polygonlist != NULL)
+311         {
+312           libMesh::err << "Cannot allocate on top of previously allocated memory!" << std::endl;
+313           libmesh_error();
+314         }
+315 
+316       // We allocate memory here, the tetgenio destructor cleans it up\&.
+317       this->tetgen_data\&.facetlist[i]\&.polygonlist = new tetgenio::polygon[numofpolygons];
+318 
+319       for (int j=0; j<this->tetgen_data\&.facetlist[i]\&.numberofpolygons; j++)
+320         this->tetgen_data\&.init(&(this->tetgen_data\&.facetlist[i]\&.polygonlist[j]));
+321     }
+322 }
+.fi
+.SS "void libMesh::TetGenWrapper::allocate_facetlist (intnumoffacets, intnumofholes)"
+Method allocates memory, sets number of facets, holes in TetGen input\&. 
+.PP
+Definition at line 223 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, set_numberoffacets(), set_numberofholes(), and tetgen_data\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+224 {
+225   // These are both stored as ints in TetGen
+226   this->set_numberoffacets(numoffacets);
+227   this->set_numberofholes(numofholes);
+228 
+229   // Don't try to allocate an array of size zero, this is not portable\&.\&.\&.
+230   if (this->tetgen_data\&.numberoffacets > 0)
+231     {
+232       // Is there previously-allocated memory here?
+233       if (this->tetgen_data\&.facetlist != NULL)
+234         {
+235           libMesh::err << "Cannot allocate on top of previously allocated memory!" << std::endl;
+236           libmesh_error();
+237         }
+238 
+239       // We allocate memory here, the tetgenio destructor cleans it up\&.
+240       this->tetgen_data\&.facetlist = new tetgenio::facet[this->tetgen_data\&.numberoffacets];
+241 
+242       for (int i=0; i<numoffacets; i++)
+243         this->tetgen_data\&.init(&(this->tetgen_data\&.facetlist[i]));
+244     }
+245 
+246 
+247   // Don't try to allocate an array of size zero, this is not portable\&.\&.\&.
+248   if (this->tetgen_data\&.numberofholes > 0)
+249     {
+250       // Is there previously-allocated memory here?
+251       if (this->tetgen_data\&.holelist != NULL)
+252         {
+253           libMesh::err << "Cannot allocate on top of previously allocated memory!" << std::endl;
+254           libmesh_error();
+255         }
+256 
+257       this->tetgen_data\&.holelist = new REAL[this->tetgen_data\&.numberofholes * 3];
+258     }
+259 }
+.fi
+.SS "void libMesh::TetGenWrapper::allocate_pointlist (intnumofpoints)"
+Method allocates memory, sets number of nodes in TetGen input\&. 
+.PP
+Definition at line 144 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, set_numberofpoints(), and tetgen_data\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::fill_pointlist()\&.
+.PP
+.nf
+145 {
+146   // This is stored as an int in tetgen, so we store it that way as well\&.
+147   this->set_numberofpoints(numofpoints);
+148 
+149   // Don't try to allocate an array of size zero, this is not portable\&.\&.\&.
+150   if (this->tetgen_data\&.numberofpoints > 0)
+151     {
+152       // Is there previously-allocated memory here?
+153       if (this->tetgen_data\&.pointlist != NULL)
+154         {
+155           libMesh::err << "Cannot allocate on top of previously allocated memory!" << std::endl;
+156           libmesh_error();
+157         }
+158 
+159       // We allocate memory here, the tetgenio destructor will delete it\&.
+160       this->tetgen_data\&.pointlist = new REAL[this->tetgen_data\&.numberofpoints * 3];
+161     }
+162 }
+.fi
+.SS "void libMesh::TetGenWrapper::allocate_polygon_vertexlist (unsignedi, unsignedj, intnumofvertices)"
+Method allocates memory, sets number of vertices for polygon j, facet i in TetGen input\&. 
+.PP
+Definition at line 334 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, set_polygon_numberofvertices(), and tetgen_data\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+335 {
+336   this->set_polygon_numberofvertices(i, j, numofvertices);
+337 
+338   // Don't try to create an array of size zero, this isn't portable
+339   if (numofvertices > 0)
+340     {
+341       // Is there previously-allocated memory here?
+342       if (this->tetgen_data\&.facetlist[i]\&.polygonlist[j]\&.vertexlist != NULL)
+343         {
+344           libMesh::err << "Cannot allocate on top of previously allocated memory!" << std::endl;
+345           libmesh_error();
+346         }
+347 
+348       // We allocate memory here, the tetgenio destructor cleans it up\&.
+349       this->tetgen_data\&.facetlist[i]\&.polygonlist[j]\&.vertexlist = new int[numofvertices];
+350     }
+351 }
+.fi
+.SS "void libMesh::TetGenWrapper::allocate_regionlist (intnumofregions)"
+Method allocates memory, sets number of regions in TetGen input\&. 
+.PP
+Definition at line 263 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, set_numberofregions(), and tetgen_data\&.
+.PP
+.nf
+264 {
+265   this->set_numberofregions(numofregions);
+266 
+267   // Don't try to allocate an array of size zero, this is not portable\&.\&.\&.
+268   if (this->tetgen_data\&.numberofregions > 0)
+269     {
+270       // Is there previously-allocated memory here?
+271       if (this->tetgen_data\&.regionlist != NULL)
+272         {
+273           libMesh::err << "Cannot allocate on top of previously allocated memory!" << std::endl;
+274           libmesh_error();
+275         }
+276 
+277       // We allocate memory here, the tetgenio destructor cleans it up\&.
+278       this->tetgen_data\&.regionlist = new REAL[this->tetgen_data\&.numberofregions * 5];
+279     }
+280 }
+.fi
+.SS "\fBREAL\fP libMesh::TetGenWrapper::get_element_attribute (unsignedi)"
+Method returns attribute of element i in TetGen output\&. 
+.PP
+Definition at line 136 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::libmesh_assert(), and tetgen_output\&.
+.PP
+.nf
+137 {
+138   libmesh_assert(tetgen_output->numberoftetrahedronattributes>0);
+139   return tetgen_output->tetrahedronattributelist[tetgen_output->numberoftetrahedronattributes*i];
+140 }
+.fi
+.SS "int libMesh::TetGenWrapper::get_element_node (unsignedi, unsignedj)"
+Method returns index of jth node from element i in TetGen output\&. 
+.PP
+Definition at line 122 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), and libMesh::TetGenMeshInterface::triangulate_pointset()\&.
+.PP
+.nf
+123 {
+124   return tetgen_output->tetrahedronlist[i*4+j];
+125 }
+.fi
+.SS "int libMesh::TetGenWrapper::get_numberofpoints ()"
+Method returns number of nodes in TetGen output\&. 
+.PP
+Definition at line 115 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+116 {
+117   return tetgen_output->numberofpoints;
+118 }
+.fi
+.SS "int libMesh::TetGenWrapper::get_numberoftetrahedra ()"
+Method returns number of tetrahedra in TetGen output\&. 
+.PP
+Definition at line 101 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), and libMesh::TetGenMeshInterface::triangulate_pointset()\&.
+.PP
+.nf
+102 {
+103   return tetgen_output->numberoftetrahedra;
+104 }
+.fi
+.SS "int libMesh::TetGenWrapper::get_numberoftrifaces ()"
+Method returns number of triangle surface elts\&. in TetGen output\&. 
+.PP
+Definition at line 108 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::pointset_convexhull()\&.
+.PP
+.nf
+109 {
+110   return tetgen_output->numberoftrifaces;
+111 }
+.fi
+.SS "void libMesh::TetGenWrapper::get_output_node (unsignedi, \fBREAL\fP &x, \fBREAL\fP &y, \fBREAL\fP &z)"
+Method returns coordinates of point i in TetGen output\&. 
+.PP
+Definition at line 80 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, and tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+81 {
+82   // Bounds checking\&.\&.\&.
+83   if (i >= static_cast<unsigned>(tetgen_output->numberofpoints))
+84     {
+85       libMesh::err << "Error, requested point "
+86                    << i
+87                    << ", but there are only "
+88                    << tetgen_output->numberofpoints
+89                    << " points available\&."
+90                    << std::endl;
+91       libmesh_error();
+92     }
+93 
+94   x = tetgen_output->pointlist[3*i];
+95   y = tetgen_output->pointlist[3*i+1];
+96   z = tetgen_output->pointlist[3*i+2];
+97 }
+.fi
+.SS "int libMesh::TetGenWrapper::get_triface_node (unsignedi, unsignedj)"
+Method returns index of jth node from surface triangle i in TetGen output\&. 
+.PP
+Definition at line 129 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::pointset_convexhull()\&.
+.PP
+.nf
+130 {
+131   return tetgen_output->trifacelist[i*3+j];
+132 }
+.fi
+.SS "void libMesh::TetGenWrapper::run_tetgen ()"
+Method starts triangulization\&. 
+.PP
+Definition at line 191 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_be, tetgen_data, and tetgen_output\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::pointset_convexhull(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), and libMesh::TetGenMeshInterface::triangulate_pointset()\&.
+.PP
+.nf
+192 {
+193   // Call tetrahedralize from the TetGen library\&.
+194   tetrahedralize(&tetgen_be, &tetgen_data, tetgen_output);
+195 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_facet_numberofholes (unsignedi, intnum)"
+Method sets number of holes for facet i in TetGen input\&. 
+.PP
+Definition at line 292 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_facet_polygonlist()\&.
+.PP
+.nf
+293 {
+294   // numberofholes is stored as an int in TetGen
+295   this->tetgen_data\&.facetlist[i]\&.numberofholes = num;
+296 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_facet_numberofpolygons (unsignedi, intnum)"
+Method sets number of polygons for facet i in TetGen input\&. 
+.PP
+Definition at line 284 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_facet_polygonlist()\&.
+.PP
+.nf
+285 {
+286   // numberofpolygons is stored as an int in TetGen
+287   this->tetgen_data\&.facetlist[i]\&.numberofpolygons = num;
+288 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_hole (unsignedi, \fBREAL\fPx, \fBREAL\fPy, \fBREAL\fPz)"
+Method sets coordinates of hole i in TetGen input\&. 
+.PP
+Definition at line 62 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data, and libMesh::x\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+63 {
+64   unsigned index = i*3;
+65   tetgen_data\&.holelist[index++] = x;
+66   tetgen_data\&.holelist[index++] = y;
+67   tetgen_data\&.holelist[index++] = z;
+68 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_node (unsignedi, \fBREAL\fPx, \fBREAL\fPy, \fBREAL\fPz)"
+Method sets coordinates of point i in TetGen input\&. 
+.PP
+Definition at line 52 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data, and libMesh::x\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::fill_pointlist()\&.
+.PP
+.nf
+53 {
+54   unsigned index = i*3;
+55   tetgen_data\&.pointlist[index++] = x;
+56   tetgen_data\&.pointlist[index++] = y;
+57   tetgen_data\&.pointlist[index++] = z;
+58 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_numberoffacets (inti)"
+Method sets number of facets in TetGen input\&. 
+.PP
+Definition at line 199 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_facetlist()\&.
+.PP
+.nf
+200 {
+201   // This is stored as an int in TetGen
+202   this->tetgen_data\&.numberoffacets = i;
+203 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_numberofholes (inti)"
+Method sets number of holes in TetGen input\&. 
+.PP
+Definition at line 207 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_facetlist()\&.
+.PP
+.nf
+208 {
+209   // This is stored as an int in TetGen
+210   this->tetgen_data\&.numberofholes = i;
+211 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_numberofpoints (inti)"
+Method sets number of nodes in TetGen input\&. 
+.PP
+Definition at line 72 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_pointlist()\&.
+.PP
+.nf
+73 {
+74   // This is an int in tetgen, so use an int here even though it should be unsigned
+75   tetgen_data\&.numberofpoints = i;
+76 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_numberofregions (inti)"
+Method sets number of regions in TetGen input\&. 
+.PP
+Definition at line 215 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_regionlist()\&.
+.PP
+.nf
+216 {
+217   // This is stored as an int in TetGen
+218   this->tetgen_data\&.numberofregions = i;
+219 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_polygon_numberofvertices (unsignedi, unsignedj, intnum)"
+Method sets number of vertices for polygon j, facet i in TetGen input\&. 
+.PP
+Definition at line 326 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by allocate_polygon_vertexlist()\&.
+.PP
+.nf
+327 {
+328   // numberofvertices is stored as an int in TetGen
+329   this->tetgen_data\&.facetlist[i]\&.polygonlist[j]\&.numberofvertices = num;
+330 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_region (unsignedi, \fBREAL\fPx, \fBREAL\fPy, \fBREAL\fPz, \fBREAL\fPattribute, \fBREAL\fPvol_constraint)"
+Method sets coordinates, attribute and volume constraint for region i in TetGen input\&. Note that coordinates and attributes will only be considered if the corresponding switches are enabled\&. See TetGen documentation for more details\&. 
+.PP
+Definition at line 364 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data, and libMesh::x\&.
+.PP
+.nf
+366 {
+367   unsigned index = i*5;
+368   tetgen_data\&.regionlist[index++] = x;
+369   tetgen_data\&.regionlist[index++] = y;
+370   tetgen_data\&.regionlist[index++] = z;
+371   tetgen_data\&.regionlist[index++] = attribute;
+372   tetgen_data\&.regionlist[index++] = vol_constraint;
+373 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_switches (const std::string &s)"
+Method to set TetGen commandline switches -p Tetrahedralizes a piecewise linear complex (\&.poly or \&.smesh file)\&. -q \fBQuality\fP mesh generation\&. A minimum radius-edge ratio may be specified (default 2\&.0)\&. -a Applies a maximum tetrahedron volume constraint\&. -A Assigns attributes to identify tetrahedra in certain regions\&. -r Reconstructs and Refines a previously generated mesh\&. -Y Suppresses boundary facets/segments splitting\&. -i Inserts a list of additional points into mesh\&. -M Does not merge coplanar facets\&. -T Set a tolerance for coplanar test (default 1e-8)\&. -d Detect intersections of PLC facets\&. -z Numbers all output items starting from zero\&. -o2 Generates second-order subparametric elements\&. -f Outputs faces (including non-boundary faces) to \&.face file\&. -e Outputs subsegments to \&.edge file\&. -n Outputs tetrahedra neighbors to \&.neigh file\&. -g Outputs mesh to \&.mesh file for viewing by Medit\&. -G Outputs mesh to \&.msh file for viewing by Gid\&. -O Outputs mesh to \&.off file for viewing by Geomview\&. -J No jettison of unused vertices from output \&.node file\&. -B Suppresses output of boundary information\&. -N Suppresses output of \&.node file\&. -E Suppresses output of \&.ele file\&. -F Suppresses output of \&.face file\&. -I Suppresses mesh iteration numbers\&. -C Checks the consistency of the final mesh\&. -Q Quiet: No terminal output except errors\&. -V Verbose: Detailed information, more terminal output\&. -v Prints the version information\&. -h Help: A brief instruction for using TetGen\&. 
+.PP
+Definition at line 166 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References libMesh::err, libMesh::out, and tetgen_be\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::pointset_convexhull(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), and libMesh::TetGenMeshInterface::triangulate_pointset()\&.
+.PP
+.nf
+167 {
+168   // A temporary buffer for passing to the C API, it requires
+169   // a char*, not a const char*\&.\&.\&.
+170   char buffer[256];
+171 
+172   // Make sure char buffer has enough room
+173   if (s\&.size() >= sizeof(buffer)-1)
+174     {
+175       libMesh::err << "Fixed size buffer of length "
+176                    << sizeof(buffer)
+177                    << " not large enough to hold TetGen switches\&."
+178                    << std::endl;
+179       libmesh_error();
+180     }
+181 
+182   // Copy the string, don't forget to NULL-terminate!
+183   buffer[ s\&.copy( buffer , sizeof( buffer ) - 1 ) ] = '\0' ;
+184 
+185   if (!tetgen_be\&.parse_commandline(buffer))
+186     libMesh::out << "TetGen replies: Wrong switches!" << std::endl;
+187 }
+.fi
+.SS "void libMesh::TetGenWrapper::set_vertex (unsignedi, unsignedj, unsignedk, intnodeindex)"
+Method sets index of ith facet, jth polygon, kth vertex in TetGen input\&. 
+.PP
+Definition at line 356 of file mesh_tetgen_wrapper\&.C\&.
+.PP
+References tetgen_data\&.
+.PP
+Referenced by libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole()\&.
+.PP
+.nf
+357 {
+358   // vertexlist entries are stored as ints in TetGen
+359   this->tetgen_data\&.facetlist[i]\&.polygonlist[j]\&.vertexlist[k] = nodeindex;
+360 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "tetgenbehavior libMesh::TetGenWrapper::tetgen_be"
+TetGen control class (from the TetGen library)\&. 
+.PP
+Definition at line 234 of file mesh_tetgen_wrapper\&.h\&.
+.PP
+Referenced by run_tetgen(), and set_switches()\&.
+.SS "tetgenio libMesh::TetGenWrapper::tetgen_data"
+TetGen input structure\&. 
+.PP
+Definition at line 219 of file mesh_tetgen_wrapper\&.h\&.
+.PP
+Referenced by allocate_facet_polygonlist(), allocate_facetlist(), allocate_pointlist(), allocate_polygon_vertexlist(), allocate_regionlist(), run_tetgen(), set_facet_numberofholes(), set_facet_numberofpolygons(), set_hole(), set_node(), set_numberoffacets(), set_numberofholes(), set_numberofpoints(), set_numberofregions(), set_polygon_numberofvertices(), set_region(), set_vertex(), and TetGenWrapper()\&.
+.SS "tetgenmesh libMesh::TetGenWrapper::tetgen_mesh"
+TetGen mesh structure (from the TetGen library)\&. 
+.PP
+Definition at line 229 of file mesh_tetgen_wrapper\&.h\&.
+.SS "tetgenio* libMesh::TetGenWrapper::tetgen_output"
+TetGen output structure\&. 
+.PP
+Definition at line 224 of file mesh_tetgen_wrapper\&.h\&.
+.PP
+Referenced by get_element_attribute(), get_element_node(), get_numberofpoints(), get_numberoftetrahedra(), get_numberoftrifaces(), get_output_node(), get_triface_node(), run_tetgen(), TetGenWrapper(), and ~TetGenWrapper()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

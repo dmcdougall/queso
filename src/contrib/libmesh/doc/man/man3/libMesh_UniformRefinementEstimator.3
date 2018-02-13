@@ -1,0 +1,860 @@
+.TH "libMesh::UniformRefinementEstimator" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::UniformRefinementEstimator \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <uniform_refinement_estimator\&.h>\fP
+.PP
+Inherits \fBlibMesh::ErrorEstimator\fP\&.
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef std::map< std::pair
+.br
+< const \fBSystem\fP *, unsigned int >
+.br
+, \fBErrorVector\fP * > \fBErrorMap\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBUniformRefinementEstimator\fP ()"
+.br
+.ti -1c
+.RI "\fB~UniformRefinementEstimator\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_error\fP (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "virtual void \fBestimate_errors\fP (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "unsigned char \fBnumber_h_refinements\fP"
+.br
+.ti -1c
+.RI "unsigned char \fBnumber_p_refinements\fP"
+.br
+.ti -1c
+.RI "\fBSystemNorm\fP \fBerror_norm\fP"
+.br
+.in -1c
+.SS "Protected Member Functions"
+
+.in +1c
+.ti -1c
+.RI "virtual void \fB_estimate_error\fP (const \fBEquationSystems\fP *equation_systems, const \fBSystem\fP *system, \fBErrorVector\fP *error_per_cell, std::map< std::pair< const \fBSystem\fP *, unsigned int >, \fBErrorVector\fP * > *errors_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > *error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors=NULL, bool estimate_parent_error=false)"
+.br
+.ti -1c
+.RI "void \fBreduce_error\fP (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fP LIBMESH_CAN_DEFAULT_TO_COMMWORLD) const "
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements a ``brute force'' error estimator which integrates differences between the current solution and the solution on a uniformly refined (in h and/or p, for an arbitrary number of levels) grid\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+Roy H\&. Stogner, 2006\&. 
+.RE
+.PP
+
+.PP
+Definition at line 44 of file uniform_refinement_estimator\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "typedef std::map<std::pair<const \fBSystem\fP*, unsigned int>, \fBErrorVector\fP*> \fBlibMesh::ErrorEstimator::ErrorMap\fP\fC [inherited]\fP"
+When calculating many error vectors at once, we need a data structure to hold them all 
+.PP
+Definition at line 110 of file error_estimator\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::UniformRefinementEstimator::UniformRefinementEstimator ()\fC [inline]\fP"
+Constructor\&. Sets the most common default parameter values\&. 
+.PP
+Definition at line 51 of file uniform_refinement_estimator\&.h\&.
+.PP
+References libMesh::ErrorEstimator::error_norm, and libMesh::H1\&.
+.PP
+.nf
+51                                :
+52     ErrorEstimator(),
+53     number_h_refinements(1),
+54     number_p_refinements(0)
+55   { error_norm = H1; }
+.fi
+.SS "libMesh::UniformRefinementEstimator::~UniformRefinementEstimator ()\fC [inline]\fP"
+Destructor\&. 
+.PP
+Definition at line 60 of file uniform_refinement_estimator\&.h\&.
+.PP
+.nf
+60 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::UniformRefinementEstimator::_estimate_error (const \fBEquationSystems\fP *equation_systems, const \fBSystem\fP *system, \fBErrorVector\fP *error_per_cell, std::map< std::pair< const \fBSystem\fP *, unsigned int >, \fBErrorVector\fP * > *errors_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > *error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [protected]\fP, \fC [virtual]\fP"
+The code for estimate_error and both estimate_errors versions is very similar, so we use the same function for all three 
+.PP
+Definition at line 86 of file uniform_refinement_estimator\&.C\&.
+.PP
+References libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), libMesh::EquationSystems::adjoint_solve(), libMesh::System::adjoint_solve(), libMesh::NumericVector< T >::build(), libMesh::FEGenericBase< T >::build(), libMesh::NumericVector< T >::clear(), libMesh::ParallelObject::comm(), libMesh::System::current_local_solution, libMesh::System::current_solution(), libMesh::FEType::default_quadrature_rule(), libMesh::dim, libMesh::System::disable_cache(), libMesh::DofMap::dof_indices(), libMesh::dof_map, libMesh::ErrorEstimator::error_norm, libMesh::ErrorVectorReal, libMesh::AutoPtr< Tp >::get(), libMesh::System::get_adjoint_solution(), libMesh::System::get_dof_map(), libMesh::System::get_equation_systems(), libMesh::EquationSystems::get_mesh(), libMesh::DofMap::get_send_list(), libMesh::EquationSystems::get_system(), libMesh::System::get_vector(), libMesh::H1, libMesh::H1_SEMINORM, libMesh::H2, libMesh::H2_SEMINORM, libMesh::DofObject::id(), libMesh::invalid_uint, libMesh::L2, libMesh::libmesh_assert(), libMesh::MeshBase::max_elem_id(), mesh, libMesh::MeshBase::mesh_dimension(), libMesh::MeshBase::n_elem(), libMesh::EquationSystems::n_systems(), libMesh::n_vars, libMesh::System::n_vars(), libMesh::TensorTools::norm_sq(), number_h_refinements, number_p_refinements, libMesh::Elem::parent(), libMesh::MeshBase::partitioner(), libMesh::System::project_solution_on_reinit(), libMesh::System::qoi, libMesh::Real, libMesh::ErrorEstimator::reduce_error(), libMesh::EquationSystems::reinit(), libMesh::System::request_vector(), libMesh::SERIAL, libMesh::TypeVector< T >::size_sq(), libMesh::TypeTensor< T >::size_sq(), libMesh::System::solution, libMesh::EquationSystems::solve(), libMesh::System::solve(), libMesh::START_LOG(), libMesh::STOP_LOG(), libMesh::NumericVector< T >::swap(), libMesh::sys, libMesh::SystemNorm::type(), libMesh::MeshRefinement::uniformly_coarsen(), libMesh::MeshRefinement::uniformly_p_coarsen(), libMesh::MeshRefinement::uniformly_p_refine(), libMesh::MeshRefinement::uniformly_refine(), libMesh::System::update(), libMesh::DofMap::variable_type(), libMesh::System::vectors_begin(), libMesh::System::vectors_end(), and libMesh::SystemNorm::weight_sq()\&.
+.PP
+Referenced by estimate_error(), and estimate_errors()\&.
+.PP
+.nf
+93 {
+94   // Get a vector of the Systems we're going to work on,
+95   // and set up a error_norms map if necessary
+96   std::vector<System *> system_list;
+97   AutoPtr<std::map<const System*, SystemNorm > > error_norms =
+98     AutoPtr<std::map<const System*, SystemNorm > >
+99     (new std::map<const System*, SystemNorm>);
+100 
+101   if (_es)
+102     {
+103       libmesh_assert(!_system);
+104       libmesh_assert(_es->n_systems());
+105       _system = &(_es->get_system(0));
+106       libmesh_assert_equal_to (&(_system->get_equation_systems()), _es);
+107 
+108       libmesh_assert(_es->n_systems());
+109       for (unsigned int i=0; i != _es->n_systems(); ++i)
+110         // We have to break the rules here, because we can't refine a const System
+111         system_list\&.push_back(const_cast<System *>(&(_es->get_system(i))));
+112 
+113       // If we're computing one vector, we need to know how to scale
+114       // each variable's contributions to it\&.
+115       if (_error_norms)
+116         {
+117           libmesh_assert(!errors_per_cell);
+118         }
+119       else
+120         // If we're computing many vectors, we just need to know which
+121         // variables to skip
+122         {
+123           libmesh_assert (errors_per_cell);
+124 
+125           _error_norms = error_norms\&.get();
+126 
+127           for (unsigned int i=0; i!= _es->n_systems(); ++i)
+128             {
+129               const System &sys = _es->get_system(i);
+130               unsigned int n_vars = sys\&.n_vars();
+131 
+132               std::vector<Real> weights(n_vars, 0\&.0);
+133               for (unsigned int v = 0; v != n_vars; ++v)
+134                 {
+135                   if (errors_per_cell->find(std::make_pair(&sys, v)) ==
+136                       errors_per_cell->end())
+137                     continue;
+138 
+139                   weights[v] = 1\&.0;
+140                 }
+141               (*error_norms)[&sys] =
+142                 SystemNorm(std::vector<FEMNormType>(n_vars, error_norm\&.type(0)),
+143                            weights);
+144             }
+145         }
+146     }
+147   else
+148     {
+149       libmesh_assert(_system);
+150       // We have to break the rules here, because we can't refine a const System
+151       system_list\&.push_back(const_cast<System *>(_system));
+152 
+153       libmesh_assert(!_error_norms);
+154       (*error_norms)[_system] = error_norm;
+155       _error_norms = error_norms\&.get();
+156     }
+157 
+158   // An EquationSystems reference will be convenient\&.
+159   // We have to break the rules here, because we can't refine a const System
+160   EquationSystems& es =
+161     const_cast<EquationSystems &>(_system->get_equation_systems());
+162 
+163   // The current mesh
+164   MeshBase& mesh = es\&.get_mesh();
+165 
+166   // The dimensionality of the mesh
+167   const unsigned int dim = mesh\&.mesh_dimension();
+168 
+169   // Resize the error_per_cell vectors to be
+170   // the number of elements, initialize them to 0\&.
+171   if (error_per_cell)
+172     {
+173       error_per_cell->clear();
+174       error_per_cell->resize (mesh\&.max_elem_id(), 0\&.);
+175     }
+176   else
+177     {
+178       libmesh_assert(errors_per_cell);
+179       for (ErrorMap::iterator i = errors_per_cell->begin();
+180            i != errors_per_cell->end(); ++i)
+181         {
+182           ErrorVector *e = i->second;
+183           e->clear();
+184           e->resize(mesh\&.max_elem_id(), 0\&.);
+185         }
+186     }
+187 
+188   // We'll want to back up all coarse grid vectors
+189   std::vector<std::map<std::string, NumericVector<Number> *> >
+190     coarse_vectors(system_list\&.size());
+191   std::vector<NumericVector<Number> *>
+192     coarse_solutions(system_list\&.size());
+193   std::vector<NumericVector<Number> *>
+194     coarse_local_solutions(system_list\&.size());
+195   // And make copies of projected solutions
+196   std::vector<NumericVector<Number> *>
+197     projected_solutions(system_list\&.size());
+198 
+199   // And we'll need to temporarily change solution projection settings
+200   std::vector<bool> old_projection_settings(system_list\&.size());
+201 
+202   // And it'll be best to avoid any repartitioning
+203   AutoPtr<Partitioner> old_partitioner = mesh\&.partitioner();
+204   mesh\&.partitioner()\&.reset(NULL);
+205 
+206   for (unsigned int i=0; i != system_list\&.size(); ++i)
+207     {
+208       System &system = *system_list[i];
+209 
+210       // Check for valid error_norms
+211       libmesh_assert (_error_norms->find(&system) !=
+212                       _error_norms->end());
+213 
+214       // Back up the solution vector
+215       coarse_solutions[i] = system\&.solution->clone()\&.release();
+216       coarse_local_solutions[i] =
+217         system\&.current_local_solution->clone()\&.release();
+218 
+219       // Back up all other coarse grid vectors
+220       for (System::vectors_iterator vec = system\&.vectors_begin(); vec !=
+221              system\&.vectors_end(); ++vec)
+222         {
+223           // The (string) name of this vector
+224           const std::string& var_name = vec->first;
+225 
+226           coarse_vectors[i][var_name] = vec->second->clone()\&.release();
+227         }
+228 
+229       // Use a non-standard solution vector if necessary
+230       if (solution_vectors &&
+231           solution_vectors->find(&system) != solution_vectors->end() &&
+232           solution_vectors->find(&system)->second &&
+233           solution_vectors->find(&system)->second != system\&.solution\&.get())
+234         {
+235           NumericVector<Number>* newsol =
+236             const_cast<NumericVector<Number>*>
+237             (solution_vectors->find(&system)->second);
+238           newsol->swap(*system\&.solution);
+239           system\&.update();
+240         }
+241 
+242       // Make sure the solution is projected when we refine the mesh
+243       old_projection_settings[i] = system\&.project_solution_on_reinit();
+244       system\&.project_solution_on_reinit() = true;
+245     }
+246 
+247   // Find the number of coarse mesh elements, to make it possible
+248   // to find correct coarse elem ids later
+249   const dof_id_type max_coarse_elem_id = mesh\&.max_elem_id();
+250 #ifndef NDEBUG
+251   // n_coarse_elem is only used in an assertion later so
+252   // avoid declaring it unless asserts are active\&.
+253   const dof_id_type n_coarse_elem = mesh\&.n_elem();
+254 #endif
+255 
+256   // Uniformly refine the mesh
+257   MeshRefinement mesh_refinement(mesh);
+258 
+259   libmesh_assert (number_h_refinements > 0 || number_p_refinements > 0);
+260 
+261   // FIXME: this may break if there is more than one System
+262   // on this mesh but estimate_error was still called instead of
+263   // estimate_errors
+264   for (unsigned int i = 0; i != number_h_refinements; ++i)
+265     {
+266       mesh_refinement\&.uniformly_refine(1);
+267       es\&.reinit();
+268     }
+269 
+270   for (unsigned int i = 0; i != number_p_refinements; ++i)
+271     {
+272       mesh_refinement\&.uniformly_p_refine(1);
+273       es\&.reinit();
+274     }
+275 
+276   for (unsigned int i=0; i != system_list\&.size(); ++i)
+277     {
+278       System &system = *system_list[i];
+279 
+280       // Copy the projected coarse grid solutions, which will be
+281       // overwritten by solve()
+282       //      projected_solutions[i] = system\&.solution->clone()\&.release();
+283       projected_solutions[i] = NumericVector<Number>::build(system\&.comm())\&.release();
+284       projected_solutions[i]->init(system\&.solution->size(), true, SERIAL);
+285       system\&.solution->localize(*projected_solutions[i],
+286                                 system\&.get_dof_map()\&.get_send_list());
+287     }
+288 
+289   // Are we doing a forward or an adjoint solve?
+290   bool solve_adjoint = false;
+291   if (solution_vectors)
+292     {
+293       System *sys = system_list[0];
+294       libmesh_assert (solution_vectors->find(sys) !=
+295                       solution_vectors->end());
+296       const NumericVector<Number> *vec = solution_vectors->find(sys)->second;
+297       for (unsigned int j=0; j != sys->qoi\&.size(); ++j)
+298         {
+299           std::ostringstream adjoint_name;
+300           adjoint_name << "adjoint_solution" << j;
+301 
+302           if (vec == sys->request_vector(adjoint_name\&.str()))
+303             {
+304               solve_adjoint = true;
+305               break;
+306             }
+307         }
+308     }
+309 
+310   // Get the uniformly refined solution\&.
+311 
+312   if (_es)
+313     {
+314       // Even if we had a decent preconditioner, valid matrix etc\&. before
+315       // refinement, we don't any more\&.
+316       for (unsigned int i=0; i != es\&.n_systems(); ++i)
+317         es\&.get_system(i)\&.disable_cache();
+318 
+319       // No specified vectors == forward solve
+320       if (!solution_vectors)
+321         es\&.solve();
+322       else
+323         {
+324           libmesh_assert_equal_to (solution_vectors->size(), es\&.n_systems());
+325           libmesh_assert (solution_vectors->find(system_list[0]) !=
+326                           solution_vectors->end());
+327           libmesh_assert(solve_adjoint ||
+328                          (solution_vectors->find(system_list[0])->second ==
+329                           system_list[0]->solution\&.get()) ||
+330                          !solution_vectors->find(system_list[0])->second);
+331 
+332 #ifdef DEBUG
+333           for (unsigned int i=0; i != system_list\&.size(); ++i)
+334             {
+335               System *sys = system_list[i];
+336               libmesh_assert (solution_vectors->find(sys) !=
+337                               solution_vectors->end());
+338               const NumericVector<Number> *vec = solution_vectors->find(sys)->second;
+339               if (solve_adjoint)
+340                 {
+341                   bool found_vec = false;
+342                   for (unsigned int j=0; j != sys->qoi\&.size(); ++j)
+343                     {
+344                       std::ostringstream adjoint_name;
+345                       adjoint_name << "adjoint_solution" << j;
+346 
+347                       if (vec == sys->request_vector(adjoint_name\&.str()))
+348                         {
+349                           found_vec = true;
+350                           break;
+351                         }
+352                     }
+353                   libmesh_assert(found_vec);
+354                 }
+355               else
+356                 libmesh_assert(vec == sys->solution\&.get() || !vec);
+357             }
+358 #endif
+359 
+360           if (solve_adjoint)
+361             {
+362               std::vector<unsigned int> adjs(system_list\&.size(),
+363                                              libMesh::invalid_uint);
+364               // Set up proper initial guesses
+365               for (unsigned int i=0; i != system_list\&.size(); ++i)
+366                 {
+367                   System *sys = system_list[i];
+368                   libmesh_assert (solution_vectors->find(sys) !=
+369                                   solution_vectors->end());
+370                   const NumericVector<Number> *vec = solution_vectors->find(sys)->second;
+371                   for (unsigned int j=0; j != sys->qoi\&.size(); ++j)
+372                     {
+373                       std::ostringstream adjoint_name;
+374                       adjoint_name << "adjoint_solution" << j;
+375 
+376                       if (vec == sys->request_vector(adjoint_name\&.str()))
+377                         {
+378                           adjs[i] = j;
+379                           break;
+380                         }
+381                     }
+382                   libmesh_assert_not_equal_to (adjs[i], libMesh::invalid_uint);
+383                   system_list[i]->get_adjoint_solution(adjs[i]) =
+384                     *system_list[i]->solution;
+385                 }
+386 
+387               es\&.adjoint_solve();
+388 
+389               // Put the adjoint_solution into solution for
+390               // comparisons
+391               for (unsigned int i=0; i != system_list\&.size(); ++i)
+392                 {
+393                   system_list[i]->get_adjoint_solution(adjs[i])\&.swap(*system_list[i]->solution);
+394                   system_list[i]->update();
+395                 }
+396             }
+397           else
+398             es\&.solve();
+399         }
+400     }
+401   else
+402     {
+403       System *sys = system_list[0];
+404 
+405       // Even if we had a decent preconditioner, valid matrix etc\&. before
+406       // refinement, we don't any more\&.
+407       sys->disable_cache();
+408 
+409       // No specified vectors == forward solve
+410       if (!solution_vectors)
+411         sys->solve();
+412       else
+413         {
+414           libmesh_assert (solution_vectors->find(sys) !=
+415                           solution_vectors->end());
+416 
+417           const NumericVector<Number> *vec = solution_vectors->find(sys)->second;
+418 
+419           libmesh_assert(solve_adjoint ||
+420                          (solution_vectors->find(sys)->second ==
+421                           sys->solution\&.get()) ||
+422                          !solution_vectors->find(sys)->second);
+423 
+424           if (solve_adjoint)
+425             {
+426               unsigned int adj = libMesh::invalid_uint;
+427               for (unsigned int j=0; j != sys->qoi\&.size(); ++j)
+428                 {
+429                   std::ostringstream adjoint_name;
+430                   adjoint_name << "adjoint_solution" << j;
+431 
+432                   if (vec == sys->request_vector(adjoint_name\&.str()))
+433                     {
+434                       adj = j;
+435                       break;
+436                     }
+437                 }
+438               libmesh_assert_not_equal_to (adj, libMesh::invalid_uint);
+439 
+440               // Set up proper initial guess
+441               sys->get_adjoint_solution(adj) = *sys->solution;
+442               sys->adjoint_solve();
+443               // Put the adjoint_solution into solution for
+444               // comparisons
+445               sys->get_adjoint_solution(adj)\&.swap(*sys->solution);
+446               sys->update();
+447             }
+448           else
+449             sys->solve();
+450         }
+451     }
+452 
+453   // Get the error in the uniformly refined solution(s)\&.
+454 
+455   for (unsigned int sysnum=0; sysnum != system_list\&.size(); ++sysnum)
+456     {
+457       System &system = *system_list[sysnum];
+458 
+459       unsigned int n_vars = system\&.n_vars();
+460 
+461       DofMap &dof_map = system\&.get_dof_map();
+462 
+463       const SystemNorm &system_i_norm =
+464         _error_norms->find(&system)->second;
+465 
+466       NumericVector<Number> *projected_solution = projected_solutions[sysnum];
+467 
+468       // Loop over all the variables in the system
+469       for (unsigned int var=0; var<n_vars; var++)
+470         {
+471           // Get the error vector to fill for this system and variable
+472           ErrorVector *err_vec = error_per_cell;
+473           if (!err_vec)
+474             {
+475               libmesh_assert(errors_per_cell);
+476               err_vec =
+477                 (*errors_per_cell)[std::make_pair(&system,var)];
+478             }
+479 
+480           // The type of finite element to use for this variable
+481           const FEType& fe_type = dof_map\&.variable_type (var);
+482 
+483           // Finite element object for each fine element
+484           AutoPtr<FEBase> fe (FEBase::build (dim, fe_type));
+485 
+486           // Build and attach an appropriate quadrature rule
+487           AutoPtr<QBase> qrule = fe_type\&.default_quadrature_rule(dim);
+488           fe->attach_quadrature_rule (qrule\&.get());
+489 
+490           const std::vector<Real>&  JxW = fe->get_JxW();
+491           const std::vector<std::vector<Real> >& phi = fe->get_phi();
+492           const std::vector<std::vector<RealGradient> >& dphi =
+493             fe->get_dphi();
+494 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+495           const std::vector<std::vector<RealTensor> >& d2phi =
+496             fe->get_d2phi();
+497 #endif
+498 
+499           // The global DOF indices for the fine element
+500           std::vector<dof_id_type> dof_indices;
+501 
+502           // Iterate over all the active elements in the fine mesh
+503           // that live on this processor\&.
+504           MeshBase::const_element_iterator       elem_it  = mesh\&.active_local_elements_begin();
+505           const MeshBase::const_element_iterator elem_end = mesh\&.active_local_elements_end();
+506 
+507           for (; elem_it != elem_end; ++elem_it)
+508             {
+509               // e is necessarily an active element on the local processor
+510               const Elem* elem = *elem_it;
+511 
+512               // Find the element id for the corresponding coarse grid element
+513               const Elem* coarse = elem;
+514               dof_id_type e_id = coarse->id();
+515               while (e_id >= max_coarse_elem_id)
+516                 {
+517                   libmesh_assert (coarse->parent());
+518                   coarse = coarse->parent();
+519                   e_id = coarse->id();
+520                 }
+521 
+522               Real L2normsq = 0\&., H1seminormsq = 0\&.; 
+523 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+524               Real H2seminormsq = 0\&.;
+525 #endif
+526 
+527               // reinitialize the element-specific data
+528               // for the current element
+529               fe->reinit (elem);
+530 
+531               // Get the local to global degree of freedom maps
+532               dof_map\&.dof_indices (elem, dof_indices, var);
+533 
+534               // The number of quadrature points
+535               const unsigned int n_qp = qrule->n_points();
+536 
+537               // The number of shape functions
+538               const unsigned int n_sf =
+539                 libmesh_cast_int<unsigned int>(dof_indices\&.size());
+540 
+541               //
+542               // Begin the loop over the Quadrature points\&.
+543               //
+544               for (unsigned int qp=0; qp<n_qp; qp++)
+545                 {
+546                   Number u_fine = 0\&., u_coarse = 0\&.;
+547 
+548                   Gradient grad_u_fine, grad_u_coarse;
+549 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+550                   Tensor grad2_u_fine, grad2_u_coarse;
+551 #endif
+552 
+553                   // Compute solution values at the current
+554                   // quadrature point\&.  This reqiures a sum
+555                   // over all the shape functions evaluated
+556                   // at the quadrature point\&.
+557                   for (unsigned int i=0; i<n_sf; i++)
+558                     {
+559                       u_fine            += phi[i][qp]*system\&.current_solution (dof_indices[i]);
+560                       u_coarse          += phi[i][qp]*(*projected_solution) (dof_indices[i]);
+561                       grad_u_fine       += dphi[i][qp]*system\&.current_solution (dof_indices[i]);
+562                       grad_u_coarse     += dphi[i][qp]*(*projected_solution) (dof_indices[i]);
+563 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+564                       grad2_u_fine      += d2phi[i][qp]*system\&.current_solution (dof_indices[i]);
+565                       grad2_u_coarse    += d2phi[i][qp]*(*projected_solution) (dof_indices[i]);
+566 #endif
+567                     }
+568 
+569                   // Compute the value of the error at this quadrature point
+570                   const Number val_error = u_fine - u_coarse;
+571 
+572                   // Add the squares of the error to each contribution
+573                   if (system_i_norm\&.type(var) == L2 ||
+574                       system_i_norm\&.type(var) == H1 ||
+575                       system_i_norm\&.type(var) == H2)
+576                     {
+577                       L2normsq += JxW[qp] * system_i_norm\&.weight_sq(var) *
+578                         TensorTools::norm_sq(val_error);
+579                       libmesh_assert_greater_equal (L2normsq, 0\&.);
+580                     }
+581 
+582 
+583                   // Compute the value of the error in the gradient at this
+584                   // quadrature point
+585                   if (system_i_norm\&.type(var) == H1 ||
+586                       system_i_norm\&.type(var) == H2 ||
+587                       system_i_norm\&.type(var) == H1_SEMINORM)
+588                     {
+589                       Gradient grad_error = grad_u_fine - grad_u_coarse;
+590 
+591                       H1seminormsq += JxW[qp] * system_i_norm\&.weight_sq(var) *
+592                         grad_error\&.size_sq();
+593                       libmesh_assert_greater_equal (H1seminormsq, 0\&.);
+594                     }
+595 
+596 #ifdef LIBMESH_ENABLE_SECOND_DERIVATIVES
+597                   // Compute the value of the error in the hessian at this
+598                   // quadrature point
+599                   if (system_i_norm\&.type(var) == H2 ||
+600                       system_i_norm\&.type(var) == H2_SEMINORM)
+601                     {
+602                       Tensor grad2_error = grad2_u_fine - grad2_u_coarse;
+603 
+604                       H2seminormsq += JxW[qp] * system_i_norm\&.weight_sq(var) *
+605                         grad2_error\&.size_sq();
+606                       libmesh_assert_greater_equal (H2seminormsq, 0\&.);
+607                     }
+608 #endif
+609                 } // end qp loop
+610 
+611               if (system_i_norm\&.type(var) == L2 ||
+612                   system_i_norm\&.type(var) == H1 ||
+613                   system_i_norm\&.type(var) == H2)
+614                 (*err_vec)[e_id] +=
+615                   static_cast<ErrorVectorReal>(L2normsq);
+616               if (system_i_norm\&.type(var) == H1 ||
+617                   system_i_norm\&.type(var) == H2 ||
+618                   system_i_norm\&.type(var) == H1_SEMINORM)
+619                 (*err_vec)[e_id] +=
+620                   static_cast<ErrorVectorReal>(H1seminormsq);
+621 
+622               if (system_i_norm\&.type(var) == H2 ||
+623                   system_i_norm\&.type(var) == H2_SEMINORM)
+624                 (*err_vec)[e_id] +=
+625                   static_cast<ErrorVectorReal>(H2seminormsq);
+626             } // End loop over active local elements
+627         } // End loop over variables
+628 
+629       // Don't bother projecting the solution; we'll restore from backup
+630       // after coarsening
+631       system\&.project_solution_on_reinit() = false;
+632     }
+633 
+634 
+635   // Uniformly coarsen the mesh, without projecting the solution
+636   libmesh_assert (number_h_refinements > 0 || number_p_refinements > 0);
+637 
+638   for (unsigned int i = 0; i != number_h_refinements; ++i)
+639     {
+640       mesh_refinement\&.uniformly_coarsen(1);
+641       // FIXME - should the reinits here be necessary? - RHS
+642       es\&.reinit();
+643     }
+644 
+645   for (unsigned int i = 0; i != number_p_refinements; ++i)
+646     {
+647       mesh_refinement\&.uniformly_p_coarsen(1);
+648       es\&.reinit();
+649     }
+650 
+651   // We should be back where we started
+652   libmesh_assert_equal_to (n_coarse_elem, mesh\&.n_elem());
+653 
+654   // Each processor has now computed the error contribuions
+655   // for its local elements\&.  We need to sum the vector
+656   // and then take the square-root of each component\&.  Note
+657   // that we only need to sum if we are running on multiple
+658   // processors, and we only need to take the square-root
+659   // if the value is nonzero\&.  There will in general be many
+660   // zeros for the inactive elements\&.
+661 
+662   if (error_per_cell)
+663     {
+664       // First sum the vector of estimated error values
+665       this->reduce_error(*error_per_cell, es\&.comm());
+666 
+667       // Compute the square-root of each component\&.
+668       START_LOG("std::sqrt()", "UniformRefinementEstimator");
+669       for (unsigned int i=0; i<error_per_cell->size(); i++)
+670         if ((*error_per_cell)[i] != 0\&.)
+671           (*error_per_cell)[i] = std::sqrt((*error_per_cell)[i]);
+672       STOP_LOG("std::sqrt()", "UniformRefinementEstimator");
+673     }
+674   else
+675     {
+676       for (ErrorMap::iterator it = errors_per_cell->begin();
+677            it != errors_per_cell->end(); ++it)
+678         {
+679           ErrorVector *e = it->second;
+680           // First sum the vector of estimated error values
+681           this->reduce_error(*e, es\&.comm());
+682 
+683           // Compute the square-root of each component\&.
+684           START_LOG("std::sqrt()", "UniformRefinementEstimator");
+685           for (unsigned int i=0; i<e->size(); i++)
+686             if ((*e)[i] != 0\&.)
+687               (*e)[i] = std::sqrt((*e)[i]);
+688           STOP_LOG("std::sqrt()", "UniformRefinementEstimator");
+689         }
+690     }
+691 
+692   // Restore old solutions and clean up the heap
+693   for (unsigned int i=0; i != system_list\&.size(); ++i)
+694     {
+695       System &system = *system_list[i];
+696 
+697       system\&.project_solution_on_reinit() = old_projection_settings[i];
+698 
+699       // Restore the coarse solution vectors and delete their copies
+700       *system\&.solution = *coarse_solutions[i];
+701       delete coarse_solutions[i];
+702       *system\&.current_local_solution = *coarse_local_solutions[i];
+703       delete coarse_local_solutions[i];
+704       delete projected_solutions[i];
+705 
+706       for (System::vectors_iterator vec = system\&.vectors_begin(); vec !=
+707              system\&.vectors_end(); ++vec)
+708         {
+709           // The (string) name of this vector
+710           const std::string& var_name = vec->first;
+711 
+712           system\&.get_vector(var_name) = *coarse_vectors[i][var_name];
+713 
+714           coarse_vectors[i][var_name]->clear();
+715           delete coarse_vectors[i][var_name];
+716         }
+717     }
+718 
+719   // Restore old partitioner settings
+720   mesh\&.partitioner() = old_partitioner;
+721 }
+.fi
+.SS "void libMesh::UniformRefinementEstimator::estimate_error (const \fBSystem\fP &system, \fBErrorVector\fP &error_per_cell, const \fBNumericVector\fP< \fBNumber\fP > *solution_vector = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+This function does uniform refinements and a solve to get an improved solution on each cell, then estimates the error by integrating differences between the coarse and fine solutions\&.
+.PP
+system\&.solve() must be called, and so should have no side effects\&.
+.PP
+Only the provided system is solved on the refined mesh; for problems decoupled into multiple systems, use of \fBestimate_errors()\fP should be more reliable\&.
+.PP
+The estimated error is output in the vector \fCerror_per_cell\fP 
+.PP
+Implements \fBlibMesh::ErrorEstimator\fP\&.
+.PP
+Definition at line 49 of file uniform_refinement_estimator\&.C\&.
+.PP
+References _estimate_error(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+53 {
+54   START_LOG("estimate_error()", "UniformRefinementEstimator");
+55   std::map<const System*, const NumericVector<Number>* > solution_vectors;
+56   solution_vectors[&_system] = solution_vector;
+57   this->_estimate_error (NULL, &_system, &error_per_cell, NULL, NULL,
+58                          &solution_vectors, estimate_parent_error);
+59   STOP_LOG("estimate_error()", "UniformRefinementEstimator");
+60 }
+.fi
+.SS "void libMesh::UniformRefinementEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorVector\fP &error_per_cell, const std::map< const \fBSystem\fP *, \fBSystemNorm\fP > &error_norms, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+Currently this function ignores the error_norm member variable, and uses the function argument error_norms instead\&.
+.PP
+This function is named estimate_errors instead of estimate_error because otherwise C++ can get confused\&. 
+.PP
+Reimplemented from \fBlibMesh::ErrorEstimator\fP\&.
+.PP
+Definition at line 62 of file uniform_refinement_estimator\&.C\&.
+.PP
+References _estimate_error(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+67 {
+68   START_LOG("estimate_errors()", "UniformRefinementEstimator");
+69   this->_estimate_error (&_es, NULL, &error_per_cell, NULL,
+70                          &error_norms, solution_vectors,
+71                          estimate_parent_error);
+72   STOP_LOG("estimate_errors()", "UniformRefinementEstimator");
+73 }
+.fi
+.SS "void libMesh::UniformRefinementEstimator::estimate_errors (const \fBEquationSystems\fP &equation_systems, \fBErrorMap\fP &errors_per_cell, const std::map< const \fBSystem\fP *, const \fBNumericVector\fP< \fBNumber\fP > * > *solution_vectors = \fCNULL\fP, boolestimate_parent_error = \fCfalse\fP)\fC [virtual]\fP"
+Currently this function ignores the component_scale member variable, because it calculates each error individually, unscaled\&.
+.PP
+The user selects which errors get computed by filling a map with error vectors: If errors_per_cell[&system][v] exists, it will be filled with the error values in variable \fCv\fP of \fCsystem\fP 
+.PP
+Reimplemented from \fBlibMesh::ErrorEstimator\fP\&.
+.PP
+Definition at line 75 of file uniform_refinement_estimator\&.C\&.
+.PP
+References _estimate_error(), libMesh::START_LOG(), and libMesh::STOP_LOG()\&.
+.PP
+.nf
+79 {
+80   START_LOG("estimate_errors()", "UniformRefinementEstimator");
+81   this->_estimate_error (&_es, NULL, NULL, &errors_per_cell, NULL,
+82                          solution_vectors, estimate_parent_error);
+83   STOP_LOG("estimate_errors()", "UniformRefinementEstimator");
+84 }
+.fi
+.SS "void libMesh::ErrorEstimator::reduce_error (std::vector< float > &error_per_cell, const \fBParallel::Communicator\fP &\fBcomm\fPLIBMESH_CAN_DEFAULT_TO_COMMWORLD) const\fC [protected]\fP, \fC [inherited]\fP"
+This method takes the local error contributions in \fCerror_per_cell\fP from each processor and combines them to get the global error vector\&. 
+.PP
+Definition at line 33 of file error_estimator\&.C\&.
+.PP
+References libMesh::Parallel::Communicator::sum()\&.
+.PP
+Referenced by _estimate_error(), libMesh::WeightedPatchRecoveryErrorEstimator::estimate_error(), libMesh::PatchRecoveryErrorEstimator::estimate_error(), libMesh::JumpErrorEstimator::estimate_error(), and libMesh::AdjointRefinementEstimator::estimate_error()\&.
+.PP
+.nf
+35 {
+36   // This function must be run on all processors at once
+37   // parallel_object_only();
+38 
+39   // Each processor has now computed the error contribuions
+40   // for its local elements\&.  We may need to sum the vector to
+41   // recover the error for each element\&.
+42 
+43   comm\&.sum(error_per_cell);
+44 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "\fBSystemNorm\fP libMesh::ErrorEstimator::error_norm\fC [inherited]\fP"
+When estimating the error in a single system, the \fCerror_norm\fP is used to control the scaling and norm choice for each variable\&. Not all estimators will support all norm choices\&. The default scaling is for all variables to be weighted equally\&. The default norm choice depends on the error estimator\&.
+.PP
+Part of this functionality was supported via component_scale and sobolev_order in older \fBlibMesh\fP versions, and a small part was supported via component_mask in even older versions\&. Hopefully the encapsulation here will allow us to avoid changing this API again\&. 
+.PP
+Definition at line 142 of file error_estimator\&.h\&.
+.PP
+Referenced by _estimate_error(), libMesh::AdjointRefinementEstimator::AdjointRefinementEstimator(), libMesh::DiscontinuityMeasure::boundary_side_integration(), libMesh::KellyErrorEstimator::boundary_side_integration(), libMesh::DiscontinuityMeasure::DiscontinuityMeasure(), libMesh::JumpErrorEstimator::estimate_error(), libMesh::AdjointResidualErrorEstimator::estimate_error(), libMesh::ErrorEstimator::estimate_errors(), libMesh::ExactErrorEstimator::ExactErrorEstimator(), libMesh::ExactErrorEstimator::find_squared_element_error(), libMesh::LaplacianErrorEstimator::internal_side_integration(), libMesh::DiscontinuityMeasure::internal_side_integration(), libMesh::KellyErrorEstimator::internal_side_integration(), libMesh::KellyErrorEstimator::KellyErrorEstimator(), libMesh::LaplacianErrorEstimator::LaplacianErrorEstimator(), libMesh::WeightedPatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::EstimateError::operator()(), libMesh::PatchRecoveryErrorEstimator::PatchRecoveryErrorEstimator(), and UniformRefinementEstimator()\&.
+.SS "unsigned char libMesh::UniformRefinementEstimator::number_h_refinements"
+How many h refinements to perform to get the fine grid 
+.PP
+Definition at line 113 of file uniform_refinement_estimator\&.h\&.
+.PP
+Referenced by _estimate_error()\&.
+.SS "unsigned char libMesh::UniformRefinementEstimator::number_p_refinements"
+How many p refinements to perform to get the fine grid 
+.PP
+Definition at line 118 of file uniform_refinement_estimator\&.h\&.
+.PP
+Referenced by _estimate_error()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

@@ -1,0 +1,314 @@
+.TH "variant_filter_iterator.h" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+variant_filter_iterator.h \- 
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBPred< IterType, PredType >\fP"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename PredType , typename IterType > \fBvariant_filter_iterator\fP (const IterType &d, const IterType &e, const PredType &p)"
+.br
+.ti -1c
+.RI "\fBvariant_filter_iterator\fP ()"
+.br
+.ti -1c
+.RI "\fBvariant_filter_iterator\fP (const Iterator &rhs)"
+.br
+.ti -1c
+.RI "template<class OtherType , class OtherReferenceType , class OtherPointerType > \fBvariant_filter_iterator\fP (const variant_filter_iterator< Predicate, OtherType, OtherReferenceType, OtherPointerType > &rhs)"
+.br
+.ti -1c
+.RI "virtual \fB~variant_filter_iterator\fP ()"
+.br
+.ti -1c
+.RI "ReferenceType \fBoperator*\fP () const "
+.br
+.ti -1c
+.RI "PointerType \fBoperator->\fP () const "
+.br
+.ti -1c
+.RI "Iterator & \fBoperator++\fP ()"
+.br
+.ti -1c
+.RI "const Iterator \fBoperator++\fP (int)"
+.br
+.ti -1c
+.RI "bool \fBequal\fP (const \fBvariant_filter_iterator\fP &other) const "
+.br
+.ti -1c
+.RI "void \fBswap\fP (Iterator &lhs, Iterator &rhs)"
+.br
+.ti -1c
+.RI "Iterator & \fBoperator=\fP (const Iterator &rhs)"
+.br
+.ti -1c
+.RI "void \fBsatisfy_predicate\fP ()"
+.br
+.ti -1c
+.RI "template<class Predicate , class Type , class ReferenceType , class PointerType > bool \fBoperator==\fP (const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &\fBx\fP, const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &y)"
+.br
+.ti -1c
+.RI "template<class Predicate , class Type , class ReferenceType , class PointerType > bool \fBoperator!=\fP (const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &\fBx\fP, const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &y)"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "template<class Predicate , class Type , class ReferenceType  = Type&, class PointerType  = Type*> IterType \fBiter_data\fP"
+.br
+.ti -1c
+.RI "IterBase * \fBdata\fP"
+.br
+.ti -1c
+.RI "IterBase * \fBend\fP"
+.br
+.ti -1c
+.RI "PredBase * \fBpred\fP"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "bool equal (const \fBvariant_filter_iterator\fP &other) const"
+forwards on the the equal function defined for the IterBase pointer\&. Possibly also compare the end pointers, but this is usually not important and would require an additional dynamic cast\&. 
+.PP
+Definition at line 450 of file variant_filter_iterator\&.h\&.
+.PP
+References data\&.
+.PP
+.nf
+451   {
+452     return data->equal(other\&.data);
+453   }
+.fi
+.SS "template<class Predicate , class Type , class ReferenceType , class PointerType > bool operator!= (const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &x, const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &y)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 515 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+517 {
+518   return !(x == y);
+519 }
+.fi
+.SS "ReferenceType operator* () const"
+unary op*() forwards on to \fCIter::op*\fP() 
+.PP
+Definition at line 409 of file variant_filter_iterator\&.h\&.
+.PP
+References data\&.
+.PP
+.nf
+410   {
+411     return **data;
+412   }
+.fi
+.SS "Iterator& operator++ ()"
+op++() forwards on to \fCIter::op++\fP() 
+.PP
+Definition at line 426 of file variant_filter_iterator\&.h\&.
+.PP
+References data, and satisfy_predicate()\&.
+.PP
+.nf
+427   {
+428     ++*data;
+429     this->satisfy_predicate();
+430     return (*this);
+431   }
+.fi
+.SS "const Iterator operator++ (int)"
+postfix op++(), creates a temporary! 
+.PP
+Definition at line 436 of file variant_filter_iterator\&.h\&.
+.PP
+References data, and satisfy_predicate()\&.
+.PP
+.nf
+437   {
+438     Iterator oldValue(*this); // standard is to return old value
+439     ++*data;
+440     this->satisfy_predicate();
+441     return oldValue;
+442   }
+.fi
+.SS "PointerType operator-> () const"
+op->() 
+.PP
+Definition at line 418 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+419   {
+420     return (&**this);
+421   }
+.fi
+.SS "Iterator& operator= (const Iterator &rhs)"
+Assignment operator\&. 
+.PP
+Definition at line 473 of file variant_filter_iterator\&.h\&.
+.PP
+References libMesh::swap()\&.
+.PP
+.nf
+474   {
+475     Iterator temp(rhs);
+476     swap(temp, *this);
+477     return *this;
+478   }
+.fi
+.SS "template<class Predicate , class Type , class ReferenceType , class PointerType > bool operator== (const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &x, const \fBvariant_filter_iterator\fP< Predicate, Type, ReferenceType, PointerType > &y)\fC [inline]\fP, \fC [private]\fP"
+
+.PP
+Definition at line 504 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+506 {
+507   return x\&.equal(y);
+508 }
+.fi
+.SS "void satisfy_predicate ()\fC [private]\fP"
+Advances the data pointer until it reaches the end or the predicate is satisfied\&. 
+.PP
+Definition at line 488 of file variant_filter_iterator\&.h\&.
+.PP
+References data, and end\&.
+.PP
+Referenced by operator++(), and variant_filter_iterator()\&.
+.PP
+.nf
+489   {
+490     while ( !data->equal(end) && !(*pred)(data) )
+491       ++(*data);
+492   }
+.fi
+.SS "void swap (Iterator &lhs, Iterator &rhs)"
+swap, used to implement op= 
+.PP
+Definition at line 458 of file variant_filter_iterator\&.h\&.
+.PP
+References libMesh::swap()\&.
+.PP
+.nf
+459   {
+460     // Swap the data pointers
+461     std::swap (lhs\&.data, rhs\&.data);
+462 
+463     // Swap the end pointers
+464     std::swap (lhs\&.end, rhs\&.end);
+465 
+466     // Also swap the predicate objects\&.
+467     std::swap (lhs\&.pred, rhs\&.pred);
+468   }
+.fi
+.SS "template<typename PredType , typename IterType > variant_filter_iterator (const IterType &d, const IterType &e, const PredType &p)"
+Templated Constructor\&. Allows you to construct the iterator and predicate from any types\&. Also advances the data pointer to the first entry which satisfies the predicate\&. 
+.PP
+Definition at line 342 of file variant_filter_iterator\&.h\&.
+.PP
+References satisfy_predicate()\&.
+.PP
+.nf
+344                                               :
+345     data ( new Iter<IterType>(d) ), // note: uses default IterBase copy constructor
+346     end  ( new Iter<IterType>(e) ),
+347     pred ( new Pred<IterType,PredType>(p) )
+348   {
+349     this->satisfy_predicate();
+350   }
+.fi
+.SS "variant_filter_iterator ()"
+Default Constructor\&. 
+.PP
+Definition at line 355 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+355                              :
+356     data(NULL),
+357     end(NULL),
+358     pred(NULL) {}
+.fi
+.SS "variant_filter_iterator (const Iterator &rhs)"
+Copy Constructor\&. Copy the internal data instead of sharing it\&. 
+.PP
+Definition at line 364 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+364                                                 :
+365     data (rhs\&.data != NULL ? rhs\&.data->clone() : NULL),
+366     end  (rhs\&.end  != NULL ? rhs\&.end->clone()  : NULL),
+367     pred (rhs\&.pred != NULL ? rhs\&.pred->clone() : NULL) {}
+.fi
+.SS "template<class OtherType , class OtherReferenceType , class OtherPointerType > variant_filter_iterator (const variant_filter_iterator< Predicate, OtherType, OtherReferenceType, OtherPointerType > &rhs)"
+Copy construct from another (similar) variant_filter_iterator\&. The Predicate is the same, but the Type, ReferenceType and PointerType are different\&. Example: You are iterating over a std::vector<int*> with std::vector<int*>::iterator Then, you have: Type=int* , ReferenceType=int*& , PointerType=int** On the other hand, when you iterate using std::vector<int*>::const_iterator you have: Type=int * const, ReferenceType=int * const & , PointerType=int * const * 
+.PP
+Definition at line 383 of file variant_filter_iterator\&.h\&.
+.PP
+.nf
+384     : data (rhs\&.data != NULL ? rhs\&.data->const_clone() : NULL),
+385       end  (rhs\&.end  != NULL ? rhs\&.end->const_clone()  : NULL),
+386       pred (rhs\&.pred != NULL ? rhs\&.pred->const_clone() : NULL)
+387   {
+388     // libMesh::out << "Called templated copy constructor for variant_filter_iterator" << std::endl;
+389   }
+.fi
+.SS "virtual ~\fBvariant_filter_iterator\fP ()\fC [virtual]\fP"
+Destructor 
+.PP
+Definition at line 399 of file variant_filter_iterator\&.h\&.
+.PP
+References data, end, and pred\&.
+.PP
+.nf
+400   {
+401     delete data; data = NULL;
+402     delete end;  end  = NULL;
+403     delete pred; pred = NULL;
+404   }
+.fi
+.SH "Variable Documentation"
+.PP 
+.SS "IterBase* data"
+Ideally this private member data should have protected access\&. However, if we want a const_iterator to be constructable from an non-const one, templated versions of the same class (not related by inheritance) will need to know about these private members\&. Thus, they have public access\&.
+.PP
+Polymorphic pointer to the object\&. Don't confuse with the data pointer located in the \fCIter!\fP 
+.PP
+Definition at line 318 of file variant_filter_iterator\&.h\&.
+.PP
+Referenced by libMesh::Parallel::BinSorter< KeyType, IdxType >::binsort(), libMesh::UNVIO::count_elements(), libMesh::UNVIO::count_nodes(), equal(), libMesh::QMonomial::init_2D(), libMesh::QMonomial::init_3D(), libMesh::Parallel::Histogram< KeyType, IdxType >::make_histogram(), libMesh::MeshFunction::operator()(), libMesh::Utility::ReverseBytes::operator()(), operator*(), operator++(), libMesh::PltLoader::read_block_data(), libMesh::PltLoader::read_feblock_data(), libMesh::PltLoader::read_fepoint_data(), libMesh::PltLoader::read_point_data(), satisfy_predicate(), libMesh::Parallel::sync_dofobject_data_by_id(), libMesh::Parallel::sync_dofobject_data_by_xyz(), libMesh::Parallel::sync_element_data_by_parent_id(), libMesh::VTKIO::system_vectors_to_vtk(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::VTKIO::write_nodal_data(), libMesh::GnuPlotIO::write_solution(), and ~variant_filter_iterator()\&.
+.SS "IterBase* end"
+Also have a polymorphic pointer to the end object, this prevents iterating past the end\&. 
+.PP
+Definition at line 324 of file variant_filter_iterator\&.h\&.
+.PP
+Referenced by libMesh::MeshRefinement::_coarsen_elements(), GETPOT_NAMESPACE::GetPot::_DBE_expand(), libMesh::MetisPartitioner::_do_partition(), libMesh::MeshRefinement::_refine_elements(), libMesh::MeshTools::Modification::all_tri(), libMesh::DofMap::allgather_recursive_constraints(), libMesh::MeshCommunication::assign_global_indices(), libMesh::ParallelMesh::assign_unique_ids(), libMesh::PeriodicBoundaries::boundary(), libMesh::Patch::build_around_element(), libMesh::EquationSystems::build_discontinuous_solution_vector(), libMesh::MeshTools::Generation::build_extrusion(), libMesh::InfElemBuilder::build_inf_elem(), libMesh::MeshTools::build_nodes_to_elem_map(), libMesh::EquationSystems::build_solution_vector(), libMesh::EquationSystems::build_variable_names(), libMesh::VTKIO::cells_to_vtk(), libMesh::TetGenMeshInterface::check_hull_integrity(), libMesh::SerialMesh::clear(), libMesh::ParallelMesh::clear(), libMesh::EquationSystems::compare(), libMesh::DofMap::compute_sparsity(), libMesh::UnstructuredMesh::contract(), libMesh::GMVIO::copy_nodal_solution(), libMesh::UnstructuredMesh::copy_nodes_and_elements(), libMesh::vectormap< dof_id_type, dof_id_type >::count(), libMesh::TetGenMeshInterface::delete_2D_hull_elements(), libMesh::MeshTools::Modification::distort(), DMCreateDomainDecomposition_libMesh(), DMCreateFieldDecomposition_libMesh(), DMLibMeshSetSystem(), DMLibMeshSetUpName_Private(), DMView_libMesh(), libMesh::TecplotIO::elem_dimension(), libMesh::MeshTools::elem_types(), libMesh::UNVIO::element_out(), libMesh::mapvector< libMesh::Elem *, dof_id_type >::end(), libMesh::LocationMap< T >::fill(), libMesh::TetGenMeshInterface::fill_pointlist(), libMesh::MeshTools::find_boundary_nodes(), libMesh::Elem::find_edge_neighbors(), libMesh::Patch::find_face_neighbors(), libMesh::MeshCommunication::find_global_indices(), libMesh::MeshTools::find_hanging_nodes_and_parents(), libMesh::UnstructuredMesh::find_neighbors(), libMesh::Patch::find_point_neighbors(), libMesh::Elem::find_point_neighbors(), libMesh::ParallelMesh::fix_broken_node_and_element_numbering(), libMesh::MeshTools::Modification::flatten(), libMesh::EquationSystems::get_info(), libMesh::DofMap::get_info(), libMesh::EquationSystems::get_solution(), libMesh::EquationSystems::get_system(), GETPOT_NAMESPACE::GetPot::GetPot(), libMesh::MeshFunction::gradient(), libMesh::MeshFunction::hessian(), libMesh::StatisticsVector< T >::histogram(), libMesh::LocationMap< T >::init(), libMesh::LaplaceMeshSmoother::init(), libMesh::PointLocatorList::init(), libMesh::ParmetisPartitioner::initialize(), libMesh::ExodusII_IO_Helper::initialize(), libMesh::Elem::is_semilocal(), libMesh::PetscVector< T >::map_global_to_local_index(), libMesh::StatisticsVector< T >::maximum(), libMesh::StatisticsVector< T >::median(), libMesh::StatisticsVector< T >::minimum(), libMesh::EquationSystems::n_active_dofs(), libMesh::MeshBase::n_active_sub_elem(), libMesh::EquationSystems::n_dofs(), libMesh::MeshTools::n_non_subactive_elem_of_type_at_level(), libMesh::MeshBase::n_sub_elem(), libMesh::EquationSystems::n_vars(), libMesh::UNVIO::node_out(), libMesh::MeshFunction::operator()(), libMesh::BoundaryInfo::operator=(), GETPOT_NAMESPACE::GetPot::operator=(), libMesh::vectormap< dof_id_type, dof_id_type >::operator[](), libMesh::AbaqusIO::parse_label(), libMesh::ParsedFunction< Output >::ParsedFunction(), libMesh::Partitioner::partition_unpartitioned_elements(), libMesh::TetGenMeshInterface::pointset_convexhull(), libMesh::LaplaceMeshSmoother::print_graph(), libMesh::BoundaryInfo::print_info(), libMesh::BoundaryInfo::print_summary(), libMesh::System::read_legacy_data(), libMesh::GmshIO::read_mesh(), libMesh::XdrIO::read_serialized_bcs(), libMesh::System::read_serialized_blocked_dof_objects(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::VariationalMeshSmoother::readgr(), libMesh::MeshBase::recalculate_n_partitions(), libMesh::MeshTools::Modification::redistribute(), libMesh::DofMap::remove_adjoint_dirichlet_boundary(), libMesh::DofMap::remove_dirichlet_boundary(), libMesh::ParallelMesh::renumber_dof_objects(), libMesh::SerialMesh::renumber_nodes_and_elements(), libMesh::ParallelMesh::renumber_nodes_and_elements(), satisfy_predicate(), libMesh::DofMap::scatter_constraints(), libMesh::DofObject::set_n_vars_per_group(), libMesh::Partitioner::set_parent_processor_ids(), libMesh::LaplaceMeshSmoother::smooth(), libMesh::MeshTools::Modification::smooth(), libMesh::vectormap< dof_id_type, dof_id_type >::sort(), libMesh::SerialMesh::stitching_helper(), libMesh::MeshBase::subdomain_ids(), libMesh::Tree< N >::Tree(), libMesh::TriangleInterface::triangulate(), libMesh::TetGenMeshInterface::triangulate_conformingDelaunayMesh_carvehole(), libMesh::FroIO::write(), libMesh::TetGenIO::write(), libMesh::MEDITIO::write_ascii(), libMesh::TecplotIO::write_ascii(), libMesh::GMVIO::write_ascii_new_impl(), libMesh::GMVIO::write_ascii_old_impl(), libMesh::TecplotIO::write_binary(), libMesh::GMVIO::write_binary(), libMesh::CheckpointIO::write_connectivity(), libMesh::GMVIO::write_discontinuous_gmv(), libMesh::ExodusII_IO_Helper::write_element_values(), libMesh::ExodusII_IO_Helper::write_elements(), libMesh::UCDIO::write_interior_elems(), libMesh::GmshIO::write_mesh(), libMesh::LegacyXdrIO::write_mesh(), libMesh::ExodusII_IO_Helper::write_nodal_coordinates(), libMesh::ExodusII_IO::write_nodal_data_discontinuous(), libMesh::UCDIO::write_nodes(), libMesh::CheckpointIO::write_nodes(), libMesh::GmshIO::write_post(), libMesh::XdrIO::write_serialized_bcs(), libMesh::System::write_serialized_blocked_dof_objects(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::VariationalMeshSmoother::writegr(), libMesh::DirichletBoundaries::~DirichletBoundaries(), GETPOT_NAMESPACE::GetPot::~GetPot(), libMesh::PeriodicBoundaries::~PeriodicBoundaries(), and ~variant_filter_iterator()\&.
+.SS "template<class Predicate , class Type , class ReferenceType  = Type&, class PointerType  = Type*> IterType iter_data"
+Original Authors: Corwin Joy * Michael Gradman cjoy@houston.rr.com * Michael.Gradman@caminus.com Caminus, Suite 1150, Two Allen Center, 1200 Smith Street, Houston, TX 77002 This class is an extension of variant_bidirectional_iterator to a filter_iterator similar to boost's\&. The filter iterator is modeled after a forward_iterator since to go backward and forward requires the storage of both a 'begin' and 'end' iterator to avoid stepping off the end or the beginning\&. To reduce complexity, we only allow traversal in one direction\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson, 2004\&. This is the iterator passed by the user\&. 
+.RE
+.PP
+
+.PP
+Definition at line 49 of file variant_filter_iterator\&.h\&.
+.SS "PredBase* pred"
+The predicate object\&. Must have op() capable of operating on IterBase* pointers\&. Therefore it has to follow the same paradigm as \fCIterBase\fP\&. 
+.PP
+Definition at line 331 of file variant_filter_iterator\&.h\&.
+.PP
+Referenced by libMesh::Predicates::abstract_multi_predicate< T >::operator()(), and ~variant_filter_iterator()\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

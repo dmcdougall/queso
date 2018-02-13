@@ -1,0 +1,1627 @@
+.TH "libMesh::Xdr" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::Xdr \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <xdr_cxx\&.h>\fP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBXdr\fP (const std::string &name='', const \fBXdrMODE\fP m=\fBUNKNOWN\fP)"
+.br
+.ti -1c
+.RI "\fB~Xdr\fP ()"
+.br
+.ti -1c
+.RI "void \fBopen\fP (const std::string &name)"
+.br
+.ti -1c
+.RI "void \fBclose\fP ()"
+.br
+.ti -1c
+.RI "bool \fBis_open\fP () const "
+.br
+.ti -1c
+.RI "bool \fBreading\fP () const "
+.br
+.ti -1c
+.RI "bool \fBwriting\fP () const "
+.br
+.ti -1c
+.RI "\fBXdrMODE\fP \fBaccess_mode\fP () const "
+.br
+.ti -1c
+.RI "template<typename T > void \fBdata\fP (T &a, const char *\fBcomment\fP='')"
+.br
+.ti -1c
+.RI "template<typename T > \fBXdr\fP & \fBoperator<<\fP (T &a)"
+.br
+.ti -1c
+.RI "template<typename T > \fBXdr\fP & \fBoperator>>\fP (T &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdata_stream\fP (T *val, const unsigned int len, const unsigned int line_break=\fBlibMesh::invalid_uint\fP)"
+.br
+.ti -1c
+.RI "void \fBcomment\fP (std::string &)"
+.br
+.ti -1c
+.RI "void \fBset_version\fP (int ver)"
+.br
+.ti -1c
+.RI "int \fBversion\fP () const "
+.br
+.ti -1c
+.RI "template<> void \fBdo_read\fP (std::string &a)"
+.br
+.ti -1c
+.RI "template<> void \fBdata_stream\fP (double *val, const unsigned int len, const unsigned int line_break)"
+.br
+.ti -1c
+.RI "template<> void \fBdata_stream\fP (float *val, const unsigned int len, const unsigned int line_break)"
+.br
+.ti -1c
+.RI "template<> void \fBdata_stream\fP (long double *val, const unsigned int len, const unsigned int line_break)"
+.br
+.ti -1c
+.RI "template<> void \fBdata_stream\fP (std::complex< double > *val, const unsigned int len, const unsigned int line_break)"
+.br
+.ti -1c
+.RI "template<> void \fBdata_stream\fP (std::complex< long double > *val, const unsigned int len, const unsigned int line_break)"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "template<typename T > void \fBdo_read\fP (T &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_read\fP (std::complex< T > &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_read\fP (std::vector< T > &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_read\fP (std::vector< std::complex< T > > &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_write\fP (T &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_write\fP (std::complex< T > &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_write\fP (std::vector< T > &a)"
+.br
+.ti -1c
+.RI "template<typename T > void \fBdo_write\fP (std::vector< std::complex< T > > &a)"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const \fBXdrMODE\fP \fBmode\fP"
+.br
+.ti -1c
+.RI "std::string \fBfile_name\fP"
+.br
+.ti -1c
+.RI "XDR * \fBxdrs\fP"
+.br
+.ti -1c
+.RI "FILE * \fBfp\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< std::istream > \fBin\fP"
+.br
+.ti -1c
+.RI "\fBAutoPtr\fP< std::ostream > \fBout\fP"
+.br
+.ti -1c
+.RI "const int \fBcomm_len\fP"
+.br
+.ti -1c
+.RI "char \fBcomm\fP [\fBxdr_MAX_STRING_LENGTH\fP]"
+.br
+.ti -1c
+.RI "bool \fBgzipped_file\fP"
+.br
+.ti -1c
+.RI "bool \fBbzipped_file\fP"
+.br
+.ti -1c
+.RI "bool \fBxzipped_file\fP"
+.br
+.ti -1c
+.RI "int \fBversion_number\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class implements a C++ interface to the XDR (eXternal Data Representation) format\&. XDR is useful for creating platform-independent binary files\&. This class was created to handle equation system output as a replacement for \fBXdrIO\fP since that is somewhat limited\&. 
+.PP
+Definition at line 70 of file xdr_cxx\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::Xdr::Xdr (const std::string &name = \fC''\fP, const \fBXdrMODE\fPm = \fC\fBUNKNOWN\fP\fP)"
+Constructor\&. Takes the filename and the mode\&. Valid modes are ENCODE, DECODE, READ, and WRITE\&. 
+.PP
+Definition at line 150 of file xdr_cxx\&.C\&.
+.PP
+References open()\&.
+.PP
+.nf
+150                                                 :
+151   mode(m),
+152   file_name(name),
+153 #ifdef LIBMESH_HAVE_XDR
+154   xdrs(NULL),
+155   fp(NULL),
+156 #endif
+157   in(NULL),
+158   out(NULL),
+159   comm_len(xdr_MAX_STRING_LENGTH),
+160   gzipped_file(false),
+161   bzipped_file(false),
+162   xzipped_file(false)
+163 {
+164   this->open(name);
+165 }
+.fi
+.SS "libMesh::Xdr::~Xdr ()"
+Destructor\&. Closes the file if it is open\&. 
+.PP
+Definition at line 169 of file xdr_cxx\&.C\&.
+.PP
+References close()\&.
+.PP
+.nf
+170 {
+171   this->close();
+172 }
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "\fBXdrMODE\fP libMesh::Xdr::access_mode () const\fC [inline]\fP"
+Returns the mode used to access the file\&. Valid modes are ENCODE, DECODE, READ, or WRITE\&. 
+.PP
+Definition at line 118 of file xdr_cxx\&.h\&.
+.PP
+References mode\&.
+.PP
+.nf
+118 { return mode; }
+.fi
+.SS "void libMesh::Xdr::close ()"
+Closes the file if it is open\&. 
+.PP
+Definition at line 295 of file xdr_cxx\&.C\&.
+.PP
+References bzipped_file, libMesh::DECODE, libMesh::ENCODE, libMesh::err, file_name, fp, libMesh::AutoPtr< Tp >::get(), in, mode, out, libMesh::READ, libMesh::AutoPtr< Tp >::reset(), libMesh::WRITE, xdrs, and xzipped_file\&.
+.PP
+Referenced by libMesh::EquationSystems::_read_impl(), libMesh::XdrIO::read(), libMesh::XdrIO::write(), and ~Xdr()\&.
+.PP
+.nf
+296 {
+297   switch (mode)
+298     {
+299     case ENCODE:
+300     case DECODE:
+301       {
+302 #ifdef LIBMESH_HAVE_XDR
+303 
+304         if (xdrs)
+305           {
+306             xdr_destroy (xdrs);
+307             delete xdrs;
+308             xdrs = NULL;
+309           }
+310 
+311         if (fp)
+312           {
+313             fflush(fp);
+314             fclose(fp);
+315             fp = NULL;
+316           }
+317 #else
+318 
+319         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+320                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+321                      << std::endl
+322                      << "The XDR interface is not available in this installation"
+323                      << std::endl;
+324 
+325         libmesh_error();
+326 
+327 #endif
+328         file_name = "";
+329         return;
+330       }
+331 
+332     case READ:
+333       {
+334         if (in\&.get() != NULL)
+335           {
+336             in\&.reset();
+337 
+338             if (bzipped_file || xzipped_file)
+339               remove_unzipped_file(file_name);
+340           }
+341         file_name = "";
+342         return;
+343       }
+344 
+345     case WRITE:
+346       {
+347         if (out\&.get() != NULL)
+348           {
+349             out\&.reset();
+350 
+351             if (bzipped_file)
+352               bzip_file(std::string(file_name\&.begin(), file_name\&.end()-4));
+353 
+354             else if (xzipped_file)
+355               xzip_file(std::string(file_name\&.begin(), file_name\&.end()-3));
+356           }
+357         file_name = "";
+358         return;
+359       }
+360 
+361     default:
+362       libmesh_error();
+363     }
+364 }
+.fi
+.SS "void libMesh::Xdr::comment (std::string &comment_in)"
+Writes or reads (ignores) a comment line\&. 
+.PP
+Definition at line 1409 of file xdr_cxx\&.C\&.
+.PP
+References comm, comm_len, libMesh::DECODE, libMesh::ENCODE, libMesh::AutoPtr< Tp >::get(), in, libMesh::libmesh_assert(), mode, out, libMesh::READ, and libMesh::WRITE\&.
+.PP
+Referenced by libMesh::System::write_serialized_data()\&.
+.PP
+.nf
+1410 {
+1411   switch (mode)
+1412     {
+1413     case ENCODE:
+1414     case DECODE:
+1415       {
+1416         return;
+1417       }
+1418 
+1419     case READ:
+1420       {
+1421         libmesh_assert(in\&.get());
+1422         libmesh_assert (in->good());
+1423         in->getline(comm, comm_len);
+1424         return;
+1425       }
+1426 
+1427     case WRITE:
+1428       {
+1429         libmesh_assert(out\&.get());
+1430         libmesh_assert (out->good());
+1431         *out << "\t " << comment_in << '\n';
+1432         return;
+1433       }
+1434 
+1435     default:
+1436       libmesh_error();
+1437     }
+1438 }
+.fi
+.SS "template<typename T > template void libMesh::Xdr::data< long double > (T &a, const char *comment = \fC''\fP)"
+Inputs or outputs a single value\&. 
+.PP
+Definition at line 640 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, do_read(), do_write(), libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, is_open(), libMesh::libmesh_assert(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+Referenced by libMesh::EquationSystems::_read_impl(), do_read(), do_write(), operator<<(), operator>>(), libMesh::CheckpointIO::read(), libMesh::XdrIO::read(), libMesh::CheckpointIO::read_bc_names(), libMesh::CheckpointIO::read_bcs(), libMesh::CheckpointIO::read_connectivity(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::CheckpointIO::read_nodes(), libMesh::CheckpointIO::read_nodesets(), libMesh::System::read_parallel_data(), libMesh::XdrIO::read_serialized_bc_names(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::XdrIO::read_serialized_subdomain_names(), libMesh::System::read_serialized_vector(), libMesh::System::read_serialized_vectors(), libMesh::CheckpointIO::read_subdomain_names(), libMesh::MeshData::read_xdr(), libMesh::CheckpointIO::write(), libMesh::XdrIO::write(), libMesh::EquationSystems::write(), libMesh::CheckpointIO::write_bc_names(), libMesh::CheckpointIO::write_bcs(), libMesh::CheckpointIO::write_connectivity(), libMesh::System::write_header(), libMesh::CheckpointIO::write_nodes(), libMesh::CheckpointIO::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::XdrIO::write_serialized_bc_names(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::XdrIO::write_serialized_subdomain_names(), libMesh::System::write_serialized_vector(), libMesh::System::write_serialized_vectors(), libMesh::CheckpointIO::write_subdomain_names(), and libMesh::MeshData::write_xdr()\&.
+.PP
+.nf
+641 {
+642   switch (mode)
+643     {
+644     case ENCODE:
+645     case DECODE:
+646       {
+647 #ifdef LIBMESH_HAVE_XDR
+648 
+649         libmesh_assert (is_open());
+650 
+651         xdr_translate(xdrs, a);
+652 
+653 #else
+654 
+655         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+656                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+657                      << std::endl
+658                      << "The XDR interface is not available in this installation"
+659                      << std::endl;
+660 
+661         libmesh_error();
+662 
+663 #endif
+664         return;
+665       }
+666 
+667     case READ:
+668       {
+669         libmesh_assert(in\&.get());
+670         libmesh_assert (in->good());
+671 
+672         this->do_read(a);
+673 
+674         return;
+675       }
+676 
+677     case WRITE:
+678       {
+679         libmesh_assert(out\&.get());
+680         libmesh_assert (out->good());
+681 
+682         this->do_write(a);
+683         *out << "\t " << comment_in << '\n';
+684 
+685         return;
+686       }
+687 
+688     default:
+689       libmesh_error();
+690     }
+691 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::data_stream (T *val, const unsigned intlen, const unsigned intline_break = \fC\fBlibMesh::invalid_uint\fP\fP)"
+Inputs or outputs a raw data stream\&. 
+.PP
+Definition at line 695 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, libMesh::invalid_uint, is_open(), libMesh::libmesh_assert(), std::min(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+Referenced by libMesh::CheckpointIO::read_connectivity(), libMesh::CheckpointIO::read_nodes(), libMesh::System::read_SCALAR_dofs(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::CheckpointIO::write_connectivity(), libMesh::CheckpointIO::write_nodes(), libMesh::System::write_SCALAR_dofs(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodes(), and libMesh::XdrIO::write_serialized_nodesets()\&.
+.PP
+.nf
+696 {
+697   switch (mode)
+698     {
+699     case ENCODE:
+700       {
+701 #ifdef LIBMESH_HAVE_XDR
+702 
+703         libmesh_assert (this->is_open());
+704 
+705         size_t size_of_type = sizeof(T);
+706 
+707         if (size_of_type <= 4) // 32-bit types
+708           {
+709             xdr_vector(xdrs,
+710                        (char*) val,
+711                        len,
+712                        size_of_type,
+713                        (xdrproc_t) xdr_u_int);
+714           }
+715         else // 64-bit types
+716           {
+717             xdr_vector(xdrs,
+718                        (char*) val,
+719                        len,
+720                        size_of_type,
+721                        (xdrproc_t) xdr_u_hyper);
+722           }
+723 
+724 #else
+725 
+726         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+727                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+728                      << std::endl
+729                      << "The XDR interface is not available in this installation"
+730                      << std::endl;
+731 
+732         libmesh_error();
+733 
+734 #endif
+735         return;
+736       }
+737 
+738     case DECODE:
+739       {
+740 #ifdef LIBMESH_HAVE_XDR
+741 
+742         libmesh_assert (this->is_open());
+743 
+744         size_t size_of_type = sizeof(T);
+745 
+746         if (size_of_type <= 4) // 32-bit types
+747           {
+748             if (len > 0)
+749               xdr_vector(xdrs,
+750                          (char*) val,
+751                          len,
+752                          size_of_type,
+753                          (xdrproc_t) xdr_u_int);
+754           }
+755         else // 64-bit types
+756           {
+757             if (len > 0)
+758               xdr_vector(xdrs,
+759                          (char*) val,
+760                          len,
+761                          size_of_type,
+762                          (xdrproc_t) xdr_u_hyper);
+763 
+764           }
+765 
+766 #else
+767 
+768         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+769                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+770                      << std::endl
+771                      << "The XDR interface is not available in this installation"
+772                      << std::endl;
+773 
+774         libmesh_error();
+775 
+776 #endif
+777         return;
+778       }
+779 
+780     case READ:
+781       {
+782         libmesh_assert(in\&.get());
+783         libmesh_assert (in->good());
+784 
+785         for (unsigned int i=0; i<len; i++)
+786           {
+787             libmesh_assert(in\&.get());
+788             libmesh_assert (in->good());
+789             *in >> val[i];
+790           }
+791 
+792         return;
+793       }
+794 
+795     case WRITE:
+796       {
+797         libmesh_assert(out\&.get());
+798         libmesh_assert (out->good());
+799 
+800         if (line_break == libMesh::invalid_uint)
+801           for (unsigned int i=0; i<len; i++)
+802             {
+803               libmesh_assert(out\&.get());
+804               libmesh_assert (out->good());
+805               *out << val[i] << " ";
+806             }
+807         else
+808           {
+809             unsigned int cnt=0;
+810             while (cnt < len)
+811               {
+812                 for (unsigned int i=0; i<std::min(line_break,len); i++)
+813                   {
+814                     libmesh_assert(out\&.get());
+815                     libmesh_assert (out->good());
+816                     *out << val[cnt++] << " ";
+817                   }
+818                 libmesh_assert(out\&.get());
+819                 libmesh_assert (out->good());
+820                 *out << '\n';
+821               }
+822           }
+823 
+824         return;
+825       }
+826 
+827     default:
+828       libmesh_error();
+829     }
+830 }
+.fi
+.SS "template<> void libMesh::Xdr::data_stream (double *val, const unsigned intlen, const unsigned intline_break)"
+
+.PP
+Definition at line 835 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, libMesh::invalid_uint, is_open(), libMesh::libmesh_assert(), std::min(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+.nf
+836 {
+837   switch (mode)
+838     {
+839     case ENCODE:
+840     case DECODE:
+841       {
+842 #ifdef LIBMESH_HAVE_XDR
+843 
+844         libmesh_assert (this->is_open());
+845 
+846         if (len > 0)
+847           xdr_vector(xdrs,
+848                      (char*) val,
+849                      len,
+850                      sizeof(double),
+851                      (xdrproc_t) xdr_double);
+852 
+853 #else
+854 
+855         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+856                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+857                      << std::endl
+858                      << "The XDR interface is not available in this installation"
+859                      << std::endl;
+860 
+861         libmesh_error();
+862 
+863 #endif
+864         return;
+865       }
+866 
+867     case READ:
+868       {
+869         libmesh_assert(in\&.get());
+870         libmesh_assert (in->good());
+871 
+872         for (unsigned int i=0; i<len; i++)
+873           {
+874             libmesh_assert(in\&.get());
+875             libmesh_assert (in->good());
+876             *in >> val[i];
+877           }
+878 
+879         return;
+880       }
+881 
+882     case WRITE:
+883       {
+884         libmesh_assert(out\&.get());
+885         libmesh_assert (out->good());
+886 
+887         // Save stream flags
+888         std::ios_base::fmtflags out_flags = out->flags();
+889 
+890         // We will use scientific notation with a precision of 16
+891         // digits in the following output\&.  The desired precision and
+892         // format will automatically determine the width\&.
+893         *out << std::scientific
+894              << std::setprecision(16);
+895 
+896         if (line_break == libMesh::invalid_uint)
+897           for (unsigned int i=0; i<len; i++)
+898             {
+899               libmesh_assert(out\&.get());
+900               libmesh_assert (out->good());
+901               *out << val[i] << ' ';
+902             }
+903         else
+904           {
+905             unsigned int cnt=0;
+906             while (cnt < len)
+907               {
+908                 for (unsigned int i=0; i<std::min(line_break,len); i++)
+909                   {
+910                     libmesh_assert(out\&.get());
+911                     libmesh_assert (out->good());
+912                     *out << val[cnt++] << ' ';
+913                   }
+914                 libmesh_assert(out\&.get());
+915                 libmesh_assert (out->good());
+916                 *out << '\n';
+917               }
+918           }
+919 
+920         // Restore stream flags
+921         out->flags(out_flags);
+922 
+923         return;
+924       }
+925 
+926     default:
+927       libmesh_error();
+928     }
+929 }
+.fi
+.SS "template<> void libMesh::Xdr::data_stream (float *val, const unsigned intlen, const unsigned intline_break)"
+
+.PP
+Definition at line 933 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, libMesh::invalid_uint, is_open(), libMesh::libmesh_assert(), std::min(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+.nf
+934 {
+935   switch (mode)
+936     {
+937     case ENCODE:
+938     case DECODE:
+939       {
+940 #ifdef LIBMESH_HAVE_XDR
+941 
+942         libmesh_assert (this->is_open());
+943 
+944         if (len > 0)
+945           xdr_vector(xdrs,
+946                      (char*) val,
+947                      len,
+948                      sizeof(float),
+949                      (xdrproc_t) xdr_float);
+950 
+951 #else
+952 
+953         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+954                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+955                      << std::endl
+956                      << "The XDR interface is not available in this installation"
+957                      << std::endl;
+958 
+959         libmesh_error();
+960 
+961 #endif
+962         return;
+963       }
+964 
+965     case READ:
+966       {
+967         libmesh_assert(in\&.get());
+968         libmesh_assert (in->good());
+969 
+970         for (unsigned int i=0; i<len; i++)
+971           {
+972             libmesh_assert(in\&.get());
+973             libmesh_assert (in->good());
+974             *in >> val[i];
+975           }
+976 
+977         return;
+978       }
+979 
+980     case WRITE:
+981       {
+982         libmesh_assert(out\&.get());
+983         libmesh_assert (out->good());
+984 
+985         // Save stream flags
+986         std::ios_base::fmtflags out_flags = out->flags();
+987 
+988         // We will use scientific notation with a precision of 16
+989         // digits in the following output\&.  The desired precision and
+990         // format will automatically determine the width\&.
+991         *out << std::scientific
+992              << std::setprecision(16);
+993 
+994         if (line_break == libMesh::invalid_uint)
+995           for (unsigned int i=0; i<len; i++)
+996             {
+997               libmesh_assert(out\&.get());
+998               libmesh_assert (out->good());
+999               *out << val[i] << ' ';
+1000             }
+1001         else
+1002           {
+1003             unsigned int cnt=0;
+1004             while (cnt < len)
+1005               {
+1006                 for (unsigned int i=0; i<std::min(line_break,len); i++)
+1007                   {
+1008                     libmesh_assert(out\&.get());
+1009                     libmesh_assert (out->good());
+1010                     *out << val[cnt++] << ' ';
+1011                   }
+1012                 libmesh_assert(out\&.get());
+1013                 libmesh_assert (out->good());
+1014                 *out << '\n';
+1015               }
+1016           }
+1017 
+1018         // Restore stream flags
+1019         out->flags(out_flags);
+1020 
+1021         return;
+1022       }
+1023 
+1024     default:
+1025       libmesh_error();
+1026     }
+1027 }
+.fi
+.SS "template<> void libMesh::Xdr::data_stream (long double *val, const unsigned intlen, const unsigned intline_break)"
+
+.PP
+Definition at line 1029 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, libMesh::invalid_uint, is_open(), libMesh::libmesh_assert(), std::min(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+.nf
+1030 {
+1031   switch (mode)
+1032     {
+1033     case ENCODE:
+1034     case DECODE:
+1035       {
+1036 #ifdef LIBMESH_HAVE_XDR
+1037 
+1038         libmesh_assert (this->is_open());
+1039 
+1040         // FIXME[JWP]: How to implement this for long double?  Mac OS
+1041         // X defines 'xdr_quadruple' but AFAICT, it does not exist for
+1042         // Linux\&.\&.\&. for now, reading/writing XDR files with long
+1043         // doubles drops back to double precision, but you can still
+1044         // write long double ASCII files of course\&.
+1045         // if (len > 0)
+1046         //   xdr_vector(xdrs,
+1047         //      (char*) val,
+1048         //      len,
+1049         //      sizeof(double),
+1050         //      (xdrproc_t) xdr_quadruple);
+1051 
+1052         if (len > 0)
+1053           {
+1054             std::vector<double> io_buffer (len);
+1055 
+1056             // Fill io_buffer if we are writing\&.
+1057             if (mode == ENCODE)
+1058               for (unsigned int i=0, cnt=0; i<len; i++)
+1059                 io_buffer[cnt++] = val[i];
+1060 
+1061             xdr_vector(xdrs,
+1062                        (char*) &io_buffer[0],
+1063                        len,
+1064                        sizeof(double),
+1065                        (xdrproc_t) xdr_double);
+1066 
+1067             // Fill val array if we are reading\&.
+1068             if (mode == DECODE)
+1069               for (unsigned int i=0, cnt=0; i<len; i++)
+1070                 {
+1071                   val[i] = io_buffer[cnt++];
+1072                 }
+1073           }
+1074 
+1075 #else
+1076 
+1077         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+1078                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+1079                      << std::endl
+1080                      << "The XDR interface is not available in this installation"
+1081                      << std::endl;
+1082 
+1083         libmesh_error();
+1084 
+1085 #endif
+1086         return;
+1087       }
+1088 
+1089     case READ:
+1090       {
+1091         libmesh_assert(in\&.get());
+1092         libmesh_assert (in->good());
+1093 
+1094         for (unsigned int i=0; i<len; i++)
+1095           {
+1096             libmesh_assert(in\&.get());
+1097             libmesh_assert (in->good());
+1098             *in >> val[i];
+1099           }
+1100 
+1101         return;
+1102       }
+1103 
+1104     case WRITE:
+1105       {
+1106         libmesh_assert(out\&.get());
+1107         libmesh_assert (out->good());
+1108 
+1109         // Save stream flags
+1110         std::ios_base::fmtflags out_flags = out->flags();
+1111 
+1112         // We will use scientific notation with a precision of 16
+1113         // digits in the following output\&.  The desired precision and
+1114         // format will automatically determine the width\&.
+1115         *out << std::scientific
+1116              << std::setprecision(16);
+1117 
+1118         if (line_break == libMesh::invalid_uint)
+1119           for (unsigned int i=0; i<len; i++)
+1120             {
+1121               libmesh_assert(out\&.get());
+1122               libmesh_assert (out->good());
+1123               *out << val[i] << ' ';
+1124             }
+1125         else
+1126           {
+1127             unsigned int cnt=0;
+1128             while (cnt < len)
+1129               {
+1130                 for (unsigned int i=0; i<std::min(line_break,len); i++)
+1131                   {
+1132                     libmesh_assert(out\&.get());
+1133                     libmesh_assert (out->good());
+1134                     *out << val[cnt++] << ' ';
+1135                   }
+1136                 libmesh_assert(out\&.get());
+1137                 libmesh_assert (out->good());
+1138                 *out << '\n';
+1139               }
+1140           }
+1141 
+1142         // Restore stream flags
+1143         out->flags(out_flags);
+1144 
+1145         return;
+1146       }
+1147 
+1148     default:
+1149       libmesh_error();
+1150     }
+1151 }
+.fi
+.SS "template<> void libMesh::Xdr::data_stream (std::complex< double > *val, const unsigned intlen, const unsigned intline_break)"
+
+.PP
+Definition at line 1156 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, libMesh::invalid_uint, is_open(), libMesh::libmesh_assert(), std::min(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+.nf
+1157 {
+1158   switch (mode)
+1159     {
+1160     case ENCODE:
+1161     case DECODE:
+1162       {
+1163 #ifdef LIBMESH_HAVE_XDR
+1164 
+1165         libmesh_assert (this->is_open());
+1166 
+1167 
+1168         if (len > 0)
+1169           {
+1170             std::vector<double> io_buffer (2*len);
+1171 
+1172             // Fill io_buffer if we are writing\&.
+1173             if (mode == ENCODE)
+1174               for (unsigned int i=0, cnt=0; i<len; i++)
+1175                 {
+1176                   io_buffer[cnt++] = val[i]\&.real();
+1177                   io_buffer[cnt++] = val[i]\&.imag();
+1178                 }
+1179 
+1180             xdr_vector(xdrs,
+1181                        (char*) &io_buffer[0],
+1182                        2*len,
+1183                        sizeof(double),
+1184                        (xdrproc_t) xdr_double);
+1185 
+1186             // Fill val array if we are reading\&.
+1187             if (mode == DECODE)
+1188               for (unsigned int i=0, cnt=0; i<len; i++)
+1189                 {
+1190                   double re = io_buffer[cnt++];
+1191                   double im = io_buffer[cnt++];
+1192                   val[i] = std::complex<double>(re,im);
+1193                 }
+1194           }
+1195 #else
+1196 
+1197         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+1198                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+1199                      << std::endl
+1200                      << "The XDR interface is not available in this installation"
+1201                      << std::endl;
+1202 
+1203         libmesh_error();
+1204 
+1205 #endif
+1206         return;
+1207       }
+1208 
+1209     case READ:
+1210       {
+1211         libmesh_assert(in\&.get());
+1212         libmesh_assert (in->good());
+1213 
+1214         for (unsigned int i=0; i<len; i++)
+1215           {
+1216             libmesh_assert(in\&.get());
+1217             libmesh_assert (in->good());
+1218             double re, im;
+1219             *in >> re >> im;
+1220             val[i] = std::complex<double>(re,im);
+1221           }
+1222 
+1223         return;
+1224       }
+1225 
+1226     case WRITE:
+1227       {
+1228         libmesh_assert(out\&.get());
+1229         libmesh_assert (out->good());
+1230 
+1231         // Save stream flags
+1232         std::ios_base::fmtflags out_flags = out->flags();
+1233 
+1234         // We will use scientific notation with a precision of 16
+1235         // digits in the following output\&.  The desired precision and
+1236         // format will automatically determine the width\&.
+1237         *out << std::scientific
+1238              << std::setprecision(16);
+1239 
+1240         if (line_break == libMesh::invalid_uint)
+1241           for (unsigned int i=0; i<len; i++)
+1242             {
+1243               libmesh_assert(out\&.get());
+1244               libmesh_assert (out->good());
+1245               *out << val[i]\&.real() << ' ';
+1246               *out << val[i]\&.imag() << ' ';
+1247             }
+1248         else
+1249           {
+1250             unsigned int cnt=0;
+1251             while (cnt < len)
+1252               {
+1253                 for (unsigned int i=0; i<std::min(line_break,len); i++)
+1254                   {
+1255                     libmesh_assert(out\&.get());
+1256                     libmesh_assert (out->good());
+1257                     *out << val[cnt]\&.real() << ' ';
+1258                     *out << val[cnt]\&.imag() << ' ';
+1259                     cnt++;
+1260                   }
+1261                 libmesh_assert(out\&.get());
+1262                 libmesh_assert (out->good());
+1263                 *out << '\n';
+1264               }
+1265           }
+1266 
+1267         // Restore stream flags
+1268         out->flags(out_flags);
+1269 
+1270         return;
+1271       }
+1272 
+1273     default:
+1274       libmesh_error();
+1275     }
+1276 }
+.fi
+.SS "template<> void libMesh::Xdr::data_stream (std::complex< long double > *val, const unsigned intlen, const unsigned intline_break)"
+
+.PP
+Definition at line 1279 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, libMesh::AutoPtr< Tp >::get(), in, libMesh::invalid_uint, is_open(), libMesh::libmesh_assert(), std::min(), mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+.nf
+1280 {
+1281   switch (mode)
+1282     {
+1283     case ENCODE:
+1284     case DECODE:
+1285       {
+1286 #ifdef LIBMESH_HAVE_XDR
+1287 
+1288         libmesh_assert (this->is_open());
+1289 
+1290         // FIXME[JWP]: How to implement this for long double?  Mac OS
+1291         // X defines 'xdr_quadruple' but AFAICT, it does not exist for
+1292         // Linux\&.\&.\&. for now, reading/writing XDR files with long
+1293         // doubles drops back to double precision, but you can still
+1294         // write long double ASCII files of course\&.
+1295 
+1296         if (len > 0)
+1297           {
+1298             std::vector<double> io_buffer (2*len);
+1299 
+1300             // Fill io_buffer if we are writing\&.
+1301             if (mode == ENCODE)
+1302               for (unsigned int i=0, cnt=0; i<len; i++)
+1303                 {
+1304                   io_buffer[cnt++] = val[i]\&.real();
+1305                   io_buffer[cnt++] = val[i]\&.imag();
+1306                 }
+1307 
+1308             xdr_vector(xdrs,
+1309                        (char*) &io_buffer[0],
+1310                        2*len,
+1311                        sizeof(double),
+1312                        (xdrproc_t) xdr_double);
+1313 
+1314             // Fill val array if we are reading\&.
+1315             if (mode == DECODE)
+1316               for (unsigned int i=0, cnt=0; i<len; i++)
+1317                 {
+1318                   double re = io_buffer[cnt++];
+1319                   double im = io_buffer[cnt++];
+1320                   val[i] = std::complex<long double>(re, im);
+1321                 }
+1322           }
+1323 #else
+1324 
+1325         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+1326                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+1327                      << std::endl
+1328                      << "The XDR interface is not available in this installation"
+1329                      << std::endl;
+1330 
+1331         libmesh_error();
+1332 
+1333 #endif
+1334         return;
+1335       }
+1336 
+1337     case READ:
+1338       {
+1339         libmesh_assert(in\&.get());
+1340         libmesh_assert (in->good());
+1341 
+1342         for (unsigned int i=0; i<len; i++)
+1343           {
+1344             libmesh_assert(in\&.get());
+1345             libmesh_assert (in->good());
+1346             long double re, im;
+1347             *in >> re >> im;
+1348             val[i] = std::complex<long double>(re,im);
+1349           }
+1350 
+1351         return;
+1352       }
+1353 
+1354     case WRITE:
+1355       {
+1356         libmesh_assert(out\&.get());
+1357         libmesh_assert (out->good());
+1358 
+1359 
+1360         // Save stream flags
+1361         std::ios_base::fmtflags out_flags = out->flags();
+1362 
+1363         // We will use scientific notation with a precision of
+1364         // 'digits10' digits in the following output\&.  The desired
+1365         // precision and format will automatically determine the
+1366         // width\&.  Note: digit10 is the number of digits (in decimal
+1367         // base) that can be represented without change\&.  Equivalent
+1368         // to FLT_DIG, DBL_DIG or LDBL_DIG for floating types\&.
+1369         *out << std::scientific
+1370              << std::setprecision(std::numeric_limits<long double>::digits10);
+1371 
+1372         if (line_break == libMesh::invalid_uint)
+1373           for (unsigned int i=0; i<len; i++)
+1374             {
+1375               libmesh_assert(out\&.get());
+1376               libmesh_assert (out->good());
+1377               *out << val[i]\&.real() << ' ' << val[i]\&.imag() << ' ';
+1378             }
+1379         else
+1380           {
+1381             unsigned int cnt=0;
+1382             while (cnt < len)
+1383               {
+1384                 for (unsigned int i=0; i<std::min(line_break,len); i++)
+1385                   {
+1386                     libmesh_assert(out\&.get());
+1387                     libmesh_assert (out->good());
+1388                     *out << val[cnt]\&.real() << ' ' << val[cnt]\&.imag() << ' ';
+1389                     cnt++;
+1390                   }
+1391                 libmesh_assert(out\&.get());
+1392                 libmesh_assert (out->good());
+1393                 *out << '\n';
+1394               }
+1395           }
+1396 
+1397         // Restore stream flags
+1398         out->flags(out_flags);
+1399 
+1400         return;
+1401       }
+1402 
+1403     default:
+1404       libmesh_error();
+1405     }
+1406 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_read (T &a)\fC [private]\fP"
+Helper method for reading different data types 
+.PP
+Definition at line 542 of file xdr_cxx\&.C\&.
+.PP
+References comm, comm_len, and in\&.
+.PP
+Referenced by data()\&.
+.PP
+.nf
+542                       {
+543   *in >> a;
+544   in->getline(comm, comm_len);
+545 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_read (std::complex< T > &a)\fC [private]\fP"
+
+.PP
+Definition at line 548 of file xdr_cxx\&.C\&.
+.PP
+References comm, comm_len, and in\&.
+.PP
+.nf
+548                                   {
+549   T r, i;
+550   *in >> r >> i;
+551   a = std::complex<T>(r,i);
+552   in->getline(comm, comm_len);
+553 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_read (std::vector< T > &a)\fC [private]\fP"
+
+.PP
+Definition at line 570 of file xdr_cxx\&.C\&.
+.PP
+References comm, comm_len, data(), libMesh::AutoPtr< Tp >::get(), in, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+570                                  {
+571   unsigned int length=0;
+572   data(length, "# vector length");
+573   a\&.resize(length);
+574 
+575   for (unsigned int i=0; i<a\&.size(); i++)
+576     {
+577       libmesh_assert(in\&.get());
+578       libmesh_assert (in->good());
+579       *in >> a[i];
+580     }
+581   in->getline(comm, comm_len);
+582 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_read (std::vector< std::complex< T > > &a)\fC [private]\fP"
+
+.PP
+Definition at line 585 of file xdr_cxx\&.C\&.
+.PP
+References comm, comm_len, data(), libMesh::AutoPtr< Tp >::get(), in, and libMesh::libmesh_assert()\&.
+.PP
+.nf
+585                                               {
+586   unsigned int length=0;
+587   data(length, "# vector length x 2 (complex)");
+588   a\&.resize(length);
+589 
+590   for (unsigned int i=0; i<a\&.size(); i++)
+591     {
+592       T r, im;
+593       libmesh_assert(in\&.get());
+594       libmesh_assert (in->good());
+595       *in >> r >> im;
+596       a[i] = std::complex<T>(r,im);
+597     }
+598   in->getline(comm, comm_len);
+599 }
+.fi
+.SS "template<> void libMesh::Xdr::do_read (std::string &a)"
+
+.PP
+Definition at line 556 of file xdr_cxx\&.C\&.
+.PP
+References comm, comm_len, and in\&.
+.PP
+.nf
+556                               {
+557   in->getline(comm, comm_len);
+558 
+559   a = "";
+560 
+561   for (unsigned int c=0; c<std::strlen(comm); c++)
+562     {
+563       if (comm[c] == '\t')
+564         break;
+565       a\&.push_back(comm[c]);
+566     }
+567 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_write (T &a)\fC [private]\fP"
+Helper method for writing different data types 
+.PP
+Definition at line 602 of file xdr_cxx\&.C\&.
+.PP
+References out\&.
+.PP
+Referenced by data(), and do_write()\&.
+.PP
+.nf
+602 { *out << a; }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_write (std::complex< T > &a)\fC [private]\fP"
+
+.PP
+Definition at line 605 of file xdr_cxx\&.C\&.
+.PP
+References out\&.
+.PP
+.nf
+605                                    {
+606   *out << a\&.real() << "\t " << a\&.imag();
+607 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_write (std::vector< T > &a)\fC [private]\fP"
+
+.PP
+Definition at line 610 of file xdr_cxx\&.C\&.
+.PP
+References data(), do_write(), libMesh::AutoPtr< Tp >::get(), libMesh::libmesh_assert(), and out\&.
+.PP
+.nf
+610                                   {
+611   std::size_t length = a\&.size();
+612   data(length, "# vector length");
+613 
+614   for (std::size_t i=0; i<a\&.size(); i++)
+615     {
+616       libmesh_assert(out\&.get());
+617       libmesh_assert (out->good());
+618       this->do_write(a[i]);
+619       *out << "\t ";
+620     }
+621 }
+.fi
+.SS "template<typename T > void libMesh::Xdr::do_write (std::vector< std::complex< T > > &a)\fC [private]\fP"
+
+.PP
+Definition at line 624 of file xdr_cxx\&.C\&.
+.PP
+References data(), do_write(), libMesh::AutoPtr< Tp >::get(), libMesh::libmesh_assert(), and out\&.
+.PP
+.nf
+624                                                {
+625   std::size_t length=a\&.size();
+626   data(length, "# vector length x 2 (complex)");
+627 
+628   for (std::size_t i=0; i<a\&.size(); i++)
+629     {
+630       libmesh_assert(out\&.get());
+631       libmesh_assert (out->good());
+632       this->do_write(a[i]);
+633       *out << "\t ";
+634     }
+635 }
+.fi
+.SS "bool libMesh::Xdr::is_open () const"
+Returns true if the \fBXdr\fP file is open, false if it is closed\&. 
+.PP
+Definition at line 368 of file xdr_cxx\&.C\&.
+.PP
+References libMesh::DECODE, libMesh::ENCODE, libMesh::err, fp, libMesh::AutoPtr< Tp >::get(), in, mode, out, libMesh::READ, libMesh::WRITE, and xdrs\&.
+.PP
+Referenced by data(), data_stream(), and libMesh::System::read_parallel_data()\&.
+.PP
+.nf
+369 {
+370   switch (mode)
+371     {
+372     case ENCODE:
+373     case DECODE:
+374       {
+375 #ifdef LIBMESH_HAVE_XDR
+376 
+377         if (fp)
+378           if (xdrs)
+379             return true;
+380 
+381         return false;
+382 
+383 #else
+384 
+385         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+386                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+387                      << std::endl
+388                      << "The XDR interface is not available in this installation"
+389                      << std::endl;
+390 
+391         libmesh_error();
+392 
+393         return false;
+394 
+395 #endif
+396 
+397       }
+398 
+399     case READ:
+400       {
+401         if (in\&.get() != NULL)
+402           return in->good();
+403         return false;
+404       }
+405 
+406     case WRITE:
+407       {
+408         if (out\&.get() != NULL)
+409           return out->good();
+410         return false;
+411       }
+412 
+413     default:
+414       libmesh_error();
+415     }
+416 
+417   return false;
+418 }
+.fi
+.SS "void libMesh::Xdr::open (const std::string &name)"
+Opens the file\&. 
+.PP
+Definition at line 176 of file xdr_cxx\&.C\&.
+.PP
+References bzipped_file, libMesh::DECODE, libMesh::ENCODE, libMesh::err, file_name, fp, libMesh::AutoPtr< Tp >::get(), gzipped_file, in, libMesh::libmesh_assert(), mode, libMesh::Quality::name(), libMesh::out, out, libMesh::READ, libMesh::AutoPtr< Tp >::reset(), libMesh::WRITE, xdrs, and xzipped_file\&.
+.PP
+Referenced by Xdr()\&.
+.PP
+.nf
+177 {
+178   file_name = name;
+179 
+180   if (name == "")
+181     return;
+182 
+183   switch (mode)
+184     {
+185     case ENCODE:
+186     case DECODE:
+187       {
+188 #ifdef LIBMESH_HAVE_XDR
+189 
+190         fp = fopen(name\&.c_str(), (mode == ENCODE) ? "w" : "r");
+191         if (!fp)
+192           libmesh_file_error(name\&.c_str());
+193         xdrs = new XDR;
+194         xdrstdio_create (xdrs, fp, (mode == ENCODE) ? XDR_ENCODE : XDR_DECODE);
+195 #else
+196 
+197         libMesh::err << "ERROR: Functionality is not available\&." << std::endl
+198                      << "Make sure LIBMESH_HAVE_XDR is defined at build time"
+199                      << std::endl
+200                      << "The XDR interface is not available in this installation"
+201                      << std::endl;
+202 
+203         libmesh_error();
+204 
+205 #endif
+206         return;
+207 
+208       }
+209 
+210     case READ:
+211       {
+212         gzipped_file = (name\&.size() - name\&.rfind("\&.gz")  == 3);
+213         bzipped_file = (name\&.size() - name\&.rfind("\&.bz2") == 4);
+214         xzipped_file = (name\&.size() - name\&.rfind("\&.xz") == 3);
+215 
+216         if (gzipped_file)
+217           {
+218 #ifdef LIBMESH_HAVE_GZSTREAM
+219             igzstream *inf = new igzstream;
+220             libmesh_assert(inf);
+221             in\&.reset(inf);
+222             inf->open(name\&.c_str(), std::ios::in);
+223 #else
+224             libMesh::err << "ERROR: need gzstream to handle \&.gz files!!!"
+225                          << std::endl;
+226             libmesh_error();
+227 #endif
+228           }
+229         else
+230           {
+231             std::ifstream *inf = new std::ifstream;
+232             libmesh_assert(inf);
+233             in\&.reset(inf);
+234 
+235             std::string new_name = unzip_file(name);
+236 
+237             inf->open(new_name\&.c_str(), std::ios::in);
+238           }
+239 
+240         libmesh_assert(in\&.get());
+241 
+242         if (!in->good())
+243           libmesh_file_error(name);
+244         return;
+245       }
+246 
+247     case WRITE:
+248       {
+249         gzipped_file = (name\&.size() - name\&.rfind("\&.gz")  == 3);
+250         bzipped_file = (name\&.size() - name\&.rfind("\&.bz2") == 4);
+251         xzipped_file = (name\&.size() - name\&.rfind("\&.xz")  == 3);
+252 
+253         if (gzipped_file)
+254           {
+255 #ifdef LIBMESH_HAVE_GZSTREAM
+256             ogzstream *outf = new ogzstream;
+257             libmesh_assert(outf);
+258             out\&.reset(outf);
+259             outf->open(name\&.c_str(), std::ios::out);
+260 #else
+261             libMesh::err << "ERROR: need gzstream to handle \&.gz files!!!"
+262                          << std::endl;
+263             libmesh_error();
+264 #endif
+265           }
+266         else
+267           {
+268             std::ofstream *outf = new std::ofstream;
+269             libmesh_assert(outf);
+270             out\&.reset(outf);
+271 
+272             std::string new_name = name;
+273 
+274             if (bzipped_file)
+275               new_name\&.erase(new_name\&.end() - 4, new_name\&.end());
+276 
+277             if (xzipped_file)
+278               new_name\&.erase(new_name\&.end() - 3, new_name\&.end());
+279 
+280             outf->open(new_name\&.c_str(), std::ios::out);
+281           }
+282 
+283         libmesh_assert(out\&.get());
+284         libmesh_assert (out->good());
+285         return;
+286       }
+287 
+288     default:
+289       libmesh_error();
+290     }
+291 }
+.fi
+.SS "template<typename T > \fBXdr\fP& libMesh::Xdr::operator<< (T &a)\fC [inline]\fP"
+Same, but provides an \fCostream\fP like interface\&. 
+.PP
+Definition at line 132 of file xdr_cxx\&.h\&.
+.PP
+References data(), libMesh::libmesh_assert(), and writing()\&.
+.PP
+.nf
+132 { libmesh_assert (writing()); data(a); return *this; }
+.fi
+.SS "template<typename T > \fBXdr\fP& libMesh::Xdr::operator>> (T &a)\fC [inline]\fP"
+Same, but provides an \fCistream\fP like interface\&. 
+.PP
+Definition at line 138 of file xdr_cxx\&.h\&.
+.PP
+References data(), libMesh::libmesh_assert(), and reading()\&.
+.PP
+.nf
+138 { libmesh_assert (reading()); data(a); return *this; }
+.fi
+.SS "bool libMesh::Xdr::reading () const\fC [inline]\fP"
+Returns true if the file is opened in a reading state, false otherwise\&. 
+.PP
+Definition at line 106 of file xdr_cxx\&.h\&.
+.PP
+References libMesh::DECODE, mode, and libMesh::READ\&.
+.PP
+Referenced by libMesh::EquationSystems::_read_impl(), operator>>(), libMesh::System::read_header(), libMesh::System::read_legacy_data(), libMesh::System::read_parallel_data(), libMesh::XdrIO::read_serialized_bcs(), libMesh::XdrIO::read_serialized_connectivity(), libMesh::XdrIO::read_serialized_nodes(), libMesh::XdrIO::read_serialized_nodesets(), libMesh::System::read_serialized_vector(), and libMesh::System::read_serialized_vectors()\&.
+.PP
+.nf
+106 { return ((mode == DECODE) || (mode == READ)); }
+.fi
+.SS "void libMesh::Xdr::set_version (intver)\fC [inline]\fP"
+Sets the version of the file that is being read 
+.PP
+Definition at line 154 of file xdr_cxx\&.h\&.
+.PP
+References version_number\&.
+.PP
+Referenced by libMesh::EquationSystems::_read_impl(), and libMesh::EquationSystems::write()\&.
+.PP
+.nf
+154 { version_number = ver; }
+.fi
+.SS "int libMesh::Xdr::version () const\fC [inline]\fP"
+Gets the version of the file that is being read 
+.PP
+Definition at line 159 of file xdr_cxx\&.h\&.
+.PP
+References version_number\&.
+.PP
+Referenced by libMesh::System::read_header(), and libMesh::System::read_serialized_vector()\&.
+.PP
+.nf
+159 { return version_number; }
+.fi
+.SS "bool libMesh::Xdr::writing () const\fC [inline]\fP"
+Returns true if the file is opened in a writing state, false otherwise\&. 
+.PP
+Definition at line 112 of file xdr_cxx\&.h\&.
+.PP
+References libMesh::ENCODE, mode, and libMesh::WRITE\&.
+.PP
+Referenced by operator<<(), libMesh::EquationSystems::write(), libMesh::CheckpointIO::write_bcs(), libMesh::CheckpointIO::write_connectivity(), libMesh::System::write_header(), libMesh::CheckpointIO::write_nodesets(), libMesh::System::write_parallel_data(), libMesh::XdrIO::write_serialized_bcs(), libMesh::XdrIO::write_serialized_connectivity(), libMesh::XdrIO::write_serialized_nodesets(), libMesh::System::write_serialized_vector(), and libMesh::System::write_serialized_vectors()\&.
+.PP
+.nf
+112 { return ((mode == ENCODE) || (mode == WRITE)); }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "bool libMesh::Xdr::bzipped_file\fC [private]\fP"
+
+.PP
+Definition at line 239 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), and open()\&.
+.SS "char libMesh::Xdr::comm[\fBxdr_MAX_STRING_LENGTH\fP]\fC [private]\fP"
+
+.PP
+Definition at line 234 of file xdr_cxx\&.h\&.
+.PP
+Referenced by comment(), and do_read()\&.
+.SS "const int libMesh::Xdr::comm_len\fC [private]\fP"
+A buffer to put comment strings into\&. 
+.PP
+Definition at line 233 of file xdr_cxx\&.h\&.
+.PP
+Referenced by comment(), and do_read()\&.
+.SS "std::string libMesh::Xdr::file_name\fC [private]\fP"
+The file name 
+.PP
+Definition at line 201 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), and open()\&.
+.SS "FILE* libMesh::Xdr::fp\fC [private]\fP"
+File pointer\&. 
+.PP
+Definition at line 216 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), is_open(), and open()\&.
+.SS "bool libMesh::Xdr::gzipped_file\fC [private]\fP"
+Are we reading/writing zipped files? 
+.PP
+Definition at line 239 of file xdr_cxx\&.h\&.
+.PP
+Referenced by open()\&.
+.SS "\fBAutoPtr\fP<std::istream> libMesh::Xdr::in\fC [private]\fP"
+The input file stream\&. 
+.PP
+Definition at line 223 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), comment(), data(), data_stream(), do_read(), is_open(), and open()\&.
+.SS "const \fBXdrMODE\fP libMesh::Xdr::mode\fC [private]\fP"
+The mode used for accessing the file\&. 
+.PP
+Definition at line 196 of file xdr_cxx\&.h\&.
+.PP
+Referenced by access_mode(), close(), comment(), data(), data_stream(), is_open(), open(), reading(), and writing()\&.
+.SS "\fBAutoPtr\fP<std::ostream> libMesh::Xdr::out\fC [private]\fP"
+The output file stream\&. 
+.PP
+Definition at line 228 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), comment(), data(), data_stream(), do_write(), is_open(), and open()\&.
+.SS "int libMesh::Xdr::version_number\fC [private]\fP"
+Version of the file being read 
+.PP
+Definition at line 244 of file xdr_cxx\&.h\&.
+.PP
+Referenced by set_version(), and version()\&.
+.SS "XDR* libMesh::Xdr::xdrs\fC [private]\fP"
+Pointer to the standard \fCxdr\fP struct\&. See the standard header file rpc/rpc\&.h for more information\&. 
+.PP
+Definition at line 211 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), data(), data_stream(), is_open(), and open()\&.
+.SS "bool libMesh::Xdr::xzipped_file\fC [private]\fP"
+
+.PP
+Definition at line 239 of file xdr_cxx\&.h\&.
+.PP
+Referenced by close(), and open()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

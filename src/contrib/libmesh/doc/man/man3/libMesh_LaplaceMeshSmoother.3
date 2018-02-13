@@ -1,0 +1,515 @@
+.TH "libMesh::LaplaceMeshSmoother" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::LaplaceMeshSmoother \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <mesh_smoother_laplace\&.h>\fP
+.PP
+Inherits \fBlibMesh::MeshSmoother\fP\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBLaplaceMeshSmoother\fP (\fBUnstructuredMesh\fP &\fBmesh\fP)"
+.br
+.ti -1c
+.RI "virtual \fB~LaplaceMeshSmoother\fP ()"
+.br
+.ti -1c
+.RI "virtual void \fBsmooth\fP ()"
+.br
+.ti -1c
+.RI "void \fBsmooth\fP (unsigned int n_iterations)"
+.br
+.ti -1c
+.RI "void \fBinit\fP ()"
+.br
+.ti -1c
+.RI "void \fBprint_graph\fP (std::ostream &\fBout\fP=\fBlibMesh::out\fP) const "
+.br
+.in -1c
+.SS "Protected Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBUnstructuredMesh\fP & \fB_mesh\fP"
+.br
+.in -1c
+.SS "Private Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBallgather_graph\fP ()"
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "bool \fB_initialized\fP"
+.br
+.ti -1c
+.RI "std::vector< std::vector
+.br
+< \fBdof_id_type\fP > > \fB_graph\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+This class defines the data structures necessary for Laplace smoothing\&. Note that this is a simple averaging smoother, which does NOT guarantee that points will be smoothed to valid locations, e\&.g\&. locations inside the boundary! This aspect could use work\&.
+.PP
+\fBAuthor:\fP
+.RS 4
+John W\&. Peterson 
+.RE
+.PP
+\fBDate:\fP
+.RS 4
+2002-2007 
+.RE
+.PP
+
+.PP
+Definition at line 52 of file mesh_smoother_laplace\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "libMesh::LaplaceMeshSmoother::LaplaceMeshSmoother (\fBUnstructuredMesh\fP &mesh)\fC [explicit]\fP"
+Constructor\&. Sets the constant mesh reference in the protected data section of the class\&. 
+.PP
+Definition at line 36 of file mesh_smoother_laplace\&.C\&.
+.PP
+.nf
+37   : MeshSmoother(mesh),
+38     _initialized(false)
+39 {
+40 }
+.fi
+.SS "virtual libMesh::LaplaceMeshSmoother::~LaplaceMeshSmoother ()\fC [inline]\fP, \fC [virtual]\fP"
+Destructor\&. 
+.PP
+Definition at line 65 of file mesh_smoother_laplace\&.h\&.
+.PP
+.nf
+65 {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "void libMesh::LaplaceMeshSmoother::allgather_graph ()\fC [private]\fP"
+This function allgather's the (local) graph after it is computed on each processor by the \fBinit()\fP function\&. 
+.PP
+Definition at line 314 of file mesh_smoother_laplace\&.C\&.
+.PP
+References _graph, libMesh::MeshSmoother::_mesh, libMesh::Parallel::Communicator::allgather(), libMesh::ParallelObject::comm(), libMesh::MeshBase::n_nodes(), and libMesh::ParallelObject::n_processors()\&.
+.PP
+Referenced by init()\&.
+.PP
+.nf
+315 {
+316   // The graph data structure is not well-suited for parallel communication,
+317   // so copy the graph into a single vector defined by:
+318   // NA A_0 A_1 \&.\&.\&. A_{NA} | NB B_0 B_1 \&.\&.\&. B_{NB} | NC C_0 C_1 \&.\&.\&. C_{NC}
+319   // where:
+320   // * NA is the number of graph connections for node A
+321   // * A_0, A_1, etc\&. are the IDs connected to node A
+322   std::vector<std::size_t> flat_graph;
+323 
+324   // Reserve at least enough space for each node to have zero entries
+325   flat_graph\&.reserve(_graph\&.size());
+326 
+327   for (std::size_t i=0; i<_graph\&.size(); ++i)
+328     {
+329       // First push back the number of entries for this node
+330       flat_graph\&.push_back (_graph[i]\&.size());
+331 
+332       // Then push back all the IDs
+333       for (std::size_t j=0; j<_graph[i]\&.size(); ++j)
+334         flat_graph\&.push_back(_graph[i][j]);
+335     }
+336 
+337   // // A copy of the flat graph (for printing only, delete me later)
+338   // std::vector<unsigned> copy_of_flat_graph(flat_graph);
+339 
+340   // Use the allgather routine to combine all the flat graphs on all processors
+341   _mesh\&.comm()\&.allgather(flat_graph);
+342 
+343   // Now reconstruct _graph from the allgathered flat_graph\&.
+344 
+345   // // (Delete me later, the copy is just for printing purposes\&.)
+346   // std::vector<std::vector<unsigned > > copy_of_graph(_graph);
+347 
+348   // Make sure the old graph is cleared out
+349   _graph\&.clear();
+350   _graph\&.resize(_mesh\&.n_nodes());
+351 
+352   // Our current position in the allgather'd flat_graph
+353   std::size_t cursor=0;
+354 
+355   // There are n_nodes * n_processors vectors to read in total
+356   for (processor_id_type p=0; p<_mesh\&.n_processors(); ++p)
+357     for (dof_id_type node_ctr=0; node_ctr<_mesh\&.n_nodes(); ++node_ctr)
+358       {
+359         // Read the number of entries for this node, move cursor
+360         std::size_t n_entries = flat_graph[cursor++];
+361 
+362         // Reserve space for that many more entries, then push back
+363         _graph[node_ctr]\&.reserve(_graph[node_ctr]\&.size() + n_entries);
+364 
+365         // Read all graph connections for this node, move the cursor each time
+366         // Note: there might be zero entries but that's fine
+367         for (std::size_t i=0; i<n_entries; ++i)
+368           _graph[node_ctr]\&.push_back(flat_graph[cursor++]);
+369       }
+370 
+371 
+372   //    // Print local graph to uniquely named file (debugging)
+373   //    {
+374   //      // Generate unique filename for this processor
+375   //      std::ostringstream oss;
+376   //      oss << "graph_filename_" << _mesh\&.processor_id() << "\&.txt";
+377   //      std::ofstream graph_stream(oss\&.str()\&.c_str());
+378   //
+379   //      // Print the local non-flat graph
+380   //      std::swap(_graph, copy_of_graph);
+381   //      print_graph(graph_stream);
+382   //
+383   //      // Print the (local) flat graph for verification
+384   //      for (std::size_t i=0; i<copy_of_flat_graph\&.size(); ++i)
+385   //graph_stream << copy_of_flat_graph[i] << " ";
+386   //      graph_stream << "\n";
+387   //
+388   //      // Print the allgather'd grap for verification
+389   //      for (std::size_t i=0; i<flat_graph\&.size(); ++i)
+390   //graph_stream << flat_graph[i] << " ";
+391   //      graph_stream << "\n";
+392   //
+393   //      // Print the global non-flat graph
+394   //      std::swap(_graph, copy_of_graph);
+395   //      print_graph(graph_stream);
+396   //    }
+397 } // allgather_graph()
+.fi
+.SS "void libMesh::LaplaceMeshSmoother::init ()"
+Initialization for the Laplace smoothing routine is basically identical to building an 'L-graph' which is expensive\&. It's provided separately from the constructor since you may or may not want to build the L-graph on construction\&. 
+.PP
+Definition at line 183 of file mesh_smoother_laplace\&.C\&.
+.PP
+References _graph, _initialized, libMesh::MeshSmoother::_mesh, libMesh::MeshBase::active_local_elements_begin(), libMesh::MeshBase::active_local_elements_end(), allgather_graph(), libMesh::Elem::build_side(), end, libMesh::err, libMesh::DofObject::id(), libMesh::MeshBase::mesh_dimension(), libMesh::Elem::n_neighbors(), libMesh::MeshBase::n_nodes(), libMesh::Elem::neighbor(), and side\&.
+.PP
+Referenced by smooth()\&.
+.PP
+.nf
+184 {
+185   switch (_mesh\&.mesh_dimension())
+186     {
+187 
+188       // TODO:[BSK] Fix this to work for refined meshes\&.\&.\&.  I think
+189       // the implementation was done quickly for Damien, who did not have
+190       // refined grids\&.  Fix it here and in the original Mesh member\&.
+191 
+192     case 2: // Stolen directly from build_L_graph in mesh_base\&.C
+193       {
+194         // Initialize space in the graph\&.  It is n_nodes long\&.  Each
+195         // node may be connected to an arbitrary number of other nodes
+196         // via edges\&.
+197         _graph\&.resize(_mesh\&.n_nodes());
+198 
+199         MeshBase::element_iterator       el  = _mesh\&.active_local_elements_begin();
+200         const MeshBase::element_iterator end = _mesh\&.active_local_elements_end();
+201 
+202         for (; el != end; ++el)
+203           {
+204             // Constant handle for the element
+205             const Elem* elem = *el;
+206 
+207             for (unsigned int s=0; s<elem->n_neighbors(); s++)
+208               {
+209                 // Only operate on sides which are on the
+210                 // boundary or for which the current element's
+211                 // id is greater than its neighbor's\&.
+212                 // Sides get only built once\&.
+213                 if ((elem->neighbor(s) == NULL) ||
+214                     (elem->id() > elem->neighbor(s)->id()))
+215                   {
+216                     AutoPtr<Elem> side(elem->build_side(s));
+217                     _graph[side->node(0)]\&.push_back(side->node(1));
+218                     _graph[side->node(1)]\&.push_back(side->node(0));
+219                   }
+220               }
+221           }
+222         _initialized = true;
+223         break;
+224       } // case 2
+225 
+226     case 3: // Stolen blatantly from build_L_graph in mesh_base\&.C
+227       {
+228         // Initialize space in the graph\&.
+229         _graph\&.resize(_mesh\&.n_nodes());
+230 
+231         MeshBase::element_iterator       el  = _mesh\&.active_local_elements_begin();
+232         const MeshBase::element_iterator end = _mesh\&.active_local_elements_end();
+233 
+234         for (; el != end; ++el)
+235           {
+236             // Shortcut notation for simplicity
+237             const Elem* elem = *el;
+238 
+239             for (unsigned int f=0; f<elem->n_neighbors(); f++) // Loop over faces
+240               if ((elem->neighbor(f) == NULL) ||
+241                   (elem->id() > elem->neighbor(f)->id()))
+242                 {
+243                   // We need a full (i\&.e\&. non-proxy) element for the face, since we will
+244                   // be looking at its sides as well!
+245                   AutoPtr<Elem> face = elem->build_side(f, /*proxy=*/false);
+246 
+247                   for (unsigned int s=0; s<face->n_neighbors(); s++) // Loop over face's edges
+248                     {
+249                       // Here we can use a proxy
+250                       AutoPtr<Elem> side = face->build_side(s);
+251 
+252                       // At this point, we just insert the node numbers
+253                       // again\&.  At the end we'll call sort and unique
+254                       // to make sure there are no duplicates
+255                       _graph[side->node(0)]\&.push_back(side->node(1));
+256                       _graph[side->node(1)]\&.push_back(side->node(0));
+257                     }
+258                 }
+259           }
+260 
+261         _initialized = true;
+262         break;
+263       } // case 3
+264 
+265     default:
+266       {
+267         libMesh::err << "At this time it is not possible "
+268                      << "to smooth a dimension "
+269                      << _mesh\&.mesh_dimension()
+270                      << "mesh\&.  Aborting\&.\&.\&."
+271                      << std::endl;
+272         libmesh_error();
+273       }
+274     }
+275 
+276   // Done building graph from local elements\&.  Let's now allgather the
+277   // graph so that it is available on all processors for the actual
+278   // smoothing operation?
+279   this->allgather_graph();
+280 
+281   // In 3D, it's possible for > 2 processor partitions to meet
+282   // at a single edge, while in 2D only 2 processor partitions
+283   // share an edge\&.  Therefore the allgather'd graph in 3D may
+284   // now have duplicate entries and we need to remove them so
+285   // they don't foul up the averaging algorithm employed by the
+286   // Laplace smoother\&.
+287   for (unsigned i=0; i<_graph\&.size(); ++i)
+288     {
+289       // The std::unique algorithm removes duplicate *consecutive* elements from a range,
+290       // so it only makes sense to call it on a sorted range\&.\&.\&.
+291       std::sort(_graph[i]\&.begin(), _graph[i]\&.end());
+292       _graph[i]\&.erase(std::unique(_graph[i]\&.begin(), _graph[i]\&.end()), _graph[i]\&.end());
+293     }
+294 
+295 } // init()
+.fi
+.SS "void libMesh::LaplaceMeshSmoother::print_graph (std::ostream &out = \fC\fBlibMesh::out\fP\fP) const"
+Mainly for debugging, this function will print out the connectivity graph which has been created\&. 
+.PP
+Definition at line 300 of file mesh_smoother_laplace\&.C\&.
+.PP
+References _graph, and end\&.
+.PP
+.nf
+301 {
+302   for (unsigned int i=0; i<_graph\&.size(); ++i)
+303     {
+304       out_stream << i << ": ";
+305       std::copy(_graph[i]\&.begin(),
+306                 _graph[i]\&.end(),
+307                 std::ostream_iterator<unsigned>(out_stream, " "));
+308       out_stream << std::endl;
+309     }
+310 }
+.fi
+.SS "virtual void libMesh::LaplaceMeshSmoother::smooth ()\fC [inline]\fP, \fC [virtual]\fP"
+Redefinition of the smooth function from the base class\&. All this does is call the smooth function in this class which takes an int, using a default value of 1\&. 
+.PP
+Implements \fBlibMesh::MeshSmoother\fP\&.
+.PP
+Definition at line 73 of file mesh_smoother_laplace\&.h\&.
+.PP
+References smooth()\&.
+.PP
+Referenced by smooth(), and libMesh::TriangleInterface::triangulate()\&.
+.PP
+.nf
+73 { this->smooth(1); }
+.fi
+.SS "void libMesh::LaplaceMeshSmoother::smooth (unsigned intn_iterations)"
+The actual smoothing function, gets called whenever the user specifies an actual number of smoothing iterations\&. 
+.PP
+Definition at line 45 of file mesh_smoother_laplace\&.C\&.
+.PP
+References _graph, _initialized, libMesh::MeshSmoother::_mesh, libMesh::MeshBase::active_elements_begin(), libMesh::MeshBase::active_elements_end(), libMesh::TypeVector< T >::add(), libMesh::ParallelObject::comm(), end, libMesh::err, libMesh::MeshTools::find_boundary_nodes(), libMesh::DofObject::id(), init(), libMesh::MeshBase::local_nodes_begin(), libMesh::MeshBase::local_nodes_end(), libMesh::MeshBase::n_nodes(), libMesh::Elem::n_nodes(), libMesh::Elem::n_second_order_adjacent_vertices(), libMesh::Elem::n_vertices(), libMesh::Elem::node(), libMesh::MeshBase::node(), libMesh::MeshBase::node_ptr(), libMesh::MeshBase::nodes_begin(), libMesh::MeshBase::nodes_end(), libMesh::MeshBase::point(), libMesh::ParallelObject::processor_id(), libMesh::Real, libMesh::Elem::second_order_adjacent_vertex(), and libMesh::Parallel::sync_dofobject_data_by_id()\&.
+.PP
+.nf
+46 {
+47   if (!_initialized)
+48     this->init();
+49 
+50   // Don't smooth the nodes on the boundary\&.\&.\&.
+51   // this would change the mesh geometry which
+52   // is probably not something we want!
+53   std::vector<bool> on_boundary;
+54   MeshTools::find_boundary_nodes(_mesh, on_boundary);
+55 
+56   // Ensure that the find_boundary_nodes() function returned a properly-sized vector
+57   if (on_boundary\&.size() != _mesh\&.n_nodes())
+58     {
+59       libMesh::err << "MeshTools::find_boundary_nodes() returned incorrect length vector!" << std::endl;
+60       libmesh_error();
+61     }
+62 
+63   // We can only update the nodes after all new positions were
+64   // determined\&. We store the new positions here
+65   std::vector<Point> new_positions;
+66 
+67   for (unsigned int n=0; n<n_iterations; n++)
+68     {
+69       new_positions\&.resize(_mesh\&.n_nodes());
+70 
+71       {
+72         MeshBase::node_iterator       it     = _mesh\&.local_nodes_begin();
+73         const MeshBase::node_iterator it_end = _mesh\&.local_nodes_end();
+74         for (; it != it_end; ++it)
+75           {
+76             Node* node = *it;
+77 
+78             if (node == NULL)
+79               {
+80                 libMesh::err << "[" << _mesh\&.processor_id() << "]: Node iterator returned NULL pointer\&." << std::endl;
+81                 libmesh_error();
+82               }
+83 
+84             // leave the boundary intact
+85             // Only relocate the nodes which are vertices of an element
+86             // All other entries of _graph (the secondary nodes) are empty
+87             if (!on_boundary[node->id()] && (_graph[node->id()]\&.size() > 0))
+88               {
+89                 Point avg_position(0\&.,0\&.,0\&.);
+90 
+91                 for (unsigned j=0; j<_graph[node->id()]\&.size(); ++j)
+92                   {
+93                     // Will these nodal positions always be available
+94                     // or will they refer to remote nodes?  To be
+95                     // careful, we grab a pointer and test it against
+96                     // NULL\&.
+97                     Node* connected_node = _mesh\&.node_ptr(_graph[node->id()][j]);
+98 
+99                     if (connected_node == NULL)
+100                       {
+101                         libMesh::err << "Error! Libmesh returned NULL pointer for node " << _graph[connected_node->id()][j] << std::endl;
+102                         libmesh_error();
+103                       }
+104 
+105                     avg_position\&.add( *connected_node );
+106                   } // end for(j)
+107 
+108                 // Compute the average, store in the new_positions vector
+109                 new_positions[node->id()] = avg_position / static_cast<Real>(_graph[node->id()]\&.size());
+110               } // end if
+111           } // end for
+112       } // end scope
+113 
+114 
+115       // now update the node positions (local node positions only)
+116       {
+117         MeshBase::node_iterator it           = _mesh\&.local_nodes_begin();
+118         const MeshBase::node_iterator it_end = _mesh\&.local_nodes_end();
+119         for (; it != it_end; ++it)
+120           {
+121             Node* node = *it;
+122 
+123             if (!on_boundary[node->id()] && (_graph[node->id()]\&.size() > 0))
+124               {
+125                 // Should call Point::op=
+126                 // libMesh::out << "Setting node id " << node->id() << " to position " << new_positions[node->id()];
+127                 _mesh\&.node(node->id()) = new_positions[node->id()];
+128               }
+129           } // end for
+130       } // end scope
+131 
+132       // Now the nodes which are ghosts on this processor may have been moved on
+133       // the processors which own them\&.  So we need to synchronize with our neighbors
+134       // and get the most up-to-date positions for the ghosts\&.
+135       SyncNodalPositions sync_object(_mesh);
+136       Parallel::sync_dofobject_data_by_id
+137         (_mesh\&.comm(), _mesh\&.nodes_begin(), _mesh\&.nodes_end(), sync_object);
+138 
+139     } // end for n_iterations
+140 
+141   // finally adjust the second order nodes (those located between vertices)
+142   // these nodes will be located between their adjacent nodes
+143   // do this element-wise
+144   MeshBase::element_iterator       el  = _mesh\&.active_elements_begin();
+145   const MeshBase::element_iterator end = _mesh\&.active_elements_end();
+146 
+147   for (; el != end; ++el)
+148     {
+149       // Constant handle for the element
+150       const Elem* elem = *el;
+151 
+152       // get the second order nodes (son)
+153       // their element indices start at n_vertices and go to n_nodes
+154       const unsigned int son_begin = elem->n_vertices();
+155       const unsigned int son_end   = elem->n_nodes();
+156 
+157       // loop over all second order nodes (son)
+158       for (unsigned int son=son_begin; son<son_end; son++)
+159         {
+160           // Don't smooth second-order nodes which are on the boundary
+161           if (!on_boundary[elem->node(son)])
+162             {
+163               const unsigned int n_adjacent_vertices =
+164                 elem->n_second_order_adjacent_vertices(son);
+165 
+166               // calculate the new position which is the average of the
+167               // position of the adjacent vertices
+168               Point avg_position(0,0,0);
+169               for (unsigned int v=0; v<n_adjacent_vertices; v++)
+170                 avg_position +=
+171                   _mesh\&.point( elem->node( elem->second_order_adjacent_vertex(son,v) ) );
+172 
+173               _mesh\&.node(elem->node(son)) = avg_position / n_adjacent_vertices;
+174             }
+175         }
+176     }
+177 }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "std::vector<std::vector<\fBdof_id_type\fP> > libMesh::LaplaceMeshSmoother::_graph\fC [private]\fP"
+Data structure for holding the L-graph 
+.PP
+Definition at line 112 of file mesh_smoother_laplace\&.h\&.
+.PP
+Referenced by allgather_graph(), init(), print_graph(), and smooth()\&.
+.SS "bool libMesh::LaplaceMeshSmoother::_initialized\fC [private]\fP"
+True if the L-graph has been created, false otherwise\&. 
+.PP
+Definition at line 107 of file mesh_smoother_laplace\&.h\&.
+.PP
+Referenced by init(), and smooth()\&.
+.SS "\fBUnstructuredMesh\fP& libMesh::MeshSmoother::_mesh\fC [protected]\fP, \fC [inherited]\fP"
+
+.PP
+Definition at line 71 of file mesh_smoother\&.h\&.
+.PP
+Referenced by libMesh::VariationalMeshSmoother::adjust_adapt_data(), allgather_graph(), init(), libMesh::VariationalMeshSmoother::readgr(), smooth(), libMesh::VariationalMeshSmoother::smooth(), and libMesh::VariationalMeshSmoother::writegr()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.

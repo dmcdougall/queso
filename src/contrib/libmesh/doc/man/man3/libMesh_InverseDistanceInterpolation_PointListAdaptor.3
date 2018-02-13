@@ -1,0 +1,162 @@
+.TH "libMesh::InverseDistanceInterpolation< KDDim >::PointListAdaptor< PLDim >" 3 "Tue May 6 2014" "libMesh" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+libMesh::InverseDistanceInterpolation< KDDim >::PointListAdaptor< PLDim > \- 
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <meshfree_interpolation\&.h>\fP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef \fBReal\fP \fBcoord_t\fP"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBPointListAdaptor\fP (const std::vector< \fBPoint\fP > &pts)"
+.br
+.ti -1c
+.RI "size_t \fBkdtree_get_point_count\fP () const "
+.br
+.ti -1c
+.RI "\fBcoord_t\fP \fBkdtree_distance\fP (const \fBcoord_t\fP *p1, const size_t idx_p2, size_t size) const "
+.br
+.ti -1c
+.RI "\fBcoord_t\fP \fBkdtree_get_pt\fP (const size_t idx, int \fBdim\fP) const "
+.br
+.ti -1c
+.RI "template<class BBOX > bool \fBkdtree_get_bbox\fP (BBOX &) const "
+.br
+.in -1c
+.SS "Private Attributes"
+
+.in +1c
+.ti -1c
+.RI "const std::vector< \fBPoint\fP > & \fB_pts\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+
+.SS "template<unsigned int KDDim>template<unsigned int PLDim>class libMesh::InverseDistanceInterpolation< KDDim >::PointListAdaptor< PLDim >"
+This class adapts list of \fBlibMesh\fP \fC\fBPoint\fP\fP types for use in a nanoflann KD-Tree\&. For more on the basic idea see examples/pointcloud_adaptor_example\&.cpp in the nanoflann source tree\&. 
+.PP
+Definition at line 186 of file meshfree_interpolation\&.h\&.
+.SH "Member Typedef Documentation"
+.PP 
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> typedef \fBReal\fP \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::\fBcoord_t\fP"
+\fBlibMesh\fP \fC\fBPoint\fP\fP coordinate type 
+.PP
+Definition at line 199 of file meshfree_interpolation\&.h\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::\fBPointListAdaptor\fP (const std::vector< \fBPoint\fP > &pts)\fC [inline]\fP"
+
+.PP
+Definition at line 192 of file meshfree_interpolation\&.h\&.
+.PP
+.nf
+192                                                    :
+193       _pts(pts)
+194     {}
+.fi
+.SH "Member Function Documentation"
+.PP 
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> \fBcoord_t\fP \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::kdtree_distance (const \fBcoord_t\fP *p1, const size_tidx_p2, size_tsize) const\fC [inline]\fP"
+Returns the distance between the vector 'p1[0:size-1]' and the data point with index 'idx_p2' stored in the class 
+.PP
+Definition at line 210 of file meshfree_interpolation\&.h\&.
+.PP
+.nf
+211     {
+212       libmesh_assert_equal_to (size, PLDim);
+213       libmesh_assert_less (idx_p2, _pts\&.size());
+214 
+215       const Point &p2(_pts[idx_p2]);
+216 
+217       switch (size)
+218         {
+219         case 3:
+220           {
+221             const coord_t d0=p1[0] - p2(0);
+222             const coord_t d1=p1[1] - p2(1);
+223             const coord_t d2=p1[2] - p2(2);
+224 
+225             return d0*d0 + d1*d1 + d2*d2;
+226           }
+227 
+228         case 2:
+229           {
+230             const coord_t d0=p1[0] - p2(0);
+231             const coord_t d1=p1[1] - p2(1);
+232 
+233             return d0*d0 + d1*d1;
+234           }
+235 
+236         case 1:
+237           {
+238             const coord_t d0=p1[0] - p2(0);
+239 
+240             return d0*d0;
+241           }
+242 
+243         default:
+244           libMesh::err << "ERROR: unknown size " << size << std::endl;
+245           libmesh_error();
+246         }
+247 
+248       return -1\&.;
+249     }
+.fi
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> template<class BBOX > bool \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::kdtree_get_bbox (BBOX &) const\fC [inline]\fP"
+Optional bounding-box computation: return false to default to a standard bbox computation loop\&. Return true if the BBOX was already computed by the class and returned in 'bb' so it can be avoided to redo it again\&. Look at bb\&.size() to find out the expected dimensionality (e\&.g\&. 2 or 3 for point clouds) 
+.PP
+Definition at line 276 of file meshfree_interpolation\&.h\&.
+.PP
+.nf
+276 { return false; }
+.fi
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> size_t \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::kdtree_get_point_count () const\fC [inline]\fP"
+Must return the number of data points 
+.PP
+Definition at line 204 of file meshfree_interpolation\&.h\&.
+.PP
+.nf
+204 { return _pts\&.size(); }
+.fi
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> \fBcoord_t\fP \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::kdtree_get_pt (const size_tidx, intdim) const\fC [inline]\fP"
+Returns the dim'th component of the idx'th point in the class: Since this is inlined and the 'dim' argument is typically an immediate value, the 'if's' are actually solved at compile time\&. 
+.PP
+Definition at line 256 of file meshfree_interpolation\&.h\&.
+.PP
+.nf
+257     {
+258       libmesh_assert_less (dim, (int) PLDim);
+259       libmesh_assert_less (idx, _pts\&.size());
+260       libmesh_assert_less (dim, 3);
+261 
+262       const Point &p(_pts[idx]);
+263 
+264       if (dim==0) return p(0);
+265       if (dim==1) return p(1);
+266       return p(2);
+267     }
+.fi
+.SH "Member Data Documentation"
+.PP 
+.SS "template<unsigned int KDDim> template<unsigned int PLDim> const std::vector<\fBPoint\fP>& \fBlibMesh::InverseDistanceInterpolation\fP< KDDim >::\fBPointListAdaptor\fP< PLDim >::_pts\fC [private]\fP"
+
+.PP
+Definition at line 189 of file meshfree_interpolation\&.h\&.
+.PP
+Referenced by libMesh::InverseDistanceInterpolation< KDDim >::PointListAdaptor< KDDim >::kdtree_distance(), libMesh::InverseDistanceInterpolation< KDDim >::PointListAdaptor< KDDim >::kdtree_get_point_count(), and libMesh::InverseDistanceInterpolation< KDDim >::PointListAdaptor< KDDim >::kdtree_get_pt()\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libMesh from the source code\&.
