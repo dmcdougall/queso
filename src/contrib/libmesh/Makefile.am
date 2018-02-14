@@ -218,6 +218,25 @@ dbg_programs   = # empty, append below
 prof_programs  = # empty, append below
 oprof_programs = # empty, append below
 
+# output_libmesh_version
+opt_programs                         += output_libmesh_version-opt
+output_libmesh_version_opt_SOURCES    = src/apps/output_libmesh_version.C
+output_libmesh_version_opt_CPPFLAGS   = $(CPPFLAGS_OPT) $(AM_CPPFLAGS)
+output_libmesh_version_opt_CXXFLAGS   = $(CXXFLAGS_OPT)
+output_libmesh_version_opt_LDADD      = libmesh_opt.la
+
+devel_programs                       += output_libmesh_version-devel
+output_libmesh_version_devel_SOURCES  = src/apps/output_libmesh_version.C
+output_libmesh_version_devel_CPPFLAGS = $(CPPFLAGS_DEVEL) $(AM_CPPFLAGS)
+output_libmesh_version_devel_CXXFLAGS = $(CXXFLAGS_DEVEL)
+output_libmesh_version_devel_LDADD    = libmesh_devel.la
+
+dbg_programs                         += output_libmesh_version-dbg
+output_libmesh_version_dbg_SOURCES    = src/apps/output_libmesh_version.C
+output_libmesh_version_dbg_CPPFLAGS   = $(CPPFLAGS_DBG) $(AM_CPPFLAGS)
+output_libmesh_version_dbg_CXXFLAGS   = $(CXXFLAGS_DBG)
+output_libmesh_version_dbg_LDADD      = libmesh_dbg.la
+
 if LIBMESH_OPT_MODE
   bin_PROGRAMS += $(opt_programs)
 endif
