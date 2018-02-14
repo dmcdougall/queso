@@ -23,7 +23,7 @@
 #include "libmesh/parallel.h"
 #include "libmesh/reference_counter.h"
 #include "libmesh/libmesh_singleton.h"
-#include "libmesh/remote_elem.h"
+// #include "libmesh/remote_elem.h"
 #include "libmesh/threads.h"
 #include "libmesh/print_trace.h"
 
@@ -393,7 +393,7 @@ LibMeshInit::LibMeshInit (int argc, const char * const * argv,
   Singleton::setup();
 
   // Make sure the construction worked
-  libmesh_assert(remote_elem);
+  // libmesh_assert(remote_elem);
 
 #if defined(LIBMESH_HAVE_MPI)
 
