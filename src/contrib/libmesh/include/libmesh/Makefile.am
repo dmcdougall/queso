@@ -23,6 +23,8 @@ BUILT_SOURCES = \
         reference_counter.h \
         enum_parallel_type.h \
         enum_solver_package.h \
+        dense_matrix.h \
+        dense_matrix_base.h \
         dense_subvector.h \
         dense_vector.h \
         dense_vector_base.h \
@@ -30,12 +32,15 @@ BUILT_SOURCES = \
         eigen_core_support.h \
         eigen_sparse_matrix.h \
         eigen_sparse_vector.h \
+        laspack_matrix.h \
         laspack_vector.h \
         numeric_vector.h \
+        petsc_matrix.h \
         petsc_vector.h \
         shell_matrix.h \
         sparse_matrix.h \
         tensor_tools.h \
+        trilinos_epetra_matrix.h \
         trilinos_epetra_vector.h \
         parallel.h \
         parallel_implementation.h \
@@ -207,6 +212,12 @@ enum_parallel_type.h: $(top_srcdir)/include/enums/enum_parallel_type.h
 enum_solver_package.h: $(top_srcdir)/include/enums/enum_solver_package.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
+dense_matrix.h: $(top_srcdir)/include/numerics/dense_matrix.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
+dense_matrix_base.h: $(top_srcdir)/include/numerics/dense_matrix_base.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
 dense_subvector.h: $(top_srcdir)/include/numerics/dense_subvector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
@@ -228,10 +239,16 @@ eigen_sparse_matrix.h: $(top_srcdir)/include/numerics/eigen_sparse_matrix.h
 eigen_sparse_vector.h: $(top_srcdir)/include/numerics/eigen_sparse_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
+laspack_matrix.h: $(top_srcdir)/include/numerics/laspack_matrix.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
 laspack_vector.h: $(top_srcdir)/include/numerics/laspack_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
 numeric_vector.h: $(top_srcdir)/include/numerics/numeric_vector.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
+petsc_matrix.h: $(top_srcdir)/include/numerics/petsc_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
 petsc_vector.h: $(top_srcdir)/include/numerics/petsc_vector.h
@@ -244,6 +261,9 @@ sparse_matrix.h: $(top_srcdir)/include/numerics/sparse_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
 tensor_tools.h: $(top_srcdir)/include/numerics/tensor_tools.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
+trilinos_epetra_matrix.h: $(top_srcdir)/include/numerics/trilinos_epetra_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
 trilinos_epetra_vector.h: $(top_srcdir)/include/numerics/trilinos_epetra_vector.h

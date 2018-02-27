@@ -27,8 +27,8 @@
 #include "libmesh/eigen_sparse_vector.h"
 #include "libmesh/eigen_sparse_matrix.h"
 #include "libmesh/dense_matrix.h"
-#include "libmesh/dof_map.h"
-#include "libmesh/sparsity_pattern.h"
+// #include "libmesh/dof_map.h"
+// #include "libmesh/sparsity_pattern.h"
 
 namespace libMesh
 {
@@ -62,57 +62,57 @@ void EigenSparseMatrix<T>::init (const numeric_index_type m_in,
 template <typename T>
 void EigenSparseMatrix<T>::init ()
 {
-  // Ignore calls on initialized objects
-  if (this->initialized())
-    return;
-
-  // We need the DofMap for this!
-  libmesh_assert(this->_dof_map);
-
-  // Clear intialized matrices
-  if (this->initialized())
-    this->clear();
-
-  const numeric_index_type n_rows   = this->_dof_map->n_dofs();
-  const numeric_index_type n_cols   = n_rows;
-
-#ifndef NDEBUG
-  // The following variables are only used for assertions,
-  // so avoid declaring them when asserts are inactive.
-  const numeric_index_type n_l = this->_dof_map->n_dofs_on_processor(0);
-  const numeric_index_type m_l = n_l;
-#endif
-
-  // Laspack Matrices only work for uniprocessor cases
-  libmesh_assert_equal_to (n_rows, n_cols);
-  libmesh_assert_equal_to (m_l, n_rows);
-  libmesh_assert_equal_to (n_l, n_cols);
-
-  const std::vector<numeric_index_type> & n_nz = this->_dof_map->get_n_nz();
-
-#ifndef NDEBUG
-  // The following variables are only used for assertions,
-  // so avoid declaring them when asserts are inactive.
-  const std::vector<numeric_index_type> & n_oz = this->_dof_map->get_n_oz();
-#endif
-
-  // Make sure the sparsity pattern isn't empty
-  libmesh_assert_equal_to (n_nz.size(), n_l);
-  libmesh_assert_equal_to (n_oz.size(), n_l);
-
-  if (n_rows==0)
-    {
-      _mat.resize(0,0);
-      return;
-    }
-
-  _mat.resize(n_rows,n_cols);
-  _mat.reserve(n_nz);
-
-  this->_is_initialized = true;
-
-  libmesh_assert_equal_to (n_rows, this->m());
-  libmesh_assert_equal_to (n_cols, this->n());
+//   // Ignore calls on initialized objects
+//   if (this->initialized())
+//     return;
+//
+//   // We need the DofMap for this!
+//   libmesh_assert(this->_dof_map);
+//
+//   // Clear intialized matrices
+//   if (this->initialized())
+//     this->clear();
+//
+//   const numeric_index_type n_rows   = this->_dof_map->n_dofs();
+//   const numeric_index_type n_cols   = n_rows;
+//
+// #ifndef NDEBUG
+//   // The following variables are only used for assertions,
+//   // so avoid declaring them when asserts are inactive.
+//   const numeric_index_type n_l = this->_dof_map->n_dofs_on_processor(0);
+//   const numeric_index_type m_l = n_l;
+// #endif
+//
+//   // Laspack Matrices only work for uniprocessor cases
+//   libmesh_assert_equal_to (n_rows, n_cols);
+//   libmesh_assert_equal_to (m_l, n_rows);
+//   libmesh_assert_equal_to (n_l, n_cols);
+//
+//   const std::vector<numeric_index_type> & n_nz = this->_dof_map->get_n_nz();
+//
+// #ifndef NDEBUG
+//   // The following variables are only used for assertions,
+//   // so avoid declaring them when asserts are inactive.
+//   const std::vector<numeric_index_type> & n_oz = this->_dof_map->get_n_oz();
+// #endif
+//
+//   // Make sure the sparsity pattern isn't empty
+//   libmesh_assert_equal_to (n_nz.size(), n_l);
+//   libmesh_assert_equal_to (n_oz.size(), n_l);
+//
+//   if (n_rows==0)
+//     {
+//       _mat.resize(0,0);
+//       return;
+//     }
+//
+//   _mat.resize(n_rows,n_cols);
+//   _mat.reserve(n_nz);
+//
+//   this->_is_initialized = true;
+//
+//   libmesh_assert_equal_to (n_rows, this->m());
+//   libmesh_assert_equal_to (n_cols, this->n());
 }
 
 

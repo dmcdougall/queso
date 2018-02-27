@@ -20,7 +20,7 @@
 // C++ includes
 
 // Local Includes
-#include "libmesh/dof_map.h"
+// #include "libmesh/dof_map.h"
 #include "libmesh/dense_matrix.h"
 #include "libmesh/laspack_matrix.h"
 #include "libmesh/eigen_sparse_matrix.h"
@@ -42,7 +42,7 @@ namespace libMesh
 template <typename T>
 SparseMatrix<T>::SparseMatrix (const Parallel::Communicator & comm_in) :
   ParallelObject(comm_in),
-  _dof_map(libmesh_nullptr),
+  // _dof_map(libmesh_nullptr),
   _is_initialized(false)
 {}
 
@@ -208,121 +208,121 @@ void SparseMatrix<T>::print(std::ostream & os, const bool sparse) const
 
   libmesh_assert (this->initialized());
 
-  if (!this->_dof_map)
-    libmesh_error_msg("Error!  Trying to print a matrix with no dof_map set!");
-
-  // We'll print the matrix from processor 0 to make sure
-  // it's serialized properly
-  if (this->processor_id() == 0)
-    {
-      libmesh_assert_equal_to (this->_dof_map->first_dof(), 0);
-      for (numeric_index_type i=this->_dof_map->first_dof();
-           i!=this->_dof_map->end_dof(); ++i)
-        {
-          if (sparse)
-            {
-              for (numeric_index_type j=0; j<this->n(); j++)
-                {
-                  T c = (*this)(i,j);
-                  if (c != static_cast<T>(0.0))
-                    {
-                      os << i << " " << j << " " << c << std::endl;
-                    }
-                }
-            }
-          else
-            {
-              for (numeric_index_type j=0; j<this->n(); j++)
-                os << (*this)(i,j) << " ";
-              os << std::endl;
-            }
-        }
-
-      std::vector<numeric_index_type> ibuf, jbuf;
-      std::vector<T> cbuf;
-      numeric_index_type currenti = this->_dof_map->end_dof();
-      for (processor_id_type p=1; p < this->n_processors(); ++p)
-        {
-          this->comm().receive(p, ibuf);
-          this->comm().receive(p, jbuf);
-          this->comm().receive(p, cbuf);
-          libmesh_assert_equal_to (ibuf.size(), jbuf.size());
-          libmesh_assert_equal_to (ibuf.size(), cbuf.size());
-
-          if (ibuf.empty())
-            continue;
-          libmesh_assert_greater_equal (ibuf.front(), currenti);
-          libmesh_assert_greater_equal (ibuf.back(), ibuf.front());
-
-          std::size_t currentb = 0;
-          for (;currenti <= ibuf.back(); ++currenti)
-            {
-              if (sparse)
-                {
-                  for (numeric_index_type j=0; j<this->n(); j++)
-                    {
-                      if (currentb < ibuf.size() &&
-                          ibuf[currentb] == currenti &&
-                          jbuf[currentb] == j)
-                        {
-                          os << currenti << " " << j << " " << cbuf[currentb] << std::endl;
-                          currentb++;
-                        }
-                    }
-                }
-              else
-                {
-                  for (numeric_index_type j=0; j<this->n(); j++)
-                    {
-                      if (currentb < ibuf.size() &&
-                          ibuf[currentb] == currenti &&
-                          jbuf[currentb] == j)
-                        {
-                          os << cbuf[currentb] << " ";
-                          currentb++;
-                        }
-                      else
-                        os << static_cast<T>(0.0) << " ";
-                    }
-                  os << std::endl;
-                }
-            }
-        }
-      if (!sparse)
-        {
-          for (; currenti != this->m(); ++currenti)
-            {
-              for (numeric_index_type j=0; j<this->n(); j++)
-                os << static_cast<T>(0.0) << " ";
-              os << std::endl;
-            }
-        }
-    }
-  else
-    {
-      std::vector<numeric_index_type> ibuf, jbuf;
-      std::vector<T> cbuf;
-
-      // We'll assume each processor has access to entire
-      // matrix rows, so (*this)(i,j) is valid if i is a local index.
-      for (numeric_index_type i=this->_dof_map->first_dof();
-           i!=this->_dof_map->end_dof(); ++i)
-        {
-          for (numeric_index_type j=0; j<this->n(); j++)
-            {
-              T c = (*this)(i,j);
-              if (c != static_cast<T>(0.0))
-                {
-                  ibuf.push_back(i);
-                  jbuf.push_back(j);
-                  cbuf.push_back(c);
-                }
-            }
-        }
-      this->comm().send(0,ibuf);
-      this->comm().send(0,jbuf);
-      this->comm().send(0,cbuf);
-    }
+  // if (!this->_dof_map)
+  //   libmesh_error_msg("Error!  Trying to print a matrix with no dof_map set!");
+  //
+  // // We'll print the matrix from processor 0 to make sure
+  // // it's serialized properly
+  // if (this->processor_id() == 0)
+  //   {
+  //     libmesh_assert_equal_to (this->_dof_map->first_dof(), 0);
+  //     for (numeric_index_type i=this->_dof_map->first_dof();
+  //          i!=this->_dof_map->end_dof(); ++i)
+  //       {
+  //         if (sparse)
+  //           {
+  //             for (numeric_index_type j=0; j<this->n(); j++)
+  //               {
+  //                 T c = (*this)(i,j);
+  //                 if (c != static_cast<T>(0.0))
+  //                   {
+  //                     os << i << " " << j << " " << c << std::endl;
+  //                   }
+  //               }
+  //           }
+  //         else
+  //           {
+  //             for (numeric_index_type j=0; j<this->n(); j++)
+  //               os << (*this)(i,j) << " ";
+  //             os << std::endl;
+  //           }
+  //       }
+  //
+  //     std::vector<numeric_index_type> ibuf, jbuf;
+  //     std::vector<T> cbuf;
+  //     numeric_index_type currenti = this->_dof_map->end_dof();
+  //     for (processor_id_type p=1; p < this->n_processors(); ++p)
+  //       {
+  //         this->comm().receive(p, ibuf);
+  //         this->comm().receive(p, jbuf);
+  //         this->comm().receive(p, cbuf);
+  //         libmesh_assert_equal_to (ibuf.size(), jbuf.size());
+  //         libmesh_assert_equal_to (ibuf.size(), cbuf.size());
+  //
+  //         if (ibuf.empty())
+  //           continue;
+  //         libmesh_assert_greater_equal (ibuf.front(), currenti);
+  //         libmesh_assert_greater_equal (ibuf.back(), ibuf.front());
+  //
+  //         std::size_t currentb = 0;
+  //         for (;currenti <= ibuf.back(); ++currenti)
+  //           {
+  //             if (sparse)
+  //               {
+  //                 for (numeric_index_type j=0; j<this->n(); j++)
+  //                   {
+  //                     if (currentb < ibuf.size() &&
+  //                         ibuf[currentb] == currenti &&
+  //                         jbuf[currentb] == j)
+  //                       {
+  //                         os << currenti << " " << j << " " << cbuf[currentb] << std::endl;
+  //                         currentb++;
+  //                       }
+  //                   }
+  //               }
+  //             else
+  //               {
+  //                 for (numeric_index_type j=0; j<this->n(); j++)
+  //                   {
+  //                     if (currentb < ibuf.size() &&
+  //                         ibuf[currentb] == currenti &&
+  //                         jbuf[currentb] == j)
+  //                       {
+  //                         os << cbuf[currentb] << " ";
+  //                         currentb++;
+  //                       }
+  //                     else
+  //                       os << static_cast<T>(0.0) << " ";
+  //                   }
+  //                 os << std::endl;
+  //               }
+  //           }
+  //       }
+  //     if (!sparse)
+  //       {
+  //         for (; currenti != this->m(); ++currenti)
+  //           {
+  //             for (numeric_index_type j=0; j<this->n(); j++)
+  //               os << static_cast<T>(0.0) << " ";
+  //             os << std::endl;
+  //           }
+  //       }
+  //   }
+  // else
+  //   {
+  //     std::vector<numeric_index_type> ibuf, jbuf;
+  //     std::vector<T> cbuf;
+  //
+  //     // We'll assume each processor has access to entire
+  //     // matrix rows, so (*this)(i,j) is valid if i is a local index.
+  //     for (numeric_index_type i=this->_dof_map->first_dof();
+  //          i!=this->_dof_map->end_dof(); ++i)
+  //       {
+  //         for (numeric_index_type j=0; j<this->n(); j++)
+  //           {
+  //             T c = (*this)(i,j);
+  //             if (c != static_cast<T>(0.0))
+  //               {
+  //                 ibuf.push_back(i);
+  //                 jbuf.push_back(j);
+  //                 cbuf.push_back(c);
+  //               }
+  //           }
+  //       }
+  //     this->comm().send(0,ibuf);
+  //     this->comm().send(0,jbuf);
+  //     this->comm().send(0,cbuf);
+  //   }
 }
 
 

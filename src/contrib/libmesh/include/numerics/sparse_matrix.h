@@ -40,7 +40,7 @@ namespace libMesh
 // forward declarations
 template <typename T> class SparseMatrix;
 template <typename T> class DenseMatrix;
-class DofMap;
+// class DofMap;
 namespace SparsityPattern { class Graph; }
 template <typename T> class NumericVector;
 
@@ -109,8 +109,8 @@ public:
   /**
    * Get a pointer to the \p DofMap to use.
    */
-  void attach_dof_map (const DofMap & dof_map)
-  { _dof_map = &dof_map; }
+  // void attach_dof_map (const DofMap & dof_map)
+  // { _dof_map = &dof_map; }
 
   /**
    * \p returns true if this sparse matrix format needs to be fed the
@@ -433,7 +433,7 @@ protected:
   /**
    * The \p DofMap object associated with this object.
    */
-  DofMap const * _dof_map;
+  // DofMap const * _dof_map;
 
   /**
    * Flag indicating whether or not the matrix
