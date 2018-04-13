@@ -188,6 +188,9 @@ AC_LANG([C])
 AX_PATH_GSL(1.10,AM_CONDITIONAL([UQBT_GSL], [test 'TRUE']),AC_MSG_ERROR([Could not find required GSL version.]))
 AC_CACHE_SAVE
 
+# Check for Eigen
+CONFIGURE_EIGEN(3.3.0,yes)
+
 # Check for boost (required)
 
 AC_LANG([C++])

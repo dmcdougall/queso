@@ -32,6 +32,8 @@ echo GSL_LIBS...................... : $GSL_LIBS
 ###echo GRVY DIR...................... : $GRVY_PREFIX
 echo BOOST_DIR..................... : ${BOOST_DIR}
 ###echo Boost program options... ..... : $BOOST_PROGRAM_OPTIONS_LDFLAGS $BOOST_PROGRAM_OPTIONS_LIBS
+echo EIGEN_INC......................: $EIGEN_INCLUDE
+
 echo ' '
 echo Install dir................... : $prefix
 echo Build user.................... : $USER
