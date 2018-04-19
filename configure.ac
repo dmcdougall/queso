@@ -288,6 +288,9 @@ AC_CONFIG_FILES([
   src/Makefile
   src/contrib/ANN/Makefile
   src/contrib/ANN/test/Makefile
+  src/contrib/libmesh/Makefile
+  src/contrib/libmesh/include/Makefile
+  src/contrib/libmesh/include/libmesh/Makefile
   examples/Makefile
   test/Makefile
   doxygen/Makefile

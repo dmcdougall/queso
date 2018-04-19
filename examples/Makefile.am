@@ -3,6 +3,7 @@
 AM_CPPFLAGS  = $(QUESO_CPPFLAGS)
 AM_CPPFLAGS += -I$(top_builddir)/src/core/inc
 AM_CPPFLAGS += -I$(top_builddir)/inc
+AM_CPPFLAGS += -I$(top_builddir)/src/contrib/libmesh/include
 
 if HAVE_BOOST
 AM_CPPFLAGS += $(BOOST_CPPFLAGS)
@@ -10,6 +11,7 @@ endif
 
 AM_CPPFLAGS += $(GSL_CFLAGS)
 AM_CPPFLAGS += $(GRVY_CFLAGS)
+AM_CPPFLAGS += $(EIGEN_INCLUDE)
 
 if HAVE_ANN
 AM_CPPFLAGS += $(ANN_CFLAGS)

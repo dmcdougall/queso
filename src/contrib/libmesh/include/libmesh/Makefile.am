@@ -6,6 +6,7 @@
 EXTRA_DIST = rebuild_makefile.sh
 
 BUILT_SOURCES = \
+				libmesh_config.h \
         auto_ptr.h \
         getpot.h \
         id_types.h \
@@ -47,6 +48,7 @@ BUILT_SOURCES = \
         parallel_object.h \
         threads.h \
         threads_tbb.h \
+				threads_none.h \
         compare_types.h \
         ignore_warnings.h \
         libmesh_nullptr.h \
@@ -58,256 +60,169 @@ BUILT_SOURCES = \
         parallel_communicator_specializations
 
 DISTCLEANFILES = $(BUILT_SOURCES)
-
-#
-# contrib rules
-if LIBMESH_ENABLE_FPARSER
-
-fparser.hh: $(top_srcdir)/contrib/fparser/fparser.hh
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-fparser_ad.hh: $(top_srcdir)/contrib/fparser/fparser_ad.hh
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += fparser.hh fparser_ad.hh
-  DISTCLEANFILES += fparser.hh fparser_ad.hh
-
-endif
-
-if LIBMESH_ENABLE_NANOFLANN
-
-nanoflann.hpp: $(top_srcdir)/contrib/nanoflann/include/nanoflann.hpp
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += nanoflann.hpp
-  DISTCLEANFILES += nanoflann.hpp
-
-endif
-
-if LIBMESH_ENABLE_EXODUS_V509
-
-exodusII.h: $(top_srcdir)/contrib/exodusii/v5.09/include/exodusII.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += exodusII.h
-  DISTCLEANFILES += exodusII.h
-
-exodusII_ext.h: $(top_srcdir)/contrib/exodusii/v5.09/include/exodusII_ext.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += exodusII_ext.h
-  DISTCLEANFILES += exodusII_ext.h
-
-endif
-
-if LIBMESH_ENABLE_EXODUS_V522
-
-exodusII.h: $(top_srcdir)/contrib/exodusii/v5.22/exodus/cbind/include/exodusII.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += exodusII.h
-  DISTCLEANFILES += exodusII.h
-
-endif
-
-if LIBMESH_ENABLE_NETCDF_V3
-
-netcdf.h: $(top_srcdir)/contrib/netcdf/v3/netcdf.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += netcdf.h
-  DISTCLEANFILES += netcdf.h
-
-endif
-
-if LIBMESH_ENABLE_NETCDF_V4
-
-netcdf.h: $(top_srcdir)/contrib/netcdf/v4/include/netcdf.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += netcdf.h
-  DISTCLEANFILES += netcdf.h
-
-endif
-
-if LIBMESH_INSTALL_HINNANT_UNIQUE_PTR
-
-unique_ptr.hpp: $(top_srcdir)/contrib/unique_ptr/unique_ptr.hpp
-	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
-
-  BUILT_SOURCES  += unique_ptr.hpp
-  DISTCLEANFILES += unique_ptr.hpp
-
-endif
-
-if LIBMESH_ENABLE_CAPNPROTO
-
-rb_data.capnp.h:
-	$(MAKE) -C $(top_builddir)/contrib/capnproto rb_data.capnp.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) $(top_builddir)/contrib/capnproto/rb_data.capnp.h $@
-
-  BUILT_SOURCES  += rb_data.capnp.h
-  DISTCLEANFILES += rb_data.capnp.h
-
-endif
-
 #
 # libmesh_config.h rule
-libmesh_config.h: $(top_builddir)/include/libmesh_config.h
-	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
-
-  BUILT_SOURCES  += libmesh_config.h
-  DISTCLEANFILES += libmesh_config.h
+# libmesh_config.h: $(top_builddir)/include/libmesh_config.h
+# 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+#
+#   BUILT_SOURCES  += libmesh_config.h
+#   DISTCLEANFILES += libmesh_config.h
 
 #
 # libMesh header rules
-auto_ptr.h: $(top_srcdir)/include/base/auto_ptr.h
+auto_ptr.h: $(top_srcdir)/src/contrib/libmesh/include/base/auto_ptr.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-getpot.h: $(top_srcdir)/include/base/getpot.h
+libmesh_config.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_config.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-id_types.h: $(top_srcdir)/include/base/id_types.h
+getpot.h: $(top_srcdir)/src/contrib/libmesh/include/base/getpot.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh.h: $(top_srcdir)/include/base/libmesh.h
+id_types.h: $(top_srcdir)/src/contrib/libmesh/include/base/id_types.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_C_isnan.h: $(top_srcdir)/include/base/libmesh_C_isnan.h
+libmesh.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_augment_std_namespace.h: $(top_srcdir)/include/base/libmesh_augment_std_namespace.h
+libmesh_C_isnan.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_C_isnan.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_base.h: $(top_srcdir)/include/base/libmesh_base.h
+libmesh_augment_std_namespace.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_augment_std_namespace.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_common.h: $(top_srcdir)/include/base/libmesh_common.h
+libmesh_base.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_base.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_exceptions.h: $(top_srcdir)/include/base/libmesh_exceptions.h
+libmesh_common.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_common.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_logging.h: $(top_srcdir)/include/base/libmesh_logging.h
+libmesh_exceptions.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_exceptions.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_singleton.h: $(top_srcdir)/include/base/libmesh_singleton.h
+libmesh_logging.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_logging.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_version.h: $(top_srcdir)/include/base/libmesh_version.h
+libmesh_singleton.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_singleton.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-print_trace.h: $(top_srcdir)/include/base/print_trace.h
+libmesh_version.h: $(top_srcdir)/src/contrib/libmesh/include/base/libmesh_version.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-reference_counted_object.h: $(top_srcdir)/include/base/reference_counted_object.h
+print_trace.h: $(top_srcdir)/src/contrib/libmesh/include/base/print_trace.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-reference_counter.h: $(top_srcdir)/include/base/reference_counter.h
+reference_counted_object.h: $(top_srcdir)/src/contrib/libmesh/include/base/reference_counted_object.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-enum_parallel_type.h: $(top_srcdir)/include/enums/enum_parallel_type.h
+reference_counter.h: $(top_srcdir)/src/contrib/libmesh/include/base/reference_counter.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-enum_solver_package.h: $(top_srcdir)/include/enums/enum_solver_package.h
+enum_parallel_type.h: $(top_srcdir)/src/contrib/libmesh/include/enums/enum_parallel_type.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-dense_matrix.h: $(top_srcdir)/include/numerics/dense_matrix.h
+enum_solver_package.h: $(top_srcdir)/src/contrib/libmesh/include/enums/enum_solver_package.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-dense_matrix_base.h: $(top_srcdir)/include/numerics/dense_matrix_base.h
+dense_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/dense_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-dense_subvector.h: $(top_srcdir)/include/numerics/dense_subvector.h
+dense_matrix_base.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/dense_matrix_base.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-dense_vector.h: $(top_srcdir)/include/numerics/dense_vector.h
+dense_subvector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/dense_subvector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-dense_vector_base.h: $(top_srcdir)/include/numerics/dense_vector_base.h
+dense_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/dense_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-distributed_vector.h: $(top_srcdir)/include/numerics/distributed_vector.h
+dense_vector_base.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/dense_vector_base.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-eigen_core_support.h: $(top_srcdir)/include/numerics/eigen_core_support.h
+distributed_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/distributed_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-eigen_sparse_matrix.h: $(top_srcdir)/include/numerics/eigen_sparse_matrix.h
+eigen_core_support.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_core_support.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-eigen_sparse_vector.h: $(top_srcdir)/include/numerics/eigen_sparse_vector.h
+eigen_sparse_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_sparse_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-laspack_matrix.h: $(top_srcdir)/include/numerics/laspack_matrix.h
+eigen_sparse_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_sparse_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-laspack_vector.h: $(top_srcdir)/include/numerics/laspack_vector.h
+laspack_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/laspack_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-numeric_vector.h: $(top_srcdir)/include/numerics/numeric_vector.h
+laspack_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/laspack_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-petsc_matrix.h: $(top_srcdir)/include/numerics/petsc_matrix.h
+numeric_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/numeric_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-petsc_vector.h: $(top_srcdir)/include/numerics/petsc_vector.h
+petsc_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/petsc_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-shell_matrix.h: $(top_srcdir)/include/numerics/shell_matrix.h
+petsc_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/petsc_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-sparse_matrix.h: $(top_srcdir)/include/numerics/sparse_matrix.h
+shell_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/shell_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-tensor_tools.h: $(top_srcdir)/include/numerics/tensor_tools.h
+sparse_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/sparse_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-trilinos_epetra_matrix.h: $(top_srcdir)/include/numerics/trilinos_epetra_matrix.h
+tensor_tools.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/tensor_tools.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-trilinos_epetra_vector.h: $(top_srcdir)/include/numerics/trilinos_epetra_vector.h
+trilinos_epetra_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/trilinos_epetra_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-parallel.h: $(top_srcdir)/include/parallel/parallel.h
+trilinos_epetra_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/trilinos_epetra_vector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-parallel_implementation.h: $(top_srcdir)/include/parallel/parallel_implementation.h
+parallel.h: $(top_srcdir)/src/contrib/libmesh/include/parallel/parallel.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-parallel_object.h: $(top_srcdir)/include/parallel/parallel_object.h
+parallel_implementation.h: $(top_srcdir)/src/contrib/libmesh/include/parallel/parallel_implementation.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-threads.h: $(top_srcdir)/include/parallel/threads.h
+parallel_object.h: $(top_srcdir)/src/contrib/libmesh/include/parallel/parallel_object.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-threads_tbb.h: $(top_srcdir)/include/parallel/threads_tbb.h
+threads.h: $(top_srcdir)/src/contrib/libmesh/include/parallel/threads.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-compare_types.h: $(top_srcdir)/include/utils/compare_types.h
+threads_tbb.h: $(top_srcdir)/src/contrib/libmesh/include/parallel/threads_tbb.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-ignore_warnings.h: $(top_srcdir)/include/utils/ignore_warnings.h
+threads_none.h: $(top_srcdir)/src/contrib/libmesh/include/parallel/threads_none.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-libmesh_nullptr.h: $(top_srcdir)/include/utils/libmesh_nullptr.h
+compare_types.h: $(top_srcdir)/src/contrib/libmesh/include/utils/compare_types.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-ostream_proxy.h: $(top_srcdir)/include/utils/ostream_proxy.h
+ignore_warnings.h: $(top_srcdir)/src/contrib/libmesh/include/utils/ignore_warnings.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-perf_log.h: $(top_srcdir)/include/utils/perf_log.h
+libmesh_nullptr.h: $(top_srcdir)/src/contrib/libmesh/include/utils/libmesh_nullptr.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-restore_warnings.h: $(top_srcdir)/include/utils/restore_warnings.h
+ostream_proxy.h: $(top_srcdir)/src/contrib/libmesh/include/utils/ostream_proxy.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-safe_bool.h: $(top_srcdir)/include/utils/safe_bool.h
+perf_log.h: $(top_srcdir)/src/contrib/libmesh/include/utils/perf_log.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-timestamp.h: $(top_srcdir)/include/utils/timestamp.h
+restore_warnings.h: $(top_srcdir)/src/contrib/libmesh/include/utils/restore_warnings.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
-parallel_communicator_specializations: $(top_srcdir)/include/parallel/parallel_communicator_specializations
+safe_bool.h: $(top_srcdir)/src/contrib/libmesh/include/utils/safe_bool.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
+timestamp.h: $(top_srcdir)/src/contrib/libmesh/include/utils/timestamp.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
+parallel_communicator_specializations: $(top_srcdir)/src/contrib/libmesh/include/parallel/parallel_communicator_specializations
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 

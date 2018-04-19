@@ -1,11 +1,13 @@
 AM_CPPFLAGS = $(QUESO_CPPFLAGS)
 AM_CPPFLAGS += -I$(top_builddir)/inc
+AM_CPPFLAGS += -I$(top_builddir)/src/contrib/libmesh/include
 
 if HAVE_BOOST
 AM_CPPFLAGS += $(BOOST_CPPFLAGS)
 endif
 
 AM_CPPFLAGS += $(GSL_CFLAGS)
+AM_CPPFLAGS += $(EIGEN_INCLUDE)
 
 if HAVE_ANN
 AM_CPPFLAGS += $(ANN_CFLAGS)
@@ -51,6 +53,8 @@ libqueso_la_LIBADD   =  # Empty.  Append below.
 if HAVE_ANN
 libqueso_la_LIBADD += contrib/ANN/libANN.la
 endif
+
+libqueso_la_LIBADD += contrib/libmesh/libnv.la
 
 if GRVY_ENABLED
   libqueso_la_LDFLAGS += $(GRVY_LIBS)
