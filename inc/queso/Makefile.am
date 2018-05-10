@@ -48,6 +48,7 @@ BUILT_SOURCES += GslBlockMatrix.h
 BUILT_SOURCES += GslMatrix.h
 BUILT_SOURCES += GslOptimizer.h
 BUILT_SOURCES += GslVector.h
+BUILT_SOURCES += GslNumericVector.h
 BUILT_SOURCES += InfiniteDimensionalGaussian.h
 BUILT_SOURCES += InfiniteDimensionalLikelihoodBase.h
 BUILT_SOURCES += InfiniteDimensionalMCMCSampler.h
@@ -291,6 +292,8 @@ GslMatrix.h: $(top_srcdir)/src/core/inc/GslMatrix.h
 GslOptimizer.h: $(top_srcdir)/src/core/inc/GslOptimizer.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 GslVector.h: $(top_srcdir)/src/core/inc/GslVector.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+GslNumericVector.h: $(top_srcdir)/src/core/inc/GslNumericVector.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 InfiniteDimensionalGaussian.h: $(top_srcdir)/src/core/inc/InfiniteDimensionalGaussian.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
