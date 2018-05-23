@@ -19,8 +19,9 @@
 #define QUESO_GSL_NUMERIC_VECTOR
 
 #include "libmesh/libmesh_common.h"
-
 #include "libmesh/numeric_vector.h"
+
+#include <queso/GslVector.h>
 
 namespace libMesh
 {
@@ -87,7 +88,7 @@ public:
   /**
    * Convenient typedefs
    */
-  typedef libMesh::EigenSV DataType;
+  typedef std::unique_ptr<GslVector> DataType;
 
   /**
    * Call the assemble functions
@@ -402,24 +403,28 @@ public:
   virtual void swap (libMesh::NumericVector<T> & v) libmesh_override;
 
   /**
-   * References to the underlying Eigen data types. Note this is generally
+   * References to the underlying QUESO-wrapped GSL data types. Note this is generally
    * not required in user-level code.
    */
-  DataType &       vec ()        { return _vec; }
-  const DataType & vec () const  { return _vec; }
+  QUESO::GslVector &       vec ()        { return *_vec; }
+  const QUESO::GslVector & vec () const  { return *_vec; }
 
 private:
 
+  QUESO::EmptyEnvironment queso_env;
+  QUESO::MpiComm queso_mpi_comm;
+  std::unique_ptr<QUESO::Map> queso_map;
+
   /**
-   * Actual Eigen::SparseVector<> we are wrapping.
+   * Actual QUESO::GslVector we are wrapping.
    */
   DataType _vec;
 
   /**
-   * Make other Eigen datatypes friends
+   * Make other QUESO-wrapped GSL datatypes friends
    */
-  friend class libMesh::EigenSparseMatrix<T>;
-  friend class libMesh::EigenSparseLinearSolver<T>;
+  // friend class libMesh::EigenSparseMatrix<T>;
+  // friend class libMesh::EigenSparseLinearSolver<T>;
 };
 
 
@@ -430,7 +435,9 @@ template <typename T>
 inline
 GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & comm_in,
                                          const libMesh::ParallelType ptype)
-  : libMesh::NumericVector<T>(comm_in, ptype)
+  : libMesh::NumericVector<T>(comm_in, ptype),
+    queso_env(),
+    queso_mpi_comm(queso_env, comm_in.get())
 {
   this->_type = ptype;
 }
@@ -442,7 +449,9 @@ inline
 GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & comm_in,
                                          const libMesh::numeric_index_type n,
                                          const libMesh::ParallelType ptype)
-  : libMesh::NumericVector<T>(comm_in, ptype)
+  : libMesh::NumericVector<T>(comm_in, ptype),
+    queso_env(),
+    queso_mpi_comm(queso_env, comm_in.get())
 {
   this->init(n, n, false, ptype);
 }
@@ -455,7 +464,9 @@ GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & c
                                          const libMesh::numeric_index_type n,
                                          const libMesh::numeric_index_type n_local,
                                          const libMesh::ParallelType ptype)
-  : libMesh::NumericVector<T>(comm_in, ptype)
+  : libMesh::NumericVector<T>(comm_in, ptype),
+    queso_env(),
+    queso_mpi_comm(queso_env, comm_in.get())
 {
   this->init(n, n_local, false, ptype);
 }
@@ -469,7 +480,9 @@ GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & c
                                          const libMesh::numeric_index_type n_local,
                                          const std::vector<libMesh::numeric_index_type> & ghost,
                                          const libMesh::ParallelType ptype)
-  : libMesh::NumericVector<T>(comm_in, ptype)
+  : libMesh::NumericVector<T>(comm_in, ptype),
+    queso_env(),
+    queso_mpi_comm(queso_env, comm_in.get())
 {
   this->init(N, n_local, ghost, false, ptype);
 }
@@ -503,7 +516,8 @@ void GslNumericVector<T>::init (const libMesh::numeric_index_type n,
   if (this->initialized())
     this->clear();
 
-  _vec.resize(n);
+  this->queso_map.reset(new QUESO::Map(n, 0, this->queso_mpi_comm));
+  this->_vec.reset(new QUESO::GslVector(this->queso_env, *(this->queso_map)));
 
   this->_is_initialized = true;
 #ifndef NDEBUG
@@ -571,7 +585,8 @@ template <typename T>
 inline
 void GslNumericVector<T>::clear ()
 {
-  _vec.resize(0);
+  this->queso_map.reset(new QUESO::Map(0, 0, this->queso_mpi_comm));
+  this->_vec.reset(new QUESO::GslVector(this->queso_env, *(this->queso_map)));
 
   this->_is_initialized = false;
 #ifndef NDEBUG
@@ -587,7 +602,7 @@ void GslNumericVector<T>::zero ()
   libmesh_assert (this->initialized());
   libmesh_assert (this->closed());
 
-  _vec.setZero();
+  _vec->cwSet(0.0);
 }
 
 
@@ -621,7 +636,7 @@ libMesh::numeric_index_type GslNumericVector<T>::size () const
 {
   libmesh_assert (this->initialized());
 
-  return static_cast<libMesh::numeric_index_type>(_vec.size());
+  return static_cast<libMesh::numeric_index_type>(_vec->sizeLocal());
 }
 
 
@@ -666,7 +681,7 @@ void GslNumericVector<T>::set (const libMesh::numeric_index_type i, const T valu
   libmesh_assert (this->initialized());
   libmesh_assert_less (i, this->size());
 
-  _vec[static_cast<libMesh::eigen_idx_type>(i)] = value;
+  (*_vec)[static_cast<libMesh::eigen_idx_type>(i)] = value;
 
 #ifndef NDEBUG
   this->_is_closed = false;
@@ -682,7 +697,7 @@ void GslNumericVector<T>::add (const libMesh::numeric_index_type i, const T valu
   libmesh_assert (this->initialized());
   libmesh_assert_less (i, this->size());
 
-  _vec[static_cast<libMesh::eigen_idx_type>(i)] += value;
+  (*_vec)[static_cast<libMesh::eigen_idx_type>(i)] += value;
 
 #ifndef NDEBUG
   this->_is_closed = false;
@@ -699,7 +714,7 @@ T GslNumericVector<T>::operator() (const libMesh::numeric_index_type i) const
   libmesh_assert ( ((i >= this->first_local_index()) &&
                     (i <  this->last_local_index())) );
 
-  return _vec[static_cast<libMesh::eigen_idx_type>(i)];
+  return (*_vec)[static_cast<libMesh::eigen_idx_type>(i)];
 }
 
 
@@ -710,7 +725,14 @@ void GslNumericVector<T>::swap (libMesh::NumericVector<T> & other)
 {
   GslNumericVector<T> & v = libMesh::cast_ref<GslNumericVector<T> &>(other);
 
-  _vec.swap(v._vec);
+  // Copy other to *tmp
+  GslNumericVector<T> * tmp = libMesh::cast_ptr<GslNumericVector<T> *>(other.clone().get());
+
+  // Store *this in other
+  *v._vec = *_vec;
+
+  // Copy *tmp to *this
+  *_vec = *(tmp->_vec);
 
   std::swap (this->_is_closed,      v._is_closed);
   std::swap (this->_is_initialized, v._is_initialized);

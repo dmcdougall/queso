@@ -36,7 +36,7 @@ T GslNumericVector<T>::sum () const
   libmesh_assert (this->closed());
   libmesh_assert (this->initialized());
 
-  return _vec.sum();
+  return _vec->sumOfComponents();
 }
 
 
@@ -47,7 +47,7 @@ libMesh::Real GslNumericVector<T>::l1_norm () const
   libmesh_assert (this->closed());
   libmesh_assert (this->initialized());
 
-  return _vec.lpNorm<1>();
+  return _vec->norm1();
 }
 
 
@@ -58,7 +58,7 @@ libMesh::Real GslNumericVector<T>::l2_norm () const
   libmesh_assert (this->closed());
   libmesh_assert (this->initialized());
 
-  return _vec.lpNorm<2>();
+  return _vec->norm2();
 }
 
 
@@ -69,7 +69,7 @@ libMesh::Real GslNumericVector<T>::linfty_norm () const
   libmesh_assert (this->closed());
   libmesh_assert (this->initialized());
 
-  return _vec.lpNorm<Eigen::Infinity>();
+  return _vec->normInf();
 }
 
 
@@ -81,7 +81,7 @@ libMesh::NumericVector<T> & GslNumericVector<T>::operator += (const libMesh::Num
 
   const GslNumericVector<T> & v = libMesh::cast_ref<const GslNumericVector<T> &>(v_in);
 
-  _vec += v._vec;
+  *_vec += *v._vec;
 
   return *this;
 }
@@ -96,7 +96,7 @@ libMesh::NumericVector<T> & GslNumericVector<T>::operator -= (const libMesh::Num
 
   const GslNumericVector<T> & v = libMesh::cast_ref<const GslNumericVector<T> &>(v_in);
 
-  _vec -= v._vec;
+  *_vec -= *v._vec;
 
   return *this;
 }
@@ -111,7 +111,7 @@ libMesh::NumericVector<T> & GslNumericVector<T>::operator /= (libMesh::NumericVe
 
   const GslNumericVector<T> & v = libMesh::cast_ref<const GslNumericVector<T> &>(v_in);
 
-  _vec = _vec.cwiseQuotient(v._vec);
+  *_vec /= *v._vec;
 
   return *this;
 }
@@ -130,7 +130,7 @@ void GslNumericVector<T>::reciprocal()
     libmesh_assert_not_equal_to ((*this)(i), T(0));
 #endif
 
-  _vec = _vec.cwiseInverse();
+  _vec->cwInvert();
 }
 
 
@@ -138,7 +138,7 @@ void GslNumericVector<T>::reciprocal()
 template <typename T>
 void GslNumericVector<T>::conjugate()
 {
-  _vec = _vec.conjugate();
+  // Do nothing.  All QUESO::GslVectors are real.
 }
 
 
@@ -146,7 +146,9 @@ void GslNumericVector<T>::conjugate()
 template <typename T>
 void GslNumericVector<T>::add (const T v)
 {
-  _vec += libMesh::EigenSV::Constant(this->size(), v);
+  for (libMesh::numeric_index_type i = 0; i < this->size(); i++) {
+    (*_vec)[i] += v;
+  }
 
 #ifndef NDEBUG
   this->_is_closed = false;
@@ -163,7 +165,7 @@ void GslNumericVector<T>::add (const libMesh::NumericVector<T> & v_in)
 
   const GslNumericVector<T> & v = libMesh::cast_ref<const GslNumericVector<T> &>(v_in);
 
-  _vec += v._vec;
+  *_vec += *v._vec;
 }
 
 
@@ -175,14 +177,16 @@ void GslNumericVector<T>::add (const T a, const libMesh::NumericVector<T> & v_in
 
   const GslNumericVector<T> & v = libMesh::cast_ref<const GslNumericVector<T> &>(v_in);
 
-  _vec += v._vec*a;
+  for (libMesh::numeric_index_type i = 0; i < this->size(); i++) {
+    (*_vec)[i] += (*v._vec)[i] * a;
+  }
 }
 
 
 
 template <typename T>
-void GslNumericVector<T>::add_vector (const libMesh::NumericVector<T> & vec_in,
-                                       const libMesh::SparseMatrix<T>  & mat_in)
+void GslNumericVector<T>::add_vector (const libMesh::NumericVector<T> & /*vec_in*/,
+                                       const libMesh::SparseMatrix<T>  & /*mat_in*/)
 {
   // // Make sure the data passed in are really in Eigen types
   // const GslNumericVector<T> * e_vec = libMesh::cast_ptr<const GslNumericVector<T> *>(&vec_in);
@@ -197,8 +201,8 @@ void GslNumericVector<T>::add_vector (const libMesh::NumericVector<T> & vec_in,
 
 
 template <typename T>
-void GslNumericVector<T>::add_vector_transpose (const libMesh::NumericVector<T> & vec_in,
-                                                 const libMesh::SparseMatrix<T>  & mat_in)
+void GslNumericVector<T>::add_vector_transpose (const libMesh::NumericVector<T> & /*vec_in*/,
+                                                 const libMesh::SparseMatrix<T>  & /*mat_in*/)
 {
   // // Make sure the data passed in are really in Eigen types
   // const GslNumericVector<T> * e_vec = libMesh::cast_ptr<const GslNumericVector<T> *>(&vec_in);
@@ -217,7 +221,7 @@ void GslNumericVector<T>::scale (const T factor)
 {
   libmesh_assert (this->initialized());
 
-  _vec *= factor;
+  *_vec *= factor;
 }
 
 
@@ -244,7 +248,13 @@ T GslNumericVector<T>::dot (const libMesh::NumericVector<T> & V) const
   const GslNumericVector<T> * v = libMesh::cast_ptr<const GslNumericVector<T> *>(&V);
   libmesh_assert(v);
 
-  return _vec.dot(v->_vec);
+  unsigned int n = _vec->sizeLocal();
+  double dot_product = 0.0;
+  for (libMesh::numeric_index_type i = 0; i < n; i++) {
+    dot_product += (*_vec)[i] + (*(v->_vec))[i];
+  }
+
+  return dot_product;
 }
 
 
@@ -256,7 +266,7 @@ GslNumericVector<T>::operator = (const T s)
   libmesh_assert (this->initialized());
   libmesh_assert (this->closed());
 
-  _vec.fill(s);
+  _vec->cwSet(s);
 
   return *this;
 }
@@ -288,7 +298,7 @@ GslNumericVector<T>::operator = (const GslNumericVector<T> & v)
   libmesh_assert (v.closed());
   libmesh_assert_equal_to (this->size(), v.size());
 
-  _vec = v._vec;
+  *_vec = *v._vec;
 
 #ifndef NDEBUG
   this->_is_closed = true;
@@ -402,10 +412,14 @@ void GslNumericVector<T>::localize_to_one (std::vector<T> & v_local,
 
 
 template <typename T>
-void GslNumericVector<T>::pointwise_mult (const libMesh::NumericVector<T> & /*vec1*/,
-                                           const libMesh::NumericVector<T> & /*vec2*/)
+void GslNumericVector<T>::pointwise_mult (const libMesh::NumericVector<T> & vec1,
+                                           const libMesh::NumericVector<T> & vec2)
 {
-  libmesh_not_implemented();
+  const GslNumericVector<T> & v1 = libMesh::cast_ref<const GslNumericVector<T> &>(vec1);
+  const GslNumericVector<T> & v2 = libMesh::cast_ref<const GslNumericVector<T> &>(vec2);
+
+  _vec->cwSet(0, *v1._vec);
+  *_vec *= *v2._vec;
 }
 
 
@@ -427,7 +441,7 @@ libMesh::Real GslNumericVector<T>::max() const
 
   return the_max;
 #else
-  return libMesh::libmesh_real(_vec.maxCoeff());
+  return libMesh::libmesh_real(_vec->getMaxValue());
 #endif
 }
 
@@ -450,7 +464,7 @@ libMesh::Real GslNumericVector<T>::min () const
 
   return the_min;
 #else
-  return libMesh::libmesh_real(_vec.minCoeff());
+  return libMesh::libmesh_real(_vec->getMinValue());
 #endif
 }
 
