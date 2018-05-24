@@ -178,7 +178,9 @@ GslSparseMatrix<T>::~GslSparseMatrix ()
 template <typename T>
 void GslSparseMatrix<T>::clear ()
 {
-  // _mat.resize(0,0);
+  unsigned int num_cols = 0;
+  this->queso_map.reset(new Map(0, 0, this->queso_mpi_comm));
+  this->_mat.reset(new GslMatrix(this->queso_env, *(this->queso_map), num_cols));
 
   _closed = false;
   this->_is_initialized = false;
