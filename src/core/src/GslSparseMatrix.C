@@ -191,7 +191,7 @@ void GslSparseMatrix<T>::clear ()
 template <typename T>
 void GslSparseMatrix<T>::zero ()
 {
-  // _mat.setZero();
+  _mat->cwSet(0.0);
 }
 
 
