@@ -276,9 +276,13 @@ void GslSparseMatrix<T>::add (const T a_in, libMesh::SparseMatrix<T> & X_in)
   libmesh_assert_equal_to (this->m(), X_in.m());
   libmesh_assert_equal_to (this->n(), X_in.n());
 
-  // GslSparseMatrix<T> & X = cast_ref<GslSparseMatrix<T> &> (X_in);
+  GslSparseMatrix<T> & X = libMesh::cast_ref<GslSparseMatrix<T> &> (X_in);
 
-  // _mat += X._mat*a_in;
+  // We don't guarantee X_in is preserved by this function, so we can modify it
+  // while scaling by a_in here.
+  *(X._mat) *= a_in;
+
+  *_mat += *(X._mat);
 }
 
 
