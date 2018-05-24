@@ -137,9 +137,11 @@ void GslSparseMatrix<T>::add_matrix(const libMesh::DenseMatrix<T> & dm,
 template <typename T>
 void GslSparseMatrix<T>::get_diagonal (libMesh::NumericVector<T> & dest_in) const
 {
-  // EigenSparseVector<T> & dest = cast_ref<EigenSparseVector<T> &>(dest_in);
-  //
-  // dest._vec = _mat.diagonal();
+  GslNumericVector<T> & dest = libMesh::cast_ref<GslNumericVector<T> &>(dest_in);
+
+  for (unsigned int i = 0; i < dest.size(); i++) {
+    dest.set(i, (*_mat)(i,i));
+  }
 }
 
 
