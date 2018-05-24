@@ -22,10 +22,9 @@
 // Local Includes
 #include "libmesh/dense_subvector.h"
 #include "libmesh/dense_vector.h"
-#include "libmesh/eigen_sparse_vector.h"
-#include "libmesh/eigen_sparse_matrix.h"
 
 #include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO
 {
