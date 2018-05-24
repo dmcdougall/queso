@@ -296,7 +296,7 @@ T GslSparseMatrix<T>::operator () (const libMesh::numeric_index_type i,
   libmesh_assert_less (i, this->m());
   libmesh_assert_less (j, this->n());
 
-  // return _mat.coeff(i,j);
+  return (*_mat)(i,j);
 }
 
 
