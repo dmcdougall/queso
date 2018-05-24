@@ -127,9 +127,9 @@ void GslSparseMatrix<T>::add_matrix(const libMesh::DenseMatrix<T> & dm,
   libmesh_assert_equal_to (dm.n(), n_cols);
 
 
-  // for (unsigned int i=0; i<n_rows; i++)
-  //   for (unsigned int j=0; j<n_cols; j++)
-  //     this->add(rows[i],cols[j],dm(i,j));
+  for (unsigned int i=0; i<n_rows; i++)
+    for (unsigned int j=0; j<n_cols; j++)
+      this->add(rows[i],cols[j],dm(i,j));
 }
 
 
