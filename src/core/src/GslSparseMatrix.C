@@ -264,7 +264,7 @@ template <typename T>
 void GslSparseMatrix<T>::add_matrix(const libMesh::DenseMatrix<T> & dm,
                                       const std::vector<libMesh::numeric_index_type> & dof_indices)
 {
-  // this->add_matrix (dm, dof_indices, dof_indices);
+  this->add_matrix (dm, dof_indices, dof_indices);
 }
 
 
