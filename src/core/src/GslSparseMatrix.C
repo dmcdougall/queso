@@ -48,8 +48,8 @@ void GslSparseMatrix<T>::init (const libMesh::numeric_index_type m_in,
   libmesh_assert_equal_to (m_in, n_in);
   libmesh_assert_greater  (nnz, 0);
 
-  // _mat.resize(m_in, n_in);
-  // _mat.reserve(Eigen::Matrix<numeric_index_type, Eigen::Dynamic, 1>::Constant(m_in,nnz));
+  this->queso_map.reset(new QUESO::Map(m_in, 0, queso_mpi_comm));
+  this->_mat.reset(new QUESO::GslMatrix(queso_env, *queso_map, n_in));
 
   this->_is_initialized = true;
 }
@@ -157,6 +157,8 @@ void GslSparseMatrix<T>::get_transpose (libMesh::SparseMatrix<T> & dest_in) cons
 template <typename T>
 GslSparseMatrix<T>::GslSparseMatrix (const libMesh::Parallel::Communicator & comm_in) :
   libMesh::SparseMatrix<T>(comm_in),
+  queso_env(),
+  queso_mpi_comm(queso_env, comm_in.get()),
   _closed (false)
 {
 }

@@ -259,6 +259,10 @@ public:
 
 private:
 
+  QUESO::EmptyEnvironment queso_env;
+  QUESO::MpiComm queso_mpi_comm;
+  std::unique_ptr<QUESO::Map> queso_map;
+
   /**
    * Actual QUESO::GslMatrix we are wrapping.
    */
