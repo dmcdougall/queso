@@ -19,10 +19,6 @@
 #include <algorithm> // for std::min
 #include <limits>
 
-// Local Includes
-#include "libmesh/dense_subvector.h"
-#include "libmesh/dense_vector.h"
-
 #include <queso/GslNumericVector.h>
 #include <queso/GslSparseMatrix.h>
 
