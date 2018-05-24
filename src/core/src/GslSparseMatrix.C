@@ -149,9 +149,9 @@ void GslSparseMatrix<T>::get_diagonal (libMesh::NumericVector<T> & dest_in) cons
 template <typename T>
 void GslSparseMatrix<T>::get_transpose (libMesh::SparseMatrix<T> & dest_in) const
 {
-  // GslSparseMatrix<T> & dest = cast_ref<GslSparseMatrix<T> &>(dest_in);
-  //
-  // dest._mat = _mat.transpose();
+  GslSparseMatrix<T> & dest = libMesh::cast_ref<GslSparseMatrix<T> &>(dest_in);
+
+  *(dest._mat) = _mat->transpose();
 }
 
 
