@@ -321,21 +321,16 @@ libMesh::Real GslSparseMatrix<T>::l1_norm () const
 template <typename T>
 libMesh::Real GslSparseMatrix<T>::linfty_norm () const
 {
-  libMesh::Real max_abs_row_sum = 0.;
+  double linfty_norm = 0.0;
 
-  // // For a row-major Eigen SparseMatrix like we're using, the
-  // // InnerIterator iterates over the non-zero entries of rows.
-  // for (unsigned row=0; row<this->m(); ++row)
-  //   {
-  //     Real current_abs_row_sum = 0.;
-  //     EigenSM::InnerIterator it(_mat, row);
-  //     for (; it; ++it)
-  //       current_abs_row_sum += std::abs(it.value());
-  //
-  //     max_abs_row_sum = std::max(max_abs_row_sum, current_abs_row_sum);
-  //   }
+  GslVector row_vec(queso_env, *queso_map);
 
-  return max_abs_row_sum;
+  for (unsigned row=0; row<this->m(); ++row) {
+    _mat->getRow(row, row_vec);
+    linfty_norm = std::max(linfty_norm, row_vec.norm1());
+  }
+
+  return linfty_norm;
 }
 
 
