@@ -227,7 +227,7 @@ libMesh::numeric_index_type GslSparseMatrix<T>::row_start () const
 template <typename T>
 libMesh::numeric_index_type GslSparseMatrix<T>::row_stop () const
 {
-  // return this->m();
+  return this->m();
 }
 
 
