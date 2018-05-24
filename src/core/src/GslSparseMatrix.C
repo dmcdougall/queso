@@ -304,22 +304,16 @@ T GslSparseMatrix<T>::operator () (const libMesh::numeric_index_type i,
 template <typename T>
 libMesh::Real GslSparseMatrix<T>::l1_norm () const
 {
-  // There does not seem to be a straightforward way to iterate over
-  // the columns of an GslSparseMatrix.  So we use some extra
-  // storage and keep track of the column sums while going over the
-  // row entries...
-  std::vector<libMesh::Real> abs_col_sums(this->n());
+  double l1_norm = 0.0;
 
-  // For a row-major Eigen SparseMatrix like we're using, the
-  // InnerIterator iterates over the non-zero entries of rows.
-  // for (unsigned row=0; row<this->m(); ++row)
-  //   {
-  //     EigenSM::InnerIterator it(_mat, row);
-  //     for (; it; ++it)
-  //       abs_col_sums[it.col()] += std::abs(it.value());
-  //   }
+  GslVector col_vec(queso_env, *queso_map);
 
-  return *(std::max_element(abs_col_sums.begin(), abs_col_sums.end()));
+  for (unsigned col=0; col<this->n(); ++col) {
+    _mat->getColumn(col, col_vec);
+    l1_norm = std::max(l1_norm, col_vec.norm1());
+  }
+
+  return l1_norm;
 }
 
 
