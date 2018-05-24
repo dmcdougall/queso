@@ -28,7 +28,7 @@ namespace libMesh
 
 // Forward declarations
 template <typename T> class GslSparseMatrix;
-template <typename T> class EigenSparseLinearSolver;
+// template <typename T> class EigenSparseLinearSolver;
 template <typename T> class SparseMatrix;
 
 }
@@ -423,7 +423,7 @@ private:
   /**
    * Make other QUESO-wrapped GSL datatypes friends
    */
-  // friend class libMesh::EigenSparseMatrix<T>;
+  friend class GslSparseMatrix<T>;
   // friend class libMesh::EigenSparseLinearSolver<T>;
 };
 

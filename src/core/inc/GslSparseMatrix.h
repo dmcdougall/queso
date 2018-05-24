@@ -36,7 +36,7 @@ namespace libMesh
 // Forward declarations
 template <typename T> class DenseMatrix;
 template <typename T> class GslNumericVector;
-template <typename T> class EigenSparseLinearSolver;
+// template <typename T> class EigenSparseLinearSolver;
 }
 
 namespace QUESO
