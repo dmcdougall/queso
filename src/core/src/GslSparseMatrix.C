@@ -255,7 +255,7 @@ void GslSparseMatrix<T>::add (const libMesh::numeric_index_type i,
   libmesh_assert_less (i, this->m());
   libmesh_assert_less (j, this->n());
 
-  // _mat.coeffRef(i,j) += value;
+  (*_mat)(i,j) += value;
 }
 
 
