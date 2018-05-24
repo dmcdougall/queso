@@ -27,7 +27,7 @@ namespace libMesh
 {
 
 // Forward declarations
-template <typename T> class EigenSparseMatrix;
+template <typename T> class GslSparseMatrix;
 template <typename T> class EigenSparseLinearSolver;
 template <typename T> class SparseMatrix;
 
@@ -681,7 +681,7 @@ void GslNumericVector<T>::set (const libMesh::numeric_index_type i, const T valu
   libmesh_assert (this->initialized());
   libmesh_assert_less (i, this->size());
 
-  (*_vec)[static_cast<libMesh::eigen_idx_type>(i)] = value;
+  (*_vec)[static_cast<int>(i)] = value;
 
 #ifndef NDEBUG
   this->_is_closed = false;
@@ -697,7 +697,7 @@ void GslNumericVector<T>::add (const libMesh::numeric_index_type i, const T valu
   libmesh_assert (this->initialized());
   libmesh_assert_less (i, this->size());
 
-  (*_vec)[static_cast<libMesh::eigen_idx_type>(i)] += value;
+  (*_vec)[static_cast<int>(i)] += value;
 
 #ifndef NDEBUG
   this->_is_closed = false;
@@ -714,7 +714,7 @@ T GslNumericVector<T>::operator() (const libMesh::numeric_index_type i) const
   libmesh_assert ( ((i >= this->first_local_index()) &&
                     (i <  this->last_local_index())) );
 
-  return (*_vec)[static_cast<libMesh::eigen_idx_type>(i)];
+  return (*_vec)[static_cast<int>(i)];
 }
 
 
