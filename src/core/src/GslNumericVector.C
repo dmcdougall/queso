@@ -200,17 +200,17 @@ void GslNumericVector<T>::add_vector (const libMesh::NumericVector<T> & vec_in,
 
 
 template <typename T>
-void GslNumericVector<T>::add_vector_transpose (const libMesh::NumericVector<T> & /*vec_in*/,
-                                                 const libMesh::SparseMatrix<T>  & /*mat_in*/)
+void GslNumericVector<T>::add_vector_transpose (const libMesh::NumericVector<T> & vec_in,
+                                                 const libMesh::SparseMatrix<T>  & mat_in)
 {
-  // // Make sure the data passed in are really in Eigen types
-  // const GslNumericVector<T> * e_vec = libMesh::cast_ptr<const GslNumericVector<T> *>(&vec_in);
-  // const libMesh::EigenSparseMatrix<T> * mat = libMesh::cast_ptr<const libMesh::EigenSparseMatrix<T> *>(&mat_in);
-  //
-  // libmesh_assert(e_vec);
-  // libmesh_assert(mat);
-  //
-  // _vec += mat->_mat.transpose()*e_vec->_vec;
+  // Make sure the data passed in are really GSL types
+  const GslNumericVector<T> * e_vec = libMesh::cast_ptr<const GslNumericVector<T> *>(&vec_in);
+  const GslSparseMatrix<T> * mat = libMesh::cast_ptr<const GslSparseMatrix<T> *>(&mat_in);
+
+  libmesh_assert(e_vec);
+  libmesh_assert(mat);
+
+  *_vec += mat->_mat->transpose() * *(e_vec->_vec);
 }
 
 
