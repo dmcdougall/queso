@@ -187,7 +187,7 @@ template <typename T>
 void GslNumericVector<T>::add_vector (const libMesh::NumericVector<T> & vec_in,
                                        const libMesh::SparseMatrix<T>  & mat_in)
 {
-  // Make sure the data passed in are really in Eigen types
+  // Make sure the data passed in are really GSL types
   const GslNumericVector<T> * e_vec = libMesh::cast_ptr<const GslNumericVector<T> *>(&vec_in);
   const GslSparseMatrix<T> * mat = libMesh::cast_ptr<const GslSparseMatrix<T> *>(&mat_in);
 
