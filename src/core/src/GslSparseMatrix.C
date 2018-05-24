@@ -201,7 +201,7 @@ libMesh::numeric_index_type GslSparseMatrix<T>::m () const
 {
   libmesh_assert (this->initialized());
 
-  // return _mat.rows();
+  return _mat->numRowsGlobal();
 }
 
 
