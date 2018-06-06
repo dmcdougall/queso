@@ -27,7 +27,6 @@ namespace libMesh
 {
 
 // Forward declarations
-template <typename T> class GslSparseMatrix;
 // template <typename T> class EigenSparseLinearSolver;
 template <typename T> class SparseMatrix;
 
@@ -35,6 +34,9 @@ template <typename T> class SparseMatrix;
 
 namespace QUESO
 {
+
+// Forward declarations
+template <typename T> class GslSparseMatrix;
 
 /**
  * Shim class for QUESO::GslVector

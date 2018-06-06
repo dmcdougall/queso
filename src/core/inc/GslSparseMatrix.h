@@ -35,12 +35,14 @@ namespace libMesh
 {
 // Forward declarations
 template <typename T> class DenseMatrix;
-template <typename T> class GslNumericVector;
 // template <typename T> class EigenSparseLinearSolver;
 }
 
 namespace QUESO
 {
+
+// Forward declarations
+template <typename T> class GslNumericVector;
 
 /**
  * The GslSparseMatrix class wraps a sparse matrix object from the GSL
