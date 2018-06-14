@@ -261,7 +261,7 @@ public:
 
 private:
 
-  QUESO::EmptyEnvironment queso_env;
+  std::unique_ptr<QUESO::BaseEnvironment> queso_env;
   QUESO::MpiComm queso_mpi_comm;
   std::unique_ptr<QUESO::Map> queso_map;
 

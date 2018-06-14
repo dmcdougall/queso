@@ -49,7 +49,7 @@ void GslSparseMatrix<T>::init (const libMesh::numeric_index_type m_in,
   libmesh_assert_greater  (nnz, 0);
 
   this->queso_map.reset(new QUESO::Map(m_in, 0, queso_mpi_comm));
-  this->_mat.reset(new QUESO::GslMatrix(queso_env, *queso_map, n_in));
+  this->_mat.reset(new QUESO::GslMatrix(*queso_env, *queso_map, n_in));
 
   this->_is_initialized = true;
 }
@@ -159,8 +159,8 @@ void GslSparseMatrix<T>::get_transpose (libMesh::SparseMatrix<T> & dest_in) cons
 template <typename T>
 GslSparseMatrix<T>::GslSparseMatrix (const libMesh::Parallel::Communicator & comm_in) :
   libMesh::SparseMatrix<T>(comm_in),
-  queso_env(),
-  queso_mpi_comm(queso_env, comm_in.get()),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(*queso_env, comm_in.get()),
   _closed (false)
 {
 }
@@ -180,7 +180,7 @@ void GslSparseMatrix<T>::clear ()
 {
   unsigned int num_cols = 0;
   this->queso_map.reset(new Map(0, 0, this->queso_mpi_comm));
-  this->_mat.reset(new GslMatrix(this->queso_env, *(this->queso_map), num_cols));
+  this->_mat.reset(new GslMatrix(*(this->queso_env), *(this->queso_map), num_cols));
 
   _closed = false;
   this->_is_initialized = false;
@@ -306,7 +306,7 @@ libMesh::Real GslSparseMatrix<T>::l1_norm () const
 {
   double l1_norm = 0.0;
 
-  GslVector col_vec(queso_env, *queso_map);
+  GslVector col_vec(*queso_env, *queso_map);
 
   for (unsigned col=0; col<this->n(); ++col) {
     _mat->getColumn(col, col_vec);
@@ -323,7 +323,7 @@ libMesh::Real GslSparseMatrix<T>::linfty_norm () const
 {
   double linfty_norm = 0.0;
 
-  GslVector row_vec(queso_env, *queso_map);
+  GslVector row_vec(*queso_env, *queso_map);
 
   for (unsigned row=0; row<this->m(); ++row) {
     _mat->getRow(row, row_vec);
