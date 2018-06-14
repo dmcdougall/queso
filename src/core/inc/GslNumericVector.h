@@ -507,10 +507,10 @@ void GslNumericVector<T>::init (const libMesh::numeric_index_type n,
                                  const bool fast,
                                  const libMesh::ParallelType)
 {
-  // Eigen vectors only for serial cases,
+  // GSL vectors only for serial cases,
   // but can provide a "parallel" vector on one processor.
   if (n != n_local)
-    libmesh_error_msg("Error: EigenSparseVectors can only be used in serial!");
+    libmesh_error_msg("Error: GslNumericVectors can only be used in serial!");
 
   this->_type = libMesh::SERIAL;
 
