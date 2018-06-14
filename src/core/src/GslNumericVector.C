@@ -535,6 +535,20 @@ GslNumericVector<T>::sizeLocal() const
   return this->_vec->sizeLocal();
 }
 
+template <typename T>
+const double &
+GslNumericVector<T>::operator[](unsigned int i) const
+{
+  return (*this->_vec)[i];
+}
+
+template <typename T>
+double &
+GslNumericVector<T>::operator[](unsigned int i)
+{
+  return (*this->_vec)[i];
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;

@@ -89,6 +89,8 @@ public:
   void cwSet(double value);
   unsigned int sizeGlobal() const;
   unsigned int sizeLocal() const;
+  const double & operator[](unsigned int i) const;
+  double & operator[](unsigned int i);
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
