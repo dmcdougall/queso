@@ -25,7 +25,8 @@
 #include <queso/VectorSubset.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
-#include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -79,6 +80,7 @@ void VectorSubset<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class VectorSubset<GslVector, GslMatrix>;
+template class VectorSubset<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::VectorSubset<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
