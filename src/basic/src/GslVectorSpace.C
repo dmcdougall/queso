@@ -24,12 +24,20 @@
 
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
 template <>
 Map*
 VectorSpace<GslVector, GslMatrix>::newMap()
+{
+  return new Map(m_dimGlobal,0,m_env.selfComm());
+}
+
+template <>
+Map*
+VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::newMap()
 {
   return new Map(m_dimGlobal,0,m_env.selfComm());
 }
