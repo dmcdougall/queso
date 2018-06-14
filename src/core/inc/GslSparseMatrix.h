@@ -81,6 +81,9 @@ public:
    */
   ~GslSparseMatrix ();
 
+  // Queso ctors and methods
+  GslSparseMatrix(const GslNumericVector<T> & v);
+
   /**
    * Convenient typedefs
    */

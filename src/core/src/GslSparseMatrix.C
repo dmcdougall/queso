@@ -173,6 +173,19 @@ GslSparseMatrix<T>::~GslSparseMatrix ()
   this->clear ();
 }
 
+template <typename T>
+GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v) :
+  libMesh::SparseMatrix<T>(
+      GslNumericVector<T>::comm_map.emplace(std::make_pair(
+          &(v.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            v.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(v._vec->map().Comm()),
+  _closed (false)
+{
+}
+
 
 
 template <typename T>
