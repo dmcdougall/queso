@@ -463,6 +463,57 @@ libMesh::Real GslNumericVector<T>::min () const
 #endif
 }
 
+template <typename T>
+GslNumericVector<T>::GslNumericVector(const BaseEnvironment& env,
+                                      const Map& map)
+  : libMesh::NumericVector<T>(
+      comm_map.emplace(std::make_pair(
+          &(map.Comm()),
+          libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second,
+      libMesh::AUTOMATIC),
+    queso_env(new EmptyEnvironment()),  // This is empty but we don't care
+                                        // because only the internal queso data
+                                        // type cares about the environment
+    queso_mpi_comm(map.Comm())
+{
+  this->init(map.NumGlobalElements(),
+             map.NumGlobalElements(),
+             false,
+             libMesh::AUTOMATIC);
+
+  // Perhaps this should be in its own init() method that takes an
+  // environment?
+  //
+  // Or add a copy ctor to BaseEnvironment?
+  this->_vec.reset(new QUESO::GslVector(env, *(this->queso_map)));
+}
+
+template <typename T>
+GslNumericVector<T>::GslNumericVector(const GslNumericVector<T> & other)
+  : libMesh::NumericVector<T>(
+      comm_map.emplace(std::make_pair(
+          &(other.queso_map->Comm()),
+          libMesh::Parallel::Communicator(other.queso_map->Comm().Comm()))).first->second,
+      libMesh::AUTOMATIC),
+    queso_env(new EmptyEnvironment()),  // This is empty but we don't care
+                                        // because only the internal queso data
+                                        // type cares about the environment
+    queso_mpi_comm(other.queso_map->Comm())
+{
+  this->init(other._vec->map().NumGlobalElements(),
+             other._vec->map().NumGlobalElements(),
+             false,
+             libMesh::AUTOMATIC);
+
+  // Perhaps this should be in its own init() method that takes an
+  // environment?
+  //
+  // Or add a copy ctor to BaseEnvironment?
+  this->_vec.reset(new QUESO::GslVector(other._vec->env(), other._vec->map()));
+
+  *(this->_vec) = *other._vec;
+}
+
 
 //------------------------------------------------------------------
 // Explicit instantiations

@@ -82,6 +82,12 @@ public:
                      const libMesh::ParallelType = libMesh::AUTOMATIC);
 
   /**
+   * QUESO's constructors
+   */
+  GslNumericVector(const BaseEnvironment & env, const Map & map);
+  GslNumericVector(const GslNumericVector<T> & other);
+
+  /**
    * Destructor, deallocates memory. Made virtual to allow
    * for derived classes to behave properly.
    */
