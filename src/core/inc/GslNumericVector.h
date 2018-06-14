@@ -413,7 +413,9 @@ public:
 
 private:
 
-  QUESO::EmptyEnvironment queso_env;
+  static std::map<const QUESO::MpiComm *, libMesh::Parallel::Communicator> comm_map;
+
+  std::unique_ptr<QUESO::BaseEnvironment> queso_env;
   QUESO::MpiComm queso_mpi_comm;
   std::unique_ptr<QUESO::Map> queso_map;
 
@@ -438,8 +440,8 @@ inline
 GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & comm_in,
                                          const libMesh::ParallelType ptype)
   : libMesh::NumericVector<T>(comm_in, ptype),
-    queso_env(),
-    queso_mpi_comm(queso_env, comm_in.get())
+    queso_env(new EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->_type = ptype;
 }
@@ -452,8 +454,8 @@ GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & c
                                          const libMesh::numeric_index_type n,
                                          const libMesh::ParallelType ptype)
   : libMesh::NumericVector<T>(comm_in, ptype),
-    queso_env(),
-    queso_mpi_comm(queso_env, comm_in.get())
+    queso_env(new EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->init(n, n, false, ptype);
 }
@@ -467,8 +469,8 @@ GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & c
                                          const libMesh::numeric_index_type n_local,
                                          const libMesh::ParallelType ptype)
   : libMesh::NumericVector<T>(comm_in, ptype),
-    queso_env(),
-    queso_mpi_comm(queso_env, comm_in.get())
+    queso_env(new EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->init(n, n_local, false, ptype);
 }
@@ -483,8 +485,8 @@ GslNumericVector<T>::GslNumericVector (const libMesh::Parallel::Communicator & c
                                          const std::vector<libMesh::numeric_index_type> & ghost,
                                          const libMesh::ParallelType ptype)
   : libMesh::NumericVector<T>(comm_in, ptype),
-    queso_env(),
-    queso_mpi_comm(queso_env, comm_in.get())
+    queso_env(new EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->init(N, n_local, ghost, false, ptype);
 }
@@ -519,7 +521,7 @@ void GslNumericVector<T>::init (const libMesh::numeric_index_type n,
     this->clear();
 
   this->queso_map.reset(new QUESO::Map(n, 0, this->queso_mpi_comm));
-  this->_vec.reset(new QUESO::GslVector(this->queso_env, *(this->queso_map)));
+  this->_vec.reset(new QUESO::GslVector(*(this->queso_env), *(this->queso_map)));
 
   this->_is_initialized = true;
 #ifndef NDEBUG
@@ -588,7 +590,7 @@ inline
 void GslNumericVector<T>::clear ()
 {
   this->queso_map.reset(new QUESO::Map(0, 0, this->queso_mpi_comm));
-  this->_vec.reset(new QUESO::GslVector(this->queso_env, *(this->queso_map)));
+  this->_vec.reset(new QUESO::GslVector(*(this->queso_env), *(this->queso_map)));
 
   this->_is_initialized = false;
 #ifndef NDEBUG
