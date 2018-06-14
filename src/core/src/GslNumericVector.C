@@ -549,6 +549,20 @@ GslNumericVector<T>::operator[](unsigned int i)
   return (*this->_vec)[i];
 }
 
+template <typename T>
+bool
+GslNumericVector<T>::atLeastOneComponentSmallerThan(const GslNumericVector<T> & rhs) const
+{
+  return this->_vec->atLeastOneComponentSmallerThan(*rhs._vec);
+}
+
+template <typename T>
+bool
+GslNumericVector<T>::atLeastOneComponentBiggerThan(const GslNumericVector<T> & rhs) const
+{
+  return this->_vec->atLeastOneComponentBiggerThan(*rhs._vec);
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;

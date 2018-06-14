@@ -91,6 +91,8 @@ public:
   unsigned int sizeLocal() const;
   const double & operator[](unsigned int i) const;
   double & operator[](unsigned int i);
+  bool atLeastOneComponentSmallerThan(const GslNumericVector<T> & rhs) const;
+  bool atLeastOneComponentBiggerThan(const GslNumericVector<T> & rhs) const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
