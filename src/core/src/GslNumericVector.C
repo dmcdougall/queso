@@ -553,4 +553,8 @@ GslNumericVector<T>::operator[](unsigned int i)
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;
 
+template <typename T>
+std::map<const QUESO::MpiComm *, libMesh::Parallel::Communicator>
+GslNumericVector<T>::comm_map;
+
 } // namespace libMesh
