@@ -514,6 +514,26 @@ GslNumericVector<T>::GslNumericVector(const GslNumericVector<T> & other)
   *(this->_vec) = *other._vec;
 }
 
+template <typename T>
+void
+GslNumericVector<T>::cwSet(double value)
+{
+  this->_vec->cwSet(value);
+}
+
+template <typename T>
+unsigned int
+GslNumericVector<T>::sizeGlobal() const
+{
+  return this->_vec->sizeGlobal();
+}
+
+template <typename T>
+unsigned int
+GslNumericVector<T>::sizeLocal() const
+{
+  return this->_vec->sizeLocal();
+}
 
 //------------------------------------------------------------------
 // Explicit instantiations
