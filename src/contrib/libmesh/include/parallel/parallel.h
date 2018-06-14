@@ -624,6 +624,20 @@ public:
   explicit Communicator (const communicator & comm);
 
   /*
+   * Don't use the copy constructor, just copy by reference or
+   * pointer - it's too hard to keep a common used_tag_values if
+   * each communicator is shared by more than one Communicator
+   */
+  explicit Communicator (const Communicator &) = delete;
+  Communicator & operator= (const Communicator &) = delete;
+
+  /*
+   * Move constructor and assignment operator
+   */
+  Communicator (Communicator &&) = default;
+  Communicator & operator= (Communicator &&) = default;
+
+  /*
    * NON-VIRTUAL destructor
    */
   ~Communicator ();
@@ -684,11 +698,6 @@ public:
   enum SendMode { DEFAULT=0, SYNCHRONOUS };
 
 private:
-
-  // Don't use the copy constructor, just copy by reference or
-  // pointer - it's too hard to keep a common used_tag_values if
-  // each communicator is shared by more than one Communicator
-  explicit Communicator (const Communicator &);
 
   /**
    * Utility function for setting our member variables from an MPI
