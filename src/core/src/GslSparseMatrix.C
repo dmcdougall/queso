@@ -346,6 +346,34 @@ libMesh::Real GslSparseMatrix<T>::linfty_norm () const
   return linfty_norm;
 }
 
+template <typename T>
+unsigned int
+GslSparseMatrix<T>::numCols() const
+{
+  return this->_mat->numCols();
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::zeroLower(bool includeDiagonal)
+{
+  return this->_mat->zeroLower(includeDiagonal);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::zeroUpper(bool includeDiagonal)
+{
+  return this->_mat->zeroUpper(includeDiagonal);
+}
+
+template <typename T>
+double &
+GslSparseMatrix<T>::operator()(unsigned int i, unsigned int j)
+{
+  return (*_mat)(i, j);
+}
+
 
 //------------------------------------------------------------------
 // Explicit instantiations

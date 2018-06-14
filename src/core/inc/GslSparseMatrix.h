@@ -83,6 +83,10 @@ public:
 
   // Queso ctors and methods
   GslSparseMatrix(const GslNumericVector<T> & v);
+  unsigned int numCols() const;
+  void zeroLower(bool includeDiagonal=false);
+  void zeroUpper(bool includeDiagonal=false);
+  double & operator()(unsigned int i, unsigned int j);
 
   /**
    * Convenient typedefs
