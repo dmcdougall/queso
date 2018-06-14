@@ -25,7 +25,9 @@
 #include <queso/Environment.h>
 #include <queso/VectorSet.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/TeuchosVector.h>
 #include <queso/TeuchosMatrix.h>
 
@@ -131,9 +133,10 @@ void VectorSet<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
-
-template class QUESO::VectorSet<QUESO::GslVector, QUESO::GslMatrix>;
+template class VectorSet<GslVector, GslMatrix>;
+template class VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 #ifdef QUESO_HAS_TRILINOS
-template class QUESO::VectorSet<QUESO::TeuchosVector, QUESO::TeuchosMatrix>;
+template class VectorSet<TeuchosVector, TeuchosMatrix>;
 #endif
+
+}  // End namespace QUESO
