@@ -83,12 +83,17 @@ public:
 
   // Queso ctors and methods
   GslSparseMatrix(const GslNumericVector<T> & v);
+  GslSparseMatrix(const GslSparseMatrix<T> & B);
   GslSparseMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols);
   unsigned int numCols() const;
   void zeroLower(bool includeDiagonal=false);
   void zeroUpper(bool includeDiagonal=false);
   double & operator()(unsigned int i, unsigned int j);
   void cwSet(unsigned int rowId, unsigned int colId, const GslSparseMatrix<T> & mat);
+  int chol();
+  int svd(GslSparseMatrix<T> & matU,
+          GslNumericVector<T> & vecS,
+          GslSparseMatrix & matVt) const;
 
   /**
    * Convenient typedefs

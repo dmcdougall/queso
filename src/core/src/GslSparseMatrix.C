@@ -188,6 +188,21 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v) :
   this->_mat.reset(new GslMatrix(v._vec->env(), v._vec->map(), v._vec->sizeLocal()));
 }
 
+template <typename T>
+GslSparseMatrix<T>::GslSparseMatrix(const GslSparseMatrix<T> & B) :
+  libMesh::SparseMatrix<T>(
+      GslNumericVector<T>::comm_map.emplace(std::make_pair(
+          &(B.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            B.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(B._mat->map().Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(B._mat->map()));
+  this->_mat.reset(new GslMatrix(*B._mat));
+}
+
 
 template <typename T>
 GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols) :
@@ -395,6 +410,22 @@ void
 GslSparseMatrix<T>::cwSet(unsigned int rowId, unsigned int colId, const GslSparseMatrix<T> & mat)
 {
   this->_mat->cwSet(rowId, colId, *mat._mat);
+}
+
+template <typename T>
+int
+GslSparseMatrix<T>::chol()
+{
+  return this->_mat->chol();
+}
+
+template <typename T>
+int
+GslSparseMatrix<T>::svd(GslSparseMatrix<T> & matU,
+                        GslNumericVector<T> & vecS,
+                        GslSparseMatrix & matVt) const
+{
+  return this->_mat->svd(*matU._mat, *vecS._vec, *matVt._mat);
 }
 
 
