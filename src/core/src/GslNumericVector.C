@@ -577,6 +577,20 @@ GslNumericVector<T>::cwExtract(unsigned int initialPos, GslNumericVector<T> & ve
   this->_vec->cwExtract(initialPos, *vec._vec);
 }
 
+template <typename T>
+double
+GslNumericVector<T>::getMinValue() const
+{
+  return this->_vec->getMinValue();
+}
+
+template <typename T>
+void
+GslNumericVector<T>::cwSqrt()
+{
+  this->_vec->cwSqrt();
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;

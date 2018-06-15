@@ -95,6 +95,8 @@ public:
   bool atLeastOneComponentSmallerThan(const GslNumericVector<T> & rhs) const;
   bool atLeastOneComponentBiggerThan(const GslNumericVector<T> & rhs) const;
   void cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const;
+  double getMinValue() const;
+  void cwSqrt();
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
