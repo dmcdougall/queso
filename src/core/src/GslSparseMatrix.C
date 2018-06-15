@@ -184,8 +184,24 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v) :
   queso_mpi_comm(v._vec->map().Comm()),
   _closed (false)
 {
+  this->queso_map.reset(new Map(v._vec->map()));
+  this->_mat.reset(new GslMatrix(v._vec->env(), v._vec->map(), v._vec->sizeLocal()));
 }
 
+
+template <typename T>
+GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols) :
+  libMesh::SparseMatrix<T>(
+      GslNumericVector<T>::comm_map.emplace(std::make_pair(
+          &(map.Comm()),
+          libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(map.Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(map));
+  this->_mat.reset(new GslMatrix(env, map, numCols));
+}
 
 
 template <typename T>
@@ -372,6 +388,13 @@ double &
 GslSparseMatrix<T>::operator()(unsigned int i, unsigned int j)
 {
   return (*_mat)(i, j);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::cwSet(unsigned int rowId, unsigned int colId, const GslSparseMatrix<T> & mat)
+{
+  this->_mat->cwSet(rowId, colId, *mat._mat);
 }
 
 
