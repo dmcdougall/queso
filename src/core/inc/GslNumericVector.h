@@ -87,12 +87,14 @@ public:
   GslNumericVector(const BaseEnvironment & env, const Map & map);
   GslNumericVector(const GslNumericVector<T> & other);
   void cwSet(double value);
+  void cwSet(unsigned int initialPos, const GslNumericVector<T> & vec);
   unsigned int sizeGlobal() const;
   unsigned int sizeLocal() const;
   const double & operator[](unsigned int i) const;
   double & operator[](unsigned int i);
   bool atLeastOneComponentSmallerThan(const GslNumericVector<T> & rhs) const;
   bool atLeastOneComponentBiggerThan(const GslNumericVector<T> & rhs) const;
+  void cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow

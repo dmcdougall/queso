@@ -522,6 +522,13 @@ GslNumericVector<T>::cwSet(double value)
 }
 
 template <typename T>
+void
+GslNumericVector<T>::cwSet(unsigned int initialPos, const GslNumericVector<T> & vec)
+{
+  this->_vec->cwSet(initialPos, *vec._vec);
+}
+
+template <typename T>
 unsigned int
 GslNumericVector<T>::sizeGlobal() const
 {
@@ -561,6 +568,13 @@ bool
 GslNumericVector<T>::atLeastOneComponentBiggerThan(const GslNumericVector<T> & rhs) const
 {
   return this->_vec->atLeastOneComponentBiggerThan(*rhs._vec);
+}
+
+template <typename T>
+void
+GslNumericVector<T>::cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const
+{
+  this->_vec->cwExtract(initialPos, *vec._vec);
 }
 
 //------------------------------------------------------------------
