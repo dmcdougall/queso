@@ -99,7 +99,7 @@ libMesh::NumericVector<T> & GslNumericVector<T>::operator -= (const libMesh::Num
 
 
 template <typename T>
-libMesh::NumericVector<T> & GslNumericVector<T>::operator /= (libMesh::NumericVector<T> & v_in)
+libMesh::NumericVector<T> & GslNumericVector<T>::operator /= (const libMesh::NumericVector<T> & v_in)
 {
   libmesh_assert (this->closed());
   libmesh_assert_equal_to(size(), v_in.size());

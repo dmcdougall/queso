@@ -267,7 +267,7 @@ public:
   /**
    * Pointwise Division operator. ie divide every entry in this vector by the entry in v
    */
-  virtual NumericVector<T> & operator /= (NumericVector<T> & v) libmesh_override;
+  virtual NumericVector<T> & operator /= (const NumericVector<T> & v) libmesh_override;
 
   /**
    * Replace each entry v_i of this vector by its reciprocal, 1/v_i.

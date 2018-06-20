@@ -284,7 +284,7 @@ public:
   /**
    * Pointwise Division operator. ie divide every entry in this vector by the entry in v
    */
-  virtual libMesh::NumericVector<T> & operator /= (libMesh::NumericVector<T> & v_in) libmesh_override;
+  virtual libMesh::NumericVector<T> & operator /= (const libMesh::NumericVector<T> & v_in) libmesh_override;
 
   /**
    * Replace each entry v_i of this vector by its reciprocal, 1/v_i.
