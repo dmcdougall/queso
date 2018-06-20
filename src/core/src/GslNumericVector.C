@@ -605,9 +605,19 @@ GslNumericVector<T>::cwSetUniform(const GslNumericVector<T> & a, const GslNumeri
   this->_vec->cwSetUniform(*a._vec, *b._vec);
 }
 
+template <typename T>
+GslNumericVector<T>
+operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
+{
+  GslNumericVector<T> answer(x);
+  answer += y;
+  return answer;
+}
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;
+
+template GslNumericVector<libMesh::Number> operator+(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 template <typename T>
 std::map<const QUESO::MpiComm *, libMesh::Parallel::Communicator>

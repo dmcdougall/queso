@@ -762,6 +762,10 @@ void GslNumericVector<T>::swap (libMesh::NumericVector<T> & other)
   std::swap (this->_type,           v._type);
 }
 
+template <typename T>
+GslNumericVector<T> operator+(const GslNumericVector<T> & x,
+                              const GslNumericVector<T> & y);
+
 
 } // namespace libMesh
 
