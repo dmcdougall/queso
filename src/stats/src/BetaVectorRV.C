@@ -23,7 +23,9 @@
 //-----------------------------------------------------------------------el-
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <queso/BetaJointPdf.h>
 #include <queso/BetaVectorRV.h>
@@ -110,6 +112,7 @@ BetaVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class BetaVectorRV<GslVector, GslMatrix>;
+template class BetaVectorRV<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BetaVectorRV<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
