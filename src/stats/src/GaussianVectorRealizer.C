@@ -25,7 +25,9 @@
 #include <limits>
 #include <queso/GaussianVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -192,6 +194,7 @@ GaussianVectorRealizer<V,M>::updateLowerCholLawCovMatrix(
   return;
 }
 
-}  // End namespace QUESO
+template class GaussianVectorRealizer<GslVector, GslMatrix>;
+template class GaussianVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GaussianVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
