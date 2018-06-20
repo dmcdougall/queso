@@ -24,7 +24,9 @@
 
 #include <queso/GenericVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -67,6 +69,7 @@ GenericVectorRealizer<V,M>::realization(V& nextValues) const
   return;
 }
 
-}  // End namespace QUESO
+template class GenericVectorRealizer<GslVector, GslMatrix>;
+template class GenericVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GenericVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
