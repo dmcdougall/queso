@@ -27,7 +27,8 @@
 #include <queso/VectorSet.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
-#include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #ifndef QUESO_DISABLE_BOOST_PROGRAM_OPTIONS
 #include <queso/BoostInputOptionsParser.h>
@@ -217,6 +218,7 @@ BaseScalarFunction<V, M>::setFiniteDifferenceStepSize(unsigned int i,
   this->m_fdStepSize[i] = fdStepSize;
 }
 
-}  // End namespace QUESO
+template class BaseScalarFunction<GslVector, GslMatrix>;
+template class BaseScalarFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BaseScalarFunction<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
