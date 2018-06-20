@@ -428,9 +428,17 @@ GslSparseMatrix<T>::svd(GslSparseMatrix<T> & matU,
   return this->_mat->svd(*matU._mat, *vecS._vec, *matVt._mat);
 }
 
+template <typename T>
+GslNumericVector<T> operator*(const GslSparseMatrix<T> & mat,
+                              const GslNumericVector<T> & vec)
+{
+  return mat.multiply(vec);
+}
 
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslSparseMatrix<libMesh::Number>;
+
+template GslNumericVector<libMesh::Number> operator*(const GslSparseMatrix<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 } // namespace QUESO

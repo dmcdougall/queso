@@ -296,6 +296,10 @@ private:
   // friend class EigenSparseLinearSolver<T>;
 };
 
+template <typename T>
+GslNumericVector<T> operator*(const GslSparseMatrix<T> & mat,
+                              const GslNumericVector<T> & vec);
+
 } // namespace QUESO
 
 #endif // #ifdef QUESO_GSL_SPARSE_MATRIX_H
