@@ -26,7 +26,9 @@
 #include <queso/math_macros.h>
 #include <queso/UniformVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -68,6 +70,7 @@ UniformVectorRealizer<V,M>::realization(V& nextValues) const
   nextValues.cwSetUniform(imageBox->minValues(),imageBox->maxValues());
 }
 
-}  // End namespace QUESO
+template class UniformVectorRealizer<GslVector, GslMatrix>;
+template class UniformVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::UniformVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
