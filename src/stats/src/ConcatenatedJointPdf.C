@@ -25,7 +25,9 @@
 #include <queso/ConcatenatedJointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -243,6 +245,7 @@ ConcatenatedJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSampl
   return value;
 }
 
-}  // End namespace QUESO
+template class ConcatenatedJointPdf<GslVector, GslMatrix>;
+template class ConcatenatedJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ConcatenatedJointPdf<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
