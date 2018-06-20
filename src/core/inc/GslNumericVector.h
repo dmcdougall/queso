@@ -782,8 +782,12 @@ template <typename T>
 GslNumericVector<T> operator*(const GslNumericVector<T> & x,
                               const GslNumericVector<T> & y);
 
+template <typename T>
+GslNumericVector<T> operator/(const GslNumericVector<T> & x,
+                              const GslNumericVector<T> & y);
 
-} // namespace libMesh
+
+} // namespace queso
 
 
 #endif  // QUESO_GSL_NUMERIC_VECTOR
