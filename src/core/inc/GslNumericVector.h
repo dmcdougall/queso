@@ -97,6 +97,7 @@ public:
   void cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const;
   double getMinValue() const;
   void cwSqrt();
+  void cwSetGaussian(double mean, double stdDev);
   void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
 
   /**
