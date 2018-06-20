@@ -633,6 +633,13 @@ GslNumericVector<T>::sumOfComponents() const
 }
 
 template <typename T>
+double
+GslNumericVector<T>::getMaxValue() const
+{
+  return this->_vec->getMaxValue();
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {

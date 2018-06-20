@@ -101,6 +101,7 @@ public:
   void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   void cwSetBeta(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   double sumOfComponents() const;
+  double getMaxValue() const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
