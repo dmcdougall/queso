@@ -97,6 +97,7 @@ public:
   void cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const;
   double getMinValue() const;
   void cwSqrt();
+  void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
 
   /**
    * Destructor, deallocates memory. Made virtual to allow

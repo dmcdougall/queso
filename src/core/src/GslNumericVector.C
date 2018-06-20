@@ -591,6 +591,13 @@ GslNumericVector<T>::cwSqrt()
   this->_vec->cwSqrt();
 }
 
+template <typename T>
+void
+GslNumericVector<T>::cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b)
+{
+  this->_vec->cwSetUniform(*a._vec, *b._vec);
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;
