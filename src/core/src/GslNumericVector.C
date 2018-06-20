@@ -619,6 +619,13 @@ GslNumericVector<T>::cwSetUniform(const GslNumericVector<T> & a, const GslNumeri
 }
 
 template <typename T>
+void
+GslNumericVector<T>::cwSetBeta(const GslNumericVector<T> & a, const GslNumericVector<T> & b)
+{
+  this->_vec->cwSetBeta(*a._vec, *b._vec);
+}
+
+template <typename T>
 double
 GslNumericVector<T>::sumOfComponents() const
 {

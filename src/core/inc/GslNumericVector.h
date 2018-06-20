@@ -99,6 +99,7 @@ public:
   void cwSqrt();
   void cwSetGaussian(double mean, double stdDev);
   void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
+  void cwSetBeta(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   double sumOfComponents() const;
 
   /**
