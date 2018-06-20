@@ -98,6 +98,7 @@ public:
   double lnDeterminant() const;
   unsigned int numRowsGlobal() const;
   GslSparseMatrix<T> & operator=(const GslSparseMatrix & rhs);
+  GslSparseMatrix<T> & operator*=(double a);
   GslNumericVector<T> multiply(const GslNumericVector<T> & x) const;
 
   /**

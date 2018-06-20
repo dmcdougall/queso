@@ -462,6 +462,14 @@ GslSparseMatrix<T>::operator=(const GslSparseMatrix<T> & rhs)
 }
 
 template <typename T>
+GslSparseMatrix<T> &
+GslSparseMatrix<T>::operator*=(double a)
+{
+  (*this->_mat) *= a;
+  return *this;
+}
+
+template <typename T>
 GslNumericVector<T>
 GslSparseMatrix<T>::multiply(const GslNumericVector<T> & x) const
 {
