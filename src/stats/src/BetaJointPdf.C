@@ -25,7 +25,9 @@
 #include <queso/BetaJointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/BasicPdfsBase.h>
 
 namespace QUESO {
@@ -192,6 +194,7 @@ BetaJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples, bool
   return value;
 }
 
-}  // End namespace QUESO
+template class BetaJointPdf<GslVector, GslMatrix>;
+template class BetaJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BetaJointPdf<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
