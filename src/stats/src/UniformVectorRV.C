@@ -26,7 +26,9 @@
 #include <queso/UniformJointPdf.h>
 #include <queso/UniformVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -77,6 +79,7 @@ UniformVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class UniformVectorRV<GslVector,GslMatrix>;
+template class UniformVectorRV<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::UniformVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO
