@@ -112,6 +112,19 @@ libMesh::NumericVector<T> & GslNumericVector<T>::operator /= (const libMesh::Num
 }
 
 
+template <typename T>
+GslNumericVector<T> & GslNumericVector<T>::operator *= (const GslNumericVector<T> & v_in)
+{
+  libmesh_assert (this->closed());
+  libmesh_assert_equal_to(size(), v_in.size());
+
+  // const GslNumericVector<T> & v = libMesh::cast_ref<const GslNumericVector<T> &>(v_in);
+
+  *_vec *= *v_in._vec;
+
+  return *this;
+}
+
 
 
 template <typename T>

@@ -289,6 +289,14 @@ public:
   virtual libMesh::NumericVector<T> & operator /= (const libMesh::NumericVector<T> & v_in) libmesh_override;
 
   /**
+   * Pointwise multiplication operator.
+   *
+   * Put this in the base class!
+   */
+  virtual GslNumericVector<T> & operator *= (const GslNumericVector<T> & v_in);
+  using libMesh::NumericVector<T>::operator*=;  // Overrode *= so we need this.
+
+  /**
    * Replace each entry v_i of this vector by its reciprocal, 1/v_i.
    */
   virtual void reciprocal() libmesh_override;
