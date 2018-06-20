@@ -101,6 +101,7 @@ public:
   void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   void cwSetBeta(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   void cwSetGamma(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
+  void cwSetConcatenated(const std::vector<const GslNumericVector<T> *> & vecs);
   double sumOfComponents() const;
   double getMaxValue() const;
 

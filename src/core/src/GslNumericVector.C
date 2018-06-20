@@ -633,6 +633,19 @@ GslNumericVector<T>::cwSetGamma(const GslNumericVector<T> & a, const GslNumericV
 }
 
 template <typename T>
+void
+GslNumericVector<T>::cwSetConcatenated(const std::vector<const GslNumericVector<T> *> & vecs)
+{
+  std::vector<const GslVector *> raw_vecs(vecs.size());
+
+  for (unsigned int i = 0; i < raw_vecs.size(); i++) {
+    raw_vecs[i] = vecs[i]->_vec.get();
+  }
+
+  this->_vec->cwSetConcatenated(raw_vecs);
+}
+
+template <typename T>
 double
 GslNumericVector<T>::sumOfComponents() const
 {
