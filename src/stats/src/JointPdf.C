@@ -25,7 +25,9 @@
 #include <queso/JointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -158,6 +160,7 @@ BaseJointPdf<V,M>::component(unsigned int componentId) const
 }
 #endif
 
-}  // End namespace QUESO
+template class BaseJointPdf<GslVector, GslMatrix>;
+template class BaseJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BaseJointPdf<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
