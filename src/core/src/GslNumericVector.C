@@ -634,6 +634,13 @@ GslNumericVector<T>::cwSetGamma(const GslNumericVector<T> & a, const GslNumericV
 
 template <typename T>
 void
+GslNumericVector<T>::cwSetInverseGamma(const GslNumericVector<T> & a, const GslNumericVector<T> & b)
+{
+  this->_vec->cwSetInverseGamma(*a._vec, *b._vec);
+}
+
+template <typename T>
+void
 GslNumericVector<T>::cwSetConcatenated(const std::vector<const GslNumericVector<T> *> & vecs)
 {
   std::vector<const GslVector *> raw_vecs(vecs.size());
