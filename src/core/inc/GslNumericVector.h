@@ -99,6 +99,7 @@ public:
   void cwSqrt();
   void cwSetGaussian(double mean, double stdDev);
   void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
+  double sumOfComponents() const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow

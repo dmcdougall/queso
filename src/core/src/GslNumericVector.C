@@ -619,6 +619,13 @@ GslNumericVector<T>::cwSetUniform(const GslNumericVector<T> & a, const GslNumeri
 }
 
 template <typename T>
+double
+GslNumericVector<T>::sumOfComponents() const
+{
+  return this->_vec->sumOfComponents();
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
