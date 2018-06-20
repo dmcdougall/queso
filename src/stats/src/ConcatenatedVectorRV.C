@@ -26,7 +26,9 @@
 #include <queso/ConcatenatedVectorRealizer.h>
 #include <queso/ConcatenatedJointPdf.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <limits>
 
@@ -161,6 +163,7 @@ ConcatenatedVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class ConcatenatedVectorRV<GslVector,GslMatrix>;
+template class ConcatenatedVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ConcatenatedVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO
