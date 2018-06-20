@@ -94,6 +94,7 @@ public:
   int svd(GslSparseMatrix<T> & matU,
           GslNumericVector<T> & vecS,
           GslSparseMatrix & matVt) const;
+  GslNumericVector<T> multiply(const GslNumericVector<T> & x) const;
 
   /**
    * Convenient typedefs

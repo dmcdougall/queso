@@ -429,6 +429,15 @@ GslSparseMatrix<T>::svd(GslSparseMatrix<T> & matU,
 }
 
 template <typename T>
+GslNumericVector<T>
+GslSparseMatrix<T>::multiply(const GslNumericVector<T> & x) const
+{
+  GslNumericVector<T> answer(x);
+  *answer._vec = this->_mat->multiply(*x._vec);
+  return answer;
+}
+
+template <typename T>
 GslNumericVector<T> operator*(const GslSparseMatrix<T> & mat,
                               const GslNumericVector<T> & vec)
 {
