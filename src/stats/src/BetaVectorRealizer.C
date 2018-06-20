@@ -26,7 +26,9 @@
 
 #include <queso/BetaVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -68,6 +70,7 @@ BetaVectorRealizer<V,M>::realization(V& nextValues) const
   return;
 }
 
-}  // End namespace QUESO
+template class BetaVectorRealizer<GslVector, GslMatrix>;
+template class BetaVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BetaVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
