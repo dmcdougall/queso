@@ -25,7 +25,9 @@
 #include <limits>
 #include <queso/InverseGammaVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -67,6 +69,7 @@ InverseGammaVectorRealizer<V,M>::realization(V& nextValues) const
   return;
 }
 
-}  // End namespace QUESO
+template class InverseGammaVectorRealizer<GslVector, GslMatrix>;
+template class InverseGammaVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::InverseGammaVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO

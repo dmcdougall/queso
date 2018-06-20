@@ -26,7 +26,9 @@
 #include <queso/InverseGammaVectorRealizer.h>
 #include <queso/InverseGammaJointPdf.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -102,6 +104,7 @@ InverseGammaVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class InverseGammaVectorRV<GslVector,GslMatrix>;
+template class InverseGammaVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::InverseGammaVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO
