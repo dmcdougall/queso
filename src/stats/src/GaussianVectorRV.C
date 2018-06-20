@@ -26,7 +26,9 @@
 #include <queso/GaussianVectorRealizer.h>
 #include <queso/GaussianJointPdf.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -253,8 +255,8 @@ ComputeConditionalGaussianVectorRV(
   return;
 }
 
+template class GaussianVectorRV<GslVector,GslMatrix>;
+template class GaussianVectorRV<GslNumericVector<libMesh::Number> ,GslSparseMatrix<libMesh::Number> >;
+template void ComputeConditionalGaussianVectorRV<GslVector, GslMatrix>(GslVector const&, GslVector const&, GslMatrix const&, GslMatrix const&, GslMatrix const&, GslMatrix const&, GslVector const&, GslVector&, GslMatrix&);
+
 }  // End namespace QUESO
-
-template class QUESO::GaussianVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
-
-template void QUESO::ComputeConditionalGaussianVectorRV<QUESO::GslVector, QUESO::GslMatrix>(QUESO::GslVector const&, QUESO::GslVector const&, QUESO::GslMatrix const&, QUESO::GslMatrix const&, QUESO::GslMatrix const&, QUESO::GslMatrix const&, QUESO::GslVector const&, QUESO::GslVector&, QUESO::GslMatrix&);
