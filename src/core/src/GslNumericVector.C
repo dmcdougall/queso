@@ -613,10 +613,21 @@ operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
   answer += y;
   return answer;
 }
+
+template <typename T>
+GslNumericVector<T>
+operator*(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
+{
+  GslNumericVector<T> answer(x);
+  answer *= y;
+  return answer;
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;
 
+template GslNumericVector<libMesh::Number> operator*(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator+(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 template <typename T>

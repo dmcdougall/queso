@@ -766,6 +766,10 @@ template <typename T>
 GslNumericVector<T> operator+(const GslNumericVector<T> & x,
                               const GslNumericVector<T> & y);
 
+template <typename T>
+GslNumericVector<T> operator*(const GslNumericVector<T> & x,
+                              const GslNumericVector<T> & y);
+
 
 } // namespace libMesh
 
