@@ -626,6 +626,13 @@ GslNumericVector<T>::cwSetBeta(const GslNumericVector<T> & a, const GslNumericVe
 }
 
 template <typename T>
+void
+GslNumericVector<T>::cwSetGamma(const GslNumericVector<T> & a, const GslNumericVector<T> & b)
+{
+  this->_vec->cwSetGamma(*a._vec, *b._vec);
+}
+
+template <typename T>
 double
 GslNumericVector<T>::sumOfComponents() const
 {
