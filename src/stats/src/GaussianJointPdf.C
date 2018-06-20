@@ -25,7 +25,9 @@
 #include <queso/GaussianJointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -372,6 +374,7 @@ GaussianJointPdf<V,M>::lawCovMatrix() const
   return *m_lawCovMatrix;
 }
 
-}  // End namespace QUESO
+template class GaussianJointPdf<GslVector, GslMatrix>;
+template class GaussianJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GaussianJointPdf<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
