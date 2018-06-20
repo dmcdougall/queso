@@ -24,7 +24,8 @@
 
 #include <queso/VectorRV.h>
 #include <queso/GslVector.h>
-#include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <queso/Defines.h>
 #include <gsl/gsl_sf_psi.h> // todo: take specificity of gsl_, i.e., make it general (gsl or boost or etc)
@@ -255,6 +256,7 @@ ComputeCovCorrMatricesBetweenVectorRvs(
   return;
 }
 
-}  // End namespace QUESO
+template class BaseVectorRV<GslVector,GslMatrix>;
+template class BaseVectorRV<GslNumericVector<libMesh::Number> ,GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BaseVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO
