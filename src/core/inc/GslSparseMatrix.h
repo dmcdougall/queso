@@ -94,6 +94,10 @@ public:
   int svd(GslSparseMatrix<T> & matU,
           GslNumericVector<T> & vecS,
           GslSparseMatrix & matVt) const;
+  GslNumericVector<T> invertMultiply(const GslNumericVector<T> & b) const;
+  double lnDeterminant() const;
+  unsigned int numRowsGlobal() const;
+  GslSparseMatrix<T> & operator=(const GslSparseMatrix & rhs);
   GslNumericVector<T> multiply(const GslNumericVector<T> & x) const;
 
   /**

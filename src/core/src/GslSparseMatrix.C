@@ -430,6 +430,39 @@ GslSparseMatrix<T>::svd(GslSparseMatrix<T> & matU,
 
 template <typename T>
 GslNumericVector<T>
+GslSparseMatrix<T>::invertMultiply(const GslNumericVector<T> & b) const
+{
+  GslNumericVector<T> answer(b);
+  *(answer._vec) = this->_mat->invertMultiply(*b._vec);
+  return answer;
+}
+
+template <typename T>
+double
+GslSparseMatrix<T>::lnDeterminant() const
+{
+  return this->_mat->lnDeterminant();
+}
+
+template <typename T>
+unsigned int
+GslSparseMatrix<T>::numRowsGlobal() const
+{
+  return this->_mat->numRowsGlobal();
+}
+
+template <typename T>
+GslSparseMatrix<T> &
+GslSparseMatrix<T>::operator=(const GslSparseMatrix<T> & rhs)
+{
+  queso_mpi_comm = rhs._mat->map().Comm();
+  this->queso_map.reset(new Map(rhs._mat->map()));
+  *(this->_mat) = *rhs._mat;
+  return *this;
+}
+
+template <typename T>
+GslNumericVector<T>
 GslSparseMatrix<T>::multiply(const GslNumericVector<T> & x) const
 {
   GslNumericVector<T> answer(x);
