@@ -24,6 +24,7 @@
 
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
@@ -54,6 +55,18 @@ GslVector*
 VectorSpace<GslVector,GslMatrix>::newVector(double value) const
 {
   return new GslVector(m_env,*m_map,value);
+}
+
+template<>
+GslNumericVector<libMesh::Number>*
+VectorSpace<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >::newVector(double value) const
+{
+  GslNumericVector<libMesh::Number> * result =
+    new GslNumericVector<libMesh::Number>(m_env,*m_map);
+
+  result->cwSet(value);
+
+  return result;
 }
 
 template<>
