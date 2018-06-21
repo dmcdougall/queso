@@ -24,7 +24,9 @@
 
 #include <queso/GenericVectorFunction.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -78,6 +80,7 @@ GenericVectorFunction<P_V,P_M,Q_V,Q_M>::compute(
   return;
 }
 
-}  // End namespace QUESO
+template class GenericVectorFunction<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class GenericVectorFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GenericVectorFunction<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
