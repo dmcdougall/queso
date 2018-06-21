@@ -28,7 +28,9 @@
 #include <queso/BayesianJointPdf.h>
 #include <queso/JointPdf.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -453,6 +455,7 @@ double ScalarFunctionSynchronizer<V,M>::callFunction(const V* vecValues,
   return result;
 }
 
-}  // End namespace QUESO
+template class ScalarFunctionSynchronizer<GslVector, GslMatrix>;
+template class ScalarFunctionSynchronizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ScalarFunctionSynchronizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
