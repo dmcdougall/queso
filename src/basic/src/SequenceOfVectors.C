@@ -24,7 +24,9 @@
 
 #include <queso/SequenceOfVectors.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/FilePtr.h>
 
 #include <sstream>
@@ -3010,6 +3012,7 @@ SequenceOfVectors<V,M>::unifiedMeanMonitorFree()
 }
 #endif // #ifdef UQ_CODE_HAS_MONITORS
 
-}  // End namespace QUESO
+template class SequenceOfVectors<GslVector, GslMatrix>;
+template class SequenceOfVectors<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::SequenceOfVectors<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
