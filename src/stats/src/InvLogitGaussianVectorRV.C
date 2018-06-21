@@ -26,7 +26,9 @@
 #include <queso/InvLogitGaussianVectorRealizer.h>
 #include <queso/InvLogitGaussianJointPdf.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 
 namespace QUESO {
@@ -192,6 +194,7 @@ InvLogitGaussianVectorRV<V, M>::print(std::ostream & os) const
   return;
 }
 
-}  // End namespace QUESO
+template class InvLogitGaussianVectorRV<GslVector,GslMatrix>;
+template class InvLogitGaussianVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::InvLogitGaussianVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO
