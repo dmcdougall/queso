@@ -95,11 +95,16 @@ public:
           GslNumericVector<T> & vecS,
           GslSparseMatrix & matVt) const;
   GslNumericVector<T> invertMultiply(const GslNumericVector<T> & b) const;
+  void invertMultiply(const GslSparseMatrix<T> & B, GslSparseMatrix<T> X) const;
   double lnDeterminant() const;
   unsigned int numRowsGlobal() const;
   GslSparseMatrix<T> & operator=(const GslSparseMatrix & rhs);
   GslSparseMatrix<T> & operator*=(double a);
+  GslSparseMatrix<T> & operator+=(const GslSparseMatrix<T> & rhs);
   GslNumericVector<T> multiply(const GslNumericVector<T> & x) const;
+  void largestEigen(double & eigenValue, GslNumericVector<T> & eigenVector) const;
+  void mpiSum(const MpiComm & comm, GslSparseMatrix<T> & M_global) const;
+
 
   /**
    * Convenient typedefs
@@ -305,6 +310,14 @@ private:
 template <typename T>
 GslNumericVector<T> operator*(const GslSparseMatrix<T> & mat,
                               const GslNumericVector<T> & vec);
+
+template <typename T>
+GslSparseMatrix<T> operator*(double a,
+                             const GslSparseMatrix<T> & mat);
+
+template <typename T>
+GslSparseMatrix<T> matrixProduct(const GslNumericVector<T> & v1,
+                                 const GslNumericVector<T> & v2);
 
 } // namespace QUESO
 

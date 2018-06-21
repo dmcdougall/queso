@@ -438,6 +438,13 @@ GslSparseMatrix<T>::invertMultiply(const GslNumericVector<T> & b) const
 }
 
 template <typename T>
+void
+GslSparseMatrix<T>::invertMultiply(const GslSparseMatrix<T> & B, GslSparseMatrix<T> X) const
+{
+  this->_mat->invertMultiply(*B._mat, *X._mat);
+}
+
+template <typename T>
 double
 GslSparseMatrix<T>::lnDeterminant() const
 {
@@ -470,6 +477,14 @@ GslSparseMatrix<T>::operator*=(double a)
 }
 
 template <typename T>
+GslSparseMatrix<T> &
+GslSparseMatrix<T>::operator+=(const GslSparseMatrix<T> & rhs)
+{
+  (*this->_mat) += *rhs._mat;
+  return *this;
+}
+
+template <typename T>
 GslNumericVector<T>
 GslSparseMatrix<T>::multiply(const GslNumericVector<T> & x) const
 {
@@ -479,10 +494,51 @@ GslSparseMatrix<T>::multiply(const GslNumericVector<T> & x) const
 }
 
 template <typename T>
+void
+GslSparseMatrix<T>::largestEigen(double & eigenValue, GslNumericVector<T> & eigenVector) const
+{
+  this->_mat->largestEigen(eigenValue, *eigenVector._vec);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::mpiSum(const MpiComm & comm, GslSparseMatrix<T> & M_global) const
+{
+  this->_mat->mpiSum(comm, *M_global._mat);
+}
+
+template <typename T>
 GslNumericVector<T> operator*(const GslSparseMatrix<T> & mat,
                               const GslNumericVector<T> & vec)
 {
   return mat.multiply(vec);
+}
+
+template <typename T>
+GslSparseMatrix<T> operator*(double a,
+                             const GslSparseMatrix<T> & mat)
+{
+  GslSparseMatrix<T> answer(mat);
+  answer *= a;
+  return answer;
+}
+
+template <typename T>
+GslSparseMatrix<T> matrixProduct(const GslNumericVector<T> & v1,
+                                 const GslNumericVector<T> & v2)
+{
+  unsigned int nRows = v1.sizeLocal();
+  unsigned int nCols = v2.sizeLocal();
+  GslSparseMatrix<T> answer(v1.env(),v1.map(),nCols);
+
+  for (unsigned int i = 0; i < nRows; ++i) {
+    double value1 = v1[i];
+    for (unsigned int j = 0; j < nCols; ++j) {
+      answer(i,j) = value1*v2[j];
+    }
+  }
+
+  return answer;
 }
 
 //------------------------------------------------------------------
@@ -490,5 +546,7 @@ GslNumericVector<T> operator*(const GslSparseMatrix<T> & mat,
 template class GslSparseMatrix<libMesh::Number>;
 
 template GslNumericVector<libMesh::Number> operator*(const GslSparseMatrix<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
+template GslSparseMatrix<libMesh::Number> operator*(double, const GslSparseMatrix<libMesh::Number> &);
+template GslSparseMatrix<libMesh::Number> matrixProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 } // namespace QUESO
