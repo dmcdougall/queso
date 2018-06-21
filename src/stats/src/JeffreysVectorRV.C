@@ -27,7 +27,9 @@
 #include <queso/JeffreysVectorRealizer.h>
 #include <queso/VectorSet.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -78,6 +80,7 @@ JeffreysVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class JeffreysVectorRV<GslVector,GslMatrix>;
+template class JeffreysVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::JeffreysVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO

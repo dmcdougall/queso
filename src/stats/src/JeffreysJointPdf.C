@@ -25,7 +25,9 @@
 #include <queso/JeffreysJointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -180,6 +182,7 @@ JeffreysJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples, 
   return value;
 }
 
-}  // End namespace QUESO
+template class JeffreysJointPdf<GslVector, GslMatrix>;
+template class JeffreysJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::JeffreysJointPdf<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
