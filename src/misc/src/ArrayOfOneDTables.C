@@ -24,7 +24,9 @@
 
 #include <queso/ArrayOfOneDTables.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -115,6 +117,7 @@ std::ostream& operator<< (std::ostream& os, const ArrayOfOneDTables<V,M>& obj)
   return os;
 }
 
-}  // End namespace QUESO
+template class ArrayOfOneDTables<GslVector, GslMatrix>;
+template class ArrayOfOneDTables<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ArrayOfOneDTables<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
