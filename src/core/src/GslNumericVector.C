@@ -584,6 +584,13 @@ GslNumericVector<T>::atLeastOneComponentBiggerThan(const GslNumericVector<T> & r
 }
 
 template <typename T>
+bool
+GslNumericVector<T>::atLeastOneComponentSmallerOrEqualThan(const GslNumericVector<T> & rhs) const
+{
+  return this->_vec->atLeastOneComponentSmallerOrEqualThan(*rhs._vec);
+}
+
+template <typename T>
 void
 GslNumericVector<T>::cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const
 {

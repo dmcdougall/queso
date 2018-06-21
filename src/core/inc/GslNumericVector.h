@@ -94,6 +94,7 @@ public:
   double & operator[](unsigned int i);
   bool atLeastOneComponentSmallerThan(const GslNumericVector<T> & rhs) const;
   bool atLeastOneComponentBiggerThan(const GslNumericVector<T> & rhs) const;
+  bool atLeastOneComponentSmallerOrEqualThan(const GslNumericVector<T> & rhs) const;
   void cwExtract(unsigned int initialPos, GslNumericVector<T> & vec) const;
   double getMinValue() const;
   void cwSqrt();
