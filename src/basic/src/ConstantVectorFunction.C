@@ -24,7 +24,9 @@
 
 #include <queso/ConstantVectorFunction.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -69,6 +71,7 @@ ConstantVectorFunction<P_V,P_M,Q_V,Q_M>::compute(
   return;
 }
 
-}  // End namespace QUESO
+template class ConstantVectorFunction<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class ConstantVectorFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ConstantVectorFunction<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
