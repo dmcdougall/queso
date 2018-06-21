@@ -674,6 +674,13 @@ GslNumericVector<T>::getMaxValue() const
 }
 
 template <typename T>
+double
+GslNumericVector<T>::norm2() const
+{
+  return this->_vec->norm2();
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {

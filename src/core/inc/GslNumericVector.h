@@ -106,6 +106,7 @@ public:
   void cwSetConcatenated(const std::vector<const GslNumericVector<T> *> & vecs);
   double sumOfComponents() const;
   double getMaxValue() const;
+  double norm2() const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
