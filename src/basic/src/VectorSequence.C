@@ -25,7 +25,9 @@
 
 #include <queso/VectorSequence.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -2758,7 +2760,8 @@ ComputeCovCorrMatricesBetweenVectorSequences(
   return;
 }
 
-}  // End namespace QUESO
+template class BaseVectorSequence<GslVector, GslMatrix>;
+template class BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template void ComputeCovCorrMatricesBetweenVectorSequences<GslVector, GslMatrix, GslVector, GslMatrix>(BaseVectorSequence<GslVector, GslMatrix> const&, BaseVectorSequence<GslVector, GslMatrix> const&, unsigned int, GslMatrix&, GslMatrix&);
 
-template class QUESO::BaseVectorSequence<QUESO::GslVector, QUESO::GslMatrix>;
-template void QUESO::ComputeCovCorrMatricesBetweenVectorSequences<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>(QUESO::BaseVectorSequence<QUESO::GslVector, QUESO::GslMatrix> const&, QUESO::BaseVectorSequence<QUESO::GslVector, QUESO::GslMatrix> const&, unsigned int, QUESO::GslMatrix&, QUESO::GslMatrix&);
+}  // End namespace QUESO
