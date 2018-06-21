@@ -24,7 +24,9 @@
 
 #include <queso/VectorFunction.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -64,6 +66,7 @@ BaseVectorFunction<P_V,P_M,Q_V,Q_M>::imageSet() const
   return m_imageSet;
 }
 
-}  // End namespace QUESO
+template class BaseVectorFunction<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class BaseVectorFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::BaseVectorFunction<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
