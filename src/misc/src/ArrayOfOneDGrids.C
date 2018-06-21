@@ -26,7 +26,9 @@
 #include <queso/UniformOneDGrid.h>
 #include <queso/ArrayOfOneDGrids.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -150,6 +152,7 @@ ArrayOfOneDGrids<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class ArrayOfOneDGrids<GslVector, GslMatrix>;
+template class ArrayOfOneDGrids<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ArrayOfOneDGrids<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
