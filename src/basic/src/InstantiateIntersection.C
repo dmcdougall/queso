@@ -28,7 +28,9 @@
 #include <queso/IntersectionSubset.h>
 #include <queso/InstantiateIntersection.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -159,9 +161,14 @@ InstantiateIntersection(const VectorSet<V,M>& domain1, const VectorSet<V,M>& dom
   return result;
 }
 
-}  // End namespace QUESO
+template
+VectorSet<GslVector, GslMatrix> *
+InstantiateIntersection(const VectorSet<GslVector, GslMatrix> & domain1,
+                        const VectorSet<GslVector, GslMatrix> & domain2);
 
-template QUESO::VectorSet<QUESO::GslVector, QUESO::GslMatrix> *
-QUESO::InstantiateIntersection(
-    const QUESO::VectorSet<QUESO::GslVector, QUESO::GslMatrix>& domain1,
-    const QUESO::VectorSet<QUESO::GslVector, QUESO::GslMatrix>& domain2);
+template
+VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > *
+InstantiateIntersection(const VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > & domain1,
+                        const VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > & domain2);
+
+}  // End namespace QUESO
