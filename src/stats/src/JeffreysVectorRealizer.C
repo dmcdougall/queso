@@ -65,7 +65,7 @@ JeffreysVectorRealizer<V,M>::realization(V& nextValues) const
     queso_error_msg("For JeffreysVectorRealizer<V,M>::realization(), only box images are supported right now");
   }
   //take log of Jeffreys bounds to set uniform bounds
-  GslVector logMinValues(imageBox->minValues());
+  V logMinValues(imageBox->minValues());
   for (unsigned int i = 0; i < logMinValues.sizeLocal(); ++i) {
     if (logMinValues[i] < 0.0) {
       queso_error_msg("The minimum value for a Jeffreys distribution should be greater than or equal to zero.");
@@ -75,7 +75,7 @@ JeffreysVectorRealizer<V,M>::realization(V& nextValues) const
     }
   }
 
-  GslVector logMaxValues(imageBox->maxValues());
+  V logMaxValues(imageBox->maxValues());
   for (unsigned int i = 0; i < logMaxValues.sizeLocal(); ++i) {
     if (logMaxValues[i] <= 0.0) {
       queso_error_msg("The maximum value for a Jeffreys distribution should be greater than zero.");
