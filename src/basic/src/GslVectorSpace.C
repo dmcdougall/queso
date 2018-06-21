@@ -51,6 +51,13 @@ VectorSpace<GslVector,GslMatrix>::newVector() const
 }
 
 template<>
+GslNumericVector<libMesh::Number>*
+VectorSpace<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >::newVector() const
+{
+  return new GslNumericVector<libMesh::Number>(m_env,*m_map);
+}
+
+template<>
 GslVector*
 VectorSpace<GslVector,GslMatrix>::newVector(double value) const
 {
