@@ -620,6 +620,13 @@ GslNumericVector<T>::cwSetGaussian(double mean, double stdDev)
 
 template <typename T>
 void
+GslNumericVector<T>::cwSetGaussian(const GslNumericVector<T> & mean, const GslNumericVector<T> & stdDev)
+{
+  this->_vec->cwSetGaussian(*mean._vec, *stdDev._vec);
+}
+
+template <typename T>
+void
 GslNumericVector<T>::cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b)
 {
   this->_vec->cwSetUniform(*a._vec, *b._vec);

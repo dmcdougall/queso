@@ -99,6 +99,7 @@ public:
   double getMinValue() const;
   void cwSqrt();
   void cwSetGaussian(double mean, double stdDev);
+  void cwSetGaussian(const GslNumericVector<T> & mean, const GslNumericVector<T> & stdDev);
   void cwSetUniform(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   void cwSetBeta(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
   void cwSetGamma(const GslNumericVector<T> & a, const GslNumericVector<T> & b);
