@@ -114,6 +114,7 @@ public:
   bool getPrintScientific() const;
   const BaseEnvironment & env() const;
   const Map & map() const;
+  unsigned int numOfProcsForStorage() const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow

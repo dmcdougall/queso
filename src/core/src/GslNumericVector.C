@@ -730,6 +730,13 @@ GslNumericVector<T>::map() const
 }
 
 template <typename T>
+unsigned int
+GslNumericVector<T>::numOfProcsForStorage() const
+{
+  return this->_vec->numOfProcsForStorage();
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
