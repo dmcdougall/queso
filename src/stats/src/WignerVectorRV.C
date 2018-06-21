@@ -26,7 +26,9 @@
 #include <queso/WignerJointPdf.h>
 #include <queso/WignerVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -85,6 +87,7 @@ WignerVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class WignerVectorRV<GslVector,GslMatrix>;
+template class WignerVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::WignerVectorRV<QUESO::GslVector,QUESO::GslMatrix>;
+}  // End namespace QUESO

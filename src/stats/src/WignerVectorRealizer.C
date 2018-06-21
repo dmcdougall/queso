@@ -25,7 +25,9 @@
 #include <limits>
 #include <queso/WignerVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -73,6 +75,7 @@ WignerVectorRealizer<V,M>::realization(V& nextValues) const
   return;
 }
 
-}  // End namespace QUESO
+template class WignerVectorRealizer<GslVector, GslMatrix>;
+template class WignerVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::WignerVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
