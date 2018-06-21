@@ -688,6 +688,48 @@ GslNumericVector<T>::norm2() const
 }
 
 template <typename T>
+void
+GslNumericVector<T>::setPrintHorizontally(bool value) const
+{
+  this->_vec->setPrintHorizontally(value);
+}
+
+template <typename T>
+bool
+GslNumericVector<T>::getPrintHorizontally() const
+{
+  return this->_vec->getPrintHorizontally();
+}
+
+template <typename T>
+void
+GslNumericVector<T>::setPrintScientific(bool value) const
+{
+  this->_vec->setPrintScientific(value);
+}
+
+template <typename T>
+bool
+GslNumericVector<T>::getPrintScientific() const
+{
+  return this->_vec->getPrintScientific();
+}
+
+template <typename T>
+const BaseEnvironment &
+GslNumericVector<T>::env() const
+{
+  return this->_vec->env();
+}
+
+template <typename T>
+const Map &
+GslNumericVector<T>::map() const
+{
+  return this->_vec->map();
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {

@@ -108,6 +108,12 @@ public:
   double sumOfComponents() const;
   double getMaxValue() const;
   double norm2() const;
+  void setPrintHorizontally(bool value) const;
+  bool getPrintHorizontally() const;
+  void setPrintScientific(bool value) const;
+  bool getPrintScientific() const;
+  const BaseEnvironment & env() const;
+  const Map & map() const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
