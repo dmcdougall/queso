@@ -26,7 +26,9 @@
 #include <queso/LogNormalJointPdf.h>
 #include <queso/LogNormalVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -134,7 +136,7 @@ LogNormalVectorRV<V,M>::print(std::ostream& os) const
   return;
 }
 
+template class LogNormalVectorRV<GslVector,GslMatrix>;
+template class LogNormalVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
-
-template class QUESO::LogNormalVectorRV<QUESO::GslVector,QUESO::GslMatrix>;

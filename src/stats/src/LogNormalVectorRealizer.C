@@ -25,7 +25,9 @@
 #include <limits>
 #include <queso/LogNormalVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -141,6 +143,7 @@ LogNormalVectorRealizer<V,M>::realization(V& nextValues) const
   return;
 }
 
-}  // End namespace QUESO
+template class LogNormalVectorRealizer<GslVector, GslMatrix>;
+template class LogNormalVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::LogNormalVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO

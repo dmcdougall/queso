@@ -25,7 +25,9 @@
 #include <queso/LogNormalJointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -277,6 +279,7 @@ LogNormalJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples,
   return value;
 }
 
-}  // End namespace QUESO
+template class LogNormalJointPdf<GslVector, GslMatrix>;
+template class LogNormalJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::LogNormalJointPdf<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
