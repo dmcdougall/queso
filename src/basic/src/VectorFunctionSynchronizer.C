@@ -24,7 +24,9 @@
 
 #include <queso/VectorFunctionSynchronizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -220,6 +222,7 @@ VectorFunctionSynchronizer<P_V,P_M,Q_V,Q_M>::callFunction(
   return;
 }
 
-}  // End namespace QUESO
+template class VectorFunctionSynchronizer<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class VectorFunctionSynchronizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::VectorFunctionSynchronizer<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
