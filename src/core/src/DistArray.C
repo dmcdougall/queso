@@ -25,7 +25,9 @@
 #include <queso/asserts.h>
 #include <queso/DistArray.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/ScalarSequence.h>
 #include <queso/SampledScalarCdf.h>
 #include <queso/OneDGrid.h>
@@ -151,13 +153,14 @@ DistArray<T>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
-
 // Class prototypes with all the types that QUESO needs
-template class QUESO::DistArray<QUESO::GslVector*>;
-template class QUESO::DistArray<QUESO::GslMatrix*>;
-template class QUESO::DistArray<QUESO::ScalarSequence<double>*>;
-template class QUESO::DistArray<QUESO::SampledScalarCdf<double>*>;
-template class QUESO::DistArray<QUESO::BaseOneDGrid<double>*>;
-template class QUESO::DistArray<std::string>;
-template class QUESO::DistArray<std::vector<double>*>;
+template class DistArray<GslVector*>;
+template class DistArray<GslNumericVector<libMesh::Number> *>;
+template class DistArray<GslSparseMatrix<libMesh::Number> *>;
+template class DistArray<ScalarSequence<double>*>;
+template class DistArray<SampledScalarCdf<double>*>;
+template class DistArray<BaseOneDGrid<double>*>;
+template class DistArray<std::string>;
+template class DistArray<std::vector<double>*>;
+
+}  // End namespace QUESO
