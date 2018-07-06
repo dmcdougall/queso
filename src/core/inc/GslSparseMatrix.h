@@ -104,7 +104,13 @@ public:
   GslNumericVector<T> multiply(const GslNumericVector<T> & x) const;
   void largestEigen(double & eigenValue, GslNumericVector<T> & eigenVector) const;
   void mpiSum(const MpiComm & comm, GslSparseMatrix<T> & M_global) const;
+  GslSparseMatrix<T> transpose() const;
   const Map & map() const;
+  void eigen(GslNumericVector<T> & eigenValues, GslSparseMatrix<T> * eigenVectors) const;
+  GslNumericVector<T> getColumn(const unsigned int column_num) const;
+  GslSparseMatrix<T> inverse() const;
+  unsigned int rank(double absoluteZeroThreshold, double relativeZeroThreshold) const;
+  double determinant() const;
   const BaseEnvironment & env() const;
 
 

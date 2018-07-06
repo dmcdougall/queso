@@ -508,10 +508,72 @@ GslSparseMatrix<T>::mpiSum(const MpiComm & comm, GslSparseMatrix<T> & M_global) 
 }
 
 template <typename T>
+GslSparseMatrix<T>
+GslSparseMatrix<T>::transpose() const
+{
+  GslMatrix internal_answer(_mat->transpose());
+
+  int num_elements = internal_answer.map().NumGlobalElements();
+  GslSparseMatrix<T> answer(internal_answer.env(),
+                            internal_answer.map(),
+                            num_elements);
+
+  *(answer._mat) = internal_answer;
+
+  return answer;
+}
+
+template <typename T>
 const Map &
 GslSparseMatrix<T>::map() const
 {
   return this->_mat->map();
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::eigen(GslNumericVector<T> & eigenValues, GslSparseMatrix<T> * eigenVectors) const
+{
+  this->_mat->eigen(*eigenValues._vec, eigenVectors->_mat.get());
+}
+
+template <typename T>
+GslNumericVector<T>
+GslSparseMatrix<T>::getColumn(const unsigned int column_num) const
+{
+  GslVector internal_answer(this->_mat->getColumn(column_num));
+  GslNumericVector<T> answer(internal_answer.env(), internal_answer.map());
+
+  *answer._vec = internal_answer;
+
+  return answer;
+}
+
+template <typename T>
+GslSparseMatrix<T>
+GslSparseMatrix<T>::inverse() const
+{
+  GslMatrix internal_answer(this->_mat->inverse());
+
+  GslSparseMatrix<T> answer(internal_answer.env(),
+                            internal_answer.map(),
+                            internal_answer.map().NumGlobalElements());
+
+  return answer;
+}
+
+template <typename T>
+unsigned int
+GslSparseMatrix<T>::rank(double absoluteZeroThreshold, double relativeZeroThreshold) const
+{
+  return this->_mat->rank(absoluteZeroThreshold, relativeZeroThreshold);
+}
+
+template <typename T>
+double
+GslSparseMatrix<T>::determinant() const
+{
+  return this->_mat->determinant();
 }
 
 template <typename T>
