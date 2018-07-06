@@ -104,6 +104,7 @@ public:
   GslNumericVector<T> multiply(const GslNumericVector<T> & x) const;
   void largestEigen(double & eigenValue, GslNumericVector<T> & eigenVector) const;
   void mpiSum(const MpiComm & comm, GslSparseMatrix<T> & M_global) const;
+  const Map & map() const;
   const BaseEnvironment & env() const;
 
 

@@ -508,6 +508,13 @@ GslSparseMatrix<T>::mpiSum(const MpiComm & comm, GslSparseMatrix<T> & M_global) 
 }
 
 template <typename T>
+const Map &
+GslSparseMatrix<T>::map() const
+{
+  return this->_mat->map();
+}
+
+template <typename T>
 const BaseEnvironment &
 GslSparseMatrix<T>::env() const
 {
