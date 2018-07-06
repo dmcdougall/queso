@@ -555,6 +555,33 @@ GslSparseMatrix<T> matrixProduct(const GslNumericVector<T> & v1,
   return answer;
 }
 
+template <typename T>
+GslSparseMatrix<T> operator*(const GslSparseMatrix<T> & m1,
+                             const GslSparseMatrix<T> & m2)
+{
+  unsigned int m1Rows = m1.numRowsGlobal();  // Because they're serial
+  unsigned int m1Cols = m1.numCols();
+  unsigned int m2Rows = m2.numRowsGlobal();  // Because they're serial
+  unsigned int m2Cols = m2.numCols();
+
+  queso_require_equal_to_msg(m1Cols, m2Rows, "different sizes m1Cols and m2Rows");
+
+  GslSparseMatrix<T> mat(m1.env(),m1.map(),m2Cols);
+
+  unsigned int commonSize = m1Cols;
+  for (unsigned int row1 = 0; row1 < m1Rows; ++row1) {
+    for (unsigned int col2 = 0; col2 < m2Cols; ++col2) {
+      double result = 0.;
+      for (unsigned int k = 0; k < commonSize; ++k) {
+        result += m1(row1,k)*m2(k,col2);
+      }
+      mat(row1,col2) = result;
+    }
+  }
+
+  return mat;
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslSparseMatrix<libMesh::Number>;
@@ -562,5 +589,6 @@ template class GslSparseMatrix<libMesh::Number>;
 template GslNumericVector<libMesh::Number> operator*(const GslSparseMatrix<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslSparseMatrix<libMesh::Number> operator*(double, const GslSparseMatrix<libMesh::Number> &);
 template GslSparseMatrix<libMesh::Number> matrixProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
+template GslSparseMatrix<libMesh::Number> operator*(const GslSparseMatrix<libMesh::Number> &, const GslSparseMatrix<libMesh::Number> &);
 
 } // namespace QUESO

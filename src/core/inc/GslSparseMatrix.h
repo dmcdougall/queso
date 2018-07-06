@@ -321,6 +321,10 @@ template <typename T>
 GslSparseMatrix<T> matrixProduct(const GslNumericVector<T> & v1,
                                  const GslNumericVector<T> & v2);
 
+template <typename T>
+GslSparseMatrix<T> operator*(const GslSparseMatrix<T> & m1,
+                             const GslSparseMatrix<T> & m2);
+
 } // namespace QUESO
 
 #endif // #ifdef QUESO_GSL_SPARSE_MATRIX_H
