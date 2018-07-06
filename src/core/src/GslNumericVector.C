@@ -737,6 +737,14 @@ GslNumericVector<T>::numOfProcsForStorage() const
 }
 
 template <typename T>
+GslNumericVector<T> &
+GslNumericVector<T>::operator/=(double a)
+{
+  *_vec /= a;
+  return *this;
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
@@ -773,6 +781,22 @@ operator/(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 }
 
 
+template <typename T>
+double
+scalarProduct(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
+{
+  unsigned int size1 = x.sizeLocal();
+  unsigned int size2 = y.sizeLocal();
+  queso_require_equal_to_msg(size1, size2, "different sizes of x and y");
+
+  double result = 0.;
+  for (unsigned int i = 0; i < size1; ++i) {
+    result += x[i]*y[i];
+  }
+
+  return result;
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;
@@ -781,6 +805,7 @@ template GslNumericVector<libMesh::Number> operator/(const GslNumericVector<libM
 template GslNumericVector<libMesh::Number> operator*(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator-(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator+(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
+template double scalarProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 template <typename T>
 std::map<const QUESO::MpiComm *, libMesh::Parallel::Communicator>
