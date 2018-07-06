@@ -24,7 +24,9 @@
 
 #include <queso/GPMSA.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/SimulationOutputMesh.h>
 
 namespace QUESO {
@@ -1810,6 +1812,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
       *(this->totalDomain)));
 }
 
-}  // End namespace QUESO
+template class GPMSAFactory<GslVector, GslMatrix>;
+template class GPMSAFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GPMSAFactory<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
