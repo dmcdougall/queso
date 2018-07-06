@@ -35,6 +35,7 @@
 #include <queso/GPMSAOptions.h>
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/SimulationOutputMesh.h>
 
 
@@ -1251,5 +1252,14 @@ GPMSAOptions::set_final_scaling<GslVector>
    const std::vector<SharedPtr<GslVector>::Type> &,
    const std::vector<typename SharedPtr<SimulationOutputMesh<GslVector> >::Type> &);
 
+template
+void
+GPMSAOptions::set_final_scaling<GslNumericVector<libMesh::Number> >
+  (const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
+   const std::vector<typename SharedPtr<SimulationOutputMesh<GslNumericVector<libMesh::Number> > >::Type> &);
 
 }  // End namespace QUESO
