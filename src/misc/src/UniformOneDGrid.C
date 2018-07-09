@@ -92,6 +92,6 @@ UniformOneDGrid<T>::findIntervalId(const T& paramValue) const
   return i;
 }
 
-}  // End namespace QUESO
+template class UniformOneDGrid<double>;
 
-template class QUESO::UniformOneDGrid<double>;
+}  // End namespace QUESO
