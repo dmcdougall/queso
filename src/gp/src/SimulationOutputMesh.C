@@ -24,6 +24,7 @@
 
 #include <queso/SimulationOutputMesh.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 
 namespace QUESO {
 
@@ -55,8 +56,7 @@ SimulationOutputMesh<V>::interpolateOutputs
       this->interpolateOutput(solutionVector, outputPoints[i]);
 }
 
-
+template class SimulationOutputMesh<GslVector>;
+template class SimulationOutputMesh<GslNumericVector<libMesh::Number> >;
 
 }  // End namespace QUESO
-
-template class QUESO::SimulationOutputMesh<QUESO::GslVector>;
