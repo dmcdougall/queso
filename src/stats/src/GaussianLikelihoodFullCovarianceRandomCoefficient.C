@@ -23,7 +23,9 @@
 //-----------------------------------------------------------------------el-
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/VectorSpace.h>
 #include <queso/GaussianLikelihoodFullCovarianceRandomCoefficient.h>
@@ -82,6 +84,7 @@ GaussianLikelihoodFullCovarianceRandomCoefficient<V, M>::lnValue(const V & domai
   return -0.5 * norm2_squared / cov_coeff - std::log(cov_coeff * deter_cov);
 }
 
-}  // End namespace QUESO
+template class GaussianLikelihoodFullCovarianceRandomCoefficient<GslVector, GslMatrix>;
+template class GaussianLikelihoodFullCovarianceRandomCoefficient<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GaussianLikelihoodFullCovarianceRandomCoefficient<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
