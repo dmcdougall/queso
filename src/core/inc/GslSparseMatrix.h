@@ -112,6 +112,7 @@ public:
   unsigned int rank(double absoluteZeroThreshold, double relativeZeroThreshold) const;
   double determinant() const;
   const BaseEnvironment & env() const;
+  unsigned int numRowsLocal() const;
 
 
   /**

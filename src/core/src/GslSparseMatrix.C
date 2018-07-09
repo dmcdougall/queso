@@ -644,6 +644,13 @@ GslSparseMatrix<T> operator*(const GslSparseMatrix<T> & m1,
   return mat;
 }
 
+template <typename T>
+unsigned int
+GslSparseMatrix<T>::numRowsLocal() const
+{
+  return this->_mat->numRowsLocal();
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslSparseMatrix<libMesh::Number>;
