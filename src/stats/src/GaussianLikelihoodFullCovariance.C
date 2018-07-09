@@ -25,7 +25,9 @@
 #include <cmath>
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/GaussianLikelihoodFullCovariance.h>
 
@@ -73,6 +75,7 @@ GaussianLikelihoodFullCovariance<V, M>::lnValue(const V & domainVector) const
   return -0.5 * norm2_squared / (this->m_covarianceCoefficient);
 }
 
-}  // End namespace QUESO
+template class GaussianLikelihoodFullCovariance<GslVector, GslMatrix>;
+template class GaussianLikelihoodFullCovariance<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::GaussianLikelihoodFullCovariance<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
