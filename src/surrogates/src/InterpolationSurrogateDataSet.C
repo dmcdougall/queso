@@ -27,7 +27,9 @@
 
 // QUESO
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO
 {
@@ -49,7 +51,8 @@ namespace QUESO
       delete *it;
   }
 
-} // end namespace QUESO
+  // Instantiate
+  template class InterpolationSurrogateDataSet<GslVector,GslMatrix>;
+  template class InterpolationSurrogateDataSet<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-// Instantiate
-template class QUESO::InterpolationSurrogateDataSet<QUESO::GslVector,QUESO::GslMatrix>;
+} // end namespace QUESO
