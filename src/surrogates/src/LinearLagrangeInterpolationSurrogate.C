@@ -27,7 +27,9 @@
 
 // QUESO
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/MultiDimensionalIndexing.h>
 #include <queso/InterpolationSurrogateData.h>
 
@@ -225,7 +227,8 @@ namespace QUESO
     return value;
   }
 
-} // end namespace QUESO
+  // Instantiate
+  template class LinearLagrangeInterpolationSurrogate<GslVector,GslMatrix>;
+  template class LinearLagrangeInterpolationSurrogate<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-// Instantiate
-template class QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>;
+} // end namespace QUESO
