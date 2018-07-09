@@ -28,7 +28,9 @@
 // QUESO
 #include <queso/MpiComm.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/MultiDimensionalIndexing.h>
 #include <queso/StreamUtilities.h>
 #include <queso/VectorSpace.h>
@@ -219,7 +221,8 @@ namespace QUESO
       }
   }
 
-} // end namespace QUESO
+  // Instantiate
+  template class InterpolationSurrogateBuilder<GslVector,GslMatrix>;
+  template class InterpolationSurrogateBuilder<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
-// Instantiate
-template class QUESO::InterpolationSurrogateBuilder<QUESO::GslVector,QUESO::GslMatrix>;
+} // end namespace QUESO
