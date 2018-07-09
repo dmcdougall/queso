@@ -26,7 +26,9 @@
 #include <queso/Defines.h>
 #include <queso/Miscellaneous.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <sys/time.h>
 #include <iostream>
 #include <fstream>
@@ -610,10 +612,11 @@ std::string container_to_string(const T& container)
   return oss.str();
 }
 
-}  // End namespace QUESO
+template void MiscCheckTheParallelEnvironment<GslVector, GslVector>(GslVector const&, GslVector const&);
+template void MiscCheckTheParallelEnvironment<GslNumericVector<libMesh::Number>, GslNumericVector<libMesh::Number> >(GslNumericVector<libMesh::Number> const&, GslNumericVector<libMesh::Number> const&);
+template bool MiscCheckForSameValueInAllNodes<bool>(bool&, double, MpiComm const&, char const*);
+template bool MiscCheckForSameValueInAllNodes<double>(double&, double, MpiComm const&, char const*);
+template std::string container_to_string(const std::set<unsigned int>& container);
+template std::string container_to_string(const std::vector<double>& container);
 
-template void QUESO::MiscCheckTheParallelEnvironment<QUESO::GslVector, QUESO::GslVector>(QUESO::GslVector const&, QUESO::GslVector const&);
-template bool QUESO::MiscCheckForSameValueInAllNodes<bool>(bool&, double, QUESO::MpiComm const&, char const*);
-template bool QUESO::MiscCheckForSameValueInAllNodes<double>(double&, double, QUESO::MpiComm const&, char const*);
-template std::string QUESO::container_to_string(const std::set<unsigned int>& container);
-template std::string QUESO::container_to_string(const std::vector<double>& container);
+}  // End namespace QUESO
