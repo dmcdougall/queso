@@ -28,7 +28,9 @@
 #include <queso/MultiDimensionalIndexing.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO
 {
@@ -89,5 +91,6 @@ namespace QUESO
 
   // Instantiate
   template class TensorProductQuadrature<GslVector,GslMatrix>;
+  template class TensorProductQuadrature<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
 
 } // end namespace QUESO
