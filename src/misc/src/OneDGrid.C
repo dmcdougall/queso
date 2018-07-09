@@ -71,6 +71,6 @@ BaseOneDGrid<T>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class BaseOneDGrid<double>;
 
-template class QUESO::BaseOneDGrid<double>;
+}  // End namespace QUESO
