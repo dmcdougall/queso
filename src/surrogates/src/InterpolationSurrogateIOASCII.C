@@ -136,8 +136,8 @@ namespace QUESO
     // Construct parameter domain
     /* BoxSubset copies the incoming paramMins/paramMaxs so we don't
        need to cache these copies, they can die. */
-    QUESO::GslVector paramMins(this->m_vector_space->zeroVector());
-    QUESO::GslVector paramMaxs(this->m_vector_space->zeroVector());
+    V paramMins(this->m_vector_space->zeroVector());
+    V paramMaxs(this->m_vector_space->zeroVector());
 
     for( unsigned int d = 0; d < dim; d++ )
       {
