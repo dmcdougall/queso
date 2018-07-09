@@ -25,7 +25,9 @@
 #include <queso/MonteCarloQuadrature.h>
 #include <queso/UniformVectorRV.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO
 {
@@ -61,6 +63,7 @@ namespace QUESO
   }
 
   // Instantiate
-  template class MonteCarloQuadrature<GslVector,GslMatrix>;
+  template class MonteCarloQuadrature<GslVector, GslMatrix>;
+  template class MonteCarloQuadrature<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 } // end namespace QUESO
