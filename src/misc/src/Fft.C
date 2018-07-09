@@ -39,6 +39,6 @@ Fft<T>::~Fft()
 {
 }
 
-}  // End namespace QUESO
+template class Fft<double>;
 
-template class QUESO::Fft<double>;
+}  // End namespace QUESO
