@@ -25,7 +25,9 @@
 #include <sstream>
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/LikelihoodBase.h>
 
@@ -59,6 +61,7 @@ void LikelihoodBase<V, M>::evaluateModel(const V & /* domainVector */, const V *
   queso_error_msg(ss.str());
 }
 
-}  // End namespace QUESO
+template class LikelihoodBase<GslVector, GslMatrix>;
+template class LikelihoodBase<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::LikelihoodBase<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
