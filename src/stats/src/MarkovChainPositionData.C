@@ -24,6 +24,7 @@
 
 #include <queso/MarkovChainPositionData.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 
 namespace QUESO {
 
@@ -135,6 +136,7 @@ MarkovChainPositionData<V>::set(
   return;
 }
 
-}  // End namespace QUESO
+template class MarkovChainPositionData<GslVector>;
+template class MarkovChainPositionData<GslNumericVector<libMesh::Number> >;
 
-template class QUESO::MarkovChainPositionData<QUESO::GslVector>;
+}  // End namespace QUESO
