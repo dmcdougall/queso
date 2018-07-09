@@ -25,7 +25,9 @@
 #include <queso/Environment.h>
 #include <queso/math_macros.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/Algorithm.h>
 #include <queso/TKGroup.h>
 #include <queso/InvLogitGaussianJointPdf.h>
@@ -148,5 +150,6 @@ Algorithm<V, M>::acceptance_ratio(
 }
 
 template class Algorithm<GslVector, GslMatrix>;
+template class Algorithm<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
