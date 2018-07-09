@@ -528,6 +528,32 @@ GslNumericVector<T>::GslNumericVector(const GslNumericVector<T> & other)
 }
 
 template <typename T>
+GslNumericVector<T>::GslNumericVector(const GslNumericVector<T> & other, double start, double end)
+  : libMesh::NumericVector<T>(
+      comm_map.emplace(std::make_pair(
+          &(other.queso_map->Comm()),
+          libMesh::Parallel::Communicator(other.queso_map->Comm().Comm()))).first->second,
+      libMesh::AUTOMATIC),
+    queso_env(new EmptyEnvironment()),  // This is empty but we don't care
+                                        // because only the internal queso data
+                                        // type cares about the environment
+    queso_mpi_comm(other.queso_map->Comm())
+{
+  this->init(other._vec->map().NumGlobalElements(),
+             other._vec->map().NumGlobalElements(),
+             false,
+             libMesh::AUTOMATIC);
+
+  // Perhaps this should be in its own init() method that takes an
+  // environment?
+  //
+  // Or add a copy ctor to BaseEnvironment?
+  this->_vec.reset(new QUESO::GslVector(*other._vec, start, end));
+
+  *(this->_vec) = *other._vec;
+}
+
+template <typename T>
 void
 GslNumericVector<T>::cwSet(double value)
 {
@@ -685,6 +711,13 @@ double
 GslNumericVector<T>::norm2() const
 {
   return this->_vec->norm2();
+}
+
+template <typename T>
+double
+GslNumericVector<T>::norm2Sq() const
+{
+  return this->_vec->norm2Sq();
 }
 
 template <typename T>

@@ -86,6 +86,7 @@ public:
    */
   GslNumericVector(const BaseEnvironment & env, const Map & map);
   GslNumericVector(const GslNumericVector<T> & other);
+  GslNumericVector(const GslNumericVector<T> & v, double start, double end);
   void cwSet(double value);
   void cwSet(unsigned int initialPos, const GslNumericVector<T> & vec);
   unsigned int sizeGlobal() const;
@@ -108,6 +109,7 @@ public:
   double sumOfComponents() const;
   double getMaxValue() const;
   double norm2() const;
+  double norm2Sq() const;
   void setPrintHorizontally(bool value) const;
   bool getPrintHorizontally() const;
   void setPrintScientific(bool value) const;
