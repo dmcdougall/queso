@@ -28,7 +28,9 @@
 // QUESO
 #include <queso/MpiComm.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/math_macros.h>
 
 // C++
@@ -141,8 +143,9 @@ namespace QUESO
                      "MpiComm::Bcast() failed!" );
   }
 
+  // Instantiate
+  template class InterpolationSurrogateData<GslVector,GslMatrix>;
+  template class InterpolationSurrogateData<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+
 
 } // end namespace QUESO
-
-// Instantiate
-template class QUESO::InterpolationSurrogateData<QUESO::GslVector,QUESO::GslMatrix>;
