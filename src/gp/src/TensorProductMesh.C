@@ -24,6 +24,7 @@
 
 #include <queso/TensorProductMesh.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/asserts.h>
 #include <queso/GPMSAOptions.h>
 
@@ -430,8 +431,7 @@ TensorProductMesh<V>::interpolateOutput
   return interpolated_val;
 }
 
-
+template class TensorProductMesh<GslVector>;
+template class TensorProductMesh<GslNumericVector<libMesh::Number> >;
 
 }  // End namespace QUESO
-
-template class QUESO::TensorProductMesh<QUESO::GslVector>;
