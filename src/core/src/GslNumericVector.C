@@ -813,6 +813,14 @@ operator/(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
   return answer;
 }
 
+template <typename T>
+GslNumericVector<T> operator*(double a, const GslNumericVector<T> & x)
+{
+  GslNumericVector<T> answer(x);
+  answer *= a;
+  return answer;
+}
+
 
 template <typename T>
 double
@@ -838,6 +846,7 @@ template GslNumericVector<libMesh::Number> operator/(const GslNumericVector<libM
 template GslNumericVector<libMesh::Number> operator*(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator-(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator+(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
+template GslNumericVector<libMesh::Number> operator*(double a, const GslNumericVector<libMesh::Number> &);
 template double scalarProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 template <typename T>

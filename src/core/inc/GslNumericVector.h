@@ -806,6 +806,10 @@ GslNumericVector<T> operator/(const GslNumericVector<T> & x,
                               const GslNumericVector<T> & y);
 
 template <typename T>
+GslNumericVector<T> operator*(double a,
+                              const GslNumericVector<T> & y);
+
+template <typename T>
 double scalarProduct(const GslNumericVector<T> & x,
                      const GslNumericVector<T> & y);
 
