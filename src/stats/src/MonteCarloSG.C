@@ -24,7 +24,9 @@
 
 #include <queso/MonteCarloSG.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/FilePtr.h>
 
 namespace QUESO {
@@ -494,6 +496,7 @@ MonteCarloSG<P_V,P_M,Q_V,Q_M>::actualReadSequence(
   return;
 }
 
-}  // End namespace QUESO
+template class MonteCarloSG<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class MonteCarloSG<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::MonteCarloSG<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
