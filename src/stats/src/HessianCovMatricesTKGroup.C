@@ -24,7 +24,9 @@
 
 #include <queso/HessianCovMatricesTKGroup.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -398,6 +400,7 @@ HessianCovMatricesTKGroup<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
+template class HessianCovMatricesTKGroup<GslVector, GslMatrix>;
+template class HessianCovMatricesTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::HessianCovMatricesTKGroup<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
