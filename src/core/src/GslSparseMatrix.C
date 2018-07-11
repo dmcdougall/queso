@@ -189,6 +189,21 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v) :
 }
 
 template <typename T>
+GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v, double diagValue) :
+  libMesh::SparseMatrix<T>(
+      GslNumericVector<T>::comm_map.emplace(std::make_pair(
+          &(v.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            v.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(v._vec->map().Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(v._vec->map()));
+  this->_mat.reset(new GslMatrix(*v._vec, diagValue));
+}
+
+template <typename T>
 GslSparseMatrix<T>::GslSparseMatrix(const GslSparseMatrix<T> & B) :
   libMesh::SparseMatrix<T>(
       GslNumericVector<T>::comm_map.emplace(std::make_pair(
@@ -645,6 +660,15 @@ GslSparseMatrix<T> operator*(const GslSparseMatrix<T> & m1,
 }
 
 template <typename T>
+GslSparseMatrix<T> operator+(const GslSparseMatrix<T> & m1,
+                             const GslSparseMatrix<T> & m2)
+{
+  GslSparseMatrix<T> mat(m1);
+  mat += m2;
+  return mat;
+}
+
+template <typename T>
 unsigned int
 GslSparseMatrix<T>::numRowsLocal() const
 {
@@ -659,5 +683,6 @@ template GslNumericVector<libMesh::Number> operator*(const GslSparseMatrix<libMe
 template GslSparseMatrix<libMesh::Number> operator*(double, const GslSparseMatrix<libMesh::Number> &);
 template GslSparseMatrix<libMesh::Number> matrixProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslSparseMatrix<libMesh::Number> operator*(const GslSparseMatrix<libMesh::Number> &, const GslSparseMatrix<libMesh::Number> &);
+template GslSparseMatrix<libMesh::Number> operator+(const GslSparseMatrix<libMesh::Number> &, const GslSparseMatrix<libMesh::Number> &);
 
 } // namespace QUESO

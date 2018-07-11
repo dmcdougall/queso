@@ -83,6 +83,7 @@ public:
 
   // Queso ctors and methods
   GslSparseMatrix(const GslNumericVector<T> & v);
+  GslSparseMatrix(const GslNumericVector<T> & v, double diagValue);
   GslSparseMatrix(const GslSparseMatrix<T> & B);
   GslSparseMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols);
   unsigned int numCols() const;
@@ -330,6 +331,10 @@ GslSparseMatrix<T> matrixProduct(const GslNumericVector<T> & v1,
 
 template <typename T>
 GslSparseMatrix<T> operator*(const GslSparseMatrix<T> & m1,
+                             const GslSparseMatrix<T> & m2);
+
+template <typename T>
+GslSparseMatrix<T> operator+(const GslSparseMatrix<T> & m1,
                              const GslSparseMatrix<T> & m2);
 
 } // namespace QUESO
