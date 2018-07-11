@@ -2763,5 +2763,6 @@ ComputeCovCorrMatricesBetweenVectorSequences(
 template class BaseVectorSequence<GslVector, GslMatrix>;
 template class BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 template void ComputeCovCorrMatricesBetweenVectorSequences<GslVector, GslMatrix, GslVector, GslMatrix>(BaseVectorSequence<GslVector, GslMatrix> const&, BaseVectorSequence<GslVector, GslMatrix> const&, unsigned int, GslMatrix&, GslMatrix&);
+template void ComputeCovCorrMatricesBetweenVectorSequences<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >(BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > const&, BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > const&, unsigned int, GslSparseMatrix<libMesh::Number>&, GslSparseMatrix<libMesh::Number>&);
 
 }  // End namespace QUESO
