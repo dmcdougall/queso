@@ -24,7 +24,9 @@
 
 #include <queso/SequentialVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -78,6 +80,7 @@ SequentialVectorRealizer<V,M>::unifiedSampleVarVector() const
   return *m_unifiedSampleVarVector;
 }
 
-}  // End namespace QUESO
+template class SequentialVectorRealizer<GslVector, GslMatrix>;
+template class SequentialVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::SequentialVectorRealizer<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
