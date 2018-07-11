@@ -25,7 +25,9 @@
 #include <queso/StatisticalForwardProblem.h>
 #include <queso/SequentialVectorRealizer.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/FilePtr.h>
 
 namespace QUESO {
@@ -422,6 +424,7 @@ StatisticalForwardProblem<P_V,P_M,Q_V,Q_M>::print(std::ostream& /* os */) const
   return;
 }
 
-}  // End namespace QUESO
+template class StatisticalForwardProblem<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class StatisticalForwardProblem<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::StatisticalForwardProblem<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
