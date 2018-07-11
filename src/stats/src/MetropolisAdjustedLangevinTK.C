@@ -24,7 +24,9 @@
 
 #include <queso/MetropolisAdjustedLangevinTK.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/GaussianJointPdf.h>
 #include <queso/BayesianJointPdf.h>
 
@@ -250,5 +252,6 @@ MetropolisAdjustedLangevinTK<V, M>::print(std::ostream & os) const
 }
 
 template class MetropolisAdjustedLangevinTK<GslVector, GslMatrix>;
+template class MetropolisAdjustedLangevinTK<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
