@@ -25,7 +25,9 @@
 #include <queso/TransformedScaledCovMatrixTKGroup.h>
 #include <queso/InvLogitGaussianJointPdf.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -359,6 +361,7 @@ TransformedScaledCovMatrixTKGroup<V, M>::transformCovMatrixToGaussianSpace(
   }
 }
 
-}  // End namespace QUESO
+template class TransformedScaledCovMatrixTKGroup<GslVector, GslMatrix>;
+template class TransformedScaledCovMatrixTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::TransformedScaledCovMatrixTKGroup<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
