@@ -24,7 +24,9 @@
 
 #include <queso/ScaledCovMatrixTKGroup.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/GaussianJointPdf.h>
 
 namespace QUESO {
@@ -251,6 +253,7 @@ ScaledCovMatrixTKGroup<V,M>::print(std::ostream& os) const
   BaseTKGroup<V,M>::print(os);
 }
 
-}  // End namespace QUESO
+template class ScaledCovMatrixTKGroup<GslVector, GslMatrix>;
+template class ScaledCovMatrixTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ScaledCovMatrixTKGroup<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
