@@ -86,6 +86,6 @@ MyTransitionKernel<V, M>::cleanCovMatrix()
 template class MyTransitionKernel<GslVector, GslMatrix>;
 
 // Register this TK with the appropriate factory
-TKFactoryRandomWalk<MyTransitionKernel<GslVector, GslMatrix> > tk_factory_mytk("my_tk");
+TKFactoryRandomWalk<MyTransitionKernel, GslVector, GslMatrix> tk_factory_mytk("my_tk");
 
 }  // End namespace QUESO

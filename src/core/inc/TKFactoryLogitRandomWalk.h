@@ -39,7 +39,7 @@ namespace QUESO
  * allow more efficient sampling for problems with parameters bounds in
  * high-dimensional state spaces.
  */
-template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+template <template <typename, typename> class DerivedTK, class V = GslVector, class M = GslMatrix>
 class TKFactoryLogitRandomWalk : public TransitionKernelFactory<V, M>
 {
 public:
@@ -60,10 +60,10 @@ protected:
   {
     typename SharedPtr<BaseTKGroup<V, M> >::Type new_tk;
 
-    new_tk.reset(new DerivedTK(this->m_options->m_prefix.c_str(),
-                               this->m_target_pdf->domainSet(),
-                               *(this->m_dr_scales),
-                               *(this->m_initial_cov_matrix)));
+    new_tk.reset(new DerivedTK<V, M>(this->m_options->m_prefix.c_str(),
+                                     this->m_target_pdf->domainSet(),
+                                     *(this->m_dr_scales),
+                                     *(this->m_initial_cov_matrix)));
 
     return new_tk;
   }

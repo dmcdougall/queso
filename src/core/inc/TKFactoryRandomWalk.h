@@ -37,7 +37,7 @@ namespace QUESO
  * TKFactoryRandomWalk class defintion.  Implements a factory for random-walk
  * type transition kernels.  Supports delayed rejection.
  */
-template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+template <template <typename, typename> class DerivedTK, class V = GslVector, class M = GslMatrix>
 class TKFactoryRandomWalk : public TransitionKernelFactory<V, M>
 {
 public:
@@ -58,10 +58,10 @@ protected:
   {
     typename SharedPtr<BaseTKGroup<V, M> >::Type new_tk;
 
-    new_tk.reset(new DerivedTK(this->m_options->m_prefix.c_str(),
-                               *(this->m_vectorSpace),
-                               *(this->m_dr_scales),
-                               *(this->m_initial_cov_matrix)));
+    new_tk.reset(new DerivedTK<V, M>(this->m_options->m_prefix.c_str(),
+                                     *(this->m_vectorSpace),
+                                     *(this->m_dr_scales),
+                                     *(this->m_initial_cov_matrix)));
 
     return new_tk;
   }

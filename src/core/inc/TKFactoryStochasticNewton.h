@@ -37,7 +37,7 @@ namespace QUESO
  * TKFactoryStochasticNewton class defintion.  Implements a factory for the
  * transition kernel used in Stochastic Newton (?)
  */
-template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+template <template <typename, typename> class DerivedTK, class V = GslVector, class M = GslMatrix>
 class TKFactoryStochasticNewton : public TransitionKernelFactory<V, M>
 {
 public:
@@ -58,10 +58,10 @@ protected:
   {
     typename SharedPtr<BaseTKGroup<V, M> >::Type new_tk;
 
-    new_tk.reset(new DerivedTK(this->m_options->m_prefix.c_str(),
-                               *(this->m_vectorSpace),
-                               *(this->m_dr_scales),
-                               *(this->m_pdf_synchronizer)));
+    new_tk.reset(new DerivedTK<V, M>(this->m_options->m_prefix.c_str(),
+                                     *(this->m_vectorSpace),
+                                     *(this->m_dr_scales),
+                                     *(this->m_pdf_synchronizer)));
 
     return new_tk;
   }
