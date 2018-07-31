@@ -28,6 +28,8 @@
 #include <queso/TransitionKernelFactory.h>
 #include <queso/TKGroup.h>
 #include <queso/BayesianJointPdf.h>
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
 
 namespace QUESO
 {
@@ -36,15 +38,15 @@ namespace QUESO
  * TKFactoryMALA class defintion.  Implements the factory for the MALA
  * transition kernel.
  */
-template <class DerivedTK>
-class TKFactoryMALA : public TransitionKernelFactory
+template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+class TKFactoryMALA : public TransitionKernelFactory<V, M>
 {
 public:
   /**
    * Constructor. Takes the name to be mapped.
    */
   TKFactoryMALA(const std::string & name)
-    : TransitionKernelFactory(name)
+    : TransitionKernelFactory<V, M>(name)
   {}
 
   /**

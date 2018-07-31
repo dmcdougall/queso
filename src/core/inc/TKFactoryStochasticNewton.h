@@ -27,6 +27,8 @@
 
 #include <queso/TransitionKernelFactory.h>
 #include <queso/TKGroup.h>
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
 
 namespace QUESO
 {
@@ -35,15 +37,15 @@ namespace QUESO
  * TKFactoryStochasticNewton class defintion.  Implements a factory for the
  * transition kernel used in Stochastic Newton (?)
  */
-template <class DerivedTK>
-class TKFactoryStochasticNewton : public TransitionKernelFactory
+template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+class TKFactoryStochasticNewton : public TransitionKernelFactory<V, M>
 {
 public:
   /**
    * Constructor. Takes the name to be mapped.
    */
   TKFactoryStochasticNewton(const std::string & name)
-    : TransitionKernelFactory(name)
+    : TransitionKernelFactory<V, M>(name)
   {}
 
   /**

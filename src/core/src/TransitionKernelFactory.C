@@ -23,7 +23,9 @@
 //-----------------------------------------------------------------------el-
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/TransitionKernelFactory.h>
 #include <queso/ScaledCovMatrixTKGroup.h>
 #include <queso/TransformedScaledCovMatrixTKGroup.h>
@@ -90,16 +92,22 @@ Factory<BaseTKGroup<GslVector, GslMatrix> >::factory_map()
 //   return new_tk;
 // }
 
-const VectorSpace<GslVector, GslMatrix> * TransitionKernelFactory::m_vectorSpace = NULL;
+template <>
+const VectorSpace<GslVector, GslMatrix> * TransitionKernelFactory<GslVector, GslMatrix>::m_vectorSpace = NULL;
 
-const std::vector<double> * TransitionKernelFactory::m_dr_scales = NULL;
+template <>
+const std::vector<double> * TransitionKernelFactory<GslVector, GslMatrix>::m_dr_scales = NULL;
 
-const ScalarFunctionSynchronizer<GslVector, GslMatrix> * TransitionKernelFactory::m_pdf_synchronizer = NULL;
+template <>
+const ScalarFunctionSynchronizer<GslVector, GslMatrix> * TransitionKernelFactory<GslVector, GslMatrix>::m_pdf_synchronizer = NULL;
 
-GslMatrix * TransitionKernelFactory::m_initial_cov_matrix = NULL;
+template <>
+GslMatrix * TransitionKernelFactory<GslVector, GslMatrix>::m_initial_cov_matrix = NULL;
 
-const MhOptionsValues * TransitionKernelFactory::m_options = NULL;
+template <>
+const MhOptionsValues * TransitionKernelFactory<GslVector, GslMatrix>::m_options = NULL;
 
-const BaseJointPdf<GslVector, GslMatrix> * TransitionKernelFactory::m_target_pdf = NULL;
+template <>
+const BaseJointPdf<GslVector, GslMatrix> * TransitionKernelFactory<GslVector, GslMatrix>::m_target_pdf = NULL;
 
 } // namespace QUESO

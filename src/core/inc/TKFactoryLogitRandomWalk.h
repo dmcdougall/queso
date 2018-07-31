@@ -27,6 +27,8 @@
 
 #include <queso/TransitionKernelFactory.h>
 #include <queso/TKGroup.h>
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
 
 namespace QUESO
 {
@@ -37,15 +39,15 @@ namespace QUESO
  * allow more efficient sampling for problems with parameters bounds in
  * high-dimensional state spaces.
  */
-template <class DerivedTK>
-class TKFactoryLogitRandomWalk : public TransitionKernelFactory
+template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+class TKFactoryLogitRandomWalk : public TransitionKernelFactory<V, M>
 {
 public:
   /**
    * Constructor. Takes the name to be mapped.
    */
   TKFactoryLogitRandomWalk(const std::string & name)
-    : TransitionKernelFactory(name)
+    : TransitionKernelFactory<V, M>(name)
   {}
 
   /**

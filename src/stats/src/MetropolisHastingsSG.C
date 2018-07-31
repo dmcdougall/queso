@@ -514,13 +514,13 @@ MetropolisHastingsSG<P_V,P_M>::commonConstructor()
   // factories
   TKFactoryInitializer tk_factory_initializer;
 
-  TransitionKernelFactory::set_vectorspace(m_vectorSpace);
-  TransitionKernelFactory::set_options(*m_optionsObj);
-  TransitionKernelFactory::set_pdf_synchronizer(*m_targetPdfSynchronizer);
-  TransitionKernelFactory::set_initial_cov_matrix(m_initialProposalCovMatrix);
-  TransitionKernelFactory::set_dr_scales(drScalesAll);
-  TransitionKernelFactory::set_target_pdf(m_targetPdf);
-  m_tk = TransitionKernelFactory::build(m_optionsObj->m_tk);
+  TransitionKernelFactory<>::set_vectorspace(m_vectorSpace);
+  TransitionKernelFactory<>::set_options(*m_optionsObj);
+  TransitionKernelFactory<>::set_pdf_synchronizer(*m_targetPdfSynchronizer);
+  TransitionKernelFactory<>::set_initial_cov_matrix(m_initialProposalCovMatrix);
+  TransitionKernelFactory<>::set_dr_scales(drScalesAll);
+  TransitionKernelFactory<>::set_target_pdf(m_targetPdf);
+  m_tk = TransitionKernelFactory<>::build(m_optionsObj->m_tk);
 
   // This instantiates all the algorithms with their associated factories
   AlgorithmFactoryInitializer algorithm_factory_initializer;

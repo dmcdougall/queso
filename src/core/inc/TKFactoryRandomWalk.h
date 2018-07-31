@@ -27,6 +27,8 @@
 
 #include <queso/TransitionKernelFactory.h>
 #include <queso/TKGroup.h>
+#include <queso/GslVector.h>
+#include <queso/GslMatrix.h>
 
 namespace QUESO
 {
@@ -35,15 +37,15 @@ namespace QUESO
  * TKFactoryRandomWalk class defintion.  Implements a factory for random-walk
  * type transition kernels.  Supports delayed rejection.
  */
-template <class DerivedTK>
-class TKFactoryRandomWalk : public TransitionKernelFactory
+template <class DerivedTK, class V = GslVector, class M = GslMatrix>
+class TKFactoryRandomWalk : public TransitionKernelFactory<V, M>
 {
 public:
   /**
    * Constructor. Takes the name to be mapped.
    */
   TKFactoryRandomWalk(const std::string & name)
-    : TransitionKernelFactory(name)
+    : TransitionKernelFactory<V, M>(name)
   {}
 
   /**

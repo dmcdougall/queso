@@ -38,14 +38,15 @@ namespace QUESO
 /**
  * TransitionKernelFactory class defintion.
  */
-class TransitionKernelFactory : public Factory<BaseTKGroup<GslVector, GslMatrix> >
+template <typename V = GslVector, typename M = GslMatrix>
+class TransitionKernelFactory : public Factory<BaseTKGroup<V, M> >
 {
 public:
   /**
    * Constructor. Takes the name to be mapped.
    */
   TransitionKernelFactory(const std::string & name)
-    : Factory<BaseTKGroup<GslVector, GslMatrix> >(name)
+    : Factory<BaseTKGroup<V, M> >(name)
   {}
 
   /**
@@ -56,7 +57,7 @@ public:
   /**
    * Static method to set the vector space the transition kernel is defined on
    */
-  static void set_vectorspace(const VectorSpace<GslVector, GslMatrix> & v)
+  static void set_vectorspace(const VectorSpace<V, M> & v)
   {
     m_vectorSpace = &v;
   }
@@ -73,7 +74,7 @@ public:
   /**
    * Static method to set the pdf synchronizer.  Used by Stochastic Newton?
    */
-  static void set_pdf_synchronizer(const ScalarFunctionSynchronizer<GslVector, GslMatrix> & synchronizer)
+  static void set_pdf_synchronizer(const ScalarFunctionSynchronizer<V, M> & synchronizer)
   {
     m_pdf_synchronizer = &synchronizer;
   }
@@ -81,7 +82,7 @@ public:
   /**
    * Static method to set the initial proposal covariance matrix
    */
-  static void set_initial_cov_matrix(GslMatrix & cov_matrix)
+  static void set_initial_cov_matrix(M & cov_matrix)
   {
     m_initial_cov_matrix = &cov_matrix;
   }
@@ -98,31 +99,32 @@ public:
   /**
    * Static method to set the pdf we wish to draw samples from
    */
-  static void set_target_pdf(const BaseJointPdf<GslVector, GslMatrix> & target_pdf)
+  static void set_target_pdf(const BaseJointPdf<V, M> & target_pdf)
   {
     m_target_pdf = &target_pdf;
   }
 
 protected:
-  virtual SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type build_tk() = 0;
+  virtual typename SharedPtr<BaseTKGroup<V, M> >::Type build_tk() = 0;
 
-  static const VectorSpace<GslVector, GslMatrix> * m_vectorSpace;
+  static const VectorSpace<V, M> * m_vectorSpace;
   static const std::vector<double> * m_dr_scales;
-  static const ScalarFunctionSynchronizer<GslVector, GslMatrix> * m_pdf_synchronizer;
-  static GslMatrix * m_initial_cov_matrix;
+  static const ScalarFunctionSynchronizer<V, M> * m_pdf_synchronizer;
+  static M * m_initial_cov_matrix;
   static const MhOptionsValues * m_options;
-  static const BaseJointPdf<GslVector, GslMatrix> * m_target_pdf;
+  static const BaseJointPdf<V, M> * m_target_pdf;
 
 private:
   /**
    * Create a Base class.  Force this to be implemented
    * later.
    */
-  virtual SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type create();
+  virtual typename SharedPtr<BaseTKGroup<V, M> >::Type create();
 };
 
+template <typename V, typename M>
 inline
-SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type TransitionKernelFactory::create()
+typename SharedPtr<BaseTKGroup<V, M> >::Type TransitionKernelFactory<V, M>::create()
 {
   queso_require_msg(m_vectorSpace, "ERROR: must call set_vectorspace() before building tk!");
   queso_require_msg(m_dr_scales, "ERROR: must call set_dr_scales() before building tk!");
@@ -131,7 +133,7 @@ SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type TransitionKernelFactory::cre
   queso_require_msg(m_options, "ERROR: must call set_options() before building tk!");
   queso_require_msg(m_target_pdf, "ERROR: must call set_target_pdf() before building tk!");
 
-  SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type new_tk = this->build_tk();
+  typename SharedPtr<BaseTKGroup<V, M> >::Type new_tk = this->build_tk();
 
   queso_assert(new_tk);
 
