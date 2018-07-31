@@ -58,5 +58,6 @@ TKFactoryInitializer<V, M>::~TKFactoryInitializer()
 }
 
 template class TKFactoryInitializer<GslVector, GslMatrix>;
+template class TKFactoryInitializer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 } // namespace QUESO
