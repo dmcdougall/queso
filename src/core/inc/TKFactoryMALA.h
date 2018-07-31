@@ -55,13 +55,13 @@ public:
   virtual ~TKFactoryMALA() {}
 
 protected:
-  virtual SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type build_tk()
+  virtual typename SharedPtr<BaseTKGroup<V, M> >::Type build_tk()
   {
-    SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type new_tk;
+    typename SharedPtr<BaseTKGroup<V, M> >::Type new_tk;
 
     // Assume the problem is Bayesian
-    const BayesianJointPdf<GslVector, GslMatrix> * target_bayesian_pdf =
-      dynamic_cast<const BayesianJointPdf<GslVector, GslMatrix> *>(
+    const BayesianJointPdf<V, M> * target_bayesian_pdf =
+      dynamic_cast<const BayesianJointPdf<V, M> *>(
           this->m_target_pdf);
 
     new_tk.reset(new DerivedTK(this->m_options->m_prefix.c_str(),
