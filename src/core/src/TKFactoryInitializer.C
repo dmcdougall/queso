@@ -45,10 +45,10 @@ template <typename V, typename M>
 TKFactoryInitializer<V, M>::TKFactoryInitializer()
 {
   // Instantiate all the transition kernel factories
-  static TKFactoryRandomWalk<ScaledCovMatrixTKGroup<V, M> > tk_factory_random_walk("random_walk");
-  static TKFactoryLogitRandomWalk<TransformedScaledCovMatrixTKGroup<V, M> > tk_factory_logit_random_walk("logit_random_walk");
-  static TKFactoryStochasticNewton<HessianCovMatricesTKGroup<V, M> > tk_factory_stochastic_newton("stochastic_newton");
-  static TKFactoryMALA<MetropolisAdjustedLangevinTK<V, M> > tk_factory_mala("mala");
+  static TKFactoryRandomWalk<ScaledCovMatrixTKGroup<V, M>, V, M> tk_factory_random_walk("random_walk");
+  static TKFactoryLogitRandomWalk<TransformedScaledCovMatrixTKGroup<V, M>, V, M> tk_factory_logit_random_walk("logit_random_walk");
+  static TKFactoryStochasticNewton<HessianCovMatricesTKGroup<V, M>, V, M> tk_factory_stochastic_newton("stochastic_newton");
+  static TKFactoryMALA<MetropolisAdjustedLangevinTK<V, M>, V, M> tk_factory_mala("mala");
 }
 
 template <typename V, typename M>
