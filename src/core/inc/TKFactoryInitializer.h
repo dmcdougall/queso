@@ -39,8 +39,6 @@ public:
   virtual ~TKFactoryInitializer();
 };
 
-template class TKFactoryInitializer<GslVector, GslMatrix>;
-
 } // namespace QUESO
 
 #endif  // QUESO_TK_FACTORY_INITIALIZER_H

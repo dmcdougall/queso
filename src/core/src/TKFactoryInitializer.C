@@ -57,4 +57,6 @@ TKFactoryInitializer<V, M>::~TKFactoryInitializer()
   // Do nothing
 }
 
+template class TKFactoryInitializer<GslVector, GslMatrix>;
+
 } // namespace QUESO
