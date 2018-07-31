@@ -28,12 +28,18 @@
 namespace QUESO
 {
 
+class GslVector;
+class GslMatrix;
+
+template <typename V = GslVector, typename M = GslMatrix>
 class TKFactoryInitializer
 {
 public:
   TKFactoryInitializer();
   virtual ~TKFactoryInitializer();
 };
+
+template class TKFactoryInitializer<GslVector, GslMatrix>;
 
 } // namespace QUESO
 

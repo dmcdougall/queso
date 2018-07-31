@@ -512,7 +512,7 @@ MetropolisHastingsSG<P_V,P_M>::commonConstructor()
 
   // This instantiates all the transition kernels with their associated
   // factories
-  TKFactoryInitializer tk_factory_initializer;
+  TKFactoryInitializer<> tk_factory_initializer;
 
   TransitionKernelFactory<>::set_vectorspace(m_vectorSpace);
   TransitionKernelFactory<>::set_options(*m_optionsObj);

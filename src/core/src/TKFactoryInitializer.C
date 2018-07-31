@@ -33,19 +33,26 @@
 #include <queso/MetropolisAdjustedLangevinTK.h>
 #include <queso/HessianCovMatricesTKGroup.h>
 
+#include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
+
 namespace QUESO
 {
 
-TKFactoryInitializer::TKFactoryInitializer()
+template <typename V, typename M>
+TKFactoryInitializer<V, M>::TKFactoryInitializer()
 {
   // Instantiate all the transition kernel factories
-  static TKFactoryRandomWalk<ScaledCovMatrixTKGroup<GslVector, GslMatrix> > tk_factory_random_walk("random_walk");
-  static TKFactoryLogitRandomWalk<TransformedScaledCovMatrixTKGroup<GslVector, GslMatrix> > tk_factory_logit_random_walk("logit_random_walk");
-  static TKFactoryStochasticNewton<HessianCovMatricesTKGroup<GslVector, GslMatrix> > tk_factory_stochastic_newton("stochastic_newton");
-  static TKFactoryMALA<MetropolisAdjustedLangevinTK<GslVector, GslMatrix> > tk_factory_mala("mala");
+  static TKFactoryRandomWalk<ScaledCovMatrixTKGroup<V, M> > tk_factory_random_walk("random_walk");
+  static TKFactoryLogitRandomWalk<TransformedScaledCovMatrixTKGroup<V, M> > tk_factory_logit_random_walk("logit_random_walk");
+  static TKFactoryStochasticNewton<HessianCovMatricesTKGroup<V, M> > tk_factory_stochastic_newton("stochastic_newton");
+  static TKFactoryMALA<MetropolisAdjustedLangevinTK<V, M> > tk_factory_mala("mala");
 }
 
-TKFactoryInitializer::~TKFactoryInitializer()
+template <typename V, typename M>
+TKFactoryInitializer<V, M>::~TKFactoryInitializer()
 {
   // Do nothing
 }
