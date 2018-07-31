@@ -43,6 +43,15 @@ Factory<BaseTKGroup<GslVector, GslMatrix> >::factory_map()
   return _factory_map;
 }
 
+template <>
+std::map<std::string, Factory<BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > > *> &
+Factory<BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > >::factory_map()
+{
+  static std::map<std::string, Factory<BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > > *> _factory_map;
+
+  return _factory_map;
+}
+
 // SharedPtr<BaseTKGroup<GslVector, GslMatrix> >::Type
 // TransitionKernelFactory::build_tk(
 //     const MhOptionsValues & options,
