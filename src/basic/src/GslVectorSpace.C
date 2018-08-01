@@ -97,4 +97,11 @@ VectorSpace<GslVector,GslMatrix>::newDiagMatrix(double diagValue) const
   return new GslMatrix(m_env,*m_map,diagValue);
 }
 
+template<>
+GslSparseMatrix<libMesh::Number> *
+VectorSpace<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >::newDiagMatrix(double diagValue) const
+{
+  return new GslSparseMatrix<libMesh::Number>(m_env,*m_map,diagValue);
+}
+
 }  // End namespace QUESO
