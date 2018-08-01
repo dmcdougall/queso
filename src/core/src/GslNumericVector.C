@@ -778,6 +778,15 @@ GslNumericVector<T>::operator/=(double a)
 }
 
 template <typename T>
+void
+GslNumericVector<T>::subReadContents(const std::string & fileName,
+                                     const std::string & fileType,
+                                     const std::set<unsigned int> & allowedSubEnvIds)
+{
+  this->_vec->subReadContents(fileName, fileType, allowedSubEnvIds);
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {

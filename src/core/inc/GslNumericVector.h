@@ -118,6 +118,9 @@ public:
   const Map & map() const;
   unsigned int numOfProcsForStorage() const;
   GslNumericVector<T> & operator/=(double a);
+  void subReadContents(const std::string & fileName,
+                       const std::string & fileType,
+                       const std::set<unsigned int> & allowedSubEnvIds);
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
