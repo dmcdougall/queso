@@ -24,6 +24,10 @@
 
 #include <queso/AlgorithmFactory.h>
 #include <queso/AlgorithmFactoryInitializer.h>
+#include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO
 {
@@ -44,5 +48,6 @@ AlgorithmFactoryInitializer<V, M>::~AlgorithmFactoryInitializer()
 }
 
 template class AlgorithmFactoryInitializer<GslVector, GslMatrix>;
+template class AlgorithmFactoryInitializer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 } // namespace QUESO
