@@ -28,6 +28,7 @@
 namespace QUESO
 {
 
+template <typename V, typename M>
 class AlgorithmFactoryInitializer
 {
 public:

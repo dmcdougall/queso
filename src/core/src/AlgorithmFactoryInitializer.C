@@ -28,17 +28,21 @@
 namespace QUESO
 {
 
-AlgorithmFactoryInitializer::AlgorithmFactoryInitializer()
+template <typename V, typename M>
+AlgorithmFactoryInitializer<V, M>::AlgorithmFactoryInitializer()
 {
   // Instantiate all the algorithm factories
-  static AlgorithmFactoryImp<Algorithm<GslVector, GslMatrix> > random_walk_alg("random_walk");
-  static AlgorithmFactoryImp<Algorithm<GslVector, GslMatrix> > logit_random_walk_alg("logit_random_walk");
+  static AlgorithmFactoryImp<Algorithm, V, M> random_walk_alg("random_walk");
+  static AlgorithmFactoryImp<Algorithm, V, M> logit_random_walk_alg("logit_random_walk");
 
 }
 
-AlgorithmFactoryInitializer::~AlgorithmFactoryInitializer()
+template <typename V, typename M>
+AlgorithmFactoryInitializer<V, M>::~AlgorithmFactoryInitializer()
 {
   // Do nothing
 }
+
+template class AlgorithmFactoryInitializer<GslVector, GslMatrix>;
 
 } // namespace QUESO

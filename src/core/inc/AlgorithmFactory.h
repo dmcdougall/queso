@@ -39,14 +39,15 @@ namespace QUESO
  * algorithm (aka Metropolis-Hastings acceptance ratio) should implement
  * build_algorithm.
  */
-class AlgorithmFactory : public Factory<Algorithm<GslVector, GslMatrix> >
+template <typename V = GslVector, typename M = GslMatrix>
+class AlgorithmFactory : public Factory<Algorithm<V, M> >
 {
 public:
   /**
    * Constructor. Takes the name to be mapped.
    */
   AlgorithmFactory(const std::string & name)
-    : Factory<Algorithm<GslVector, GslMatrix> >(name)
+    : Factory<Algorithm<V, M> >(name)
   {}
 
   /**
@@ -59,33 +60,34 @@ public:
     m_env = &env;
   }
 
-  static void set_tk(const BaseTKGroup<GslVector, GslMatrix> & tk)
+  static void set_tk(const BaseTKGroup<V, M> & tk)
   {
     m_tk = &tk;
   }
 
 protected:
-  virtual SharedPtr<Algorithm<GslVector, GslMatrix> >::Type build_algorithm() = 0;
+  virtual typename SharedPtr<Algorithm<V, M> >::Type build_algorithm() = 0;
 
   static const BaseEnvironment * m_env;
-  static const BaseTKGroup<GslVector, GslMatrix> * m_tk;
+  static const BaseTKGroup<V, M> * m_tk;
 
 private:
   /**
    * Create a Base class.  Force this to be implemented
    * later.
    */
-  virtual SharedPtr<Algorithm<GslVector, GslMatrix> >::Type create();
+  virtual typename SharedPtr<Algorithm<V, M> >::Type create();
 };
 
+template <typename V, typename M>
 inline
-SharedPtr<Algorithm<GslVector, GslMatrix> >::Type
-AlgorithmFactory::create()
+typename SharedPtr<Algorithm<V, M> >::Type
+AlgorithmFactory<V, M>::create()
 {
   queso_require_msg(m_env, "ERROR: must call set_environment() before building alg!");
   queso_require_msg(m_tk, "ERROR: must call set_tk() before building alg!");
 
-  SharedPtr<Algorithm<GslVector, GslMatrix> >::Type new_alg = this->build_algorithm();
+  typename SharedPtr<Algorithm<V, M> >::Type new_alg = this->build_algorithm();
 
   queso_assert(new_alg);
 
@@ -97,21 +99,21 @@ AlgorithmFactory::create()
  * algorithm factory for the standard Metropolis-Hastings algorithm (aka
  * acceptance ratio).
  */
-template <class DerivedAlgorithm>
-class AlgorithmFactoryImp : public AlgorithmFactory
+template <template <typename, typename> class DerivedAlgorithm, typename V = GslVector, typename M = GslMatrix>
+class AlgorithmFactoryImp : public AlgorithmFactory<V, M>
 {
 public:
   AlgorithmFactoryImp(const std::string & name)
-    : AlgorithmFactory(name)
+    : AlgorithmFactory<V, M>(name)
   {}
 
   virtual ~AlgorithmFactoryImp() {}
 
 private:
-  virtual SharedPtr<Algorithm<GslVector, GslMatrix> >::Type build_algorithm()
+  virtual typename SharedPtr<Algorithm<V, M> >::Type build_algorithm()
   {
-    SharedPtr<Algorithm<GslVector, GslMatrix> >::Type new_alg;
-    new_alg.reset(new DerivedAlgorithm(*(this->m_env), *(this->m_tk)));
+    typename SharedPtr<Algorithm<V, M> >::Type new_alg;
+    new_alg.reset(new DerivedAlgorithm<V, M>(*(this->m_env), *(this->m_tk)));
     return new_alg;
   }
 

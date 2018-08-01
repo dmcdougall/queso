@@ -523,11 +523,11 @@ MetropolisHastingsSG<P_V,P_M>::commonConstructor()
   m_tk = TransitionKernelFactory<P_V, P_M>::build(m_optionsObj->m_tk);
 
   // This instantiates all the algorithms with their associated factories
-  AlgorithmFactoryInitializer algorithm_factory_initializer;
+  AlgorithmFactoryInitializer<P_V, P_M> algorithm_factory_initializer;
 
-  AlgorithmFactory::set_environment(m_env);
-  AlgorithmFactory::set_tk(*m_tk);
-  m_algorithm = AlgorithmFactory::build(m_optionsObj->m_algorithm);
+  AlgorithmFactory<P_V, P_M>::set_environment(m_env);
+  AlgorithmFactory<P_V, P_M>::set_tk(*m_tk);
+  m_algorithm = AlgorithmFactory<P_V, P_M>::build(m_optionsObj->m_algorithm);
 }
 //--------------------------------------------------
 template<class P_V,class P_M>

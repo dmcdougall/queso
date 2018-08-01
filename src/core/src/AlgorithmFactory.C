@@ -38,7 +38,10 @@ Factory<Algorithm<GslVector, GslMatrix> >::factory_map()
   return _factory_map;
 }
 
-const BaseEnvironment * AlgorithmFactory::m_env = NULL;
-const BaseTKGroup<GslVector, GslMatrix> * AlgorithmFactory::m_tk = NULL;
+template <>
+const BaseEnvironment * AlgorithmFactory<GslVector, GslMatrix>::m_env = NULL;
+
+template <>
+const BaseTKGroup<GslVector, GslMatrix> * AlgorithmFactory<GslVector, GslMatrix>::m_tk = NULL;
 
 } // namespace QUESO
