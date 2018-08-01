@@ -675,6 +675,40 @@ GslSparseMatrix<T>::numRowsLocal() const
   return this->_mat->numRowsLocal();
 }
 
+template <typename T>
+void
+GslSparseMatrix<T>::subReadContents(const std::string & fileName,
+                                    const std::string & fileType,
+                                    const std::set<unsigned int> & allowedSubEnvIds)
+{
+  this->_mat->subReadContents(fileName, fileType, allowedSubEnvIds);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::cwSet(double value)
+{
+  this->_mat->cwSet(value);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::subWriteContents(const std::string & varNamePrefix,
+                                     const std::string & fileName,
+                                     const std::string & fileType,
+                                     const std::set<unsigned int> & allowedSubEnvIds) const
+{
+  this->_mat->subWriteContents(varNamePrefix, fileName, fileType, allowedSubEnvIds);
+}
+
+template <typename T>
+GslSparseMatrix<T> &
+GslSparseMatrix<T>::operator/=(double a)
+{
+  *this->_mat /= a;
+  return *this;
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslSparseMatrix<libMesh::Number>;

@@ -114,6 +114,15 @@ public:
   double determinant() const;
   const BaseEnvironment & env() const;
   unsigned int numRowsLocal() const;
+  void subReadContents(const std::string & fileName,
+                       const std::string & fileType,
+                       const std::set<unsigned int> & allowedSubEnvIds);
+  void cwSet(double value);
+  void subWriteContents(const std::string & varNamePrefix,
+                        const std::string & fileName,
+                        const std::string & fileType,
+                        const std::set<unsigned int> & allowedSubEnvIds) const;
+  GslSparseMatrix<T> & operator/=(double a);
 
 
   /**
