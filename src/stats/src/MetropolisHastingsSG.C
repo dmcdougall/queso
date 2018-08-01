@@ -25,7 +25,9 @@
 #include <queso/asserts.h>
 #include <queso/MetropolisHastingsSG.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <queso/HessianCovMatricesTKGroup.h>
 #include <queso/ScaledCovMatrixTKGroup.h>
@@ -2489,5 +2491,6 @@ MetropolisHastingsSG<P_V,P_M>::updateAdaptedCovMatrix(
 }
 
 template class MetropolisHastingsSG<GslVector, GslMatrix>;
+template class MetropolisHastingsSG<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
