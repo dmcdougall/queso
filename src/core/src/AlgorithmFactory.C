@@ -23,7 +23,9 @@
 //-----------------------------------------------------------------------el-
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/AlgorithmFactory.h>
 
 namespace QUESO
@@ -39,9 +41,24 @@ Factory<Algorithm<GslVector, GslMatrix> >::factory_map()
 }
 
 template <>
+std::map<std::string, Factory<Algorithm<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > > *> &
+Factory<Algorithm<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > >::factory_map()
+{
+  static std::map<std::string, Factory<Algorithm<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > > *> _factory_map;
+
+  return _factory_map;
+}
+
+template <>
 const BaseEnvironment * AlgorithmFactory<GslVector, GslMatrix>::m_env = NULL;
 
 template <>
+const BaseEnvironment * AlgorithmFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_env = NULL;
+
+template <>
 const BaseTKGroup<GslVector, GslMatrix> * AlgorithmFactory<GslVector, GslMatrix>::m_tk = NULL;
+
+template <>
+const BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > * AlgorithmFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_tk = NULL;
 
 } // namespace QUESO
