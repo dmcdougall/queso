@@ -512,15 +512,15 @@ MetropolisHastingsSG<P_V,P_M>::commonConstructor()
 
   // This instantiates all the transition kernels with their associated
   // factories
-  TKFactoryInitializer<> tk_factory_initializer;
+  TKFactoryInitializer<P_V, P_M> tk_factory_initializer;
 
-  TransitionKernelFactory<>::set_vectorspace(m_vectorSpace);
-  TransitionKernelFactory<>::set_options(*m_optionsObj);
-  TransitionKernelFactory<>::set_pdf_synchronizer(*m_targetPdfSynchronizer);
-  TransitionKernelFactory<>::set_initial_cov_matrix(m_initialProposalCovMatrix);
-  TransitionKernelFactory<>::set_dr_scales(drScalesAll);
-  TransitionKernelFactory<>::set_target_pdf(m_targetPdf);
-  m_tk = TransitionKernelFactory<>::build(m_optionsObj->m_tk);
+  TransitionKernelFactory<P_V, P_M>::set_vectorspace(m_vectorSpace);
+  TransitionKernelFactory<P_V, P_M>::set_options(*m_optionsObj);
+  TransitionKernelFactory<P_V, P_M>::set_pdf_synchronizer(*m_targetPdfSynchronizer);
+  TransitionKernelFactory<P_V, P_M>::set_initial_cov_matrix(m_initialProposalCovMatrix);
+  TransitionKernelFactory<P_V, P_M>::set_dr_scales(drScalesAll);
+  TransitionKernelFactory<P_V, P_M>::set_target_pdf(m_targetPdf);
+  m_tk = TransitionKernelFactory<P_V, P_M>::build(m_optionsObj->m_tk);
 
   // This instantiates all the algorithms with their associated factories
   AlgorithmFactoryInitializer algorithm_factory_initializer;
