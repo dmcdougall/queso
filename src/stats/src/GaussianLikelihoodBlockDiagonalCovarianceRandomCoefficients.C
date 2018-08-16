@@ -30,10 +30,10 @@
 
 namespace QUESO {
 
-template<class V, class M>
-GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients(
+template<class V, class M, class BM>
+GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients(
     const char * prefix, const VectorSet<V, M> & domainSet,
-    const V & observations, const GslBlockMatrix & covariance)
+    const V & observations, const BM & covariance)
   : LikelihoodBase<V, M>(prefix, domainSet, observations),
     m_covariance(covariance)
 {
@@ -48,14 +48,14 @@ GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>::GaussianLikel
   }
 }
 
-template<class V, class M>
-GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>::~GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients()
+template<class V, class M, class BM>
+GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::~GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients()
 {
 }
 
-template<class V, class M>
+template<class V, class M, class BM>
 double
-GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>::lnValue(const V & domainVector) const
+GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::lnValue(const V & domainVector) const
 {
   V modelOutput(this->m_observations, 0, 0);  // At least it's not a copy
   V weightedMisfit(this->m_observations, 0, 0);  // At least it's not a copy
@@ -106,6 +106,6 @@ GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>::lnValue(const
   return -0.5 * norm2_squared - cov_norm_factor;
 }
 
-}  // End namespace QUESO
+template class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<GslVector, GslMatrix, GslBlockMatrix>;
 
-template class QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO

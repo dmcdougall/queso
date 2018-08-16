@@ -43,7 +43,7 @@ class GslBlockMatrix;
  * as a hyperparameter to be inferred during the sampling procedure.
  */
 
-template <class V = GslVector, class M = GslMatrix>
+template <class V = GslVector, class M = GslMatrix, class BM = GslBlockMatrix>
 class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients : public LikelihoodBase<V, M> {
 public:
   //! @name Constructor/Destructor methods.
@@ -60,7 +60,7 @@ public:
    */
   GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients(const char * prefix,
       const VectorSet<V, M> & domainSet, const V & observations,
-      const GslBlockMatrix & covariance);
+      const BM & covariance);
 
   //! Destructor
   virtual ~GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients();
@@ -81,7 +81,7 @@ public:
   using LikelihoodBase<V, M>::lnValue;
 
 private:
-  const GslBlockMatrix & m_covariance;
+  const BM & m_covariance;
 };
 
 }  // End namespace QUESO
