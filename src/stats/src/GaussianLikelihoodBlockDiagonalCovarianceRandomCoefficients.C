@@ -24,6 +24,7 @@
 
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslBlockMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.h>
 

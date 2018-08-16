@@ -25,13 +25,13 @@
 #ifndef UQ_GAUSSIAN_LIKELIHOOD_BLOCK_DIAG_COV_RAND_COEFFS_H
 #define UQ_GAUSSIAN_LIKELIHOOD_BLOCK_DIAG_COV_RAND_COEFFS_H
 
-#include <queso/GslBlockMatrix.h>
 #include <queso/LikelihoodBase.h>
 
 namespace QUESO {
 
 class GslVector;
 class GslMatrix;
+class GslBlockMatrix;
 
 /*!
  * \file GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.h
