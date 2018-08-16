@@ -26,13 +26,13 @@
 #define UQ_GAUSSIAN_LIKELIHOOD_BLOCK_DIAG_COV_H
 
 #include <vector>
-#include <queso/GslBlockMatrix.h>
 #include <queso/LikelihoodBase.h>
 
 namespace QUESO {
 
 class GslVector;
 class GslMatrix;
+class GslBlockMatrix;
 
 /*!
  * \file GaussianLikelihoodBlockDiagonalCovariance.h
