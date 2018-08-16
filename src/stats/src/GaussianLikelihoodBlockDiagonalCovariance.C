@@ -34,10 +34,10 @@
 
 namespace QUESO {
 
-template<class V, class M>
-GaussianLikelihoodBlockDiagonalCovariance<V, M>::GaussianLikelihoodBlockDiagonalCovariance(
+template<class V, class M, class BM>
+GaussianLikelihoodBlockDiagonalCovariance<V, M, BM>::GaussianLikelihoodBlockDiagonalCovariance(
     const char * prefix, const VectorSet<V, M> & domainSet,
-    const V & observations, const GslBlockMatrix & covariance)
+    const V & observations, const BM & covariance)
   : LikelihoodBase<V, M>(prefix, domainSet, observations),
     m_covarianceCoefficients(covariance.numBlocks(), 1.0),
     m_covariance(covariance)
@@ -53,30 +53,30 @@ GaussianLikelihoodBlockDiagonalCovariance<V, M>::GaussianLikelihoodBlockDiagonal
   }
 }
 
-template<class V, class M>
-GaussianLikelihoodBlockDiagonalCovariance<V, M>::~GaussianLikelihoodBlockDiagonalCovariance()
+template<class V, class M, class BM>
+GaussianLikelihoodBlockDiagonalCovariance<V, M, BM>::~GaussianLikelihoodBlockDiagonalCovariance()
 {
 }
 
-template<class V, class M>
+template<class V, class M, class BM>
 double &
-GaussianLikelihoodBlockDiagonalCovariance<V, M>::blockCoefficient(
+GaussianLikelihoodBlockDiagonalCovariance<V, M, BM>::blockCoefficient(
     unsigned int i)
 {
   return this->m_covarianceCoefficients[i];
 }
 
-template<class V, class M>
+template<class V, class M, class BM>
 const double &
-GaussianLikelihoodBlockDiagonalCovariance<V, M>::getBlockCoefficient(
+GaussianLikelihoodBlockDiagonalCovariance<V, M, BM>::getBlockCoefficient(
     unsigned int i) const
 {
   return this->m_covarianceCoefficients[i];
 }
 
-template<class V, class M>
+template<class V, class M, class BM>
 double
-GaussianLikelihoodBlockDiagonalCovariance<V, M>::lnValue(const V & domainVector) const
+GaussianLikelihoodBlockDiagonalCovariance<V, M, BM>::lnValue(const V & domainVector) const
 {
   V modelOutput(this->m_observations, 0, 0);  // At least it's not a copy
   V weightedMisfit(this->m_observations, 0, 0);  // At least it's not a copy
@@ -111,7 +111,7 @@ GaussianLikelihoodBlockDiagonalCovariance<V, M>::lnValue(const V & domainVector)
   return -0.5 * norm2_squared;
 }
 
-template class GaussianLikelihoodBlockDiagonalCovariance<GslVector, GslMatrix>;
+template class GaussianLikelihoodBlockDiagonalCovariance<GslVector, GslMatrix, GslBlockMatrix>;
 // template class GaussianLikelihoodBlockDiagonalCovariance<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO

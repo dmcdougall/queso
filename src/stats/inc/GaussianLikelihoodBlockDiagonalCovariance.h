@@ -41,7 +41,7 @@ class GslBlockMatrix;
  * \brief A class representing a Gaussian likelihood with block-diagonal covariance matrix
  */
 
-template <class V = GslVector, class M = GslMatrix>
+template <class V = GslVector, class M = GslMatrix, class BM = GslBlockMatrix>
 class GaussianLikelihoodBlockDiagonalCovariance : public LikelihoodBase<V, M> {
 public:
   //! @name Constructor/Destructor methods.
@@ -58,7 +58,7 @@ public:
    */
   GaussianLikelihoodBlockDiagonalCovariance(const char * prefix,
       const VectorSet<V, M> & domainSet, const V & observations,
-      const GslBlockMatrix & covariance);
+      const BM & covariance);
 
   //! Destructor
   virtual ~GaussianLikelihoodBlockDiagonalCovariance();
@@ -77,7 +77,7 @@ public:
 
 private:
   std::vector<double> m_covarianceCoefficients;
-  const GslBlockMatrix & m_covariance;
+  const BM & m_covariance;
 };
 
 }  // End namespace QUESO
