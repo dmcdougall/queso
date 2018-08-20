@@ -23,8 +23,11 @@
 //-----------------------------------------------------------------------el-
 
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/GslBlockMatrix.h>
+#include <queso/GslNumericBlockMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.h>
 
@@ -107,5 +110,6 @@ GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::lnValue(c
 }
 
 template class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<GslVector, GslMatrix, GslBlockMatrix>;
+template class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericBlockMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
