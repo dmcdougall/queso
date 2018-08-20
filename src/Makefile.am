@@ -137,6 +137,7 @@ if UQBT_GSL
 libqueso_la_SOURCES += core/src/GslVector.C
 libqueso_la_SOURCES += core/src/GslNumericVector.C
 libqueso_la_SOURCES += core/src/GslSparseMatrix.C
+libqueso_la_SOURCES += core/src/GslNumericBlockMatrix.C
 libqueso_la_SOURCES += core/src/GslMatrix.C
 endif
 
@@ -324,6 +325,7 @@ libqueso_include_HEADERS += core/inc/GslMatrix.h
 libqueso_include_HEADERS += core/inc/GslVector.h
 libqueso_include_HEADERS += core/inc/GslNumericVector.h
 libqueso_include_HEADERS += core/inc/GslSparseMatrix.h
+libqueso_include_HEADERS += core/inc/GslNumericBlockMatrix.h
 libqueso_include_HEADERS += core/inc/TeuchosMatrix.h
 libqueso_include_HEADERS += core/inc/TeuchosVector.h
 libqueso_include_HEADERS += core/inc/Matrix.h

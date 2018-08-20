@@ -37,6 +37,7 @@ namespace QUESO
 
 // Forward declarations
 template <typename T> class GslSparseMatrix;
+template <typename T> class GslNumericBlockMatrix;
 
 /**
  * Shim class for QUESO::GslVector
@@ -477,6 +478,7 @@ private:
    * Make other QUESO-wrapped GSL datatypes friends
    */
   friend class GslSparseMatrix<T>;
+  friend class GslNumericBlockMatrix<T>;
   // friend class libMesh::EigenSparseLinearSolver<T>;
 };
 

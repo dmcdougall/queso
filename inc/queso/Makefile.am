@@ -45,6 +45,7 @@ BUILT_SOURCES += FilePtr.h
 BUILT_SOURCES += FunctionBase.h
 BUILT_SOURCES += FunctionOperatorBuilder.h
 BUILT_SOURCES += GslBlockMatrix.h
+BUILT_SOURCES += GslNumericBlockMatrix.h
 BUILT_SOURCES += GslMatrix.h
 BUILT_SOURCES += GslOptimizer.h
 BUILT_SOURCES += GslVector.h
@@ -287,6 +288,8 @@ FunctionBase.h: $(top_srcdir)/src/core/inc/FunctionBase.h
 FunctionOperatorBuilder.h: $(top_srcdir)/src/core/inc/FunctionOperatorBuilder.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 GslBlockMatrix.h: $(top_srcdir)/src/core/inc/GslBlockMatrix.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
+GslNumericBlockMatrix.h: $(top_srcdir)/src/core/inc/GslNumericBlockMatrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
 GslMatrix.h: $(top_srcdir)/src/core/inc/GslMatrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) $< $@
