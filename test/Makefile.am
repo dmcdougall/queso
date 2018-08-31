@@ -2,6 +2,7 @@ BUILT_SOURCES =
 
 check_PROGRAMS = # Append below
 check_PROGRAMS += unit_driver
+check_PROGRAMS += unit_driver2
 check_PROGRAMS += test_boxsubset_centroid
 check_PROGRAMS += test_concatenation_centroid
 check_PROGRAMS += test_beta_moments
@@ -145,6 +146,9 @@ unit_driver_SOURCES += unit/basic_pdfs_boost.C
 unit_driver_SOURCES += unit/miscellaneous.C
 unit_driver_SOURCES += unit/1d1dfunction.C
 
+unit_driver2_SOURCES = unit/unit_driver2.C
+unit_driver2_SOURCES += unit/fft.C
+
 test_boxsubset_centroid_SOURCES = test_centroids/test_boxsubset_centroid.C
 test_concatenation_centroid_SOURCES = test_centroids/test_concatenation_centroid.C
 test_beta_moments_SOURCES = test_pdfmoments/test_beta_moments.C
@@ -268,6 +272,7 @@ test_gpmsa_scalar_pdf_large_SOURCES = test_gpmsa/scalar_pdf_large.C
 
 TESTS =
 TESTS += unit_driver
+TESTS += unit_driver2
 TESTS += test_boxsubset_centroid
 TESTS += test_concatenation_centroid
 TESTS += test_beta_moments
