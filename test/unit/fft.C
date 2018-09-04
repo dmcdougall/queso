@@ -570,10 +570,12 @@ public:
 
   void test_complex_fft_forward()
   {
+    // Not implemented in QUESO
   }
 
   void test_complex_fft_inverse()
   {
+    // Not implemented in QUESO
   }
 
 private:
