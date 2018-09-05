@@ -26,11 +26,13 @@
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_complex.h>
 
-// Need to conditionally include this
+#ifdef QUESO_HAVE_EIGEN
 #include <unsupported/Eigen/FFT>
+#endif  // QUESO_HAVE_EIGEN
 
 namespace QUESO {
 
+#ifdef QUESO_HAVE_EIGEN
 void
 eigen_impl_fft_real_forward(const std::vector<double> & data,
                        unsigned int fftSize,
@@ -39,7 +41,7 @@ eigen_impl_fft_real_forward(const std::vector<double> & data,
   Eigen::FFT<double> fft;
   fft.fwd(forwardResult, data);
 }
-
+#else
 void
 gsl_impl_fft_real_forward(const std::vector<double> & data,
                      unsigned int fftSize,
@@ -87,6 +89,7 @@ gsl_impl_fft_real_forward(const std::vector<double> & data,
     forwardResult[j] = std::complex<double>(realPartOfFFT,imagPartOfFFT);
   }
 }
+#endif  // QUESO_HAVE_EIGEN
 
 // Math methods------------------------------------------
 template <>
@@ -107,10 +110,10 @@ Fft<double>::forward(
     internalData[j] = data[j];
   }
 
-#if 1
-  gsl_impl_fft_real_forward(internalData, fftSize, forwardResult);
-#else
+#ifdef QUESO_HAVE_EIGEN
   eigen_impl_fft_real_forward(internalData, fftSize, forwardResult);
+#else
+  gsl_impl_fft_real_forward(internalData, fftSize, forwardResult);
 #endif
 }
 //-------------------------------------------------------
