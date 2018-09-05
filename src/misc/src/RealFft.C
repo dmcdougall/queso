@@ -135,14 +135,6 @@ Fft<double>::inverse(
     internalData[2*j] = data[j];
   }
 
-  //if (m_subDisplayFile()) {
-  //  *m_subDisplayFile() << "In Fft<double>::inverse()"
-  //                     << ": about to call gsl_fft_complex_inverse()"
-  //                     << " with fftSize = "         << fftSize
-  //                     << "; internalData.size() = " << internalData.size()
-  //                     << std::endl;
-  //}
-
   gsl_fft_complex_workspace* complexWkSpace = gsl_fft_complex_workspace_alloc(fftSize);
   gsl_fft_complex_wavetable* complexWvTable = gsl_fft_complex_wavetable_alloc(fftSize);
 
@@ -155,49 +147,9 @@ Fft<double>::inverse(
   gsl_fft_complex_wavetable_free(complexWvTable);
   gsl_fft_complex_workspace_free(complexWkSpace);
 
-  //if (m_subDisplayFile()) {
-  //  *m_subDisplayFile() << "In Fft<double>::inverse()"
-  //                     << ": returned from gsl_fft_complex_inverse()"
-  //                     << " with fftSize = "          << fftSize
-  //                     << "; inverseResult.size() = " << inverseResult.size()
-  //                     << std::endl;
-  //}
-
   for (unsigned int j = 0; j < fftSize; ++j) {
     inverseResult[j] = std::complex<double>(internalData[2*j],internalData[2*j+1]);
   }
-
-  return;
 }
-#if 0
-template <class T>
-void
-Fft<T>::allocTables(unsigned int fftSize)
-{
-  if (m_fftSize != fftSize) {
-    if (m_fftSize != 0) freeTables();
-    m_fftSize = fftSize;
-    m_realWkSpace = gsl_fft_real_workspace_alloc       (fftSize);
-    m_realWvTable = gsl_fft_real_wavetable_alloc       (fftSize);
-  //m_hcWvTable   = gsl_fft_halfcomplex_wavetable_alloc(fftSize);
-  }
-
-  return;
-}
-
-template <class T>
-void
-Fft<T>::freeTables()
-{
-  if (m_fftSize != 0) {
-  //gsl_fft_halfcomplex_wavetable_free(m_hcWvTable);
-    gsl_fft_real_wavetable_free       (m_realWvTable);
-    gsl_fft_real_workspace_free       (m_realWkSpace);
-    m_fftSize = 0;
-  }
-
-  return;
-}
-#endif
 
 }  // End namespace QUESO
