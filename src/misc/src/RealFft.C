@@ -59,6 +59,7 @@ gsl_impl_fft_real_forward(const std::vector<double> & data,
   gsl_fft_real_workspace_free(realWkSpace);
 
   unsigned int halfFFTSize = fftSize/2;
+  bool sizeIsEven = ((fftSize % 2) == 0);
   double realPartOfFFT = 0.;
   double imagPartOfFFT = 0.;
   for (unsigned int j = 0; j < data_tmp.size(); ++j) {
@@ -72,7 +73,12 @@ gsl_impl_fft_real_forward(const std::vector<double> & data,
     }
     else if (j == halfFFTSize) {
       realPartOfFFT = data_tmp[2*j-1];
-      imagPartOfFFT = 0.;
+      if (sizeIsEven) {
+        imagPartOfFFT = 0.;
+      }
+      else {
+        imagPartOfFFT = data_tmp[2*j  ];
+      }
     }
     else {
       realPartOfFFT =  data_tmp[2*(fftSize-j)-1];
