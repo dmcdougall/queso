@@ -91,6 +91,34 @@ gsl_impl_fft_real_forward(const std::vector<double> & data,
 }
 #endif  // QUESO_HAVE_EIGEN
 
+void
+gsl_impl_fft_real_inverse(const std::vector<double> & data,
+                          unsigned int fftSize,
+                          std::vector<std::complex<double> > & inverseResult)
+{
+  std::vector<double> internalData(2*fftSize,0.); // Yes, twice the fftSize
+  unsigned int minSize = std::min((unsigned int) data.size(),fftSize);
+  for (unsigned int j = 0; j < minSize; ++j) {
+    internalData[2*j] = data[j];
+  }
+
+  gsl_fft_complex_workspace* complexWkSpace = gsl_fft_complex_workspace_alloc(fftSize);
+  gsl_fft_complex_wavetable* complexWvTable = gsl_fft_complex_wavetable_alloc(fftSize);
+
+  gsl_fft_complex_inverse(&internalData[0],
+                          1,
+                          fftSize,
+                          complexWvTable,
+                          complexWkSpace);
+
+  gsl_fft_complex_wavetable_free(complexWvTable);
+  gsl_fft_complex_workspace_free(complexWkSpace);
+
+  for (unsigned int j = 0; j < fftSize; ++j) {
+    inverseResult[j] = std::complex<double>(internalData[2*j],internalData[2*j+1]);
+  }
+}
+
 // Math methods------------------------------------------
 template <>
 void
@@ -129,27 +157,7 @@ Fft<double>::inverse(
     std::vector<std::complex<double> >(inverseResult).swap(inverseResult);
   }
 
-  std::vector<double> internalData(2*fftSize,0.); // Yes, twice the fftSize
-  unsigned int minSize = std::min((unsigned int) data.size(),fftSize);
-  for (unsigned int j = 0; j < minSize; ++j) {
-    internalData[2*j] = data[j];
-  }
-
-  gsl_fft_complex_workspace* complexWkSpace = gsl_fft_complex_workspace_alloc(fftSize);
-  gsl_fft_complex_wavetable* complexWvTable = gsl_fft_complex_wavetable_alloc(fftSize);
-
-  gsl_fft_complex_inverse(&internalData[0],
-                          1,
-                          fftSize,
-                          complexWvTable,
-                          complexWkSpace);
-
-  gsl_fft_complex_wavetable_free(complexWvTable);
-  gsl_fft_complex_workspace_free(complexWkSpace);
-
-  for (unsigned int j = 0; j < fftSize; ++j) {
-    inverseResult[j] = std::complex<double>(internalData[2*j],internalData[2*j+1]);
-  }
+  gsl_impl_fft_real_inverse(data, fftSize, inverseResult);
 }
 
 }  // End namespace QUESO
