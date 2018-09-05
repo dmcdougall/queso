@@ -26,7 +26,61 @@
 #include <gsl/gsl_fft_real.h>
 #include <gsl/gsl_fft_complex.h>
 
+// Need to conditionally include this
+#include <unsupported/Eigen/FFT>
+
 namespace QUESO {
+
+void
+eigen_impl_fft_real_forward(const std::vector<double> & data,
+                       unsigned int fftSize,
+                       std::vector<std::complex<double> > & forwardResult)
+{
+  Eigen::FFT<double> fft;
+  fft.fwd(forwardResult, data);
+}
+
+void
+gsl_impl_fft_real_forward(const std::vector<double> & data,
+                     unsigned int fftSize,
+                     std::vector<std::complex<double> > & forwardResult)
+{
+  gsl_fft_real_workspace* realWkSpace = gsl_fft_real_workspace_alloc(fftSize);
+  gsl_fft_real_wavetable* realWvTable = gsl_fft_real_wavetable_alloc(fftSize);
+
+  std::vector<double> data_tmp(data);
+  gsl_fft_real_transform(&data_tmp[0],
+                         1,
+                         fftSize,
+                         realWvTable,
+                         realWkSpace);
+
+  gsl_fft_real_wavetable_free(realWvTable);
+  gsl_fft_real_workspace_free(realWkSpace);
+
+  unsigned int halfFFTSize = fftSize/2;
+  double realPartOfFFT = 0.;
+  double imagPartOfFFT = 0.;
+  for (unsigned int j = 0; j < data_tmp.size(); ++j) {
+    if (j == 0) {
+      realPartOfFFT = data_tmp[j];
+      imagPartOfFFT = 0.;
+    }
+    else if (j < halfFFTSize) {
+      realPartOfFFT = data_tmp[2*j-1];
+      imagPartOfFFT = data_tmp[2*j  ];
+    }
+    else if (j == halfFFTSize) {
+      realPartOfFFT = data_tmp[2*j-1];
+      imagPartOfFFT = 0.;
+    }
+    else {
+      realPartOfFFT =  data_tmp[2*(fftSize-j)-1];
+      imagPartOfFFT = -data_tmp[2*(fftSize-j)  ];
+    }
+    forwardResult[j] = std::complex<double>(realPartOfFFT,imagPartOfFFT);
+  }
+}
 
 // Math methods------------------------------------------
 template <>
@@ -47,54 +101,11 @@ Fft<double>::forward(
     internalData[j] = data[j];
   }
 
-  //double sumOfAllTerms = 0.;
-  //for (unsigned int j = 0; j < fftSize; ++j) {
-  //  sumOfAllTerms += internalData[j];
-  //}
-
-  //allocTables(fftSize);
-  gsl_fft_real_workspace* realWkSpace = gsl_fft_real_workspace_alloc(fftSize);
-  gsl_fft_real_wavetable* realWvTable = gsl_fft_real_wavetable_alloc(fftSize);
-
-  gsl_fft_real_transform(&internalData[0],
-                         1,
-                         fftSize,
-                         realWvTable,
-                         realWkSpace);
-
-  gsl_fft_real_wavetable_free(realWvTable);
-  gsl_fft_real_workspace_free(realWkSpace);
-  //freeTables();
-
-  //std::cout << "After FFT"
-  //          << ", sumOfAllTerms = "          << sumOfAllTerms
-  //          << ", sumOfAllTerms - dft[0] = " << sumOfAllTerms - internalData[0]
-  //          << std::endl;
-
-  unsigned int halfFFTSize = fftSize/2;
-  double realPartOfFFT = 0.;
-  double imagPartOfFFT = 0.;
-  for (unsigned int j = 0; j < internalData.size(); ++j) {
-    if (j == 0) {
-      realPartOfFFT = internalData[j];
-      imagPartOfFFT = 0.;
-    }
-    else if (j < halfFFTSize) {
-      realPartOfFFT = internalData[2*j-1];
-      imagPartOfFFT = internalData[2*j  ];
-    }
-    else if (j == halfFFTSize) {
-      realPartOfFFT = internalData[2*j-1];
-      imagPartOfFFT = 0.;
-    }
-    else {
-      realPartOfFFT =  internalData[2*(fftSize-j)-1];
-      imagPartOfFFT = -internalData[2*(fftSize-j)  ];
-    }
-    forwardResult[j] = std::complex<double>(realPartOfFFT,imagPartOfFFT);
-  }
-
-  return;
+#if 1
+  gsl_impl_fft_real_forward(internalData, fftSize, forwardResult);
+#else
+  eigen_impl_fft_real_forward(internalData, fftSize, forwardResult);
+#endif
 }
 //-------------------------------------------------------
 template <>
