@@ -92,6 +92,21 @@ gsl_impl_fft_real_forward(const std::vector<double> & data,
 #endif  // QUESO_HAVE_EIGEN
 
 void
+eigen_impl_fft_real_inverse(const std::vector<double> & data,
+                            unsigned int fftSize,
+                            std::vector<std::complex<double> > & inverseResult)
+{
+  std::vector<std::complex<double> > internalData(fftSize,0.);
+  unsigned int minSize = std::min((unsigned int) data.size(),fftSize);
+  for (unsigned int j = 0; j < minSize; ++j) {
+    internalData[j] = std::complex<double>(data[j], 0.0);
+  }
+
+  Eigen::FFT<double> fft;
+  fft.inv(inverseResult, internalData);
+}
+
+void
 gsl_impl_fft_real_inverse(const std::vector<double> & data,
                           unsigned int fftSize,
                           std::vector<std::complex<double> > & inverseResult)
