@@ -563,8 +563,8 @@ public:
     fft.inverse(data, size, result);
 
     for (int i = 0; i < size; i++) {
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(actual_result[i].real(), result[i].real(), 1e-14);
-      CPPUNIT_ASSERT_DOUBLES_EQUAL(actual_result[i].imag(), result[i].imag(), 1e-14);
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(actual_result[i].real(), result[i].real(), 1e-13);
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(actual_result[i].imag(), result[i].imag(), 1e-13);
     }
   }
 
