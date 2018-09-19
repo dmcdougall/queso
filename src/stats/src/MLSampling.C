@@ -29,7 +29,9 @@
 #include <queso/MLSampling.h>
 #include <queso/InstantiateIntersection.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/BayesianJointPdf.h>
 #include <queso/FilePtr.h>
 
@@ -4847,6 +4849,7 @@ double MLSampling<P_V,P_M>::eig() const
   return m_eig;
 }
 
-}  // End namespace QUESO
+template class MLSampling<GslVector, GslMatrix>;
+template class MLSampling<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::MLSampling<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
