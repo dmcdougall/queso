@@ -24,7 +24,9 @@
 
 #include <queso/StatisticalInverseProblem.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/GPMSA.h>
 #include <queso/GslOptimizer.h>
 #include <queso/OptimizerMonitor.h>
@@ -518,6 +520,7 @@ StatisticalInverseProblem<P_V,P_M>::print(std::ostream& /* os */) const
   return;
 }
 
-}  // End namespace QUESO
+template class StatisticalInverseProblem<GslVector, GslMatrix>;
+template class StatisticalInverseProblem<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
