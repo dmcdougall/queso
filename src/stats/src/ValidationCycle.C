@@ -24,7 +24,9 @@
 
 #include <queso/ValidationCycle.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -288,6 +290,7 @@ ValidationCycle<P_V,P_M,Q_V,Q_M>::valFP()
   return *m_valFP;
 }
 
-}  // End namespace QUESO
+template class ValidationCycle<GslVector, GslMatrix, GslVector, GslMatrix>;
+template class ValidationCycle<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
 
-template class QUESO::ValidationCycle<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector, QUESO::GslMatrix>;
+}  // End namespace QUESO
