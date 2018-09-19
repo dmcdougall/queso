@@ -122,6 +122,8 @@ public:
   void subReadContents(const std::string & fileName,
                        const std::string & fileType,
                        const std::set<unsigned int> & allowedSubEnvIds);
+  void mpiBcast(int srcRank, const MpiComm & bcastComm);
+  void mpiAllReduce(RawType_MPI_Op mpiOperation, const MpiComm & opComm, GslNumericVector<T> & resultVec) const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow

@@ -787,6 +787,22 @@ GslNumericVector<T>::subReadContents(const std::string & fileName,
 }
 
 template <typename T>
+void
+GslNumericVector<T>::mpiBcast(int srcRank, const MpiComm & bcastComm)
+{
+  this->_vec->mpiBcast(srcRank, bcastComm);
+}
+
+template <typename T>
+void
+GslNumericVector<T>::mpiAllReduce(RawType_MPI_Op mpiOperation,
+                                  const MpiComm & opComm,
+                                  GslNumericVector<T> & resultVec) const
+{
+  this->_vec->mpiAllReduce(mpiOperation, opComm, *resultVec._vec);
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
