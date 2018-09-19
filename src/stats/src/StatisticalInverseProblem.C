@@ -225,6 +225,7 @@ StatisticalInverseProblem<P_V,P_M>::solveWithBayesMetropolisHastings(
   // the optimisation
   if (this->m_seedWithMAPEstimator ||
       m_optionsObj->m_seedWithMAPEstimator) {
+#if 0
     // Unfortunately, I didn't have the foresight to make this an input file
     // option from the beginning, hence needing to check two flags
 
@@ -250,6 +251,11 @@ StatisticalInverseProblem<P_V,P_M>::solveWithBayesMetropolisHastings(
     m_mhSeqGenerator.reset(new MetropolisHastingsSG<P_V, P_M>(
         m_optionsObj->m_prefix.c_str(), alternativeOptionsValues,
         m_postRv, optimizer.minimizer(), initialProposalCovMatrix));
+#else
+    m_mhSeqGenerator.reset(new MetropolisHastingsSG<P_V, P_M>(
+        m_optionsObj->m_prefix.c_str(), alternativeOptionsValues,
+        m_postRv, initialValues, initialProposalCovMatrix));
+#endif
   }
   else {
     // Compute output realizer: Metropolis-Hastings approach

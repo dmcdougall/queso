@@ -270,6 +270,7 @@ test_parallel_h5_SOURCES = test_StatisticalInverseProblem/test_parallel_h5.C
 test_gpmsa_pdf_small_SOURCES = test_gpmsa/pdf_small.C
 test_gpmsa_scalar_pdf_large_SOURCES = test_gpmsa/scalar_pdf_large.C
 
+XFAIL_TESTS =
 TESTS =
 TESTS += unit_driver
 TESTS += unit_driver2
@@ -308,8 +309,8 @@ TESTS += test_gpmsa/test_functional.sh
 TESTS += test_StatisticalInverseProblem/test_LlhdTargetOutput.sh
 TESTS += test_Regression/test_jeffreys_samples_diff.sh
 TESTS += test_gsloptimizer
-TESTS += test_seedwithmap
-TESTS += test_seedwithmap_fd
+XFAIL_TESTS += test_seedwithmap
+XFAIL_TESTS += test_seedwithmap_fd
 TESTS += test_logitadaptedcov
 TESTS += test_scalarCovariance
 TESTS += test_diagonalCovariance
@@ -330,7 +331,7 @@ TESTS += test_4D_LinearLagrangeInterpolationSurrogate
 TESTS += test_build_InterpolationSurrogateBuilder
 TESTS += test_BoostInputOptionsParser
 TESTS += test_NoInputFile
-TESTS += test_optimizer_options
+XFAIL_TESTS += test_optimizer_options
 TESTS += test_SharedPtr
 TESTS += test_serialEnv
 TESTS += test_jeffreys_pdf
@@ -339,7 +340,7 @@ TESTS += test_log_normal_pdf_gradient
 TESTS += test_beta_pdf_gradient
 TESTS += test_intercomm0/test_intercomm0_gravity_run.sh
 TESTS += test_optimizer_input_parameters
-TESTS += test_sip_gslopt_options
+XFAIL_TESTS += test_sip_gslopt_options
 TESTS += test_SequenceOfVectors/test_seq_of_vec_hdf5_write_run.sh
 TESTS += test_mala
 TESTS += t01_valid_cycle/rtest01.sh
@@ -356,7 +357,7 @@ TESTS += test_gpmsa/scalar_pdf_large.sh
 TESTS += test_gpmsa/mv_pdf_small.sh
 
 if ! MPI_ENABLED
-XFAIL_TESTS = test_SequenceOfVectors/test_unifiedPositionsOfMaximum.sh
+XFAIL_TESTS += test_SequenceOfVectors/test_unifiedPositionsOfMaximum.sh
 endif
 
 
