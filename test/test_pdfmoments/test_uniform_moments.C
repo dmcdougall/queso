@@ -27,6 +27,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,38 +44,38 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 3, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 3, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins[0] = 1.0;
   paramMins[1] = 2.0;
   paramMins[2] = 3.0;
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs[0] = 2.0;
   paramMaxs[1] = 4.0;
   paramMaxs[2] = 6.0;
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
-  QUESO::UniformJointPdf<> pdf("", paramDomain);
+  QUESO::UniformJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramDomain);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   pdf.distributionMean(mean);
 
   const char *msg = "UniformJointPdf mean is incorrect";
-  QUESO::GslVector real_mean = paramMins;
+  QUESO::GslNumericVector<libMesh::Number> real_mean = paramMins;
   real_mean += paramMaxs;
   real_mean /= 2;
   queso_require_less_equal_msg(std::abs(mean[0]-real_mean[0]), TOL, msg);
   queso_require_less_equal_msg(std::abs(mean[1]-real_mean[1]), TOL, msg);
   queso_require_less_equal_msg(std::abs(mean[2]-real_mean[2]), TOL, msg);
 
-  QUESO::GslMatrix var(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var(paramSpace.zeroVector());
   pdf.distributionVariance(var);
 
   const char *msgv = "UniformJointPdf variance is incorrect";
-  QUESO::GslVector real_var(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> real_var(paramSpace.zeroVector());
   for (unsigned int i=0; i != 3; ++i)
     {
       const double length = paramMaxs[i] - paramMins[i];
