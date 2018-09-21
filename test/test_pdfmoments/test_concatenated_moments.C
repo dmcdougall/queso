@@ -29,6 +29,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -44,41 +46,41 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace1(env, "param1_", 1, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace1(env, "param1_", 1, NULL);
 
-  QUESO::GslVector paramMins(paramSpace1.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace1.zeroVector());
   paramMins.cwSet(0.0);
 
-  QUESO::GslVector paramMaxs(paramSpace1.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace1.zeroVector());
   paramMaxs.cwSet(1.0);
 
-  QUESO::BoxSubset<> paramDomain1("param1_", paramSpace1, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain1("param1_", paramSpace1, paramMins, paramMaxs);
 
   // We should test the other cases of alpha and beta
-  QUESO::GslVector alpha(paramSpace1.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> alpha(paramSpace1.zeroVector());
   alpha[0] = 2.0;
 
-  QUESO::GslVector beta(paramSpace1.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> beta(paramSpace1.zeroVector());
   beta[0] = 3.0;
 
-  QUESO::BetaJointPdf<> pdf1("", paramDomain1, alpha, beta);
+  QUESO::BetaJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf1("", paramDomain1, alpha, beta);
 
-  QUESO::VectorSpace<> paramSpace2(env, "param2_", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace2(env, "param2_", 2, NULL);
 
-  QUESO::GslVector k(paramSpace2.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> k(paramSpace2.zeroVector());
   k[0] = 3.0;
   k[1] = 0.5;
 
-  QUESO::GslVector theta(paramSpace2.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> theta(paramSpace2.zeroVector());
   theta[0] = 4.0;
   theta[1] = 2.5;
-  QUESO::GammaJointPdf<> pdf2("", paramSpace2, k, theta);
+  QUESO::GammaJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf2("", paramSpace2, k, theta);
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 3, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 3, NULL);
 
-  QUESO::ConcatenatedJointPdf<> pdf("", pdf1, pdf2, paramSpace);
+  QUESO::ConcatenatedJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", pdf1, pdf2, paramSpace);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   pdf.distributionMean(mean);
 
   const char *msg = "ConcatenatedJointPdf mean is incorrect";
@@ -90,7 +92,7 @@ int main(int argc, char ** argv)
   queso_require_less_equal_msg(std::abs(mean[2]-real_mean2), TOL, msg);
 
   const char *msgv = "ConcatenatedJointPdf variance is incorrect";
-  QUESO::GslMatrix var(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var(paramSpace.zeroVector());
   pdf.distributionVariance(var);
   double real_var0 = alpha[0] * beta[0] / (alpha[0] + beta[0]) /
           (alpha[0] + beta[0]) / (alpha[0] + beta[0] + 1);
