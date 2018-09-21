@@ -237,8 +237,11 @@ GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map
 template <typename T>
 void GslSparseMatrix<T>::clear ()
 {
-  unsigned int num_cols = 0;
-  this->queso_map.reset(new Map(0, 0, this->queso_mpi_comm));
+  unsigned int num_cols = 1;
+  // We need at least one element because GSL doesn't permit 0-block sizes until
+  // version 2.4.  See here:
+  // http://git.savannah.gnu.org/cgit/gsl.git/commit/vector/init_source.c?id=823370832b717b0734b3ac476c4ef0aff2ee3dbe
+  this->queso_map.reset(new Map(1, 0, this->queso_mpi_comm));
   this->_mat.reset(new GslMatrix(*(this->queso_env), *(this->queso_map), num_cols));
 
   _closed = false;

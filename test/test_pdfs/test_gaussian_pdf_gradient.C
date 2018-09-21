@@ -24,7 +24,9 @@
 
 #include <queso/Environment.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/GaussianJointPdf.h>
 #include <queso/VectorSpace.h>
 
@@ -43,18 +45,18 @@ int main(int argc, char ** argv)
 #endif
 
   unsigned int dim = 3;
-  QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", dim, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(-INFINITY);
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(INFINITY);
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
-  QUESO::GslMatrix var(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var(paramSpace.zeroVector());
   mean[0] = 2.0;
   mean[1] = 3.0;
   mean[2] = 4.0;
@@ -63,15 +65,15 @@ int main(int argc, char ** argv)
   var(2,2) = 7.0;
 
   // Construct a Gaussian PDF
-  QUESO::GaussianJointPdf<> pdf("", paramDomain, mean, var);
+  QUESO::GaussianJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramDomain, mean, var);
 
   // Vectors to store gradient calculations
-  QUESO::GslVector lnGradVector(paramSpace.zeroVector());
-  QUESO::GslVector gradVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> lnGradVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> gradVector(paramSpace.zeroVector());
 
   // Where to evaluate the gradient.  Evaluating at the mean (the mode for a
   // Gaussian) should give a gradient consisting of a vector of zeros.
-  QUESO::GslVector point(mean);
+  QUESO::GslNumericVector<libMesh::Number> point(mean);
 
   // We are testing that the gradient of log of the pdf is all zeros
   pdf.lnValue(point, NULL, &lnGradVector, NULL, NULL);
@@ -107,7 +109,7 @@ int main(int argc, char ** argv)
   point[1] = -3.4;
   point[2] = -4.3;
 
-  QUESO::GaussianJointPdf<> pdf2("", paramDomain, mean, var);
+  QUESO::GaussianJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf2("", paramDomain, mean, var);
 
   pdf2.lnValue(point, NULL, &lnGradVector, NULL, NULL);
 
