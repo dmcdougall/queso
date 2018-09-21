@@ -642,7 +642,10 @@ template <typename T>
 inline
 void GslNumericVector<T>::clear ()
 {
-  this->queso_map.reset(new QUESO::Map(0, 0, this->queso_mpi_comm));
+  // We need at least one element because GSL doesn't permit 0-block sizes until
+  // version 2.4.  See here:
+  // http://git.savannah.gnu.org/cgit/gsl.git/commit/vector/init_source.c?id=823370832b717b0734b3ac476c4ef0aff2ee3dbe
+  this->queso_map.reset(new QUESO::Map(1, 0, this->queso_mpi_comm));
   this->_vec.reset(new QUESO::GslVector(*(this->queso_env), *(this->queso_map)));
 
   this->_is_initialized = false;

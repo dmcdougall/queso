@@ -87,12 +87,14 @@ LDADD       = $(top_builddir)/src/libqueso.la
 AM_CPPFLAGS = $(QUESO_CPPFLAGS)
 AM_CPPFLAGS += -I.
 AM_CPPFLAGS += -I$(top_builddir)/inc
+AM_CPPFLAGS += -I$(top_builddir)/src/contrib/libmesh/include
 
 if HAVE_BOOST
 AM_CPPFLAGS += $(BOOST_CPPFLAGS)
 endif
 
 AM_CPPFLAGS += $(GSL_CFLAGS) $(ANN_CFLAGS)
+AM_CPPFLAGS += $(EIGEN_INCLUDE)
 
 #----------------
 # CppUnit support
