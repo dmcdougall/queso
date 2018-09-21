@@ -26,6 +26,8 @@
 #include <queso/WignerJointPdf.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -41,16 +43,16 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 2, NULL);
 
-  QUESO::GslVector center(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> center(paramSpace.zeroVector());
   center[0] = 2.4;
   center[1] = 1.2;
 
   double radius = 1.5;
-  QUESO::WignerJointPdf<> pdf("", paramSpace, center, radius);
+  QUESO::WignerJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramSpace, center, radius);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   pdf.distributionMean(mean);
 
   const char *msg = "WignerJointPdf mean is incorrect";
