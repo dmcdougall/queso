@@ -27,6 +27,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,18 +44,18 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 2, NULL);
 
-  QUESO::GslVector k(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> k(paramSpace.zeroVector());
   k[0] = 1.4;
   k[1] = 0.1;
 
-  QUESO::GslVector theta(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> theta(paramSpace.zeroVector());
   theta[0] = 2.0;
   theta[1] = 0.8;
-  QUESO::GammaJointPdf<> pdf("", paramSpace, k, theta);
+  QUESO::GammaJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramSpace, k, theta);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   pdf.distributionMean(mean);
 
   const char *msg = "GammaJointPdf mean is incorrect";
@@ -62,7 +64,7 @@ int main(int argc, char ** argv)
   queso_require_less_equal_msg(std::abs(mean[0]-real_mean0), TOL, msg);
   queso_require_less_equal_msg(std::abs(mean[1]-real_mean1), TOL, msg);
 
-  QUESO::GslMatrix var(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var(paramSpace.zeroVector());
   pdf.distributionVariance(var);
 
   const char *msgv = "GammaJointPdf variance is incorrect";
