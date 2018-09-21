@@ -27,6 +27,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,33 +44,33 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 1, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 1, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(0.0);
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(1.0);
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
   // We should test the other cases of alpha and beta
-  QUESO::GslVector alpha(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> alpha(paramSpace.zeroVector());
   alpha[0] = 2.0;
 
-  QUESO::GslVector beta(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> beta(paramSpace.zeroVector());
   beta[0] = 3.0;
 
-  QUESO::BetaJointPdf<> pdf("", paramDomain, alpha, beta);
+  QUESO::BetaJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramDomain, alpha, beta);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   pdf.distributionMean(mean);
 
   const char *msg = "BetaJointPdf mean is incorrect";
   double real_mean = alpha[0] / (alpha[0] + beta[0]);
   queso_require_less_equal_msg(std::abs(mean[0]-real_mean), TOL, msg);
 
-  QUESO::GslMatrix var(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var(paramSpace.zeroVector());
   pdf.distributionVariance(var);
 
   const char *msgv = "BetaJointPdf variance is incorrect";
