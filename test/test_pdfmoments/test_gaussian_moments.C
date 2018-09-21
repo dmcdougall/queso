@@ -27,6 +27,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,27 +44,27 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 2, NULL);
 
-  QUESO::GslVector lawexp(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> lawexp(paramSpace.zeroVector());
   lawexp[0] = 2.4;
   lawexp[1] = 0.4;
 
-  QUESO::GslVector lawvar(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> lawvar(paramSpace.zeroVector());
   lawvar[0] = 1.2;
   lawvar[1] = 0.9;
-  QUESO::GaussianJointPdf<> pdf1("", paramSpace, lawexp, lawvar);
+  QUESO::GaussianJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf1("", paramSpace, lawexp, lawvar);
 
-  QUESO::GslMatrix lawcovar(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> lawcovar(paramSpace.zeroVector());
   lawcovar(0,0) = 1.5;
   lawcovar(0,1) = lawcovar(1,0) = 1.2;
   lawcovar(1,1) = 0.5;
-  QUESO::GaussianJointPdf<> pdf2("", paramSpace, lawexp, lawcovar);
+  QUESO::GaussianJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf2("", paramSpace, lawexp, lawcovar);
 
-  QUESO::GslVector mean1(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean1(paramSpace.zeroVector());
   pdf1.distributionMean(mean1);
 
-  QUESO::GslVector mean2(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean2(paramSpace.zeroVector());
   pdf1.distributionMean(mean2);
 
   const char *msg = "GaussianJointPdf mean is incorrect";
@@ -71,10 +73,10 @@ int main(int argc, char ** argv)
   queso_require_less_equal_msg(std::abs(mean2[0]-lawexp[0]), TOL, msg);
   queso_require_less_equal_msg(std::abs(mean2[1]-lawexp[1]), TOL, msg);
 
-  QUESO::GslMatrix var1(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var1(paramSpace.zeroVector());
   pdf1.distributionVariance(var1);
 
-  QUESO::GslMatrix var2(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var2(paramSpace.zeroVector());
   pdf2.distributionVariance(var2);
 
   const char *msgv = "GaussianJointPdf variance is incorrect";
