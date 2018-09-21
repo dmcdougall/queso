@@ -26,6 +26,8 @@
 #include <queso/GslVector.h>
 #include <queso/LogNormalJointPdf.h>
 #include <queso/VectorSpace.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,18 +44,18 @@ int main(int argc, char ** argv)
 #endif
 
   unsigned int dim = 3;
-  QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", dim, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(-INFINITY);
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(INFINITY);
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
-  QUESO::GslVector var(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> var(paramSpace.zeroVector());
   mean[0] = 2.0;
   mean[1] = 3.0;
   mean[2] = 4.0;
@@ -61,16 +63,16 @@ int main(int argc, char ** argv)
   var[1] = 6.0;
   var[2] = 7.0;
 
-  QUESO::LogNormalJointPdf<> pdf("", paramDomain, mean, var);
+  QUESO::LogNormalJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramDomain, mean, var);
 
   // This point is the mode of the log normal distribution defined above
-  QUESO::GslVector point(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> point(paramSpace.zeroVector());
   point[0] = std::exp(mean[0] - var[0]);
   point[1] = std::exp(mean[1] - var[1]);
   point[2] = std::exp(mean[2] - var[2]);
 
-  QUESO::GslVector lnGradVector(paramSpace.zeroVector());
-  QUESO::GslVector gradVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> lnGradVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> gradVector(paramSpace.zeroVector());
 
   // Here we test the gradient of the log of the pdf and the gradient of the
   // pdf are zero at the mode, as we expect.
