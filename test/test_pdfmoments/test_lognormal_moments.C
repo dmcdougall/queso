@@ -27,6 +27,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,18 +44,18 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 2, NULL);
 
-  QUESO::GslVector lawexp(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> lawexp(paramSpace.zeroVector());
   lawexp[0] = 2.4;
   lawexp[1] = 0.4;
 
-  QUESO::GslVector lawvar(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> lawvar(paramSpace.zeroVector());
   lawvar[0] = 1.2;
   lawvar[1] = 0.9;
-  QUESO::LogNormalJointPdf<> pdf("", paramSpace, lawexp, lawvar);
+  QUESO::LogNormalJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > pdf("", paramSpace, lawexp, lawvar);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   pdf.distributionMean(mean);
 
   double realmean0 = std::exp(lawexp[0] + lawvar[0]/2);
@@ -63,7 +65,7 @@ int main(int argc, char ** argv)
   queso_require_less_equal_msg(std::abs(mean[0]-realmean0), TOL, msg);
   queso_require_less_equal_msg(std::abs(mean[1]-realmean1), TOL, msg);
 
-  QUESO::GslMatrix var(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> var(paramSpace.zeroVector());
   pdf.distributionVariance(var);
 
   double realvar0 = (std::exp(lawvar[0])-1) * std::exp(2*lawexp[0] + lawvar[0]);
