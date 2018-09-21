@@ -26,6 +26,8 @@
 #include <queso/BoxSubset.h>
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,23 +44,23 @@ int main(int argc, char ** argv)
 #endif
 
   unsigned int dim = 4;
-  QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", dim, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins[0] = 1e2;
   paramMins[1] = -1e5;
   paramMins[2] = 4e-3;
   paramMins[3] = 1;
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs[0] = 2e2;
   paramMaxs[1] = 1e5;
   paramMaxs[2] = 6e-3;
   paramMaxs[3] = 11;
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
-  QUESO::GslVector centroid(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> centroid(paramSpace.zeroVector());
   paramDomain.centroid(centroid);
 
   const char *msg = "BoxSubset centroid is incorrect";
