@@ -27,6 +27,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/ConcatenationSubset.h>
 #include <queso/GslVector.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -42,39 +44,39 @@ int main(int argc, char ** argv)
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace1(env, "param1_", 4, NULL);
-  QUESO::VectorSpace<> paramSpace2(env, "param2_", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace1(env, "param1_", 4, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace2(env, "param2_", 2, NULL);
 
-  QUESO::GslVector paramMins1(paramSpace1.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins1(paramSpace1.zeroVector());
   paramMins1[0] = 1e2;
   paramMins1[1] = -1e5;
   paramMins1[2] = 4e-3;
   paramMins1[3] = 1;
 
-  QUESO::GslVector paramMaxs1(paramSpace1.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs1(paramSpace1.zeroVector());
   paramMaxs1[0] = 2e2;
   paramMaxs1[1] = 1e5;
   paramMaxs1[2] = 6e-3;
   paramMaxs1[3] = 11;
 
-  QUESO::BoxSubset<> paramDomain1("", paramSpace1, paramMins1, paramMaxs1);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain1("", paramSpace1, paramMins1, paramMaxs1);
 
-  QUESO::GslVector paramMins2(paramSpace2.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins2(paramSpace2.zeroVector());
   paramMins2[0] = -1e5;
   paramMins2[1] = 2e-3;
 
-  QUESO::GslVector paramMaxs2(paramSpace2.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs2(paramSpace2.zeroVector());
   paramMaxs2[0] = 1e5;
   paramMaxs2[1] = 4e-3;
 
-  QUESO::BoxSubset<> paramDomain2("", paramSpace2, paramMins2, paramMaxs2);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain2("", paramSpace2, paramMins2, paramMaxs2);
 
-  QUESO::VectorSpace<> paramSpace(env, "param_", 6, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 6, NULL);
 
-  QUESO::ConcatenationSubset<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::ConcatenationSubset<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramDomain("",paramSpace,paramDomain1,paramDomain2);
 
-  QUESO::GslVector centroid(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> centroid(paramSpace.zeroVector());
   paramDomain.centroid(centroid);
 
   const char *msg = "ConcatenationSubset centroid is incorrect";
