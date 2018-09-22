@@ -3,6 +3,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GaussianVectorRealizer.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #define QUESO_REQUIRE_CLOSE(a, b, c) do { if (!require_close(a, b, c)) { \
                                             std::cerr << "FAILED: " << a \
@@ -44,32 +46,32 @@ int main(int argc, char ** argv) {
   FullEnvironment env("", "", &envOptionsValues);
 #endif
 
-  VectorSpace<GslVector, GslMatrix> imageSpace(env, "test_space", 2, NULL);
+  VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> imageSpace(env, "test_space", 2, NULL);
   Map eMap(2, 0, env.fullComm());
 
-  GslVector imageMinVal(env, eMap, -INFINITY);
-  GslVector imageMaxVal(env, eMap,  INFINITY);
+  GslNumericVector<libMesh::Number> imageMinVal(env, eMap, -INFINITY);
+  GslNumericVector<libMesh::Number> imageMaxVal(env, eMap,  INFINITY);
 
-  BoxSubset<GslVector, GslMatrix> domain("domain", imageSpace, imageMinVal,
+  BoxSubset<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> domain("domain", imageSpace, imageMinVal,
       imageMaxVal);
 
   double tol = 1e-16;
 
   // Tests
   // Test 1: mean = 0, covMatrix = identity
-  GslVector expectedValues(env, eMap, 0.0);
-  GslMatrix lowerCholCovMatrix(env, eMap, 1.0); // identity
+  GslNumericVector<libMesh::Number> expectedValues(env, eMap, 0.0);
+  GslSparseMatrix<libMesh::Number> lowerCholCovMatrix(env, eMap, 1.0); // identity
 
   int ierr = lowerCholCovMatrix.chol();
   QUESO_REQUIRE( ierr==0 ); // make sure cholesky succeeded
 
   lowerCholCovMatrix.zeroUpper(false); // zero upper triangular
 
-  GaussianVectorRealizer<GslVector, GslMatrix>* gaussianRealizer =
-    new GaussianVectorRealizer<GslVector, GslMatrix>("test_realizer",
+  GaussianVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>* gaussianRealizer =
+    new GaussianVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>("test_realizer",
         domain, expectedValues, lowerCholCovMatrix);
 
-  GslVector myRealization(expectedValues);
+  GslNumericVector<libMesh::Number> myRealization(expectedValues);
 
   gaussianRealizer->realization(myRealization);
 
@@ -91,7 +93,7 @@ int main(int argc, char ** argv) {
 
   lowerCholCovMatrix.zeroUpper(false); // zero upper triangular
 
-  gaussianRealizer = new GaussianVectorRealizer<GslVector, GslMatrix>(
+  gaussianRealizer = new GaussianVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>(
       "test_realizer", domain, expectedValues, lowerCholCovMatrix);
 
   // Generate realization
