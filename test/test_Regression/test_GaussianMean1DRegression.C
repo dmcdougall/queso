@@ -4,6 +4,8 @@
 #include <queso/GaussianVectorRV.h>
 #include <queso/StatisticalInverseProblem.h>
 #include <queso/ScalarSequence.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 #include <cstdlib>
@@ -239,7 +241,7 @@ int main(int argc, char* argv[]) {
   env.resetSeed(env.seed() + env.fullRank());
 
   // Work routine, with GSL
-  GaussianMean1DRegressionCompute<QUESO::GslVector, QUESO::GslMatrix>(env,
+  GaussianMean1DRegressionCompute<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(env,
       priorMean, priorVar, dat);
 
 #ifdef QUESO_HAS_MPI
