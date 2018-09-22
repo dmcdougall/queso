@@ -9,6 +9,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/BoxSubset.h>
 #include <queso/IntersectionSubset.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 int main(int argc, char **argv) {
 #ifdef QUESO_HAS_MPI
@@ -36,32 +38,32 @@ int main(int argc, char **argv) {
   names[0] = "my_name";
 
   // Create a vector space
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> vec_space(*env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> vec_space(*env,
       "vec_prefix", 1, &names);
 
   // Create two vector sets
-  QUESO::GslVector min1(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> min1(vec_space.zeroVector());
   min1[0] = 0.0;
-  QUESO::GslVector max1(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> max1(vec_space.zeroVector());
   max1[0] = 1.0;
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> set1("set1", vec_space,
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> set1("set1", vec_space,
       min1, max1);
 
   // Now for the second one
-  QUESO::GslVector min2(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> min2(vec_space.zeroVector());
   min2[0] = 0.5;
-  QUESO::GslVector max2(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> max2(vec_space.zeroVector());
   max2[0] = 1.5;
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> set2("set1", vec_space,
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> set2("set1", vec_space,
       min2, max2);
 
   // Create their intersection
-  QUESO::IntersectionSubset<QUESO::GslVector, QUESO::GslMatrix> intersection(
+  QUESO::IntersectionSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> intersection(
       "intersection", vec_space, 1.0, set1, set2);
 
   // Test the containment
   bool does_contain;
-  QUESO::GslVector test_vec(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> test_vec(vec_space.zeroVector());
 
   // Should be true
   test_vec[0] = 0.75;
