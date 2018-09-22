@@ -124,6 +124,13 @@ public:
                         const std::string & fileType,
                         const std::set<unsigned int> & allowedSubEnvIds) const;
   GslSparseMatrix<T> & operator/=(double a);
+  double normFrob() const;
+  double normMax() const;
+  double max() const;
+  void filterSmallValues(double thresholdValue);
+  void filterLargeValues(double thresholdValue);
+  GslSparseMatrix<T> & operator-=(const GslSparseMatrix<T> & rhs);
+  GslSparseMatrix<T> invertMultiply(const GslSparseMatrix<T> & B) const;
 
 
   /**

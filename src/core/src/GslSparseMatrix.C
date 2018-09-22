@@ -719,6 +719,65 @@ GslSparseMatrix<T>::subWriteContents(const std::string & varNamePrefix,
 }
 
 template <typename T>
+double
+GslSparseMatrix<T>::normFrob() const
+{
+  return this->_mat->normFrob();
+}
+
+template <typename T>
+double
+GslSparseMatrix<T>::normMax() const
+{
+  return this->_mat->normMax();
+}
+
+template <typename T>
+double
+GslSparseMatrix<T>::max() const
+{
+  return this->_mat->max();
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::filterSmallValues(double thresholdValue)
+{
+  return this->_mat->filterSmallValues(thresholdValue);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::filterLargeValues(double thresholdValue)
+{
+  return this->_mat->filterLargeValues(thresholdValue);
+}
+
+template <typename T>
+GslSparseMatrix<T> &
+GslSparseMatrix<T>::operator-=(const GslSparseMatrix<T> & rhs)
+{
+  *this->_mat -= *rhs._mat;
+  return *this;
+}
+
+template <typename T>
+GslSparseMatrix<T>
+GslSparseMatrix<T>::invertMultiply(const GslSparseMatrix<T> & B) const
+{
+  GslMatrix internal_answer(this->_mat->invertMultiply(*B._mat));
+
+  unsigned int num_cols = internal_answer.numCols();
+  GslSparseMatrix<T> answer(internal_answer.env(),
+                            internal_answer.map(),
+                            num_cols);
+
+  *(answer._mat) = internal_answer;
+
+  return answer;
+}
+
+template <typename T>
 GslSparseMatrix<T> &
 GslSparseMatrix<T>::operator/=(double a)
 {
