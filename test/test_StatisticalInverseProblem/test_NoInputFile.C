@@ -8,8 +8,10 @@
 #include <queso/StatisticalInverseProblemOptions.h>
 #include <queso/ScalarFunction.h>
 #include <queso/VectorSet.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
-template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
+template <class V = QUESO::GslNumericVector<libMesh::Number>, class M = QUESO::GslSparseMatrix<libMesh::Number>>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
 {
 public:
@@ -62,23 +64,23 @@ int main(int argc, char ** argv) {
 #endif
 
   unsigned int dim = 2;
-  QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", dim, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
 
   double min_val = -10.0;
   double max_val = 10.0;
   paramMins.cwSet(min_val);
   paramMaxs.cwSet(max_val);
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
-  QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > priorRv("prior_", paramDomain);
 
-  Likelihood<> lhood("llhd_", paramDomain);
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > lhood("llhd_", paramDomain);
 
-  QUESO::GenericVectorRV<> postRv("post_", paramSpace);
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > postRv("post_", paramSpace);
 
   QUESO::SipOptionsValues sipOptions;
   sipOptions.m_computeSolution = 1;
@@ -86,14 +88,14 @@ int main(int argc, char ** argv) {
   sipOptions.m_dataOutputAllowedSet.clear();
   sipOptions.m_dataOutputAllowedSet.insert(0);
 
-  QUESO::StatisticalInverseProblem<> ip("", &sipOptions, priorRv, lhood,
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > ip("", &sipOptions, priorRv, lhood,
       postRv);
 
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
   paramInitials[0] = 0.0;
   paramInitials[1] = 0.0;
 
-  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(paramSpace.zeroVector());
 
   proposalCovMatrix(0, 0) = 1.0;
   proposalCovMatrix(0, 1) = 0.0;
