@@ -7,6 +7,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/ScalarSequence.h>
 #include <queso/SequenceOfVectors.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 int main(int argc, char **argv) {
 #ifndef QUESO_HAS_MPI
@@ -25,13 +27,13 @@ int main(int argc, char **argv) {
   QUESO::FullEnvironment env(MPI_COMM_WORLD, "", "", &options);
 
   // Create a vector space
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env, "", 1,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env, "", 1,
       NULL);
 
-  QUESO::SequenceOfVectors<QUESO::GslVector, QUESO::GslMatrix> pretendChain(
+  QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> pretendChain(
       paramSpace, 3, "pretendChain");
 
-  QUESO::GslVector v(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v(paramSpace.zeroVector());
   v[0] = 0.0;
 
   // Create a scalar sequence on each processor
@@ -56,13 +58,13 @@ int main(int argc, char **argv) {
   }
 
   // Create a sequence of vectors
-  QUESO::SequenceOfVectors<QUESO::GslVector, QUESO::GslMatrix> maxs(paramSpace,
+  QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> maxs(paramSpace,
       0, "name2");
 
   pretendChain.unifiedPositionsOfMaximum(scalarSequence, maxs);
 
   // Should not fail
-  QUESO::GslVector tmpVec(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> tmpVec(paramSpace.zeroVector());
 
   // The loop should only actually do anything on process zero
   for (unsigned int i = 0; i < maxs.subSequenceSize(); i++) {
