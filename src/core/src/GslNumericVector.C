@@ -502,6 +502,33 @@ GslNumericVector<T>::GslNumericVector(const BaseEnvironment& env,
 }
 
 template <typename T>
+GslNumericVector<T>::GslNumericVector(const BaseEnvironment& env,
+                                      double d1,
+                                      double d2,
+                                      const Map& map)
+  : libMesh::NumericVector<T>(
+      comm_map.emplace(std::make_pair(
+          &(map.Comm()),
+          libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second,
+      libMesh::AUTOMATIC),
+    queso_env(new EmptyEnvironment()),  // This is empty but we don't care
+                                        // because only the internal queso data
+                                        // type cares about the environment
+    queso_mpi_comm(map.Comm())
+{
+  this->init(map.NumGlobalElements(),
+             map.NumGlobalElements(),
+             false,
+             libMesh::AUTOMATIC);
+
+  // Perhaps this should be in its own init() method that takes an
+  // environment?
+  //
+  // Or add a copy ctor to BaseEnvironment?
+  this->_vec.reset(new QUESO::GslVector(env, d1, d2, *(this->queso_map)));
+}
+
+template <typename T>
 GslNumericVector<T>::GslNumericVector(const GslNumericVector<T> & other)
   : libMesh::NumericVector<T>(
       comm_map.emplace(std::make_pair(
@@ -803,6 +830,77 @@ GslNumericVector<T>::mpiAllReduce(RawType_MPI_Op mpiOperation,
 }
 
 template <typename T>
+double
+GslNumericVector<T>::norm1() const
+{
+  return this->_vec->norm1();
+}
+
+template <typename T>
+double
+GslNumericVector<T>::normInf() const
+{
+  return this->_vec->normInf();
+}
+
+template <typename T>
+void
+GslNumericVector<T>::cwSetConcatenated(const GslNumericVector<T> & v1,
+                                       const GslNumericVector<T> & v2)
+{
+  this->_vec->cwSetConcatenated(*v1._vec, *v2._vec);
+}
+
+template <typename T>
+void
+GslNumericVector<T>::cwInvert()
+{
+  this->_vec->cwInvert();
+}
+
+template <typename T>
+void
+GslNumericVector<T>::matlabDiff(unsigned int firstPositionToStoreDiff,
+                                double valueForRemainderPosition,
+                                GslNumericVector<T> & outputVec) const
+{
+  this->_vec->matlabDiff(firstPositionToStoreDiff,
+                         valueForRemainderPosition,
+                         *outputVec._vec);
+}
+
+template <typename T>
+void
+GslNumericVector<T>::sort()
+{
+  this->_vec->sort();
+}
+
+template <typename T>
+void
+GslNumericVector<T>::subWriteContents(const std::string & varNamePrefix,
+                                      const std::string & fileName,
+                                      const std::string & fileType,
+                                      const std::set<unsigned int> & allowedSubEnvIds) const
+{
+  this->_vec->subWriteContents(varNamePrefix, fileName, fileType, allowedSubEnvIds);
+}
+
+template <typename T>
+bool
+GslNumericVector<T>::atLeastOneComponentBiggerOrEqualThan(const GslNumericVector<T> & rhs) const
+{
+  return this->_vec->atLeastOneComponentBiggerOrEqualThan(*rhs._vec);
+}
+
+template <typename T>
+int
+GslNumericVector<T>::getMinValueIndex() const
+{
+  return this->_vec->getMinValueIndex();
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
@@ -839,6 +937,35 @@ operator/(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 }
 
 template <typename T>
+GslNumericVector<T>
+operator/(double a, const GslNumericVector<T> & x)
+{
+  GslNumericVector<T> answer(x);
+  answer.cwInvert();
+  return a * answer;
+}
+
+template <typename T>
+bool
+operator==(const GslNumericVector<T> & lhs, const GslNumericVector<T> & rhs)
+{
+  bool answer = true;
+
+  unsigned int size1 = lhs.sizeLocal();
+  unsigned int size2 = rhs.sizeLocal();
+  queso_require_equal_to_msg(size1, size2, "different sizes of lhs and rhs");
+
+  for (unsigned int i = 0; i < size1; ++i) {
+    if (lhs[i] != rhs[i]) {
+      answer = false;
+      break;
+    }
+  }
+
+  return answer;
+}
+
+template <typename T>
 GslNumericVector<T> operator*(double a, const GslNumericVector<T> & x)
 {
   GslNumericVector<T> answer(x);
@@ -868,10 +995,12 @@ scalarProduct(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 template class GslNumericVector<libMesh::Number>;
 
 template GslNumericVector<libMesh::Number> operator/(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
+template GslNumericVector<libMesh::Number> operator/(double a, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator*(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator-(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator+(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslNumericVector<libMesh::Number> operator*(double a, const GslNumericVector<libMesh::Number> &);
+template bool operator==(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template double scalarProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 
 template <typename T>

@@ -88,6 +88,7 @@ public:
   GslNumericVector(const BaseEnvironment & env, const Map & map);
   GslNumericVector(const GslNumericVector<T> & other);
   GslNumericVector(const GslNumericVector<T> & v, double start, double end);
+  GslNumericVector(const BaseEnvironment& env, double d1, double d2, const Map& map);
   void cwSet(double value);
   void cwSet(unsigned int initialPos, const GslNumericVector<T> & vec);
   unsigned int sizeGlobal() const;
@@ -124,6 +125,20 @@ public:
                        const std::set<unsigned int> & allowedSubEnvIds);
   void mpiBcast(int srcRank, const MpiComm & bcastComm);
   void mpiAllReduce(RawType_MPI_Op mpiOperation, const MpiComm & opComm, GslNumericVector<T> & resultVec) const;
+  double norm1() const;
+  double normInf() const;
+  void cwSetConcatenated(const GslNumericVector<T> & v1, const GslNumericVector<T> & v2);
+  void cwInvert();
+  void matlabDiff(unsigned int firstPositionToStoreDiff,
+                  double valueForRemainderPosition,
+                  GslNumericVector<T> & outputVec) const;
+  void sort();
+  void subWriteContents(const std::string & varNamePrefix,
+                        const std::string & fileName,
+                        const std::string & fileType,
+                        const std::set<unsigned int> & allowedSubEnvIds) const;
+  bool atLeastOneComponentBiggerOrEqualThan(const GslNumericVector<T> & rhs) const;
+  int getMinValueIndex() const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
@@ -816,8 +831,16 @@ GslNumericVector<T> operator/(const GslNumericVector<T> & x,
                               const GslNumericVector<T> & y);
 
 template <typename T>
+GslNumericVector<T> operator/(double a,
+                              const GslNumericVector<T> & x);
+
+template <typename T>
 GslNumericVector<T> operator*(double a,
                               const GslNumericVector<T> & y);
+
+template <typename T>
+bool operator==(const GslNumericVector<T> & lhs,
+                const GslNumericVector<T> & rhs);
 
 template <typename T>
 double scalarProduct(const GslNumericVector<T> & x,
