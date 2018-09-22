@@ -3,6 +3,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -10,7 +12,7 @@
 
 using namespace std;
 
-int matrixIsDiag(const QUESO::GslMatrix &M, double diagValue) {
+int matrixIsDiag(const QUESO::GslSparseMatrix<libMesh::Number> &M, double diagValue) {
   // M is assumed to be square
   unsigned int i, j;
   unsigned int n;
@@ -36,7 +38,7 @@ int matrixIsDiag(const QUESO::GslMatrix &M, double diagValue) {
   return 1;
 }
 
-void fill2By2Matrix(QUESO::GslMatrix &M) {
+void fill2By2Matrix(QUESO::GslSparseMatrix<libMesh::Number> &M) {
   M(0, 0) = 2.0; M(0, 1) = 3.0;
   M(1, 0) = 2.0; M(1, 1) = 2.0;
 }
@@ -59,12 +61,12 @@ int main(int argc, char **argv) {
     new QUESO::FullEnvironment("", "", &options);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> *param_space =
-    new QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>(*env, "param_", 3, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> *param_space =
+    new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(*env, "param_", 3, NULL);
 
-  QUESO::GslVector v(param_space->zeroVector());
-  QUESO::GslMatrix M1(*env, v.map(), diagValue);
-  QUESO::GslMatrix M2(v, diagValue);
+  QUESO::GslNumericVector<libMesh::Number> v(param_space->zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> M1(*env, v.map(), diagValue);
+  QUESO::GslSparseMatrix<libMesh::Number> M2(v, diagValue);
 
   if (!matrixIsDiag(M1, diagValue)) {
     std::cerr << "matrix not diagonal" << std::endl;
@@ -183,10 +185,10 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> space(*env, "", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> space(*env, "", 2, NULL);
 
-  QUESO::GslVector v2(space.zeroVector());
-  QUESO::GslMatrix M3(v2, 0.0);
+  QUESO::GslNumericVector<libMesh::Number> v2(space.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> M3(v2, 0.0);
 
   fill2By2Matrix(M3);
   M3.filterSmallValues(2.5);
@@ -208,7 +210,7 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  QUESO::GslMatrix M4(v2, 0.0);
+  QUESO::GslSparseMatrix<libMesh::Number> M4(v2, 0.0);
   fill2By2Matrix(M3);
   M4 = M3.inverse();
   if (std::abs(M4(0, 0) + 1.0) > TOL ||
@@ -220,7 +222,7 @@ int main(int argc, char **argv) {
   }
 
   M4 = M3;
-  QUESO::GslMatrix I(M3.invertMultiply(M4));
+  QUESO::GslSparseMatrix<libMesh::Number> I(M3.invertMultiply(M4));
   if (!matrixIsDiag(I, 1.0)) {
     std::cerr << "invert multiply failed" << std::endl;
     return 1;
