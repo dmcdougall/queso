@@ -3,6 +3,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GaussianVectorRV.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #define PI 3.14159265358979323846
 
@@ -35,24 +37,24 @@ int main(int argc, char ** argv) {
   FullEnvironment env("", "", &envOptionsValues);
 #endif
 
-  VectorSpace<GslVector, GslMatrix> imageSpace(env, "test_space", 2, NULL);
+  VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> imageSpace(env, "test_space", 2, NULL);
   Map eMap(2, 0, env.fullComm());
 
-  GslVector imageMinVal(env, eMap, -INFINITY);
-  GslVector imageMaxVal(env, eMap,  INFINITY);
+  GslNumericVector<libMesh::Number> imageMinVal(env, eMap, -INFINITY);
+  GslNumericVector<libMesh::Number> imageMaxVal(env, eMap,  INFINITY);
 
-  BoxSubset<GslVector, GslMatrix> domain("domain", imageSpace, imageMinVal,
+  BoxSubset<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> domain("domain", imageSpace, imageMinVal,
       imageMaxVal);
 
-  GslVector initExpectedValues(env, eMap, 0.0);
-  GslMatrix initCovMatrix(env, eMap, 1.0);
+  GslNumericVector<libMesh::Number> initExpectedValues(env, eMap, 0.0);
+  GslSparseMatrix<libMesh::Number> initCovMatrix(env, eMap, 1.0);
 
-  GslVector finalExpectedValues(env, eMap, 1.0);
-  GslMatrix finalCovMatrix(env, eMap, 3.0);
+  GslNumericVector<libMesh::Number> finalExpectedValues(env, eMap, 1.0);
+  GslSparseMatrix<libMesh::Number> finalCovMatrix(env, eMap, 3.0);
 
-  GslVector testValues(env, eMap, 0.0);
+  GslNumericVector<libMesh::Number> testValues(env, eMap, 0.0);
 
-  GaussianVectorRV<GslVector, GslMatrix> gaussianRV("test_rv", domain,
+  GaussianVectorRV<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> gaussianRV("test_rv", domain,
       initExpectedValues, initCovMatrix);
   double normalisingConstant = 1.0 / (2.0 * PI);
 
@@ -73,7 +75,7 @@ int main(int argc, char ** argv) {
   // Test realizer
   // NOTE: just calls it... doesn't check values
   //***********************************************************************
-  GslVector myRealization(testValues);
+  GslNumericVector<libMesh::Number> myRealization(testValues);
   gaussianRV.realizer().realization(myRealization);
 
   std::cout << myRealization;
