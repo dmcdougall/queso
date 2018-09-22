@@ -3,6 +3,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GaussianJointPdf.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #define PI 3.14159265358979323846
 
@@ -36,15 +38,15 @@ int main(int argc, char ** argv) {
   FullEnvironment env("", "", &envOptionsValues);
 #endif
 
-  VectorSpace<GslVector, GslMatrix> domainSpace(env, "test_space", 2, NULL);
+  VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> domainSpace(env, "test_space", 2, NULL);
   Map eMap(2, 0, env.fullComm());
 
-  GslVector domainMinVal(env, eMap, -1e30);
-  GslVector domainMaxVal(env, eMap,  1e30);
+  GslNumericVector<libMesh::Number> domainMinVal(env, eMap, -1e30);
+  GslNumericVector<libMesh::Number> domainMaxVal(env, eMap,  1e30);
 
-  BoxSubset<GslVector, GslMatrix> domain("domain", domainSpace, domainMinVal, domainMaxVal);
+  BoxSubset<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> domain("domain", domainSpace, domainMinVal, domainMaxVal);
 
-  GaussianJointPdf<GslVector, GslMatrix>* gaussianPdf;
+  GaussianJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>* gaussianPdf;
   double tolClose = 1e-13;
 
   //***********************************************************************
@@ -52,11 +54,11 @@ int main(int argc, char ** argv) {
   //***********************************************************************
 
   // mean = [0; 0], var = [1; 1]
-  GslVector expectedVal(env, eMap, 0.0);
-  GslVector varianceVal(env, eMap, 1.0);
-  GslVector testValues(env, eMap, 0.0);
+  GslNumericVector<libMesh::Number> expectedVal(env, eMap, 0.0);
+  GslNumericVector<libMesh::Number> varianceVal(env, eMap, 1.0);
+  GslNumericVector<libMesh::Number> testValues(env, eMap, 0.0);
 
-  gaussianPdf = new GaussianJointPdf<GslVector, GslMatrix>("test_pdf", domain, expectedVal, varianceVal);
+  gaussianPdf = new GaussianJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>("test_pdf", domain, expectedVal, varianceVal);
   double normalisingConstant = 1.0 / (2.0 * PI);
   double logNormalisingConstant = std::log(normalisingConstant);
 
@@ -100,7 +102,7 @@ int main(int argc, char ** argv) {
   // mean = [0; 0], var = [0.25; 0.5]
   varianceVal[0] = 0.25; varianceVal[1] = 0.5;
 
-  gaussianPdf = new GaussianJointPdf<GslVector, GslMatrix>("test_pdf", domain, expectedVal, varianceVal);
+  gaussianPdf = new GaussianJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>("test_pdf", domain, expectedVal, varianceVal);
   normalisingConstant = 1.0 / (2.0 * PI * std::sqrt(0.125));
   logNormalisingConstant = std::log(normalisingConstant);
 
@@ -189,9 +191,9 @@ int main(int argc, char ** argv) {
   // mean = [0; 0], covar = [1, 0; 0, 1], i.e. same as first case for diagonal matrices
   expectedVal[0] = expectedVal[1] = 0.0;
 
-  GslMatrix covMatrix(env, eMap, 1.0);  // actually diagonal
+  GslSparseMatrix<libMesh::Number> covMatrix(env, eMap, 1.0);  // actually diagonal
 
-  gaussianPdf = new GaussianJointPdf<GslVector, GslMatrix>("test_pdf", domain, expectedVal, covMatrix);
+  gaussianPdf = new GaussianJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>("test_pdf", domain, expectedVal, covMatrix);
   normalisingConstant = 1.0 / (2.0 * PI);
   logNormalisingConstant = std::log(normalisingConstant);
 

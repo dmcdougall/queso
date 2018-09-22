@@ -464,7 +464,7 @@ template <typename T>
 GslNumericVector<T>
 GslSparseMatrix<T>::invertMultiply(const GslNumericVector<T> & b) const
 {
-  GslNumericVector<T> answer(b);
+  GslNumericVector<T> answer(_mat->env(), _mat->map());
   *(answer._vec) = this->_mat->invertMultiply(*b._vec);
   return answer;
 }
