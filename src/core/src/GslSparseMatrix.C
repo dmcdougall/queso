@@ -594,7 +594,9 @@ GslSparseMatrix<T>::inverse() const
 
   GslSparseMatrix<T> answer(internal_answer.env(),
                             internal_answer.map(),
-                            (unsigned int)internal_answer.map().NumGlobalElements());
+                            (unsigned int)internal_answer.numCols());
+
+  *answer._mat = internal_answer;
 
   return answer;
 }
