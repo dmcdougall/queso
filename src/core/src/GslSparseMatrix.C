@@ -186,6 +186,7 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v) :
 {
   this->queso_map.reset(new Map(v._vec->map()));
   this->_mat.reset(new GslMatrix(v._vec->env(), v._vec->map(), v._vec->sizeLocal()));
+  this->_is_initialized = true;
 }
 
 template <typename T>
@@ -201,6 +202,7 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v, double diagVa
 {
   this->queso_map.reset(new Map(v._vec->map()));
   this->_mat.reset(new GslMatrix(*v._vec, diagValue));
+  this->_is_initialized = true;
 }
 
 template <typename T>
@@ -216,6 +218,7 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslSparseMatrix<T> & B) :
 {
   this->queso_map.reset(new Map(B._mat->map()));
   this->_mat.reset(new GslMatrix(*B._mat));
+  this->_is_initialized = true;
 }
 
 
@@ -231,6 +234,7 @@ GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map
 {
   this->queso_map.reset(new Map(map));
   this->_mat.reset(new GslMatrix(env, map, numCols));
+  this->_is_initialized = true;
 }
 
 template <typename T>
@@ -245,6 +249,7 @@ GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map
 {
   this->queso_map.reset(new Map(map));
   this->_mat.reset(new GslMatrix(env, map, diagValue));
+  this->_is_initialized = true;
 }
 
 
