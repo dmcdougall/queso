@@ -8,6 +8,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorSpace.h>
 #include <queso/SequenceOfVectors.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #ifndef QUESO_HAS_HDF5
 int main() {
@@ -36,19 +38,19 @@ int main(int argc, char **argv) {
 #endif
 
   // Create a vector space
-  QUESO::VectorSpace<> vec_space(env, "", 2, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > vec_space(env, "", 2, NULL);
 
   // Create some things to put in the sequence
-  QUESO::GslVector v1(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v1(vec_space.zeroVector());
   v1[0] = 1.0;
   v1[1] = 2.0;
 
-  QUESO::GslVector v2(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v2(vec_space.zeroVector());
   v2[0] = 3.0;
   v2[1] = 4.0;
 
   // Create a sequence of vectors
-  QUESO::SequenceOfVectors<> vec_seq(vec_space, 2, "");
+  QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > vec_seq(vec_space, 2, "");
 
   vec_seq.setPositionValues(0, v1);
   vec_seq.setPositionValues(1, v2);
