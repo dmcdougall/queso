@@ -5,12 +5,14 @@
 #include <queso/VectorSpace.h>
 #include <queso/Environment.h>
 #include <queso/EnvironmentOptions.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
 #define TOL 1e-10
 
-int checkLinearSpacing(const QUESO::GslVector &v, double d1, double d2) {
+int checkLinearSpacing(const QUESO::GslNumericVector<libMesh::Number> &v, double d1, double d2) {
   unsigned int i;
   double alpha, elt;
 
@@ -42,24 +44,24 @@ int main(int argc, char **argv) {
   QUESO::FullEnvironment *env = new QUESO::FullEnvironment("", "", &options);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> *param_space =
-    new QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>(*env, "param_", 3, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> *param_space =
+    new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(*env, "param_", 3, NULL);
 
-  QUESO::GslVector v1(param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v1(param_space->zeroVector());
   v1.cwSet(2.0);
 
-  QUESO::GslVector *v2 = new QUESO::GslVector(*env, d1, d2, v1.map());
+  QUESO::GslNumericVector<libMesh::Number> *v2 = new QUESO::GslNumericVector<libMesh::Number>(*env, d1, d2, v1.map());
   if (checkLinearSpacing(*v2, d1, d2) == 1) {
     std::cerr << "Linear spacing test 1 failed" << std::endl;
   }
   delete v2;
 
-  v2 = new QUESO::GslVector(v1, d1, d2);
+  v2 = new QUESO::GslNumericVector<libMesh::Number>(v1, d1, d2);
   if (checkLinearSpacing(*v2, d1, d2) == 1) {
     std::cerr << "Linear spacing test 2 failed" << std::endl;
   }
 
-  QUESO::GslVector v3(*v2);
+  QUESO::GslNumericVector<libMesh::Number> v3(*v2);
   *v2 /= v1;
 
   for (i = 0; i < v2->sizeLocal(); i++) {
@@ -81,9 +83,9 @@ int main(int argc, char **argv) {
   }
 
   // Testing concatenate so we need a bigger param space
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> *big_param_space =
-    new QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>(*env, "", 6, NULL);
-  QUESO::GslVector v4(big_param_space->zeroVector());
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> *big_param_space =
+    new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(*env, "", 6, NULL);
+  QUESO::GslNumericVector<libMesh::Number> v4(big_param_space->zeroVector());
   v4.cwSetConcatenated(v1, v3);
 
   for (i = 0; i < v1.sizeLocal(); i++) {
@@ -98,10 +100,10 @@ int main(int argc, char **argv) {
     }
   }
 
-  std::vector<const QUESO::GslVector*> vecs;
+  std::vector<const QUESO::GslNumericVector<libMesh::Number>*> vecs;
   vecs.push_back(&v1);
   vecs.push_back(&v3);
-  QUESO::GslVector v5(big_param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v5(big_param_space->zeroVector());
   v5.cwSetConcatenated(vecs);
   for (i = 0; i < v5.sizeLocal(); i++) {
     if (std::abs(v5[i] - v4[i]) > TOL) {
@@ -223,7 +225,7 @@ int main(int argc, char **argv) {
     return 1;
   }
 
-  QUESO::GslVector ones(v1, 1.0, 1.0);
+  QUESO::GslNumericVector<libMesh::Number> ones(v1, 1.0, 1.0);
   if (!(ones == (v1 / v3))) {
     std::cerr << "division test failed" << std::endl;
     return 1;
