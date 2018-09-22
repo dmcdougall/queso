@@ -8,6 +8,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorSpace.h>
 #include <queso/DistArray.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 int main(int argc, char **argv) {
 #ifdef QUESO_HAS_MPI
@@ -33,11 +35,11 @@ int main(int argc, char **argv) {
 
   std::vector<std::string> names(1);
   names[0] = "my_name";
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> vec_space(*env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> vec_space(*env,
       "vec_prefix", 1, &names);
 
   // 1x1 diagonal matrix containing the value 3.0 on the diagonal
-  QUESO::GslMatrix * diag_matrix = vec_space.newDiagMatrix(3.0);
+  QUESO::GslSparseMatrix<libMesh::Number> * diag_matrix = vec_space.newDiagMatrix(3.0);
 
   if ((*diag_matrix)(0,0) != 3.0) {
     std::cerr << "newDiagMatrix test failed" << std::endl;
@@ -50,11 +52,11 @@ int main(int argc, char **argv) {
   }
 
   // Create a vector
-  QUESO::GslVector v1(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v1(vec_space.zeroVector());
   v1.cwSet(2.0);
 
   // Now create a new vector
-  QUESO::GslVector * v2 = vec_space.newVector(v1);
+  QUESO::GslNumericVector<libMesh::Number> * v2 = vec_space.newVector(v1);
 
   if ((*v2)[0] != v1[0]) {
     std::cerr << "newVector test failed" << std::endl;
