@@ -755,7 +755,7 @@ GslNumericBlockMatrix<T>::getBlock(unsigned int i) const
 
   GslSparseMatrix<T> answer(internal_answer.env(),
                             internal_answer.map(),
-                            internal_answer.map().NumGlobalElements());
+                            (unsigned int)internal_answer.map().NumGlobalElements());
 
   return answer;
 }

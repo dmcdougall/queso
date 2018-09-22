@@ -233,6 +233,20 @@ GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map
   this->_mat.reset(new GslMatrix(env, map, numCols));
 }
 
+template <typename T>
+GslSparseMatrix<T>::GslSparseMatrix(const BaseEnvironment & env, const Map & map, double diagValue) :
+  libMesh::SparseMatrix<T>(
+      GslNumericVector<T>::comm_map.emplace(std::make_pair(
+          &(map.Comm()),
+          libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(map.Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(map));
+  this->_mat.reset(new GslMatrix(env, map, diagValue));
+}
+
 
 template <typename T>
 void GslSparseMatrix<T>::clear ()
@@ -531,7 +545,7 @@ GslSparseMatrix<T>::transpose() const
 {
   GslMatrix internal_answer(_mat->transpose());
 
-  int num_elements = internal_answer.map().NumGlobalElements();
+  unsigned int num_elements = internal_answer.map().NumGlobalElements();
   GslSparseMatrix<T> answer(internal_answer.env(),
                             internal_answer.map(),
                             num_elements);
@@ -575,7 +589,7 @@ GslSparseMatrix<T>::inverse() const
 
   GslSparseMatrix<T> answer(internal_answer.env(),
                             internal_answer.map(),
-                            internal_answer.map().NumGlobalElements());
+                            (unsigned int)internal_answer.map().NumGlobalElements());
 
   return answer;
 }

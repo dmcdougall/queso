@@ -86,6 +86,7 @@ public:
    * QUESO's ctors and methods
    */
   GslNumericVector(const BaseEnvironment & env, const Map & map);
+  GslNumericVector(const BaseEnvironment & env, const Map & map, double value);
   GslNumericVector(const GslNumericVector<T> & other);
   GslNumericVector(const GslNumericVector<T> & v, double start, double end);
   GslNumericVector(const BaseEnvironment& env, double d1, double d2, const Map& map);

@@ -86,6 +86,7 @@ public:
   GslSparseMatrix(const GslNumericVector<T> & v, double diagValue);
   GslSparseMatrix(const GslSparseMatrix<T> & B);
   GslSparseMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols);
+  GslSparseMatrix(const BaseEnvironment & env, const Map & map, double diagValue);
   unsigned int numCols() const;
   void zeroLower(bool includeDiagonal=false);
   void zeroUpper(bool includeDiagonal=false);
