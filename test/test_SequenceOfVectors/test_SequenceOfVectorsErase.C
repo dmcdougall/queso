@@ -8,6 +8,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorSpace.h>
 #include <queso/SequenceOfVectors.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 int main(int argc, char **argv) {
 #ifdef QUESO_HAS_MPI
@@ -33,14 +35,14 @@ int main(int argc, char **argv) {
   std::vector<std::string> names(2);
   names[0] = "my_name_0";
   names[1] = "my_name_1";
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> vec_space(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> vec_space(env,
       "vec_prefix", 2, &names);
 
   // Create some things to put in the sequence
-  QUESO::GslVector v(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> v(vec_space.zeroVector());
 
   // Create a sequence of vectors
-  QUESO::SequenceOfVectors<QUESO::GslVector, QUESO::GslMatrix> vec_seq(
+  QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> vec_seq(
       vec_space, 13, "vec_seq");
 
   for (unsigned int i = 0; i < 13; i++) {
@@ -52,8 +54,8 @@ int main(int argc, char **argv) {
   // Now erase
   vec_seq.erasePositions(2, 5);
 
-  QUESO::GslVector expected(vec_space.zeroVector());
-  QUESO::GslVector computed(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> expected(vec_space.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> computed(vec_space.zeroVector());
   for (unsigned int i = 0; i < 8; i++) {
     if (i < 2) {
       expected[0] = i;
