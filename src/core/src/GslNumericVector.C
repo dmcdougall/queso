@@ -576,8 +576,6 @@ GslNumericVector<T>::GslNumericVector(const GslNumericVector<T> & other, double 
   //
   // Or add a copy ctor to BaseEnvironment?
   this->_vec.reset(new QUESO::GslVector(*other._vec, start, end));
-
-  *(this->_vec) = *other._vec;
 }
 
 template <typename T>
