@@ -27,6 +27,8 @@
 #include <queso/BoxSubset.h>
 #include <queso/LinearLagrangeInterpolationSurrogate.h>
 #include <queso/InterpolationSurrogateData.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 #include <limits>
@@ -49,23 +51,23 @@ int main(int argc, char ** argv)
 
   int return_flag = 0;
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     paramSpace(env,"param_", 1, NULL);
 
   double min_val = -5;
   double max_val = 3;
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(min_val);
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(max_val);
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
   std::vector<unsigned int> n_points(1, 101);
 
-  QUESO::InterpolationSurrogateData<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::InterpolationSurrogateData<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     data(paramDomain,n_points);
 
   std::vector<double> values(n_points[0]);
@@ -80,10 +82,10 @@ int main(int argc, char ** argv)
 
   data.set_values( values );
 
-  QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     one_d_surrogate( data );
 
-  QUESO::GslVector domainVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> domainVector(paramSpace.zeroVector());
   domainVector.cwSet(1.221);
 
   double test_val = one_d_surrogate.evaluate(domainVector);

@@ -27,6 +27,8 @@
 #include <queso/BoxSubset.h>
 #include <queso/LinearLagrangeInterpolationSurrogate.h>
 #include <queso/InterpolationSurrogateData.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 #include <limits>
@@ -49,20 +51,20 @@ int main(int argc, char ** argv)
 
   int return_flag = 0;
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     paramSpace(env,"param_", 3, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins[0] = -1;
   paramMins[1] = -0.5;
   paramMins[2] = 1.1;
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs[0] = 0.9;
   paramMaxs[1] = 3.14;
   paramMaxs[2] = 2.1;
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
   std::vector<unsigned int> n_points(3);
@@ -70,7 +72,7 @@ int main(int argc, char ** argv)
   n_points[1] = 51;
   n_points[2] = 31;
 
-  QUESO::InterpolationSurrogateData<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::InterpolationSurrogateData<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     data(paramDomain,n_points);
 
   std::vector<double> values(n_points[0]*n_points[1]*n_points[2]);
@@ -98,10 +100,10 @@ int main(int argc, char ** argv)
 
   data.set_values( values );
 
-  QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     three_d_surrogate( data );
 
-  QUESO::GslVector domainVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> domainVector(paramSpace.zeroVector());
   domainVector[0] = -0.4;
   domainVector[1] = 3.0;
   domainVector[2] = 1.5;
