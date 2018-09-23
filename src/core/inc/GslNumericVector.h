@@ -140,6 +140,8 @@ public:
                         const std::set<unsigned int> & allowedSubEnvIds) const;
   bool atLeastOneComponentBiggerOrEqualThan(const GslNumericVector<T> & rhs) const;
   int getMinValueIndex() const;
+  void getMinValueAndIndex(double & value, int & index);
+  void getMaxValueAndIndex(double & value, int & index);
 
   /**
    * Destructor, deallocates memory. Made virtual to allow

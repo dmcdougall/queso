@@ -925,6 +925,20 @@ GslNumericVector<T>::getMinValueIndex() const
 }
 
 template <typename T>
+void
+GslNumericVector<T>::getMinValueAndIndex(double & value, int & index)
+{
+  return this->_vec->getMinValueAndIndex(value, index);
+}
+
+template <typename T>
+void
+GslNumericVector<T>::getMaxValueAndIndex(double & value, int & index)
+{
+  return this->_vec->getMaxValueAndIndex(value, index);
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
