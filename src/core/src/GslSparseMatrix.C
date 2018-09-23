@@ -185,7 +185,7 @@ GslSparseMatrix<T>::GslSparseMatrix(const GslNumericVector<T> & v) :
   _closed (false)
 {
   this->queso_map.reset(new Map(v._vec->map()));
-  this->_mat.reset(new GslMatrix(v._vec->env(), v._vec->map(), v._vec->sizeLocal()));
+  this->_mat.reset(new GslMatrix(*v._vec));
   this->_is_initialized = true;
 }
 
