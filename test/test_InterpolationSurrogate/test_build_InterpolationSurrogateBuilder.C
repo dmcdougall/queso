@@ -29,6 +29,8 @@
 #include <queso/InterpolationSurrogateBuilder.h>
 #include <queso/InterpolationSurrogateDataSet.h>
 #include <queso/InterpolationSurrogateIOASCII.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 #include <limits>
@@ -78,11 +80,11 @@ int main(int argc, char ** argv)
   std::string filename1 = "test_write_InterpolationSurrogateBuilder_1.dat";
   std::string filename2 = "test_write_InterpolationSurrogateBuilder_2.dat";
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
       paramSpace(env,vs_prefix.c_str(), 4, NULL);
 
   // Point at which we will test the surrogate evaluation
-  QUESO::GslVector domainVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> domainVector(paramSpace.zeroVector());
   domainVector[0] = -0.4;
   domainVector[1] = 3.0;
   domainVector[2] = 1.5;
@@ -95,19 +97,19 @@ int main(int argc, char ** argv)
 
   // First test surrogate build directly from the computed values
   {
-    QUESO::GslVector paramMins(paramSpace.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
     paramMins[0] = -1;
     paramMins[1] = -0.5;
     paramMins[2] = 1.1;
     paramMins[3] = -2.1;
 
-    QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
     paramMaxs[0] = 0.9;
     paramMaxs[1] = 3.14;
     paramMaxs[2] = 2.1;
     paramMaxs[3] = 4.1;
 
-    QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix>
+    QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
       paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
     std::vector<unsigned int> n_points(4);
@@ -119,18 +121,18 @@ int main(int argc, char ** argv)
     // One dataset for each of the two functions
     const unsigned int n_datasets = 2;
 
-    QUESO::InterpolationSurrogateDataSet<QUESO::GslVector, QUESO::GslMatrix>
+    QUESO::InterpolationSurrogateDataSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
       data(paramDomain,n_points,n_datasets);
 
-    MyInterpolationBuilder<QUESO::GslVector,QUESO::GslMatrix>
+    MyInterpolationBuilder<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       builder( data );
 
     builder.build_values();
 
-    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>
+    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       four_d_surrogate_1( data.get_dataset(0) );
 
-    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>
+    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       four_d_surrogate_2( data.get_dataset(1) );
 
     double test_val_1 = four_d_surrogate_1.evaluate(domainVector);
@@ -141,7 +143,7 @@ int main(int argc, char ** argv)
       test_val( test_val_2, exact_val_2, tol, "test_build_2" );
 
     // Write the output to test reading next
-    QUESO::InterpolationSurrogateIOASCII<QUESO::GslVector,QUESO::GslMatrix>
+    QUESO::InterpolationSurrogateIOASCII<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       data_writer;
 
     data_writer.write( filename1, data.get_dataset(0) );
@@ -150,7 +152,7 @@ int main(int argc, char ** argv)
 
   // Now read the data and test
   {
-    QUESO::InterpolationSurrogateIOASCII<QUESO::GslVector,QUESO::GslMatrix>
+    QUESO::InterpolationSurrogateIOASCII<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       data_reader_1, data_reader_2;
 
     data_reader_1.read( filename1, env, vs_prefix.c_str() );
@@ -158,10 +160,10 @@ int main(int argc, char ** argv)
 
 
     // Build a new surrogate
-    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>
+    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       four_d_surrogate_1( data_reader_1.data() );
 
-    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslVector,QUESO::GslMatrix>
+    QUESO::LinearLagrangeInterpolationSurrogate<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
       four_d_surrogate_2( data_reader_2.data() );
 
     double test_val_1 = four_d_surrogate_1.evaluate(domainVector);
