@@ -28,6 +28,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/BoxSubset.h>
 #include <queso/GaussianLikelihoodDiagonalCovariance.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 #include <cmath>
@@ -76,41 +78,41 @@ int main(int argc, char ** argv) {
   QUESO::FullEnvironment env(inputFileName, "", NULL);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env,
       "param_", 1, NULL);
 
   double min_val = -INFINITY;
   double max_val = INFINITY;
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(min_val);
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(max_val);
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramDomain("param_",
       paramSpace, paramMins, paramMaxs);
 
   // Set up observation space
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> obsSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> obsSpace(env,
       "obs_", 2, NULL);
 
   // Fill up observation vector
-  QUESO::GslVector observations(obsSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> observations(obsSpace.zeroVector());
   observations[0] = 1.0;
   observations[1] = 1.0;
 
   // Fill up covariance 'matrix'
-  QUESO::GslVector covariance(obsSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> covariance(obsSpace.zeroVector());
   covariance[0] = 1.0;
   covariance[1] = 2.0;
 
   // Pass in observations to Gaussian likelihood object
-  Likelihood<QUESO::GslVector, QUESO::GslMatrix> lhood("llhd_", paramDomain,
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> lhood("llhd_", paramDomain,
       observations, covariance);
 
   double lhood_value;
   double truth_value;
-  QUESO::GslVector point(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> point(paramSpace.zeroVector());
   point[0] = 0.0;
   lhood_value = lhood.actualValue(point, NULL, NULL, NULL, NULL);
   truth_value = std::exp(-3.0);
