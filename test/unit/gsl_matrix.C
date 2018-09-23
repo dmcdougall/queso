@@ -33,6 +33,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorRV.h>
 #include <queso/VectorSpace.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <vector>
 #include <set>
@@ -70,16 +72,16 @@ namespace QUESOTesting
 
     void test_get_set_row_column()
     {
-      QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
         paramSpace( (*_env), "param_", 2, NULL);
 
-      typename QUESO::ScopedPtr<QUESO::GslMatrix>::Type
+      typename QUESO::ScopedPtr<QUESO::GslSparseMatrix<libMesh::Number>>::Type
         matrix( paramSpace.newMatrix() );
 
       (*matrix)(0,0) = 4.; (*matrix)(0,1) = 3.;
       (*matrix)(1,0) = 5.; (*matrix)(1,1) = 7.;
 
-      QUESO::GslVector row((*matrix).getRow(0));
+      QUESO::GslNumericVector<libMesh::Number> row((*matrix).getRow(0));
       CPPUNIT_ASSERT_EQUAL( (*matrix)(0,0), row[0]);
       CPPUNIT_ASSERT_EQUAL( (*matrix)(0,1), row[1]);
 
@@ -87,7 +89,7 @@ namespace QUESOTesting
       CPPUNIT_ASSERT_EQUAL( (*matrix)(1,0), row[0]);
       CPPUNIT_ASSERT_EQUAL( (*matrix)(1,1), row[1]);
 
-      QUESO::GslVector column((*matrix).getColumn(0));
+      QUESO::GslNumericVector<libMesh::Number> column((*matrix).getColumn(0));
       CPPUNIT_ASSERT_EQUAL( (*matrix)(0,0), column[0]);
       CPPUNIT_ASSERT_EQUAL( (*matrix)(1,0), column[1]);
 
@@ -112,16 +114,16 @@ namespace QUESOTesting
 
     void test_inverse_power_method()
     {
-      QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
         paramSpace( (*_env), "param_", 2, NULL);
 
-      typename QUESO::ScopedPtr<QUESO::GslMatrix>::Type
+      typename QUESO::ScopedPtr<QUESO::GslSparseMatrix<libMesh::Number>>::Type
         matrix( paramSpace.newMatrix() );
       (*matrix)(0,0) = 4.; (*matrix)(0,1) = 3.;
       (*matrix)(1,0) = 5.; (*matrix)(1,1) = 7.;
 
       double eValue = 0.0;
-      QUESO::GslVector eVector( (*paramSpace.newVector()) );
+      QUESO::GslNumericVector<libMesh::Number> eVector( (*paramSpace.newVector()) );
 
       matrix->smallestEigen( eValue, eVector );
 
@@ -144,7 +146,7 @@ namespace QUESOTesting
       // Note the minus sign doesn't matter (as long as the sign change is
       // consistent within the vector). We just need to make sure
       // that we get the right values in the vector.
-      QUESO::GslVector eVectorExact( (*paramSpace.newVector() ) );
+      QUESO::GslNumericVector<libMesh::Number> eVectorExact( (*paramSpace.newVector() ) );
       eVectorExact[0] =  0.749062754969087;
       eVectorExact[1] = -0.662499048390352;
 
@@ -160,16 +162,16 @@ namespace QUESOTesting
 
     void test_power_method()
     {
-      QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
         paramSpace( (*_env), "param_", 2, NULL);
 
-      typename QUESO::ScopedPtr<QUESO::GslMatrix>::Type
+      typename QUESO::ScopedPtr<QUESO::GslSparseMatrix<libMesh::Number>>::Type
         matrix( paramSpace.newMatrix() );
       (*matrix)(0,0) = 4.; (*matrix)(0,1) = 3.;
       (*matrix)(1,0) = 5.; (*matrix)(1,1) = 7.;
 
       double eValue = 0.0;
-      QUESO::GslVector eVector( (*paramSpace.newVector()) );
+      QUESO::GslNumericVector<libMesh::Number> eVector( (*paramSpace.newVector()) );
 
       matrix->largestEigen( eValue, eVector );
 
@@ -189,7 +191,7 @@ namespace QUESOTesting
 
       double eValueExact = 9.653311931459037;
 
-      QUESO::GslVector eVectorExact( (*paramSpace.newVector() ) );
+      QUESO::GslNumericVector<libMesh::Number> eVectorExact( (*paramSpace.newVector() ) );
       eVectorExact[0] = 0.468750367387953;
       eVectorExact[1] = 0.883330681610041;
 
@@ -205,15 +207,15 @@ namespace QUESOTesting
 
     void test_multiple_rhs_matrix_solve()
     {
-      QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
         paramSpace( (*_env), "param_", 2, NULL);
 
-      typename QUESO::ScopedPtr<QUESO::GslMatrix>::Type
+      typename QUESO::ScopedPtr<QUESO::GslSparseMatrix<libMesh::Number>>::Type
         matrix( paramSpace.newMatrix() );
       (*matrix)(0,0) = 4.; (*matrix)(0,1) = 3.;
       (*matrix)(1,0) = 5.; (*matrix)(1,1) = 7.;
 
-      QUESO::GslMatrix result( (*matrix) );
+      QUESO::GslSparseMatrix<libMesh::Number> result( (*matrix) );
 
       matrix->invertMultiply( (*matrix), result );
 
@@ -226,15 +228,15 @@ namespace QUESOTesting
 
     void test_chol_matrix_solve()
     {
-      QUESO::VectorSpace<> paramSpace(*_env, "param_", 2, NULL);
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(*_env, "param_", 2, NULL);
 
-      QUESO::GslVector rhs(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> rhs(paramSpace.zeroVector());
       rhs[0] = 6.0;
       rhs[1] = 5.0;
 
-      QUESO::GslVector sol(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> sol(paramSpace.zeroVector());
 
-      QUESO::GslMatrix A(rhs);
+      QUESO::GslSparseMatrix<libMesh::Number> A(rhs);
       A(0,0) = 4.;
       A(0,1) = 1.;
       A(1,0) = 1.;
@@ -249,8 +251,8 @@ namespace QUESOTesting
 
     void test_cw_extract()
     {
-      QUESO::VectorSpace<> space4(*_env, "", 4, NULL);
-      QUESO::GslMatrix mat4(space4.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space4(*_env, "", 4, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> mat4(space4.zeroVector());
 
       for (unsigned int i = 0; i < 4; i++) {
         for (unsigned int j = 0; j < 4; j++) {
@@ -258,8 +260,8 @@ namespace QUESOTesting
         }
       }
 
-      QUESO::VectorSpace<> space2(*_env, "", 2, NULL);
-      QUESO::GslMatrix mat2(space2.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> mat2(space2.zeroVector());
 
       mat4.cwExtract(1, 1, mat2);
 
@@ -271,11 +273,11 @@ namespace QUESOTesting
 
     void test_svd()
     {
-      QUESO::VectorSpace<> space(*_env, "", 2, NULL);
-      QUESO::GslMatrix M(space.zeroVector());
-      QUESO::GslMatrix U(space.zeroVector());
-      QUESO::GslMatrix Vs(space.zeroVector());
-      QUESO::GslVector S(space.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> M(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> U(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> Vs(space.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> S(space.zeroVector());
 
       M(0,0) = 1.0;
       M(0,1) = 2.0;
@@ -285,9 +287,9 @@ namespace QUESOTesting
       M.svd(U, S, Vs);
 
       // Sanity check the decomposition
-      QUESO::GslMatrix M_computed(space.zeroVector());
-      QUESO::GslMatrix temp(space.zeroVector());
-      QUESO::GslMatrix S_matrix(S);
+      QUESO::GslSparseMatrix<libMesh::Number> M_computed(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> temp(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> S_matrix(S);
 
       U.multiply(S_matrix, temp);
       temp.multiply(Vs, M_computed);
@@ -298,9 +300,9 @@ namespace QUESOTesting
       CPPUNIT_ASSERT_DOUBLES_EQUAL(M(1,1), M_computed(1,1), 1.0e-14);
 
       // Check solves
-      QUESO::GslMatrix X(space.zeroVector());
-      QUESO::GslMatrix X_computed(space.zeroVector());
-      QUESO::GslMatrix B(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> X(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> X_computed(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> B(space.zeroVector());
 
       B(0,0) = 11.0;
       B(0,1) = 17.0;
@@ -332,9 +334,9 @@ namespace QUESOTesting
 
     void test_fill_diag()
     {
-      QUESO::VectorSpace<> space2(*_env, "", 2, NULL);
-      QUESO::GslMatrix m1(space2.zeroVector());
-      QUESO::GslMatrix m2(space2.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m1(space2.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> m2(space2.zeroVector());
 
       m1(0,0) = 1.0;
       m1(0,1) = 2.0;
@@ -345,10 +347,10 @@ namespace QUESOTesting
       m2(1,0) = 7.0;
       m2(1,1) = 8.0;
 
-      QUESO::VectorSpace<> space4(*_env, "", 4, NULL);
-      QUESO::GslMatrix m(space4.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space4(*_env, "", 4, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m(space4.zeroVector());
 
-      std::vector<const QUESO::GslMatrix *> ms;
+      std::vector<const QUESO::GslSparseMatrix<libMesh::Number> *> ms;
       ms.push_back(&m1);
       ms.push_back(&m2);
 
@@ -372,7 +374,7 @@ namespace QUESOTesting
       CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, m(3,1), 1e-14);
 
       m.cwSet(0.0);
-      std::vector<QUESO::GslMatrix *> ms2;
+      std::vector<QUESO::GslSparseMatrix<libMesh::Number> *> ms2;
       ms2.push_back(&m1);
       ms2.push_back(&m2);
 
@@ -399,9 +401,9 @@ namespace QUESOTesting
     void test_fill_horiz()
     {
       QUESO::Map map(2, 0, _env->fullComm());
-      QUESO::GslMatrix m1(*_env, map, (unsigned int)2);  // 2 x 2 matrix
-      QUESO::GslMatrix m2(*_env, map, (unsigned int)2);  // 2 x 2 matrix
-      QUESO::GslMatrix m(*_env, map, (unsigned int)4);  // 2 x 4 matrix
+      QUESO::GslSparseMatrix<libMesh::Number> m1(*_env, map, (unsigned int)2);  // 2 x 2 matrix
+      QUESO::GslSparseMatrix<libMesh::Number> m2(*_env, map, (unsigned int)2);  // 2 x 2 matrix
+      QUESO::GslSparseMatrix<libMesh::Number> m(*_env, map, (unsigned int)4);  // 2 x 4 matrix
 
       m1(0,0) = 1.0;
       m1(0,1) = 2.0;
@@ -412,7 +414,7 @@ namespace QUESOTesting
       m2(1,0) = 7.0;
       m2(1,1) = 8.0;
 
-      std::vector<const QUESO::GslMatrix *> ms;
+      std::vector<const QUESO::GslSparseMatrix<libMesh::Number> *> ms;
       ms.push_back(&m1);
       ms.push_back(&m2);
 
@@ -428,7 +430,7 @@ namespace QUESOTesting
       CPPUNIT_ASSERT_DOUBLES_EQUAL(m2(1,1), m(1,3), 1e-14);
 
       m.cwSet(0.0);
-      std::vector<QUESO::GslMatrix *> ms2;
+      std::vector<QUESO::GslSparseMatrix<libMesh::Number> *> ms2;
       ms2.push_back(&m1);
       ms2.push_back(&m2);
 
@@ -447,11 +449,11 @@ namespace QUESOTesting
     void test_fill_vert()
     {
       QUESO::Map map(4, 0, _env->fullComm());
-      QUESO::GslMatrix m(*_env, map, (unsigned int)2);  // 4 x 2 matrix
+      QUESO::GslSparseMatrix<libMesh::Number> m(*_env, map, (unsigned int)2);  // 4 x 2 matrix
 
-      QUESO::VectorSpace<> space(*_env, "", 2, NULL);
-      QUESO::GslMatrix m1(space.zeroVector());  // 2 x 2 matrix
-      QUESO::GslMatrix m2(space.zeroVector());  // 2 x 2 matrix
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m1(space.zeroVector());  // 2 x 2 matrix
+      QUESO::GslSparseMatrix<libMesh::Number> m2(space.zeroVector());  // 2 x 2 matrix
 
       m1(0,0) = 1.0;
       m1(0,1) = 2.0;
@@ -462,7 +464,7 @@ namespace QUESOTesting
       m2(1,0) = 7.0;
       m2(1,1) = 8.0;
 
-      std::vector<const QUESO::GslMatrix *> ms;
+      std::vector<const QUESO::GslSparseMatrix<libMesh::Number> *> ms;
       ms.push_back(&m1);
       ms.push_back(&m2);
 
@@ -478,7 +480,7 @@ namespace QUESOTesting
       CPPUNIT_ASSERT_DOUBLES_EQUAL(m2(1,1), m(3,1), 1e-14);
 
       m.cwSet(0.0);
-      std::vector<QUESO::GslMatrix *> ms2;
+      std::vector<QUESO::GslSparseMatrix<libMesh::Number> *> ms2;
       ms2.push_back(&m1);
       ms2.push_back(&m2);
 
@@ -496,12 +498,12 @@ namespace QUESOTesting
 
     void test_fill_tensor_product()
     {
-      QUESO::VectorSpace<> space4(*_env, "", 4, NULL);
-      QUESO::GslMatrix m(space4.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space4(*_env, "", 4, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m(space4.zeroVector());
 
-      QUESO::VectorSpace<> space2(*_env, "", 2, NULL);
-      QUESO::GslMatrix m1(space2.zeroVector());
-      QUESO::GslMatrix m2(space2.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m1(space2.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> m2(space2.zeroVector());
 
       m1(0,0) = 1.0;
       m1(0,1) = 2.0;
@@ -532,9 +534,9 @@ namespace QUESOTesting
       CPPUNIT_ASSERT_DOUBLES_EQUAL(m1(1,1) * m2(1,1), m(3,3), 1e-14);
 
       QUESO::Map map(4, 0, _env->fullComm());
-      QUESO::GslMatrix mv(*_env, map, (unsigned int)2);  // 4 x 2 matrix
+      QUESO::GslSparseMatrix<libMesh::Number> mv(*_env, map, (unsigned int)2);  // 4 x 2 matrix
 
-      QUESO::GslVector v(space2.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> v(space2.zeroVector());
       v[0] = 1.0;
       v[1] = 1.0;
 
@@ -555,9 +557,9 @@ namespace QUESOTesting
 
     void test_fill_transpose()
     {
-      QUESO::VectorSpace<> space2(*_env, "", 2, NULL);
-      QUESO::GslMatrix m1(space2.zeroVector());
-      QUESO::GslMatrix m2(space2.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m1(space2.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> m2(space2.zeroVector());
 
       m1(0,0) = 1.0;
       m1(0,1) = 2.0;
@@ -574,8 +576,8 @@ namespace QUESOTesting
 
     void test_write_read()
     {
-      QUESO::VectorSpace<> space(*_env, "", 2, NULL);
-      QUESO::GslMatrix m(space.zeroVector());
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space(*_env, "", 2, NULL);
+      QUESO::GslSparseMatrix<libMesh::Number> m(space.zeroVector());
 
       m(0,0) = 1.0;
       m(0,1) = 2.0;
@@ -592,7 +594,7 @@ namespace QUESOTesting
                          allowedSubEnvIds);
 
       // Now read and make sure we get the same thing
-      QUESO::GslMatrix m2(space.zeroVector());
+      QUESO::GslSparseMatrix<libMesh::Number> m2(space.zeroVector());
       m2.subReadContents("gsl_matrix_test_write_read_sub0", // Need "_sub0"
                          "m",
                          allowedSubEnvIds);

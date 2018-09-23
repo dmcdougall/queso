@@ -33,6 +33,8 @@
 #include <queso/GslVector.h>
 #include <queso/VectorRV.h>
 #include <queso/VectorSpace.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESOTesting
 {
@@ -57,11 +59,11 @@ namespace QUESOTesting
     void test_min_max()
     {
       // Instantiate the parameter space
-      QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
         paramSpace( (*_env), "param_", 2, NULL);
 
       // Instantiate the parameter domain
-      QUESO::GslVector vec( paramSpace.zeroVector() );
+      QUESO::GslNumericVector<libMesh::Number> vec( paramSpace.zeroVector() );
 
       vec[0] = -4.;
       vec[1] =  3.;
@@ -84,12 +86,12 @@ namespace QUESOTesting
       unsigned int num_samples = 1000000;
 
       // Instantiate the parameter space
-      QUESO::VectorSpace<> paramSpace(*_env, "", num_samples, NULL);
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(*_env, "", num_samples, NULL);
 
       // Instantiate the parameter domain
-      QUESO::GslVector vec(paramSpace.zeroVector());
-      QUESO::GslVector a(paramSpace.zeroVector());
-      QUESO::GslVector b(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> vec(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> a(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> b(paramSpace.zeroVector());
       a.cwSet(2.0);
       b.cwSet(2.0);
       vec.cwSetBeta(a, b);
@@ -104,12 +106,12 @@ namespace QUESOTesting
       unsigned int num_samples = 1000000;
 
       // Instantiate the parameter space
-      QUESO::VectorSpace<> paramSpace(*_env, "", num_samples, NULL);
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(*_env, "", num_samples, NULL);
 
       // Instantiate the parameter domain
-      QUESO::GslVector vec(paramSpace.zeroVector());
-      QUESO::GslVector a(paramSpace.zeroVector());
-      QUESO::GslVector b(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> vec(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> a(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> b(paramSpace.zeroVector());
       a.cwSet(10.0);
       b.cwSet(0.5);
       vec.cwSetGamma(a, b);
@@ -124,12 +126,12 @@ namespace QUESOTesting
       unsigned int num_samples = 1000000;
 
       // Instantiate the parameter space
-      QUESO::VectorSpace<> paramSpace(*_env, "", num_samples, NULL);
+      QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(*_env, "", num_samples, NULL);
 
       // Instantiate the parameter domain
-      QUESO::GslVector vec(paramSpace.zeroVector());
-      QUESO::GslVector a(paramSpace.zeroVector());
-      QUESO::GslVector b(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> vec(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> a(paramSpace.zeroVector());
+      QUESO::GslNumericVector<libMesh::Number> b(paramSpace.zeroVector());
       a.cwSet(11.0);
       b.cwSet(1.0);
       vec.cwSetInverseGamma(a, b);
