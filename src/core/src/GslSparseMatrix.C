@@ -693,6 +693,15 @@ GslSparseMatrix<T> operator+(const GslSparseMatrix<T> & m1,
 }
 
 template <typename T>
+GslSparseMatrix<T> operator-(const GslSparseMatrix<T> & m1,
+                             const GslSparseMatrix<T> & m2)
+{
+  GslSparseMatrix<T> mat(m1);
+  mat -= m2;
+  return mat;
+}
+
+template <typename T>
 unsigned int
 GslSparseMatrix<T>::numRowsLocal() const
 {
@@ -801,5 +810,6 @@ template GslSparseMatrix<libMesh::Number> operator*(double, const GslSparseMatri
 template GslSparseMatrix<libMesh::Number> matrixProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template GslSparseMatrix<libMesh::Number> operator*(const GslSparseMatrix<libMesh::Number> &, const GslSparseMatrix<libMesh::Number> &);
 template GslSparseMatrix<libMesh::Number> operator+(const GslSparseMatrix<libMesh::Number> &, const GslSparseMatrix<libMesh::Number> &);
+template GslSparseMatrix<libMesh::Number> operator-(const GslSparseMatrix<libMesh::Number> &, const GslSparseMatrix<libMesh::Number> &);
 
 } // namespace QUESO
