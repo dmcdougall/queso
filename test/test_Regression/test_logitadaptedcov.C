@@ -8,6 +8,8 @@
 #include <queso/GaussianJointPdf.h>
 #include <queso/InvLogitGaussianJointPdf.h>
 #include <queso/StatisticalInverseProblem.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 #include <iomanip>
@@ -61,46 +63,46 @@ int main(int argc, char ** argv) {
   QUESO::FullEnvironment env(inputFileName, "", NULL);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env,
       "param_", 2, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(0.0);
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(1.0);
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramDomain("param_",
       paramSpace, paramMins, paramMaxs);
 
-  QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix> prior("prior_",
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> prior("prior_",
       paramDomain);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
   mean.cwSet(0.5);
 
-  QUESO::GslMatrix cov(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> cov(paramSpace.zeroVector());
   cov(0, 0) = 0.05 * 0.05;
   cov(0, 1) = 0.001;
   cov(1, 0) = 0.001;
   cov(1, 1) = 0.05 * 0.05;
 
-  QUESO::GaussianJointPdf<QUESO::GslVector, QUESO::GslMatrix> pdf("pdf_",
+  QUESO::GaussianJointPdf<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> pdf("pdf_",
       paramDomain, mean, cov);
 
-  Likelihood<QUESO::GslVector, QUESO::GslMatrix> likelihood("likelihood_",
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> likelihood("likelihood_",
       paramDomain, pdf);
 
-  QUESO::GenericVectorRV<QUESO::GslVector, QUESO::GslMatrix> posterior(
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> posterior(
       "posterior_", paramDomain);
 
-  QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix> ip("",
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> ip("",
       NULL, prior, likelihood, posterior);
 
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
   paramInitials.cwSet(0.5);
 
-  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(paramSpace.zeroVector());
   proposalCovMatrix(0, 0) = 0.5;
   proposalCovMatrix(0, 1) = 0.0;
   proposalCovMatrix(1, 0) = 0.0;
@@ -108,9 +110,9 @@ int main(int argc, char ** argv) {
 
   ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
 
-  QUESO::GslMatrix adaptedCovMatrix(
-      dynamic_cast<const QUESO::InvLogitGaussianJointPdf<QUESO::GslVector,
-          QUESO::GslMatrix> &>(
+  QUESO::GslSparseMatrix<libMesh::Number> adaptedCovMatrix(
+      dynamic_cast<const QUESO::InvLogitGaussianJointPdf<QUESO::GslNumericVector<libMesh::Number>,
+          QUESO::GslSparseMatrix<libMesh::Number>> &>(
             ip.sequenceGenerator().transitionKernel().rv(0).pdf()).lawCovMatrix());
 
   std::cout << std::setprecision(15)
@@ -119,13 +121,13 @@ int main(int argc, char ** argv) {
             << adaptedCovMatrix(1, 0) << " " << adaptedCovMatrix(1, 1) << std::endl;
 
 
-  QUESO::GslMatrix regressionTestMatrix(proposalCovMatrix);
+  QUESO::GslSparseMatrix<libMesh::Number> regressionTestMatrix(proposalCovMatrix);
   regressionTestMatrix(0, 0) = 0.0162626079275191;
   regressionTestMatrix(0, 1) = 0.0065764502233059;
   regressionTestMatrix(1, 0) = 0.0065764502233059;
   regressionTestMatrix(1, 1) = 0.0154739306675151;
 
-  QUESO::GslMatrix diff(regressionTestMatrix - adaptedCovMatrix);
+  QUESO::GslSparseMatrix<libMesh::Number> diff(regressionTestMatrix - adaptedCovMatrix);
 
 
   std::cout << "norm is " << diff.normFrob() / regressionTestMatrix.normFrob() << std::endl;
