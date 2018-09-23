@@ -26,11 +26,11 @@
 
 #include <queso/GenericScalarFunction.h>
 #include <queso/GslVector.h>
-#include <queso/GslMatrix.h>
 #include <queso/UniformVectorRV.h>
 #include <queso/StatisticalInverseProblem.h>
 #include <queso/ScalarFunction.h>
 #include <queso/VectorSet.h>
+#include <queso/GslNumericVector.h>
 
 #include <gravity_likelihood.h>
 
@@ -90,4 +90,4 @@ Likelihood<V, M>::actualValue(const V & domainVector,
         hessianMatrix, hessianEffect));
 }
 
-template class Likelihood<QUESO::GslVector, QUESO::GslMatrix>;
+template class Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>;

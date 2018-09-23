@@ -54,6 +54,8 @@
 #include <queso/GenericVectorRV.h>
 #include <queso/StatisticalInverseProblem.h>
 #include <queso/StatisticalForwardProblem.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 #include <cstdlib>
@@ -82,48 +84,48 @@ int main(int argc, char* argv[])
   //------------------------------------------------------
   // SIP Step 1 of 6: Instantiate the parameter space
   //------------------------------------------------------
-  QUESO::VectorSpace<> paramSpace(env, "param_", 1, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", 1, NULL);
 
   //------------------------------------------------------
   // SIP Step 2 of 6: Instantiate the parameter domain
   //------------------------------------------------------
-  QUESO::GslVector paramMinValues(paramSpace.zeroVector());
-  QUESO::GslVector paramMaxValues(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMinValues(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxValues(paramSpace.zeroVector());
 
   paramMinValues[0] = 8.;
   paramMaxValues[0] = 11.;
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMinValues,
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMinValues,
       paramMaxValues);
 
   //------------------------------------------------------
   // SIP Step 3 of 6: Instantiate the likelihood function
   // object to be used by QUESO.
   //------------------------------------------------------
-  Likelihood<> lhood("like_", paramDomain);
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > lhood("like_", paramDomain);
 
   //------------------------------------------------------
   // SIP Step 4 of 6: Define the prior RV
   //------------------------------------------------------
-  QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > priorRv("prior_", paramDomain);
 
   //------------------------------------------------------
   // SIP Step 5 of 6: Instantiate the inverse problem
   //------------------------------------------------------
   // Extra prefix before the default "rv_" prefix
-  QUESO::GenericVectorRV<> postRv("post_", paramSpace);
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > postRv("post_", paramSpace);
 
   // No extra prefix before the default "ip_" prefix
-  QUESO::StatisticalInverseProblem<> ip("", NULL, priorRv, lhood, postRv);
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > ip("", NULL, priorRv, lhood, postRv);
 
   //------------------------------------------------------
   // SIP Step 6 of 6: Solve the inverse problem, that is,
   // set the 'pdf' and the 'realizer' of the posterior RV
   //------------------------------------------------------
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
   priorRv.realizer().realization(paramInitials);
 
-  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(paramSpace.zeroVector());
   proposalCovMatrix(0,0) = std::pow(std::abs(paramInitials[0]) / 20.0, 2.0);
 
   ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
@@ -139,7 +141,7 @@ int main(int argc, char* argv[])
   // SFP input RV = FIP posterior RV, so SFP parameter space
   // has been already defined.
   //------------------------------------------------------
-  QUESO::VectorSpace<> qoiSpace(env, "qoi_", 1, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > qoiSpace(env, "qoi_", 1, NULL);
 
   //------------------------------------------------------
   // SFP Step 2 of 6: Instantiate the parameter domain
@@ -152,7 +154,7 @@ int main(int argc, char* argv[])
   // SFP Step 3 of 6: Instantiate the qoi object
   // to be used by QUESO.
   //------------------------------------------------------
-  Qoi<> qoi("qoi_", paramDomain, qoiSpace);
+  Qoi<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > qoi("qoi_", paramDomain, qoiSpace);
 
   //------------------------------------------------------
   // SFP Step 4 of 6: Define the input RV
@@ -164,9 +166,9 @@ int main(int argc, char* argv[])
   //------------------------------------------------------
   // SFP Step 5 of 6: Instantiate the forward problem
   //------------------------------------------------------
-  QUESO::GenericVectorRV<> qoiRv("qoi_", qoiSpace);
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > qoiRv("qoi_", qoiSpace);
 
-  QUESO::StatisticalForwardProblem<> fp("", NULL, postRv, qoi, qoiRv);
+  QUESO::StatisticalForwardProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>, QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > fp("", NULL, postRv, qoi, qoiRv);
 
   //------------------------------------------------------
   // SFP Step 6 of 6: Solve the forward problem

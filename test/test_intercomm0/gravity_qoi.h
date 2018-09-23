@@ -33,9 +33,11 @@
 
 #include <queso/VectorFunction.h>
 #include <queso/DistArray.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
-template<class P_V = QUESO::GslVector, class P_M = QUESO::GslMatrix,
-         class Q_V = QUESO::GslVector, class Q_M = QUESO::GslMatrix>
+template<class P_V = QUESO::GslNumericVector<libMesh::Number>, class P_M = QUESO::GslSparseMatrix<libMesh::Number>,
+         class Q_V = QUESO::GslNumericVector<libMesh::Number>, class Q_M = QUESO::GslSparseMatrix<libMesh::Number>>
 class Qoi : public QUESO::BaseVectorFunction<P_V, P_M, Q_V, Q_M>
 {
 public:

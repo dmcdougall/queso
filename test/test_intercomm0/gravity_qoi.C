@@ -33,6 +33,8 @@
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
 #include <gravity_qoi.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 template<class P_V, class P_M, class Q_V, class Q_M>
 Qoi<P_V, P_M, Q_V, Q_M>::Qoi(const char * prefix,
@@ -75,5 +77,5 @@ Qoi<P_V, P_M, Q_V, Q_M>::compute(const P_V & domainVector,
   imageVector[0] = distanceTraveled;
 }
 
-template class Qoi<QUESO::GslVector, QUESO::GslMatrix, QUESO::GslVector,
-                   QUESO::GslMatrix>;
+template class Qoi<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>, QUESO::GslNumericVector<libMesh::Number>,
+                   QUESO::GslSparseMatrix<libMesh::Number>>;
