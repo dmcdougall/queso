@@ -97,7 +97,8 @@ public:
           GslNumericVector<T> & vecS,
           GslSparseMatrix & matVt) const;
   GslNumericVector<T> invertMultiply(const GslNumericVector<T> & b) const;
-  void invertMultiply(const GslSparseMatrix<T> & B, GslSparseMatrix<T> X) const;
+  void invertMultiply(const GslSparseMatrix<T> & B, GslSparseMatrix<T> & X) const;
+  void invertMultiply(const GslNumericVector<T> & b, GslNumericVector<T> & x) const;
   double lnDeterminant() const;
   unsigned int numRowsGlobal() const;
   GslSparseMatrix<T> & operator=(const GslSparseMatrix & rhs);
@@ -131,6 +132,63 @@ public:
   void filterLargeValues(double thresholdValue);
   GslSparseMatrix<T> & operator-=(const GslSparseMatrix<T> & rhs);
   GslSparseMatrix<T> invertMultiply(const GslSparseMatrix<T> & B) const;
+  GslNumericVector<T> getRow(const unsigned int row_num) const;
+  void setRow(const unsigned int row_num, const GslNumericVector<T> & row);
+  void setColumn(const unsigned int column_num, const GslNumericVector<T> & column);
+  void smallestEigen(double & eigenValue, GslNumericVector<T> & eigenVector) const;
+  void cholSolve(const GslNumericVector<T> & rhs, GslNumericVector<T> & sol) const;
+  void cwExtract(unsigned int rowId, unsigned int colId, GslSparseMatrix<T> & mat) const;
+  void multiply(const GslSparseMatrix<T> & X, GslSparseMatrix<T> & Y) const;
+  int svdSolve(const GslSparseMatrix<T> & rhsMat, GslSparseMatrix<T> & solMat) const;
+  const GslSparseMatrix<T> & svdMatU() const;
+  const GslSparseMatrix<T> & svdMatV() const;
+  void fillWithBlocksDiagonally(unsigned int rowId,
+                                unsigned int colId,
+                                const std::vector<const GslSparseMatrix<T> *> & matrices,
+                                bool checkForExactNumRowsMatching,
+                                bool checkForExactNumColsMatching);
+  void fillWithBlocksDiagonally(unsigned int rowId,
+                                unsigned int colId,
+                                const std::vector<GslSparseMatrix<T> *> & matrices,
+                                bool checkForExactNumRowsMatching,
+                                bool checkForExactNumColsMatching);
+  void fillWithTensorProduct(unsigned int rowId,
+                             unsigned int colId,
+                             const GslSparseMatrix<T> & mat1,
+                             const GslSparseMatrix<T> & mat2,
+                             bool checkForExactNumRowsMatching,
+                             bool checkForExactNumColsMatching);
+  void fillWithTensorProduct(unsigned int rowId,
+                             unsigned int colId,
+                             const GslSparseMatrix<T> & mat1,
+                             const GslNumericVector<T> & vec2,
+                             bool checkForExactNumRowsMatching,
+                             bool checkForExactNumColsMatching);
+  void fillWithTranspose(unsigned int rowId,
+                         unsigned int colId,
+                         const GslSparseMatrix<T> & mat,
+                         bool checkForExactNumRowsMatching,
+                         bool checkForExactNumColsMatching);
+  void fillWithBlocksHorizontally(unsigned int rowId,
+                                  unsigned int colId,
+                                  const std::vector<const GslSparseMatrix<T> *> & matrices,
+                                  bool checkForExactNumRowsMatching,
+                                  bool checkForExactNumColsMatching);
+  void fillWithBlocksHorizontally(unsigned int rowId,
+                                  unsigned int colId,
+                                  const std::vector<GslSparseMatrix<T> *> & matrices,
+                                  bool checkForExactNumRowsMatching,
+                                  bool checkForExactNumColsMatching);
+  void fillWithBlocksVertically(unsigned int rowId,
+                                unsigned int colId,
+                                const std::vector<const GslSparseMatrix<T> *> & matrices,
+                                bool checkForExactNumRowsMatching,
+                                bool checkForExactNumColsMatching);
+  void fillWithBlocksVertically(unsigned int rowId,
+                                unsigned int colId,
+                                const std::vector<GslSparseMatrix<T> *> & matrices,
+                                bool checkForExactNumRowsMatching,
+                                bool checkForExactNumColsMatching);
 
 
   /**
@@ -321,6 +379,10 @@ private:
    * Actual QUESO::GslMatrix we are wrapping.
    */
   DataType _mat;
+
+  // Stuff that queso stores internally in a GslMatrix
+  mutable std::unique_ptr<GslSparseMatrix<T> > m_svdMatU;
+  mutable std::unique_ptr<GslSparseMatrix<T> > m_svdMatV;
 
   /**
    * Flag indicating if the matrix has been closed yet.

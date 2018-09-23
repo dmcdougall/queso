@@ -476,9 +476,16 @@ GslSparseMatrix<T>::invertMultiply(const GslNumericVector<T> & b) const
 
 template <typename T>
 void
-GslSparseMatrix<T>::invertMultiply(const GslSparseMatrix<T> & B, GslSparseMatrix<T> X) const
+GslSparseMatrix<T>::invertMultiply(const GslSparseMatrix<T> & B, GslSparseMatrix<T> & X) const
 {
   this->_mat->invertMultiply(*B._mat, *X._mat);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::invertMultiply(const GslNumericVector<T> & b, GslNumericVector<T> & x) const
+{
+  this->_mat->invertMultiply(*b._vec, *x._vec);
 }
 
 template <typename T>
@@ -791,6 +798,272 @@ GslSparseMatrix<T>::invertMultiply(const GslSparseMatrix<T> & B) const
   *(answer._mat) = internal_answer;
 
   return answer;
+}
+
+template <typename T>
+GslNumericVector<T>
+GslSparseMatrix<T>::getRow(const unsigned int row_num) const
+{
+  GslVector internal_answer(this->_mat->getRow(row_num));
+  GslNumericVector<T> answer(internal_answer.env(), internal_answer.map());
+
+  *(answer._vec) = internal_answer;
+
+  return answer;
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::setRow(const unsigned int row_num, const GslNumericVector<T> & row)
+{
+  this->_mat->setRow(row_num, *row._vec);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::setColumn(const unsigned int column_num, const GslNumericVector<T> & column)
+{
+  this->_mat->setColumn(column_num, *column._vec);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::smallestEigen(double & eigenValue, GslNumericVector<T> & eigenVector) const
+{
+  this->_mat->smallestEigen(eigenValue, *eigenVector._vec);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::cholSolve(const GslNumericVector<T> & rhs, GslNumericVector<T> & sol) const
+{
+  this->_mat->cholSolve(*rhs._vec, *sol._vec);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::cwExtract(unsigned int rowId, unsigned int colId, GslSparseMatrix<T> & mat) const
+{
+  this->_mat->cwExtract(rowId, colId, *mat._mat);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::multiply(const GslSparseMatrix<T> & X, GslSparseMatrix<T> & Y) const
+{
+  this->_mat->multiply(*X._mat, *Y._mat);
+}
+
+template <typename T>
+int
+GslSparseMatrix<T>::svdSolve(const GslSparseMatrix<T> & rhsMat, GslSparseMatrix<T> & solMat) const
+{
+  return this->_mat->svdSolve(*rhsMat._mat, *solMat._mat);
+}
+
+template <typename T>
+const GslSparseMatrix<T> &
+GslSparseMatrix<T>::svdMatU() const
+{
+  GslMatrix internal_answer(this->_mat->svdMatU());
+
+  unsigned int num_cols = internal_answer.numCols();
+  m_svdMatU.reset(new GslSparseMatrix<T>(internal_answer.env(),
+                                         internal_answer.map(),
+                                         num_cols));
+
+  // Maybe m_svdMatU could be stale if the user modifies the matrix after
+  // this method is called
+  *(m_svdMatU->_mat) = internal_answer;
+
+  return *m_svdMatU;
+}
+
+template <typename T>
+const GslSparseMatrix<T> &
+GslSparseMatrix<T>::svdMatV() const
+{
+  GslMatrix internal_answer(this->_mat->svdMatV());
+
+  unsigned int num_cols = internal_answer.numCols();
+  m_svdMatV.reset(new GslSparseMatrix<T>(internal_answer.env(),
+                                         internal_answer.map(),
+                                         num_cols));
+
+  // Maybe m_svdMatU could be stale if the user modifies the matrix after
+  // this method is called
+  *(m_svdMatV->_mat) = internal_answer;
+
+  return *m_svdMatV;
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithBlocksDiagonally(unsigned int rowId,
+                                             unsigned int colId,
+                                             const std::vector<const GslSparseMatrix<T> *> & matrices,
+                                             bool checkForExactNumRowsMatching,
+                                             bool checkForExactNumColsMatching)
+{
+  std::vector<const GslMatrix *> mats(matrices.size());
+  for (int i = 0; i < mats.size(); i++) {
+    mats[i] = matrices[i]->_mat.get();
+  }
+
+  this->_mat->fillWithBlocksDiagonally(rowId,
+                                       colId,
+                                       mats,
+                                       checkForExactNumRowsMatching,
+                                       checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithBlocksDiagonally(unsigned int rowId,
+                                             unsigned int colId,
+                                             const std::vector<GslSparseMatrix<T> *> & matrices,
+                                             bool checkForExactNumRowsMatching,
+                                             bool checkForExactNumColsMatching)
+{
+  std::vector<GslMatrix *> mats(matrices.size());
+  for (int i = 0; i < mats.size(); i++) {
+    mats[i] = matrices[i]->_mat.get();
+  }
+
+  this->_mat->fillWithBlocksDiagonally(rowId,
+                                       colId,
+                                       mats,
+                                       checkForExactNumRowsMatching,
+                                       checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithTensorProduct(unsigned int rowId,
+                                          unsigned int colId,
+                                          const GslSparseMatrix<T> & mat1,
+                                          const GslSparseMatrix<T> & mat2,
+                                          bool checkForExactNumRowsMatching,
+                                          bool checkForExactNumColsMatching)
+{
+  this->_mat->fillWithTensorProduct(rowId,
+                                    colId,
+                                    *mat1._mat,
+                                    *mat2._mat,
+                                    checkForExactNumRowsMatching,
+                                    checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithTensorProduct(unsigned int rowId,
+                                          unsigned int colId,
+                                          const GslSparseMatrix<T> & mat1,
+                                          const GslNumericVector<T> & vec2,
+                                          bool checkForExactNumRowsMatching,
+                                          bool checkForExactNumColsMatching)
+{
+  this->_mat->fillWithTensorProduct(rowId,
+                                    colId,
+                                    *mat1._mat,
+                                    *vec2._vec,
+                                    checkForExactNumRowsMatching,
+                                    checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithTranspose(unsigned int rowId,
+                                      unsigned int colId,
+                                      const GslSparseMatrix<T> & mat,
+                                      bool checkForExactNumRowsMatching,
+                                      bool checkForExactNumColsMatching)
+{
+  this->_mat->fillWithTranspose(rowId,
+                                colId,
+                                *mat._mat,
+                                checkForExactNumRowsMatching,
+                                checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithBlocksHorizontally(unsigned int rowId,
+                                               unsigned int colId,
+                                               const std::vector<const GslSparseMatrix<T> *> & matrices,
+                                               bool checkForExactNumRowsMatching,
+                                               bool checkForExactNumColsMatching)
+{
+  std::vector<const GslMatrix *> mats(matrices.size());
+  for (int i = 0; i < mats.size(); i++) {
+    mats[i] = matrices[i]->_mat.get();
+  }
+
+  this->_mat->fillWithBlocksHorizontally(rowId,
+                                         colId,
+                                         mats,
+                                         checkForExactNumRowsMatching,
+                                         checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithBlocksHorizontally(unsigned int rowId,
+                                               unsigned int colId,
+                                               const std::vector<GslSparseMatrix<T> *> & matrices,
+                                               bool checkForExactNumRowsMatching,
+                                               bool checkForExactNumColsMatching)
+{
+  std::vector<GslMatrix *> mats(matrices.size());
+  for (int i = 0; i < mats.size(); i++) {
+    mats[i] = matrices[i]->_mat.get();
+  }
+
+  this->_mat->fillWithBlocksHorizontally(rowId,
+                                         colId,
+                                         mats,
+                                         checkForExactNumRowsMatching,
+                                         checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithBlocksVertically(unsigned int rowId,
+                                             unsigned int colId,
+                                             const std::vector<const GslSparseMatrix<T> *> & matrices,
+                                             bool checkForExactNumRowsMatching,
+                                             bool checkForExactNumColsMatching)
+{
+  std::vector<const GslMatrix *> mats(matrices.size());
+  for (int i = 0; i < mats.size(); i++) {
+    mats[i] = matrices[i]->_mat.get();
+  }
+
+  this->_mat->fillWithBlocksVertically(rowId,
+                                       colId,
+                                       mats,
+                                       checkForExactNumRowsMatching,
+                                       checkForExactNumColsMatching);
+}
+
+template <typename T>
+void
+GslSparseMatrix<T>::fillWithBlocksVertically(unsigned int rowId,
+                                             unsigned int colId,
+                                             const std::vector<GslSparseMatrix<T> *> & matrices,
+                                             bool checkForExactNumRowsMatching,
+                                             bool checkForExactNumColsMatching)
+{
+  std::vector<GslMatrix *> mats(matrices.size());
+  for (int i = 0; i < mats.size(); i++) {
+    mats[i] = matrices[i]->_mat.get();
+  }
+
+  this->_mat->fillWithBlocksVertically(rowId,
+                                       colId,
+                                       mats,
+                                       checkForExactNumRowsMatching,
+                                       checkForExactNumColsMatching);
 }
 
 template <typename T>
