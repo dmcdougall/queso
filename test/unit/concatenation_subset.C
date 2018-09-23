@@ -35,6 +35,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/VectorRV.h>
 #include <queso/VectorSpace.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <vector>
 #include <iostream>
@@ -57,34 +59,34 @@ public:
   {
     env.reset(new QUESO::FullEnvironment("","",NULL));
 
-    space.reset(new QUESO::VectorSpace<>(*env, "", 1, NULL));
+    space.reset(new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(*env, "", 1, NULL));
 
-    min1.reset(new QUESO::GslVector(space->zeroVector()));
+    min1.reset(new QUESO::GslNumericVector<libMesh::Number>(space->zeroVector()));
     (*min1)[0] = 1;
-    max1.reset(new QUESO::GslVector(space->zeroVector()));
+    max1.reset(new QUESO::GslNumericVector<libMesh::Number>(space->zeroVector()));
     (*max1)[0] = 3;
 
-    min2.reset(new QUESO::GslVector(space->zeroVector()));
+    min2.reset(new QUESO::GslNumericVector<libMesh::Number>(space->zeroVector()));
     (*min2)[0] = 2;
-    max2.reset(new QUESO::GslVector(space->zeroVector()));
+    max2.reset(new QUESO::GslNumericVector<libMesh::Number>(space->zeroVector()));
     (*max2)[0] = 14;
 
-    domain1.reset(new QUESO::BoxSubset<>("", *space, *min1, *max1));
-    domain2.reset(new QUESO::BoxSubset<>("", *space, *min2, *max2));
+    domain1.reset(new QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >("", *space, *min1, *max1));
+    domain2.reset(new QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >("", *space, *min2, *max2));
 
     double volume = domain1->volume() * domain2->volume();
 
-    sets.reset(new std::vector<const QUESO::VectorSet<> *>(2));
+    sets.reset(new std::vector<const QUESO::VectorSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > *>(2));
     (*sets)[0] = domain1.get();
     (*sets)[1] = domain2.get();
 
-    concat_subset.reset(new QUESO::ConcatenationSubset<>("", *space, volume, *sets));
+    concat_subset.reset(new QUESO::ConcatenationSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >("", *space, volume, *sets));
   }
 
   void test_contains()
   {
-    QUESO::VectorSpace<> big_space(*env, "", 2, NULL);
-    QUESO::GslVector vec(big_space.zeroVector());
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > big_space(*env, "", 2, NULL);
+    QUESO::GslNumericVector<libMesh::Number> vec(big_space.zeroVector());
 
     vec[0] = 1.5;
     vec[1] = 4.1;
@@ -94,8 +96,8 @@ public:
 
   void test_moments()
   {
-    QUESO::VectorSpace<> big_space(*env, "", 2, NULL);
-    QUESO::GslMatrix moments(big_space.zeroVector());
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > big_space(*env, "", 2, NULL);
+    QUESO::GslSparseMatrix<libMesh::Number> moments(big_space.zeroVector());
 
     concat_subset->moments(moments);
 
@@ -110,15 +112,15 @@ public:
 
 private:
   typename QUESO::ScopedPtr<QUESO::BaseEnvironment>::Type env;
-  typename QUESO::ScopedPtr<QUESO::VectorSpace<> >::Type space;
-  typename QUESO::ScopedPtr<QUESO::GslVector>::Type min1;
-  typename QUESO::ScopedPtr<QUESO::GslVector>::Type max1;
-  typename QUESO::ScopedPtr<QUESO::GslVector>::Type min2;
-  typename QUESO::ScopedPtr<QUESO::GslVector>::Type max2;
-  typename QUESO::ScopedPtr<QUESO::BoxSubset<> >::Type domain1;
-  typename QUESO::ScopedPtr<QUESO::BoxSubset<> >::Type domain2;
-  typename QUESO::ScopedPtr<std::vector<const QUESO::VectorSet<> *> >::Type sets;
-  typename QUESO::ScopedPtr<QUESO::ConcatenationSubset<> >::Type concat_subset;
+  typename QUESO::ScopedPtr<QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type space;
+  typename QUESO::ScopedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type min1;
+  typename QUESO::ScopedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type max1;
+  typename QUESO::ScopedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type min2;
+  typename QUESO::ScopedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type max2;
+  typename QUESO::ScopedPtr<QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type domain1;
+  typename QUESO::ScopedPtr<QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type domain2;
+  typename QUESO::ScopedPtr<std::vector<const QUESO::VectorSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > *> >::Type sets;
+  typename QUESO::ScopedPtr<QUESO::ConcatenationSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type concat_subset;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ConcatenationSubsetTest);
