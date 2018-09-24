@@ -36,13 +36,15 @@
 #include <queso/VectorSet.h>
 #include <queso/VectorSpace.h>
 #include <queso/ScalarFunction.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
 namespace QUESOTesting
 {
 
-template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
+template <class V = QUESO::GslNumericVector<libMesh::Number>, class M = QUESO::GslSparseMatrix<libMesh::Number>>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
 {
 public:
@@ -81,22 +83,22 @@ public:
 
   void test_fd()
   {
-    QUESO::VectorSpace<> space(*env, "", 1, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space(*env, "", 1, NULL);
 
-    QUESO::GslVector min(space.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> min(space.zeroVector());
     min[0] = -INFINITY;
-    QUESO::GslVector max(space.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> max(space.zeroVector());
     max[0] = INFINITY;
 
-    QUESO::BoxSubset<> domain("", space, min, max);
+    QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > domain("", space, min, max);
 
-    Likelihood<> lhood("", domain);
+    Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > lhood("", domain);
 
-    QUESO::GslVector point(space.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> point(space.zeroVector());
     point[0] = 10.0;
 
-    QUESO::GslVector grad1(space.zeroVector());
-    QUESO::GslVector grad2(space.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> grad1(space.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> grad2(space.zeroVector());
 
     lhood.setFiniteDifferenceStepSize(1e-4);
     lhood.lnValue(point, grad1);
