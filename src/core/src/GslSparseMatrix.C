@@ -557,10 +557,10 @@ GslSparseMatrix<T>::transpose() const
 {
   GslMatrix internal_answer(_mat->transpose());
 
-  unsigned int num_elements = internal_answer.map().NumGlobalElements();
+  unsigned int num_cols = internal_answer.numCols();
   GslSparseMatrix<T> answer(internal_answer.env(),
                             internal_answer.map(),
-                            num_elements);
+                            num_cols);
 
   *(answer._mat) = internal_answer;
 
