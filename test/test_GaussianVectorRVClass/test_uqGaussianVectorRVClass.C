@@ -8,6 +8,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/VectorSubset.h>
 #include <queso/GaussianVectorRV.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 using namespace std;
 
@@ -33,8 +35,8 @@ int main(int argc, char **argv) {
   QUESO::FullEnvironment *env = new QUESO::FullEnvironment("", "", opts);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> *param_space;
-  param_space = new QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>(
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> *param_space;
+  param_space = new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(
       *env, "param_", 4, NULL);
 
   mean = new double[4];
@@ -42,25 +44,25 @@ int main(int argc, char **argv) {
   sumsq = new double[4];
   delta = new double[4];
 
-  QUESO::GslVector mins(param_space->zeroVector());
-  QUESO::GslVector maxs(param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mins(param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> maxs(param_space->zeroVector());
   mins.cwSet(-INFINITY);
   maxs.cwSet(INFINITY);
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> *param_domain;
-  param_domain = new QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix>(
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> *param_domain;
+  param_domain = new QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(
       "param_", *param_space, mins, maxs);
 
   // Mean zero
-  QUESO::GslVector prior_mean_vals(param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> prior_mean_vals(param_space->zeroVector());
   // Variance
-  QUESO::GslVector prior_var_vals(param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> prior_var_vals(param_space->zeroVector());
   prior_var_vals.cwSet(sigmasq);
 
-  QUESO::GaussianVectorRV<QUESO::GslVector, QUESO::GslMatrix> *prior;
-  prior = new QUESO::GaussianVectorRV<QUESO::GslVector, QUESO::GslMatrix>(
+  QUESO::GaussianVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> *prior;
+  prior = new QUESO::GaussianVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(
       "prior_", *(param_domain), prior_mean_vals, prior_var_vals);
 
-  QUESO::GslVector draw(param_space->zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> draw(param_space->zeroVector());
 
   for (j = 0; j < 4; j++) {
     mean[j] = 0.0;
