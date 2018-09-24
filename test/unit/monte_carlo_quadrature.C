@@ -34,6 +34,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <vector>
 #include <cmath>
@@ -188,7 +190,7 @@ namespace QUESOTesting
 
 
   class MonteCarloQuadratureHypersphereVolumeGslTest :
-    public MonteCarloQuadratureHypersphereVolumeTestBase<QUESO::GslVector,QUESO::GslMatrix>
+    public MonteCarloQuadratureHypersphereVolumeTestBase<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
   {
   public:
 
