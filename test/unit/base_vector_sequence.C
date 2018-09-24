@@ -36,6 +36,8 @@
 #include <queso/VectorSpace.h>
 #include <queso/SequenceOfVectors.h>
 #include <queso/BoxSubset.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESOTesting
 {
@@ -59,11 +61,11 @@ public:
   void setUp()
   {
     env.reset(new QUESO::FullEnvironment("","",NULL));
-    space.reset(new QUESO::VectorSpace<>(*env, "", 2, NULL));
-    sequence.reset(new QUESO::SequenceOfVectors<>(*space, 13, ""));
+    space.reset(new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(*env, "", 2, NULL));
+    sequence.reset(new QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(*space, 13, ""));
 
     // Fill up the sequence with some not-so-random stuff
-    QUESO::GslVector v(space->zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> v(space->zeroVector());
     for (unsigned int i = 0; i < sequence->subSequenceSize(); i++) {
       v[0] = i;
       v[1] = i + 1;
@@ -79,17 +81,17 @@ public:
 
   void test_min_max()
   {
-    QUESO::GslVector min(sequence->subMinPlain());
+    QUESO::GslNumericVector<libMesh::Number> min(sequence->subMinPlain());
     CPPUNIT_ASSERT_EQUAL(0.0, min[0]);
     CPPUNIT_ASSERT_EQUAL(1.0, min[1]);
     sequence->deleteStoredVectors();
 
-    QUESO::GslVector max(sequence->subMaxPlain());
+    QUESO::GslNumericVector<libMesh::Number> max(sequence->subMaxPlain());
     CPPUNIT_ASSERT_EQUAL(12.0, max[0]);
     CPPUNIT_ASSERT_EQUAL(13.0, max[1]);
     sequence->deleteStoredVectors();
 
-    QUESO::GslVector max2(sequence->unifiedMaxPlain());
+    QUESO::GslNumericVector<libMesh::Number> max2(sequence->unifiedMaxPlain());
     CPPUNIT_ASSERT_EQUAL(12.0, max2[0]);
     CPPUNIT_ASSERT_EQUAL(13.0, max2[1]);
     sequence->deleteStoredVectors();
@@ -97,12 +99,12 @@ public:
 
   void test_median()
   {
-    QUESO::GslVector median(sequence->subMedianPlain());
+    QUESO::GslNumericVector<libMesh::Number> median(sequence->subMedianPlain());
     CPPUNIT_ASSERT_EQUAL(6.0, median[0]);
     CPPUNIT_ASSERT_EQUAL(7.0, median[1]);
     sequence->deleteStoredVectors();
 
-    QUESO::GslVector median2(sequence->unifiedMedianPlain());
+    QUESO::GslNumericVector<libMesh::Number> median2(sequence->unifiedMedianPlain());
     CPPUNIT_ASSERT_EQUAL(6.0, median2[0]);
     CPPUNIT_ASSERT_EQUAL(7.0, median2[1]);
     sequence->deleteStoredVectors();
@@ -112,7 +114,7 @@ public:
   {
     double actualVar = 182.0 / 12.0;
 
-    QUESO::GslVector var(sequence->subSampleVariancePlain());
+    QUESO::GslNumericVector<libMesh::Number> var(sequence->subSampleVariancePlain());
     CPPUNIT_ASSERT_EQUAL(actualVar, var[0]);
     CPPUNIT_ASSERT_EQUAL(actualVar, var[1]);
     sequence->deleteStoredVectors();
@@ -128,13 +130,13 @@ public:
 
   void test_gaussian()
   {
-    QUESO::GslVector mean(space->zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> mean(space->zeroVector());
     mean.cwSet(5.0);
-    QUESO::GslVector std(space->zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> std(space->zeroVector());
     std.cwSet(0.1);
 
     unsigned int N = 1000000;
-    QUESO::SequenceOfVectors<> gaussian_seq(*space, N, "");
+    QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > gaussian_seq(*space, N, "");
     for (unsigned int i = 0; i < N; i++) {
       gaussian_seq.setPositionValues(i, space->zeroVector());
     }
@@ -142,25 +144,25 @@ public:
     gaussian_seq.setGaussian(mean, std);
 
     // Check the mean is close to (5, 5)
-    QUESO::GslVector sampleMean(gaussian_seq.subMeanPlain());
+    QUESO::GslNumericVector<libMesh::Number> sampleMean(gaussian_seq.subMeanPlain());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(mean[0], sampleMean[0], 0.001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(mean[1], sampleMean[1], 0.001);
 
     // Check the var is close to 0.1
-    QUESO::GslVector sampleVar(gaussian_seq.subSampleVariancePlain());
+    QUESO::GslNumericVector<libMesh::Number> sampleVar(gaussian_seq.subSampleVariancePlain());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(std[0]* std[0], sampleVar[0], 0.001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(std[1]* std[1], sampleVar[1], 0.001);
   }
 
   void test_uniform()
   {
-    QUESO::GslVector mins(space->zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> mins(space->zeroVector());
     mins.cwSet(3.0);
-    QUESO::GslVector maxs(space->zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> maxs(space->zeroVector());
     maxs.cwSet(7.0);
 
     unsigned int N = 1000000;
-    QUESO::SequenceOfVectors<> uniform_seq(*space, N, "");
+    QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > uniform_seq(*space, N, "");
     for (unsigned int i = 0; i < N; i++) {
       uniform_seq.setPositionValues(i, space->zeroVector());
     }
@@ -168,7 +170,7 @@ public:
     uniform_seq.setUniform(mins, maxs);
 
     // Check the mean is close to (5, 5)
-    QUESO::GslVector sampleMean(uniform_seq.subMeanPlain());
+    QUESO::GslNumericVector<libMesh::Number> sampleMean(uniform_seq.subMeanPlain());
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, sampleMean[0], 0.01);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0, sampleMean[1], 0.01);
   }
@@ -186,8 +188,8 @@ public:
 
 private:
   typename QUESO::ScopedPtr<QUESO::BaseEnvironment>::Type env;
-  typename QUESO::ScopedPtr<QUESO::VectorSpace<> >::Type space;
-  typename QUESO::ScopedPtr<QUESO::SequenceOfVectors<> >::Type sequence;
+  typename QUESO::ScopedPtr<QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type space;
+  typename QUESO::ScopedPtr<QUESO::SequenceOfVectors<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type sequence;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseVectorSequenceTest);
