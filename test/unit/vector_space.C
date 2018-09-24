@@ -34,6 +34,8 @@
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/VectorSpace.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cmath>
 
@@ -53,12 +55,12 @@ public:
   void setUp()
   {
     env.reset(new QUESO::FullEnvironment("","",NULL));
-    space.reset(new QUESO::VectorSpace<>(*env, "", 2, NULL));
+    space.reset(new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(*env, "", 2, NULL));
   }
 
   void test_centroid()
   {
-    QUESO::GslVector centroid(space->zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> centroid(space->zeroVector());
     space->centroid(centroid);
 
     // Is this peligroso?
@@ -68,7 +70,7 @@ public:
 
   void test_moments()
   {
-    QUESO::GslMatrix moments(space->zeroVector());
+    QUESO::GslSparseMatrix<libMesh::Number> moments(space->zeroVector());
     space->moments(moments);
 
     // Is this peligroso?
@@ -80,7 +82,7 @@ public:
 
 private:
   typename QUESO::ScopedPtr<QUESO::BaseEnvironment>::Type env;
-  typename QUESO::ScopedPtr<QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> >::Type space;
+  typename QUESO::ScopedPtr<QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> >::Type space;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(VectorSpaceTest);
