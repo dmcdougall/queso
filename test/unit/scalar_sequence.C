@@ -33,6 +33,8 @@
 #include <queso/ScopedPtr.h>
 #include <queso/GslVector.h>
 #include <queso/ScalarSequence.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <string>
 #include <cmath>
