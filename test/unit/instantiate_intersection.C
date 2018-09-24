@@ -36,6 +36,8 @@
 #include <queso/GslVector.h>
 #include <queso/BoxSubset.h>
 #include <queso/IntersectionSubset.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESOTesting
 {
@@ -59,11 +61,11 @@ public:
 
   void test_intersect1()
   {
-    QUESO::VectorSpace<> space1(*env, "", 1, NULL);
-    QUESO::VectorSpace<> space2(*env, "", 2, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space1(*env, "", 1, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*env, "", 2, NULL);
 
-    QUESO::ScopedPtr<QUESO::VectorSet<> >::Type vectorSetPtr;
-    vectorSetPtr.reset(QUESO::InstantiateIntersection<>(space1, space2));
+    QUESO::ScopedPtr<QUESO::VectorSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type vectorSetPtr;
+    vectorSetPtr.reset(QUESO::InstantiateIntersection<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(space1, space2));
 
     unsigned int dim = 1;
     CPPUNIT_ASSERT_EQUAL(vectorSetPtr->vectorSpace().dimGlobal(), dim);
@@ -71,11 +73,11 @@ public:
 
   void test_intersect2()
   {
-    QUESO::VectorSpace<> space1(*env, "", 1, NULL);
-    QUESO::VectorSpace<> space2(*env, "", 1, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space1(*env, "", 1, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*env, "", 1, NULL);
 
-    QUESO::ScopedPtr<QUESO::VectorSet<> >::Type vectorSetPtr;
-    vectorSetPtr.reset(QUESO::InstantiateIntersection<>(space1, space2));
+    QUESO::ScopedPtr<QUESO::VectorSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type vectorSetPtr;
+    vectorSetPtr.reset(QUESO::InstantiateIntersection<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(space1, space2));
 
     unsigned int dim = 1;
     CPPUNIT_ASSERT_EQUAL(vectorSetPtr->vectorSpace().dimGlobal(), dim);
@@ -83,11 +85,11 @@ public:
 
   void test_intersect3()
   {
-    QUESO::VectorSpace<> space1(*env, "", 2, NULL);
-    QUESO::VectorSpace<> space2(*env, "", 1, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space1(*env, "", 2, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*env, "", 1, NULL);
 
-    QUESO::ScopedPtr<QUESO::VectorSet<> >::Type vectorSetPtr;
-    vectorSetPtr.reset(QUESO::InstantiateIntersection<>(space1, space2));
+    QUESO::ScopedPtr<QUESO::VectorSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type vectorSetPtr;
+    vectorSetPtr.reset(QUESO::InstantiateIntersection<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(space1, space2));
 
     unsigned int dim = 1;
     CPPUNIT_ASSERT_EQUAL(vectorSetPtr->vectorSpace().dimGlobal(), dim);
@@ -95,27 +97,27 @@ public:
 
   void test_intersect4()
   {
-    QUESO::VectorSpace<> space1(*env, "", 1, NULL);
-    QUESO::GslVector min1(space1.zeroVector());
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space1(*env, "", 1, NULL);
+    QUESO::GslNumericVector<libMesh::Number> min1(space1.zeroVector());
     min1[0] = -2;
-    QUESO::GslVector max1(space1.zeroVector());
+    QUESO::GslNumericVector<libMesh::Number> max1(space1.zeroVector());
     max1[0] = 2;
-    QUESO::BoxSubset<> box1("", space1, min1, max1);
+    QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > box1("", space1, min1, max1);
 
-    QUESO::VectorSpace<> space2(*env, "", 1, NULL);
+    QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > space2(*env, "", 1, NULL);
 
-    QUESO::ScopedPtr<QUESO::VectorSet<> >::Type vectorSetPtr;
-    vectorSetPtr.reset(QUESO::InstantiateIntersection<>(space2, box1));
+    QUESO::ScopedPtr<QUESO::VectorSet<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > >::Type vectorSetPtr;
+    vectorSetPtr.reset(QUESO::InstantiateIntersection<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(space2, box1));
 
     // It should be a box
-    QUESO::BoxSubset<> & box2 = dynamic_cast<QUESO::BoxSubset<> &>(*vectorSetPtr);
+    QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > & box2 = dynamic_cast<QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > &>(*vectorSetPtr);
 
     CPPUNIT_ASSERT_EQUAL(box1.volume(), box2.volume());
 
-    vectorSetPtr.reset(QUESO::InstantiateIntersection<>(box1, space2));
+    vectorSetPtr.reset(QUESO::InstantiateIntersection<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >(box1, space2));
 
     // It should be a box
-    QUESO::BoxSubset<> & box3 = dynamic_cast<QUESO::BoxSubset<> &>(*vectorSetPtr);
+    QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > & box3 = dynamic_cast<QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > &>(*vectorSetPtr);
 
     CPPUNIT_ASSERT_EQUAL(box1.volume(), box3.volume());
   }
