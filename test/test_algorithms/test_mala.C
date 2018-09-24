@@ -5,6 +5,8 @@
 #include <queso/StatisticalInverseProblem.h>
 #include <queso/ScalarFunction.h>
 #include <queso/VectorSet.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 template<class V, class M>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
@@ -60,39 +62,39 @@ int main(int argc, char ** argv) {
   unsigned int dim = 1;
 
   // Step 1 of 5: Instantiate the parameter space
-  QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", dim, NULL);
 
   double min_val = -10000.0;
   double max_val =  10000.0;
 
   // Step 2 of 5: Set up the prior
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(min_val);
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(max_val);
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
   // Uniform prior here.  Could be a different prior.
-  QUESO::UniformVectorRV<> priorRv("prior_", paramDomain);
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > priorRv("prior_", paramDomain);
 
   // Step 3 of 5: Set up the likelihood using the class above
-  Likelihood<QUESO::GslVector, QUESO::GslMatrix> lhood("llhd_", paramDomain);
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> lhood("llhd_", paramDomain);
 
   // Step 4 of 5: Instantiate the inverse problem
-  QUESO::GenericVectorRV<> postRv("post_", paramSpace);
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > postRv("post_", paramSpace);
 
-  QUESO::StatisticalInverseProblem<> ip("", NULL, priorRv, lhood, postRv);
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > ip("", NULL, priorRv, lhood, postRv);
 
   // Step 5 of 5: Solve the inverse problem
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
 
   // Initial condition of the chain
   for (unsigned int i = 0; i < dim; i++) {
     paramInitials[i] = 0.0;
   }
 
-  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(paramSpace.zeroVector());
 
   for (unsigned int i = 0; i < dim; i++) {
     // Might need to tweak this
@@ -101,11 +103,11 @@ int main(int argc, char ** argv) {
 
   ip.solveWithBayesMetropolisHastings(NULL, paramInitials, &proposalCovMatrix);
 
-  QUESO::GslVector draw(paramSpace.zeroVector());
-  QUESO::GslVector mean(paramSpace.zeroVector());
-  QUESO::GslVector sumsq(paramSpace.zeroVector());
-  QUESO::GslVector delta(paramSpace.zeroVector());
-  QUESO::GslVector var(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> draw(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> sumsq(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> delta(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> var(paramSpace.zeroVector());
 
   unsigned int num_samples = 10000;
   for (unsigned int i = 1; i < num_samples + 1; i++) {
