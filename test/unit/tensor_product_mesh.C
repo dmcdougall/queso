@@ -34,6 +34,8 @@
 #include <queso/ScopedPtr.h>
 #include <queso/SimulationOutputPoint.h>
 #include <queso/TensorProductMesh.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace
 {
@@ -63,9 +65,9 @@ namespace QUESOTesting
     {
       QUESO::Map map(n_points, 0, env->fullComm());
 
-      QUESO::GslVector coefs(*env, map);
+      QUESO::GslNumericVector<libMesh::Number> coefs(*env, map);
 
-      QUESO::TensorProductMesh<> mesh;
+      QUESO::TensorProductMesh<QUESO::GslNumericVector<libMesh::Number> > mesh;
 
       // Test coords going out of scope
       {
