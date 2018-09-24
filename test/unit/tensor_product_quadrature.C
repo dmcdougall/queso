@@ -31,6 +31,8 @@
 #include <queso/MonteCarloQuadrature.h>
 #include <queso/TensorProductQuadrature.h>
 #include <queso/1DQuadrature.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <convergence_rate_helper.h>
 
@@ -145,7 +147,7 @@ namespace QUESOTesting
   };
 
   class TensorProductLegendreQuadratureRuleGslTest :
-    public TensorProductLegendreQuadratureRuleTestBase<QUESO::GslVector,QUESO::GslMatrix>
+    public TensorProductLegendreQuadratureRuleTestBase<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
   {
   public:
 
