@@ -28,13 +28,12 @@
 #include <queso/ScaledCovMatrixTKGroup.h>
 #include <queso/VectorRV.h>
 #include <queso/ScalarFunctionSynchronizer.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
-class GslVector;
-class GslMatrix;
-
-template <class V = GslVector, class M = GslMatrix>
+template <class V = GslNumericVector<libMesh::Number>, class M = GslSparseMatrix<libMesh::Number> >
 class MyTransitionKernel : public ScaledCovMatrixTKGroup<V, M> {
 public:
   MyTransitionKernel(const char * prefix,

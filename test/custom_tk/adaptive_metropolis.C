@@ -28,6 +28,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GaussianJointPdf.h>
 #include <queso/TKFactoryRandomWalk.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 namespace QUESO {
 
@@ -55,7 +57,7 @@ void
 MyTransitionKernel<V, M>::updateTK()
 {
   if (m_counter == 15) {
-    GslMatrix new_matrix(m_vectorSpace.zeroVector());
+    GslSparseMatrix<libMesh::Number> new_matrix(m_vectorSpace.zeroVector());
 
     new_matrix(0, 0) = 1.0;
 
@@ -85,9 +87,9 @@ MyTransitionKernel<V, M>::cleanCovMatrix()
 }
 
 // Explicit instantiation of the template
-template class MyTransitionKernel<GslVector, GslMatrix>;
+template class MyTransitionKernel<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>>;
 
 // Register this TK with the appropriate factory
-TKFactoryRandomWalk<MyTransitionKernel, GslVector, GslMatrix> tk_factory_mytk("my_tk");
+TKFactoryRandomWalk<MyTransitionKernel, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>> tk_factory_mytk("my_tk");
 
 }  // End namespace QUESO
