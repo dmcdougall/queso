@@ -32,6 +32,8 @@
 #include <queso/ScalarFunction.h>
 #include <queso/GaussianLikelihoodDiagonalCovariance.h>
 #include <queso/StatisticalInverseProblem.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 
@@ -125,37 +127,37 @@ public:
 #endif
 
     this->paramSpace =
-      new QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>(*env,
+      new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(*env,
           "param_", 2, NULL);
 
     double min_val = -INFINITY;
     double max_val = INFINITY;
 
-    this->paramMins = new QUESO::GslVector(this->paramSpace->zeroVector());
+    this->paramMins = new QUESO::GslNumericVector<libMesh::Number>(this->paramSpace->zeroVector());
     this->paramMins->cwSet(min_val);
-    this->paramMaxs = new QUESO::GslVector(this->paramSpace->zeroVector());
+    this->paramMaxs = new QUESO::GslNumericVector<libMesh::Number>(this->paramSpace->zeroVector());
     this->paramMaxs->cwSet(max_val);
 
     this->paramDomain =
-      new QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix>("param_",
+      new QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>("param_",
           *(this->paramSpace), *(this->paramMins), *(this->paramMaxs));
 
     this->priorRv =
-      new QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix>("prior_",
+      new QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>("prior_",
           *(this->paramDomain));
 
     // Set up observation space
     this->obsSpace =
-      new QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>(*env, "obs_",
+      new QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(*env, "obs_",
           2, NULL);
 
     // Fill up observation vector
-    this->observations = new QUESO::GslVector(this->obsSpace->zeroVector());
+    this->observations = new QUESO::GslNumericVector<libMesh::Number>(this->obsSpace->zeroVector());
     (*(this->observations))[0] = 1.0;
     (*(this->observations))[1] = 1.0;
 
     // Fill up covariance 'matrix'
-    this->covariance = new QUESO::GslVector(this->obsSpace->zeroVector());
+    this->covariance = new QUESO::GslNumericVector<libMesh::Number>(this->obsSpace->zeroVector());
     (*(this->covariance))[0] = 2.0;
     (*(this->covariance))[1] = 8.0;
 
@@ -163,13 +165,13 @@ public:
 
     if (likelihoodFlag == 1) {
       // Do canned Gaussian likelihood
-      this->lhood = new Likelihood<QUESO::GslVector, QUESO::GslMatrix>("llhd_",
+      this->lhood = new Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>("llhd_",
           *(this->paramDomain), *(this->observations), *(this->covariance));
     }
     else if (likelihoodFlag == 2) {
       // Do the other, custom, likelihood (which just so happens to be
       // Gaussian)
-      this->lhood = new CustomLikelihood<QUESO::GslVector, QUESO::GslMatrix>(
+      this->lhood = new CustomLikelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(
           "llhd_", *(this->paramDomain));
     }
     else {
@@ -178,18 +180,18 @@ public:
     }
 
     this->postRv =
-      new QUESO::GenericVectorRV<QUESO::GslVector, QUESO::GslMatrix>("post_",
+      new QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>("post_",
         *(this->paramSpace));
 
     this->ip =
-      new QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix>(
+      new QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>(
           "", NULL, *(this->priorRv), *(this->lhood), *(this->postRv));
 
-    this->paramInitials = new QUESO::GslVector(this->paramSpace->zeroVector());
+    this->paramInitials = new QUESO::GslNumericVector<libMesh::Number>(this->paramSpace->zeroVector());
     (*(this->paramInitials))[0] = 1.0;
     (*(this->paramInitials))[1] = 1.0;
 
-    this->proposalCovMatrix = new QUESO::GslMatrix(
+    this->proposalCovMatrix = new QUESO::GslSparseMatrix<libMesh::Number>(
         this->paramSpace->zeroVector());
     (*(this->proposalCovMatrix))(0, 0) = 2.0;
     (*(this->proposalCovMatrix))(0, 1) = 0.0;
@@ -199,7 +201,7 @@ public:
     this->ip->solveWithBayesMetropolisHastings(NULL, *(this->paramInitials),
         this->proposalCovMatrix);
 
-    this->draw = new QUESO::GslVector(this->paramSpace->zeroVector());
+    this->draw = new QUESO::GslNumericVector<libMesh::Number>(this->paramSpace->zeroVector());
   }
 
   virtual ~BayesianInverseProblem()
@@ -207,19 +209,19 @@ public:
   }
 
   QUESO::FullEnvironment * env;
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> * paramSpace;
-  QUESO::GslVector * paramMins;
-  QUESO::GslVector * paramMaxs;
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> * paramDomain;
-  QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix> * priorRv;
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> * obsSpace;
-  QUESO::GslVector * observations;
-  QUESO::GslVector * covariance;
-  QUESO::BaseScalarFunction<QUESO::GslVector, QUESO::GslMatrix> * lhood;
-  QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix> * ip;
-  QUESO::GslVector * paramInitials;
-  QUESO::GslMatrix * proposalCovMatrix;
-  QUESO::GslVector * draw;
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> * paramSpace;
+  QUESO::GslNumericVector<libMesh::Number> * paramMins;
+  QUESO::GslNumericVector<libMesh::Number> * paramMaxs;
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> * paramDomain;
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> * priorRv;
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> * obsSpace;
+  QUESO::GslNumericVector<libMesh::Number> * observations;
+  QUESO::GslNumericVector<libMesh::Number> * covariance;
+  QUESO::BaseScalarFunction<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> * lhood;
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> * ip;
+  QUESO::GslNumericVector<libMesh::Number> * paramInitials;
+  QUESO::GslSparseMatrix<libMesh::Number> * proposalCovMatrix;
+  QUESO::GslNumericVector<libMesh::Number> * draw;
   QUESO::GenericVectorRV<V, M> * postRv;
 };
 
@@ -229,8 +231,8 @@ int main(int argc, char ** argv) {
 #endif
 
   // Instantiate each inverse problem
-  BayesianInverseProblem<QUESO::GslVector, QUESO::GslMatrix> b1(1);
-  BayesianInverseProblem<QUESO::GslVector, QUESO::GslMatrix> b2(2);
+  BayesianInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> b1(1);
+  BayesianInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> b2(2);
 
   // Compare each draw
   for (unsigned int i = 0; i < 1000; i++) {
@@ -238,7 +240,7 @@ int main(int argc, char ** argv) {
     b2.postRv->realizer().realization(*(b2.draw));
 
     // Test draws
-    QUESO::GslVector diff(*(b1.draw));
+    QUESO::GslNumericVector<libMesh::Number> diff(*(b1.draw));
     diff -= *(b2.draw);
     if (diff.norm2() > TOL) {
       queso_error_msg("test_fullCovarianceChain: Samples from the canned likelihood do not match samples from the equivalent custom likelihood");
