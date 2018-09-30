@@ -7,8 +7,10 @@
 #include <queso/StatisticalInverseProblemOptions.h>
 #include <queso/ScalarFunction.h>
 #include <queso/VectorSet.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
-template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
+template <class V = QUESO::GslNumericVector<libMesh::Number>, class M = QUESO::GslSparseMatrix<libMesh::Number>>
 class Likelihood : public QUESO::BaseScalarFunction<V, M>
 {
 public:
@@ -58,31 +60,31 @@ int main(int argc, char ** argv) {
 #endif
 
   unsigned int dim = 2;
-  QUESO::VectorSpace<> paramSpace(env, "param_", dim, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "param_", dim, NULL);
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
 
   double min_val = -10.0;
   double max_val = 10.0;
   paramMins.cwSet(min_val);
   paramMaxs.cwSet(max_val);
 
-  QUESO::BoxSubset<> paramDomain("param_", paramSpace, paramMins, paramMaxs);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
-  QUESO::GslVector mean(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> mean(paramSpace.zeroVector());
 
-  QUESO::GslMatrix cov(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> cov(paramSpace.zeroVector());
   cov(0, 0) = 1.0;
   cov(0, 1) = 0.0;
   cov(1, 0) = 0.0;
   cov(1, 1) = 1.0;
 
-  QUESO::GaussianVectorRV<> prior("prior_", paramDomain, mean, cov);
+  QUESO::GaussianVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > prior("prior_", paramDomain, mean, cov);
 
-  Likelihood<> lhood("llhd_", paramDomain);
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > lhood("llhd_", paramDomain);
 
-  QUESO::GenericVectorRV<> post("post_", paramSpace);
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > post("post_", paramSpace);
 
   QUESO::SipOptionsValues sipOptions;
   sipOptions.m_computeSolution = 1;
@@ -90,13 +92,13 @@ int main(int argc, char ** argv) {
   sipOptions.m_dataOutputAllowedSet.clear();
   sipOptions.m_dataOutputAllowedSet.insert(0);
 
-  QUESO::StatisticalInverseProblem<> ip1("", &sipOptions, prior, lhood, post);
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > ip1("", &sipOptions, prior, lhood, post);
 
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
   paramInitials[0] = 0.0;
   paramInitials[1] = 0.0;
 
-  QUESO::GslMatrix proposalCovMatrix(paramInitials);
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(paramInitials);
 
   proposalCovMatrix(0, 0) = 1.0;
   proposalCovMatrix(0, 1) = 0.0;
@@ -110,13 +112,13 @@ int main(int argc, char ** argv) {
   // Now do the second IP
   env.resetSeed(0);
 
-  QUESO::GenericVectorRV<> post2("post_", paramSpace);
-  QUESO::StatisticalInverseProblem<> ip2("", &sipOptions, prior, lhood, post2);
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > post2("post_", paramSpace);
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > ip2("", &sipOptions, prior, lhood, post2);
 
   ip2.solveWithBayesMetropolisHastings();
 
-  QUESO::GslVector sample1(paramSpace.zeroVector());
-  QUESO::GslVector sample2(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> sample1(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> sample2(paramSpace.zeroVector());
 
   for (unsigned int i = 0; i < 100; i++) {
     ip1.postRv().realizer().realization(sample1);
