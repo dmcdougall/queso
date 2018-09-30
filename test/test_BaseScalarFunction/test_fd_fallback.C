@@ -3,6 +3,8 @@
 #include <queso/asserts.h>
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/VectorSpace.h>
 #include <queso/BoxSubset.h>
@@ -11,7 +13,7 @@
 #include <queso/OptimizerMonitor.h>
 
 // Common function for both objectives
-template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
+template <class V = QUESO::GslNumericVector<libMesh::Number>, class M = QUESO::GslSparseMatrix<libMesh::Number>>
 double
 f(const V & domainVector)
 {
@@ -22,7 +24,7 @@ f(const V & domainVector)
 }
 
 // Function without a gradient (falls back to finite difference approximation
-template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
+template <class V = QUESO::GslNumericVector<libMesh::Number>, class M = QUESO::GslSparseMatrix<libMesh::Number>>
 class ObjectiveFunctionWithoutGradient : public QUESO::BaseScalarFunction<V, M> {
 public:
   ObjectiveFunctionWithoutGradient(const char * prefix,
@@ -45,7 +47,7 @@ public:
 };
 
 // Objective function with analytical gradient (same function basically)
-template <class V = QUESO::GslVector, class M = QUESO::GslMatrix>
+template <class V = QUESO::GslNumericVector<libMesh::Number>, class M = QUESO::GslSparseMatrix<libMesh::Number>>
 class ObjectiveFunctionWithGradient : public QUESO::BaseScalarFunction<V, M> {
 public:
   ObjectiveFunctionWithGradient(const char * prefix,
@@ -83,24 +85,24 @@ int main(int argc, char ** argv) {
   QUESO::FullEnvironment env("", "", NULL);
 #endif
 
-  QUESO::VectorSpace<> paramSpace(env, "space_", 3, NULL);
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > paramSpace(env, "space_", 3, NULL);
 
-  QUESO::GslVector minBound(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> minBound(paramSpace.zeroVector());
   minBound[0] = -10.0;
   minBound[1] = -10.0;
   minBound[2] = -10.0;
 
-  QUESO::GslVector maxBound(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> maxBound(paramSpace.zeroVector());
   maxBound[0] = 10.0;
   maxBound[1] = 10.0;
   maxBound[2] = 10.0;
 
-  QUESO::BoxSubset<> domain("", paramSpace, minBound, maxBound);
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > domain("", paramSpace, minBound, maxBound);
 
-  ObjectiveFunctionWithoutGradient<> objectiveFunctionWithoutGradient("", domain);
-  ObjectiveFunctionWithGradient<> objectiveFunctionWithGradient("", domain);
+  ObjectiveFunctionWithoutGradient<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > objectiveFunctionWithoutGradient("", domain);
+  ObjectiveFunctionWithGradient<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> > objectiveFunctionWithGradient("", domain);
 
-  QUESO::GslVector point(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> point(paramSpace.zeroVector());
   point[0] = 9.0;
   point[1] = -9.0;
   point[1] = -1.0;
@@ -119,8 +121,8 @@ int main(int argc, char ** argv) {
     queso_error_msg(msg);
   }
 
-  QUESO::GslVector grad1(paramSpace.zeroVector());
-  QUESO::GslVector grad2(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> grad1(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> grad2(paramSpace.zeroVector());
 
   objectiveFunctionWithoutGradient.lnValue(point, grad1);
   objectiveFunctionWithGradient.lnValue(point, grad2);
