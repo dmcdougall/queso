@@ -29,20 +29,23 @@
 #include <queso/VectorSpace.h>
 #include <queso/BoxSubset.h>
 #include <queso/GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
+#include <queso/GslNumericBlockMatrix.h>
 
 #include <cstdlib>
 #include <cmath>
 
 #define TOL 1e-8
 
-template<class V, class M>
-class Likelihood : public QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>
+template<class V, class M, class BM>
+class Likelihood : public QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>
 {
 public:
 
   Likelihood(const char * prefix, const QUESO::VectorSet<V, M> & domain,
-      const V & observations, const QUESO::GslBlockMatrix & covariance)
-    : QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>(prefix, domain,
+      const V & observations, const QUESO::GslNumericBlockMatrix<libMesh::Number> & covariance)
+    : QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>(prefix, domain,
         observations, covariance)
   {
   }
@@ -59,7 +62,7 @@ public:
     }
   }
 
-  using QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M>::evaluateModel;
+  using QUESO::GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::evaluateModel;
 };
 
 int main(int argc, char ** argv) {
@@ -75,14 +78,14 @@ int main(int argc, char ** argv) {
   QUESO::FullEnvironment env(inputFileName, "", NULL);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env,
       "param_", 3, NULL);
 
   double min_val = 0.0;
   double max_val = INFINITY;
 
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
 
   // Hyperparameter bounds
   paramMins.cwSet(min_val);
@@ -91,15 +94,15 @@ int main(int argc, char ** argv) {
   // Model parameter bounds
   paramMaxs[0] = 1.0;
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramDomain("param_",
       paramSpace, paramMins, paramMaxs);
 
   // Set up observation space
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> obsSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> obsSpace(env,
       "obs_", 3, NULL);
 
   // Fill up observation vector
-  QUESO::GslVector observations(obsSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> observations(obsSpace.zeroVector());
   observations[0] = 1.0;
   observations[1] = 1.0;
   observations[2] = 1.0;
@@ -110,7 +113,7 @@ int main(int argc, char ** argv) {
   blockSizes[1] = 2;  // Second block is 2x2
 
   // Set up block (identity) matrix with specified block sizes
-  QUESO::GslBlockMatrix covariance(blockSizes, observations, 1.0);
+  QUESO::GslNumericBlockMatrix<libMesh::Number> covariance(blockSizes, observations, 1.0);
 
   covariance.getBlock(0)(0, 0) = 1.0;
   covariance.getBlock(1)(0, 0) = 1.0;
@@ -119,12 +122,12 @@ int main(int argc, char ** argv) {
   covariance.getBlock(1)(1, 1) = 8.0;
 
   // Pass in observations to Gaussian likelihood object
-  Likelihood<QUESO::GslVector, QUESO::GslMatrix> lhood("llhd_", paramDomain,
+  Likelihood<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>, QUESO::GslNumericBlockMatrix<libMesh::Number> > lhood("llhd_", paramDomain,
       observations, covariance);
 
   double lhood_value;
   double truth_value;
-  QUESO::GslVector point(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> point(paramSpace.zeroVector());
   point[0] = 0.0;
   point[1] = 4.0;
   point[2] = 2.0;
