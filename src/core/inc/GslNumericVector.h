@@ -142,6 +142,7 @@ public:
   int getMinValueIndex() const;
   void getMinValueAndIndex(double & value, int & index);
   void getMaxValueAndIndex(double & value, int & index);
+  void print(std::ostream & os) const;
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
@@ -848,6 +849,9 @@ bool operator==(const GslNumericVector<T> & lhs,
 template <typename T>
 double scalarProduct(const GslNumericVector<T> & x,
                      const GslNumericVector<T> & y);
+
+template <typename T>
+std::ostream & operator<<(std::ostream & os, const GslNumericVector<T> & obj);
 
 } // namespace queso
 

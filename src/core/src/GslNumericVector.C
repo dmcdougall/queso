@@ -939,6 +939,13 @@ GslNumericVector<T>::getMaxValueAndIndex(double & value, int & index)
 }
 
 template <typename T>
+void
+GslNumericVector<T>::print(std::ostream & os) const
+{
+  this->_vec->print(os);
+}
+
+template <typename T>
 GslNumericVector<T>
 operator+(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
 {
@@ -1028,6 +1035,14 @@ scalarProduct(const GslNumericVector<T> & x, const GslNumericVector<T> & y)
   return result;
 }
 
+template <typename T>
+std::ostream &
+operator<<(std::ostream & os, const GslNumericVector<T> & obj)
+{
+  obj.print(os);
+  return os;
+}
+
 //------------------------------------------------------------------
 // Explicit instantiations
 template class GslNumericVector<libMesh::Number>;
@@ -1040,6 +1055,7 @@ template GslNumericVector<libMesh::Number> operator+(const GslNumericVector<libM
 template GslNumericVector<libMesh::Number> operator*(double a, const GslNumericVector<libMesh::Number> &);
 template bool operator==(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
 template double scalarProduct(const GslNumericVector<libMesh::Number> &, const GslNumericVector<libMesh::Number> &);
+template std::ostream & operator<<(std::ostream & os, const GslNumericVector<libMesh::Number> & obj);
 
 template <typename T>
 std::map<const QUESO::MpiComm *, libMesh::Parallel::Communicator>
