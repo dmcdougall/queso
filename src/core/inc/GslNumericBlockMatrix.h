@@ -86,6 +86,7 @@ public:
   // GslNumericBlockMatrix(const GslNumericVector<T> & v, double diagValue);
   // GslNumericBlockMatrix(const GslNumericBlockMatrix<T> & B);
   // GslNumericBlockMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols);
+  GslNumericBlockMatrix(const std::vector<unsigned int> & blockSizes, const GslNumericVector<T> & v, double diagValue);
   unsigned int numCols() const;
   void zeroLower(bool includeDiagonal=false);
   void zeroUpper(bool includeDiagonal=false);
@@ -316,6 +317,10 @@ private:
    * Actual QUESO::GslBlockMatrix we are wrapping.
    */
   DataType _mat;
+
+  // Raw pointer to a block internal to _mat.  Just temporary.
+  std::vector<QUESO::VectorSpace<GslNumericVector<T>, GslSparseMatrix<T> >* > m_vectorSpaces;
+  std::vector<QUESO::GslSparseMatrix<T> *> m_blocks;
 
   /**
    * Flag indicating if the matrix has been closed yet.

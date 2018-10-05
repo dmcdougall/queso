@@ -169,7 +169,33 @@ void GslNumericBlockMatrix<T>::get_transpose (libMesh::SparseMatrix<T> & dest_in
 // {
 // }
 
+template <typename T>
+GslNumericBlockMatrix<T>::GslNumericBlockMatrix(const std::vector<unsigned int> & blockSizes,
+                                                const GslNumericVector<T> & v,
+                                                double diagValue) :
+  libMesh::SparseMatrix<T>(
+      GslNumericVector<T>::comm_map.emplace(std::make_pair(
+          &(v.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            v.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(v._vec->map().Comm()),
+  m_vectorSpaces(blockSizes.size()),
+  m_blocks(blockSizes.size()),
+  _closed(false)
+{
+  this->queso_map.reset(new Map(v._vec->map()));
+  this->_mat.reset(new GslBlockMatrix(blockSizes, *v._vec, diagValue));
+  this->_is_initialized = true;
 
+  // We copy all the internal blocks...  Memory changes wont be propagated back
+  // to the internally stored pointer
+  for (unsigned int i = 0; i < blockSizes.size(); i++) {
+    this->m_vectorSpaces[i] = new VectorSpace<GslNumericVector<T>, GslSparseMatrix<T> >(_mat->env(), "block_param_", blockSizes[i], NULL);
+    const GslMatrix & tmp_matrix = this->_mat->getBlock(i);  // the blocks exist
+    this->m_blocks[i] = new GslSparseMatrix<T>(this->m_vectorSpaces[i]->zeroVector(), diagValue);
+  }
+}
 
 template <typename T>
 GslNumericBlockMatrix<T>::~GslNumericBlockMatrix ()
@@ -245,13 +271,14 @@ GslNumericBlockMatrix<T>::~GslNumericBlockMatrix ()
 template <typename T>
 void GslNumericBlockMatrix<T>::clear ()
 {
-  queso_not_implemented();
-  // unsigned int num_cols = 0;
-  // this->queso_map.reset(new Map(0, 0, this->queso_mpi_comm));
+  // queso_not_implemented();
+  unsigned int num_cols = 0;
+  this->queso_map.reset(new Map(1, 0, this->queso_mpi_comm));
   // this->_mat.reset(new GslMatrix(*(this->queso_env), *(this->queso_map), num_cols));
-  //
-  // _closed = false;
-  // this->_is_initialized = false;
+  this->_mat.reset(NULL);
+
+  _closed = false;
+  this->_is_initialized = false;
 }
 
 
@@ -481,7 +508,44 @@ template <typename T>
 void
 GslNumericBlockMatrix<T>::invertMultiply(const GslNumericVector<T> & b, GslNumericVector<T> & x) const
 {
-  this->_mat->invertMultiply(*b._vec, *x._vec);
+  unsigned int totalCols = 0;
+
+  for (unsigned int i = 0; i < this->m_blocks.size(); i++) {
+    totalCols += this->m_blocks[i]->numCols();
+  }
+
+  if (totalCols != b.sizeLocal()) {
+    queso_error_msg("block matrix and rhs have incompatible sizes");
+  }
+
+  if (x.sizeLocal() != b.sizeLocal()) {
+    queso_error_msg("solution and rhs have incompatible sizes");
+  }
+
+  unsigned int blockOffset = 0;
+
+  // Do an invertMultiply for each block
+  for (unsigned int i = 0; i < this->m_blocks.size(); i++) {
+    GslNumericVector<T> blockRHS(this->m_vectorSpaces[i]->zeroVector());
+    GslNumericVector<T> blockSol(this->m_vectorSpaces[i]->zeroVector());
+
+    // Be sure to copy over the RHS to the right sized vector
+    for (unsigned int j = 0; j < this->m_blocks[i]->numCols(); j++) {
+      blockRHS[j] = b[blockOffset + j];
+    }
+
+    // Solve
+    this->m_blocks[i]->invertMultiply(blockRHS, blockSol);
+
+    // Be sure to copy the block solution back to the global solution vector
+    for (unsigned int j = 0; j < this->m_blocks[i]->numCols(); j++) {
+      x[blockOffset + j] = blockSol[j];
+    }
+
+    // Remember to increment the offset so we don't lose our place for the next
+    // block
+    blockOffset += this->m_blocks[i]->numCols();
+  }
 }
 
 //
@@ -751,13 +815,7 @@ template <typename T>
 GslSparseMatrix<T> &
 GslNumericBlockMatrix<T>::getBlock(unsigned int i) const
 {
-  GslMatrix internal_answer(this->_mat->getBlock(i));
-
-  GslSparseMatrix<T> answer(internal_answer.env(),
-                            internal_answer.map(),
-                            (unsigned int)internal_answer.map().NumGlobalElements());
-
-  return answer;
+  return *this->m_blocks[i];
 }
 
 //------------------------------------------------------------------
