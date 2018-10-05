@@ -4,6 +4,9 @@
 #include <queso/GslVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslBlockMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
+#include <queso/GslNumericBlockMatrix.h>
 
 #define TOL 1e-10
 
@@ -21,11 +24,11 @@ int main(int argc, char **argv) {
   QUESO::FullEnvironment env("", "", &options);
 #endif
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env,
       "param_", 3, NULL);
 
   // Example RHS
-  QUESO::GslVector b(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> b(paramSpace.zeroVector());
   b[0] = 1.0;
   b[1] = 2.0;
   b[2] = 3.0;
@@ -36,7 +39,7 @@ int main(int argc, char **argv) {
   blockSizes[1] = 2;  // Second block is 2x2
 
   // Set up block (identity) matrix with specified block sizes
-  QUESO::GslBlockMatrix covariance(blockSizes, b, 1.0);
+  QUESO::GslNumericBlockMatrix<libMesh::Number> covariance(blockSizes, b, 1.0);
 
   // The matrix [[1, 0, 0], [0, 1, 2], [0, 2, 8]]
   // has inverse 0.25 * [[1, 0, 0], [0, 2, -0.5], [0, -0.5, 0.25]]
@@ -47,11 +50,11 @@ int main(int argc, char **argv) {
   covariance.getBlock(1)(1, 1) = 8.0;
 
   // Compute solution
-  QUESO::GslVector x(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> x(paramSpace.zeroVector());
   covariance.invertMultiply(b, x);
 
   // This is the analytical solution
-  QUESO::GslVector sol(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> sol(paramSpace.zeroVector());
   sol[0] = 1.0;
   sol[1] = 2.5;
   sol[2] = -0.25;
