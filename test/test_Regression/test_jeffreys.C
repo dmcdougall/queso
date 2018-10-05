@@ -11,6 +11,8 @@
 #include <queso/JeffreysVectorRV.h>
 #include <queso/GslMatrix.h>
 #include <queso/DistArray.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdlib>
 
@@ -20,21 +22,21 @@ struct qoiRoutine_DataType
 };
 
 void qoiRoutine(
-    const QUESO::GslVector&                    paramValues,
-    const QUESO::GslVector*                    paramDirection,
+    const QUESO::GslNumericVector<libMesh::Number>&                    paramValues,
+    const QUESO::GslNumericVector<libMesh::Number>*                    paramDirection,
     const void*                                functionDataPtr,
-          QUESO::GslVector&                    qoiValues,
-          QUESO::DistArray<QUESO::GslVector*>* gradVectors,
-          QUESO::DistArray<QUESO::GslMatrix*>* hessianMatrices,
-          QUESO::DistArray<QUESO::GslVector*>* hessianEffects)
+          QUESO::GslNumericVector<libMesh::Number>&                    qoiValues,
+          QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* gradVectors,
+          QUESO::DistArray<QUESO::GslSparseMatrix<libMesh::Number>*>* hessianMatrices,
+          QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* hessianEffects)
 {
   //logic to avoid warnings from intel compiler
-  const QUESO::GslVector* aux1 = paramDirection;
+  const QUESO::GslNumericVector<libMesh::Number>* aux1 = paramDirection;
   if (aux1) {};
-  QUESO::DistArray<QUESO::GslVector*>* aux2 = gradVectors;
+  QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* aux2 = gradVectors;
   if (aux2) {};
   aux2 = hessianEffects;
-  QUESO::DistArray<QUESO::GslMatrix*>* aux3 = hessianMatrices;
+  QUESO::DistArray<QUESO::GslSparseMatrix<libMesh::Number>*>* aux3 = hessianMatrices;
   if (aux3) {};
 
   //checking size of paramValues and qoiValues
@@ -65,26 +67,26 @@ void qoiRoutine(
 void compute(const QUESO::FullEnvironment& env) {
 
   //step 1: instatiate parameter space
-  QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramSpace(env, "param_", 1, NULL);
 
   //step 2: instantiate the parameter domain
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(0.001);
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet(100.); //TODO: this is not working with gsl sampling right now in FP
-  QUESO::BoxSubset<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramDomain("param_", paramSpace, paramMins, paramMaxs);
 
   //step 3: instantiate the qoi space
-  QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     qoiSpace(env, "qoi_", 1, NULL);
 
   //step 4: instantiate the qoi function object
   qoiRoutine_DataType qoiRoutine_Data;
   qoiRoutine_Data.coef1 = 1.;
-  QUESO::GenericVectorFunction<QUESO::GslVector,QUESO::GslMatrix,
-                               QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericVectorFunction<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>,
+                               QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     qoiFunctionObj("qoi_",
         paramDomain,
         qoiSpace,
@@ -93,14 +95,14 @@ void compute(const QUESO::FullEnvironment& env) {
 
   //step 5: instantiate the forward problem
   //parameter is Jeffreys RV
-  QUESO::JeffreysVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::JeffreysVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramRv("param_", paramDomain);
 
-  QUESO::GenericVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     qoiRv("qoi_",qoiSpace);
 
-  QUESO::StatisticalForwardProblem<QUESO::GslVector,QUESO::GslMatrix,
-                                   QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::StatisticalForwardProblem<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>,
+                                   QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     fp("", NULL, paramRv, qoiFunctionObj, qoiRv);
 
   //step 6: solve the forward problem
