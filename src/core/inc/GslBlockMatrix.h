@@ -47,7 +47,7 @@ namespace QUESO {
  * diagonal structure.  Each block is implemented as a GslMatrix object.
  */
 
-class GslBlockMatrix : Matrix
+class GslBlockMatrix : public Matrix
 {
 public:
   //! @name Constructor/Destructor methods
