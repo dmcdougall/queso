@@ -25,19 +25,19 @@
 #include <example_likelihood.h>
 
 double likelihoodRoutine(
-  const QUESO::GslVector& paramValues,
-  const QUESO::GslVector* paramDirection,
+  const QUESO::GslNumericVector<libMesh::Number>& paramValues,
+  const QUESO::GslNumericVector<libMesh::Number>* paramDirection,
   const void*             functionDataPtr,
-  QUESO::GslVector*       gradVector,
-  QUESO::GslMatrix*       hessianMatrix,
-  QUESO::GslVector*       hessianEffect)
+  QUESO::GslNumericVector<libMesh::Number>*       gradVector,
+  QUESO::GslSparseMatrix<libMesh::Number>*       hessianMatrix,
+  QUESO::GslNumericVector<libMesh::Number>*       hessianEffect)
 {
   // Logic just to avoid warnings from INTEL compiler
-  const QUESO::GslVector* aux1 = paramDirection;
+  const QUESO::GslNumericVector<libMesh::Number>* aux1 = paramDirection;
   if (aux1) {};
   aux1 = gradVector;
   aux1 = hessianEffect;
-  QUESO::GslMatrix* aux2 = hessianMatrix;
+  QUESO::GslSparseMatrix<libMesh::Number>* aux2 = hessianMatrix;
   if (aux2) {};
 
   // Just checking: the user, at the application level, expects
@@ -64,12 +64,12 @@ double likelihoodRoutine(
   double result = 0.;
   const QUESO::BaseEnvironment& env = paramValues.env();
   if (env.subRank() == 0) {
-    const QUESO::GslVector& meanVector =
+    const QUESO::GslNumericVector<libMesh::Number>& meanVector =
       *((likelihoodRoutine_DataType *) functionDataPtr)->meanVector;
-    const QUESO::GslMatrix& covMatrix  =
+    const QUESO::GslSparseMatrix<libMesh::Number>& covMatrix  =
       *((likelihoodRoutine_DataType *) functionDataPtr)->covMatrix;
 
-    QUESO::GslVector diffVec(paramValues - meanVector);
+    QUESO::GslNumericVector<libMesh::Number> diffVec(paramValues - meanVector);
 
     result = scalarProduct(diffVec, covMatrix.invertMultiply(diffVec));
   }

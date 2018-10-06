@@ -31,31 +31,33 @@
 #include <queso/StatisticalForwardProblem.h>
 #include <queso/GenericScalarFunction.h>
 #include <queso/GenericVectorFunction.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 void compute(const QUESO::FullEnvironment& env) {
   // Step 1 of 9: Instantiate the parameter space
-  QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramSpace(env, "param_", 2, NULL);
 
   // Step 2 of 9: Instantiate the parameter domain
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(-INFINITY);
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet( INFINITY);
-  QUESO::BoxSubset<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramDomain("param_",paramSpace,paramMins,paramMaxs);
 
   // Step 3 of 9: Instantiate the likelihood function object
-  QUESO::GslVector meanVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> meanVector(paramSpace.zeroVector());
   meanVector[0] = -1;
   meanVector[1] =  2;
-  QUESO::GslMatrix covMatrix(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> covMatrix(paramSpace.zeroVector());
   covMatrix(0,0) = 4.; covMatrix(0,1) = 0.;
   covMatrix(1,0) = 0.; covMatrix(1,1) = 1.;
   likelihoodRoutine_DataType likelihoodRoutine_Data;
   likelihoodRoutine_Data.meanVector = &meanVector;
   likelihoodRoutine_Data.covMatrix  = &covMatrix;
-  QUESO::GenericScalarFunction<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericScalarFunction<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     likelihoodFunctionObj("like_",
                           paramDomain,
                           likelihoodRoutine,
@@ -63,32 +65,32 @@ void compute(const QUESO::FullEnvironment& env) {
                           true); // routine computes [ln(function)]
 
   // Step 4 of 9: Instantiate the inverse problem
-  QUESO::UniformVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     priorRv("prior_", paramDomain);
-  QUESO::GenericVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     postRv("post_", paramSpace);
-  QUESO::StatisticalInverseProblem<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     ip("", NULL, priorRv, likelihoodFunctionObj, postRv);
 
   // Step 5 of 9: Solve the inverse problem
-  QUESO::GslVector paramInitials(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
   paramInitials[0] = 0.1;
   paramInitials[1] = -1.4;
-  QUESO::GslMatrix proposalCovMatrix(paramSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(paramSpace.zeroVector());
   proposalCovMatrix(0,0) = 8.; proposalCovMatrix(0,1) = 4.;
   proposalCovMatrix(1,0) = 4.; proposalCovMatrix(1,1) = 16.;
   ip.solveWithBayesMetropolisHastings(NULL,paramInitials, &proposalCovMatrix);
 
   // Step 6 of 9: Instantiate the qoi space
-  QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     qoiSpace(env, "qoi_", 1, NULL);
 
   // Step 7 of 9: Instantiate the qoi function object
   qoiRoutine_DataType qoiRoutine_Data;
   qoiRoutine_Data.coef1 = 1.;
   qoiRoutine_Data.coef2 = 1.;
-  QUESO::GenericVectorFunction<QUESO::GslVector,QUESO::GslMatrix,
-                               QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericVectorFunction<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>,
+                               QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     qoiFunctionObj("qoi_",
                    paramDomain,
                    qoiSpace,
@@ -96,10 +98,10 @@ void compute(const QUESO::FullEnvironment& env) {
                    (void *) &qoiRoutine_Data);
 
   // Step 8 of 9: Instantiate the forward problem
-  QUESO::GenericVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     qoiRv("qoi_", qoiSpace);
-  QUESO::StatisticalForwardProblem<QUESO::GslVector,QUESO::GslMatrix,
-                                   QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::StatisticalForwardProblem<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>,
+                                   QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     fp("", NULL, postRv, qoiFunctionObj, qoiRv);
 
   // Step 9 of 9: Solve the forward problem

@@ -26,6 +26,8 @@
 
 #include <queso/GslMatrix.h>
 #include <queso/DistArray.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 struct
 qoiRoutine_DataType
@@ -36,12 +38,12 @@ qoiRoutine_DataType
 
 void
 qoiRoutine(
-  const QUESO::GslVector&                    paramValues,
-  const QUESO::GslVector*                    paramDirection,
+  const QUESO::GslNumericVector<libMesh::Number>&                    paramValues,
+  const QUESO::GslNumericVector<libMesh::Number>*                    paramDirection,
   const void*                                functionDataPtr,
-        QUESO::GslVector&                    qoiValues,
-        QUESO::DistArray<QUESO::GslVector*>* gradVectors,
-        QUESO::DistArray<QUESO::GslMatrix*>* hessianMatrices,
-        QUESO::DistArray<QUESO::GslVector*>* hessianEffects);
+        QUESO::GslNumericVector<libMesh::Number>&                    qoiValues,
+        QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* gradVectors,
+        QUESO::DistArray<QUESO::GslSparseMatrix<libMesh::Number>*>* hessianMatrices,
+        QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* hessianEffects);
 
 #endif

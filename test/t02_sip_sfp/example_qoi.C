@@ -23,24 +23,26 @@
 //-----------------------------------------------------------------------el-
 
 #include <example_qoi.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 void
 qoiRoutine(
-  const QUESO::GslVector&                    paramValues,
-  const QUESO::GslVector*                    paramDirection,
+  const QUESO::GslNumericVector<libMesh::Number>&                    paramValues,
+  const QUESO::GslNumericVector<libMesh::Number>*                    paramDirection,
   const void*                                functionDataPtr,
-        QUESO::GslVector&                    qoiValues,
-        QUESO::DistArray<QUESO::GslVector*>* gradVectors,
-        QUESO::DistArray<QUESO::GslMatrix*>* hessianMatrices,
-        QUESO::DistArray<QUESO::GslVector*>* hessianEffects)
+        QUESO::GslNumericVector<libMesh::Number>&                    qoiValues,
+        QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* gradVectors,
+        QUESO::DistArray<QUESO::GslSparseMatrix<libMesh::Number>*>* hessianMatrices,
+        QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* hessianEffects)
 {
   // Logic just to avoid warnings from INTEL compiler
-  const QUESO::GslVector* aux1 = paramDirection;
+  const QUESO::GslNumericVector<libMesh::Number>* aux1 = paramDirection;
   if (aux1) {};
-  QUESO::DistArray<QUESO::GslVector*>* aux2 = gradVectors;
+  QUESO::DistArray<QUESO::GslNumericVector<libMesh::Number>*>* aux2 = gradVectors;
   if (aux2) {};
   aux2 = hessianEffects;
-  QUESO::DistArray<QUESO::GslMatrix*>* aux3 = hessianMatrices;
+  QUESO::DistArray<QUESO::GslSparseMatrix<libMesh::Number>*>* aux3 = hessianMatrices;
   if (aux3) {};
 
   // Just checking: the user, at the application level, expects
