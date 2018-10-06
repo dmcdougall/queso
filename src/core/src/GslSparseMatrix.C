@@ -532,7 +532,7 @@ template <typename T>
 GslNumericVector<T>
 GslSparseMatrix<T>::multiply(const GslNumericVector<T> & x) const
 {
-  GslNumericVector<T> answer(x);
+  GslNumericVector<T> answer(_mat->env(), _mat->map());
   *answer._vec = this->_mat->multiply(*x._vec);
   return answer;
 }
