@@ -33,6 +33,8 @@
 
 #include <TgaValidationCycle_appl.h>
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 int main(int argc, char* argv[])
 {
@@ -56,10 +58,10 @@ int main(int argc, char* argv[])
   //************************************************
   // Run application
   //************************************************
-  uqAppl<QUESO::GslVector, // type for parameter vectors
-         QUESO::GslMatrix, // type for parameter matrices
-         QUESO::GslVector, // type for qoi vectors
-         QUESO::GslMatrix  // type for qoi matrices
+  uqAppl<QUESO::GslNumericVector<libMesh::Number>, // type for parameter vectors
+         QUESO::GslSparseMatrix<libMesh::Number>, // type for parameter matrices
+         QUESO::GslNumericVector<libMesh::Number>, // type for qoi vectors
+         QUESO::GslSparseMatrix<libMesh::Number>  // type for qoi matrices
         >(*env);
 
   //************************************************
