@@ -39,6 +39,8 @@
 #include <queso/StatisticalInverseProblem.h>
 #include <queso/VectorSet.h>
 #include <queso/GPMSA.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 #include <cstdio>
 
@@ -59,12 +61,12 @@ void open_data_file(const std::string& data_filename, std::ifstream& data_stream
 // Read in data files
 void readData
 (const std::string& sim_data_filename, const std::string& exp_data_filename,
- const std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type> & simulationScenarios,
- const std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type> & simulationParameters,
- const std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type> & simulationOutputs,
- const std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type> & experimentScenarios,
- const std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type> & experimentOutputs,
- QUESO::GslMatrix& experimentMat)
+ const std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type> & simulationScenarios,
+ const std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type> & simulationParameters,
+ const std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type> & simulationOutputs,
+ const std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type> & experimentScenarios,
+ const std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type> & experimentOutputs,
+ QUESO::GslSparseMatrix<libMesh::Number>& experimentMat)
 {
   unsigned int num_config = simulationScenarios[0]->sizeGlobal();
   unsigned int num_params = simulationParameters[0]->sizeGlobal();
@@ -119,27 +121,27 @@ void run_scalar(const QUESO::FullEnvironment& env)
   unsigned int experimentSize = 1;  // Size of each experiment
 
   // Step 2: Set up prior for calibration parameters
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env,
       "param_", numUncertainVars, NULL);
 
   // Parameter (theta) bounds:
   //   descriptors   'beta0'  'beta1'  'beta2'
   //   upper_bounds    0.45   -0.1      0.4
   //   lower_bounds   -0.1    -0.5     -0.2
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins[0] = -0.1;
   paramMins[1] = -0.5;
   paramMins[2] = -0.2;
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs[0] =  0.45;
   paramMaxs[1] = -0.1;
   paramMaxs[2] =  0.4;
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramDomain("param_",
       paramSpace, paramMins, paramMaxs);
 
-  QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix> priorRv("prior_",
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> priorRv("prior_",
       paramDomain);
 
   // Step 3: Instantiate the 'scenario' and 'output' spaces for simulation
@@ -149,17 +151,17 @@ void run_scalar(const QUESO::FullEnvironment& env)
   // x1      0.9   1.1
   // x2     -1.5   1.0
   // x3     -1.5   0.5
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> configSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> configSpace(env,
       "scenario_", numConfigVars, NULL);
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> nEtaSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> nEtaSpace(env,
       "output_", numEta, NULL);
 
   // Step 4: Instantiate the 'output' space for the experiments
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> experimentSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> experimentSpace(env,
       "experimentspace_", experimentSize, NULL);
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> totalExperimentSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> totalExperimentSpace(env,
       "experimentspace_", experimentSize * numExperiments, NULL);
 
   // Step 5: Instantiate the Gaussian process emulator object
@@ -168,7 +170,7 @@ void run_scalar(const QUESO::FullEnvironment& env)
   // data, and if the users opts to, will normalise this to have zero mean and
   // unit variance.  It also stores default information about the hyperparameter
   // distributions.
-  QUESO::GPMSAFactory<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::GPMSAFactory<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     gpmsaFactory(env,
                  NULL,
                  priorRv,
@@ -185,36 +187,36 @@ void run_scalar(const QUESO::FullEnvironment& env)
 
   // std::vector containing all the points in scenario space where we have
   // simulations
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     simulationScenarios(numSimulations);
 
   // std::vector containing all the points in parameter space where we have
   // simulations
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     paramVecs(numSimulations);
 
   // std::vector containing all the simulation output data
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     outputVecs(numSimulations);
 
   // std::vector containing all the points in scenario space where we have
   // experiments
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     experimentScenarios(numExperiments);
 
   // std::vector containing all the experimental output data
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     experimentVecs(numExperiments);
 
   // The experimental output data observation error covariance matrix
-  QUESO::SharedPtr<QUESO::GslMatrix>::Type experimentMat
-    (new QUESO::GslMatrix(totalExperimentSpace.zeroVector()));
+  QUESO::SharedPtr<QUESO::GslSparseMatrix<libMesh::Number>>::Type experimentMat
+    (new QUESO::GslSparseMatrix<libMesh::Number>(totalExperimentSpace.zeroVector()));
 
   // Instantiate each of the simulation points/outputs
   for (unsigned int i = 0; i < numSimulations; i++) {
-    simulationScenarios[i].reset(new QUESO::GslVector(configSpace.zeroVector()));  // 'x_{i+1}^*' in paper
-    paramVecs          [i].reset(new QUESO::GslVector(paramSpace.zeroVector()));  // 't_{i+1}^*' in paper
-    outputVecs         [i].reset(new QUESO::GslVector(nEtaSpace.zeroVector()));  // 'eta_{i+1}' in paper
+    simulationScenarios[i].reset(new QUESO::GslNumericVector<libMesh::Number>(configSpace.zeroVector()));  // 'x_{i+1}^*' in paper
+    paramVecs          [i].reset(new QUESO::GslNumericVector<libMesh::Number>(paramSpace.zeroVector()));  // 't_{i+1}^*' in paper
+    outputVecs         [i].reset(new QUESO::GslNumericVector<libMesh::Number>(nEtaSpace.zeroVector()));  // 'eta_{i+1}' in paper
   }
 
   // Must set scaling before adding experiments due to construct order
@@ -226,8 +228,8 @@ void run_scalar(const QUESO::FullEnvironment& env)
     gp_opts.set_autoscale_meanvar_output(i);
 
   for (unsigned int i = 0; i < numExperiments; i++) {
-    experimentScenarios[i].reset(new QUESO::GslVector(configSpace.zeroVector())); // 'x_{i+1}' in paper
-    experimentVecs     [i].reset(new QUESO::GslVector(experimentSpace.zeroVector()));
+    experimentScenarios[i].reset(new QUESO::GslNumericVector<libMesh::Number>(configSpace.zeroVector())); // 'x_{i+1}' in paper
+    experimentVecs     [i].reset(new QUESO::GslNumericVector<libMesh::Number>(experimentSpace.zeroVector()));
   }
 
   // Experiment observation error (also needs to be scaled by
@@ -263,7 +265,7 @@ void run_scalar(const QUESO::FullEnvironment& env)
   gpmsaFactory.addSimulations(simulationScenarios, paramVecs, outputVecs);
   gpmsaFactory.addExperiments(experimentScenarios, experimentVecs, experimentMat);
 
-  QUESO::GslVector point(
+  QUESO::GslNumericVector<libMesh::Number> point(
       gpmsaFactory.prior().imageSet().vectorSpace().zeroVector());
 
   unsigned int num_lines = 10000;
@@ -330,27 +332,27 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   unsigned int experimentSize = 5;  // Size of each experiment
 
   // Step 2: Set up prior for calibration parameters
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> paramSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramSpace(env,
       "param_", numUncertainVars, NULL);
 
   // Parameter (theta) bounds:
   //   descriptors   'beta0'  'beta1'  'beta2'
   //   upper_bounds    0.45   -0.1      0.4
   //   lower_bounds   -0.1    -0.5     -0.2
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins[0] = -0.1;
   paramMins[1] = -0.5;
   paramMins[2] = -0.2;
 
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs[0] =  0.45;
   paramMaxs[1] = -0.1;
   paramMaxs[2] =  0.4;
 
-  QUESO::BoxSubset<QUESO::GslVector, QUESO::GslMatrix> paramDomain("param_",
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> paramDomain("param_",
       paramSpace, paramMins, paramMaxs);
 
-  QUESO::UniformVectorRV<QUESO::GslVector, QUESO::GslMatrix> priorRv("prior_",
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> priorRv("prior_",
       paramDomain);
 
   // Step 3: Instantiate the 'scenario' and 'output' spaces for simulation
@@ -361,17 +363,17 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   // x2     -1.5   1.0
   // x3     -1.5   0.5
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> configSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> configSpace(env,
       "scenario_", numConfigVars, NULL);
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> nEtaSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> nEtaSpace(env,
       "output_", numEta, NULL);
 
   // Step 4: Instantiate the 'output' space for the experiments
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> experimentSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> experimentSpace(env,
       "experimentspace_", experimentSize, NULL);
 
-  QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix> totalExperimentSpace(env,
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> totalExperimentSpace(env,
       "experimentspace_", experimentSize * numExperiments, NULL);
 
   // Step 5: Instantiate the Gaussian process emulator object
@@ -391,7 +393,7 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   // GPMSA stores all the information about our simulation
   // data and experimental data.  It also stores default information about the
   // hyperparameter distributions.
-  QUESO::GPMSAFactory<QUESO::GslVector, QUESO::GslMatrix>
+  QUESO::GPMSAFactory<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>>
     gpmsaFactory(env,
                  NULL,
                  priorRv,
@@ -412,41 +414,41 @@ void run_multivariate(const QUESO::FullEnvironment& env)
 
   // std::vector containing all the points in scenario space where we have
   // simulations
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     simulationScenarios(numSimulations);
 
   // std::vector containing all the points in parameter space where we have
   // simulations
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     paramVecs(numSimulations);
 
   // std::vector containing all the simulation output data
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     outputVecs(numSimulations);
 
   // std::vector containing all the points in scenario space where we have
   // experiments
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     experimentScenarios(numExperiments);
 
   // std::vector containing all the experimental output data
-  std::vector<QUESO::SharedPtr<QUESO::GslVector>::Type>
+  std::vector<QUESO::SharedPtr<QUESO::GslNumericVector<libMesh::Number>>::Type>
     experimentVecs(numExperiments);
 
   // The experimental output data observation error covariance matrix
-  QUESO::SharedPtr<QUESO::GslMatrix>::Type experimentMat
-    (new QUESO::GslMatrix(totalExperimentSpace.zeroVector()));
+  QUESO::SharedPtr<QUESO::GslSparseMatrix<libMesh::Number>>::Type experimentMat
+    (new QUESO::GslSparseMatrix<libMesh::Number>(totalExperimentSpace.zeroVector()));
 
   // Instantiate each of the simulation points/outputs
   for (unsigned int i = 0; i < numSimulations; i++) {
-    simulationScenarios[i].reset(new QUESO::GslVector(configSpace.zeroVector()));  // 'x_{i+1}^*' in paper
-    paramVecs          [i].reset(new QUESO::GslVector(paramSpace.zeroVector()));  // 't_{i+1}^*' in paper
-    outputVecs         [i].reset(new QUESO::GslVector(nEtaSpace.zeroVector()));  // 'eta_{i+1}' in paper
+    simulationScenarios[i].reset(new QUESO::GslNumericVector<libMesh::Number>(configSpace.zeroVector()));  // 'x_{i+1}^*' in paper
+    paramVecs          [i].reset(new QUESO::GslNumericVector<libMesh::Number>(paramSpace.zeroVector()));  // 't_{i+1}^*' in paper
+    outputVecs         [i].reset(new QUESO::GslNumericVector<libMesh::Number>(nEtaSpace.zeroVector()));  // 'eta_{i+1}' in paper
   }
 
   for (unsigned int i = 0; i < numExperiments; i++) {
-    experimentScenarios[i].reset(new QUESO::GslVector(configSpace.zeroVector())); // 'x_{i+1}' in paper
-    experimentVecs     [i].reset(new QUESO::GslVector(experimentSpace.zeroVector()));
+    experimentScenarios[i].reset(new QUESO::GslNumericVector<libMesh::Number>(configSpace.zeroVector())); // 'x_{i+1}' in paper
+    experimentVecs     [i].reset(new QUESO::GslNumericVector<libMesh::Number>(experimentSpace.zeroVector()));
   }
 
 
@@ -458,7 +460,7 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   //   0.0016   0.002   0.0025 0.002   0.0016
   //   0.00128  0.0016  0.002  0.0025  0.002
   //   0.001024 0.00128 0.0016 0.002   0.0025
-  QUESO::GslMatrix covarianceR(experimentSpace.zeroVector());
+  QUESO::GslSparseMatrix<libMesh::Number> covarianceR(experimentSpace.zeroVector());
   for (unsigned int i = 0; i < 5; ++i)
     covarianceR(i, i) = 0.0025;
   for (unsigned int i = 0; i < 4; ++i)
@@ -470,7 +472,7 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   covarianceR(0,4) = covarianceR(4,0) = 0.001024;
 
   // Populate the totalExperimentSpace covariance matrix
-  std::vector<const QUESO::GslMatrix* > vec_covmat_ptrs(numExperiments,
+  std::vector<const QUESO::GslSparseMatrix<libMesh::Number>* > vec_covmat_ptrs(numExperiments,
       &covarianceR);
   experimentMat->fillWithBlocksDiagonally(0, 0, vec_covmat_ptrs, true, true);
 
@@ -490,13 +492,13 @@ void run_multivariate(const QUESO::FullEnvironment& env)
   gpmsaFactory.addSimulations(simulationScenarios, paramVecs, outputVecs);
   gpmsaFactory.addExperiments(experimentScenarios, experimentVecs, experimentMat);
 
-  QUESO::GenericVectorRV<QUESO::GslVector, QUESO::GslMatrix> postRv(
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> postRv(
       "post_",
       gpmsaFactory.prior().imageSet().vectorSpace());
-  QUESO::StatisticalInverseProblem<QUESO::GslVector, QUESO::GslMatrix> ip("",
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number>> ip("",
       NULL, gpmsaFactory, postRv);
 
-  QUESO::GslVector paramInitials(
+  QUESO::GslNumericVector<libMesh::Number> paramInitials(
       gpmsaFactory.prior().imageSet().vectorSpace().zeroVector());
 
   // Start with the mean of the prior
@@ -533,7 +535,7 @@ void run_multivariate(const QUESO::FullEnvironment& env)
 
   std::cout << "\nAdjusted initial position:\n" << paramInitials << std::endl;
 
-  QUESO::GslMatrix proposalCovMatrix(
+  QUESO::GslSparseMatrix<libMesh::Number> proposalCovMatrix(
       gpmsaFactory.prior().imageSet().vectorSpace().zeroVector());
 
   // Start with the covariance matrix for the whole prior, including
