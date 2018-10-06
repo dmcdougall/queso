@@ -28,19 +28,19 @@
 static unsigned int likelihoodCounter = 0;
 
 double likelihoodRoutine(
-  const QUESO::GslVector& paramValues,
-  const QUESO::GslVector* paramDirection,
+  const QUESO::GslNumericVector<libMesh::Number>& paramValues,
+  const QUESO::GslNumericVector<libMesh::Number>* paramDirection,
   const void*             functionDataPtr,
-  QUESO::GslVector*       gradVector,
-  QUESO::GslMatrix*       hessianMatrix,
-  QUESO::GslVector*       hessianEffect)
+  QUESO::GslNumericVector<libMesh::Number>*       gradVector,
+  QUESO::GslSparseMatrix<libMesh::Number>*       hessianMatrix,
+  QUESO::GslNumericVector<libMesh::Number>*       hessianEffect)
 {
-  //const uqGslVector& meanVector =
+  //const uqGslNumericVector<libMesh::Number>& meanVector =
   //  *((likelihoodRoutine_DataType *) functionDataPtr)->meanVector;
-  //const uqGslMatrix& covMatrix  =
+  //const uqGslSparseMatrix<libMesh::Number>& covMatrix  =
   //  *((likelihoodRoutine_DataType *) functionDataPtr)->covMatrix;
 
-  //uqGslVector diffVec(paramValues - meanVector);
+  //uqGslNumericVector<libMesh::Number> diffVec(paramValues - meanVector);
 
   //return scalarProduct(diffVec, covMatrix.invertMultiply(diffVec));
 

@@ -26,20 +26,22 @@
 #define EX_LIKELIHOOD_H
 
 #include <queso/GslMatrix.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 struct
 likelihoodRoutine_DataType
 {
-  const QUESO::GslVector* meanVector;
-  const QUESO::GslMatrix* covMatrix;
+  const QUESO::GslNumericVector<libMesh::Number>* meanVector;
+  const QUESO::GslSparseMatrix<libMesh::Number>* covMatrix;
 };
 
 double likelihoodRoutine(
-  const QUESO::GslVector& paramValues,
-  const QUESO::GslVector* paramDirection,
+  const QUESO::GslNumericVector<libMesh::Number>& paramValues,
+  const QUESO::GslNumericVector<libMesh::Number>* paramDirection,
   const void*             functionDataPtr,
-  QUESO::GslVector*       gradVector,
-  QUESO::GslMatrix*       hessianMatrix,
-  QUESO::GslVector*       hessianEffect);
+  QUESO::GslNumericVector<libMesh::Number>*       gradVector,
+  QUESO::GslSparseMatrix<libMesh::Number>*       hessianMatrix,
+  QUESO::GslNumericVector<libMesh::Number>*       hessianEffect);
 
 #endif

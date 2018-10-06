@@ -30,46 +30,48 @@
 #include <queso/GenericScalarFunction.h>
 #include <queso/GenericVectorRV.h>
 #include <queso/UniformVectorRV.h>
+#include <queso/GslNumericVector.h>
+#include <queso/GslSparseMatrix.h>
 
 void compute(const QUESO::FullEnvironment& env) {
 #if 0
   QUESO::Constant1D1DFunction w(-1.,1.,1.);
 
-  uqVectorSpace<uqGslVector,uqGslMatrix>
+  uqVectorSpace<uqGslNumericVector<libMesh::Number>,uqGslSparseMatrix<libMesh::Number>>
     paramSpace(env, "param_", 5, NULL);
-  uqGslVector v1(paramSpace.zeroVector());
-  uqGslVector v2(paramSpace.zeroVector());
-  w.quadPtsWeights<uqGslVector,uqGslMatrix>(200,false,v1,v2);
+  uqGslNumericVector<libMesh::Number> v1(paramSpace.zeroVector());
+  uqGslNumericVector<libMesh::Number> v2(paramSpace.zeroVector());
+  w.quadPtsWeights<uqGslNumericVector<libMesh::Number>,uqGslSparseMatrix<libMesh::Number>>(200,false,v1,v2);
   std::cout << "v1 = " << v1 << std::endl;
   std::cout << "v2 = " << v2 << std::endl;
 #else
   ////////////////////////////////////////////////////////
   // Step 1 of 5: Instantiate the parameter space
   ////////////////////////////////////////////////////////
-  QUESO::VectorSpace<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramSpace(env, "param_", 1, NULL);
 
   ////////////////////////////////////////////////////////
   // Step 2 of 5: Instantiate the parameter domain
   ////////////////////////////////////////////////////////
-  QUESO::GslVector paramMins(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMins(paramSpace.zeroVector());
   paramMins.cwSet(-250.);
-  QUESO::GslVector paramMaxs(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> paramMaxs(paramSpace.zeroVector());
   paramMaxs.cwSet( 250.);
-  QUESO::BoxSubset<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::BoxSubset<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     paramDomain("param_",paramSpace,paramMins,paramMaxs);
 
   ////////////////////////////////////////////////////////
   // Step 3 of 5: Instantiate the likelihood function object
   ////////////////////////////////////////////////////////
-  QUESO::GslVector meanVector(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> meanVector(paramSpace.zeroVector());
   meanVector[0] = 10.;
-  QUESO::GslMatrix* covMatrix = paramSpace.newMatrix();
+  QUESO::GslSparseMatrix<libMesh::Number>* covMatrix = paramSpace.newMatrix();
   (*covMatrix)(0,0) = 1.;
   likelihoodRoutine_DataType likelihoodRoutine_Data;
   likelihoodRoutine_Data.meanVector = &meanVector;
   likelihoodRoutine_Data.covMatrix  = covMatrix;
-  QUESO::GenericScalarFunction<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericScalarFunction<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     likelihoodFunctionObj("like_",
                           paramDomain,
                           likelihoodRoutine,
@@ -79,20 +81,20 @@ void compute(const QUESO::FullEnvironment& env) {
   ////////////////////////////////////////////////////////
   // Step 4 of 5: Instantiate the inverse problem
   ////////////////////////////////////////////////////////
-  QUESO::UniformVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::UniformVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     priorRv("prior_", paramDomain);
-  QUESO::GenericVectorRV<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::GenericVectorRV<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     postRv("post_", paramSpace);
-  QUESO::StatisticalInverseProblem<QUESO::GslVector,QUESO::GslMatrix>
+  QUESO::StatisticalInverseProblem<QUESO::GslNumericVector<libMesh::Number>,QUESO::GslSparseMatrix<libMesh::Number>>
     ip("", NULL, priorRv, likelihoodFunctionObj, postRv);
 
   ////////////////////////////////////////////////////////
   // Step 5 of 5: Solve the inverse problem
   ////////////////////////////////////////////////////////
 #if 0
-  uqGslVector paramInitials(paramSpace.zeroVector());
+  uqGslNumericVector<libMesh::Number> paramInitials(paramSpace.zeroVector());
   paramInitials[0] = 45.;
-  uqGslMatrix* proposalCovMatrix = paramSpace.newMatrix();
+  uqGslSparseMatrix<libMesh::Number>* proposalCovMatrix = paramSpace.newMatrix();
   (*proposalCovMatrix)(0,0) = 1600.;
   ip.solveWithBayesMetropolisHastings(NULL, paramInitials, proposalCovMatrix);
   delete proposalCovMatrix;
@@ -109,7 +111,7 @@ void compute(const QUESO::FullEnvironment& env) {
                           << std::endl;
   }
 
-  QUESO::GslVector auxVec(paramSpace.zeroVector());
+  QUESO::GslNumericVector<libMesh::Number> auxVec(paramSpace.zeroVector());
   unsigned int numPosSmallerThan40 = 0;
   for (unsigned int i = 0; i < numPosTotal; ++i) {
     postRv.realizer().realization(auxVec);
