@@ -30,6 +30,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/TeuchosVector.h>
 #include <queso/TeuchosMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -135,6 +137,7 @@ void VectorSet<V,M>::print(std::ostream& os) const
 
 template class VectorSet<GslVector, GslMatrix>;
 template class VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class VectorSet<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 #ifdef QUESO_HAS_TRILINOS
 template class VectorSet<TeuchosVector, TeuchosMatrix>;
 #endif
