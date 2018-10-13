@@ -22,6 +22,9 @@ AM_CPPFLAGS      = -DLIBMESH_IS_COMPILING_ITSELF \
 									 $(EIGEN_INCLUDE) \
                    -I$(top_builddir)/include # required for libmesh_version.h
 
+# QUESO-specific stuff
+AM_CPPFLAGS += -I$(top_builddir)/inc
+
 LIBS             = $(libmesh_optional_LIBS)
 
 # # additional files which must be included in 'make dist'
