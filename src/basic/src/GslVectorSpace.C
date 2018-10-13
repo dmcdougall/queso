@@ -26,6 +26,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslNumericVector.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -42,6 +44,14 @@ VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> 
 {
   return new Map(m_dimGlobal,0,m_env.selfComm());
 }
+
+template <>
+Map*
+VectorSpace<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::newMap()
+{
+  return new Map(m_dimGlobal,0,m_env.selfComm());
+}
+
 
 template<>
 GslVector*
