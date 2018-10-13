@@ -27,11 +27,86 @@
 #include "libmesh/eigen_sparse_vector.h"
 #include "libmesh/eigen_sparse_matrix.h"
 
+// Just so my fingers don't hate me after editing 300+ source files
+using namespace QUESO;
 
 #ifdef LIBMESH_HAVE_EIGEN
 
 namespace libMesh
 {
+
+template <typename T>
+EigenSparseVector<T>::EigenSparseVector(const BaseEnvironment & env,
+                                        const Map & map)
+  : libMesh::NumericVector<T>(
+      comm_map.emplace(std::make_pair(
+          &(map.Comm()),
+          libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second,
+      libMesh::AUTOMATIC),
+    queso_env(new EmptyEnvironment()),
+    queso_mpi_comm(map.Comm())
+{
+  this->init(map.NumGlobalElements(),
+             map.NumGlobalElements(),
+             false,
+             libMesh::AUTOMATIC);
+}
+
+template <typename T>
+EigenSparseVector<T>::EigenSparseVector(const EigenSparseVector<T> & other)
+  : libMesh::NumericVector<T>(
+      comm_map.emplace(std::make_pair(
+          &(other.queso_map->Comm()),
+          libMesh::Parallel::Communicator(other.queso_map->Comm().Comm()))).first->second,
+      libMesh::AUTOMATIC),
+    queso_env(new EmptyEnvironment()),  // This is empty but we don't care
+                                        // because only the internal queso data
+                                        // type cares about the environment
+    queso_mpi_comm(other.queso_map->Comm())
+{
+  this->init(other.queso_map->NumGlobalElements(),
+             other.queso_map->NumGlobalElements(),
+             false,
+             libMesh::AUTOMATIC);
+}
+
+template <typename T>
+void
+EigenSparseVector<T>::cwSet(double value)
+{
+  libmesh_assert (this->initialized());
+  libmesh_assert (this->closed());
+
+  _vec.fill(value);
+}
+
+template <typename T>
+unsigned int
+EigenSparseVector<T>::sizeGlobal() const
+{
+  return this->size();
+}
+
+template <typename T>
+unsigned int
+EigenSparseVector<T>::sizeLocal() const
+{
+  return this->size();
+}
+
+template <typename T>
+const double &
+EigenSparseVector<T>::operator[](unsigned int i) const
+{
+  return this->_vec[static_cast<eigen_idx_type>(i)];
+}
+
+template <typename T>
+double &
+EigenSparseVector<T>::operator[](unsigned int i)
+{
+  return this->_vec[static_cast<eigen_idx_type>(i)];
+}
 
 template <typename T>
 T EigenSparseVector<T>::sum () const
@@ -461,6 +536,10 @@ Real EigenSparseVector<T>::min () const
 //------------------------------------------------------------------
 // Explicit instantiations
 template class EigenSparseVector<Number>;
+
+template <typename T>
+std::map<const QUESO::MpiComm *, Parallel::Communicator>
+EigenSparseVector<T>::comm_map;
 
 } // namespace libMesh
 

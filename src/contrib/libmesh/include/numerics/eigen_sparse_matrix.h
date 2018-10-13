@@ -28,6 +28,9 @@
 #include "libmesh/sparse_matrix.h"
 #include "libmesh/eigen_core_support.h"
 
+#include <queso/Environment.h>
+#include <queso/Map.h>
+
 // Eigen includes
 
 // C++ includes
@@ -84,6 +87,15 @@ public:
    */
   typedef EigenSM DataType;
   typedef Eigen::Triplet<T,eigen_idx_type> TripletType;
+
+  /**
+   * QUESO-specific ctors/methods/whatnot
+   */
+  EigenSparseMatrix(const EigenSparseVector<T> & v);
+  unsigned int numCols() const;
+  void zeroLower(bool includeDiagonal=false);
+  void zeroUpper(bool includeDiagonal=false);
+  double & operator()(unsigned int i, unsigned int j);
 
   /**
    * Initialize a Eigen matrix that is of global
@@ -259,6 +271,10 @@ public:
   virtual void get_transpose (SparseMatrix<T> & dest) const libmesh_override;
 
 private:
+
+  std::unique_ptr<QUESO::BaseEnvironment> queso_env;
+  QUESO::MpiComm queso_mpi_comm;
+  std::unique_ptr<QUESO::Map> queso_map;
 
   /**
    * Actual Eigen::SparseMatrix<> we are wrapping.

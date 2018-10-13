@@ -30,8 +30,80 @@
 // #include "libmesh/dof_map.h"
 // #include "libmesh/sparsity_pattern.h"
 
+// Protecc the fingies
+using namespace QUESO;
+
 namespace libMesh
 {
+
+template <typename T>
+EigenSparseMatrix<T>::EigenSparseMatrix(const EigenSparseVector<T> & v) :
+  libMesh::SparseMatrix<T>(
+      EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+          &(v.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            v.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(v.queso_map->Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(*v.queso_map));
+  this->_is_initialized = true;
+}
+
+template <typename T>
+unsigned int
+EigenSparseMatrix<T>::numCols() const
+{
+  return this->n();
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::zeroLower(bool includeDiagonal)
+{
+  for (unsigned int i = 1; i < _mat.rows(); i++) {
+    for (unsigned int j = 0; j < _mat.cols(); j++) {
+      if (j < i) {
+        this->set(i,j,0.0);
+      }
+    }
+  }
+
+  if (includeDiagonal) {
+    unsigned int num_elements = std::min(_mat.rows(), _mat.cols());
+    for (unsigned int i = 0; i < num_elements; i++) {
+      this->set(i,i,0.0);
+    }
+  }
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::zeroUpper(bool includeDiagonal)
+{
+  for (unsigned int i = 0; i < _mat.rows(); i++) {
+    for (unsigned int j = 1; j < _mat.cols(); j++) {
+      if (j > i) {
+        this->set(i,j,0.0);
+      }
+    }
+  }
+
+  if (includeDiagonal) {
+    unsigned int num_elements = std::min(_mat.rows(), _mat.cols());
+    for (unsigned int i = 0; i < num_elements; i++) {
+      this->set(i,i,0.0);
+    }
+  }
+}
+
+template <typename T>
+double &
+EigenSparseMatrix<T>::operator()(unsigned int i, unsigned int j)
+{
+  return _mat.coeffRef(i,j);
+}
 
 
 //-----------------------------------------------------------------------
@@ -160,6 +232,8 @@ void EigenSparseMatrix<T>::get_transpose (SparseMatrix<T> & dest_in) const
 template <typename T>
 EigenSparseMatrix<T>::EigenSparseMatrix (const Parallel::Communicator & comm_in) :
   SparseMatrix<T>(comm_in),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(*queso_env, comm_in.get()),
   _closed (false)
 {
 }

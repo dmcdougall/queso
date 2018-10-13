@@ -31,6 +31,10 @@
 #include "libmesh/eigen_core_support.h"
 #include "libmesh/numeric_vector.h"
 
+#include <queso/Environment.h>
+#include <queso/Map.h>
+#include <queso/MpiComm.h>
+
 namespace libMesh
 {
 
@@ -85,6 +89,18 @@ public:
                      const numeric_index_type n_local,
                      const std::vector<numeric_index_type> & ghost,
                      const ParallelType = AUTOMATIC);
+
+  /**
+   * QUESO-specific ctors/methods/whatnot
+   */
+  EigenSparseVector(const QUESO::BaseEnvironment & env, const QUESO::Map & map);
+  EigenSparseVector(const EigenSparseVector & other);
+  void cwSet(double value);
+  unsigned int sizeGlobal() const;
+  unsigned int sizeLocal() const;
+  const double & operator[](unsigned int i) const;
+  double & operator[](unsigned int i);
+
 
   /**
    * Destructor, deallocates memory. Made virtual to allow
@@ -418,6 +434,13 @@ public:
 
 private:
 
+  // This comm_map should probably go in the NumericVector base class
+  static std::map<const QUESO::MpiComm *, Parallel::Communicator> comm_map;
+
+  std::unique_ptr<QUESO::BaseEnvironment> queso_env;
+  QUESO::MpiComm queso_mpi_comm;
+  std::unique_ptr<QUESO::Map> queso_map;
+
   /**
    * Actual Eigen::SparseVector<> we are wrapping.
    */
@@ -438,7 +461,9 @@ template <typename T>
 inline
 EigenSparseVector<T>::EigenSparseVector (const Parallel::Communicator & comm_in,
                                          const ParallelType ptype)
-  : NumericVector<T>(comm_in, ptype)
+  : NumericVector<T>(comm_in, ptype),
+    queso_env(new QUESO::EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->_type = ptype;
 }
@@ -450,7 +475,9 @@ inline
 EigenSparseVector<T>::EigenSparseVector (const Parallel::Communicator & comm_in,
                                          const numeric_index_type n,
                                          const ParallelType ptype)
-  : NumericVector<T>(comm_in, ptype)
+  : NumericVector<T>(comm_in, ptype),
+    queso_env(new QUESO::EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->init(n, n, false, ptype);
 }
@@ -463,7 +490,9 @@ EigenSparseVector<T>::EigenSparseVector (const Parallel::Communicator & comm_in,
                                          const numeric_index_type n,
                                          const numeric_index_type n_local,
                                          const ParallelType ptype)
-  : NumericVector<T>(comm_in, ptype)
+  : NumericVector<T>(comm_in, ptype),
+    queso_env(new QUESO::EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->init(n, n_local, false, ptype);
 }
@@ -477,7 +506,9 @@ EigenSparseVector<T>::EigenSparseVector (const Parallel::Communicator & comm_in,
                                          const numeric_index_type n_local,
                                          const std::vector<numeric_index_type> & ghost,
                                          const ParallelType ptype)
-  : NumericVector<T>(comm_in, ptype)
+  : NumericVector<T>(comm_in, ptype),
+    queso_env(new QUESO::EmptyEnvironment()),
+    queso_mpi_comm(*queso_env, comm_in.get())
 {
   this->init(N, n_local, ghost, false, ptype);
 }
