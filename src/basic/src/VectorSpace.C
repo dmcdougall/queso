@@ -29,6 +29,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/TeuchosVector.h>
 #include <queso/TeuchosMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 #include <queso/DistArray.h>
 #include <queso/Map.h>
 #include <cmath>
@@ -324,10 +326,11 @@ void VectorSpace<V,M>::print(std::ostream& os) const
   return;
 }
 
-}  // End namespace QUESO
-
-template class QUESO::VectorSpace<QUESO::GslVector, QUESO::GslMatrix>;
-template class QUESO::VectorSpace<QUESO::GslNumericVector<libMesh::Number>, QUESO::GslSparseMatrix<libMesh::Number> >;
+template class VectorSpace<GslVector, GslMatrix>;
+template class VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class VectorSpace<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 #ifdef QUESO_HAS_TRILINOS
-template class QUESO::VectorSpace<QUESO::TeuchosVector, QUESO::TeuchosMatrix>;
+template class VectorSpace<TeuchosVector, TeuchosMatrix>;
 #endif
+
+}  // End namespace QUESO
