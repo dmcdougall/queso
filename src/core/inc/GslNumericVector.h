@@ -484,6 +484,7 @@ public:
 
 private:
 
+  // This comm_map should probably go in the NumericVector base class
   static std::map<const QUESO::MpiComm *, libMesh::Parallel::Communicator> comm_map;
 
   std::unique_ptr<QUESO::BaseEnvironment> queso_env;

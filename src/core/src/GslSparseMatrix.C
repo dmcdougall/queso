@@ -425,14 +425,14 @@ template <typename T>
 void
 GslSparseMatrix<T>::zeroLower(bool includeDiagonal)
 {
-  return this->_mat->zeroLower(includeDiagonal);
+  this->_mat->zeroLower(includeDiagonal);
 }
 
 template <typename T>
 void
 GslSparseMatrix<T>::zeroUpper(bool includeDiagonal)
 {
-  return this->_mat->zeroUpper(includeDiagonal);
+  this->_mat->zeroUpper(includeDiagonal);
 }
 
 template <typename T>
