@@ -142,6 +142,29 @@ EigenSparseVector<T>::atLeastOneComponentBiggerThan(const EigenSparseVector<T> &
   return result;
 }
 
+template <typename T>
+void
+EigenSparseVector<T>::cwExtract(unsigned int initialPos, EigenSparseVector<T> & vec) const
+{
+  queso_require_less_msg(initialPos, this->sizeLocal(), "invalid initialPos");
+  queso_require_less_equal_msg((initialPos +vec.sizeLocal()), this->sizeLocal(), "invalid vec.sizeLocal()");
+
+  for (unsigned int i = 0; i < vec.sizeLocal(); ++i) {
+    vec[i] = (*this)[initialPos+i];
+  }
+}
+
+template <typename T>
+void
+EigenSparseVector<T>::cwSet(unsigned int initialPos, const EigenSparseVector<T> & vec)
+{
+  queso_require_less_msg(initialPos, this->sizeLocal(), "invalid initialPos");
+  queso_require_less_equal_msg((initialPos +vec.sizeLocal()), this->sizeLocal(), "invalid vec.sizeLocal()");
+
+  for (unsigned int i = 0; i < vec.sizeLocal(); ++i) {
+    (*this)[initialPos+i] = vec[i];
+  }
+}
 
 template <typename T>
 T EigenSparseVector<T>::sum () const

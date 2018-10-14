@@ -52,6 +52,22 @@ EigenSparseMatrix<T>::EigenSparseMatrix(const EigenSparseVector<T> & v) :
 }
 
 template <typename T>
+EigenSparseMatrix<T>::EigenSparseMatrix(const BaseEnvironment & env,
+                                        const Map & map,
+                                        unsigned int numCols) :
+  libMesh::SparseMatrix<T>(
+      EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+          &(map.Comm()),
+          libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(map.Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(map));
+  this->_is_initialized = true;
+}
+
+template <typename T>
 unsigned int
 EigenSparseMatrix<T>::numCols() const
 {
@@ -103,6 +119,31 @@ double &
 EigenSparseMatrix<T>::operator()(unsigned int i, unsigned int j)
 {
   return _mat.coeffRef(i,j);
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::cwSet(unsigned int initialTargetRowId,
+                            unsigned int initialTargetColId,
+                            const EigenSparseMatrix<T> & mat)
+{
+  queso_require_less_msg(initialTargetRowId, this->numRowsLocal(), "invalid initialTargetRowId");
+  queso_require_less_equal_msg((initialTargetRowId + mat.numRowsLocal()), this->numRowsLocal(), "invalid vec.numRowsLocal()");
+  queso_require_less_msg(initialTargetColId, this->numCols(), "invalid initialTargetColId");
+  queso_require_less_equal_msg((initialTargetColId + mat.numCols()), this->numCols(), "invalid vec.numCols()");
+
+  for (unsigned int i = 0; i < mat.numRowsLocal(); ++i) {
+    for (unsigned int j = 0; j < mat.numCols(); ++j) {
+      (*this)(initialTargetRowId+i,initialTargetColId+j) = mat(i,j);
+    }
+  }
+}
+
+template <typename T>
+unsigned int
+EigenSparseMatrix<T>::numRowsLocal() const
+{
+  return this->n();
 }
 
 

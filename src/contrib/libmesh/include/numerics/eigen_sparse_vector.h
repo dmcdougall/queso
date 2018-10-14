@@ -102,6 +102,8 @@ public:
   double & operator[](unsigned int i);
   bool atLeastOneComponentSmallerThan(const EigenSparseVector<T> & rhs) const;
   bool atLeastOneComponentBiggerThan(const EigenSparseVector<T> & rhs) const;
+  void cwExtract(unsigned int initialPos, EigenSparseVector<T> & vec) const;
+  void cwSet(unsigned int initialPos, const EigenSparseVector<T> & vec);
 
 
   /**

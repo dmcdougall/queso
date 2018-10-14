@@ -96,6 +96,11 @@ public:
   void zeroLower(bool includeDiagonal=false);
   void zeroUpper(bool includeDiagonal=false);
   double & operator()(unsigned int i, unsigned int j);
+  EigenSparseMatrix(const QUESO::BaseEnvironment & env,
+                    const QUESO::Map & map,
+                    unsigned int numCols);
+  void cwSet(unsigned int rowId, unsigned int colId, const EigenSparseMatrix<T> & mat);
+  unsigned int numRowsLocal() const;
 
   /**
    * Initialize a Eigen matrix that is of global
