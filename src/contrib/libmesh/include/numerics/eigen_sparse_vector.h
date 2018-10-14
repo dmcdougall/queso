@@ -100,6 +100,8 @@ public:
   unsigned int sizeLocal() const;
   const double & operator[](unsigned int i) const;
   double & operator[](unsigned int i);
+  bool atLeastOneComponentSmallerThan(const EigenSparseVector<T> & rhs) const;
+  bool atLeastOneComponentBiggerThan(const EigenSparseVector<T> & rhs) const;
 
 
   /**

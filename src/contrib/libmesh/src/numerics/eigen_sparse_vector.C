@@ -109,6 +109,41 @@ EigenSparseVector<T>::operator[](unsigned int i)
 }
 
 template <typename T>
+bool
+EigenSparseVector<T>::atLeastOneComponentSmallerThan(const EigenSparseVector<T> & rhs) const
+{
+  queso_require_equal_to_msg(this->sizeLocal(), rhs.sizeLocal(), "vectors have different sizes");
+
+  bool result = false;
+  unsigned int i = 0;
+  unsigned int size = this->sizeLocal();
+  while ((i < size) && (result == false)) {
+    result = ( (*this)[i] < rhs[i] );
+    i++;
+  };
+
+  return result;
+}
+
+template <typename T>
+bool
+EigenSparseVector<T>::atLeastOneComponentBiggerThan(const EigenSparseVector<T> & rhs) const
+{
+  queso_require_equal_to_msg(this->sizeLocal(), rhs.sizeLocal(), "vectors have different sizes");
+
+  bool result = false;
+  unsigned int i = 0;
+  unsigned int size = this->sizeLocal();
+  while ((i < size) && (result == false)) {
+    result = ( (*this)[i] > rhs[i] );
+    i++;
+  };
+
+  return result;
+}
+
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
