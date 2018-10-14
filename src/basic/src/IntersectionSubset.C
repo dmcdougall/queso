@@ -28,6 +28,8 @@
 #include <queso/GslVector.h>
 #include <queso/GslNumericVector.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -103,5 +105,6 @@ void IntersectionSubset<V,M>::print(std::ostream& os) const
 
 template class IntersectionSubset<GslVector, GslMatrix>;
 template class IntersectionSubset<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class IntersectionSubset<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
