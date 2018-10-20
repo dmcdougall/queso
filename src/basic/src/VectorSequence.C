@@ -2639,7 +2639,7 @@ ComputeCovCorrMatricesBetweenVectorSequences(
       "must provide at least 2 samples to compute correlation matrices");
 
   // Check input data consistency
-  const BaseEnvironment& env = subPSeq.vectorSpace().zeroVector().env();
+  const BaseEnvironment& env = subPSeq.vectorSpace().env();
 
   bool useOnlyInter0Comm = (subPSeq.vectorSpace().numOfProcsForStorage() == 1) &&
                            (subQSeq.vectorSpace().numOfProcsForStorage() == 1);
