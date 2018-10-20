@@ -167,6 +167,20 @@ EigenSparseVector<T>::cwSet(unsigned int initialPos, const EigenSparseVector<T> 
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::cwSetGaussian(const EigenSparseVector<T> & meanVec, const EigenSparseVector<T> & stdDevVec)
+{
+  queso_not_implemented();
+}
+
+template <typename T>
+void
+EigenSparseVector<T>::cwSetUniform(const EigenSparseVector<T> & aVec, const EigenSparseVector<T> & bVec)
+{
+  queso_not_implemented();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
