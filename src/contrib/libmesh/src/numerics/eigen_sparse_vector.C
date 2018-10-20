@@ -181,6 +181,13 @@ EigenSparseVector<T>::cwSetUniform(const EigenSparseVector<T> & aVec, const Eige
 }
 
 template <typename T>
+double
+EigenSparseVector<T>::getMinValue( ) const
+{
+  return _vec.minCoeff();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());

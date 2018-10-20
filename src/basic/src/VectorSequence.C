@@ -2768,4 +2768,19 @@ template class BaseVectorSequence<libMesh::EigenSparseVector<libMesh::Number>, l
 template void ComputeCovCorrMatricesBetweenVectorSequences<GslVector, GslMatrix, GslVector, GslMatrix>(BaseVectorSequence<GslVector, GslMatrix> const&, BaseVectorSequence<GslVector, GslMatrix> const&, unsigned int, GslMatrix&, GslMatrix&);
 template void ComputeCovCorrMatricesBetweenVectorSequences<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >(BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > const&, BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > const&, unsigned int, GslSparseMatrix<libMesh::Number>&, GslSparseMatrix<libMesh::Number>&);
 
+template
+void
+ComputeCovCorrMatricesBetweenVectorSequences
+  <libMesh::EigenSparseVector<libMesh::Number>,
+   libMesh::EigenSparseMatrix<libMesh::Number>,
+   libMesh::EigenSparseVector<libMesh::Number>,
+   libMesh::EigenSparseMatrix<libMesh::Number> >(
+       BaseVectorSequence<libMesh::EigenSparseVector<libMesh::Number>,
+       libMesh::EigenSparseMatrix<libMesh::Number> > const&,
+       BaseVectorSequence<libMesh::EigenSparseVector<libMesh::Number>,
+       libMesh::EigenSparseMatrix<libMesh::Number> > const&,
+       unsigned int,
+       libMesh::EigenSparseMatrix<libMesh::Number>&,
+       libMesh::EigenSparseMatrix<libMesh::Number>&);
+
 }  // End namespace QUESO

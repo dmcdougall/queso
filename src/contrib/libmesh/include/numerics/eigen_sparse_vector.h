@@ -106,6 +106,7 @@ public:
   void cwSet(unsigned int initialPos, const EigenSparseVector<T> & vec);
   void cwSetGaussian(const EigenSparseVector<T> & meanVec, const EigenSparseVector<T> & stdDevVec);
   void cwSetUniform(const EigenSparseVector<T> & aVec, const EigenSparseVector<T> & bVec);
+  double getMinValue() const;
 
 
   /**
