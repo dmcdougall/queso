@@ -28,6 +28,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -2762,6 +2764,7 @@ ComputeCovCorrMatricesBetweenVectorSequences(
 
 template class BaseVectorSequence<GslVector, GslMatrix>;
 template class BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BaseVectorSequence<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 template void ComputeCovCorrMatricesBetweenVectorSequences<GslVector, GslMatrix, GslVector, GslMatrix>(BaseVectorSequence<GslVector, GslMatrix> const&, BaseVectorSequence<GslVector, GslMatrix> const&, unsigned int, GslMatrix&, GslMatrix&);
 template void ComputeCovCorrMatricesBetweenVectorSequences<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >(BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > const&, BaseVectorSequence<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > const&, unsigned int, GslSparseMatrix<libMesh::Number>&, GslSparseMatrix<libMesh::Number>&);
 
