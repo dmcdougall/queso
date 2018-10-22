@@ -28,6 +28,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/FilePtr.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 #include <sstream>
 
@@ -3014,5 +3016,6 @@ SequenceOfVectors<V,M>::unifiedMeanMonitorFree()
 
 template class SequenceOfVectors<GslVector, GslMatrix>;
 template class SequenceOfVectors<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class SequenceOfVectors<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
