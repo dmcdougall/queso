@@ -28,6 +28,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -162,5 +164,6 @@ BaseJointPdf<V,M>::component(unsigned int componentId) const
 
 template class BaseJointPdf<GslVector, GslMatrix>;
 template class BaseJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BaseJointPdf<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
