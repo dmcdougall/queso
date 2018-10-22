@@ -33,6 +33,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -104,5 +106,6 @@ double GenericScalarFunction<V,M>::lnValue(const V& domainVector,
 
 template class GenericScalarFunction<GslVector, GslMatrix>;
 template class GenericScalarFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class GenericScalarFunction<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
