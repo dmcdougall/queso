@@ -275,6 +275,12 @@ public:
    */
   virtual void get_transpose (SparseMatrix<T> & dest) const libmesh_override;
 
+  /**
+   * Access to the internal Eigen datatype
+   */
+  DataType & mat() { return _mat; }
+  const DataType & mat() const { return _mat; }
+
 private:
 
   std::unique_ptr<QUESO::BaseEnvironment> queso_env;
