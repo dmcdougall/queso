@@ -27,6 +27,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -68,5 +70,6 @@ BaseVectorFunction<P_V,P_M,Q_V,Q_M>::imageSet() const
 
 template class BaseVectorFunction<GslVector, GslMatrix, GslVector, GslMatrix>;
 template class BaseVectorFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BaseVectorFunction<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number>, libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
