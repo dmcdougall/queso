@@ -29,6 +29,8 @@
 #include <queso/GslVector.h>
 #include <queso/GslNumericVector.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 #ifndef QUESO_DISABLE_BOOST_PROGRAM_OPTIONS
 #include <queso/BoostInputOptionsParser.h>
@@ -220,5 +222,6 @@ BaseScalarFunction<V, M>::setFiniteDifferenceStepSize(unsigned int i,
 
 template class BaseScalarFunction<GslVector, GslMatrix>;
 template class BaseScalarFunction<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BaseScalarFunction<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
