@@ -30,6 +30,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/LikelihoodBase.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -63,5 +65,6 @@ void LikelihoodBase<V, M>::evaluateModel(const V & /* domainVector */, const V *
 
 template class LikelihoodBase<GslVector, GslMatrix>;
 template class LikelihoodBase<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class LikelihoodBase<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
