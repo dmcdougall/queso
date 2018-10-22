@@ -92,15 +92,21 @@ public:
    * QUESO-specific ctors/methods/whatnot
    */
   EigenSparseMatrix(const EigenSparseVector<T> & v);
+  EigenSparseMatrix(const QUESO::BaseEnvironment & env,
+                    const QUESO::Map & map,
+                    unsigned int numCols);
+  EigenSparseMatrix(const EigenSparseMatrix<T> & B);
   unsigned int numCols() const;
   void zeroLower(bool includeDiagonal=false);
   void zeroUpper(bool includeDiagonal=false);
   double & operator()(unsigned int i, unsigned int j);
-  EigenSparseMatrix(const QUESO::BaseEnvironment & env,
-                    const QUESO::Map & map,
-                    unsigned int numCols);
   void cwSet(unsigned int rowId, unsigned int colId, const EigenSparseMatrix<T> & mat);
   unsigned int numRowsLocal() const;
+  EigenSparseMatrix<T> & operator+=(const EigenSparseMatrix<T> & rhs);
+  void mpiSum(const QUESO::MpiComm & comm, EigenSparseMatrix<T> & M_global) const;
+  EigenSparseMatrix<T> & operator=(const EigenSparseMatrix & rhs);
+  void invertMultiply(const EigenSparseMatrix<T> & B, EigenSparseMatrix<T> & X) const;
+  void largestEigen(double & eigenValue, EigenSparseVector<T> & eigenVector) const;
 
   /**
    * Initialize a Eigen matrix that is of global
@@ -305,6 +311,22 @@ private:
 };
 
 } // namespace libMesh
+
+namespace QUESO
+{
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseMatrix<T> & mat,
+                                        const libMesh::EigenSparseVector<T> & vec);
+
+template <typename T>
+libMesh::EigenSparseMatrix<T> operator*(double a, const libMesh::EigenSparseMatrix<T> & mat);
+
+template <typename T>
+libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> & v1,
+                                            const libMesh::EigenSparseVector<T> & v2);
+
+}
 
 #endif // #ifdef LIBMESH_HAVE_EIGEN
 #endif // #ifdef LIBMESH_EIGEN_SPARSE_MATRIX_H

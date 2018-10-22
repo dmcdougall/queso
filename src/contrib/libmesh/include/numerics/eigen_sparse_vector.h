@@ -107,6 +107,16 @@ public:
   void cwSetGaussian(const EigenSparseVector<T> & meanVec, const EigenSparseVector<T> & stdDevVec);
   void cwSetUniform(const EigenSparseVector<T> & aVec, const EigenSparseVector<T> & bVec);
   double getMinValue() const;
+  //! Determines whether vector should be printed horizontally.
+  void setPrintHorizontally(bool value) const;
+  //! Checks if vector is printed horizontally.
+  bool getPrintHorizontally() const;
+  //! Determines whether vector should be printed in Scientific Notation.
+  void setPrintScientific(bool value) const;
+  //! Checks if the vector should be printed in Scientific Notation.
+  bool getPrintScientific() const;
+  int getMaxValueIndex() const;
+  double norm2() const;
 
 
   /**
@@ -447,6 +457,9 @@ private:
   std::unique_ptr<QUESO::BaseEnvironment> queso_env;
   QUESO::MpiComm queso_mpi_comm;
   std::unique_ptr<QUESO::Map> queso_map;
+  mutable bool m_printHorizontally = true;
+  mutable bool m_printScientific = false;
+
 
   /**
    * Actual Eigen::SparseVector<> we are wrapping.
@@ -765,6 +778,20 @@ void EigenSparseVector<T>::swap (NumericVector<T> & other)
 
 
 } // namespace libMesh
+
+// Not really sure what namespace I should be extending.
+namespace QUESO
+{
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator-(const libMesh::EigenSparseVector<T> & x,
+                                        const libMesh::EigenSparseVector<T> & y);
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator*(double a,
+                                        const libMesh::EigenSparseVector<T> & y);
+
+}
 
 
 #endif // #ifdef LIBMESH_HAVE_EIGEN

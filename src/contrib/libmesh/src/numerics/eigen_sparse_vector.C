@@ -188,6 +188,58 @@ EigenSparseVector<T>::getMinValue( ) const
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::setPrintHorizontally(bool value) const
+{
+  m_printHorizontally = value;
+}
+
+template <typename T>
+bool
+EigenSparseVector<T>::getPrintHorizontally() const
+{
+  return m_printHorizontally;
+}
+
+template <typename T>
+void
+EigenSparseVector<T>::setPrintScientific(bool value) const
+{
+  m_printScientific = value;
+}
+
+template <typename T>
+bool
+EigenSparseVector<T>::getPrintScientific() const
+{
+  return m_printScientific;
+}
+
+template <typename T>
+int
+EigenSparseVector<T>::getMaxValueIndex() const
+{
+  T maxval = -INFINITY;  // Assumes T is floating point type?
+  unsigned int maxval_index = 0;
+
+  for (unsigned int i = 0; i < this->size(); i++) {
+    if (_vec[i] > maxval) {
+      maxval = _vec[i];
+      maxval_index = i;
+    }
+  }
+
+  return maxval_index;
+}
+
+template <typename T>
+double
+EigenSparseVector<T>::norm2() const
+{
+  return l2_norm();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
@@ -621,6 +673,34 @@ std::map<const QUESO::MpiComm *, Parallel::Communicator>
 EigenSparseVector<T>::comm_map;
 
 } // namespace libMesh
+
+// Not really sure what namespace I should be extending
+namespace QUESO
+{
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator-(const libMesh::EigenSparseVector<T> & x,
+                                        const libMesh::EigenSparseVector<T> & y)
+{
+  // How to write inefficient code lesson 1
+  libMesh::EigenSparseVector<T> answer(x);
+  answer -= y;
+  return answer;
+}
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator*(double a,
+                                        const libMesh::EigenSparseVector<T> & y)
+{
+  libMesh::EigenSparseVector<T> answer(y);
+  answer.scale(a);
+  return answer;
+}
+
+template libMesh::EigenSparseVector<libMesh::Number> operator-(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
+template libMesh::EigenSparseVector<libMesh::Number> operator*(double a, const libMesh::EigenSparseVector<libMesh::Number> & y);
+
+}
 
 
 #endif // #ifdef LIBMESH_HAVE_EIGEN

@@ -29,6 +29,7 @@
 #include "libmesh/dense_matrix.h"
 // #include "libmesh/dof_map.h"
 // #include "libmesh/sparsity_pattern.h"
+#include <Eigen/SparseLU>
 
 // Protecc the fingies
 using namespace QUESO;
@@ -64,6 +65,22 @@ EigenSparseMatrix<T>::EigenSparseMatrix(const BaseEnvironment & env,
   _closed (false)
 {
   this->queso_map.reset(new Map(map));
+  this->_is_initialized = true;
+}
+
+
+template <typename T>
+EigenSparseMatrix<T>::EigenSparseMatrix(const EigenSparseMatrix<T> & B) :
+  libMesh::SparseMatrix<T>(
+      EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+          &(B.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            B.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(B.queso_map->Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(*B.queso_map));
   this->_is_initialized = true;
 }
 
@@ -144,6 +161,152 @@ unsigned int
 EigenSparseMatrix<T>::numRowsLocal() const
 {
   return this->n();
+}
+
+template <typename T>
+EigenSparseMatrix<T> &
+EigenSparseMatrix<T>::operator+=(const EigenSparseMatrix<T> & rhs)
+{
+  add(1.0, const_cast<EigenSparseMatrix<T> &>(rhs));
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::mpiSum( const MpiComm & comm, EigenSparseMatrix<T> & M_global) const
+{
+  // Sanity Checks
+  queso_require_equal_to_msg(this->numRowsLocal(), M_global.numRowsLocal(), "local matrices incompatible");
+  queso_require_equal_to_msg(this->numCols(), M_global.numCols(), "global matrices incompatible");
+
+  /* TODO: Probably a better way to handle this unpacking/packing of data */
+  int size = M_global.numRowsLocal()*M_global.numCols();
+  std::vector<double> local( size, 0.0 );
+  std::vector<double> global( size, 0.0 );
+
+  int k;
+  for( unsigned int i = 0; i < this->numRowsLocal(); i++ ) {
+    for( unsigned int j = 0; j < this->numCols(); j++ ) {
+      k = i + j*M_global.numCols();
+      local[k] = (*this)(i,j);
+    }
+  }
+
+  comm.Allreduce<double>(&local[0], &global[0], size, RawValue_MPI_SUM,
+                 "GslMatrix::mpiSum()",
+                 "failed MPI.Allreduce()");
+
+  for( unsigned int i = 0; i < this->numRowsLocal(); i++ ) {
+    for( unsigned int j = 0; j < this->numCols(); j++ ) {
+      k = i + j*M_global.numCols();
+      M_global(i,j) = global[k];
+    }
+  }
+}
+
+template <typename T>
+EigenSparseMatrix<T> &
+EigenSparseMatrix<T>::operator=(const EigenSparseMatrix<T> & rhs)
+{
+  queso_mpi_comm = rhs.queso_map->Comm();
+  this->queso_map.reset(new Map(*rhs.queso_map));
+  _mat = rhs._mat;
+  return *this;
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::invertMultiply(const EigenSparseMatrix<T> & B, EigenSparseMatrix<T> & X) const
+{
+  queso_require_equal_to_msg(B.numRowsLocal(), X.numRowsLocal(),
+                 "Matrices B and X are incompatible");
+  queso_require_equal_to_msg(B.numCols(),      X.numCols(),
+                 "Matrices B and X are incompatible");
+  queso_require_equal_to_msg(this->numRowsLocal(), X.numRowsLocal(),
+                             "This and X matrices are incompatible");
+
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpmat = _mat;
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmprhs = B._mat;
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpsol = X._mat;
+
+  tmpmat.makeCompressed();
+  Eigen::SparseLU<libMesh::EigenSM> solver;
+  solver.analyzePattern(tmpmat);
+  solver.factorize(tmpmat);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "decomp failed");
+
+  tmpsol = solver.solve(tmprhs);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "solve failed");
+
+  // Copy back
+  X._mat = tmpsol;
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::largestEigen(double & eigenValue, EigenSparseVector<T> & eigenVector) const
+{
+  unsigned int n = eigenVector.sizeLocal();
+  queso_require_not_equal_to_msg(n, 0, "invalid input vector size");
+
+  /*
+   * The following notation is used:
+   * z = vector used in iteration that ends up being the eigenvector
+   *     corresponding to the largest eigenvalue
+   * w = vector used in iteration that we extract the largest eigenvalue from.
+   */
+
+  // Some parameters associated with the algorithm
+  // TODO: Do we want to add the ability to have these set by the user?
+  const unsigned int max_num_iterations = 10000;
+  const double tolerance = 1.0e-13;
+
+  // Create temporary working vectors.
+  // TODO: We shouldn't have to use these - we ought to be able to work directly
+  // TODO: with eigenValue and eigenVector. Optimize this once we have regression
+  // TODO: tests.
+  EigenSparseVector<T> z(*queso_env, *queso_map); // Needs to be initialized to 1.0
+  z.cwSet(1.0);
+  EigenSparseVector<T> w(*queso_env, *queso_map);
+
+  // Some variables we use inside the loop.
+  int index;
+  double residual;
+  double lambda;
+
+  for( unsigned int k = 0; k < max_num_iterations; ++k) {
+    w = (*this) * z;
+
+    // For this algorithm, it's crucial to get the maximum in
+    // absolute value, but then to normalize by the actual value
+    // and *not* the absolute value.
+    EigenSparseVector<T> w_abs(w);
+    w_abs.abs();
+    index = w_abs.getMaxValueIndex();
+
+    lambda = w[index];
+
+    z = (1.0/lambda) * w;
+
+    // Here we use the norm of the residual as our convergence check:
+    // norm( A*x - \lambda*x )
+    residual = ( (*this)*z - lambda*z ).norm2();
+
+    if( residual < tolerance ) {
+      eigenValue = lambda;
+
+      // TODO: Do we want to normalize this so eigenVector.norm2() = 1?
+      eigenVector = z;
+      return;
+    }
+  }
+
+  // If we reach this point, then we didn't converge. Print error message
+  // to this effect.
+  // TODO: We know we failed at this point - need a way to not need a test
+  // TODO: Just specify the error.
+  queso_require_less_msg(residual, tolerance, "Maximum num iterations exceeded");
 }
 
 
@@ -459,5 +622,47 @@ template class EigenSparseMatrix<Number>;
 
 } // namespace libMesh
 
+namespace QUESO
+{
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseMatrix<T> & mat,
+                                        const libMesh::EigenSparseVector<T> & vec)
+{
+  libMesh::EigenSparseVector<T> answer(vec.comm(), mat.m());
+  answer.vec() = (mat.mat() * vec.vec()).eval();
+  return answer;
+}
+
+template <typename T>
+libMesh::EigenSparseMatrix<T> operator*(double a, const libMesh::EigenSparseMatrix<T> & mat)
+{
+  libMesh::EigenSparseMatrix<T> answer(mat);
+  answer.mat() *= a;
+  return answer;
+}
+
+template <typename T>
+libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> & v1, const libMesh::EigenSparseVector<T> & v2)
+{
+  unsigned int nRows = v1.sizeLocal();
+  unsigned int nCols = v2.sizeLocal();
+  libMesh::EigenSparseMatrix<T> answer(v1.comm());
+  answer.init(nRows, nCols, nRows, nCols);
+
+  for (unsigned int i = 0; i < nRows; ++i) {
+    double value1 = v1[i];
+    for (unsigned int j = 0; j < nCols; ++j) {
+      answer(i,j) = value1*v2[j];
+    }
+  }
+
+  return answer;
+}
+
+template libMesh::EigenSparseMatrix<libMesh::Number> operator*(double, const libMesh::EigenSparseMatrix<libMesh::Number> &);
+template libMesh::EigenSparseMatrix<libMesh::Number> matrixProduct(const libMesh::EigenSparseVector<libMesh::Number> &, const libMesh::EigenSparseVector<libMesh::Number> &);
+
+}
 
 #endif // #ifdef LIBMESH_HAVE_EIGEN
