@@ -309,6 +309,12 @@ EigenSparseMatrix<T>::largestEigen(double & eigenValue, EigenSparseVector<T> & e
   queso_require_less_msg(residual, tolerance, "Maximum num iterations exceeded");
 }
 
+template <typename T>
+unsigned int
+EigenSparseMatrix<T>::numRowsGlobal() const
+{
+  return m();
+}
 
 //-----------------------------------------------------------------------
 // EigenSparseMatrix members
