@@ -30,6 +30,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/math_macros.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -194,5 +196,6 @@ InvLogitGaussianVectorRealizer<V, M>::updateLowerCholLawCovMatrix(
 
 template class InvLogitGaussianVectorRealizer<GslVector, GslMatrix>;
 template class InvLogitGaussianVectorRealizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class InvLogitGaussianVectorRealizer<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
