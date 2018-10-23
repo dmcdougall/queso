@@ -273,6 +273,13 @@ EigenSparseVector<T>::cwSetConcatenated(const std::vector<const EigenSparseVecto
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::cwSetGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b)
+{
+  queso_not_implemented();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());

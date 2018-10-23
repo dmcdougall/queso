@@ -124,6 +124,8 @@ public:
   void cwSetBeta(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
   //! Should be a non-member non-friend function?
   void cwSetConcatenated(const std::vector<const EigenSparseVector<T> *> & vecs);
+  //! Should be a non-member non-friend function?
+  void cwSetGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
 
 
   /**
