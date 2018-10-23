@@ -104,7 +104,9 @@ public:
   bool atLeastOneComponentBiggerThan(const EigenSparseVector<T> & rhs) const;
   void cwExtract(unsigned int initialPos, EigenSparseVector<T> & vec) const;
   void cwSet(unsigned int initialPos, const EigenSparseVector<T> & vec);
+  //! Should be a non-member non-friend function?
   void cwSetGaussian(const EigenSparseVector<T> & meanVec, const EigenSparseVector<T> & stdDevVec);
+  //! Should be a non-member non-friend function?
   void cwSetUniform(const EigenSparseVector<T> & aVec, const EigenSparseVector<T> & bVec);
   double getMinValue() const;
   //! Determines whether vector should be printed horizontally.
@@ -118,7 +120,10 @@ public:
   int getMaxValueIndex() const;
   double norm2() const;
   unsigned int numOfProcsForStorage() const;
+  //! Should be a non-member non-friend function?
   void cwSetBeta(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
+  //! Should be a non-member non-friend function?
+  void cwSetConcatenated(const std::vector<const EigenSparseVector<T> *> & vecs);
 
 
   /**

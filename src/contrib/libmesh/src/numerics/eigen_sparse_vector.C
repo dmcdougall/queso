@@ -257,6 +257,22 @@ EigenSparseVector<T>::cwSetBeta(const EigenSparseVector<T> & a, const EigenSpars
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::cwSetConcatenated(const std::vector<const EigenSparseVector<T>* >& vecs)
+{
+  unsigned int cummulativeSize = 0;
+  for (unsigned int i = 0; i < vecs.size(); ++i) {
+    EigenSparseVector<T> tmpVec(*(vecs[i]));
+    for (unsigned int j = 0; j < vecs[i]->sizeLocal(); ++j) {
+      (*this)[cummulativeSize+j] = tmpVec[j];
+    }
+    cummulativeSize += vecs[i]->sizeLocal();
+  }
+
+  queso_require_equal_to_msg(this->sizeLocal(), cummulativeSize, "incompatible vector sizes");
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
