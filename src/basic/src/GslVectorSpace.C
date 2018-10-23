@@ -95,6 +95,18 @@ VectorSpace<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >
 
 template<>
 libMesh::EigenSparseVector<libMesh::Number>*
+VectorSpace<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >::newVector(double value) const
+{
+  libMesh::EigenSparseVector<libMesh::Number> * result =
+    new libMesh::EigenSparseVector<libMesh::Number>(m_env,*m_map);
+
+  result->cwSet(value);
+
+  return result;
+}
+
+template<>
+libMesh::EigenSparseVector<libMesh::Number>*
 VectorSpace<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseVector<libMesh::Number> >::newVector(double value) const
 {
   libMesh::EigenSparseVector<libMesh::Number> * result =
