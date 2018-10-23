@@ -287,6 +287,13 @@ EigenSparseVector<T>::cwSetGaussian(double mean, double stdDev)
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::cwSetInverseGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b)
+{
+  queso_not_implemented();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());

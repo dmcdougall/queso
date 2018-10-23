@@ -128,6 +128,8 @@ public:
   void cwSetGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
   //! Should be a non-member non-friend function?
   void cwSetGaussian(double mean, double stdDev);
+  //! Should be a non-member non-friend function?
+  void cwSetInverseGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
 
 
   /**
