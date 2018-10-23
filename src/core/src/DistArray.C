@@ -31,6 +31,8 @@
 #include <queso/ScalarSequence.h>
 #include <queso/SampledScalarCdf.h>
 #include <queso/OneDGrid.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 #ifdef QUESO_HAS_TRILINOS
 #include <Epetra_MpiComm.h>
@@ -157,6 +159,7 @@ DistArray<T>::print(std::ostream& os) const
 template class DistArray<GslVector*>;
 template class DistArray<GslNumericVector<libMesh::Number> *>;
 template class DistArray<GslSparseMatrix<libMesh::Number> *>;
+template class DistArray<libMesh::EigenSparseMatrix<libMesh::Number> *>;
 template class DistArray<ScalarSequence<double>*>;
 template class DistArray<SampledScalarCdf<double>*>;
 template class DistArray<BaseOneDGrid<double>*>;
