@@ -31,6 +31,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -171,4 +173,8 @@ VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > 
 InstantiateIntersection(const VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > & domain1,
                         const VectorSet<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > & domain2);
 
+template
+VectorSet<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > *
+InstantiateIntersection(const VectorSet<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > & domain1,
+                        const VectorSet<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > & domain2);
 }  // End namespace QUESO
