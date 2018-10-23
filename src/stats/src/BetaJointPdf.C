@@ -29,6 +29,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/BasicPdfsBase.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -196,5 +198,6 @@ BetaJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples, bool
 
 template class BetaJointPdf<GslVector, GslMatrix>;
 template class BetaJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BetaJointPdf<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
