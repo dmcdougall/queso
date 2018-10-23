@@ -280,6 +280,13 @@ EigenSparseVector<T>::cwSetGamma(const EigenSparseVector<T> & a, const EigenSpar
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::cwSetGaussian(double mean, double stdDev)
+{
+  queso_not_implemented();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
@@ -719,6 +726,15 @@ namespace QUESO
 {
 
 template <typename T>
+libMesh::EigenSparseVector<T>
+operator+(const libMesh::EigenSparseVector<T> & x, const libMesh::EigenSparseVector<T> & y)
+{
+  libMesh::EigenSparseVector<T> answer(x);
+  answer.vec() += y.vec();
+  return answer;
+}
+
+template <typename T>
 libMesh::EigenSparseVector<T> operator-(const libMesh::EigenSparseVector<T> & x,
                                         const libMesh::EigenSparseVector<T> & y)
 {
@@ -737,8 +753,19 @@ libMesh::EigenSparseVector<T> operator*(double a,
   return answer;
 }
 
+template <typename T>
+libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseVector<T> & x,
+                                        const libMesh::EigenSparseVector<T> & y)
+{
+  libMesh::EigenSparseVector<T> answer(x);
+  answer.vec() *= y.vec();
+  return answer;
+}
+
+template libMesh::EigenSparseVector<libMesh::Number> operator+(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator-(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator*(double a, const libMesh::EigenSparseVector<libMesh::Number> & y);
+template libMesh::EigenSparseVector<libMesh::Number> operator*(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 
 }
 

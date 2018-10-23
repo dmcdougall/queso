@@ -126,6 +126,8 @@ public:
   void cwSetConcatenated(const std::vector<const EigenSparseVector<T> *> & vecs);
   //! Should be a non-member non-friend function?
   void cwSetGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
+  //! Should be a non-member non-friend function?
+  void cwSetGaussian(double mean, double stdDev);
 
 
   /**
@@ -793,11 +795,19 @@ namespace QUESO
 {
 
 template <typename T>
+libMesh::EigenSparseVector<T> operator+(const libMesh::EigenSparseVector<T> & x,
+                                        const libMesh::EigenSparseVector<T> & y);
+
+template <typename T>
 libMesh::EigenSparseVector<T> operator-(const libMesh::EigenSparseVector<T> & x,
                                         const libMesh::EigenSparseVector<T> & y);
 
 template <typename T>
 libMesh::EigenSparseVector<T> operator*(double a,
+                                        const libMesh::EigenSparseVector<T> & y);
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseVector<T> & x,
                                         const libMesh::EigenSparseVector<T> & y);
 
 }
