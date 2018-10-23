@@ -117,6 +117,7 @@ public:
   bool getPrintScientific() const;
   int getMaxValueIndex() const;
   double norm2() const;
+  unsigned int numOfProcsForStorage() const;
 
 
   /**

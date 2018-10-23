@@ -240,6 +240,14 @@ EigenSparseVector<T>::norm2() const
 }
 
 template <typename T>
+unsigned int
+EigenSparseVector<T>::numOfProcsForStorage() const
+{
+  return queso_map->Comm().NumProc();
+}
+
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
