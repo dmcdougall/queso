@@ -31,6 +31,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -457,5 +459,6 @@ double ScalarFunctionSynchronizer<V,M>::callFunction(const V* vecValues,
 
 template class ScalarFunctionSynchronizer<GslVector, GslMatrix>;
 template class ScalarFunctionSynchronizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class ScalarFunctionSynchronizer<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
