@@ -118,6 +118,7 @@ public:
   int getMaxValueIndex() const;
   double norm2() const;
   unsigned int numOfProcsForStorage() const;
+  void cwSetBeta(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
 
 
   /**

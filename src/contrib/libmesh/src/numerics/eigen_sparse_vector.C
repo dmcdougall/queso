@@ -170,6 +170,7 @@ template <typename T>
 void
 EigenSparseVector<T>::cwSetGaussian(const EigenSparseVector<T> & meanVec, const EigenSparseVector<T> & stdDevVec)
 {
+  // should be a non-member non-friend function
   queso_not_implemented();
 }
 
@@ -177,6 +178,7 @@ template <typename T>
 void
 EigenSparseVector<T>::cwSetUniform(const EigenSparseVector<T> & aVec, const EigenSparseVector<T> & bVec)
 {
+  // should be a non-member non-friend function
   queso_not_implemented();
 }
 
@@ -246,6 +248,13 @@ EigenSparseVector<T>::numOfProcsForStorage() const
   return queso_map->Comm().NumProc();
 }
 
+template <typename T>
+void
+EigenSparseVector<T>::cwSetBeta(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b)
+{
+  // should be a non-member non-friend function
+  queso_not_implemented();
+}
 
 template <typename T>
 T EigenSparseVector<T>::sum () const
