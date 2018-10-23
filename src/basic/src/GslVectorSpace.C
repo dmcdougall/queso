@@ -120,6 +120,13 @@ VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> 
 }
 
 template<>
+libMesh::EigenSparseMatrix<libMesh::Number>*
+VectorSpace<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::newMatrix() const
+{
+  return new libMesh::EigenSparseMatrix<libMesh::Number>(m_env,*m_map,this->dimGlobal());
+}
+
+template<>
 GslMatrix*
 VectorSpace<GslVector,GslMatrix>::newDiagMatrix(double diagValue) const
 {
