@@ -131,6 +131,7 @@ public:
   //! Should be a non-member non-friend function?
   void cwSetInverseGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
   double sumOfComponents() const;
+  bool atLeastOneComponentSmallerOrEqualThan(const EigenSparseVector<T> & rhs) const;
 
 
   /**
