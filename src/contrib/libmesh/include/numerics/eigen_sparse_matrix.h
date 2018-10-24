@@ -110,6 +110,7 @@ public:
   unsigned int numRowsGlobal() const;
   double lnDeterminant() const;
   EigenSparseVector<T> invertMultiply(const EigenSparseVector<T> & b) const;
+  EigenSparseMatrix<T> & operator*=(double a);
 
   /**
    * Initialize a Eigen matrix that is of global

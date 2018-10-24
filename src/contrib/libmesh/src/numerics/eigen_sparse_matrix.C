@@ -362,6 +362,15 @@ EigenSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b) const
   sol.vec() = tmpsol;
 }
 
+template <typename T>
+EigenSparseMatrix<T> &
+EigenSparseMatrix<T>::operator*=(double a)
+{
+  _mat *= a;
+  return *this;
+}
+
+
 
 
 //-----------------------------------------------------------------------
