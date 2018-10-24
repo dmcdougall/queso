@@ -316,6 +316,54 @@ EigenSparseMatrix<T>::numRowsGlobal() const
   return m();
 }
 
+template <typename T>
+double
+EigenSparseMatrix<T>::lnDeterminant() const
+{
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpmat = _mat;
+
+  tmpmat.makeCompressed();
+  Eigen::SparseLU<libMesh::EigenSM> solver;
+  solver.analyzePattern(tmpmat);
+  solver.factorize(tmpmat);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "decomp failed");
+
+  double lndet = solver.logAbsDeterminant();
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "solve failed");
+
+  return lndet;
+}
+
+template <typename T>
+EigenSparseVector<T>
+EigenSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b) const
+{
+  queso_require_equal_to_msg(this->numCols(), b.sizeLocal(), "matrix and rhs have incompatible sizes");
+
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpmat = _mat;
+  Eigen::Matrix<double, Eigen::Dynamic, 1> tmprhs = b.vec();
+  Eigen::Matrix<double, Eigen::Dynamic, 1> tmpsol(m());
+
+  tmpmat.makeCompressed();
+  Eigen::SparseLU<libMesh::EigenSM> solver;
+  solver.analyzePattern(tmpmat);
+  solver.factorize(tmpmat);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "decomp failed");
+
+  tmpsol = solver.solve(tmprhs);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "solve failed");
+
+  // Copy back
+  EigenSparseVector<T> sol(this->comm(), m(), m());
+  sol.vec() = tmpsol;
+}
+
+
+
 //-----------------------------------------------------------------------
 // EigenSparseMatrix members
 template <typename T>

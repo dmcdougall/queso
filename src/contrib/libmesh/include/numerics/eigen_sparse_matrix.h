@@ -108,6 +108,8 @@ public:
   void invertMultiply(const EigenSparseMatrix<T> & B, EigenSparseMatrix<T> & X) const;
   void largestEigen(double & eigenValue, EigenSparseVector<T> & eigenVector) const;
   unsigned int numRowsGlobal() const;
+  double lnDeterminant() const;
+  EigenSparseVector<T> invertMultiply(const EigenSparseVector<T> & b) const;
 
   /**
    * Initialize a Eigen matrix that is of global

@@ -294,6 +294,13 @@ EigenSparseVector<T>::cwSetInverseGamma(const EigenSparseVector<T> & a, const Ei
 }
 
 template <typename T>
+double
+EigenSparseVector<T>::sumOfComponents() const
+{
+  return _vec.sum();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
@@ -769,10 +776,20 @@ libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseVector<T> & x,
   return answer;
 }
 
+template <typename T>
+libMesh::EigenSparseVector<T>
+operator/(const libMesh::EigenSparseVector<T> & x, const libMesh::EigenSparseVector<T> & y)
+{
+  libMesh::EigenSparseVector<T> answer(x);
+  answer.vec() = answer.vec().cwiseQuotient(y.vec());
+  return answer;
+}
+
 template libMesh::EigenSparseVector<libMesh::Number> operator+(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator-(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator*(double a, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator*(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
+template libMesh::EigenSparseVector<libMesh::Number> operator/(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 
 }
 

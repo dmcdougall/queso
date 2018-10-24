@@ -130,6 +130,7 @@ public:
   void cwSetGaussian(double mean, double stdDev);
   //! Should be a non-member non-friend function?
   void cwSetInverseGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
+  double sumOfComponents() const;
 
 
   /**
@@ -810,6 +811,10 @@ libMesh::EigenSparseVector<T> operator*(double a,
 
 template <typename T>
 libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseVector<T> & x,
+                                        const libMesh::EigenSparseVector<T> & y);
+
+template <typename T>
+libMesh::EigenSparseVector<T> operator/(const libMesh::EigenSparseVector<T> & x,
                                         const libMesh::EigenSparseVector<T> & y);
 
 }
