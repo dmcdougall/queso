@@ -28,6 +28,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -146,5 +148,6 @@ WignerJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples, bo
 
 template class WignerJointPdf<GslVector,GslMatrix>;
 template class WignerJointPdf<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+template class WignerJointPdf<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
