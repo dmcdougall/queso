@@ -28,6 +28,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -281,5 +283,6 @@ LogNormalJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples,
 
 template class LogNormalJointPdf<GslVector, GslMatrix>;
 template class LogNormalJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class LogNormalJointPdf<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
