@@ -27,6 +27,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -92,5 +94,6 @@ GenericJointPdf<V,M>::computeLogOfNormalizationFactor(unsigned int numSamples, b
 
 template class GenericJointPdf<GslVector, GslMatrix>;
 template class GenericJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class GenericJointPdf<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
