@@ -29,6 +29,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -111,5 +113,6 @@ GammaVectorRV<V,M>::print(std::ostream& os) const
 
 template class GammaVectorRV<GslVector,GslMatrix>;
 template class GammaVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+template class GammaVectorRV<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
