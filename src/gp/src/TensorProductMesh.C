@@ -25,6 +25,7 @@
 #include <queso/TensorProductMesh.h>
 #include <queso/GslVector.h>
 #include <queso/GslNumericVector.h>
+#include <libmesh/eigen_sparse_vector.h>
 #include <queso/asserts.h>
 #include <queso/GPMSAOptions.h>
 
@@ -433,5 +434,6 @@ TensorProductMesh<V>::interpolateOutput
 
 template class TensorProductMesh<GslVector>;
 template class TensorProductMesh<GslNumericVector<libMesh::Number> >;
+template class TensorProductMesh<libMesh::EigenSparseVector<libMesh::Number> >;
 
 }  // End namespace QUESO
