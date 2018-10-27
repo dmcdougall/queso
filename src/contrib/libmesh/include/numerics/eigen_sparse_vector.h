@@ -134,6 +134,9 @@ public:
   bool atLeastOneComponentSmallerOrEqualThan(const EigenSparseVector<T> & rhs) const;
   void cwSqrt();
   double getMaxValue() const;
+  EigenSparseVector<T> & operator/=(double a);
+  virtual EigenSparseVector<T> & operator*=(const EigenSparseVector<T> & v_in);
+  using libMesh::NumericVector<T>::operator*=;  // Overrode *= so we need this.
 
 
   /**

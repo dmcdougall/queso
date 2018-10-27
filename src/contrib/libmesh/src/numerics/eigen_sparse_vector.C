@@ -334,6 +334,24 @@ EigenSparseVector<T>::getMaxValue() const
 }
 
 template <typename T>
+EigenSparseVector<T> &
+EigenSparseVector<T>::operator/=(double a)
+{
+  scale(1.0/a);
+}
+
+template <typename T>
+EigenSparseVector<T> & EigenSparseVector<T>::operator*=(const EigenSparseVector<T> & v_in)
+{
+  libmesh_assert (this->closed());
+  libmesh_assert_equal_to(size(), v_in.size());
+
+  _vec *= v_in._vec;
+
+  return *this;
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
@@ -782,8 +800,8 @@ operator+(const libMesh::EigenSparseVector<T> & x, const libMesh::EigenSparseVec
 }
 
 template <typename T>
-libMesh::EigenSparseVector<T> operator-(const libMesh::EigenSparseVector<T> & x,
-                                        const libMesh::EigenSparseVector<T> & y)
+libMesh::EigenSparseVector<T>
+operator-(const libMesh::EigenSparseVector<T> & x, const libMesh::EigenSparseVector<T> & y)
 {
   // How to write inefficient code lesson 1
   libMesh::EigenSparseVector<T> answer(x);
