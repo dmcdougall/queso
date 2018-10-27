@@ -32,6 +32,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/MultiDimensionalIndexing.h>
 #include <queso/InterpolationSurrogateData.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO
 {
@@ -230,5 +232,6 @@ namespace QUESO
   // Instantiate
   template class LinearLagrangeInterpolationSurrogate<GslVector,GslMatrix>;
   template class LinearLagrangeInterpolationSurrogate<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+  template class LinearLagrangeInterpolationSurrogate<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 } // end namespace QUESO
