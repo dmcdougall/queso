@@ -36,6 +36,8 @@
 
 #include <queso/GslVector.h>
 #include <queso/GslNumericVector.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 #include <queso/SimulationOutputMesh.h>
 
 
@@ -100,6 +102,12 @@ void min_max_update(V & min, V & max, const V & new_data,
 template <typename V>
 void mean_var_update(unsigned int & n, V & mean, V & var, const V & new_data)
 {
+  // For operator- otherwise name lookup fails when V is
+  // libMesh::EigenSparseVector because operator- lives in QUESO::
+  //
+  // That's probably an oversight.
+  using namespace QUESO;
+
   ++n;
 
   const V delta (new_data - mean);
@@ -883,8 +891,8 @@ GPMSAOptions::set_final_scaling
 
       V meanScenario(*m_simulationScenarios[0]);
 
-      V varScenario(m_simulationScenarios[0]->env(),
-                    m_simulationScenarios[0]->map());
+      V varScenario(*m_simulationScenarios[0]);
+      varScenario.cwSet(0.0);
 
       // For consistency with the min-max behavior, only normalize
       // using simulation data, not experiment data.
@@ -916,8 +924,8 @@ GPMSAOptions::set_final_scaling
 
       V meanUncertain(*m_simulationParameters[0]);
 
-      V varUncertain(m_simulationParameters[0]->env(),
-                     m_simulationParameters[0]->map());
+      V varUncertain(*m_simulationParameters[0]);
+      varUncertain.cwSet(0.0);
 
       for (unsigned int i=0; i < m_simulationParameters.size(); ++i)
         mean_var_update(n, meanUncertain, varUncertain,
@@ -946,8 +954,8 @@ GPMSAOptions::set_final_scaling
 
       V meanOutput(*m_simulationOutputs[0]);
 
-      V varOutput(m_simulationOutputs[0]->env(),
-                  m_simulationOutputs[0]->map());
+      V varOutput(*m_simulationOutputs[0]);
+      varOutput.cwSet(0.0);
 
       // This gives us the right mean and var values for any
       // multivariate components of the problem; we'll handle
@@ -1261,5 +1269,15 @@ GPMSAOptions::set_final_scaling<GslNumericVector<libMesh::Number> >
    const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
    const std::vector<SharedPtr<GslNumericVector<libMesh::Number> >::Type> &,
    const std::vector<typename SharedPtr<SimulationOutputMesh<GslNumericVector<libMesh::Number> > >::Type> &);
+
+template
+void
+GPMSAOptions::set_final_scaling<libMesh::EigenSparseVector<libMesh::Number> >
+  (const std::vector<SharedPtr<libMesh::EigenSparseVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<libMesh::EigenSparseVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<libMesh::EigenSparseVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<libMesh::EigenSparseVector<libMesh::Number> >::Type> &,
+   const std::vector<SharedPtr<libMesh::EigenSparseVector<libMesh::Number> >::Type> &,
+   const std::vector<typename SharedPtr<SimulationOutputMesh<libMesh::EigenSparseVector<libMesh::Number> > >::Type> &);
 
 }  // End namespace QUESO
