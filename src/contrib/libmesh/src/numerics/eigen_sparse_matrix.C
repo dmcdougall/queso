@@ -31,6 +31,7 @@
 // #include "libmesh/sparsity_pattern.h"
 #include <Eigen/SparseLU>
 #include <Eigen/SVD>
+#include <Eigen/Eigenvalues>
 
 // Protecc the fingies
 using namespace QUESO;
@@ -412,7 +413,116 @@ EigenSparseMatrix<T>::svd(EigenSparseMatrix<T> & matU,
   matVt.mat() = svd.matrixV().sparseView().transpose().eval();
 }
 
+template <typename T>
+EigenSparseMatrix<T>
+EigenSparseMatrix<T>::transpose() const
+{
+  EigenSparseMatrix<T> answer(*this);
+  this->get_transpose(answer);
+  return answer;
+}
 
+template <typename T>
+double
+EigenSparseMatrix<T>::determinant() const
+{
+  return std::exp(this->lnDeterminant());
+}
+
+template <typename T>
+unsigned int
+EigenSparseMatrix<T>::rank(double absoluteZeroThreshold, double relativeZeroThreshold) const
+{
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::MatrixXd m = _mat;
+  Eigen::JacobiSVD<Eigen::MatrixXd> svd(m, Eigen::ComputeThinU | Eigen::ComputeThinV);
+  Eigen::VectorXd relative_values = svd.singularValues();
+
+  if (relative_values[0] > 0.0) {
+    relative_values = (1.0 / relative_values[0]) * relative_values;
+  }
+
+  unsigned int rank = 0;
+  for (unsigned int i = 0; i < relative_values.size(); i++) {
+    if ((svd.singularValues()[i] >= absoluteZeroThreshold) &&
+        (relative_values[i] >= relativeZeroThreshold)) {
+      rank++;
+    }
+  }
+
+  return rank;
+}
+
+template <typename T>
+EigenSparseMatrix<T>
+EigenSparseMatrix<T>::inverse() const
+{
+  unsigned int nRows = m();
+  unsigned int nCols = n();
+  queso_require_equal_to_msg(nRows, nCols, "matrix is not square");
+
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpmat = _mat;
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmprhs = _mat;
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpsol = _mat;
+  tmprhs.setIdentity();
+
+  tmpmat.makeCompressed();
+  Eigen::SparseLU<libMesh::EigenSM> solver;
+  solver.analyzePattern(tmpmat);
+  solver.factorize(tmpmat);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "decomp failed");
+
+  tmpsol = solver.solve(tmprhs);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "solve failed");
+
+  // Copy back
+  EigenSparseMatrix<T> answer(*this);
+  answer._mat = tmpsol;
+}
+
+template <typename T>
+EigenSparseVector<T>
+EigenSparseMatrix<T>::getColumn(const unsigned int column_num) const
+{
+  EigenSparseVector<T> col(this->comm(), this->m());
+  for (unsigned int i = 0; i < col.size(); i++) {
+    col[i] = _mat.coeff(i, column_num);
+  }
+
+  return col;
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::eigen(EigenSparseVector<T> & eigenValues,
+                            EigenSparseMatrix<T> * eigenVectors) const
+{
+  int options;
+  if (eigenVectors == NULL) {
+    options = Eigen::EigenvaluesOnly;
+  }
+  else {
+    options = Eigen::ComputeEigenvectors;
+  }
+
+  // Expensive copies -- really bad
+  // Need them because col major (and dense) is required by the solvers in eigen
+  Eigen::MatrixXd m = _mat;
+  Eigen::SelfAdjointEigenSolver<Eigen::MatrixXd> solver(m, options);
+  
+  eigenValues.vec() = solver.eigenvalues();
+
+  // Sometimes I wonder whether what I'm doing is really the right appraoch.
+  // It seems like we should either really be dealing with a dense matrix
+  // internally, or abandoning svd and chol and replacing them with iterative
+  // linear solvers that are allowed to fail.
+  if (options == Eigen::ComputeEigenvectors) {
+    eigenVectors->mat() = solver.eigenvectors().sparseView();
+  }
+}
 
 //-----------------------------------------------------------------------
 // EigenSparseMatrix members
@@ -747,6 +857,16 @@ libMesh::EigenSparseMatrix<T> operator*(double a, const libMesh::EigenSparseMatr
 }
 
 template <typename T>
+libMesh::EigenSparseMatrix<T> operator*(const libMesh::EigenSparseMatrix<T> & m1,
+                                        const libMesh::EigenSparseMatrix<T> & m2)
+{
+  libMesh::EigenSparseMatrix<T> answer(m1.comm());
+  answer.init(m1.m(), m2.n(), m1.m(), m2.n());
+  answer.mat() = m1.mat() * m2.mat();
+  return answer;
+}
+
+template <typename T>
 libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> & v1, const libMesh::EigenSparseVector<T> & v2)
 {
   unsigned int nRows = v1.sizeLocal();
@@ -765,6 +885,7 @@ libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> 
 }
 
 template libMesh::EigenSparseMatrix<libMesh::Number> operator*(double, const libMesh::EigenSparseMatrix<libMesh::Number> &);
+template libMesh::EigenSparseMatrix<libMesh::Number> operator*(const libMesh::EigenSparseMatrix<libMesh::Number> &, const libMesh::EigenSparseMatrix<libMesh::Number> &);
 template libMesh::EigenSparseMatrix<libMesh::Number> matrixProduct(const libMesh::EigenSparseVector<libMesh::Number> &, const libMesh::EigenSparseVector<libMesh::Number> &);
 
 }

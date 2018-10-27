@@ -823,6 +823,10 @@ template <typename T>
 libMesh::EigenSparseVector<T> operator/(const libMesh::EigenSparseVector<T> & x,
                                         const libMesh::EigenSparseVector<T> & y);
 
+template <typename T>
+double scalarProduct(const libMesh::EigenSparseVector<T> & x,
+                     const libMesh::EigenSparseVector<T> & y);
+
 }
 
 

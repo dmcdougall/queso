@@ -115,6 +115,12 @@ public:
   int svd(EigenSparseMatrix<T> & matU,
           EigenSparseVector<T> & vecS,
           EigenSparseMatrix & matVt) const;
+  EigenSparseMatrix<T> transpose() const;
+  double determinant() const;
+  unsigned int rank(double absoluteZeroThreshold, double relativeZeroThreshold) const;
+  EigenSparseMatrix<T> inverse() const;
+  EigenSparseVector<T> getColumn(const unsigned int column_num) const;
+  void eigen(EigenSparseVector<T> & eigenValues, EigenSparseMatrix<T> * eigenVectors) const;
 
   /**
    * Initialize a Eigen matrix that is of global
@@ -329,6 +335,10 @@ libMesh::EigenSparseVector<T> operator*(const libMesh::EigenSparseMatrix<T> & ma
 
 template <typename T>
 libMesh::EigenSparseMatrix<T> operator*(double a, const libMesh::EigenSparseMatrix<T> & mat);
+
+template <typename T>
+libMesh::EigenSparseMatrix<T> operator*(const libMesh::EigenSparseMatrix<T> & m1,
+                                        const libMesh::EigenSparseMatrix<T> & m2);
 
 template <typename T>
 libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> & v1,

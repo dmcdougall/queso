@@ -836,11 +836,19 @@ operator/(const libMesh::EigenSparseVector<T> & x, const libMesh::EigenSparseVec
   return answer;
 }
 
+template <typename T>
+double
+scalarProduct(const libMesh::EigenSparseVector<T> & x, const libMesh::EigenSparseVector<T> & y)
+{
+  return x.dot(y);
+}
+
 template libMesh::EigenSparseVector<libMesh::Number> operator+(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator-(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator*(double a, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator*(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 template libMesh::EigenSparseVector<libMesh::Number> operator/(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
+template double scalarProduct(const libMesh::EigenSparseVector<libMesh::Number> & x, const libMesh::EigenSparseVector<libMesh::Number> & y);
 
 }
 
