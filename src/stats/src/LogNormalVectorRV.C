@@ -29,6 +29,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -138,5 +140,6 @@ LogNormalVectorRV<V,M>::print(std::ostream& os) const
 
 template class LogNormalVectorRV<GslVector,GslMatrix>;
 template class LogNormalVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+template class LogNormalVectorRV<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
