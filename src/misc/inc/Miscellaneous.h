@@ -78,7 +78,7 @@ void MiscComputePositionsBetweenMinMax(V minValues, V maxValues,
     std::vector<V*>& positions);
 
 template <class V1,class V2>
-void MiscCheckTheParallelEnvironment(const V1& vec1, const V2& vec2);
+void MiscCheckTheParallelEnvironment(const BaseEnvironment & env, const V1& vec1, const V2& vec2);
 
 //! Convert container contents to space-separated string, omitting trailing whitespace
 template<typename T>

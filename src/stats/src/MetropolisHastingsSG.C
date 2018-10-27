@@ -871,8 +871,9 @@ MetropolisHastingsSG<P_V,P_M>::generateSequence(
     writeLogTarget = false;
   }
 
-  MiscCheckTheParallelEnvironment<P_V,P_V>(m_initialPosition,
-                                             m_initialPosition);
+  MiscCheckTheParallelEnvironment<P_V,P_V>(m_env,
+                                           m_initialPosition,
+                                           m_initialPosition);
 
   P_V valuesOf1stPosition(m_initialPosition);
   int iRC = UQ_OK_RC;

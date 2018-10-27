@@ -29,6 +29,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 #include <sys/time.h>
 #include <iostream>
 #include <fstream>
@@ -564,10 +566,8 @@ MiscComputePositionsBetweenMinMax(V                minValues,
 
 template <class V1,class V2>
 void
-MiscCheckTheParallelEnvironment(const V1& vec1, const V2& vec2)
+MiscCheckTheParallelEnvironment(const BaseEnvironment & env, const V1& vec1, const V2& vec2)
 {
-  const BaseEnvironment& env = vec1.env();
-
   if (env.numSubEnvironments() == (unsigned int) env.fullComm().NumProc()) {
     queso_require_equal_to_msg(env.subRank(), 0, "there should exist only one processor per sub environment");
     queso_require_equal_to_msg(vec1.numOfProcsForStorage(), 1,
@@ -612,8 +612,9 @@ std::string container_to_string(const T& container)
   return oss.str();
 }
 
-template void MiscCheckTheParallelEnvironment<GslVector, GslVector>(GslVector const&, GslVector const&);
-template void MiscCheckTheParallelEnvironment<GslNumericVector<libMesh::Number>, GslNumericVector<libMesh::Number> >(GslNumericVector<libMesh::Number> const&, GslNumericVector<libMesh::Number> const&);
+template void MiscCheckTheParallelEnvironment<GslVector, GslVector>(const BaseEnvironment &, GslVector const&, GslVector const&);
+template void MiscCheckTheParallelEnvironment<GslNumericVector<libMesh::Number>, GslNumericVector<libMesh::Number> >(const BaseEnvironment &, GslNumericVector<libMesh::Number> const&, GslNumericVector<libMesh::Number> const&);
+template void MiscCheckTheParallelEnvironment<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseVector<libMesh::Number> >(const BaseEnvironment &, libMesh::EigenSparseVector<libMesh::Number> const&, libMesh::EigenSparseVector<libMesh::Number> const&);
 template bool MiscCheckForSameValueInAllNodes<bool>(bool&, double, MpiComm const&, char const*);
 template bool MiscCheckForSameValueInAllNodes<double>(double&, double, MpiComm const&, char const*);
 template std::string container_to_string(const std::set<unsigned int>& container);
