@@ -132,6 +132,7 @@ public:
   void cwSetInverseGamma(const EigenSparseVector<T> & a, const EigenSparseVector<T> & b);
   double sumOfComponents() const;
   bool atLeastOneComponentSmallerOrEqualThan(const EigenSparseVector<T> & rhs) const;
+  void cwSqrt();
 
 
   /**

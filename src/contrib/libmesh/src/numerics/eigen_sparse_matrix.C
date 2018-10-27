@@ -30,6 +30,7 @@
 // #include "libmesh/dof_map.h"
 // #include "libmesh/sparsity_pattern.h"
 #include <Eigen/SparseLU>
+#include <Eigen/SVD>
 
 // Protecc the fingies
 using namespace QUESO;
@@ -370,6 +371,46 @@ EigenSparseMatrix<T>::operator*=(double a)
   return *this;
 }
 
+template <typename T>
+int
+EigenSparseMatrix<T>::chol()
+{
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpmat = _mat;
+
+  tmpmat.makeCompressed();
+  Eigen::SimplicialLLT<libMesh::EigenSM> solver;
+  solver.analyzePattern(tmpmat);
+  solver.factorize(tmpmat);
+  
+  if (solver.info() != Eigen::Success) {
+    return 1;
+  }
+  else {
+    return 0;
+  }
+}
+
+template <typename T>
+int
+EigenSparseMatrix<T>::svd(EigenSparseMatrix<T> & matU,
+                          EigenSparseVector<T> & vecS,
+                          EigenSparseMatrix & matVt) const
+{
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::MatrixXd m = _mat;
+  Eigen::JacobiSVD<Eigen::MatrixXd> svd(m, Eigen::ComputeThinU | Eigen::ComputeThinV);
+  vecS.vec() = svd.singularValues();
+
+  // Sometimes I wonder whether what I'm doing is really the right appraoch.
+  // It seems like we should either really be dealing with a dense matrix
+  // internally, or abandoning svd and chol and replacing them with iterative
+  // linear solvers that are allowed to fail.
+  matU.mat() = svd.matrixU().sparseView();
+  matVt.mat() = svd.matrixV().sparseView().transpose().eval();
+}
 
 
 

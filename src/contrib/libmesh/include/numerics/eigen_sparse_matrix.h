@@ -111,6 +111,10 @@ public:
   double lnDeterminant() const;
   EigenSparseVector<T> invertMultiply(const EigenSparseVector<T> & b) const;
   EigenSparseMatrix<T> & operator*=(double a);
+  int chol();
+  int svd(EigenSparseMatrix<T> & matU,
+          EigenSparseVector<T> & vecS,
+          EigenSparseMatrix & matVt) const;
 
   /**
    * Initialize a Eigen matrix that is of global

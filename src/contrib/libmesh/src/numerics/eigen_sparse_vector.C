@@ -318,6 +318,15 @@ EigenSparseVector<T>::atLeastOneComponentSmallerOrEqualThan(const EigenSparseVec
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::cwSqrt()
+{
+  for (unsigned int i = 0; i < size(); i++) {
+    _vec[i] = std::sqrt(_vec[i]);
+  }
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
