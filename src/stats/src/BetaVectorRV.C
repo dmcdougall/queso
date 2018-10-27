@@ -30,6 +30,8 @@
 #include <queso/BetaJointPdf.h>
 #include <queso/BetaVectorRV.h>
 #include <queso/BetaVectorRealizer.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -114,5 +116,6 @@ BetaVectorRV<V,M>::print(std::ostream& os) const
 
 template class BetaVectorRV<GslVector, GslMatrix>;
 template class BetaVectorRV<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BetaVectorRV<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
