@@ -30,6 +30,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -196,5 +198,6 @@ InvLogitGaussianVectorRV<V, M>::print(std::ostream & os) const
 
 template class InvLogitGaussianVectorRV<GslVector,GslMatrix>;
 template class InvLogitGaussianVectorRV<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+template class InvLogitGaussianVectorRV<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
