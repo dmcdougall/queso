@@ -28,6 +28,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/SimulationOutputMesh.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -83,7 +85,7 @@ GPMSAEmulator<V, M>::GPMSAEmulator(
   queso_assert_greater(m_numSimulations, 0);
 
   queso_assert_equal_to
-    (m_simulationOutputs[0]->map().Comm().NumProc(), 1);
+    (m_simulationOutputSpace.map().Comm().NumProc(), 1);
 }
 
 template <class V, class M>
@@ -195,10 +197,8 @@ GPMSAEmulator<V, M>::lnValue(const V & domainVector,
   const unsigned int offset2 = (numSimulationOutputs == 1) ?
     0 : m_numExperiments * (num_discrepancy_bases + num_svd_terms);
 
-  // This is cumbersome.  All I want is a matrix.
-  const MpiComm & comm = domainVector.map().Comm();
-  Map z_map(residualSize, 0, comm);
-  M covMatrix(this->m_env, z_map, residualSize);
+  VectorSpace<V, M> residualSpace(this->m_env, "", residualSize, NULL);
+  M covMatrix(residualSpace.zeroVector());
 
   typename SharedPtr<V>::Type domainVectorParameter
     (new V(*(this->m_simulationParameters[0])));
@@ -783,8 +783,8 @@ GPMSAFactory<V, M>::setUpDiscrepancyBases()
   if ((m_discrepancyBases.size() == 1) &&
       !m_discrepancyBases[0].get())
     {
-      const Map & output_map = m_simulationOutputs[0]->map();
-      const BaseEnvironment &env = m_simulationOutputs[0]->env();
+      const Map & output_map = m_simulationOutputSpace.map();
+      const BaseEnvironment &env = m_simulationOutputSpace.env();
 
       // Replace our placeholder with the default discrepancy basis:
       m_discrepancyBases.clear();
@@ -846,13 +846,13 @@ GPMSAFactory<V, M>::setUpEmulator()
   const unsigned int numSimulationOutputs =
     this->m_simulationOutputSpace.dimLocal();
 
-  const Map & output_map = m_simulationOutputs[0]->map();
+  const Map & output_map = this->m_simulationOutputSpace.map();
 
   const MpiComm & comm = output_map.Comm();
 
   Map serial_map(m_numSimulations, 0, comm);
 
-  const BaseEnvironment &env = m_simulationOutputs[0]->env();
+  const BaseEnvironment &env = this->m_simulationOutputSpace.env();
 
   simulationOutputMeans.reset
     (new V (env, output_map));
@@ -890,13 +890,14 @@ GPMSAFactory<V, M>::setUpEmulator()
 
   // GSL only finds left singular vectors if n_rows>=n_columns, so we need to
   // calculate them indirectly from the eigenvalues of M^T*M
+  Map SM_squared_map(numSimulationOutputs, 0, comm);
 
   M S_trans(simulation_matrix.transpose());
 
   M SM_squared(S_trans*simulation_matrix);
 
-  M SM_singularVectors(env, SM_squared.map(), numSimulationOutputs);
-  V SM_singularValues(env, SM_squared.map());
+  M SM_singularVectors(env, SM_squared_map, numSimulationOutputs);
+  V SM_singularValues(env, SM_squared_map);
 
   SM_squared.eigen(SM_singularValues, &SM_singularVectors);
 
@@ -1199,9 +1200,7 @@ GPMSAFactory<V, M>::addExperiments(
     const unsigned int outsize =
       this->m_experimentOutputs[i]->sizeGlobal();
 
-    const BaseEnvironment & output_env = this->m_experimentOutputs[i]->env();
-    const Map & output_map = this->m_experimentOutputs[i]->map();
-    typename SharedPtr<M>::Type new_matrix(new M(output_env, output_map, 0.0));
+    typename SharedPtr<M>::Type new_matrix(new M(*this->m_experimentOutputs[i]));
     m_observationErrorMatrices.push_back(new_matrix);
 
     for (unsigned int outi = 0; outi != outsize; ++outi)
@@ -1352,7 +1351,7 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
   const unsigned int n_variables = m_simulationMeshes.size() + n_multivariate_indices;
   const unsigned int num_discrepancy_groups = n_variables;
 
-  const MpiComm & comm = m_simulationOutputs[0]->map().Comm();
+  const MpiComm & comm = m_simulationOutputSpace.map().Comm();
 
   unsigned int rank_B;
   if (m_BMatrix->numRowsGlobal() > m_BMatrix->numCols())
@@ -1814,5 +1813,6 @@ GPMSAFactory<V, M>::setUpHyperpriors(const M & Wy)
 
 template class GPMSAFactory<GslVector, GslMatrix>;
 template class GPMSAFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class GPMSAFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
