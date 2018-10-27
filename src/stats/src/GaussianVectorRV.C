@@ -29,6 +29,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -257,6 +259,7 @@ ComputeConditionalGaussianVectorRV(
 
 template class GaussianVectorRV<GslVector,GslMatrix>;
 template class GaussianVectorRV<GslNumericVector<libMesh::Number> ,GslSparseMatrix<libMesh::Number> >;
+template class GaussianVectorRV<libMesh::EigenSparseVector<libMesh::Number> ,libMesh::EigenSparseMatrix<libMesh::Number> >;
 template void ComputeConditionalGaussianVectorRV<GslVector, GslMatrix>(GslVector const&, GslVector const&, GslMatrix const&, GslMatrix const&, GslMatrix const&, GslMatrix const&, GslVector const&, GslVector&, GslMatrix&);
 
 }  // End namespace QUESO
