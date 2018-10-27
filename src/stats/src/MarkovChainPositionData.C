@@ -25,6 +25,7 @@
 #include <queso/MarkovChainPositionData.h>
 #include <queso/GslVector.h>
 #include <queso/GslNumericVector.h>
+#include <libmesh/eigen_sparse_vector.h>
 
 namespace QUESO {
 
@@ -138,5 +139,6 @@ MarkovChainPositionData<V>::set(
 
 template class MarkovChainPositionData<GslVector>;
 template class MarkovChainPositionData<GslNumericVector<libMesh::Number> >;
+template class MarkovChainPositionData<libMesh::EigenSparseVector<libMesh::Number> >;
 
 }  // End namespace QUESO
