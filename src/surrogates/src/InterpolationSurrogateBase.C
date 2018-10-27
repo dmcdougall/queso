@@ -31,6 +31,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/InterpolationSurrogateData.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 // C++
 #include <sstream>
@@ -46,5 +48,6 @@ namespace QUESO
   // Instantiate
   template class InterpolationSurrogateBase<GslVector,GslMatrix>;
   template class InterpolationSurrogateBase<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >;
+  template class InterpolationSurrogateBase<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 } // end namespace QUESO
