@@ -133,6 +133,7 @@ public:
   double sumOfComponents() const;
   bool atLeastOneComponentSmallerOrEqualThan(const EigenSparseVector<T> & rhs) const;
   void cwSqrt();
+  double getMaxValue() const;
 
 
   /**

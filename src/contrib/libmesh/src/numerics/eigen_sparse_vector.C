@@ -327,6 +327,13 @@ EigenSparseVector<T>::cwSqrt()
 }
 
 template <typename T>
+double
+EigenSparseVector<T>::getMaxValue() const
+{
+  return _vec.maxCoeff();
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());
