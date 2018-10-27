@@ -25,6 +25,7 @@
 #include <queso/SimulationOutputMesh.h>
 #include <queso/GslVector.h>
 #include <queso/GslNumericVector.h>
+#include <libmesh/eigen_sparse_vector.h>
 
 namespace QUESO {
 
@@ -58,5 +59,6 @@ SimulationOutputMesh<V>::interpolateOutputs
 
 template class SimulationOutputMesh<GslVector>;
 template class SimulationOutputMesh<GslNumericVector<libMesh::Number> >;
+template class SimulationOutputMesh<libMesh::EigenSparseVector<libMesh::Number> >;
 
 }  // End namespace QUESO
