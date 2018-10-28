@@ -55,8 +55,10 @@ template<class V, class M>
 double
 GaussianLikelihoodFullCovariance<V, M>::lnValue(const V & domainVector) const
 {
-  V modelOutput(this->m_observations, 0, 0);  // At least it's not a copy
-  V weightedMisfit(this->m_observations, 0, 0);  // At least it's not a copy
+  V modelOutput(this->m_observations);
+  modelOutput.cwSet(0.0);
+  V weightedMisfit(this->m_observations);
+  weightedMisfit.cwSet(0.0);
 
   this->evaluateModel(domainVector, modelOutput);
 
