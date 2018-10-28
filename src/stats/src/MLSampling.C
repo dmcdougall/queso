@@ -32,6 +32,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 #include <queso/BayesianJointPdf.h>
 #include <queso/FilePtr.h>
 
@@ -4851,5 +4853,6 @@ double MLSampling<P_V,P_M>::eig() const
 
 template class MLSampling<GslVector, GslMatrix>;
 template class MLSampling<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class MLSampling<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
