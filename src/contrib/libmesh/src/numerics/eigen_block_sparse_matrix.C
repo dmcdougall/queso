@@ -1,0 +1,830 @@
+// The libMesh Finite Element Library.
+// Copyright (C) 2002-2017 Benjamin S. Kirk, John W. Peterson, Roy H. Stogner
+
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Lesser General Public License for more details.
+
+// You should have received a copy of the GNU Lesser General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+
+// C++ includes
+
+// Local includes
+#include "libmesh/libmesh_config.h"
+
+#include "libmesh/eigen_sparse_vector.h"
+#include "libmesh/eigen_block_sparse_matrix.h"
+#include "libmesh/dense_matrix.h"
+// #include "libmesh/dof_map.h"
+// #include "libmesh/sparsity_pattern.h"
+#include "libmesh/eigen_sparse_matrix.h"
+
+namespace libMesh
+{
+
+//-----------------------------------------------------------------------
+// EigenBlockSparseMatrix members
+template <typename T>
+void EigenBlockSparseMatrix<T>::init (const libMesh::numeric_index_type m_in,
+                                 const libMesh::numeric_index_type n_in,
+                                 const libMesh::numeric_index_type libmesh_dbg_var(m_l),
+                                 const libMesh::numeric_index_type libmesh_dbg_var(n_l),
+                                 const libMesh::numeric_index_type nnz,
+                                 const libMesh::numeric_index_type,
+                                 const libMesh::numeric_index_type)
+{
+  queso_not_implemented();
+  // // noz ignored...  only used for multiple processors!
+  // libmesh_assert_equal_to (m_in, m_l);
+  // libmesh_assert_equal_to (n_in, n_l);
+  // libmesh_assert_equal_to (m_in, n_in);
+  // libmesh_assert_greater  (nnz, 0);
+  //
+  // this->queso_map.reset(new QUESO::Map(m_in, 0, queso_mpi_comm));
+  // this->_mat.reset(new QUESO::GslMatrix(*queso_env, *queso_map, n_in));
+  //
+  // this->_is_initialized = true;
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::init ()
+{
+//   // Ignore calls on initialized objects
+//   if (this->initialized())
+//     return;
+//
+//   // We need the DofMap for this!
+//   libmesh_assert(this->_dof_map);
+//
+//   // Clear intialized matrices
+//   if (this->initialized())
+//     this->clear();
+//
+//   const numeric_index_type n_rows   = this->_dof_map->n_dofs();
+//   const numeric_index_type n_cols   = n_rows;
+//
+// #ifndef NDEBUG
+//   // The following variables are only used for assertions,
+//   // so avoid declaring them when asserts are inactive.
+//   const numeric_index_type n_l = this->_dof_map->n_dofs_on_processor(0);
+//   const numeric_index_type m_l = n_l;
+// #endif
+//
+//   // Laspack Matrices only work for uniprocessor cases
+//   libmesh_assert_equal_to (n_rows, n_cols);
+//   libmesh_assert_equal_to (m_l, n_rows);
+//   libmesh_assert_equal_to (n_l, n_cols);
+//
+//   const std::vector<numeric_index_type> & n_nz = this->_dof_map->get_n_nz();
+//
+// #ifndef NDEBUG
+//   // The following variables are only used for assertions,
+//   // so avoid declaring them when asserts are inactive.
+//   const std::vector<numeric_index_type> & n_oz = this->_dof_map->get_n_oz();
+// #endif
+//
+//   // Make sure the sparsity pattern isn't empty
+//   libmesh_assert_equal_to (n_nz.size(), n_l);
+//   libmesh_assert_equal_to (n_oz.size(), n_l);
+//
+//   if (n_rows==0)
+//     {
+//       _mat.resize(0,0);
+//       return;
+//     }
+//
+//   _mat.resize(n_rows,n_cols);
+//   _mat.reserve(n_nz);
+//
+//   this->_is_initialized = true;
+//
+//   libmesh_assert_equal_to (n_rows, this->m());
+//   libmesh_assert_equal_to (n_cols, this->n());
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::add_matrix(const libMesh::DenseMatrix<T> & dm,
+                                      const std::vector<libMesh::numeric_index_type> & rows,
+                                      const std::vector<libMesh::numeric_index_type> & cols)
+
+{
+  libmesh_assert (this->initialized());
+  unsigned int n_rows = libMesh::cast_int<unsigned int>(rows.size());
+  unsigned int n_cols = libMesh::cast_int<unsigned int>(cols.size());
+  libmesh_assert_equal_to (dm.m(), n_rows);
+  libmesh_assert_equal_to (dm.n(), n_cols);
+
+
+  for (unsigned int i=0; i<n_rows; i++)
+    for (unsigned int j=0; j<n_cols; j++)
+      this->add(rows[i],cols[j],dm(i,j));
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::get_diagonal (libMesh::NumericVector<T> & dest_in) const
+{
+  queso_not_implemented();
+  // EigenSparseVector<T> & dest = libMesh::cast_ref<EigenSparseVector<T> &>(dest_in);
+  //
+  // for (unsigned int i = 0; i < dest.size(); i++) {
+  //   dest.set(i, (*_mat)(i,i));
+  // }
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::get_transpose (libMesh::SparseMatrix<T> & dest_in) const
+{
+  queso_not_implemented();
+  // EigenBlockSparseMatrix<T> & dest = libMesh::cast_ref<EigenBlockSparseMatrix<T> &>(dest_in);
+  //
+  // *(dest._mat) = _mat->transpose();
+}
+
+
+
+// template <typename T>
+// EigenBlockSparseMatrix<T>::EigenBlockSparseMatrix (const libMesh::Parallel::Communicator & comm_in) :
+//   libMesh::SparseMatrix<T>(comm_in),
+//   queso_env(new EmptyEnvironment()),
+//   queso_mpi_comm(*queso_env, comm_in.get()),
+//   _closed (false)
+// {
+// }
+
+template <typename T>
+EigenBlockSparseMatrix<T>::EigenBlockSparseMatrix(const std::vector<unsigned int> & blockSizes,
+                                                const EigenSparseVector<T> & v,
+                                                double diagValue) :
+  libMesh::SparseMatrix<T>(
+      EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+          &(v.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            v.queso_map->Comm().Comm()))).first->second),
+  queso_env(new QUESO::EmptyEnvironment()),
+  queso_mpi_comm(v.queso_map->Comm()),
+  m_vectorSpaces(blockSizes.size()),
+  m_blocks(blockSizes.size()),
+  _closed(false)
+{
+  this->queso_map.reset(new QUESO::Map(*v.queso_map));
+  // this->_mat.reset(new GslBlockMatrix(blockSizes, *v._vec, diagValue));
+  this->_is_initialized = true;
+
+  // We copy all the internal blocks...  Memory changes wont be propagated back
+  // to the internally stored pointer
+  // for (unsigned int i = 0; i < blockSizes.size(); i++) {
+  //   this->m_vectorSpaces[i] = new VectorSpace<EigenSparseVector<T>, EigenSparseMatrix<T> >(*queso_env, "block_param_", blockSizes[i], NULL);
+  //   const GslMatrix & tmp_matrix = this->_mat->getBlock(i);  // the blocks exist
+  //   this->m_blocks[i] = new EigenSparseMatrix<T>(this->m_vectorSpaces[i]->zeroVector(), diagValue);
+  // }
+}
+
+template <typename T>
+EigenBlockSparseMatrix<T>::~EigenBlockSparseMatrix ()
+{
+  this->clear ();
+}
+
+// template <typename T>
+// EigenBlockSparseMatrix<T>::EigenBlockSparseMatrix(const EigenSparseVector<T> & v) :
+//   libMesh::SparseMatrix<T>(
+//       EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+//           &(v.queso_map->Comm()),
+//           libMesh::Parallel::Communicator(
+//             v.queso_map->Comm().Comm()))).first->second),
+//   queso_env(new EmptyEnvironment()),
+//   queso_mpi_comm(v._vec->map().Comm()),
+//   _closed (false)
+// {
+//   queso_not_implemented();
+//   // this->queso_map.reset(new Map(v._vec->map()));
+//   // this->_mat.reset(new GslMatrix(v._vec->env(), v._vec->map(), v._vec->sizeLocal()));
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T>::EigenBlockSparseMatrix(const EigenSparseVector<T> & v, double diagValue) :
+//   libMesh::SparseMatrix<T>(
+//       EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+//           &(v.queso_map->Comm()),
+//           libMesh::Parallel::Communicator(
+//             v.queso_map->Comm().Comm()))).first->second),
+//   queso_env(new EmptyEnvironment()),
+//   queso_mpi_comm(v._vec->map().Comm()),
+//   _closed (false)
+// {
+//   queso_not_implemented();
+//   // this->queso_map.reset(new Map(v._vec->map()));
+//   // this->_mat.reset(new GslMatrix(*v._vec, diagValue));
+// }
+
+// template <typename T>
+// EigenBlockSparseMatrix<T>::EigenBlockSparseMatrix(const EigenBlockSparseMatrix<T> & B) :
+//   libMesh::SparseMatrix<T>(
+//       EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+//           &(B.queso_map->Comm()),
+//           libMesh::Parallel::Communicator(
+//             B.queso_map->Comm().Comm()))).first->second),
+//   queso_env(new EmptyEnvironment()),
+//   queso_mpi_comm(B._mat->map().Comm()),
+//   _closed (false)
+// {
+//   queso_not_implemented();
+//   // this->queso_map.reset(new Map(B._mat->map()));
+//   // this->_mat.reset(new GslMatrix(*B._mat));
+// }
+
+
+// template <typename T>
+// EigenBlockSparseMatrix<T>::EigenBlockSparseMatrix(const BaseEnvironment & env, const Map & map, unsigned int numCols) :
+//   libMesh::SparseMatrix<T>(
+//       EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+//           &(map.Comm()),
+//           libMesh::Parallel::Communicator(map.Comm().Comm()))).first->second),
+//   queso_env(new EmptyEnvironment()),
+//   queso_mpi_comm(map.Comm()),
+//   _closed (false)
+// {
+//   queso_not_implemented();
+//   // this->queso_map.reset(new Map(map));
+//   // this->_mat.reset(new GslMatrix(env, map, numCols));
+// }
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::clear ()
+{
+  // queso_not_implemented();
+  unsigned int num_cols = 0;
+  this->queso_map.reset(new QUESO::Map(1, 0, this->queso_mpi_comm));
+  // this->_mat.reset(new GslMatrix(*(this->queso_env), *(this->queso_map), num_cols));
+  // this->_mat.reset(NULL);
+
+  _closed = false;
+  this->_is_initialized = false;
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::zero ()
+{
+  queso_not_implemented();
+  // _mat->cwSet(0.0);
+}
+
+
+
+template <typename T>
+libMesh::numeric_index_type EigenBlockSparseMatrix<T>::m () const
+{
+  libmesh_assert (this->initialized());
+
+  return m_blocks[0]->numRowsGlobal();
+}
+
+
+
+template <typename T>
+libMesh::numeric_index_type EigenBlockSparseMatrix<T>::n () const
+{
+  libmesh_assert (this->initialized());
+
+  return m_blocks[0]->numCols();
+}
+
+
+
+template <typename T>
+libMesh::numeric_index_type EigenBlockSparseMatrix<T>::row_start () const
+{
+  return 0;
+}
+
+
+
+template <typename T>
+libMesh::numeric_index_type EigenBlockSparseMatrix<T>::row_stop () const
+{
+  return this->m();
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::set (const libMesh::numeric_index_type i,
+                                const libMesh::numeric_index_type j,
+                                const T value)
+{
+  queso_not_implemented();
+  // libmesh_assert (this->initialized());
+  // libmesh_assert_less (i, this->m());
+  // libmesh_assert_less (j, this->n());
+  //
+  // (*_mat)(i,j) = value;
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::add (const libMesh::numeric_index_type i,
+                                const libMesh::numeric_index_type j,
+                                const T value)
+{
+  queso_not_implemented();
+  // libmesh_assert (this->initialized());
+  // libmesh_assert_less (i, this->m());
+  // libmesh_assert_less (j, this->n());
+  //
+  // (*_mat)(i,j) += value;
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::add_matrix(const libMesh::DenseMatrix<T> & dm,
+                                      const std::vector<libMesh::numeric_index_type> & dof_indices)
+{
+  this->add_matrix (dm, dof_indices, dof_indices);
+}
+
+
+
+template <typename T>
+void EigenBlockSparseMatrix<T>::add (const T a_in, libMesh::SparseMatrix<T> & X_in)
+{
+  queso_not_implemented();
+  // libmesh_assert (this->initialized());
+  // libmesh_assert_equal_to (this->m(), X_in.m());
+  // libmesh_assert_equal_to (this->n(), X_in.n());
+  //
+  // EigenBlockSparseMatrix<T> & X = libMesh::cast_ref<EigenBlockSparseMatrix<T> &> (X_in);
+  //
+  // // We don't guarantee X_in is preserved by this function, so we can modify it
+  // // while scaling by a_in here.
+  // *(X._mat) *= a_in;
+  //
+  // *_mat += *(X._mat);
+}
+
+
+
+
+template <typename T>
+T EigenBlockSparseMatrix<T>::operator () (const libMesh::numeric_index_type i,
+                                     const libMesh::numeric_index_type j) const
+{
+  queso_not_implemented();
+  // libmesh_assert (this->initialized());
+  // libmesh_assert_less (i, this->m());
+  // libmesh_assert_less (j, this->n());
+  //
+  // return (*_mat)(i,j);
+}
+
+
+
+template <typename T>
+libMesh::Real EigenBlockSparseMatrix<T>::l1_norm () const
+{
+  queso_not_implemented();
+  // double l1_norm = 0.0;
+  //
+  // GslVector col_vec(*queso_env, *queso_map);
+  //
+  // for (unsigned col=0; col<this->n(); ++col) {
+  //   _mat->getColumn(col, col_vec);
+  //   l1_norm = std::max(l1_norm, col_vec.norm1());
+  // }
+  //
+  // return l1_norm;
+}
+
+
+
+template <typename T>
+libMesh::Real EigenBlockSparseMatrix<T>::linfty_norm () const
+{
+  queso_not_implemented();
+  // double linfty_norm = 0.0;
+  //
+  // GslVector row_vec(*queso_env, *queso_map);
+  //
+  // for (unsigned row=0; row<this->m(); ++row) {
+  //   _mat->getRow(row, row_vec);
+  //   linfty_norm = std::max(linfty_norm, row_vec.norm1());
+  // }
+  //
+  // return linfty_norm;
+}
+
+template <typename T>
+unsigned int
+EigenBlockSparseMatrix<T>::numCols() const
+{
+  return this->m_blocks[0]->numCols();
+}
+
+template <typename T>
+void
+EigenBlockSparseMatrix<T>::zeroLower(bool includeDiagonal)
+{
+  return this->m_blocks[0]->zeroLower(includeDiagonal);
+}
+
+template <typename T>
+void
+EigenBlockSparseMatrix<T>::zeroUpper(bool includeDiagonal)
+{
+  return this->m_blocks[0]->zeroUpper(includeDiagonal);
+}
+
+// template <typename T>
+// double &
+// EigenBlockSparseMatrix<T>::operator()(unsigned int i, unsigned int j)
+// {
+//   queso_not_implemented();
+//   // return (*_mat)(i, j);
+// }
+
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::cwSet(unsigned int rowId, unsigned int colId, const EigenBlockSparseMatrix<T> & mat)
+// {
+//   this->_mat->cwSet(rowId, colId, *mat._mat);
+// }
+
+template <typename T>
+int
+EigenBlockSparseMatrix<T>::chol()
+{
+  return this->m_blocks[0]->chol();
+}
+
+// template <typename T>
+// int
+// EigenBlockSparseMatrix<T>::svd(EigenBlockSparseMatrix<T> & matU,
+//                         EigenSparseVector<T> & vecS,
+//                         EigenBlockSparseMatrix & matVt) const
+// {
+//   queso_not_implemented();
+//   // return this->_mat->svd(*matU._mat, *vecS._vec, *matVt._mat);
+// }
+
+// template <typename T>
+// EigenSparseVector<T>
+// EigenBlockSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b) const
+// {
+//   EigenSparseVector<T> answer(b);
+//   *(answer._vec) = this->_mat->invertMultiply(*b._vec);
+//   return answer;
+// }
+
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::invertMultiply(const EigenBlockSparseMatrix<T> & B, EigenBlockSparseMatrix<T> X) const
+// {
+//   this->_mat->invertMultiply(*B._mat, *X._mat);
+// }
+
+template <typename T>
+void
+EigenBlockSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b, EigenSparseVector<T> & x) const
+{
+  unsigned int totalCols = 0;
+
+  for (unsigned int i = 0; i < this->m_blocks.size(); i++) {
+    totalCols += this->m_blocks[i]->numCols();
+  }
+
+  if (totalCols != b.sizeLocal()) {
+    queso_error_msg("block matrix and rhs have incompatible sizes");
+  }
+
+  if (x.sizeLocal() != b.sizeLocal()) {
+    queso_error_msg("solution and rhs have incompatible sizes");
+  }
+
+  unsigned int blockOffset = 0;
+
+  // Do an invertMultiply for each block
+  for (unsigned int i = 0; i < this->m_blocks.size(); i++) {
+    EigenSparseVector<T> blockRHS(this->m_vectorSpaces[i]->zeroVector());
+    EigenSparseVector<T> blockSol(this->m_vectorSpaces[i]->zeroVector());
+
+    // Be sure to copy over the RHS to the right sized vector
+    for (unsigned int j = 0; j < this->m_blocks[i]->numCols(); j++) {
+      blockRHS[j] = b[blockOffset + j];
+    }
+
+    // Solve
+    this->m_blocks[i]->invertMultiply(blockRHS, blockSol);
+
+    // Be sure to copy the block solution back to the global solution vector
+    for (unsigned int j = 0; j < this->m_blocks[i]->numCols(); j++) {
+      x[blockOffset + j] = blockSol[j];
+    }
+
+    // Remember to increment the offset so we don't lose our place for the next
+    // block
+    blockOffset += this->m_blocks[i]->numCols();
+  }
+}
+
+//
+// template <typename T>
+// double
+// EigenBlockSparseMatrix<T>::lnDeterminant() const
+// {
+//   return this->_mat->lnDeterminant();
+// }
+
+template <typename T>
+unsigned int
+EigenBlockSparseMatrix<T>::numRowsGlobal() const
+{
+  return this->m_blocks[0]->numRowsGlobal();
+}
+
+// template <typename T>
+// EigenBlockSparseMatrix<T> &
+// EigenBlockSparseMatrix<T>::operator=(const EigenBlockSparseMatrix<T> & rhs)
+// {
+//   queso_mpi_comm = rhs._mat->map().Comm();
+//   this->queso_map.reset(new Map(rhs._mat->map()));
+//   *(this->_mat) = *rhs._mat;
+//   return *this;
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> &
+// EigenBlockSparseMatrix<T>::operator*=(double a)
+// {
+//   (*this->_mat) *= a;
+//   return *this;
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> &
+// EigenBlockSparseMatrix<T>::operator+=(const EigenBlockSparseMatrix<T> & rhs)
+// {
+//   (*this->_mat) += *rhs._mat;
+//   return *this;
+// }
+//
+// template <typename T>
+// EigenSparseVector<T>
+// EigenBlockSparseMatrix<T>::multiply(const EigenSparseVector<T> & x) const
+// {
+//   EigenSparseVector<T> answer(x);
+//   *answer._vec = this->_mat->multiply(*x._vec);
+//   return answer;
+// }
+//
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::largestEigen(double & eigenValue, EigenSparseVector<T> & eigenVector) const
+// {
+//   this->_mat->largestEigen(eigenValue, *eigenVector._vec);
+// }
+//
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::mpiSum(const MpiComm & comm, EigenBlockSparseMatrix<T> & M_global) const
+// {
+//   this->_mat->mpiSum(comm, *M_global._mat);
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T>
+// EigenBlockSparseMatrix<T>::transpose() const
+// {
+//   queso_not_implemented();
+//   // GslMatrix internal_answer(_mat->transpose());
+//   //
+//   // int num_elements = internal_answer.map().NumGlobalElements();
+//   // EigenBlockSparseMatrix<T> answer(internal_answer.env(),
+//   //                           internal_answer.map(),
+//   //                           num_elements);
+//   //
+//   // *(answer._mat) = internal_answer;
+//   //
+//   // return answer;
+// }
+//
+// template <typename T>
+// const Map &
+// EigenBlockSparseMatrix<T>::map() const
+// {
+//   return this->_mat->map();
+// }
+//
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::eigen(EigenSparseVector<T> & eigenValues, EigenBlockSparseMatrix<T> * eigenVectors) const
+// {
+//   this->_mat->eigen(*eigenValues._vec, eigenVectors->_mat.get());
+// }
+//
+// template <typename T>
+// EigenSparseVector<T>
+// EigenBlockSparseMatrix<T>::getColumn(const unsigned int column_num) const
+// {
+//   GslVector internal_answer(this->_mat->getColumn(column_num));
+//   EigenSparseVector<T> answer(internal_answer.env(), internal_answer.map());
+//
+//   *answer._vec = internal_answer;
+//
+//   return answer;
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T>
+// EigenBlockSparseMatrix<T>::inverse() const
+// {
+//   GslMatrix internal_answer(this->_mat->inverse());
+//
+//   EigenBlockSparseMatrix<T> answer(internal_answer.env(),
+//                             internal_answer.map(),
+//                             internal_answer.map().NumGlobalElements());
+//
+//   return answer;
+// }
+//
+// template <typename T>
+// unsigned int
+// EigenBlockSparseMatrix<T>::rank(double absoluteZeroThreshold, double relativeZeroThreshold) const
+// {
+//   return this->_mat->rank(absoluteZeroThreshold, relativeZeroThreshold);
+// }
+//
+// template <typename T>
+// double
+// EigenBlockSparseMatrix<T>::determinant() const
+// {
+//   return this->_mat->determinant();
+// }
+//
+// template <typename T>
+// const BaseEnvironment &
+// EigenBlockSparseMatrix<T>::env() const
+// {
+//   queso_not_implemented();
+//   // return this->_mat->env();
+// }
+//
+// template <typename T>
+// EigenSparseVector<T> operator*(const EigenBlockSparseMatrix<T> & mat,
+//                               const EigenSparseVector<T> & vec)
+// {
+//   queso_not_implemented();
+//   // return mat.multiply(vec);
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> operator*(double a,
+//                              const EigenBlockSparseMatrix<T> & mat)
+// {
+//   queso_not_implemented();
+//   // EigenBlockSparseMatrix<T> answer(mat);
+//   // answer *= a;
+//   // return answer;
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> matrixProduct(const EigenSparseVector<T> & v1,
+//                                  const EigenSparseVector<T> & v2)
+// {
+//   queso_not_implemented();
+//   // unsigned int nRows = v1.sizeLocal();
+//   // unsigned int nCols = v2.sizeLocal();
+//   // EigenBlockSparseMatrix<T> answer(v1.env(),v1.map(),nCols);
+//   //
+//   // for (unsigned int i = 0; i < nRows; ++i) {
+//   //   double value1 = v1[i];
+//   //   for (unsigned int j = 0; j < nCols; ++j) {
+//   //     answer(i,j) = value1*v2[j];
+//   //   }
+//   // }
+//   //
+//   // return answer;
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> operator*(const EigenBlockSparseMatrix<T> & m1,
+//                              const EigenBlockSparseMatrix<T> & m2)
+// {
+//   unsigned int m1Rows = m1.numRowsGlobal();  // Because they're serial
+//   unsigned int m1Cols = m1.numCols();
+//   unsigned int m2Rows = m2.numRowsGlobal();  // Because they're serial
+//   unsigned int m2Cols = m2.numCols();
+//
+//   queso_require_equal_to_msg(m1Cols, m2Rows, "different sizes m1Cols and m2Rows");
+//
+//   EigenBlockSparseMatrix<T> mat(m1.env(),m1.map(),m2Cols);
+//
+//   unsigned int commonSize = m1Cols;
+//   for (unsigned int row1 = 0; row1 < m1Rows; ++row1) {
+//     for (unsigned int col2 = 0; col2 < m2Cols; ++col2) {
+//       double result = 0.;
+//       for (unsigned int k = 0; k < commonSize; ++k) {
+//         result += m1(row1,k)*m2(k,col2);
+//       }
+//       mat(row1,col2) = result;
+//     }
+//   }
+//
+//   return mat;
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> operator+(const EigenBlockSparseMatrix<T> & m1,
+//                              const EigenBlockSparseMatrix<T> & m2)
+// {
+//   EigenBlockSparseMatrix<T> mat(m1);
+//   mat += m2;
+//   return mat;
+// }
+
+template <typename T>
+unsigned int
+EigenBlockSparseMatrix<T>::numRowsLocal() const
+{
+  return this->m_blocks[0]->numRowsLocal();
+}
+
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::subReadContents(const std::string & fileName,
+//                                     const std::string & fileType,
+//                                     const std::set<unsigned int> & allowedSubEnvIds)
+// {
+//   this->_mat->subReadContents(fileName, fileType, allowedSubEnvIds);
+// }
+//
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::cwSet(double value)
+// {
+//   this->_mat->cwSet(value);
+// }
+//
+// template <typename T>
+// void
+// EigenBlockSparseMatrix<T>::subWriteContents(const std::string & varNamePrefix,
+//                                      const std::string & fileName,
+//                                      const std::string & fileType,
+//                                      const std::set<unsigned int> & allowedSubEnvIds) const
+// {
+//   this->_mat->subWriteContents(varNamePrefix, fileName, fileType, allowedSubEnvIds);
+// }
+//
+// template <typename T>
+// EigenBlockSparseMatrix<T> &
+// EigenBlockSparseMatrix<T>::operator/=(double a)
+// {
+//   *this->_mat /= a;
+//   return *this;
+// }
+
+template <typename T>
+unsigned int
+EigenBlockSparseMatrix<T>::numBlocks() const
+{
+  return this->m_blocks.size();
+}
+
+template <typename T>
+EigenSparseMatrix<T> &
+EigenBlockSparseMatrix<T>::getBlock(unsigned int i) const
+{
+  return *this->m_blocks[i];
+}
+
+//------------------------------------------------------------------
+// Explicit instantiations
+template class EigenBlockSparseMatrix<libMesh::Number>;
+
+// template EigenSparseVector<libMesh::Number> operator*(const EigenBlockSparseMatrix<libMesh::Number> &, const EigenSparseVector<libMesh::Number> &);
+// template EigenBlockSparseMatrix<libMesh::Number> operator*(double, const EigenBlockSparseMatrix<libMesh::Number> &);
+// template EigenBlockSparseMatrix<libMesh::Number> matrixProduct(const EigenSparseVector<libMesh::Number> &, const EigenSparseVector<libMesh::Number> &);
+// template EigenBlockSparseMatrix<libMesh::Number> operator*(const EigenBlockSparseMatrix<libMesh::Number> &, const EigenBlockSparseMatrix<libMesh::Number> &);
+// template EigenBlockSparseMatrix<libMesh::Number> operator+(const EigenBlockSparseMatrix<libMesh::Number> &, const EigenBlockSparseMatrix<libMesh::Number> &);
+
+} // namespace libMesh

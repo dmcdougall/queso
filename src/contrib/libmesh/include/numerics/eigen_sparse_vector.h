@@ -40,6 +40,7 @@ namespace libMesh
 
 // Forward declarations
 template <typename T> class EigenSparseMatrix;
+template <typename T> class EigenBlockSparseMatrix;
 template <typename T> class EigenSparseLinearSolver;
 template <typename T> class SparseMatrix;
 
@@ -491,6 +492,7 @@ private:
    * Make other Eigen datatypes friends
    */
   friend class EigenSparseMatrix<T>;
+  friend class EigenBlockSparseMatrix<T>;
   friend class EigenSparseLinearSolver<T>;
 };
 

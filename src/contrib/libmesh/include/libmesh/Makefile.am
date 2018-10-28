@@ -32,6 +32,7 @@ BUILT_SOURCES = \
         distributed_vector.h \
         eigen_core_support.h \
         eigen_sparse_matrix.h \
+				eigen_block_sparse_matrix.h \
         eigen_sparse_vector.h \
         laspack_matrix.h \
         laspack_vector.h \
@@ -146,6 +147,9 @@ eigen_core_support.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_c
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
 eigen_sparse_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_sparse_matrix.h
+	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
+
+eigen_block_sparse_matrix.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_block_sparse_matrix.h
 	$(AM_V_GEN)rm -f $@ && $(LN_S) -f $< $@
 
 eigen_sparse_vector.h: $(top_srcdir)/src/contrib/libmesh/include/numerics/eigen_sparse_vector.h
