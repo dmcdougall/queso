@@ -252,6 +252,80 @@ EigenSparseVector<T>::subReadContents(const std::string & fileName,
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::mpiBcast(int srcRank, const QUESO::MpiComm & bcastComm)
+{
+  // Filter out those nodes that should not participate
+  if (bcastComm.MyPID() < 0) return;
+
+  // Check 'srcRank'
+  queso_require_msg(!((srcRank < 0) || (srcRank >= bcastComm.NumProc())), "invalud srcRank");
+
+  // Check number of participant nodes
+  double localNumNodes = 1.;
+  double totalNumNodes = 0.;
+  bcastComm.Allreduce<double>(&localNumNodes, &totalNumNodes, (int) 1, RawValue_MPI_SUM,
+                      "GslVector::mpiBcast()",
+                      "failed MPI.Allreduce() for numNodes");
+  queso_require_equal_to_msg(((int) totalNumNodes), bcastComm.NumProc(), "inconsistent numNodes");
+
+  // Check that all participant nodes have the same vector size
+  double localVectorSize  = this->sizeLocal();
+  double sumOfVectorSizes = 0.;
+  bcastComm.Allreduce<double>(&localVectorSize, &sumOfVectorSizes, (int) 1, RawValue_MPI_SUM,
+                      "GslVector::mpiBcast()",
+                      "failed MPI.Allreduce() for vectorSize");
+
+  if ( ((unsigned int) sumOfVectorSizes) != ((unsigned int)(totalNumNodes*localVectorSize)) ) {
+    std::cerr << "rank "                 << bcastComm.MyPID()
+              << ": sumOfVectorSizes = " << sumOfVectorSizes
+              << ", totalNumNodes = "    << totalNumNodes
+              << ", localVectorSize = "  << localVectorSize
+              << std::endl;
+  }
+  bcastComm.Barrier();
+  queso_require_equal_to_msg(((unsigned int) sumOfVectorSizes), ((unsigned int)(totalNumNodes*localVectorSize)), "inconsistent vectorSize");
+
+  // Ok, bcast data
+  std::vector<double> dataBuffer((unsigned int) localVectorSize, 0.);
+  if (bcastComm.MyPID() == srcRank) {
+    for (unsigned int i = 0; i < dataBuffer.size(); ++i) {
+      dataBuffer[i] = (*this)[i];
+    }
+  }
+
+  bcastComm.Bcast((void *) &dataBuffer[0], (int) localVectorSize, RawValue_MPI_DOUBLE, srcRank,
+                  "GslVector::mpiBcast()",
+                  "failed MPI.Bcast()");
+
+  if (bcastComm.MyPID() != srcRank) {
+    for (unsigned int i = 0; i < dataBuffer.size(); ++i) {
+      (*this)[i] = dataBuffer[i];
+    }
+  }
+}
+
+template <typename T>
+void
+EigenSparseVector<T>::mpiAllReduce(QUESO::RawType_MPI_Op mpiOperation, const QUESO::MpiComm & opComm, EigenSparseVector<T> & resultVec) const
+{
+  // Filter out those nodes that should not participate
+  if (opComm.MyPID() < 0) return;
+
+  unsigned int size = this->sizeLocal();
+  queso_require_equal_to_msg(size, resultVec.sizeLocal(), "different vector sizes");
+
+  for (unsigned int i = 0; i < size; ++i) {
+    double srcValue = (*this)[i];
+    double resultValue = 0.;
+    opComm.Allreduce<double>(&srcValue, &resultValue, (int) 1, mpiOperation,
+                     "GslVector::mpiAllReduce()",
+                     "failed MPI.Allreduce()");
+    resultVec[i] = resultValue;
+  }
+}
+
+template <typename T>
 unsigned int
 EigenSparseVector<T>::numOfProcsForStorage() const
 {
