@@ -31,6 +31,8 @@
 #include <queso/Algorithm.h>
 #include <queso/TKGroup.h>
 #include <queso/InvLogitGaussianJointPdf.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -151,5 +153,6 @@ Algorithm<V, M>::acceptance_ratio(
 
 template class Algorithm<GslVector, GslMatrix>;
 template class Algorithm<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class Algorithm<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
