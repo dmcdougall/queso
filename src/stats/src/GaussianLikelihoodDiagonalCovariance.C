@@ -30,6 +30,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/GaussianLikelihoodDiagonalCovariance.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -70,5 +72,6 @@ GaussianLikelihoodDiagonalCovariance<V, M>::lnValue(const V & domainVector) cons
 
 template class GaussianLikelihoodDiagonalCovariance<GslVector, GslMatrix>;
 template class GaussianLikelihoodDiagonalCovariance<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class GaussianLikelihoodDiagonalCovariance<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
