@@ -123,6 +123,15 @@ public:
   EigenSparseVector<T> getColumn(const unsigned int column_num) const;
   void eigen(EigenSparseVector<T> & eigenValues, EigenSparseMatrix<T> * eigenVectors) const;
   void invertMultiply(const EigenSparseVector<T> & b, EigenSparseVector<T> & x) const;
+  void subReadContents(const std::string & fileName,
+                       const std::string & fileType,
+                       const std::set<unsigned int> & allowedSubEnvIds);
+  void subWriteContents(const std::string & varNamePrefix,
+                        const std::string & fileName,
+                        const std::string & fileType,
+                        const std::set<unsigned int> & allowedSubEnvIds) const;
+  void cwSet(double value);
+  EigenSparseMatrix<T> & operator/=(double a);
 
   /**
    * Initialize a Eigen matrix that is of global

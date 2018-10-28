@@ -139,6 +139,9 @@ public:
   virtual EigenSparseVector<T> & operator*=(const EigenSparseVector<T> & v_in);
   using libMesh::NumericVector<T>::operator*=;  // Overrode *= so we need this.
   double norm2Sq() const;
+  void subReadContents(const std::string & fileName,
+                       const std::string & fileType,
+                       const std::set<unsigned int> & allowedSubEnvIds);
 
 
   /**

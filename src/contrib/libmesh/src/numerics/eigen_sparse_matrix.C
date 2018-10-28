@@ -410,6 +410,45 @@ EigenSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b, EigenSparse
   x.vec() = tmpsol;
 }
 
+template <typename T>
+void
+EigenSparseMatrix<T>::subReadContents(const std::string & fileName,
+                                      const std::string & fileType,
+                                      const std::set<unsigned int> & allowedSubEnvIds)
+{
+  std::cerr << "ERROR: use non-member non-friend function instead" << std::endl;
+  queso_not_implemented();
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::subWriteContents(const std::string & varNamePrefix,
+                                       const std::string & fileName,
+                                       const std::string & fileType,
+                                       const std::set<unsigned int> & allowedSubEnvIds) const
+{
+  std::cerr << "ERROR: use non-member non-friend function instead" << std::endl;
+  queso_not_implemented();
+}
+
+template <typename T>
+void
+EigenSparseMatrix<T>::cwSet(double value)
+{
+  for (unsigned int i = 0; i < m(); i++) {
+    for (unsigned int j = 0; j < n(); j++) {
+      _mat.coeffRef(i,j) = value;
+    }
+  }
+}
+
+template <typename T>
+EigenSparseMatrix<T> &
+EigenSparseMatrix<T>::operator/=(double a)
+{
+  _mat /= a;
+  return *this;
+}
 
 template <typename T>
 EigenSparseMatrix<T> &

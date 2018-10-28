@@ -242,6 +242,16 @@ EigenSparseVector<T>::norm2() const
 }
 
 template <typename T>
+void
+EigenSparseVector<T>::subReadContents(const std::string & fileName,
+                                      const std::string & fileType,
+                                      const std::set<unsigned int> & allowedSubEnvIds)
+{
+  std::cerr << "ERROR: use non-member non-friend function instead" << std::endl;
+  queso_not_implemented();
+}
+
+template <typename T>
 unsigned int
 EigenSparseVector<T>::numOfProcsForStorage() const
 {

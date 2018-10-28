@@ -152,4 +152,11 @@ VectorSpace<GslNumericVector<libMesh::Number>,GslSparseMatrix<libMesh::Number> >
   return new GslSparseMatrix<libMesh::Number>(m_env,*m_map,diagValue);
 }
 
+template<>
+libMesh::EigenSparseMatrix<libMesh::Number> *
+VectorSpace<libMesh::EigenSparseVector<libMesh::Number>,libMesh::EigenSparseMatrix<libMesh::Number> >::newDiagMatrix(double diagValue) const
+{
+  return new libMesh::EigenSparseMatrix<libMesh::Number>(m_env,*m_map,diagValue);
+}
+
 }  // End namespace QUESO
