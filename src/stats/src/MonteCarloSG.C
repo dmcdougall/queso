@@ -28,6 +28,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/FilePtr.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -498,5 +500,6 @@ MonteCarloSG<P_V,P_M,Q_V,Q_M>::actualReadSequence(
 
 template class MonteCarloSG<GslVector, GslMatrix, GslVector, GslMatrix>;
 template class MonteCarloSG<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class MonteCarloSG<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number>, libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
