@@ -28,6 +28,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO
 {
@@ -49,5 +51,6 @@ AlgorithmFactoryInitializer<V, M>::~AlgorithmFactoryInitializer()
 
 template class AlgorithmFactoryInitializer<GslVector, GslMatrix>;
 template class AlgorithmFactoryInitializer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class AlgorithmFactoryInitializer<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 } // namespace QUESO
