@@ -29,6 +29,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/GaussianJointPdf.h>
 #include <queso/BayesianJointPdf.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -253,5 +255,6 @@ MetropolisAdjustedLangevinTK<V, M>::print(std::ostream & os) const
 
 template class MetropolisAdjustedLangevinTK<GslVector, GslMatrix>;
 template class MetropolisAdjustedLangevinTK<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class MetropolisAdjustedLangevinTK<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
