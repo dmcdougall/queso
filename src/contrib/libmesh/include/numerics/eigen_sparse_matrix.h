@@ -92,6 +92,7 @@ public:
    * QUESO-specific ctors/methods/whatnot
    */
   EigenSparseMatrix(const EigenSparseVector<T> & v);
+  EigenSparseMatrix(const EigenSparseVector<T> & v, double diagValue);
   EigenSparseMatrix(const QUESO::BaseEnvironment & env,
                     const QUESO::Map & map,
                     unsigned int numCols);
@@ -121,6 +122,7 @@ public:
   EigenSparseMatrix<T> inverse() const;
   EigenSparseVector<T> getColumn(const unsigned int column_num) const;
   void eigen(EigenSparseVector<T> & eigenValues, EigenSparseMatrix<T> * eigenVectors) const;
+  void invertMultiply(const EigenSparseVector<T> & b, EigenSparseVector<T> & x) const;
 
   /**
    * Initialize a Eigen matrix that is of global
@@ -339,6 +341,11 @@ libMesh::EigenSparseMatrix<T> operator*(double a, const libMesh::EigenSparseMatr
 template <typename T>
 libMesh::EigenSparseMatrix<T> operator*(const libMesh::EigenSparseMatrix<T> & m1,
                                         const libMesh::EigenSparseMatrix<T> & m2);
+
+template <typename T>
+libMesh::EigenSparseMatrix<T> operator+(const libMesh::EigenSparseMatrix<T> & m1,
+                                        const libMesh::EigenSparseMatrix<T> & m2);
+
 
 template <typename T>
 libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> & v1,

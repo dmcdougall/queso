@@ -55,6 +55,27 @@ EigenSparseMatrix<T>::EigenSparseMatrix(const EigenSparseVector<T> & v) :
 }
 
 template <typename T>
+EigenSparseMatrix<T>::EigenSparseMatrix(const EigenSparseVector<T> & v, double diagValue) :
+  libMesh::SparseMatrix<T>(
+      EigenSparseVector<T>::comm_map.emplace(std::make_pair(
+          &(v.queso_map->Comm()),
+          libMesh::Parallel::Communicator(
+            v.queso_map->Comm().Comm()))).first->second),
+  queso_env(new EmptyEnvironment()),
+  queso_mpi_comm(v.queso_map->Comm()),
+  _closed (false)
+{
+  this->queso_map.reset(new Map(*v.queso_map));
+
+  // Hmmm, is the internal matrix the right size?!
+  for (unsigned int i = 0; i < v.sizeLocal(); i++) {
+    _mat.coeffRef(i,i) = diagValue;
+  }
+
+  this->_is_initialized = true;
+}
+
+template <typename T>
 EigenSparseMatrix<T>::EigenSparseMatrix(const BaseEnvironment & env,
                                         const Map & map,
                                         unsigned int numCols) :
@@ -363,6 +384,32 @@ EigenSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b) const
   EigenSparseVector<T> sol(this->comm(), m(), m());
   sol.vec() = tmpsol;
 }
+
+template <typename T>
+void
+EigenSparseMatrix<T>::invertMultiply(const EigenSparseVector<T> & b, EigenSparseVector<T> & x) const
+{
+  queso_require_equal_to_msg(this->numCols(), b.sizeLocal(), "matrix and rhs have incompatible sizes");
+
+  // Expensive copies -- really bad
+  // Need them because col major is required by the solvers in eigen
+  Eigen::SparseMatrix<double, Eigen::ColMajor, libMesh::eigen_idx_type> tmpmat = _mat;
+  Eigen::Matrix<double, Eigen::Dynamic, 1> tmprhs = b.vec();
+  Eigen::Matrix<double, Eigen::Dynamic, 1> tmpsol = x.vec();
+
+  tmpmat.makeCompressed();
+  Eigen::SparseLU<libMesh::EigenSM> solver;
+  solver.analyzePattern(tmpmat);
+  solver.factorize(tmpmat);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "decomp failed");
+
+  tmpsol = solver.solve(tmprhs);
+  queso_require_equal_to_msg(solver.info(), Eigen::Success, "solve failed");
+
+  // Copy back
+  x.vec() = tmpsol;
+}
+
 
 template <typename T>
 EigenSparseMatrix<T> &
@@ -884,8 +931,18 @@ libMesh::EigenSparseMatrix<T> matrixProduct(const libMesh::EigenSparseVector<T> 
   return answer;
 }
 
+template <typename T>
+libMesh::EigenSparseMatrix<T> operator+(const libMesh::EigenSparseMatrix<T> & m1,
+                                        const libMesh::EigenSparseMatrix<T> & m2)
+{
+  libMesh::EigenSparseMatrix<T> mat(m1);
+  mat.mat() += m2.mat();
+  return mat;
+}
+
 template libMesh::EigenSparseMatrix<libMesh::Number> operator*(double, const libMesh::EigenSparseMatrix<libMesh::Number> &);
 template libMesh::EigenSparseMatrix<libMesh::Number> operator*(const libMesh::EigenSparseMatrix<libMesh::Number> &, const libMesh::EigenSparseMatrix<libMesh::Number> &);
+template libMesh::EigenSparseMatrix<libMesh::Number> operator+(const libMesh::EigenSparseMatrix<libMesh::Number> &, const libMesh::EigenSparseMatrix<libMesh::Number> &);
 template libMesh::EigenSparseMatrix<libMesh::Number> matrixProduct(const libMesh::EigenSparseVector<libMesh::Number> &, const libMesh::EigenSparseVector<libMesh::Number> &);
 
 }
