@@ -29,6 +29,8 @@
 #include <queso/VectorSet.h>
 #include <queso/VectorSpace.h>
 #include <queso/GaussianLikelihoodFullCovarianceRandomCoefficient.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -88,5 +90,6 @@ GaussianLikelihoodFullCovarianceRandomCoefficient<V, M>::lnValue(const V & domai
 
 template class GaussianLikelihoodFullCovarianceRandomCoefficient<GslVector, GslMatrix>;
 template class GaussianLikelihoodFullCovarianceRandomCoefficient<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class GaussianLikelihoodFullCovarianceRandomCoefficient<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
