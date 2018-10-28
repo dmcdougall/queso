@@ -26,6 +26,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 #include <queso/TransitionKernelFactory.h>
 #include <queso/ScaledCovMatrixTKGroup.h>
 #include <queso/TransformedScaledCovMatrixTKGroup.h>
@@ -48,6 +50,15 @@ std::map<std::string, Factory<BaseTKGroup<GslNumericVector<libMesh::Number>, Gsl
 Factory<BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > >::factory_map()
 {
   static std::map<std::string, Factory<BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > > *> _factory_map;
+
+  return _factory_map;
+}
+
+template <>
+std::map<std::string, Factory<BaseTKGroup<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > > *> &
+Factory<BaseTKGroup<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > >::factory_map()
+{
+  static std::map<std::string, Factory<BaseTKGroup<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > > *> _factory_map;
 
   return _factory_map;
 }
@@ -105,30 +116,42 @@ template <>
 const VectorSpace<GslVector, GslMatrix> * TransitionKernelFactory<GslVector, GslMatrix>::m_vectorSpace = NULL;
 template <>
 const VectorSpace<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > * TransitionKernelFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_vectorSpace = NULL;
+template <>
+const VectorSpace<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > * TransitionKernelFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::m_vectorSpace = NULL;
 
 template <>
 const std::vector<double> * TransitionKernelFactory<GslVector, GslMatrix>::m_dr_scales = NULL;
 template <>
 const std::vector<double> * TransitionKernelFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_dr_scales = NULL;
+template <>
+const std::vector<double> * TransitionKernelFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::m_dr_scales = NULL;
 
 template <>
 const ScalarFunctionSynchronizer<GslVector, GslMatrix> * TransitionKernelFactory<GslVector, GslMatrix>::m_pdf_synchronizer = NULL;
 template <>
 const ScalarFunctionSynchronizer<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > * TransitionKernelFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_pdf_synchronizer = NULL;
+template <>
+const ScalarFunctionSynchronizer<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > * TransitionKernelFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::m_pdf_synchronizer = NULL;
 
 template <>
 GslMatrix * TransitionKernelFactory<GslVector, GslMatrix>::m_initial_cov_matrix = NULL;
 template <>
 GslSparseMatrix<libMesh::Number>  * TransitionKernelFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_initial_cov_matrix = NULL;
+template <>
+libMesh::EigenSparseMatrix<libMesh::Number>  * TransitionKernelFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::m_initial_cov_matrix = NULL;
 
 template <>
 const MhOptionsValues * TransitionKernelFactory<GslVector, GslMatrix>::m_options = NULL;
 template <>
 const MhOptionsValues * TransitionKernelFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_options = NULL;
+template <>
+const MhOptionsValues * TransitionKernelFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::m_options = NULL;
 
 template <>
 const BaseJointPdf<GslVector, GslMatrix> * TransitionKernelFactory<GslVector, GslMatrix>::m_target_pdf = NULL;
 template <>
 const BaseJointPdf<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> > * TransitionKernelFactory<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >::m_target_pdf = NULL;
+template <>
+const BaseJointPdf<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> > * TransitionKernelFactory<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >::m_target_pdf = NULL;
 
 } // namespace QUESO
