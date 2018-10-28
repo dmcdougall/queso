@@ -28,6 +28,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/GaussianJointPdf.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -255,5 +257,6 @@ ScaledCovMatrixTKGroup<V,M>::print(std::ostream& os) const
 
 template class ScaledCovMatrixTKGroup<GslVector, GslMatrix>;
 template class ScaledCovMatrixTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class ScaledCovMatrixTKGroup<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
