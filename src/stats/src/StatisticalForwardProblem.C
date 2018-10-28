@@ -29,6 +29,8 @@
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
 #include <queso/FilePtr.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -426,5 +428,6 @@ StatisticalForwardProblem<P_V,P_M,Q_V,Q_M>::print(std::ostream& /* os */) const
 
 template class StatisticalForwardProblem<GslVector, GslMatrix, GslVector, GslMatrix>;
 template class StatisticalForwardProblem<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class StatisticalForwardProblem<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number>, libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
