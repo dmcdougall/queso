@@ -352,6 +352,13 @@ EigenSparseVector<T> & EigenSparseVector<T>::operator*=(const EigenSparseVector<
 }
 
 template <typename T>
+double
+EigenSparseVector<T>::norm2Sq() const
+{
+  return this->dot(*this);
+}
+
+template <typename T>
 T EigenSparseVector<T>::sum () const
 {
   libmesh_assert (this->closed());

@@ -137,6 +137,7 @@ public:
   EigenSparseVector<T> & operator/=(double a);
   virtual EigenSparseVector<T> & operator*=(const EigenSparseVector<T> & v_in);
   using libMesh::NumericVector<T>::operator*=;  // Overrode *= so we need this.
+  double norm2Sq() const;
 
 
   /**
