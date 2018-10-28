@@ -27,6 +27,8 @@
 #include <queso/GslNumericVector.h>
 #include <queso/GslMatrix.h>
 #include <queso/GslSparseMatrix.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -141,5 +143,6 @@ BaseTKGroup<V,M>::print(std::ostream& os) const
 
 template class BaseTKGroup<GslVector, GslMatrix>;
 template class BaseTKGroup<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class BaseTKGroup<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
