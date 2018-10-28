@@ -30,6 +30,8 @@
 #include <queso/GslSparseMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/GaussianLikelihoodScalarCovariance.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -64,5 +66,6 @@ GaussianLikelihoodScalarCovariance<V, M>::lnValue(const V & domainVector) const
 
 template class GaussianLikelihoodScalarCovariance<GslVector, GslMatrix>;
 template class GaussianLikelihoodScalarCovariance<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class GaussianLikelihoodScalarCovariance<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
