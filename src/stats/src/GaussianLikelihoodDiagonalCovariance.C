@@ -54,7 +54,8 @@ template<class V, class M>
 double
 GaussianLikelihoodDiagonalCovariance<V, M>::lnValue(const V & domainVector) const
 {
-  V modelOutput(this->m_observations, 0, 0);  // At least it's not a copy
+  V modelOutput(this->m_observations);
+  modelOutput.cwSet(0.0);
 
   this->evaluateModel(domainVector, modelOutput);
 
