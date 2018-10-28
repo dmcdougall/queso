@@ -31,6 +31,8 @@
 #include <queso/GslOptimizer.h>
 #include <queso/OptimizerMonitor.h>
 #include <queso/BayesianJointPdf.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -522,5 +524,6 @@ StatisticalInverseProblem<P_V,P_M>::print(std::ostream& /* os */) const
 
 template class StatisticalInverseProblem<GslVector, GslMatrix>;
 template class StatisticalInverseProblem<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number> >;
+template class StatisticalInverseProblem<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
