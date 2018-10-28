@@ -30,6 +30,9 @@
 #include <queso/GslNumericBlockMatrix.h>
 #include <queso/VectorSet.h>
 #include <queso/GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients.h>
+#include <libmesh/eigen_sparse_vector.h>
+#include <libmesh/eigen_sparse_matrix.h>
+#include <libmesh/eigen_block_sparse_matrix.h>
 
 namespace QUESO {
 
@@ -60,8 +63,10 @@ template<class V, class M, class BM>
 double
 GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::lnValue(const V & domainVector) const
 {
-  V modelOutput(this->m_observations, 0, 0);  // At least it's not a copy
-  V weightedMisfit(this->m_observations, 0, 0);  // At least it's not a copy
+  V modelOutput(this->m_observations);
+  modelOutput.cwSet(0.0);
+  V weightedMisfit(this->m_observations);
+  weightedMisfit.cwSet(0.0);
 
   this->evaluateModel(domainVector, modelOutput);
 
@@ -111,5 +116,6 @@ GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<V, M, BM>::lnValue(c
 
 template class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<GslVector, GslMatrix, GslBlockMatrix>;
 template class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<GslNumericVector<libMesh::Number>, GslSparseMatrix<libMesh::Number>, GslNumericBlockMatrix<libMesh::Number> >;
+template class GaussianLikelihoodBlockDiagonalCovarianceRandomCoefficients<libMesh::EigenSparseVector<libMesh::Number>, libMesh::EigenSparseMatrix<libMesh::Number>, libMesh::EigenBlockSparseMatrix<libMesh::Number> >;
 
 }  // End namespace QUESO
