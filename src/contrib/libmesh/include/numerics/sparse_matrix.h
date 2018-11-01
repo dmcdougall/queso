@@ -312,7 +312,7 @@ public:
    * in a uniform style, regardless of matrix/solver
    * package being used.
    */
-  void print(std::ostream & os=libMesh::out, const bool sparse=false) const;
+  virtual void print(std::ostream & os=libMesh::out, const bool sparse=false) const;
 
   /**
    * Same as the print method above, but allows you

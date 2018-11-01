@@ -189,6 +189,7 @@ public:
                                 const std::vector<GslSparseMatrix<T> *> & matrices,
                                 bool checkForExactNumRowsMatching,
                                 bool checkForExactNumColsMatching);
+  void print(std::ostream & os, const bool sparse=false) const;
 
 
   /**

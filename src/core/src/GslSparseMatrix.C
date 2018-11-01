@@ -1067,6 +1067,22 @@ GslSparseMatrix<T>::fillWithBlocksVertically(unsigned int rowId,
 }
 
 template <typename T>
+void
+GslSparseMatrix<T>::print(std::ostream & os, const bool sparse) const
+{
+  unsigned int nRows = this->numRowsLocal();
+  unsigned int nCols = this->numCols();
+
+  for (unsigned int i = 0; i < nRows; ++i) {
+    for (unsigned int j = 0; j < nCols; ++j) {
+      os << (*this)(i,j)
+         << " ";
+    }
+    if (i != (nRows-1)) os << "; ";
+  }
+}
+
+template <typename T>
 GslSparseMatrix<T> &
 GslSparseMatrix<T>::operator/=(double a)
 {
